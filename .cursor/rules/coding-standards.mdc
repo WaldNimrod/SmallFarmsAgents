@@ -1,0 +1,51 @@
+---
+description: Python coding standards for SmallFarms implementation
+globs: **/*.py
+alwaysApply: false
+---
+
+# SmallFarms Python Coding Standards
+
+## Stack & Versions
+
+- Python 3.11+ only. Use `match` statements, `tomllib`, `ExceptionGroup` where appropriate.
+- SQLAlchemy 2.x (`session.execute(select(...))` style — NOT legacy `session.query()`)
+- httpx (async) for HTTP. No `requests` library.
+- Flask for admin UI only (port 5000, 127.0.0.1).
+
+## Project Layout
+
+```
+smallfarms/
+  collectors/     # one file per source
+  parsers/        # one parser class per normalizer_type
+  normalizer/     # NormalizerEngine + DB-driven rules
+  aggregator/     # AggregatorEngine, QAEngine
+  publisher/      # PublishEngine, FTPSClient
+  admin/          # Flask blueprints
+  models/         # SQLAlchemy ORM models (one file per table group)
+  db/             # session factory, Alembic env
+  scheduler/      # cron wrapper, IngestionRunner
+  utils/          # logging, email alert, checksum
+  tests/          # mirrors src structure
+```
+
+## Naming & Style
+
+- All DB columns: `snake_case`
+- All Python functions: `snake_case`
+- Classes: `PascalCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Monetary values: `NUMERIC(12,4)` in DB, `Decimal` in Python — never `float`
+
+## Error Handling
+
+- Never silently swallow exceptions. Always log with structured context.
+- Alert on: ingestion failure, publish failure, stale data threshold breach.
+- Use custom exception hierarchy: `SmallFarmsError > CollectorError, ParserError, PublishError`
+
+## Data Rules
+
+- Source of truth for product catalog, aliases, and normalizer rules = PostgreSQL (not code)
+- Never hardcode product names, prices, or source URLs in logic code
+- All timestamps: `TIMESTAMPTZ` in DB, `datetime` with `tzinfo=UTC` in Python

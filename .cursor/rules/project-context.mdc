@@ -1,0 +1,64 @@
+---
+description: SmallFarms project context — goals, stack, key decisions, team structure
+alwaysApply: true
+---
+
+# SmallFarms Market Data System — Project Context
+
+## What This Project Is
+
+A free community service for Israel's organic/ecological farmers. The first feature is a **price index for organic vegetables** focused on small farms, direct sales, CSA baskets, farmers markets, and farm shops. Data is aggregated from many partial sources, not one authoritative one.
+
+## Architecture (decided, not open for discussion)
+
+- **Local Data Hub** runs Python pipeline: collect → parse → normalize → aggregate → publish
+- **WordPress (nimrod.bio)** is presentation layer only — reads static artifacts
+- **No real-time connection** between local system and public site
+- **No public API in V1**
+
+## Tech Stack (locked)
+
+- Language: **Python 3.11+**
+- Admin UI: **Flask** (local only, 127.0.0.1)
+- DB: **PostgreSQL** (direct, no Docker)
+- ORM: SQLAlchemy 2.x + Alembic migrations
+- Scraping: httpx + BeautifulSoup4
+- Scheduler: system cron (06:00 daily)
+
+## Key Decisions (locked)
+
+- Normalizer is **data-driven from DB** — aliases, rules, merges, flags all in PostgreSQL, changeable without deploy
+- Baskets (CSA) are **independent products** — not decomposed to per-kg in V1
+- Public publish = `manifest.json` + versioned `public_report-{ts}.json/html` via FTPS
+- `manifest_last_good.json` maintained as fallback
+- Stale data: warning banner after 3 days, "not relevant" after 8 days (in manifest.staleness_level)
+- Min 2 observations from 2 distinct sources for public display
+- Publish threshold: min 2 community sources succeeded
+- uPress FTP validation is a **pre-development gate** (must pass before writing publish code)
+
+## Spec Documents (source of truth)
+
+All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
+- `EXECUTIVE_SUMMARY_HE.md` — project overview v1.1
+- `DETAILED_SYSTEM_SPEC_HE.md` — full system spec v1.1
+- `ARCHITECTURE_DECISIONS_HE.md` — all architectural decisions v1.1
+- `DATABASE_SCHEMA_SPEC_HE.md` — full PostgreSQL schema (23 tables)
+- `NORMALIZER_SPEC_HE.md` — normalizer engine spec
+- `PIPELINE_ALGORITHMS_HE.md` — all pipeline algorithms
+- `PRODUCT_CATALOG_V1.md` — 29 products, aliases, units
+- `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` — data model v1.1
+- `SOURCE_MAP_MASTER_HE.md` — 20 sources, platform_family, legal flags
+- `INTERFACE_MOCKUPS_HE.md` — UI mockups v1.1
+- `UPRESS_VALIDATION_PLAN_HE.md` — uPress test plan (pre-dev gate)
+- `REVIEW_REPORT_V1.md` — architectural review findings
+
+## Team Structure
+
+- **Team 100** — Architecture (this agent). Owns spec, decisions, review.
+- **Team 50** — QA. Validates implementation against spec.
+- **Team 10** — Implementation. Writes code. Reports to _COMMUNICATION/TEAM_10/.
+
+## Communication
+
+All team reports go to `_COMMUNICATION/{TEAM_ID}/reports/`.
+Onboarding prompts: `_COMMUNICATION/{TEAM_ID}/ONBOARDING.md`.

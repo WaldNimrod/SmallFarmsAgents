@@ -1,6 +1,8 @@
 # מפת מקורות מאסטר
 
-תאריך בדיקה: 2026-03-29
+גרסה: 1.1  
+תאריך בדיקה: 2026-03-29  
+שינויים מגרסה 1.0: הוספת platform_family, legal_review_required, עמודת status
 
 ## מטרת המסמך
 
@@ -11,7 +13,7 @@
 - לא מחפשים מקור מושלם אחד
 - כן מחפשים הרבה מקורות חלקיים
 - האגרגציה תתבצע ברמת `observation`
-- לכל מקור יש תפקיד שונה: מחיר ישיר, סל/CSA, discovery, benchmark, או אימות אורגני
+- לכל מקור יש תפקיד שונה
 
 ## מקרא ציונים
 
@@ -23,76 +25,120 @@
 
 הסקאלה היא 1-5.
 
-## טבלת מקורות
+## טבלת מקורות — v1.1
 
-| ID | מקור | קבוצה | סוג שוק | URL | מה זמין בפועל | איכות נתון | כיסוי | יציבות | סיכון תחזוקה | עדיפות MVP | תפקיד מומלץ |
-|---|---|---|---|---|---|---:|---:|---:|---:|---:|---|
-| SRC001 | easyFarm platform | תשתית discovery | niche/community | [easyfarm.co.il](https://www.easyfarm.co.il/) | זיהוי משפחת חנויות חקלאיות עם מחירון, סלים, אזורי חלוקה ותדירות הזמנה | 4 | 5 | 4 | 2 | 5 | משפחת מקור ליבה + ערוץ discovery של חנויות חדשות |
-| SRC002 | סבתא יהודית | מחיר ישיר + סלים | niche/community | [sapta.easyfarm.co.il/manage/product/price_list/](https://sapta.easyfarm.co.il/manage/product/price_list/) | מחירון ציבורי מלא, יחידות, ק"ג, סלים, ספקים נוספים; מופיע גם "פיקוח אורגני ע\"י סקאל" | 5 | 4 | 4 | 2 | 5 | אחד ממקורות הליבה הראשונים |
-| SRC003 | ח'ביזה | CSA / subscription | niche/community | [chubeza.easyfarm.co.il/manage/customer/ano_custom_reg/HE/](https://chubeza.easyfarm.co.il/manage/customer/ano_custom_reg/HE/) | מחירי ארגזים, תדירות, הרכב סל עונתי, נקודות חלוקה | 4 | 3 | 4 | 2 | 5 | מקור ליבה לשכבת סלים ו-CSA |
-| SRC004 | קיימא בית זית | מחיר ישיר + סלים | niche/community | [kaima.easyfarm.co.il/shop/home/](https://kaima.easyfarm.co.il/shop/home/) | מחירי ירקות לפי ק"ג/יחידה, ארגזים, חלונות הזמנה, משלוח והרכבה עצמית | 5 | 4 | 4 | 2 | 5 | מקור ליבה לנישה |
-| SRC005 | קיימא חוקוק | מחיר ישיר + חנות חווה | niche/community | [kaima-hukuk.easyfarm.co.il/shop/](https://kaima-hukuk.easyfarm.co.il/shop/) | מחירים לצרכן, איסוף מקומי, שעות פתיחה, ציון מפורש של פיקוח `IQC` ומספר עוסק אורגני | 5 | 3 | 4 | 2 | 5 | מקור ליבה עם מטא-דאטה אורגני טוב |
-| SRC006 | עץ השדה | חנות חווה / הזמנות | niche/community | [etzhasade.easyfarm.co.il/shop/](https://etzhasade.easyfarm.co.il/shop/) | קטלוג הזמנות, מחירי מוצרים, הערת סטיות משקל, מידע על משלוחים שבועיים | 4 | 3 | 4 | 2 | 4 | מקור משלים ממשפחת easyFarm |
-| SRC007 | סלסילה | סלים | niche/community | [salsila.co.il](https://www.salsila.co.il/) | הרכב סל משתנה, חלון עדכון קבוע לפני משלוח | 3 | 2 | 3 | 3 | 4 | מקור ייעודי לשכבת baskets |
-| SRC008 | שדה ירוק | חנות אונליין אורגנית | niche/community | [sadeyarok.co.il](https://www.sadeyarok.co.il/) | מחירי מארזים, מחירי ק"ג, מבצעים, תוצרת משק | 5 | 4 | 4 | 3 | 5 | מקור חזק לנישה המורחבת |
-| SRC009 | משק זינגר | חנות אונליין אורגנית | niche/community | [zinger-organic.com/cat/ירקות](https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA) | קטגוריית ירקות עם כ-60 מוצרים, מחירים, יחידות, יצרנים, חנות משק | 5 | 4 | 4 | 3 | 5 | מקור ליבה לנישה |
-| SRC010 | Farmerim | אגרגטור אורגני | niche/community | [farmerim.com/organic](https://farmerim.com/organic) | מחירים, מארזים/ק"ג, סימון אורגני, לעיתים שם משק/מגדל | 4 | 5 | 4 | 3 | 5 | מקור רוחב חזק לאגרגציה |
-| SRC011 | האורגני | אגרגטור חקלאים אורגניים | niche/community | [haorgani.co.il](https://haorgani.co.il/) | חנות עם מחירים, רשת של 80+ חקלאים ויצרנים, שיח ישיר של קהילה-חקלאים | 4 | 5 | 4 | 3 | 5 | מקור רוחב חזק + discovery של חקלאים |
-| SRC012 | בידיים - מעגל העסקים | discovery | niche/community | [bayadaim.org.il](https://www.bayadaim.org.il/%D7%94%D7%91%D7%9C%D7%95%D7%92/%D7%9E%D7%A2%D7%92%D7%9C-%D7%94%D7%A2%D7%A1%D7%A7%D7%99%D7%9D-%D7%A2%D7%9C-%D7%9E%D7%94-%D7%95%D7%9C%D7%9E%D7%94/) | אינדקס עסקים ויוזמות קיימות עם קישורים לאתרים חיצוניים | 2 | 4 | 4 | 1 | 4 | discovery לחוות חדשות ומקורות עתידיים |
-| SRC013 | פרמקלצ'ר ישראל | discovery | niche/community | [permaculture.org.il](https://www.permaculture.org.il/) | "מפת רשת החיים", פרויקטים, קהילות, חקלאים ומורים | 2 | 4 | 4 | 1 | 4 | discovery ואימות קהילתי |
-| SRC014 | תנועת החוות הירוקות | discovery/meta | niche/community | [next.obudget.org/.../580652170](https://next.obudget.org/i/org/association/580652170) | רישום ארגון בלבד, כרגע ללא אינדקס חוות ציבורי שנמצא | 1 | 1 | 3 | 1 | 2 | מעקב בלבד עד שיימצא נכס ציבורי שימושי |
-| SRC015 | מחירי תוצרת הארץ - משרד החקלאות | benchmark רשמי | benchmark | [prices.moag.gov.il](https://prices.moag.gov.il) | מחירי שוק סיטוני רשמיים לפירות וירקות | 5 | 5 | 4 | 2 | 5 | benchmark כללי נפרד |
-| SRC016 | דוחות שבועיים - משרד החקלאות | benchmark/validation | benchmark | [gov.il weekly-prices](https://www.gov.il/he/departments/dynamiccollectors/weekly-prices?skip=0&year=9) | דוחות שבועיים מסכמים, כולל חיבור בין סיטונאי לצרכן | 4 | 4 | 5 | 1 | 4 | validation ובקרה עסקית |
-| SRC017 | Pricez | benchmark קמעונאי | benchmark | [pricez.co.il](https://www.pricez.co.il/) | השוואת מחירי רשתות; האתר מציג שהמחירים מסופקים על ידי הרשתות עצמן | 4 | 5 | 4 | 3 | 5 | שכבת benchmark לרשתות |
-| SRC018 | CHP | benchmark קמעונאי | benchmark | [chp.co.il](https://chp.co.il/) | השוואת מחירים לפי אזור וחנויות, כולל מוצרי ירקות/פירות | 4 | 5 | 4 | 3 | 5 | שכבת benchmark לרשתות |
-| SRC019 | סקאל ישראל | אימות אורגני | verification | [secal.co.il](https://www.secal.co.il/) | מידע על תקנים אורגניים וחקלאיים; שימושי לאימות claim אורגני | 3 | 3 | 4 | 1 | 4 | שכבת verification |
-| SRC020 | IQC | אימות אורגני | verification | [iqc.co.il](https://www.iqc.co.il/) | גוף פיקוח ואישור לחקלאות אורגנית ותקנים חקלאיים | 3 | 3 | 4 | 1 | 4 | שכבת verification |
+| ID | מקור | קבוצה | סוג שוק | URL | platform_family | מה זמין בפועל | איכות נתון | כיסוי | יציבות | סיכון תחזוקה | עדיפות MVP | status | legal_review_required | תפקיד מומלץ |
+|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|---|---|---|
+| SRC001 | easyFarm platform | תשתית discovery | community | [easyfarm.co.il](https://www.easyfarm.co.il/) | easyfarm | זיהוי משפחת חנויות חקלאיות, מחירון, סלים, אזורי חלוקה | 4 | 5 | 4 | 2 | 5 | active | false | משפחת מקור ליבה + discovery |
+| SRC002 | סבתא יהודית | מחיר ישיר + סלים | community | [sapta.easyfarm.co.il](https://sapta.easyfarm.co.il/manage/product/price_list/) | easyfarm | מחירון ציבורי מלא, יחידות, ק"ג, סלים, פיקוח IQC | 5 | 4 | 4 | 2 | 5 | active | false | מקור ליבה ראשון |
+| SRC003 | ח'ביזה | CSA / subscription | community | [chubeza.easyfarm.co.il](https://chubeza.easyfarm.co.il/manage/customer/ano_custom_reg/HE/) | easyfarm | מחירי ארגזים, תדירות, הרכב סל עונתי | 4 | 3 | 4 | 2 | 5 | active | false | מקור ליבה לשכבת CSA |
+| SRC004 | קיימא בית זית | מחיר ישיר + סלים | community | [kaima.easyfarm.co.il](https://kaima.easyfarm.co.il/shop/home/) | easyfarm | מחירי ירקות לק"ג/יחידה, ארגזים, חלונות הזמנה | 5 | 4 | 4 | 2 | 5 | active | false | מקור ליבה לנישה |
+| SRC005 | קיימא חוקוק | מחיר ישיר + חנות חווה | community | [kaima-hukuk.easyfarm.co.il](https://kaima-hukuk.easyfarm.co.il/shop/) | easyfarm | מחירים לצרכן, ציון IQC ומספר עוסק אורגני | 5 | 3 | 4 | 2 | 5 | active | false | מקור ליבה עם מטא-דאטה אורגני |
+| SRC006 | עץ השדה | חנות חווה / הזמנות | community | [etzhasade.easyfarm.co.il](https://etzhasade.easyfarm.co.il/shop/) | easyfarm | קטלוג הזמנות, הערת סטיות משקל | 4 | 3 | 4 | 2 | 4 | active | false | מקור משלים easyFarm |
+| SRC007 | סלסילה | סלים | community | [salsila.co.il](https://www.salsila.co.il/) | standalone | הרכב סל משתנה, עדכון קבוע לפני משלוח | 3 | 2 | 3 | 3 | 4 | active | false | מקור לשכבת baskets |
+| SRC008 | שדה ירוק | חנות אונליין אורגנית | community | [sadeyarok.co.il](https://www.sadeyarok.co.il/) | standalone | מחירי מארזים, מחירי ק"ג, מבצעים | 5 | 4 | 4 | 3 | 5 | active | false | מקור חזק לנישה |
+| SRC009 | משק זינגר | חנות אונליין אורגנית | community | [zinger-organic.com](https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA) | standalone | ~60 מוצרים, מחירים, יחידות, יצרנים | 5 | 4 | 4 | 3 | 5 | active | false | מקור ליבה לנישה |
+| SRC010 | Farmerim | אגרגטור אורגני | community | [farmerim.com](https://farmerim.com/organic) | aggregator | מחירים, מארזים/ק"ג, סימון אורגני | 4 | 5 | 4 | 3 | 5 | active | false | מקור רוחב לאגרגציה |
+| SRC011 | האורגני | אגרגטור חקלאים | community | [haorgani.co.il](https://haorgani.co.il/) | aggregator | 80+ חקלאים ויצרנים, שיח קהילה-חקלאים | 4 | 5 | 4 | 3 | 5 | active | false | מקור רוחב + discovery |
+| SRC012 | בידיים | discovery | community | [bayadaim.org.il](https://www.bayadaim.org.il/) | standalone | אינדקס עסקים וקישורים חיצוניים | 2 | 4 | 4 | 1 | 4 | active | false | discovery לחוות חדשות |
+| SRC013 | פרמקלצ'ר ישראל | discovery | community | [permaculture.org.il](https://www.permaculture.org.il/) | standalone | "מפת רשת החיים", פרויקטים, קהילות | 2 | 4 | 4 | 1 | 4 | active | false | discovery ואימות קהילתי |
+| SRC014 | תנועת החוות הירוקות | discovery/meta | community | [next.obudget.org](https://next.obudget.org/i/org/association/580652170) | standalone | רישום ארגון בלבד | 1 | 1 | 3 | 1 | 2 | candidate | false | מעקב בלבד |
+| SRC015 | מחירי תוצרת הארץ | benchmark רשמי | benchmark | [prices.moag.gov.il](https://prices.moag.gov.il) | govt | מחירי שוק סיטוני רשמיים | 5 | 5 | 4 | 2 | 5 | active | false | benchmark ראשי |
+| SRC016 | דוחות שבועיים משרד החקלאות | benchmark/validation | benchmark | [gov.il weekly-prices](https://www.gov.il/he/departments/dynamiccollectors/weekly-prices?skip=0&year=9) | govt | דוחות שבועיים PDF | 4 | 4 | 5 | 1 | 4 | active | false | validation ובקרה |
+| SRC017 | Pricez | benchmark קמעונאי | benchmark | [pricez.co.il](https://www.pricez.co.il/) | standalone | השוואת מחירי רשתות | 4 | 5 | 4 | 3 | 5 | candidate | **true** | benchmark רשתות — עצור לbdיקה משפטית |
+| SRC018 | CHP | benchmark קמעונאי | benchmark | [chp.co.il](https://chp.co.il/) | standalone | השוואת מחירים לפי אזור וחנויות | 4 | 5 | 4 | 3 | 5 | candidate | **true** | benchmark רשתות — עצור לבדיקה משפטית |
+| SRC019 | סקאל ישראל | אימות אורגני | verification | [secal.co.il](https://www.secal.co.il/) | standalone | מידע על תקנים אורגניים | 3 | 3 | 4 | 1 | 4 | active | false | verification layer |
+| SRC020 | IQC | אימות אורגני | verification | [iqc.co.il](https://www.iqc.co.il/) | standalone | גוף פיקוח ואישור אורגני | 3 | 3 | 4 | 1 | 4 | active | false | verification layer |
+
+---
+
+## הערות legal_review_required
+
+### SRC017 — Pricez
+
+**legal_review_required = true**
+
+`pricez.co.il` מצהיר שהמחירים מסופקים על ידי הרשתות עצמן. אין ודאות לגבי:
+- האם scraping מותר על פי תנאי השימוש
+- האם ישנה מגבלה על שימוש בנתונים לפרסום ציבורי
+
+**פעולה נדרשת:** לקרוא T&C של Pricez לפני בניית collector.  
+**עד אז:** status=candidate, אין לבנות collector.
+
+### SRC018 — CHP
+
+**legal_review_required = true**
+
+אותן מגבלות כמו Pricez.  
+**פעולה נדרשת:** לקרוא T&C של CHP.  
+**עד אז:** status=candidate.
+
+---
+
+## easyFarm Platform Family — הערה חשובה
+
+SRC001–SRC006 כולם שייכים ל-`platform_family = 'easyfarm'`.
+
+**משמעות:** שינוי בפלטפורמת easyFarm עשוי לשבור את כל ששת המקורות בבת אחת.
+
+**ניהול הסיכון:**
+- collector גנרי אחד: `collectors/easyfarm.py` שמקבל `site_subdomain` כפרמטר
+- monitoring: אם easyFarm-family source נכשל — לוג WARNING ל-admin
+- ב-source_fetch_profiles: `platform_family = 'easyfarm'` לכל 6 המקורות
+
+---
 
 ## חלוקה תפעולית מומלצת
 
-### קבוצת ליבה לחיבור מוקדם
+### קבוצת ליבה לחיבור מוקדם (V1 phase 1)
 
-- `SRC002` סבתא יהודית
-- `SRC003` ח'ביזה
-- `SRC004` קיימא בית זית
-- `SRC005` קיימא חוקוק
-- `SRC008` שדה ירוק
-- `SRC009` משק זינגר
-- `SRC010` Farmerim
-- `SRC011` האורגני
+| ID | מקור | platform_family |
+|---|---|---|
+| SRC002 | סבתא יהודית | easyfarm |
+| SRC003 | ח'ביזה | easyfarm |
+| SRC004 | קיימא בית זית | easyfarm |
+| SRC005 | קיימא חוקוק | easyfarm |
+| SRC008 | שדה ירוק | standalone |
+| SRC009 | משק זינגר | standalone |
+| SRC010 | Farmerim | aggregator |
+| SRC011 | האורגני | aggregator |
 
 ### קבוצת benchmark
 
-- `SRC015` מחירי תוצרת הארץ
-- `SRC016` דוחות שבועיים
-- `SRC017` Pricez
-- `SRC018` CHP
+| ID | מקור | status |
+|---|---|---|
+| SRC015 | מחירי תוצרת הארץ | active |
+| SRC016 | דוחות שבועיים | active |
+| SRC017 | Pricez | candidate — legal review |
+| SRC018 | CHP | candidate — legal review |
 
 ### קבוצת discovery
 
-- `SRC001` easyFarm platform
-- `SRC012` בידיים
-- `SRC013` פרמקלצ'ר ישראל
-- `SRC014` תנועת החוות הירוקות
+- SRC001 easyFarm platform
+- SRC012 בידיים
+- SRC013 פרמקלצ'ר ישראל
+- SRC014 תנועת החוות הירוקות
 
 ### קבוצת verification
 
-- `SRC019` סקאל
-- `SRC020` IQC
+- SRC019 סקאל
+- SRC020 IQC
+
+---
 
 ## מסקנות עבודה
 
-1. משפחת `easyFarm` היא כיום ערוץ האיסוף הטוב ביותר לחיבור מהיר למספר חוות ו-CSA.
-2. מקורות כמו `Farmerim` ו-`האורגני` חשובים כי הם מספקים כיסוי רחב גם אם אינם "חווה בודדת".
-3. מקורות discovery לא נותנים מחירים, אבל הם קריטיים להרחבת הרשת.
-4. מקורות benchmark חייבים להיות נפרדים מהאגרגציה הקהילתית הראשית.
-5. verification של אורגני צריך להישמר כשכבת מטא-דאטה, לא כמקור מחיר.
+1. משפחת `easyFarm` היא ערוץ האיסוף הטוב ביותר לחיבור מהיר — generic collector אחד.
+2. מקורות `Farmerim` ו-`האורגני` חשובים לכיסוי רחב גם אם אינם "חווה בודדת".
+3. discovery sources לא נותנים מחירים — קריטיים להרחבת הרשת בהמשך.
+4. benchmark חייב להיות נפרד מהאגרגציה הקהילתית.
+5. SRC017/SRC018 — לא לבנות collector לפני legal review.
 
 ## צעד המשך מומלץ
 
-לשלב הפיתוח הבא נכון לקחת את `SRC002-005` ו-`SRC008-011`, ולבנות עבורם:
+לשלב הפיתוח הראשון לקחת SRC002–SRC006 ו-SRC008–SRC011 ולבנות עבורם:
 
-- טבלת `sources`
-- טבלת `source_fetch_profiles`
-- טבלת `source_product_aliases`
-- טסט גישה ראשוני לכל מקור
+- טבלת `sources` (seed data)
+- טבלת `source_fetch_profiles` עם `platform_family`
+- collector tests: HTTP GET לכל entry_url
+- parser skeleton לכל normalizer_type

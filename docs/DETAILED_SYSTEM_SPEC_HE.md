@@ -1,414 +1,331 @@
 # אפיון מערכת מפורט
 
-תאריך: 2026-03-29
+גרסה: 1.1  
+תאריך: 2026-03-29  
+שינויים מגרסה 1.0: Python/Flask stack, normalizer admin מסך, alerting spec, manifest fallback, basket policy, agent-friendly code structure
 
 ## 1. מטרת המסמך
 
 להגדיר את הארכיטקטורה, תהליכי העבודה, מודל הפריסה, הממשקים, זרימת הנתונים והחלטות המימוש של המערכת לפני תחילת כתיבת קוד.
 
-המסמך הזה מניח:
+## 2. החלטה אדריכלית — סגורה
 
-- הפרויקט צריך להישאר פשוט
-- שכבת הניהול צריכה להישאר מקומית ככל האפשר
-- הממשק הציבורי צריך לחיות בתוך אתר הוורדפרס הקיים `nimrod.bio`
-- המערכת הציבורית תציג אגרגציה בלבד, בלי חשיפת מקור ספציפי
+**`Local Data Hub + Public WordPress Surface`**
 
-## 2. החלטה אדריכלית מוצעת
+**Python 3.11+ + Flask + PostgreSQL (ישירות, ללא Docker)**
 
-### ההצעה
+- Agents מפתחים את המערכת — מבנה מודולרי חיוני
+- venv + requirements.txt לניהול dependencies
+- כל module עצמאי — collectors, parsers, normalizer, aggregator, publisher, admin
 
-לאמץ ארכיטקטורה של `Local Data Hub + Public WordPress Surface`.
+## 3. מבנה פרויקט — agent-friendly
 
-כלומר:
+```
+smallfarms/
+├── collectors/              # fetch ממקורות
+│   ├── __init__.py
+│   ├── engine.py            # CollectorEngine
+│   ├── easyfarm.py          # easyFarm generic collector
+│   ├── json_api.py          # JSON endpoint collector
+│   └── pdf_downloader.py
+├── parsers/                 # חילוץ items מ-raw
+│   ├── __init__.py
+│   ├── engine.py            # ParserEngine (dispatcher)
+│   ├── easyfarm_catalog.py
+│   ├── simple_product_grid.py
+│   ├── basket_only.py
+│   ├── retail_benchmark.py
+│   └── official_wholesale.py
+├── normalizer/              # נרמול data-driven
+│   ├── __init__.py
+│   ├── engine.py            # NormalizerEngine
+│   ├── alias_resolver.py
+│   ├── unit_resolver.py
+│   ├── price_resolver.py
+│   └── confidence.py
+├── aggregator/              # חישוב daily/weekly
+│   ├── __init__.py
+│   ├── engine.py            # AggregatorEngine
+│   └── weekly.py
+├── qa/                      # QA ו-anomaly detection
+│   ├── __init__.py
+│   └── engine.py            # QAEngine
+├── publisher/               # build + upload artifacts
+│   ├── __init__.py
+│   ├── engine.py            # PublishEngine
+│   ├── builder.py           # JSON + HTML builder
+│   ├── uploader.py          # FTPS upload
+│   └── templates/
+│       └── public_report.html.jinja2
+├── admin/                   # Flask admin UI
+│   ├── __init__.py
+│   ├── app.py               # Flask app factory
+│   ├── routes/
+│   │   ├── dashboard.py
+│   │   ├── sources.py
+│   │   ├── runs.py
+│   │   ├── observations.py
+│   │   ├── qa.py
+│   │   ├── publish.py
+│   │   └── normalizer.py    # aliases, rules, merges, flags
+│   ├── templates/
+│   └── static/
+├── models/                  # SQLAlchemy models
+│   ├── __init__.py
+│   ├── base.py
+│   ├── measurement.py       # measurement_units, unit_conversions
+│   ├── products.py          # products, aliases, variants, merges
+│   ├── sources.py           # sources, fetch_profiles
+│   ├── normalizer.py        # profiles, rules, observation_flags
+│   ├── runs.py              # ingestion_runs, source_fetch_runs, raw_assets
+│   ├── observations.py      # raw_extracted_items, normalized_observations
+│   ├── aggregates.py        # daily_aggregates, weekly_snapshots
+│   ├── publish.py           # publish_runs, publish_artifacts
+│   └── users.py             # users, audit_log, log_entries
+├── db/                      # migrations + seed
+│   ├── session.py
+│   ├── alembic.ini
+│   └── versions/
+│       ├── 001_initial_schema.py
+│       ├── 002_seed_units.py
+│       ├── 003_seed_products.py
+│       └── 004_seed_sources.py
+├── scheduler/               # cron entry points
+│   ├── run_daily.py
+│   └── check_staleness.py
+├── utils/                   # shared utilities
+│   ├── alerts.py            # email alerts
+│   ├── checksums.py
+│   ├── logging.py
+│   └── config.py
+├── tests/                   # per-module tests
+│   ├── test_normalizer.py
+│   ├── test_aggregator.py
+│   └── test_publisher.py
+├── requirements.txt
+├── .env.example
+└── README.md
+```
 
-1. סביבת הפיתוח המקומית מריצה collectors, parsers, normalization ואגרגציה.
-2. ממשק הניהול חי רק בסביבה המקומית.
-3. המערכת המקומית מייצרת artifact ציבורי מצומצם:
-   - `public_report.json`
-   - `public_report.html`
-4. artifact זה מועלה לשרת של `nimrod.bio`.
-5. עמוד וורדפרס ציבורי מציג את המידע מתוך ה-artifact הציבורי בלבד.
-6. בשלב מאוחר יותר הסביבה המקומית עוברת לרוץ על PC ישן ייעודי.
+## 4. dependencies (requirements.txt)
 
-### החלטה
+```
+# Core
+sqlalchemy>=2.0
+alembic>=1.13
+psycopg2-binary>=2.9
+httpx>=0.27
 
-ההצעה נכונה ומתאימה ל-V1, עם תיקון חשוב אחד:
+# Parsing
+beautifulsoup4>=4.12
+lxml>=5.1
 
-המערכת הציבורית לא צריכה לדבר ישירות עם סביבת הפיתוח המקומית, אלא רק לקבל ממנה export סטטי או חצי-סטטי. זה שומר על פשטות, מצמצם אבטחה, ומונע תלות ישירה במחשב הפיתוח.
+# Admin UI
+flask>=3.0
+flask-login>=0.6
+jinja2>=3.1
 
-## 3. ניתוח חלופות
+# Utils
+python-dotenv>=1.0
+click>=8.1
 
-| חלופה | יתרון | חסרון | החלטה |
-|---|---|---|---|
-| מערכת ווב מלאה עם admin ו-auth בשרת הציבורי | מערכת אחת, כתובת אחת | יותר אבטחה, יותר auth, יותר תחזוקה | לא מומלץ ל-V1 |
-| הכל בתוך וורדפרס | נוח לפרסום ציבורי | וורדפרס לא מתאים להיות מנוע scraping, parsing ו-QA | לא מומלץ |
-| מערכת מקומית בלבד ללא אתר ציבורי | הכי פשוט טכנית | לא עונה על צורך קהילתי פתוח | לא מתאים |
-| מערכת מקומית + פרסום ציבורי סטטי לוורדפרס | פשוט, בטוח יחסית, גמיש, זול לתחזוקה | דורש מנגנון publish נפרד | מומלץ |
-| מערכת מקומית + iframe מהמחשב המקומי | פשוט לכאורה | שביר, חשוף, תלוי בזמינות מחשב מקומי | לא מומלץ |
+# Dev / Test
+pytest>=8.0
+pytest-cov
+```
 
-## 4. הקשר לאתר `nimrod.bio`
-
-בבדיקה ציבורית של `nimrod.bio` ב-2026-03-29 נצפו המאפיינים הבאים:
-
-- אתר וורדפרס קיים עם שפה תוכנית וחמה
-- טון קהילתי, אקולוגי ולא "מוצרי SaaS"
-- ניווט, בלוג, אזורי תוכן עשירים ו-CTA פשוטים
-- שפה ויזואלית שמתאימה לתוכן חקלאי-קהילתי ולא ללוח מחוונים טכני
-- קיימת כבר מורכבות frontend מסוימת, כולל JS צד-לקוח וטפסי קשר
-
-### מסקנת UI
-
-הממשק הציבורי החדש צריך להיראות כמו עוד עמוד טבעי באתר:
-
-- עברית מלאה
-- טון קהילתי
-- צבעוניות אדמתית/ירוקה
-- היררכיה תוכנית ברורה
-- מעט אינטראקציה, בלי להיראות כמו מערכת enterprise
-
-לא נכון לשתול באתר dashboard טכני או SPA כבד.
-
-## 5. עקרונות תכנון
-
-- `simple first`
-- איסוף מקומי, חשיפה ציבורית מינימלית
-- הפרדה מוחלטת בין data internals לבין public presentation
-- אין API ציבורי ב-V1
-- אין משתמשים ציבוריים
-- אין חשיפת מקורות לציבור
-- כל run נשמר
-- כל publish ציבורי ניתן לשחזור
-
-## 6. תרשים מערכת
+## 5. תרשים מערכת
 
 ```mermaid
 flowchart LR
-    A["Local Collector Engine"] --> B["Raw Files"]
-    A --> C["Normalization + Aggregation"]
-    C --> D["Local Admin UI"]
-    C --> E["Public Export Builder"]
-    E --> F["public_report.json / html"]
-    F --> G["Upload to nimrod.bio"]
-    G --> H["WordPress Public Page"]
+    A["cron 06:00"] --> B["IngestionRunner"]
+    B --> C["CollectorEngine"]
+    C --> D["raw files (filesystem)"]
+    D --> E["ParserEngine"]
+    E --> F["raw_extracted_items (DB)"]
+    F --> G["NormalizerEngine (data-driven)"]
+    G --> H["normalized_observations (DB)"]
+    H --> I["AggregatorEngine"]
+    I --> J["daily_aggregates (DB)"]
+    J --> K["QAEngine"]
+    K --> L["PublishEngine"]
+    L --> M["artifacts (filesystem)"]
+    M --> N["FTPS Upload"]
+    N --> O["nimrod.bio WordPress"]
+    J --> P["Flask Admin UI"]
 ```
 
-## 7. רכיבי המערכת
+## 6. רכיבי המערכת
 
-### 7.1 מנוע נתונים מקומי
+### 6.1 CollectorEngine
 
-אחראי על:
+- fetch ל-URL עם httpx
+- deduplication לפי checksum (לא מעבד raw זהה פעמיים)
+- retry עם backoff לפי retry_policy_json
+- שמירת raw על filesystem + raw_asset ב-DB
+- ניהול easyFarm כ-platform: collector גנרי אחד לכל תת-דומיין
 
-- רישום מקורות
-- fetch למקורות
-- שמירת raw
-- parsing
-- normalization
-- אגרגציה
-- בניית export ציבורי
+### 6.2 ParserEngine
 
-### 7.2 ממשק ניהול מקומי
+- dispatcher לפי normalizer_type
+- כל parser מחזיר `list[RawExtractedItem]`
+- parsers נפרדים: easyfarm_catalog, simple_product_grid, basket_only, retail_benchmark, official_wholesale
+- `EasyFarmCatalogParser` — generic ל-SRC002–SRC006
 
-אחראי על:
+### 6.3 NormalizerEngine
 
-- צפייה במקורות
-- צפייה ב-runs
-- צפייה ב-observations
-- QA
-- סימון חריגות
-- הרצה ידנית של תהליכים
-- publish ידני כ-override או rerun
+**data-driven לחלוטין** — ראו `NORMALIZER_SPEC_HE.md`
 
-זהו רכיב חובה ב-V1, לא nice-to-have.
+- טעינת rules מ-DB לזיכרון בתחילת run (cache per source)
+- resolve_product → resolve_unit → resolve_price → calc_confidence → apply_flags
+- basket items → `is_basket_product=true`, לא נכנסים לאגרגציה ק"ג
 
-ב-V1 הממשק הזה הוא כלי פיתוח, ניטור ותפעול, ולא מסך ניהול עסקי מלא.
+### 6.4 AggregatorEngine
 
-### 7.3 בונה export ציבורי
+- daily: weighted_avg + unweighted_avg + median + stddev per (product, market_scope, channel)
+- `meets_publish_threshold` = sample_size >= 2 AND distinct_sources >= 2
+- weekly: freeze שבועי מ-daily aggregates (כל ראשון)
 
-אחראי על:
+### 6.5 QAEngine
 
-- חילוץ subset ציבורי בלבד
-- בניית JSON ציבורי
-- בניית partial HTML או static block
-- הטמעת timestamp של publish
-- מניעת דליפת source identifiers
+- outlier detection: מחיר > 3x median היסטורי → flag review
+- duplicate detection
+- unrealistic prices (< 0.5 ILS, > 500 ILS/kg)
+- missing source alert (priority >= 7)
 
-### 7.4 ממשק וורדפרס ציבורי
+### 6.6 PublishEngine
 
-אחראי על:
+- בניית `community`, `benchmark`, `baskets` sections
+- render HTML עם Jinja2 template
+- atomicity: upload artifacts → verify → update manifest
+- `manifest_last_good.json` — תמיד עותק של manifest קודם
 
-- הצגת המחירון
-- הצגת היסטוריה בסיסית
-- הצגת disclaimer על אגרגציה
-- הצגת benchmark בנפרד
+### 6.7 Flask Admin UI
 
-## 8. מודל פריסה
+**מסכי חובה:**
 
-### שלב A: סביבת פיתוח
+| מסך | תוכן |
+|---|---|
+| Dashboard | ריצה אחרונה, publish status, stats summary |
+| Sources | רשימת מקורות, סטטוס, last success |
+| Runs | היסטוריית ריצות, errors, raw links |
+| Observations | תצפיות עם filter, confidence, flag |
+| QA | outliers, review flags, missing sources |
+| Publish | preview artifact, upload status, manual trigger |
+| **Normalizer** | aliases, rules, merges, observation flags — edit, add, deactivate |
 
-- הכל רץ על מחשב הפיתוח
-- ממשק admin זמין רק מקומית
-- binding ל-`127.0.0.1`
-- publish ציבורי נעשה אוטומטית אחת ליום אחרי run מוצלח
-- בממשק המקומי יש יכולת rerun / publish override ידני
+**Normalizer מסך — פירוט:**
+- Product Aliases: רשימה + add/edit/deactivate (ללא deploy)
+- Normalizer Rules: per source, priority sort, regex support
+- Product Merges: merge two products, view history
+- Observation Flags: hide/review rules per scope
 
-### שלב B: PC ישן ייעודי
+## 7. מודל פריסה
 
-- המנוע המקומי עובר למחשב ייעודי
-- cron רץ שם
-- publish ציבורי נעשה אוטומטית
-- הגישה לממשק admin תישאר:
-  - local only
-  - או VPN/LAN בלבד
+### Phase A: dev machine
 
-### החלטה חשובה
+- הכל על מחשב הפיתוח
+- Flask admin נגיש רק ב-`127.0.0.1:5000`
+- cron מוגדר localy
+- publish ל-uPress ב-FTPS (לאחר proof test)
+- ללא auth אפליקטיבי
 
-גם בשלב B לא נכון לחשוף admin פתוח לאינטרנט.
+### Phase B: PC ייעודי
 
-## 9. מודל אבטחה והרשאות
+- המנוע עובר ל-PC ייעודי
+- Flask admin: LAN only + HTTP Basic Auth
+- cron על PC הייעודי
+- SSH אפשרי (תלוי ב-uPress)
 
-ההצעה שלך לצמצם את auth נכונה, אבל צריך לדייק:
+## 8. מנגנון alerting — חובה
+
+### email alert על:
+
+1. `ingestion_run.status == 'failed'` — run נכשל לחלוטין
+2. `publish_run.status == 'upload_failed'`
+3. `staleness_days >= 2` — לא פורסם 2 ימים (אזהרה מוקדמת)
+
+```python
+# utils/alerts.py
+import smtplib
+from email.mime.text import MIMEText
+
+ALERT_EMAIL = os.getenv('ALERT_EMAIL')
+SMTP_HOST = os.getenv('SMTP_HOST', 'localhost')
+
+def send_email(to: str, subject: str, body: str):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = 'smallfarms@localhost'
+    msg['To'] = to
+    with smtplib.SMTP(SMTP_HOST) as s:
+        s.send_message(msg)
+```
+
+### admin UI banner:
+
+- Dashboard מציג banner אדום אם ריצה אחרונה נכשלה
+- Dashboard מציג `staleness_days` של publish אחרון
+
+## 9. mו אבטחה והרשאות
 
 ### בממשק הציבורי
 
 - אין login
-- אין חשבון משתמש
 - אין נתונים רגישים
+- אין API חי
 
-### בממשק המנהל בשלב A
+### בממשק admin Phase A
 
-אם הוא רץ רק על `127.0.0.1`, אפשר להסתפק בהגנת מערכת ההפעלה, בלי auth אפליקטיבי בשלב הראשון.
+- binding ל-`127.0.0.1` — הגנת OS מספיקה
+- ללא auth אפליקטיבי
 
-עם זאת, ממשק admin מקומי עצמו הוא חובה כבר בשלב הראשון לצורכי פיתוח, ניטור ולוגים.
+### בממשק admin Phase B
 
-### בממשק המנהל בשלב B
+- HTTP Basic Auth ברמת Flask/nginx
+- `users` table מוכן ב-schema
 
-אם הוא עובר למחשב ייעודי, מומלץ להוסיף לפחות אחת מהאפשרויות הבאות:
+## 10. manifest fallback strategy
 
-- `HTTP Basic Auth` ברמת שרת מקומי
-- login אפליקטיבי יחיד
+```
+WP renderer:
+1. fetch manifest.json
+2. אם staleness_level == 'ok' || 'warning':
+   → load artifact from manifest.json_path
+3. אם artifact לא נגיש (404/timeout):
+   → fetch manifest_last_good.json
+   → load artifact from manifest_last_good.json_path
+4. אם גם last_good לא נגיש:
+   → הצג הודעה "מחירון זמנית לא זמין"
+```
 
-### החלטה מומלצת
+`manifest_last_good.json` — תמיד עותק של manifest מהפרסום המוצלח **שלפני** הנוכחי.  
+מעודכן כחלק מכל publish run מוצלח.
 
-- `Phase A`: ללא auth אפליקטיבי, כל עוד admin local-only
-- `Phase B`: auth בסיסי יחיד למשתמש מנהל
+## 11. החלטות שנסגרו — לא יפתחו מחדש
 
-כך שומרים על פשטות בלי לנעול את עצמנו לפתרון מסוכן בהמשך.
+| נושא | החלטה |
+|---|---|
+| שפה | Python 3.11+ |
+| Admin UI | Flask |
+| DB | PostgreSQL (ללא Docker) |
+| Normalizer | data-driven מ-DB |
+| Baskets | מוצרים עצמאיים |
+| Min sample | 2 obs מ-2 מקורות |
+| Publish threshold | 2 community sources |
+| Stale TTL | 3d warning, 8d stale |
+| Region filter | לא בV1 |
+| Auth Phase A | ללא |
+| Auth Phase B | Basic Auth |
 
-## 10. מנגנון פרסום ל-WordPress
-
-זו ההחלטה הטכנית החשובה ביותר ב-V1.
-
-### אפשרות מומלצת
-
-המערכת המקומית תייצר:
-
-- `public_report.json`
-- `public_report.html`
-
-ותעלה אותם לשרת של וורדפרס, למשל לנתיב ייעודי:
-
-- `/wp-content/uploads/market/public_report.json`
-- `/wp-content/uploads/market/public_report.html`
-
-### איך עמוד הוורדפרס יציג את הנתונים
-
-יש שלוש אפשרויות:
-
-1. shortcode קטן שקורא JSON ציבורי ומציג אותו
-2. block HTML שמטמיע partial HTML מוכן
-3. page template ייעודי שטוען JSON ומרנדר
-
-### המלצה
-
-ל-V1:
-
-- להשתמש ב-`public_report.html` או `public_report.json`
-- להציג אותו דרך page template פשוט או block ייעודי
-- לא לבנות plugin כבד
-
-### למה זה טוב
-
-- אין צורך ב-API חי
-- אין צורך ב-auth בין הוורדפרס למערכת המקומית בזמן ריצה
-- אין חשיפת admin
-- אפשר לשחזר publish בקלות
-
-## 11. זרימת עבודה מלאה
-
-1. `cron` מפעיל סריקה.
-2. כל מקור נשמר כ-raw.
-3. parser מייצר observations.
-4. normalization מאחד שמות, יחידות וערוצים.
-5. aggregation מחשב public metrics.
-6. QA מקומי מזהה חריגות.
-7. publish builder יוצר export ציבורי.
-8. export מועלה לשרת הוורדפרס.
-9. עמוד `nimrod.bio` הציבורי מציג את ה-export האחרון.
-
-## 12. מודל נתונים ברמת מערכת
-
-### שכבת raw
-
-- קובצי HTML/JSON/PDF שנשמרו
-- metadata לכל fetch
-
-### שכבת normalized observations
-
-- observation לכל מוצר/מקור/זמן
-- שדות נרמול
-- confidence
-
-### שכבת aggregates
-
-- daily public aggregates
-- benchmark aggregates
-- historical aggregates
-
-### שכבת publish
-
-- artifacts ציבוריים
-- version של publish
-- published_at
-
-## 13. הגדרת subset ציבורי
-
-הממשק הציבורי יציג רק:
-
-- שם מוצר
-- טווח תאריך/עדכון
-- מחיר ממוצע
-- חציון
-- סטיית תקן
-- מינימום
-- מקסימום
-- מספר תצפיות
-- שיוך שוק:
-  - שוק קהילתי-אורגני
-  - benchmark רשתות
-
-הממשק הציבורי לא יציג:
-
-- source name
-- URL source
-- raw values
-- parser diagnostics
-- internal confidence comments
-
-## 14. מודל ה-admin המקומי
-
-ה-admin צריך לכלול את המסכים הבאים:
-
-### Dashboard
-
-- status של הריצה האחרונה
-- מספר מקורות פעילים
-- מספר כשלונות
-- publish status
-
-### Sources
-
-- רשימת מקורות
-- סוג מקור
-- עדיפות
-- סטטוס חיבור
-- fetch profile
-
-### Runs
-
-- היסטוריית ריצות
-- זמן התחלה/סיום
-- שגיאות
-- קישור ל-raw
-
-### Observations
-
-- תצפיות גולמיות
-- ערך מנורמל
-- confidence
-- benchmark flag
-
-### QA
-
-- חריגות
-- חוסרים
-- כפילויות
-- unit mismatch
-
-### Publish
-
-- preview ציבורי
-- timestamp
-- build artifacts
-- upload status
-- manual rerun
-- trigger יזום לסריקה / normalization / publish
-
-## 15. החלטות UX
-
-### ציבורי
-
-- לא dashboard
-- כן עמוד תוכן-נתונים
-- כן טקסט הסבר קצר על המתודולוגיה
-- כן כרטיסי מוצרים וטבלה קריאה
-- כן benchmark בנפרד
-
-### admin
-
-- utilitarian
-- טבלאי
-- קריא ומהיר
-- ללא השקעת עיצוב מיותרת בשלב ראשון
-- ממוקד ניטור, לוגים, QA והרצת תהליכים ידנית
-
-## 16. שפת עיצוב ציבורית
-
-בהתאם ל-`nimrod.bio`:
-
-- רקע בהיר
-- ירוקים/חומים/קרם
-- כותרות חמות ולא טכניות
-- CTA עדינים
-- קופסאות מידע עם אוויר
-- פחות "גרפים נוצצים", יותר קריאות
-
-## 17. סיכונים והפחתה
+## 12. סיכונים והפחתה
 
 | סיכון | השפעה | הפחתה |
 |---|---|---|
-| תלות במחשב פיתוח | publish נפסק כשהמחשב כבוי | מעבר עתידי ל-PC ייעודי |
-| publish ל-WordPress נשבר | האתר הציבורי מציג מידע ישן | לשמור last good artifact |
+| easyFarm פלטפורמה משתנה | 5 מקורות ישברו | platform_family + generic collector |
+| publish ל-WordPress נשבר | מידע ישן מוצג | manifest_last_good + staleness banners |
 | מקור משתנה | parser נשבר | QA + source versioning |
+| cache/CDN של uPress | עיכוב עדכון | versioned filenames + proof tests |
 | admin נחשף בטעות | סיכון אבטחה | local-only binding |
-| עמוד ציבורי נראה זר לאתר | UX חלש | להטמיע בתוך theme/WordPress |
-
-## 18. החלטות לביצוע לפני קוד
-
-לפני שמתחילים לפתח, צריך לנעול:
-
-1. האם publish יהיה דרך `public_report.html`, `public_report.json`, או שניהם
-2. האם upload לשרת ייעשה ב-SFTP, rsync, או דרך endpoint פשוט
-3. האם ב-Phase A יש auth אפליקטיבי או local-only ללא auth
-4. אילו מסכים בדיוק ייכנסו ל-admin של V1
-5. אילו KPI יופיעו בעמוד הציבורי
-6. מהי תדירות ה-publish
-7. האם benchmark יופיע באותו עמוד או בטאב נפרד
-
-החלטה שכבר נסגרה:
-
-- admin מקומי הוא חובה מיום ראשון
-- admin V1 הוא כלי פיתוח ותפעול, לא CRUD מלא של מקורות/normalizers
-
-## 19. המלצה סופית
-
-הארכיטקטורה המומלצת ל-V1 היא:
-
-- מנוע נתונים מקומי
-- admin מקומי בלבד
-- publish ציבורי סטטי ל-WordPress
-- ללא auth ציבורי
-- ללא חשיפת source internals
-- עם עיצוב מוטמע בשפה של `nimrod.bio`
-- עם admin מקומי חובה לניטור והרצת תהליכים כבר מ-V1
-
-זה הפתרון הכי פשוט שעונה על המטרות שלכם, בלי לייצר מראש מערכת כבדה מדי.
+| normalizer שגוי | נתון מוטעה | QA + confidence scoring + flag review |
+| run נכשל שקטנ | אין עדכון ואיש לא יודע | email alert + admin dashboard banner |
