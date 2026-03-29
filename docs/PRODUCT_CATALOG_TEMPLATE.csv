@@ -1,0 +1,5 @@
+product_id,name_he,aliases_he,category,default_unit,normalized_unit,target_market,allowed_sales_channels,price_type,quality_grade,is_organic_required,seasonality_notes,is_active,notes
+PRD001,עגבנייה,"עגבניה|עגבניות",vegetable,kg,kg,community_target,"community_direct|csa_basket|farm_shop|farmers_market",direct_or_retail,,yes,year_round,yes,
+PRD002,מלפפון,"מלפפונים",vegetable,kg,kg,community_target,"community_direct|csa_basket|farm_shop|farmers_market",direct_or_retail,,yes,year_round,yes,
+PRD003,חסה,"חסה ירוקה|חסה רומית",leafy,unit,unit,community_target,"community_direct|csa_basket|farm_shop|farmers_market",direct_or_retail,,yes,seasonal,yes,May need per-head normalization
+PRD004,קישוא,"קישואים",vegetable,kg,kg,community_target,"community_direct|csa_basket|farm_shop|farmers_market",direct_or_retail,,yes,seasonal,yes,

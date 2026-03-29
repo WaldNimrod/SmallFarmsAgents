@@ -1,0 +1,6 @@
+source_id,source_name,source_type,domain_or_url,market_scope,sales_channel,coverage_scope,price_type,refresh_frequency,access_method,format,requires_login,robots_or_terms_checked,stability_score_1_5,data_quality_score_1_5,maintenance_risk_1_5,notes
+SRC001,Small Organic Farm Example,direct,https://example-farm.co.il,community_target,community_direct,"Organic vegetables",retail_or_direct,weekly,to_be_verified,html_or_form,no,pending,2,4,4,Target-market source
+SRC002,CSA Basket Example,direct,https://example-csa.co.il,community_target,csa_basket,"Organic vegetable baskets",basket_price,weekly,to_be_verified,html_or_form,no,pending,2,4,4,Need basket normalization rules
+SRC003,Farm Shop Example,direct,https://example-farmshop.co.il,community_target,farm_shop,"Farm shop vegetables",retail_or_direct,weekly,to_be_verified,html,no,pending,3,4,3,Target-market source
+SRC004,Ministry Wholesale Prices,official,https://prices.moag.gov.il,benchmark,wholesale_reference,"Broad fruit and vegetable market",wholesale,daily,to_be_verified,to_be_verified,no,pending,5,4,2,Benchmark only not target-market core
+SRC005,Food Retail Transparency Files,regulated,mapped_per_chain,benchmark,retail_chain_benchmark,"Retail chains and branches",retail,daily,to_be_mapped,xml_or_other,no,pending,4,3,3,Comparison layer only
