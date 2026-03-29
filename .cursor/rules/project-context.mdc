@@ -56,9 +56,18 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 
 - **Team 100** — Architecture (this agent). Owns spec, decisions, review.
 - **Team 50** — QA. Validates implementation against spec.
-- **Team 10** — Implementation. Writes code. Reports to _COMMUNICATION/TEAM_10/.
+- **Team 20** — Infrastructure. Python env, PostgreSQL, Alembic, skeleton, utils.
+- **Team 10** — Feature Dev. Collectors, parsers, normalizer, aggregator, admin UI.
+
+## Development Roadmap
+
+- Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY REFERENCE
+- **Current milestone: M1 — Local Foundation (Team 20 active)**
+- Gate system G0–G7: see `_COMMUNICATION/ROADMAP.md`
+- uPress mandate deferred to M7 (go-live)
 
 ## Communication
 
 All team reports go to `_COMMUNICATION/{TEAM_ID}/reports/`.
 Onboarding prompts: `_COMMUNICATION/{TEAM_ID}/ONBOARDING.md`.
+Roadmap + gates: `_COMMUNICATION/ROADMAP.md`.
