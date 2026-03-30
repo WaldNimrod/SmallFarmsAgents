@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}הרצות{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">הרצות אינג׳סט (20 אחרונות)</h1>
+{% if current_user.is_authenticated %}
+<form method="post" action="{{ url_for('runs.runs_trigger') }}" class="mb-4">
+  <button type="submit" class="btn btn-primary">הפעל מחזור מלא (רקע)</button>
+</form>
+{% else %}
+<p class="text-muted small">יש להתחבר כדי להפעיל הרצה.</p>
+{% endif %}
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>מזהה</th>
+        <th>סוג</th>
+        <th>סטטוס</th>
+        <th>התחלה</th>
+        <th>סיום</th>
+        <th>מקורות</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td class="ltr">{{ it.id }}</td>
+        <td>{{ it.run_type }}</td>
+        <td>{{ it.status }}</td>
+        <td class="small"><span class="ltr">{{ it.started_at }}</span></td>
+        <td class="small"><span class="ltr">{{ it.finished_at or '—' }}</span></td>
+        <td class="small"><span class="ltr">{{ it.sources_succeeded }}/{{ it.sources_total }}</span> (קהילה: {{ it.community_sources_succeeded }})</td>
+        <td><a href="{{ url_for('runs.run_detail', run_id=it.id) }}">פירוט</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

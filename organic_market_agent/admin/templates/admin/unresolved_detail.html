@@ -73,6 +73,30 @@
 </div>
 {% endif %}
 
+{% if current_user.is_authenticated %}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-3">הוסף אליאס לשם זה</h2>
+    <form method="post" action="{{ url_for('unresolved.add_alias', raw_name_encoded=raw_encoded) }}">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-8">
+          <label class="form-label small" for="product_code">מוצר</label>
+          <select name="product_code" id="product_code" class="form-select" required>
+            <option value="">— בחר מוצר —</option>
+            {% for p in all_products %}
+            <option value="{{ p.code }}">{{ p.code }} — {{ p.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-success w-100">הוסף אליאס</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
 {# ── All occurrences ── #}
 <h2 class="h5 mb-3">📋 מופעים <small class="text-muted fs-6">(עד 100 אחרונים)</small></h2>
 <div class="table-responsive mb-4">

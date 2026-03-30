@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% block title %}דגלי QA{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">דגלי QA</h1>
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>תאריך</th>
+        <th>מוצר</th>
+        <th>מקור</th>
+        <th>סוג</th>
+        <th>סיבה</th>
+        <th>מחיר</th>
+        <th>פעיל</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td class="small"><span class="ltr">{{ it.created_at }}</span></td>
+        <td>
+          {% if it.product_code %}
+          <a href="{{ url_for('products.product_detail', code=it.product_code) }}">{{ it.canonical_name_he }}</a>
+          {% else %}—{% endif %}
+        </td>
+        <td class="ltr small">{{ it.source_code or '—' }}</td>
+        <td>{{ it.flag_type }}</td>
+        <td class="small text-break" style="max-inline-size:240px;">{{ it.reason }}</td>
+        <td class="text-end ltr">{% if it.price is not none %}{{ "%.2f"|format(it.price) }}{% else %}—{% endif %}</td>
+        <td>{{ 'כן' if it.is_active else 'לא' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

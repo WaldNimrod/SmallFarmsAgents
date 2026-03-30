@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+{% block title %}אליאסים{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">אליאסים פעילים</h1>
+<p class="text-muted small"><a href="{{ url_for('aliases.alias_new') }}" class="btn btn-sm btn-success">+ אליאס חדש</a></p>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>אליאס</th>
+        <th>מוצר</th>
+        <th>היקף</th>
+        <th>נוצר</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td class="fw-semibold">{{ it.alias_text }}</td>
+        <td><span class="ltr">{{ it.product_code }}</span> — {{ it.canonical_name_he }}</td>
+        <td>{{ it.scope }}</td>
+        <td class="small text-muted"><span class="ltr">{{ it.created_at }}</span></td>
+        <td>
+          <form method="post" action="{{ url_for('aliases.alias_disable', alias_id=it.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger">השבת</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

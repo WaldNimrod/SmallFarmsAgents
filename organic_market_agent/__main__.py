@@ -29,7 +29,7 @@ def run_ingestion_cmd(
     """Run collectors + parsers (and optionally normalizer)."""
     from organic_market_agent.scheduler.run_ingestion import run_ingestion
 
-    run_ingestion.callback(
+    run_ingestion(
         run_type=run_type,
         source_code=source_code,
         normalize=normalize,

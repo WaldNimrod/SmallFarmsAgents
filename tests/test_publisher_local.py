@@ -184,7 +184,7 @@ def test_publish_writes_json_and_html(pg_session: Session, tmp_path: Path) -> No
         ):
             assert key in p0
         assert "<html" in html.lower()
-        assert "bootstrap" in html.lower()
+        assert 'dir="rtl"' in html or "dir='rtl'" in html
     finally:
         _cleanup_pub(pg_session)
 

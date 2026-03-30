@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}כלל חדש{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">כלל נורמליזציה חדש</h1>
+<form method="post" action="{{ url_for('rules.rule_new') }}">
+  <div class="mb-3">
+    <label class="form-label" for="profile_id">פרופיל</label>
+    <select name="profile_id" id="profile_id" class="form-select" required>
+      {% for p in profiles %}
+      <option value="{{ p.id }}">{{ p.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="rule_kind">סוג כלל (ערכי DB)</label>
+    <select name="rule_kind" id="rule_kind" class="form-select" required>
+      {% for k in ui_kinds.keys() %}
+      <option value="{{ k }}">{{ k }}</option>
+      {% endfor %}
+    </select>
+    <div class="form-text">price_multiplier → price_correction, exclusion → ignore_pattern</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="match_pattern">תבנית</label>
+    <input type="text" name="match_pattern" id="match_pattern" class="form-control" required maxlength="500">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="match_type">סוג התאמה</label>
+    <select name="match_type" id="match_type" class="form-select">
+      <option value="exact">exact</option>
+      <option value="contains">contains</option>
+      <option value="regex">regex</option>
+      <option value="prefix">prefix</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="replacement_value">ערך החלפה (אופציונלי)</label>
+    <input type="text" name="replacement_value" id="replacement_value" class="form-control" maxlength="500">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="priority">עדיפות</label>
+    <input type="number" name="priority" id="priority" class="form-control" value="100">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="notes">הערות</label>
+    <textarea name="notes" id="notes" class="form-control" rows="2"></textarea>
+  </div>
+  <button type="submit" class="btn btn-success">שמור</button>
+  <a href="{{ url_for('rules.rules_list') }}" class="btn btn-outline-secondary">ביטול</a>
+</form>
+{% endblock %}

@@ -157,13 +157,25 @@
 {# ── Active aliases ── #}
 <h2 class="h5 mb-3">🔤 אליאסים פעילים <small class="text-muted fs-6">(שמות גולמיים שמוביאים למוצר זה)</small></h2>
 {% if aliases_out %}
-<div class="d-flex flex-wrap gap-2 mb-4">
-  {% for a in aliases_out %}
-  <span class="badge bg-light text-dark border fs-6 px-3 py-2">
-    {{ a.text }}
-    <span class="text-muted small ms-1 ltr">({{ a.scope }})</span>
-  </span>
-  {% endfor %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-bordered bg-white align-middle">
+    <thead class="table-light"><tr><th>אליאס</th><th>היקף</th>{% if current_user.is_authenticated %}<th></th>{% endif %}</tr></thead>
+    <tbody>
+      {% for a in aliases_out %}
+      <tr>
+        <td class="fw-semibold">{{ a.text }}</td>
+        <td class="small">{{ a.scope }}</td>
+        {% if current_user.is_authenticated %}
+        <td>
+          <form method="post" action="{{ url_for('products.disable_alias', code=prod.code, alias_id=a.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger">השבת</button>
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% else %}
 <p class="text-muted mb-4">אין אליאסים מוגדרים.</p>

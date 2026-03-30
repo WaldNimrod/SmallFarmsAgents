@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}כללי נורמליזציה{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">כללי נורמליזציה</h1>
+<p><a href="{{ url_for('rules.rule_new') }}" class="btn btn-sm btn-success">+ כלל חדש</a></p>
+{% if grouped %}
+{% for profile_id, rows in grouped.items() %}
+<h2 class="h6 text-muted mt-4">פרופיל #<span class="ltr">{{ profile_id }}</span></h2>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>מקור</th>
+        <th>סוג</th>
+        <th>תבנית</th>
+        <th>התאמה</th>
+        <th>החלפה</th>
+        <th>עדיפות</th>
+        <th>פעיל</th>
+        <th>הערות</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr class="{% if not r.is_active %}text-muted{% endif %}">
+        <td class="ltr small">{{ r.src_code }}</td>
+        <td class="small">{{ r.rule_kind }}</td>
+        <td class="small text-break" style="max-inline-size:200px;">{{ r.match_pattern }}</td>
+        <td>{{ r.match_type }}</td>
+        <td class="small text-break">{{ r.replacement_value or '—' }}</td>
+        <td class="ltr">{{ r.priority }}</td>
+        <td>{{ 'כן' if r.is_active else 'לא' }}</td>
+        <td class="small">{{ r.notes or '—' }}</td>
+        <td>
+          {% if r.is_active %}
+          <form method="post" action="{{ url_for('rules.rule_disable', rule_id=r.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger">השבת</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+{% else %}
+<p class="text-muted">אין כללים.</p>
+{% endif %}
+{% endblock %}

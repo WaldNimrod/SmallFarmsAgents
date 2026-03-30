@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.6  
+**Version:** 1.7  
 **Date:** 2026-03-31  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M5 — Admin UI (Phase A: pending M5 mandate issuance)
+**Active Milestone:** M6 — Automation + Resilience (Phase A: pending M6 mandate issuance)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -289,8 +289,10 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 ## M5 — Admin UI
 **Team:** Team 10
 **Dependency:** Gate G4 must be open
-**Mandate:** To be issued after G4 opens
-**QA Mandate:** To be issued after G4 opens
+**Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M5_ADMIN_UI_TEAM10.md` ✅ ISSUED
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED
+**Schema Mandate:** `_COMMUNICATION/TEAM_20/MANDATE_M5_SCHEMA_TEAM20.md` ✅ ISSUED
+**Status:** ✅ COMPLETE — G5 PASS (sign-off: `ARCH-20260331-G5-PASS-M5-COMPLETE`)
 
 ### Phase A — Implementation (Team 10)
 - Flask app factory + local password authentication
@@ -334,8 +336,9 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 ## M6 — Automation + Resilience
 **Teams:** Team 10 (code) + Team 20 (cron setup)
 **Dependency:** Gate G5 must be open
-**Mandate:** To be issued after G5 opens
-**QA Mandate:** To be issued after G5 opens
+**Mandate:** To be issued by Team 100
+**QA Mandate:** To be issued by Team 100
+**Status:** 🟡 PHASE A — pending M6 mandate issuance
 
 ### Phase A — Implementation (Team 10 + Team 20)
 - cron job: `0 6 * * * python -m organic_market_agent.scheduler.runner`
@@ -437,7 +440,8 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 | G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` |
 | G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3_v2.md` (v2 — active) |
 | G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` ✅ ISSUED |
-| G5–G7 | To be issued when the preceding gate opens |
+| G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED · ✅ PASS |
+| G6–G7 | To be issued when the preceding gate opens |
 
 ---
 

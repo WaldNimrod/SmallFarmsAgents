@@ -42,15 +42,59 @@ def _get_normalizer_type(session: Session, source_id: int) -> str | None:
     ).scalar_one_or_none()
 
 
-@click.command()
-@click.option("--run-type", default="daily", type=click.Choice(["daily", "manual", "retry"]))
-@click.option("--source-code", default=None, help="Run a single source by code (for debugging)")
-@click.option(
-    "--normalize",
-    is_flag=True,
-    default=False,
-    help="Run M3 normalizer after ingestion for this ingestion run",
-)
+def execute_ingestion_for_run(
+    session: Session,
+    ingestion_run: IngestionRun,
+    pairs: list[tuple[Source, SourceFetchProfile]],
+) -> None:
+    """Collect + parse for each source; update ingestion_run counters (no commit).
+
+    Plain Python helper — no Click decoration. Called by pipeline.run_pipeline
+    (background thread) and by run_ingestion() (CLI path).
+    """
+    ingestion_run.sources_total = len(pairs)
+    succeeded = 0
+    failed = 0
+    skipped = 0
+    community_succeeded = 0
+
+    for source, profile in pairs:
+        raw_asset, status = collector_engine.run(
+            session,
+            ingestion_run.id,
+            source,
+            profile,
+        )
+
+        if status == "success" and raw_asset is not None:
+            normalizer_type = _get_normalizer_type(session, source.id)
+            if normalizer_type:
+                parser_engine.run(
+                    session,
+                    raw_asset,
+                    source,
+                    normalizer_type,
+                    ingestion_run_id=ingestion_run.id,
+                    charset_hint=profile.charset_hint,
+                    selector_overrides=profile.selector_profile,
+                )
+            succeeded += 1
+            if source.market_scope == "community":
+                community_succeeded += 1
+        elif status == "failed":
+            failed += 1
+        elif status == "skipped":
+            skipped += 1
+
+    ingestion_run.sources_succeeded = succeeded
+    ingestion_run.sources_failed = failed
+    ingestion_run.community_sources_succeeded = community_succeeded
+    ingestion_run.finished_at = datetime.now(timezone.utc)
+    ingestion_run.status = (
+        "completed" if failed == 0 else ("partial" if succeeded > 0 else "failed")
+    )
+
+
 def run_ingestion(
     run_type: str,
     source_code: str | None,
@@ -75,53 +119,16 @@ def run_ingestion(
         session.add(ingestion_run)
         session.flush()
 
-        succeeded = 0
-        failed = 0
-        skipped = 0
-        community_succeeded = 0
-
-        for source, profile in pairs:
-            raw_asset, status = collector_engine.run(
-                session,
-                ingestion_run.id,
-                source,
-                profile,
-            )
-
-            if status == "success" and raw_asset is not None:
-                normalizer_type = _get_normalizer_type(session, source.id)
-                if normalizer_type:
-                    parser_engine.run(
-                        session,
-                        raw_asset,
-                        source,
-                        normalizer_type,
-                        ingestion_run_id=ingestion_run.id,
-                        charset_hint=profile.charset_hint,
-                        selector_overrides=profile.selector_profile,
-                    )
-                succeeded += 1
-                if source.market_scope == "community":
-                    community_succeeded += 1
-            elif status == "failed":
-                failed += 1
-            elif status == "skipped":
-                skipped += 1
-
-        ingestion_run.sources_succeeded = succeeded
-        ingestion_run.sources_failed = failed
-        ingestion_run.community_sources_succeeded = community_succeeded
-        ingestion_run.finished_at = datetime.now(timezone.utc)
-        ingestion_run.status = (
-            "completed" if failed == 0 else ("partial" if succeeded > 0 else "failed")
-        )
+        execute_ingestion_for_run(session, ingestion_run, pairs)
         session.commit()
 
+        # Read counters from the model fields populated by execute_ingestion_for_run
         click.echo(
             f"IngestionRun #{ingestion_run.id}: "
             f"status={ingestion_run.status} "
-            f"succeeded={succeeded} failed={failed} skipped={skipped} "
-            f"community_ok={community_succeeded}"
+            f"succeeded={ingestion_run.sources_succeeded} "
+            f"failed={ingestion_run.sources_failed} "
+            f"community_ok={ingestion_run.community_sources_succeeded}"
         )
 
         if normalize:
@@ -134,5 +141,19 @@ def run_ingestion(
                 )
 
 
+@click.command("run_ingestion")
+@click.option("--run-type", default="daily", type=click.Choice(["daily", "manual", "retry"]))
+@click.option("--source-code", default=None, help="Run a single source by code (for debugging)")
+@click.option(
+    "--normalize",
+    is_flag=True,
+    default=False,
+    help="Run M3 normalizer after ingestion for this ingestion run",
+)
+def run_ingestion_cli(run_type: str, source_code: str | None, normalize: bool) -> None:
+    """CLI entry point — thin wrapper around run_ingestion()."""
+    run_ingestion(run_type, source_code, normalize)
+
+
 if __name__ == "__main__":
-    run_ingestion()
+    run_ingestion_cli(standalone_mode=True)

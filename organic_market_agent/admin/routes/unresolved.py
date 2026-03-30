@@ -5,8 +5,13 @@ import difflib
 from urllib.parse import quote, unquote
 
 import sqlalchemy as sa
-from flask import Blueprint, abort, g, render_template, request
+from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
+from flask_login import login_required
 from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError
+
+from organic_market_agent.admin.audit import audit_write
+from organic_market_agent.models import Product, ProductAlias
 
 bp = Blueprint("unresolved", __name__)
 
@@ -127,12 +132,61 @@ def unresolved_detail(raw_name_encoded: str):
             {"alias": alias_text, "canonical": canonical, "code": code, "match_type": "כלול"}
         )
 
+    all_products = session.execute(
+        sa.select(Product.code, Product.canonical_name_he)
+        .where(Product.is_active.is_(True))
+        .order_by(Product.display_order, Product.code)
+    ).all()
+    all_products_out = [{"code": r[0], "name": r[1]} for r in all_products]
+    raw_encoded = quote(raw_name, safe="")
+
     return render_template(
         "admin/unresolved_detail.html",
         raw_name=raw_name,
+        raw_encoded=raw_encoded,
         occurrences=occ_out,
         total_count=total_count,
         distinct_sources=distinct_sources,
         unique_reasons=unique_reasons,
         alias_suggestions=alias_suggestions,
+        all_products=all_products_out,
     )
+
+
+@bp.route("/unresolved/<path:raw_name_encoded>/add_alias", methods=["POST"])
+@login_required
+def add_alias(raw_name_encoded: str):
+    session = g.db_session
+    raw_name = unquote(raw_name_encoded)
+    product_code = (request.form.get("product_code") or "").strip()
+    if not product_code:
+        flash("יש לבחור מוצר.", "danger")
+        return redirect(url_for("unresolved.unresolved_detail", raw_name_encoded=raw_name_encoded))
+    prod = session.execute(sa.select(Product).where(Product.code == product_code)).scalar_one_or_none()
+    if not prod:
+        flash("מוצר לא נמצא.", "danger")
+        return redirect(url_for("unresolved.unresolved_detail", raw_name_encoded=raw_name_encoded))
+    norm = raw_name.strip().lower()
+    pa = ProductAlias(
+        product_id=prod.id,
+        alias_text=raw_name[:200],
+        alias_text_normalized=norm[:200],
+        source_id=None,
+        is_active=True,
+    )
+    session.add(pa)
+    try:
+        session.flush()
+        audit_write(
+            session,
+            "create_alias",
+            "product_alias",
+            entity_id=pa.id,
+            after={"alias_text": raw_name, "product_code": product_code, "from_unresolved": True},
+        )
+        session.commit()
+        flash("אליאס נוסף בהצלחה", "success")
+    except IntegrityError:
+        session.rollback()
+        flash("אליאס כפול או התנגשות.", "danger")
+    return redirect(url_for("unresolved.unresolved_detail", raw_name_encoded=raw_name_encoded))

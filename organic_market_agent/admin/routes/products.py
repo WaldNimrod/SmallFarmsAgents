@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import sqlalchemy as sa
-from flask import Blueprint, abort, g, render_template
+from flask import Blueprint, abort, flash, g, redirect, render_template, url_for
+from flask_login import login_required
 from sqlalchemy import text
 from urllib.parse import quote
 
-from organic_market_agent.models import Product
+from organic_market_agent.admin.audit import audit_write
+from organic_market_agent.models import Product, ProductAlias
 
 bp = Blueprint("products", __name__)
 
@@ -176,7 +178,7 @@ def product_detail(code: str):
     # ── Active aliases ───────────────────────────────────────────────────────
     aliases = session.execute(
         text("""
-            SELECT pa.alias_text,
+            SELECT pa.id, pa.alias_text,
                    COALESCE(s.code, 'גלובלי') AS scope
             FROM product_aliases pa
             LEFT JOIN sources s ON s.id = pa.source_id
@@ -186,7 +188,7 @@ def product_detail(code: str):
         {"pid": prod.id},
     ).all()
 
-    aliases_out = [{"text": r[0], "scope": r[1]} for r in aliases]
+    aliases_out = [{"id": r[0], "text": r[1], "scope": r[2]} for r in aliases]
 
     # ── Unresolvable raw strings that look similar (potential missing aliases) ──
     similar_unresolved = session.execute(
@@ -225,3 +227,29 @@ def product_detail(code: str):
         aliases_out=aliases_out,
         unresolved_similar=unresolved_similar,
     )
+
+
+@bp.route("/products/<code>/disable_alias/<int:alias_id>", methods=["POST"])
+@login_required
+def disable_alias(code: str, alias_id: int):
+    session = g.db_session
+    prod = session.execute(sa.select(Product).where(Product.code == code)).scalar_one_or_none()
+    if not prod:
+        abort(404)
+    pa = session.get(ProductAlias, alias_id)
+    if not pa or pa.product_id != prod.id:
+        flash("אליאס לא נמצא למוצר זה.", "danger")
+        return redirect(url_for("products.product_detail", code=code))
+    before = {"is_active": pa.is_active}
+    pa.is_active = False
+    audit_write(
+        session,
+        "disable_alias",
+        "product_alias",
+        entity_id=pa.id,
+        before=before,
+        after={"is_active": False},
+    )
+    session.commit()
+    flash("האליאס הושבת.", "success")
+    return redirect(url_for("products.product_detail", code=code))

@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+{% block title %}אליאס חדש{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">יצירת אליאס</h1>
+<form method="post" action="{{ url_for('aliases.alias_new') }}">
+  <div class="mb-3">
+    <label class="form-label" for="product_code">מוצר</label>
+    <select name="product_code" id="product_code" class="form-select" required>
+      <option value="">— בחר —</option>
+      {% for p in products %}
+      <option value="{{ p.code }}">{{ p.code }} — {{ p.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="alias_text">טקסט אליאס</label>
+    <input type="text" name="alias_text" id="alias_text" class="form-control" required maxlength="200">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="source_id">מקור (אופציונלי — ריק = גלובלי)</label>
+    <select name="source_id" id="source_id" class="form-select">
+      <option value="">גלובלי</option>
+      {% for s in sources %}
+      <option value="{{ s.id }}">{{ s.code }} — {{ s.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-success">שמור</button>
+  <a href="{{ url_for('aliases.alias_list') }}" class="btn btn-outline-secondary">ביטול</a>
+</form>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% block title %}יומן פעולות{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">יומן פעולות (200 אחרונות)</h1>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>תאריך</th>
+        <th>שחקן</th>
+        <th>פעולה</th>
+        <th>ישות</th>
+        <th>מזהה</th>
+        <th>JSON</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td class="small"><span class="ltr">{{ it.created_at }}</span></td>
+        <td>{{ it.actor_name }}</td>
+        <td><code class="small">{{ it.action }}</code></td>
+        <td class="small">{{ it.entity_type or '—' }}</td>
+        <td class="ltr small">{{ it.entity_id or '—' }}</td>
+        <td class="small">
+          {% if it.before_json %}
+          <details><summary>לפני</summary><pre class="small mb-0 mt-1 text-start ltr" dir="ltr">{{ it.before_json }}</pre></details>
+          {% endif %}
+          {% if it.after_json %}
+          <details><summary>אחרי</summary><pre class="small mb-0 mt-1 text-start ltr" dir="ltr">{{ it.after_json }}</pre></details>
+          {% endif %}
+          {% if not it.before_json and not it.after_json %}—{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
