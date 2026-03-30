@@ -10,6 +10,30 @@ def cli() -> None:
     pass
 
 
+@cli.command("run_ingestion")
+@click.option("--run-type", default="daily", type=click.Choice(["daily", "manual", "retry"]))
+@click.option("--source-code", default=None, help="Run a single source by code")
+@click.option(
+    "--normalize",
+    is_flag=True,
+    default=False,
+    help="Run M3 normalizer after ingestion for this ingestion run",
+)
+def run_ingestion_cmd(
+    run_type: str,
+    source_code: str | None,
+    normalize: bool,
+) -> None:
+    """Run collectors + parsers (and optionally normalizer)."""
+    from organic_market_agent.scheduler.run_ingestion import run_ingestion
+
+    run_ingestion.callback(
+        run_type=run_type,
+        source_code=source_code,
+        normalize=normalize,
+    )
+
+
 @cli.command("run_normalizer")
 @click.option("--source-id", default=None, type=int)
 @click.option("--ingestion-run-id", default=None, type=int)

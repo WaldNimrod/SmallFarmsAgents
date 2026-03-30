@@ -57,17 +57,37 @@ class SimpleProductGridParser(BaseParser):
         return items
 
     def _try_list(self, soup: BeautifulSoup) -> list[RawItem]:
+        """Fallback for div/li/article based product listings.
+
+        Requires both a name element and a price element per row.
+        Rows missing either are skipped — they are page noise, not products.
+        """
         items: list[RawItem] = []
         for el in soup.find_all(["li", "div", "article"]):
-            text = el.get_text(separator=" ", strip=True)
-            if self._PRICE_RE.search(text) and len(text) > 5:
-                items.append(
-                    RawItem(
-                        raw_product_name=text[:200],
-                        raw_price_text=None,
-                        raw_unit_text=None,
-                        raw_quantity_text=None,
-                        raw_payload_json={"raw_text": text[:500]},
-                    )
+            name_el = el.select_one(
+                ".name, .title, .product-name, h3, h4, "
+                "[class*='name'], [class*='title'], [class*='product']"
+            )
+            price_el = el.select_one(
+                ".price, [class*='price'], [class*='cost'], "
+                "span.amount, .item-price"
+            )
+            if name_el is None or price_el is None:
+                continue
+
+            name_text = name_el.get_text(strip=True)
+            price_text = price_el.get_text(strip=True)
+
+            if not name_text or not self._PRICE_RE.search(price_text):
+                continue
+
+            items.append(
+                RawItem(
+                    raw_product_name=name_text[:200],
+                    raw_price_text=price_text[:50],
+                    raw_unit_text=None,
+                    raw_quantity_text=None,
+                    raw_payload_json={"raw_name": name_text, "raw_price": price_text},
                 )
+            )
         return items

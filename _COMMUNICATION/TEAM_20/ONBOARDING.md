@@ -21,7 +21,29 @@ those belong to Team 10.
 2. Read `_COMMUNICATION/ROADMAP.md` — current milestone and gate status
 3. Read `_COMMUNICATION/README.md` — team structure and gate protocol
 4. Check latest reports in `_COMMUNICATION/TEAM_20/reports/`
-5. Read current mandate: `_COMMUNICATION/TEAM_20/MANDATE_M1_INFRASTRUCTURE.md`
+5. Read current active mandate in `_COMMUNICATION/TEAM_20/`
+
+---
+
+## Canonical Templates — Mandatory
+
+All reports and requests filed by Team 20 **must** use the canonical templates:
+
+```
+_COMMUNICATION/TEMPLATES/
+  README.md             ← Read this first for usage rules
+  COMPLETION_REPORT.md  ← Use when a mandate is complete
+  QA_REVIEW_REQUEST.md  ← Use when requesting Team 50 to run gate QA
+```
+
+| Situation | Template to use | Where to file |
+|-----------|----------------|---------------|
+| Mandate complete, no gate | `COMPLETION_REPORT.md` | `_COMMUNICATION/TEAM_20/reports/` |
+| Mandate complete + gate QA needed | `COMPLETION_REPORT.md` + `QA_REVIEW_REQUEST.md` | Team 20 reports + Team 50 reports |
+| Blocked on an issue | `COMPLETION_REPORT.md` (partial, prefix `BLOCKED_`) | `_COMMUNICATION/TEAM_20/reports/` |
+| Architecture question / deviation | Free-form report to Team 100 | `_COMMUNICATION/TEAM_100/reports/` |
+
+**Documents not using templates are informal only and carry no binding obligation on other teams.**
 
 ---
 

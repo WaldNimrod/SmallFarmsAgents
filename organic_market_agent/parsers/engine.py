@@ -53,6 +53,18 @@ class ParserEngine:
             )
             return 0
 
+        # Warn when ingesting from non-price_grid sources (informational — does not skip)
+        try:
+            if getattr(source, "source_tier", None) in ("discovery", "basket"):
+                logger.warning(
+                    "Source %s has tier='%s' — extracted items will be quarantined "
+                    "and skipped by the normalizer",
+                    source.code,
+                    source.source_tier,
+                )
+        except Exception:
+            pass  # source_tier not yet available (pre-migration 013)
+
         if parser_cls is EasyFarmCatalogParser:
             parser: BaseParser = EasyFarmCatalogParser(selector_overrides)
         else:
@@ -88,6 +100,17 @@ class ParserEngine:
             )
         ).scalar_one_or_none()
 
+        valid_items = [
+            item for item in raw_items if item.raw_product_name and item.raw_price_text
+        ]
+        skipped_count = len(raw_items) - len(valid_items)
+        if skipped_count:
+            logger.warning(
+                "ParserEngine: skipped %d incomplete items (no name or price) for source=%s",
+                skipped_count,
+                source.code,
+            )
+
         db_items: list[RawExtractedItem] = [
             RawExtractedItem(
                 source_fetch_run_id=raw_asset.source_fetch_run_id,
@@ -100,13 +123,14 @@ class ParserEngine:
                 raw_payload_json=item.raw_payload_json,
                 extraction_status="extracted",
             )
-            for item in raw_items
+            for item in valid_items
         ]
 
         session.add_all(db_items)
         logger.info(
-            "ParserEngine: wrote %d raw_extracted_items for source=%s",
+            "ParserEngine: wrote %d raw_extracted_items for source=%s (%d skipped)",
             len(db_items),
             source.code,
+            skipped_count,
         )
         return len(db_items)

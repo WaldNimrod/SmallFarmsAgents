@@ -23,6 +23,28 @@ architectural decisions, and design reviews. Does not write production code.
 
 ---
 
+## Canonical Templates — Mandatory
+
+Team 100 **must** use canonical templates for all binding decisions:
+
+```
+_COMMUNICATION/TEMPLATES/
+  README.md           ← Full template index and usage rules
+  MANDATE.md          ← Issue work orders to implementing teams
+  ARCH_DECISION.md    ← Record gate decisions, amendments, architectural rulings
+```
+
+| Situation | Template to use | Where to file |
+|-----------|----------------|---------------|
+| Issuing work to Team 10 or 20 | `MANDATE.md` | `_COMMUNICATION/TEAM_{RECIPIENT}/` |
+| Gate open / close / conditional | `ARCH_DECISION.md` | `_COMMUNICATION/TEAM_100/reports/` |
+| Amendment to existing mandate/QA | `ARCH_DECISION.md` | `_COMMUNICATION/TEAM_100/reports/` |
+| Review or informal analysis | Free-form report | `_COMMUNICATION/TEAM_100/reports/` |
+
+**Gate decisions are only binding when recorded in an `ARCH_DECISION.md` document.**
+
+---
+
 ## Spec Documents (Source of Truth)
 
 | File | Content |

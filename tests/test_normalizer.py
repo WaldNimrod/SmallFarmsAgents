@@ -227,15 +227,24 @@ def test_unit_resolver_builtin_kg(db_session):
 
 
 def test_normalizer_engine_resolves_one_row(db_session):
+    # Use any active alias — global (source_id=None) or source-scoped.
     pa = db_session.scalar(
         sa.select(ProductAlias)
         .where(ProductAlias.is_active.is_(True))
-        .where(ProductAlias.source_id.isnot(None))
         .limit(1)
     )
     if pa is None:
-        pytest.skip("No source-scoped alias for integration test")
+        pytest.skip("No product aliases in DB for integration test")
+
+    # If alias is global (source_id=None), pick any active source.
     source_id = pa.source_id
+    if source_id is None:
+        source_id = db_session.scalar(
+            sa.select(Source.id).where(Source.is_active.is_(True)).limit(1)
+        )
+    if source_id is None:
+        pytest.skip("No active source in DB")
+
     assert source_id is not None
     np_id = db_session.scalar(
         sa.select(NormalizerProfile.id).where(NormalizerProfile.source_id == source_id)
@@ -299,3 +308,69 @@ def test_price_normalizer_direct_when_no_conversion(db_session):
     result = price_normalizer.run(ctx, db_session)
     assert result.normalization_method == "direct"
     assert result.normalized_price_value == Decimal("5.0000")
+
+
+# --- quarantine filter ---
+
+
+def test_normalizer_skips_quarantined_items(db_session):
+    """NormalizerEngine must not process items with is_quarantined=True."""
+    # Insert an ingestion run + fetch run + asset + ONE quarantined item in a clean transaction.
+    src = db_session.scalar(
+        sa.select(Source).where(Source.is_active.is_(True)).limit(1)
+    )
+    if src is None:
+        pytest.skip("No active source in DB")
+
+    ir = IngestionRun(run_type="manual", status="completed")
+    db_session.add(ir)
+    db_session.flush()
+
+    sfr = SourceFetchRun(
+        ingestion_run_id=ir.id,
+        source_id=src.id,
+        status="success",
+    )
+    db_session.add(sfr)
+    db_session.flush()
+
+    asset = RawAsset(
+        source_id=src.id,
+        source_fetch_run_id=sfr.id,
+        storage_path="/tmp/test_quarantine.html",
+        checksum_sha256="abc" + uuid.uuid4().hex,
+        file_type="html",
+        bytes_size=0,
+    )
+    db_session.add(asset)
+    db_session.flush()
+
+    item = RawExtractedItem(
+        source_fetch_run_id=sfr.id,
+        raw_asset_id=asset.id,
+        raw_product_name="quarantined product",
+        raw_price_text="9.99",
+        extraction_status="extracted",
+        is_quarantined=True,
+    )
+    db_session.add(item)
+    db_session.flush()
+
+    engine = NormalizerEngine()
+    counts = engine.run(db_session, ingestion_run_id=ir.id)
+
+    # Item must remain 'extracted' — normalizer should not have touched it
+    db_session.refresh(item)
+    assert item.extraction_status == "extracted", (
+        "Quarantined item must not be normalized"
+    )
+    assert counts["resolved"] == 0
+    assert counts["unresolvable"] == 0
+
+
+def test_print_cycle_metrics_no_crash(db_session):
+    """_print_cycle_metrics must not raise even when there are zero matching rows."""
+    from organic_market_agent.normalizer.run_normalizer import _print_cycle_metrics
+
+    # Should complete without exception, printing zeros
+    _print_cycle_metrics(db_session, ingestion_run_id=999999)

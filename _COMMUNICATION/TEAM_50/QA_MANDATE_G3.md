@@ -1,3 +1,9 @@
+> ⚠️ **SUPERSEDED — 2026-03-30**
+> This document is superseded by `QA_MANDATE_G3_v2.md`.
+> Per architectural decision `ARCH-20260330-G3-DATA-QUALITY`, the `≥ 40` threshold in this
+> document has been retired. `QA_MANDATE_G3_v2.md` is the single binding G3 QA reference.
+> Do NOT use this document for any new QA execution.
+
 # QA Mandate — Gate G3 (M3 Normalizer Engine)
 **From:** Team 100 (Architecture)  
 **To:** Team 50 (QA)  

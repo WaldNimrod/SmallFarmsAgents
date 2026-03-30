@@ -1,0 +1,26 @@
+-- Template for Phase B1 — add aliases after Phase A identifies top raw_product_name values.
+-- Replace placeholders; coordinate product_id and source_id with docs/PRODUCT_CATALOG_V1.md and Team 100.
+--
+-- Example (global alias):
+-- INSERT INTO product_aliases (product_id, alias_text, alias_text_normalized, source_id, confidence, is_active)
+-- VALUES (
+--   (SELECT id FROM products WHERE code = 'PRD001'),
+--   'Display Name As Crawled',
+--   lower(trim(regexp_replace('Display Name As Crawled', '\s+', ' ', 'g'))),
+--   NULL,
+--   0.85,
+--   true
+-- );
+--
+-- Example (source-scoped):
+-- INSERT INTO product_aliases (product_id, alias_text, alias_text_normalized, source_id, confidence, is_active)
+-- VALUES (
+--   (SELECT id FROM products WHERE code = 'PRD001'),
+--   'Display Name',
+--   lower(trim(regexp_replace('Display Name', '\s+', ' ', 'g'))),
+--   (SELECT id FROM sources WHERE code = 'SRC002'),
+--   0.85,
+--   true
+-- );
+
+SELECT 1 AS template_only;

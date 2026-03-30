@@ -54,6 +54,7 @@ class NormalizerEngine:
             sa.select(RawExtractedItem)
             .join(SourceFetchRun, RawExtractedItem.source_fetch_run_id == SourceFetchRun.id)
             .where(RawExtractedItem.extraction_status == "extracted")
+            .where(RawExtractedItem.is_quarantined.is_(False))
             .order_by(RawExtractedItem.id)
         )
         if ingestion_run_id is not None:
@@ -98,7 +99,7 @@ class NormalizerEngine:
 
             if ctx.stage_failed in BLOCKING_STAGES:
                 item.extraction_status = "unresolvable"
-                item.unresolvable_reason = ctx.unresolvable_reason
+                item.unresolvable_reason = (ctx.unresolvable_reason or "")[:500]
                 counts["unresolvable"] += 1
                 continue
 
@@ -106,7 +107,7 @@ class NormalizerEngine:
                 item.extraction_status = "unresolvable"
                 item.unresolvable_reason = (
                     ctx.unresolvable_reason or "missing product_id, price, or display_unit after stages"
-                )
+                )[:500]
                 counts["unresolvable"] += 1
                 continue
 

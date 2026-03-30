@@ -85,7 +85,7 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 ## Development Roadmap
 
 - Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
-- **Current milestone: M3 — Normalizer Engine (Team 10 active)**
+- **Current milestone: M4 — Aggregation + Local Viewer + Admin Dashboard (Team 10 Phase A active)**
 - Gate system G1–G7: see ROADMAP.md
 - uPress mandate deferred to M7
 
@@ -101,3 +101,17 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 Reports: `_COMMUNICATION/{TEAM_ID}/reports/`
 Onboarding: `_COMMUNICATION/{TEAM_ID}/ONBOARDING.md`
 Roadmap + gates: `_COMMUNICATION/ROADMAP.md`
+**Canonical templates (mandatory):** `_COMMUNICATION/TEMPLATES/`
+
+### Templates — every inter-team document must use one of:
+
+| Template | File | Used by |
+|----------|------|---------|
+| Mandate | `TEMPLATES/MANDATE.md` | Team 100 |
+| Completion Report | `TEMPLATES/COMPLETION_REPORT.md` | Team 10, Team 20 |
+| QA Review Request | `TEMPLATES/QA_REVIEW_REQUEST.md` | Team 10, Team 20 |
+| QA Findings Report | `TEMPLATES/QA_FINDINGS_REPORT.md` | Team 50 |
+| Architectural Decision | `TEMPLATES/ARCH_DECISION.md` | Team 100 |
+
+Gate decisions are **only binding** when recorded using `QA_FINDINGS_REPORT.md` (Team 50)
+or `ARCH_DECISION.md` (Team 100). All other formats are informal.

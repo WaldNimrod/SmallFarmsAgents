@@ -76,12 +76,41 @@ LIST_HTML = b"""
 </body></html>
 """
 
+LIST_HTML_STRUCTURED = b"""
+<html><body>
+<ul>
+  <li>
+    <span class="product-name">Organic carrots</span>
+    <span class="price">12 NIS</span>
+  </li>
+  <li>
+    <span class="product-name">Tomatoes</span>
+    <span class="price">8.50</span>
+  </li>
+</ul>
+</body></html>
+"""
+
 
 def test_simple_grid_list_fallback_extracts():
+    """Plain <li> text without distinct name/price elements must NOT be extracted.
+
+    The old _try_list accepted any text containing a digit, producing garbage rows
+    with raw_price_text=None. The new implementation requires structured name+price
+    child elements — unstructured text is rejected as page noise.
+    """
     parser = SimpleProductGridParser()
     items = parser.parse(LIST_HTML)
+    assert items == []
+
+
+def test_simple_grid_list_structured_extracts():
+    """Structured <li> items with explicit name and price child elements ARE extracted."""
+    parser = SimpleProductGridParser()
+    items = parser.parse(LIST_HTML_STRUCTURED)
     assert len(items) >= 1
     assert "carrots" in (items[0].raw_product_name or "").lower()
+    assert items[0].raw_price_text is not None
 
 
 GOVT_JSON = json.dumps(

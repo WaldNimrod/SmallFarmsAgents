@@ -26,6 +26,28 @@ Issue QA reports. Sign off on gates.
 
 ---
 
+## Canonical Templates — Mandatory
+
+All reports filed by Team 50 **must** use the canonical templates:
+
+```
+_COMMUNICATION/TEMPLATES/
+  README.md               ← Read this first for usage rules
+  QA_FINDINGS_REPORT.md   ← ALWAYS use for gate results (the only valid gate decision format)
+```
+
+| Situation | Template to use | Where to file |
+|-----------|----------------|---------------|
+| Gate QA complete | `QA_FINDINGS_REPORT.md` | `_COMMUNICATION/TEAM_50/reports/` |
+| Gate PASS | `QA_FINDINGS_REPORT.md` — section: ✅ GATE PASS | Team 50 reports |
+| Gate CONDITIONAL | `QA_FINDINGS_REPORT.md` — section: 🟡 CONDITIONAL PASS | Team 50 reports |
+| Gate FAIL | `QA_FINDINGS_REPORT.md` — section: ❌ GATE FAIL | Team 50 reports |
+
+**A gate decision is ONLY binding when filed using `QA_FINDINGS_REPORT.md`.**
+Verbal or informal gate decisions have no authority.
+
+---
+
 ## QA Mandate Files (always read before testing)
 
 | Gate | Mandate |

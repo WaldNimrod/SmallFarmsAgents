@@ -16,14 +16,37 @@ Canonical terminology: `docs/GLOSSARY.md`
 
 ---
 
+## ⚠️ Canonical Templates — Mandatory
+
+All inter-team communication **must** use the canonical templates defined in:
+
+```
+_COMMUNICATION/TEMPLATES/
+  README.md             ← Template index + usage rules (READ FIRST)
+  MANDATE.md            ← Work orders issued to implementing teams
+  COMPLETION_REPORT.md  ← Mandate completion + next action request
+  QA_REVIEW_REQUEST.md  ← Request to Team 50 to run gate QA
+  QA_FINDINGS_REPORT.md ← Team 50 gate results + binding gate decision
+  ARCH_DECISION.md      ← Team 100 decisions, gate open/close, amendments
+```
+
+> Documents not using these templates are informally valid but carry
+> **no binding authority** for gate decisions or mandate obligations.
+
+**Before writing any report or mandate:** read `_COMMUNICATION/TEMPLATES/README.md`.
+
+---
+
 ## Team Structure
 
-| Team | Name | Role | Active Mandate |
-|------|------|------|----------------|
-| **Team 100** | Architecture | Owns spec and architectural decisions | Ongoing review |
-| **Team 50** | QA | Validates implementation against spec | Gate G1 review pending |
-| **Team 20** | Infrastructure | DB, env, skeleton | **M1 — active** |
-| **Team 10** | Feature Dev | Collectors, parsers, normalizer, admin UI | Waiting for G1 |
+| Team | Name | Role | Reports to |
+|------|------|------|------------|
+| **Team 100** | Architecture | Owns spec, decisions, reviews | Nimrod |
+| **Team 50** | QA | Validates implementation against spec | Team 100 |
+| **Team 20** | Infrastructure | DB, env, migrations, seed data | Team 100 |
+| **Team 10** | Feature Dev | Collectors, parsers, normalizer, admin UI | Team 100 |
+
+Active milestone and gate status: `_COMMUNICATION/ROADMAP.md`
 
 ---
 
@@ -33,43 +56,71 @@ Canonical terminology: `docs/GLOSSARY.md`
 _COMMUNICATION/
   README.md                          ← this file
   ROADMAP.md                         ← PRIMARY REFERENCE — all milestones M1–M7
+  TEMPLATES/                         ← Canonical templates (MANDATORY)
   TEAM_100/
-    ONBOARDING.md                    ← architecture team session onboarding
-    reports/
+    ONBOARDING.md
+    reports/                         ← arch decisions, reviews, gate rulings
   TEAM_50/
-    ONBOARDING.md                    ← QA team session onboarding
-    reports/
+    ONBOARDING.md
+    QA_MANDATE_G*.md                 ← per-gate QA mandates
+    reports/                         ← QA findings, review requests
   TEAM_20/
-    ONBOARDING.md                    ← infrastructure team session onboarding
-    MANDATE_M1_INFRASTRUCTURE.md     ← current active mandate
-    reports/
+    ONBOARDING.md
+    MANDATE_*.md                     ← active mandates
+    reports/                         ← completion reports, blockers
   TEAM_10/
-    ONBOARDING.md                    ← feature dev team session onboarding
-    MANDATE_UPRESS_VALIDATION.md     ← DEFERRED to M7 (go-live)
-    reports/
+    ONBOARDING.md
+    MANDATE_*.md                     ← active mandates
+    reports/                         ← completion reports, blockers
 ```
 
 ---
 
-## Report Naming Convention
+## Standard Document Naming
 
 ```
-YYYY-MM-DD_{TOPIC}_{TEAM_ID}.md
+Mandates (in TEAM_XX/):       MANDATE_{TOPIC}_{TEAM_RECIPIENT}.md
+Completion Reports:           {YYYY-MM-DD}_{TOPIC}_COMPLETE_TEAM{ID}.md
+QA Review Requests:           {YYYY-MM-DD}_G{N}_REVIEW_REQUEST_TEAM{ID}.md
+QA Findings:                  {YYYY-MM-DD}_G{N}_QA_FINDINGS_TEAM50.md
+Arch Decisions / Reviews:     {YYYY-MM-DD}_{TOPIC}_TEAM100.md
 ```
 
-Examples:
-- `2026-03-29_M1_COMPLETE_TEAM20.md`
-- `2026-03-29_G1_QA_PASS_TEAM50.md`
-- `2026-03-29_ARCH_REVIEW_DB_SCHEMA_TEAM100.md`
+All filenames: `UPPERCASE_WITH_UNDERSCORES.md` — no spaces, no Hebrew.
+
+---
+
+## Communication Flow
+
+```
+Implementing Team           Team 100              Team 50
+       │                       │                     │
+       │  Read MANDATE         │                     │
+       │◄──────────────────────│                     │
+       │                       │                     │
+       │  [implement work]     │                     │
+       │                       │                     │
+       │  COMPLETION_REPORT ──►│                     │
+       │  + QA_REVIEW_REQUEST ─┼────────────────────►│
+       │                       │                     │
+       │                       │  [run QA mandate]   │
+       │                       │                     │
+       │◄──────────────────────┼─ QA_FINDINGS_REPORT │
+       │                       │◄────────────────────│
+       │                       │                     │
+       │  [if PASS: next M]    │                     │
+       │  [if FAIL: fix+loop]  │                     │
+```
 
 ---
 
 ## Escalation Protocol
 
-1. Blocked by technical issue → write blocker in report, notify Team 100 via their reports/
-2. Blocked waiting on Nimrod → mark report with `[USER ACTION REQUIRED]`
-3. No gate passes without written Team 50 sign-off
-4. Gates G5 and G7 additionally require Team 100 or Nimrod sign-off
+1. **Blocked on technical issue** → file `BLOCKED_{TOPIC}_TEAM{ID}.md` in your `reports/`
+2. **Blocked waiting on Nimrod** → tag report with `[USER ACTION REQUIRED]`
+3. **Gate disputes** → Team 100 issues an `ARCH_DECISION` doc to resolve
+4. **No gate passes** without written `QA_FINDINGS_REPORT` from Team 50
+5. **Gates G5 and G7** additionally require Team 100 or Nimrod written sign-off
 
 ---
 
@@ -84,7 +135,5 @@ Examples:
 | G5 | M5 | Admin UI functional | Team 100 + Team 50 |
 | G6 | M6 | 7-day automated run + alerting | Team 50 |
 | G7 | M7 | Public publishing (uPress) — Go-Live | Nimrod |
-
-**Current active gate: G1 (M1)**
 
 Full milestone details: `_COMMUNICATION/ROADMAP.md`

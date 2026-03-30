@@ -40,15 +40,24 @@ class EasyFarmCatalogParser(BaseParser):
 
         items: list[RawItem] = []
         for row in rows:
-            name_el = row.select_one(self._selectors["name"])
-            price_el = row.select_one(self._selectors["price"])
-            unit_el = row.select_one(self._selectors["unit"])
-            qty_el = row.select_one(self._selectors["quantity"])
+            name_el = row.select_one(self._selectors["name"]) if self._selectors.get("name") else None
+            price_el = row.select_one(self._selectors["price"]) if self._selectors.get("price") else None
+            unit_sel = self._selectors.get("unit")
+            qty_sel = self._selectors.get("quantity")
+            unit_el = row.select_one(unit_sel) if unit_sel else None
+            qty_el = row.select_one(qty_sel) if qty_sel else None
+
+            raw_product_name = name_el.get_text(strip=True) if name_el else None
+            raw_price_text = price_el.get_text(strip=True) if price_el else None
+
+            # Skip rows with no product name or no price — they are extraction failures.
+            if not raw_product_name or not raw_price_text:
+                continue
 
             items.append(
                 RawItem(
-                    raw_product_name=name_el.get_text(strip=True) if name_el else None,
-                    raw_price_text=price_el.get_text(strip=True) if price_el else None,
+                    raw_product_name=raw_product_name,
+                    raw_price_text=raw_price_text,
                     raw_unit_text=unit_el.get_text(strip=True) if unit_el else None,
                     raw_quantity_text=qty_el.get_text(strip=True) if qty_el else None,
                     raw_payload_json={},
