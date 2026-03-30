@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.2  
+**Version:** 1.3  
 **Date:** 2026-03-30  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M3 — Normalizer Engine
+**Active Milestone:** M3 — Normalizer Engine (Phase B: G3 QA in progress)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -159,7 +159,7 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 **Dependency:** Gate G2 open ✅
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M3_NORMALIZER_ENGINE.md`
 **QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G3.md`
-**Status:** 🔵 ACTIVE
+**Status:** 🟡 PHASE B — G3 QA open (Team 50 active)
 
 ### Phase A — Implementation (Team 10)
 - `NormalizerEngine` — 7 stages (alias → organic flag → unit resolve → price normalize → quantity → basket → confidence)

@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from organic_market_agent.collectors.engine import CollectorEngine
 from organic_market_agent.db.session import SessionFactory
 from organic_market_agent.models import IngestionRun, NormalizerProfile, Source, SourceFetchProfile
+from organic_market_agent.normalizer.engine import NormalizerEngine
 from organic_market_agent.parsers.engine import ParserEngine
 from organic_market_agent.utils.config import config
 from organic_market_agent.utils.logging_setup import get_logger
@@ -44,7 +45,17 @@ def _get_normalizer_type(session: Session, source_id: int) -> str | None:
 @click.command()
 @click.option("--run-type", default="daily", type=click.Choice(["daily", "manual", "retry"]))
 @click.option("--source-code", default=None, help="Run a single source by code (for debugging)")
-def run_ingestion(run_type: str, source_code: str | None) -> None:
+@click.option(
+    "--normalize",
+    is_flag=True,
+    default=False,
+    help="Run M3 normalizer after ingestion for this ingestion run",
+)
+def run_ingestion(
+    run_type: str,
+    source_code: str | None,
+    normalize: bool,
+) -> None:
     """Execute a full (or single-source) ingestion run."""
     config.ensure_dirs()
 
@@ -112,6 +123,15 @@ def run_ingestion(run_type: str, source_code: str | None) -> None:
             f"succeeded={succeeded} failed={failed} skipped={skipped} "
             f"community_ok={community_succeeded}"
         )
+
+        if normalize:
+            with SessionFactory() as norm_session:
+                norm_engine = NormalizerEngine()
+                ncounts = norm_engine.run(norm_session, ingestion_run_id=ingestion_run.id)
+                click.echo(
+                    f"Normalizer: resolved={ncounts['resolved']} "
+                    f"unresolvable={ncounts['unresolvable']} skipped={ncounts['skipped']}"
+                )
 
 
 if __name__ == "__main__":
