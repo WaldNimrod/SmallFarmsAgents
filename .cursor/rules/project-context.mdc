@@ -42,7 +42,9 @@ More agents will follow under the MyFarmAgents umbrella.
 - Language: **Python 3.11+**
 - Package name: `organic_market_agent`
 - Admin UI: **Flask** (local only, 127.0.0.1:5000)
-- DB: **PostgreSQL** (direct install, no Docker)
+- DB: **PostgreSQL 15 via Docker** (`docker-compose.yml` at repo root)
+- Docker container: `oma-postgres` (port 5433) for fresh installs; `oma-g2-ev` (port 55435) for current dev DB
+- `DATABASE_URL` in `.env` — see `.env.example`
 - ORM: SQLAlchemy 2.x + Alembic migrations
 - Scraping: httpx + BeautifulSoup4
 - Scheduler: system cron (06:00 daily)
@@ -83,7 +85,7 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 ## Development Roadmap
 
 - Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
-- **Current milestone: M1 — Local Foundation (Team 20 active)**
+- **Current milestone: M3 — Normalizer Engine (Team 10 active)**
 - Gate system G1–G7: see ROADMAP.md
 - uPress mandate deferred to M7
 

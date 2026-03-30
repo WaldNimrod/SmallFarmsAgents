@@ -24,13 +24,17 @@ Read before starting:
 Before running any test, confirm:
 
 ```bash
-python --version    # must be 3.11.x or higher
-psql --version      # must be 15.x or higher
-# Confirm PostgreSQL is a direct local install — NOT running in Docker
-docker ps           # must NOT show any postgres container being used
+python --version          # must be 3.11.x or higher
+docker ps | grep postgres # must show OMA postgres container running
+echo $DATABASE_URL        # must point to Docker port (e.g. 55435 or 5433)
 ```
 
-If Python < 3.11 or Docker PostgreSQL is in use: **FAIL immediately, block gate.**
+**Stack note (2026-03-30):** Homebrew PostgreSQL has been removed.
+PostgreSQL is served exclusively via Docker.
+- Current dev DB: `oma-g2-ev` on port 55435 (`postgresql://oma:t@localhost:55435/organic`)
+- Fresh installs: `docker-compose up -d` → port 5433 (`postgresql://oma:oma@localhost:5433/organic_market_agent`)
+
+If Python < 3.11 or no postgres Docker container is running: **FAIL immediately, block gate.**
 
 ---
 

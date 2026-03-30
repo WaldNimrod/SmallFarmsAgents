@@ -53,26 +53,38 @@ def main() -> int:
             ).one()._mapping
         )
 
-    files: list[dict[str, str | int]] = []
-    if capture_root.exists():
-        for p in sorted(capture_root.rglob("*")):
+    def scan_tree(root: Path) -> dict:
+        files: list[dict[str, str | int]] = []
+        if not root.exists():
+            return {"root": str(root), "file_count": 0, "files": [], "truncated": False}
+        for p in sorted(root.rglob("*")):
             if p.is_file():
-                rel = str(p.relative_to(capture_root))
+                rel = str(p.relative_to(root))
                 try:
                     sz = p.stat().st_size
                 except OSError:
                     sz = -1
                 files.append({"path": rel, "bytes": sz})
+        return {
+            "root": str(root),
+            "file_count": len(files),
+            "files": files[:500],
+            "truncated": len(files) > 500,
+        }
+
+    capture_scan = scan_tree(capture_root)
+    mirror_root = capture_root.parent / "full_mirror"
+    mirror_scan = scan_tree(mirror_root)
 
     payload = {
         "snapshot_label": "first_full_scan_2026-03-30",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "raw_files_root_capture": str(capture_root),
+        "full_mirror_root": str(mirror_root),
         "ingestion_runs_last_10": [dict(r) for r in runs],
         "table_counts": counts,
-        "capture_file_count": len(files),
-        "capture_files": files[:500],
-        "capture_files_truncated": len(files) > 500,
+        "capture": capture_scan,
+        "full_mirror": mirror_scan,
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")

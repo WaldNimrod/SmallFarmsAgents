@@ -24,38 +24,58 @@ Deliverables only:
 
 ## Step 0: Local Environment Setup
 
-### 0.1 Verify PostgreSQL
+> **Stack update (2026-03-30):** PostgreSQL runs via Docker only.
+> Homebrew PostgreSQL has been removed. Do NOT use `brew install postgresql`.
+
+### 0.1 Start PostgreSQL via Docker
 
 ```bash
-psql --version   # must be >= 15
+cd /Users/nimrod/Documents/SmallFarmsAgents
 
-# macOS — if not installed:
-brew install postgresql@15
-brew services start postgresql@15
-echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
+# Option A — fresh install (creates oma-postgres on port 5433):
+docker-compose up -d
+docker-compose ps   # verify: oma-postgres is Up and healthy
+
+# Option B — use existing oma-g2-ev container (already has G2 data, port 55435):
+docker ps | grep oma   # verify it is running
 ```
 
-### 0.2 Create Database and User
-
+Verify connectivity:
 ```bash
-createdb smallfarms_local
+# Option A
+docker exec oma-postgres psql -U oma -d organic_market_agent -c "SELECT version();"
 
-createuser smallfarms_app
-psql postgres -c "GRANT ALL ON DATABASE smallfarms_local TO smallfarms_app;"
-psql smallfarms_local -c "GRANT ALL ON SCHEMA public TO smallfarms_app;"
-psql smallfarms_local -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO smallfarms_app;"
-psql smallfarms_local -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO smallfarms_app;"
+# Option B
+docker exec oma-g2-ev psql -U oma -d organic -c "SELECT version();"
+```
 
-# Verify connection
-psql postgresql://smallfarms_app@localhost/smallfarms_local -c "SELECT version();"
+### 0.2 Database setup (Option A — fresh container only)
+
+For the `oma-postgres` docker-compose container, the `POSTGRES_USER`, `POSTGRES_DB`,
+and `POSTGRES_PASSWORD` are already created by the Docker image on first start.
+**No `createdb` or `createuser` needed.**
+
+Then run migrations:
+```bash
+alembic upgrade head
+python -m organic_market_agent.db.check
 ```
 
 ### 0.3 Create `.env` File
 
 ```bash
-# /Users/nimrod/Documents/SmallFarmsAgents/.env  (never commit this file)
-DATABASE_URL=postgresql://smallfarms_app@localhost/smallfarms_local
+# Copy example and set DATABASE_URL for your container:
+cp .env.example .env
+```
+
+Edit `.env`:
+```bash
+# For oma-g2-ev (current dev DB — G2 data intact):
+DATABASE_URL=postgresql://oma:t@localhost:55435/organic
+
+# OR for fresh oma-postgres (docker-compose):
+DATABASE_URL=postgresql://oma:oma@localhost:5433/organic_market_agent
+
 RAW_FILES_ROOT=/Users/nimrod/Documents/SmallFarmsAgents/raw_files
 LOG_LEVEL=INFO
 ENVIRONMENT=local
@@ -65,10 +85,11 @@ ENVIRONMENT=local
 
 ```bash
 cd /Users/nimrod/Documents/SmallFarmsAgents
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ---

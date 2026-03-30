@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.1  
+**Version:** 1.2  
 **Date:** 2026-03-30  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M1 — Local Foundation (Phase B: QA pending G1)
+**Active Milestone:** M3 — Normalizer Engine
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -63,12 +63,12 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 **Team:** Team 20 (Infrastructure)
 **Mandate:** `_COMMUNICATION/TEAM_20/MANDATE_M1_INFRASTRUCTURE.md`
 **QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md`
-**Status:** Phase A complete → Phase B (QA) pending
+**Status:** ✅ COMPLETE — G1 open (Conditional Pass: seed patch P1–P3 required before G3)
 
 ### Phase A — Implementation (Team 20)
 - Python project skeleton (`organic_market_agent/` package, all submodules)
 - `requirements.txt` complete
-- PostgreSQL installed and configured locally (direct install, no Docker)
+- PostgreSQL 15 via Docker (`docker-compose up -d` — see `docker-compose.yml` at repo root)
 - Alembic migrations: 5 revisions (001 schema, 002–005 seed data)
 - All 23 tables + 2 views
 - SQLAlchemy 2.x models for all tables
@@ -90,7 +90,7 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 | Schema | SQL queries: all 23 tables exist, all required indexes, all CHECK constraints |
 | Data Quality | Row counts: exactly 11 units, 29 products, ≥20 sources, aliases present |
 | Type Safety | No `FLOAT` columns; all `*_at` columns are `TIMESTAMPTZ`; price columns `NUMERIC(12,4)` |
-| Environment | Python 3.11+; PostgreSQL direct install (not Docker) |
+| Environment | Python 3.11+; PostgreSQL 15 via Docker (`docker ps` shows postgres container) |
 
 **QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md`
 
@@ -102,7 +102,7 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 - [ ] All price columns `NUMERIC(12,4)` — no `FLOAT` anywhere
 - [ ] All `*_at` columns are `TIMESTAMPTZ`
 - [ ] Python 3.11+ confirmed
-- [ ] PostgreSQL direct install confirmed (not Docker)
+- [ ] PostgreSQL 15 Docker container confirmed running (`docker ps | grep postgres`)
 - [ ] `pytest tests/test_db_health.py` — all PASS
 - [ ] Team 50 written sign-off
 
@@ -113,6 +113,7 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 **Dependency:** Gate G1 must be open
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M2_COLLECTION_LAYER.md`
 **QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md`
+**Status:** ✅ COMPLETE — G2 open (Conditional: seed patch P1–P3 required before G3)
 
 ### Phase A — Implementation (Team 10)
 - `CollectorEngine` + `BaseCollector` (retry, timeout, checksum dedup)
@@ -155,9 +156,10 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 
 ## M3 — Normalizer Engine
 **Team:** Team 10
-**Dependency:** Gate G2 must be open
-**Mandate:** To be issued after G2 opens
-**QA Mandate:** To be issued after G2 opens
+**Dependency:** Gate G2 open ✅
+**Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M3_NORMALIZER_ENGINE.md`
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G3.md`
+**Status:** 🔵 ACTIVE
 
 ### Phase A — Implementation (Team 10)
 - `NormalizerEngine` — 7 stages (alias → organic flag → unit resolve → price normalize → quantity → basket → confidence)
@@ -397,7 +399,8 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 |------|-----------|
 | G1 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md` |
 | G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` |
-| G3–G7 | To be issued when the preceding gate opens |
+| G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3.md` |
+| G4–G7 | To be issued when the preceding gate opens |
 
 ---
 

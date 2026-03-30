@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: oma-postgres
+    environment:
+      POSTGRES_USER: oma
+      POSTGRES_PASSWORD: oma
+      POSTGRES_DB: organic_market_agent
+    ports:
+      - "5433:5432"
+    volumes:
+      - oma_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oma -d organic_market_agent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  oma_postgres_data:

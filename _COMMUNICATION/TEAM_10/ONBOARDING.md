@@ -32,7 +32,7 @@ normalizer, aggregator, publisher, admin UI.
 | Milestone | Status | Mandate File |
 |-----------|--------|--------------|
 | M2 — Collection Layer | **PENDING G1 open** | `_COMMUNICATION/TEAM_10/MANDATE_M2_COLLECTION_LAYER.md` |
-| M3 — Normalizer Engine | Locked until G2 | To be issued after G2 |
+| M3 — Normalizer Engine | **ACTIVE — implement now** | `_COMMUNICATION/TEAM_10/MANDATE_M3_NORMALIZER_ENGINE.md` |
 | M4 — Aggregation + Local Viewer | Locked until G3 | To be issued after G3 |
 | M5 — Admin UI | Locked until G4 | To be issued after G4 |
 | M6 — Automation + Resilience | Locked until G5 | To be issued after G5 |
@@ -48,7 +48,7 @@ normalizer, aggregator, publisher, admin UI.
 | Milestone | Primary Mandate | Supporting Specs |
 |-----------|-----------------|-----------------|
 | M2 | `MANDATE_M2_COLLECTION_LAYER.md` | `docs/SOURCE_MAP_MASTER_HE.md`, `docs/PIPELINE_ALGORITHMS_HE.md` |
-| M3 | *(to be issued)* | `docs/NORMALIZER_SPEC_HE.md`, `docs/DATABASE_SCHEMA_SPEC_HE.md` |
+| **M3** | **`MANDATE_M3_NORMALIZER_ENGINE.md`** | `docs/NORMALIZER_SPEC_HE.md`, `docs/DATABASE_SCHEMA_SPEC_HE.md` |
 | M4 | *(to be issued)* | `docs/PIPELINE_ALGORITHMS_HE.md`, `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` |
 | M5 | *(to be issued)* | `docs/INTERFACE_MOCKUPS_HE.md`, `docs/DETAILED_SYSTEM_SPEC_HE.md` |
 | M6 | *(to be issued)* | All documents |
@@ -66,7 +66,7 @@ normalizer, aggregator, publisher, admin UI.
 ```
 Python 3.11+       — required, no exceptions
 Flask 3.x          — Admin UI only (127.0.0.1:5000, M5+)
-PostgreSQL 15+     — Direct install (no Docker)
+PostgreSQL 15+     — via Docker (docker-compose.yml at repo root)
 SQLAlchemy 2.x     — ORM, select() style only (no legacy session.query())
 Alembic            — Migrations (Team 20 owns; do not modify migration files)
 httpx              — HTTP client (synchronous in M2; async if needed in M6+)

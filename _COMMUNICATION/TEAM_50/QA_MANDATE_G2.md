@@ -25,10 +25,13 @@ Read before starting:
 
 Before running any test:
 ```bash
-python --version    # must be 3.11+
-psql --version      # must be 15+ direct install
-echo $DATABASE_URL  # must be set and pointing to local DB
+python --version          # must be 3.11+
+docker ps | grep postgres # must show OMA postgres container running
+echo $DATABASE_URL        # must point to Docker port (55435 or 5433)
 ```
+
+> PostgreSQL via Docker only. Homebrew PostgreSQL removed 2026-03-30.
+> See `docker-compose.yml` and `.env.example` at repo root.
 
 ---
 
@@ -154,9 +157,22 @@ WHERE ir.id = (SELECT MAX(id) FROM ingestion_runs)
 GROUP BY sfr.status;
 ```
 
-**Pass criterion:**
-- `new_assets` = 0
-- All `source_fetch_runs.status = 'skipped'` for the second run
+**Pass criterion (amended 2026-03-30 per Team 100 decision):**
+
+Dedup is proven when **both** of the following hold:
+
+1. At least one source in the second run produced `status='skipped'` — confirming the dedup path executes
+2. No duplicate rows exist in `raw_assets` for the same `(source_id, checksum_sha256)`:
+
+```sql
+SELECT source_id, checksum_sha256, COUNT(*) AS cnt
+FROM raw_assets
+GROUP BY source_id, checksum_sha256
+HAVING COUNT(*) > 1;
+```
+→ must return **0 rows**
+
+**Why amended:** Live HTTP sources may return changed payloads between runs (new checksum → new asset, correctly marked `success`). The strict "all `skipped`" criterion is only valid for frozen/mocked endpoints. The meaningful test is that unchanged payloads are deduplicated (not re-fetched) and no duplicate `raw_assets` rows are created.
 
 ---
 

@@ -16,6 +16,7 @@ venv/
 raw_files/
 # First baseline raw dataset (large captures + local manifest paths)
 data_snapshots/first_full_scan_2026-03-30/capture/
+data_snapshots/first_full_scan_2026-03-30/full_mirror/
 data_snapshots/first_full_scan_2026-03-30/SNAPSHOT_MANIFEST.json
 dist/
 build/

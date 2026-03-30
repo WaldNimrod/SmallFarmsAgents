@@ -66,18 +66,35 @@ those belong to Team 10.
 
 ---
 
-## Python Environment
+## Python & Database Environment
+
+> **PostgreSQL runs via Docker only** (Homebrew removed 2026-03-30).
+> See `docker-compose.yml` at repo root.
 
 ```bash
+# Start PostgreSQL container (fresh install)
+docker-compose up -d
+
+# OR verify existing oma-g2-ev container is running (current dev DB):
+docker ps | grep postgres
+
 # Verify Python version
 python3 --version  # must be >= 3.11
 
 # Create and activate venv
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+pip install -e .
+
+# Copy and configure .env
+cp .env.example .env
+# Edit .env — set DATABASE_URL to your Docker container's port
+
+# Verify DB connection
+python -m organic_market_agent.db.check
 ```
 
 ---

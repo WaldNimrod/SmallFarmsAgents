@@ -112,7 +112,7 @@ deviation is approved by Team 100.
 | 3 | Schema | All 23 tables exist; all required indexes; all CHECK constraints active |
 | 4 | Data Quality | 11 units, 29 products, ≥20 sources, aliases present (SQL queries) |
 | 5 | Type Safety | No `FLOAT` columns anywhere; all `*_at` are `TIMESTAMPTZ`; prices `NUMERIC(12,4)` |
-| 6 | Environment | Python 3.11+ (`python --version`); PostgreSQL direct install (`psql --version`, no Docker) |
+| 6 | Environment | Python 3.11+ (`python --version`); PostgreSQL via Docker (`docker ps` shows postgres container running; `DATABASE_URL` points to Docker port) |
 | 7 | CLI | `python -m organic_market_agent.db.check` → output shows PASS for all 23 tables |
 
 ---
