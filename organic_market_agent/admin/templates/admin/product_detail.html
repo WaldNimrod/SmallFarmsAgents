@@ -1,0 +1,252 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ prod.canonical_name_he }}{% endblock %}
+{% block content %}
+
+{# ── Header ── #}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h1 class="h4 mb-1">🥕 {{ prod.canonical_name_he }}</h1>
+    <div class="small text-muted d-flex gap-3 flex-wrap mt-1">
+      <span><span class="ltr">{{ prod.code }}</span></span>
+      <span>{{ prod.category or '—' }}</span>
+      {% if prod.is_active %}
+        <span class="badge bg-success">פעיל</span>
+      {% else %}
+        <span class="badge bg-secondary">לא פעיל</span>
+      {% endif %}
+      {% if prod.is_basket_product %}
+        <span class="badge bg-info text-dark">סל</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{# ── Summary KPIs ── #}
+{% if summary %}
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">סה״כ תצפיות</div>
+        <div class="fs-3 fw-bold text-primary"><span class="ltr">{{ summary.total_obs }}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">מקורות</div>
+        <div class="fs-3 fw-bold"><span class="ltr">{{ summary.distinct_srcs }}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">מחיר ממוצע</div>
+        <div class="fs-3 fw-bold text-success">
+          {% if summary.avg_price is not none %}
+            <span class="ltr">₪ {{ "%.2f"|format(summary.avg_price) }}</span>
+          {% else %}—{% endif %}
+        </div>
+        <div class="text-muted small">{{ summary.unit }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">חציון</div>
+        <div class="fs-3 fw-bold">
+          {% if summary.median_price is not none %}
+            <span class="ltr">₪ {{ "%.2f"|format(summary.median_price) }}</span>
+          {% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">טווח מחירים</div>
+        <div class="fw-semibold">
+          {% if summary.min_price is not none and summary.max_price is not none %}
+            <span class="ltr">₪ {{ "%.2f"|format(summary.min_price) }} – {{ "%.2f"|format(summary.max_price) }}</span>
+          {% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">סטיית תקן</div>
+        <div class="fw-semibold">
+          {% if summary.stddev_price is not none %}
+            <span class="ltr">{{ "%.2f"|format(summary.stddev_price) }}</span>
+          {% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">תצפייה ראשונה</div>
+        <div class="small fw-semibold"><span class="ltr">{{ summary.first_seen }}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm text-center">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">תצפייה אחרונה</div>
+        <div class="small fw-semibold"><span class="ltr">{{ summary.last_seen }}</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-warning mb-4">אין תצפיות מנורמלות למוצר זה.</div>
+{% endif %}
+
+{# ── Per-source breakdown ── #}
+<h2 class="h5 mb-3">📡 פירוט לפי מקור</h2>
+{% if sources_out %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>מקור</th>
+        <th>סוג</th>
+        <th class="text-end">תצפיות</th>
+        <th class="text-end">מחיר מינ׳</th>
+        <th class="text-end">מחיר מקס׳</th>
+        <th class="text-end">ממוצע</th>
+        <th>יחידה</th>
+        <th>נצפה לאחרונה</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sources_out %}
+      <tr>
+        <td>
+          <a href="{{ url_for('sources.source_detail', code=s.code) }}" class="text-decoration-none fw-semibold">{{ s.name }}</a>
+          <div class="text-muted small ltr">{{ s.code }}</div>
+        </td>
+        <td>
+          {% if s.tier %}
+            <span class="badge badge-tier-{{ s.tier }}">{{ s.tier }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="text-end"><span class="ltr fw-bold">{{ s.obs_count }}</span></td>
+        <td class="text-end"><span class="ltr">{% if s.min_price is not none %}₪ {{ "%.2f"|format(s.min_price) }}{% else %}—{% endif %}</span></td>
+        <td class="text-end"><span class="ltr">{% if s.max_price is not none %}₪ {{ "%.2f"|format(s.max_price) }}{% else %}—{% endif %}</span></td>
+        <td class="text-end fw-semibold text-success"><span class="ltr">{% if s.avg_price is not none %}₪ {{ "%.2f"|format(s.avg_price) }}{% else %}—{% endif %}</span></td>
+        <td class="small">{{ s.unit }}</td>
+        <td class="small text-muted"><span class="ltr">{{ s.last_seen }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted mb-4">אין נתוני מקור.</p>
+{% endif %}
+
+{# ── Active aliases ── #}
+<h2 class="h5 mb-3">🔤 אליאסים פעילים <small class="text-muted fs-6">(שמות גולמיים שמוביאים למוצר זה)</small></h2>
+{% if aliases_out %}
+<div class="d-flex flex-wrap gap-2 mb-4">
+  {% for a in aliases_out %}
+  <span class="badge bg-light text-dark border fs-6 px-3 py-2">
+    {{ a.text }}
+    <span class="text-muted small ms-1 ltr">({{ a.scope }})</span>
+  </span>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-muted mb-4">אין אליאסים מוגדרים.</p>
+{% endif %}
+
+{# ── Similar unresolved strings ── #}
+{% if unresolved_similar %}
+<div class="alert alert-warning mb-4">
+  <h2 class="h6 mb-2">⚠️ שמות גולמיים לא-מזוהים שעשויים להתאים למוצר זה</h2>
+  <p class="small mb-2">אם אחד מהם הוא אכן מוצר זה — ניתן להוסיפו כאליאס ולשפר את אחוז הפתרון:</p>
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 bg-white">
+      <thead><tr><th>שם גולמי</th><th class="text-end">הופעות</th><th>מקורות</th><th></th></tr></thead>
+      <tbody>
+        {% for u in unresolved_similar %}
+        <tr>
+          <td class="fw-semibold">{{ u.raw_name or '(ריק)' }}</td>
+          <td class="text-end"><span class="ltr">{{ u.count }}</span></td>
+          <td class="small text-muted ltr">{{ u.src_codes }}</td>
+          <td>
+            <a href="{{ url_for('unresolved.unresolved_detail', raw_name_encoded=u.url_encoded) }}"
+               class="btn btn-sm btn-outline-warning">ניתוח</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{# ── Last 50 observations ── #}
+<h2 class="h5 mb-3">📋 50 תצפיות אחרונות</h2>
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle" style="font-size:0.85rem;">
+    <thead class="table-dark">
+      <tr>
+        <th>תאריך</th>
+        <th>מקור</th>
+        <th class="text-end">מחיר</th>
+        <th>יחידה</th>
+        <th>שם גולמי</th>
+        <th>מחיר גולמי</th>
+        <th>יחידה גולמית</th>
+        <th class="text-end">ביטחון</th>
+        <th>דגל</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in obs_out %}
+      <tr class="{% if o.flag_status != 'ok' %}table-warning{% endif %}">
+        <td class="text-muted"><span class="ltr">{{ o.observed_at }}</span></td>
+        <td>
+          <span class="badge bg-dark ltr">{{ o.src_code }}</span>
+        </td>
+        <td class="text-end fw-semibold text-success">
+          {% if o.price is not none %}<span class="ltr">₪ {{ "%.2f"|format(o.price) }}</span>{% else %}—{% endif %}
+        </td>
+        <td>{{ o.display_unit }}</td>
+        <td class="text-muted small">{{ o.raw_name }}</td>
+        <td class="text-muted small ltr">{{ o.raw_price }}</td>
+        <td class="text-muted small">{{ o.raw_unit }}</td>
+        <td class="text-end">
+          {% if o.confidence is not none %}
+            <span class="ltr {% if o.confidence >= 0.8 %}text-success{% elif o.confidence >= 0.5 %}text-warning{% else %}text-danger{% endif %}">
+              {{ "%.0f"|format(o.confidence * 100) }}%
+            </span>
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          {% if o.flag_status == 'ok' %}
+            <span class="badge bg-success">ok</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">{{ o.flag_status }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<p>
+  <a href="{{ url_for('products.product_list') }}" class="btn btn-outline-secondary btn-sm">← חזרה למוצרים</a>
+</p>
+{% endblock %}

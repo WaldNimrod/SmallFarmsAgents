@@ -4,6 +4,7 @@ from __future__ import annotations
 import sqlalchemy as sa
 from flask import Blueprint, abort, g, render_template
 from sqlalchemy import text
+from urllib.parse import quote
 
 from organic_market_agent.models import Product
 
@@ -210,7 +211,8 @@ def product_detail(code: str):
     ).all()
 
     unresolved_similar = [
-        {"raw_name": r[0], "count": int(r[1]), "src_codes": r[2] or ""}
+        {"raw_name": r[0], "count": int(r[1]), "src_codes": r[2] or "",
+         "url_encoded": quote(r[0], safe="")}
         for r in similar_unresolved
     ]
 
