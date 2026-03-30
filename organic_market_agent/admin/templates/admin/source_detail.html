@@ -1,0 +1,137 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ source.name }}{% endblock %}
+{% block content %}
+
+{# ── Header card ── #}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div>
+        <h1 class="h4 mb-1">
+          {% if source.base_url %}
+            <a href="{{ source.base_url }}" target="_blank" rel="noopener" class="text-decoration-none">
+              {{ source.name }}
+            </a>
+            <small class="text-muted fs-6">↗</small>
+          {% else %}
+            {{ source.name }}
+          {% endif %}
+        </h1>
+        <div class="small text-muted">
+          <span class="ltr">{{ source.code }}</span>
+          {% if source.source_tier %}
+            &nbsp;·&nbsp;
+            <span class="badge badge-tier-{{ source.source_tier }}">{{ source.source_tier }}</span>
+          {% endif %}
+          &nbsp;·&nbsp;
+          {% if source.is_active %}
+            <span class="badge bg-success">פעיל</span>
+          {% else %}
+            <span class="badge bg-secondary">לא פעיל</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ── Recent runs ── #}
+<h2 class="h5 mb-3">⏱ הרצות אחרונות</h2>
+{% if recent_runs %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>מזהה הרצה</th>
+        <th>תחילה</th>
+        <th>סטטוס</th>
+        <th class="text-end">פוּתרו</th>
+        <th class="text-end">לא פוּתרו</th>
+        <th class="text-end">סה״כ פריטים</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in recent_runs %}
+      <tr>
+        <td><span class="ltr text-muted">#{{ r.run_id }}</span></td>
+        <td><span class="ltr small">{{ r.started_at }}</span></td>
+        <td>
+          <span class="badge {% if r.status == 'success' %}bg-success{% elif r.status == 'failed' %}bg-danger{% else %}bg-secondary{% endif %}">
+            {{ r.status }}
+          </span>
+        </td>
+        <td class="text-end text-success fw-semibold"><span class="ltr">{{ r.resolved }}</span></td>
+        <td class="text-end text-danger"><span class="ltr">{{ r.unresolvable }}</span></td>
+        <td class="text-end"><span class="ltr">{{ r.total }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted mb-4">אין הרצות עדיין.</p>
+{% endif %}
+
+{# ── Products observed ── #}
+<h2 class="h5 mb-3">🥕 מוצרים שנצפו</h2>
+{% if products_seen %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-striped table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>מוצר</th>
+        <th>קוד</th>
+        <th class="text-end">מחיר ממוצע</th>
+        <th>יחידה</th>
+        <th class="text-end">תצפיות</th>
+        <th>נצפה לאחרונה</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products_seen %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td><span class="ltr text-muted small">{{ p.code }}</span></td>
+        <td class="text-end fw-semibold">
+          {% if p.avg_price is not none %}
+            <span class="ltr">₪ {{ "%.2f"|format(p.avg_price) }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td>{{ p.unit }}</td>
+        <td class="text-end"><span class="ltr">{{ p.obs_count }}</span></td>
+        <td class="text-muted small"><span class="ltr">{{ p.last_seen }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted mb-4">אין תצפיות מנורמלות עדיין.</p>
+{% endif %}
+
+{# ── Unresolved raw names ── #}
+<h2 class="h5 mb-3">❓ שמות גולמיים לא מזוהים <small class="text-muted fs-6">(עד 50 ראשונים)</small></h2>
+{% if unresolved %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr><th>שם גולמי</th><th class="text-end">כמות</th></tr>
+    </thead>
+    <tbody>
+      {% for u in unresolved %}
+      <tr>
+        <td>{{ u.name or '(ריק)' }}</td>
+        <td class="text-end"><span class="ltr">{{ u.count }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">אין פריטים לא מזוהים ממקור זה.</p>
+{% endif %}
+
+<p class="mt-3">
+  <a href="{{ url_for('sources.source_list') }}" class="btn btn-outline-secondary btn-sm">← חזרה למקורות</a>
+</p>
+{% endblock %}

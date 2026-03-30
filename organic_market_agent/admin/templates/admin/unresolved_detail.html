@@ -1,0 +1,115 @@
+{% extends "admin/base.html" %}
+{% block title %}ניתוח: {{ raw_name }}{% endblock %}
+{% block content %}
+
+{# ── Header ── #}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h1 class="h4 mb-1">🔬 ניתוח שם גולמי לא מזוהה</h1>
+    <div class="fs-5 fw-bold mt-2 text-danger">{{ raw_name or '(ריק)' }}</div>
+    <div class="row g-3 mt-2">
+      <div class="col-auto">
+        <span class="badge bg-secondary fs-6">
+          <span class="ltr">{{ total_count }}</span> הופעות
+        </span>
+      </div>
+      <div class="col-auto">
+        <span class="badge bg-primary fs-6">
+          <span class="ltr">{{ distinct_sources }}</span> מקורות
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ── Normalizer hint box ── #}
+<div class="alert alert-info mb-4">
+  <strong>מטרת העמוד:</strong> לאפשר לך לזהות מה מונע מהנורמלייזר לפתור שם זה — ולהחליט אם יש להוסיף אליאס, לשפר כלל חילוץ, או לבטל את המקור.
+  <ul class="mb-0 mt-2">
+    <li>ראה את <strong>סיבת אי-הזיהוי</strong> — האם מדובר בחוסר אליאס? שגיאת חילוץ מחיר? שם ריק?</li>
+    <li>אם יש <strong>מחיר גולמי</strong> תקין — כנראה שחסר אליאס בלבד.</li>
+    <li>ראה את <strong>אליאסים קרובים</strong> — אולי כבר קיים אליאס דומה ואפשר להרחיב אותו.</li>
+  </ul>
+</div>
+
+{# ── Failure reasons ── #}
+{% if unique_reasons %}
+<div class="mb-4">
+  <h2 class="h5 mb-2">⚠️ סיבות אי-זיהוי ייחודיות</h2>
+  <ul class="list-group list-group-flush">
+    {% for r in unique_reasons %}
+    <li class="list-group-item list-group-item-warning small text-break">{{ r }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{# ── Alias suggestions ── #}
+{% if alias_suggestions %}
+<div class="mb-4">
+  <h2 class="h5 mb-2">💡 אליאסים קרובים קיימים <small class="text-muted fs-6">(השוואה אוטומטית)</small></h2>
+  <p class="text-muted small">אם אחד מאלה מתאים — הוסף אליאס חדש: <code>"{{ raw_name }}" → [קוד מוצר]</code></p>
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered bg-white">
+      <thead class="table-light">
+        <tr><th>אליאס קיים</th><th>מוצר קאנוני</th><th>קוד מוצר</th><th>סוג התאמה</th></tr>
+      </thead>
+      <tbody>
+        {% for s in alias_suggestions %}
+        <tr>
+          <td class="fw-semibold">{{ s.alias }}</td>
+          <td>{{ s.canonical }}</td>
+          <td><span class="ltr text-muted small">{{ s.code }}</span></td>
+          <td><span class="badge {% if s.match_type == 'דמיון' %}bg-warning text-dark{% else %}bg-info text-dark{% endif %}">{{ s.match_type }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-warning mb-4">
+  לא נמצאו אליאסים קיימים דומים. זהו כנראה מוצר חדש שאינו בקטלוג — בדוק אם יש להוסיפו ולהגדיר אליאס.
+</div>
+{% endif %}
+
+{# ── All occurrences ── #}
+<h2 class="h5 mb-3">📋 מופעים <small class="text-muted fs-6">(עד 100 אחרונים)</small></h2>
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>תאריך חילוץ</th>
+        <th>מקור</th>
+        <th>מחיר גולמי</th>
+        <th>יחידה גולמית</th>
+        <th>סיבת אי-זיהוי</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in occurrences %}
+      <tr>
+        <td class="small text-muted"><span class="ltr">{{ o.extracted_at }}</span></td>
+        <td>
+          <span class="badge bg-dark ltr">{{ o.src_code }}</span>
+          <span class="small text-muted">{{ o.src_name }}</span>
+        </td>
+        <td>
+          {% if o.raw_price != '—' %}
+            <span class="ltr text-success fw-semibold">{{ o.raw_price }}</span>
+          {% else %}
+            <span class="text-danger">—</span>
+          {% endif %}
+        </td>
+        <td class="small">{{ o.raw_unit }}</td>
+        <td class="small text-break text-muted" style="max-inline-size: 300px;">{{ o.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<p>
+  <a href="{{ url_for('unresolved.unresolved_list') }}" class="btn btn-outline-secondary btn-sm">← חזרה לרשימה</a>
+</p>
+{% endblock %}

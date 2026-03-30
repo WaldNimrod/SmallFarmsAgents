@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+{% block title %}דשבורד{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">📊 דשבורד ניטור</h1>
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">מקורות פעילים</div>
+        <div class="fs-2 fw-bold text-success">{{ active_sources }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">מוצרים בקטלוג</div>
+        <div class="fs-2 fw-bold">{{ total_products_catalog }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">מוצרים עם תצפיות</div>
+        <div class="fs-2 fw-bold text-primary">{{ products_covered }}</div>
+        <div class="text-muted small">מתוך {{ total_products_catalog }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">סה״כ תצפיות מנורמלות</div>
+        <div class="fs-2 fw-bold">{{ total_observations }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">הרצה אחרונה</div>
+        <div class="fs-6 fw-semibold">
+          {% if last_run %}<span class="ltr">{{ last_run.strftime('%Y-%m-%d %H:%M') }}</span>{% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body">
+        <div class="text-muted small mb-1">אחוז פתרון (מנורמל / מנורמל+לא מזוהה)</div>
+        <div class="fs-2 fw-bold {% if resolution_pct >= 50 %}text-success{% else %}text-warning{% endif %}">
+          <span class="ltr">{{ resolution_pct }}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

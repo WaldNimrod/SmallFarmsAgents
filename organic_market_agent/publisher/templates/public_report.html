@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מחירי ירקות אורגניים — {{ report_date }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1b4332;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --sand:        #f5f0e8;
+      --sand-dark:   #e8dfc8;
+      --gold:        #c9a84c;
+      --text:        #1a1a1a;
+      --muted:       #6b7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header .brand {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-block-end: 0.25rem;
+    }
+    .site-header .sub {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .report-meta {
+      background: var(--green-mid);
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .report-meta span { direction: ltr; }
+
+    /* Stale banner */
+    .stale-banner {
+      background: #fef3c7;
+      border-inline-start: 4px solid var(--gold);
+      padding: 0.75rem 1.25rem;
+      margin: 1rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #92400e;
+    }
+
+    /* Main content */
+    .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
+
+    /* Table */
+    .price-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    thead tr {
+      background: var(--green-dark);
+      color: #fff;
+    }
+    thead th {
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      text-align: start;
+      white-space: nowrap;
+    }
+    thead th.num { text-align: end; }
+    tbody tr { border-block-end: 1px solid #f0ede6; }
+    tbody tr:last-child { border-block-end: none; }
+    tbody tr:nth-child(even) { background: #fafaf8; }
+    tbody tr:hover { background: #f0faf4; }
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+    td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
+    .product-name { font-weight: 600; font-size: 1rem; }
+    .product-emoji { font-size: 1.3rem; margin-inline-end: 0.4rem; }
+    .unit-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      background: var(--sand-dark);
+      color: var(--green-dark);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-weight: 500;
+      margin-inline-start: 4px;
+      direction: rtl;
+    }
+    .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
+    .price-secondary { color: var(--muted); font-size: 0.88rem; }
+    /* range bar */
+    .range-bar-wrap {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      min-inline-size: 80px;
+      margin-block: 4px;
+    }
+    .range-bar-fill {
+      position: absolute;
+      inset-block: 0;
+      background: linear-gradient(to left, var(--green-light), var(--green-dark));
+      border-radius: 3px;
+    }
+    .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
+    .stddev-text { font-size: 0.78rem; color: var(--muted); }
+    .sources-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .site-footer a { color: var(--green-mid); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      thead th, td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">🌿 מחירי ירקות אורגניים</div>
+  <div class="sub">נתוני מחיר מקהילת המגדלים האורגנית</div>
+</header>
+
+<div class="report-meta">
+  <span>תאריך דוח: {{ report_date }}</span>
+  <span>עודכן: {{ generated_at[:16].replace("T", " ") }}</span>
+  <span>{{ products | length }} מוצרים</span>
+</div>
+
+{% if stale_banner %}
+<div class="stale-banner">
+  ⚠️ הנתונים עשויים שלא להיות עדכניים — מעל 3 ימים מאז התצפית האחרונה.
+</div>
+{% endif %}
+
+<div class="container">
+
+{# Calculate global price range for proportional bars #}
+{% set all_prices = products | selectattr('min_price', 'ne', none) | map(attribute='min_price') | list +
+                   products | selectattr('max_price', 'ne', none) | map(attribute='max_price') | list %}
+{% set global_min = all_prices | min if all_prices else 0 %}
+{% set global_max = all_prices | max if all_prices else 100 %}
+{% set price_span = (global_max - global_min) if global_max != global_min else 1 %}
+
+{# Vegetable emoji map #}
+{% set EMOJIS = {
+  'עגבנייה':       '🍅',
+  'עגבנייה שרי':   '🍅',
+  'פלפל אדום':     '🫑',
+  'פלפל צהוב':     '🫑',
+  'פלפל ירוק':     '🫑',
+  'מלפפון':        '🥒',
+  'חציל':          '🍆',
+  'קישוא':         '🥬',
+  'גזר':           '🥕',
+  'סלק':           '🟣',
+  'תפוח אדמה':     '🥔',
+  'בצל יבש':       '🧅',
+  'שום':           '🧄',
+  'עלי תרד':       '🥬',
+  'חסה':           '🥬',
+  'רוקט':          '🥗',
+  'כרוב':          '🥦',
+  'פטרוזיליה':     '🌿',
+  'כוסברה':        '🌿',
+  'צנון':          '🔴',
+  'סל ירקות גדול': '🧺',
+  'סל ירקות קטן':  '🧺',
+  'סל ירקות בינוני':'🧺',
+} %}
+
+<div class="price-table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>מוצר</th>
+        <th class="num">ממוצע ₪</th>
+        <th class="num">חציון ₪</th>
+        <th>טווח מחירים</th>
+        <th class="num hide-mobile">סטיית תקן</th>
+        <th class="num">תצפיות</th>
+        <th class="num">מקורות</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      {% set emoji = EMOJIS.get(p.canonical_name_he, '🥬') %}
+      <tr>
+        <td>
+          <span class="product-emoji">{{ emoji }}</span>
+          <span class="product-name">{{ p.canonical_name_he }}</span>
+          <span class="unit-badge">{{ p.normalized_unit }}</span>
+        </td>
+        <td class="num">
+          {% if p.avg_price is not none %}
+            <span class="price-main">{{ "%.2f"|format(p.avg_price) }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="num">
+          {% if p.median_price is not none %}
+            <span class="price-secondary">{{ "%.2f"|format(p.median_price) }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          {% if p.min_price is not none and p.max_price is not none %}
+            {# Proportional bar relative to global price range #}
+            {% set bar_start_pct = ((p.min_price - global_min) / price_span * 100) | round(1) %}
+            {% set bar_width_pct = ((p.max_price - p.min_price) / price_span * 100) | round(1) %}
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: {{ bar_start_pct }}%; inline-size: {{ [bar_width_pct, 4] | max }}%;"></div>
+            </div>
+            <div class="range-text">{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</div>
+          {% else %}—{% endif %}
+        </td>
+        <td class="num hide-mobile">
+          {% if p.stddev_price is defined and p.stddev_price is not none %}
+            <span class="stddev-text">{{ "%.2f"|format(p.stddev_price) }}</span>
+          {% else %}
+            <span class="stddev-text text-muted">—</span>
+          {% endif %}
+        </td>
+        <td class="num">{{ p.sample_size }}</td>
+        <td class="num">
+          <span class="sources-badge">
+            {% for i in range(p.distinct_sources) %}●{% endfor %}
+            {{ p.distinct_sources }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<p class="text-center mt-3" style="font-size:0.8rem; color: var(--muted);">
+  נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
+</p>
+</div>
+
+<footer class="site-footer">
+  <p>🌱 <a href="https://www.nimrod.bio" target="_blank" rel="noopener">nimrod.bio</a> — חקלאות אקולוגית מקומית אורגנית</p>
+</footer>
+
+</body>
+</html>

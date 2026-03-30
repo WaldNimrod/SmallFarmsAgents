@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מחירי ירקות אורגניים — 2026-03-30</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1b4332;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --sand:        #f5f0e8;
+      --sand-dark:   #e8dfc8;
+      --gold:        #c9a84c;
+      --text:        #1a1a1a;
+      --muted:       #6b7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header .brand {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-block-end: 0.25rem;
+    }
+    .site-header .sub {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .report-meta {
+      background: var(--green-mid);
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .report-meta span { direction: ltr; }
+
+    /* Stale banner */
+    .stale-banner {
+      background: #fef3c7;
+      border-inline-start: 4px solid var(--gold);
+      padding: 0.75rem 1.25rem;
+      margin: 1rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #92400e;
+    }
+
+    /* Main content */
+    .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
+
+    /* Table */
+    .price-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    thead tr {
+      background: var(--green-dark);
+      color: #fff;
+    }
+    thead th {
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      text-align: start;
+      white-space: nowrap;
+    }
+    thead th.num { text-align: end; }
+    tbody tr { border-block-end: 1px solid #f0ede6; }
+    tbody tr:last-child { border-block-end: none; }
+    tbody tr:nth-child(even) { background: #fafaf8; }
+    tbody tr:hover { background: #f0faf4; }
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+    td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
+    .product-name { font-weight: 600; font-size: 1rem; }
+    .product-emoji { font-size: 1.3rem; margin-inline-end: 0.4rem; }
+    .unit-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      background: var(--sand-dark);
+      color: var(--green-dark);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-weight: 500;
+      margin-inline-start: 4px;
+      direction: rtl;
+    }
+    .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
+    .price-secondary { color: var(--muted); font-size: 0.88rem; }
+    /* range bar */
+    .range-bar-wrap {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      min-inline-size: 80px;
+      margin-block: 4px;
+    }
+    .range-bar-fill {
+      position: absolute;
+      inset-block: 0;
+      background: linear-gradient(to left, var(--green-light), var(--green-dark));
+      border-radius: 3px;
+    }
+    .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
+    .stddev-text { font-size: 0.78rem; color: var(--muted); }
+    .sources-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .site-footer a { color: var(--green-mid); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      thead th, td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">🌿 מחירי ירקות אורגניים</div>
+  <div class="sub">נתוני מחיר מקהילת המגדלים האורגנית</div>
+</header>
+
+<div class="report-meta">
+  <span>תאריך דוח: 2026-03-30</span>
+  <span>עודכן: 2026-03-30 22:08</span>
+  <span>19 מוצרים</span>
+</div>
+
+
+
+<div class="container">
+
+
+
+
+
+
+
+
+
+
+<div class="price-table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>מוצר</th>
+        <th class="num">ממוצע ₪</th>
+        <th class="num">חציון ₪</th>
+        <th>טווח מחירים</th>
+        <th class="num hide-mobile">סטיית תקן</th>
+        <th class="num">תצפיות</th>
+        <th class="num">מקורות</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🍅</span>
+          <span class="product-name">עגבנייה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.78</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.0%; inline-size: 23.0%;"></div>
+            </div>
+            <div class="range-text">5.00 – 22.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.02</span>
+          
+        </td>
+        <td class="num">29</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🍅</span>
+          <span class="product-name">עגבנייה שרי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">15.67</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 13.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.00 – 16.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.52</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥒</span>
+          <span class="product-name">מלפפון</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">24.62</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 9.5%; inline-size: 90.5%;"></div>
+            </div>
+            <div class="range-text">12.00 – 79.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">21.67</span>
+          
+        </td>
+        <td class="num">16</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🍆</span>
+          <span class="product-name">חציל</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.8%; inline-size: 4.1%;"></div>
+            </div>
+            <div class="range-text">10.00 – 13.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.39</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">חסה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 12.2%;"></div>
+            </div>
+            <div class="range-text">6.00 – 15.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.01</span>
+          
+        </td>
+        <td class="num">24</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">עלי תרד</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.64</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.1%; inline-size: 13.5%;"></div>
+            </div>
+            <div class="range-text">8.00 – 18.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.19</span>
+          
+        </td>
+        <td class="num">22</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥗</span>
+          <span class="product-name">רוקט</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.20</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.1%; inline-size: 8.1%;"></div>
+            </div>
+            <div class="range-text">8.00 – 14.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.86</span>
+          
+        </td>
+        <td class="num">10</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🌿</span>
+          <span class="product-name">כוסברה</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 10.8%;"></div>
+            </div>
+            <div class="range-text">6.00 – 14.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.55</span>
+          
+        </td>
+        <td class="num">12</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🌿</span>
+          <span class="product-name">פטרוזיליה</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 16.2%;"></div>
+            </div>
+            <div class="range-text">6.00 – 18.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.50</span>
+          
+        </td>
+        <td class="num">20</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥕</span>
+          <span class="product-name">גזר</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">17.86</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 8.1%; inline-size: 36.5%;"></div>
+            </div>
+            <div class="range-text">11.00 – 38.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">9.17</span>
+          
+        </td>
+        <td class="num">14</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🟣</span>
+          <span class="product-name">סלק</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 21.6%;"></div>
+            </div>
+            <div class="range-text">6.00 – 22.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.72</span>
+          
+        </td>
+        <td class="num">16</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🧅</span>
+          <span class="product-name">בצל יבש</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.88</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.75</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.8%; inline-size: 16.2%;"></div>
+            </div>
+            <div class="range-text">10.00 – 22.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.84</span>
+          
+        </td>
+        <td class="num">16</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בצל ירוק</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.86</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 10.8%;"></div>
+            </div>
+            <div class="range-text">6.00 – 14.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.96</span>
+          
+        </td>
+        <td class="num">14</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🧄</span>
+          <span class="product-name">שום</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">21.48</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">17.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.6%; inline-size: 49.5%;"></div>
+            </div>
+            <div class="range-text">8.40 – 45.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">13.05</span>
+          
+        </td>
+        <td class="num">10</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרישה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">19.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">17.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 39.2%;"></div>
+            </div>
+            <div class="range-text">6.00 – 35.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">9.34</span>
+          
+        </td>
+        <td class="num">12</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרוב לבן</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">17.27</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 45.9%;"></div>
+            </div>
+            <div class="range-text">6.00 – 40.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">10.41</span>
+          
+        </td>
+        <td class="num">22</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרובית</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">28.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">22.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 13.5%; inline-size: 60.8%;"></div>
+            </div>
+            <div class="range-text">15.00 – 60.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">15.57</span>
+          
+        </td>
+        <td class="num">12</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ברוקולי</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">15.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.8%; inline-size: 21.6%;"></div>
+            </div>
+            <div class="range-text">10.00 – 26.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">6.51</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr>
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שעועית ירוקה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">17.11</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 11.1%; inline-size: 7.7%;"></div>
+            </div>
+            <div class="range-text">13.20 – 18.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.06</span>
+          
+        </td>
+        <td class="num">18</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+<p class="text-center mt-3" style="font-size:0.8rem; color: var(--muted);">
+  נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
+</p>
+</div>
+
+<footer class="site-footer">
+  <p>🌱 <a href="https://www.nimrod.bio" target="_blank" rel="noopener">nimrod.bio</a> — חקלאות אקולוגית מקומית אורגנית</p>
+</footer>
+
+</body>
+</html>

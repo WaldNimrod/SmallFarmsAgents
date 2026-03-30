@@ -15,3 +15,7 @@ class ParserError(MyFarmAgentsError):
 
 class DuplicateAssetError(MyFarmAgentsError):
     """Raised when the same checksum already exists in raw_assets."""
+
+
+class PublishAbortError(MyFarmAgentsError):
+    """Raised when local publish preconditions fail (e.g. insufficient community sources)."""

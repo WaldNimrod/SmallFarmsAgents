@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.5  
-**Date:** 2026-03-30  
+**Version:** 1.6  
+**Date:** 2026-03-31  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M4 — Aggregation + Local Viewer + Admin Dashboard (Phase A: Team 10 active)
+**Active Milestone:** M5 — Admin UI (Phase A: pending M5 mandate issuance)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -217,7 +217,7 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M4_AGGREGATION_LOCAL_VIEWER_TEAM10.md` ✅ ISSUED
 **QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` ✅ ISSUED
 **Schema Mandate:** `_COMMUNICATION/TEAM_20/MANDATE_M4_SCHEMA_TEAM20.md` ✅ ISSUED
-**Status:** 🟡 PHASE A — Implementation active (Team 10)
+**Status:** ✅ COMPLETE — G4 PASS (sign-off: `ARCH-20260331-G4-PASS`)
 
 **M3→M4 Boundary Work (all ✅ COMPLETE as of 2026-03-30):**
 - Migration 010: EasyFarm selector fix, SRC007 deactivated, noise sources off

@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block title %}מוצרים{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">🥦 כיסוי מוצרים</h1>
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>קוד</th>
+        <th>שם</th>
+        <th>יחידת ברירת מחדל</th>
+        <th class="text-end">מחיר ממוצע</th>
+        <th class="text-end">תצפיות</th>
+        <th class="text-end">מקורות</th>
+        <th>נצפה לאחרונה</th>
+        <th>פעיל</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr class="{% if not p.is_active or p.obs_count == 0 %}text-muted{% endif %}">
+        <td><span class="ltr small">{{ p.code }}</span></td>
+        <td class="fw-semibold">{{ p.canonical_name_he }}</td>
+        <td>{{ p.default_unit }}</td>
+        <td class="text-end">
+          {% if p.avg_price is not none %}
+            <span class="ltr fw-semibold">₪ {{ "%.2f"|format(p.avg_price) }}</span>
+          {% else %}<span class="text-muted">—</span>{% endif %}
+        </td>
+        <td class="text-end"><span class="ltr">{{ p.obs_count }}</span></td>
+        <td class="text-end"><span class="ltr">{{ p.sources_count }}</span></td>
+        <td class="small text-muted">
+          {% if p.last_seen %}<span class="ltr">{{ p.last_seen }}</span>{% else %}—{% endif %}
+        </td>
+        <td>
+          {% if p.is_active %}
+            <span class="badge bg-success">כן</span>
+          {% else %}
+            <span class="badge bg-secondary">לא</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('products.product_detail', code=p.code) }}" class="btn btn-sm btn-outline-secondary">פירוט</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

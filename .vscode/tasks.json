@@ -1,0 +1,85 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🟢 Admin Dashboard — Start",
+      "type": "shell",
+      "command": "bash scripts/admin_server.sh start",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔴 Admin Dashboard — Stop",
+      "type": "shell",
+      "command": "bash scripts/admin_server.sh stop",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Admin Dashboard — Restart",
+      "type": "shell",
+      "command": "bash scripts/admin_server.sh restart",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "📋 Admin Dashboard — Status",
+      "type": "shell",
+      "command": "bash scripts/admin_server.sh status",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🟢 Public Viewer — Start",
+      "type": "shell",
+      "command": "bash scripts/viewer_server.sh start",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔴 Public Viewer — Stop",
+      "type": "shell",
+      "command": "bash scripts/viewer_server.sh stop",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Public Viewer — Restart",
+      "type": "shell",
+      "command": "bash scripts/viewer_server.sh restart",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "📋 Public Viewer — Status",
+      "type": "shell",
+      "command": "bash scripts/viewer_server.sh status",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 כל השרתים — Restart All",
+      "type": "shell",
+      "command": "bash scripts/restart_all_servers.sh restart",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "📋 כל השרתים — Status",
+      "type": "shell",
+      "command": "bash scripts/restart_all_servers.sh status",
+      "group": "none",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    }
+  ]
+}

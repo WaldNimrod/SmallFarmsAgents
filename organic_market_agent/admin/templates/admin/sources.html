@@ -1,0 +1,66 @@
+{% extends "admin/base.html" %}
+{% block title %}מקורות{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">📡 מקורות נתונים</h1>
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>קוד</th>
+        <th>שם</th>
+        <th>סוג</th>
+        <th>פעיל</th>
+        <th>הרצה אחרונה</th>
+        <th class="text-end">פריטים</th>
+        <th class="text-end">פוּתרו</th>
+        <th class="text-end">לא פוּתרו</th>
+        <th class="text-end">% פתרון</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sources %}
+      <tr class="{% if not s.is_active %}table-secondary text-muted{% endif %}">
+        <td><span class="ltr fw-semibold">{{ s.code }}</span></td>
+        <td>
+          {% if s.url %}
+            <a href="{{ s.url }}" target="_blank" rel="noopener" class="text-decoration-none">{{ s.name }}</a>
+            <span class="text-muted small">↗</span>
+          {% else %}
+            {{ s.name }}
+          {% endif %}
+        </td>
+        <td>
+          {% if s.tier %}
+            <span class="badge badge-tier-{{ s.tier }}">{{ s.tier }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          {% if s.is_active %}
+            <span class="badge bg-success">כן</span>
+          {% else %}
+            <span class="badge bg-secondary">לא</span>
+          {% endif %}
+        </td>
+        <td class="text-muted small">
+          {% if s.last_run %}<span class="ltr">{{ s.last_run }}</span>{% else %}—{% endif %}
+        </td>
+        <td class="text-end"><span class="ltr">{{ s.items_extracted }}</span></td>
+        <td class="text-end text-success fw-semibold"><span class="ltr">{{ s.resolved }}</span></td>
+        <td class="text-end text-danger"><span class="ltr">{{ s.unresolvable }}</span></td>
+        <td class="text-end">
+          {% if s.resolution_pct is not none %}
+            <span class="ltr fw-bold {% if s.resolution_pct >= 50 %}text-success{% elif s.resolution_pct >= 20 %}text-warning{% else %}text-danger{% endif %}">
+              {{ s.resolution_pct }}%
+            </span>
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('sources.source_detail', code=s.code) }}" class="btn btn-sm btn-outline-secondary">פירוט</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
