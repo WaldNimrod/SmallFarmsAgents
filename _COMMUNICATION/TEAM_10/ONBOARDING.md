@@ -1,150 +1,205 @@
-# ONBOARDING — צוות 10 (אימפלמנטציה)
-## פתיחת סשן — הנחיות לאיגנט
+# ONBOARDING — Team 10 (Feature Dev)
+## Session Start Instructions
 
 ---
 
-## זהות הצוות
+## Team Identity
 
-**שם:** צוות 10 — אימפלמנטציה  
-**תפקיד:** ממש את מערכת SmallFarms בדיוק לפי האפיון. קרא את הספק לפני שאתה כותב שורת קוד. שאל לפני שאתה סוטה מהאפיון.  
-**כותב דוחות ל:** `_COMMUNICATION/TEAM_10/reports/`  
-**מדווח ל:** נמרוד (משתמש).  
-**שאלות ארכיטקטורה → קרא את האפיון ב-`docs/`, אם עדיין לא ברור — כתוב ב-`_COMMUNICATION/TEAM_100/reports/`**
-
----
-
-## פעולות ראשונות בפתיחת כל סשן
-
-1. קרא קובץ זה (`_COMMUNICATION/TEAM_10/ONBOARDING.md`) עד הסוף
-2. קרא `_COMMUNICATION/README.md` — מבנה שערי האישור
-3. בדוק מה השלב הנוכחי — בדוק אילו שערים G0–G6 נפתחו:
-   - חפש אישורים בדוחות `_COMMUNICATION/TEAM_50/reports/`
-4. קרא את מסמך האפיון הרלוונטי לשלב הנוכחי (ראה טבלה למטה)
-5. **לא מתחילים לכתוב קוד לפני שקראת את האפיון**
-
-**המשימה הראשונה שלך:** ראה `_COMMUNICATION/TEAM_10/MANDATE_UPRESS_VALIDATION.md`
+**Name:** Team 10 — Feature Development  
+**Role:** Implement all OrganicMarketAgent features — collectors, parsers,
+normalizer, aggregator, publisher, admin UI.  
+**Reports to:** Nimrod (project lead). Architectural questions → Team 100.  
+**Writes to:** `_COMMUNICATION/TEAM_10/reports/`  
+**Reads from:** `_COMMUNICATION/TEAM_10/` mandates, `_COMMUNICATION/ROADMAP.md`,
+`docs/GLOSSARY.md`
 
 ---
 
-## מסמכי האפיון לפי שלב — `docs/`
+## First Actions — Every Session
 
-| שלב | שערים | מסמכים לקריאה |
-|-----|--------|----------------|
-| uPress validation | G0 | `UPRESS_VALIDATION_PLAN_HE.md` |
-| DB setup | G1 | `DATABASE_SCHEMA_SPEC_HE.md`, `ARCHITECTURE_DECISIONS_HE.md` |
-| Collectors | G2 | `SOURCE_MAP_MASTER_HE.md`, `PIPELINE_ALGORITHMS_HE.md` |
-| Parsers | G2 | `PIPELINE_ALGORITHMS_HE.md`, `PRODUCT_CATALOG_V1.md` |
-| Normalizer | G3 | `NORMALIZER_SPEC_HE.md`, `DATABASE_SCHEMA_SPEC_HE.md` |
-| Aggregator | G4 | `PIPELINE_ALGORITHMS_HE.md`, `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` |
-| Publisher | G4 | `PIPELINE_ALGORITHMS_HE.md`, `UPRESS_VALIDATION_PLAN_HE.md` |
-| Admin UI | G5 | `INTERFACE_MOCKUPS_HE.md`, `DETAILED_SYSTEM_SPEC_HE.md` |
-| Integration | G6 | כל המסמכים |
+1. Read this file in full
+2. Read `_COMMUNICATION/ROADMAP.md` — confirm active milestone and gate status
+3. Check if the gate before your milestone is signed off: `_COMMUNICATION/TEAM_50/reports/`
+4. Read the mandate for the active milestone (see table below) before writing any code
+5. If anything contradicts the mandate, stop and file a report in `_COMMUNICATION/TEAM_100/reports/`
+
+**Do NOT write feature code until the previous gate is formally open (Team 50 sign-off).**
 
 ---
 
-## Stack הפרויקט (נעול)
+## Active Mandate
+
+| Milestone | Status | Mandate File |
+|-----------|--------|--------------|
+| M2 — Collection Layer | **PENDING G1 open** | `_COMMUNICATION/TEAM_10/MANDATE_M2_COLLECTION_LAYER.md` |
+| M3 — Normalizer Engine | Locked until G2 | To be issued after G2 |
+| M4 — Aggregation + Local Viewer | Locked until G3 | To be issued after G3 |
+| M5 — Admin UI | Locked until G4 | To be issued after G4 |
+| M6 — Automation + Resilience | Locked until G5 | To be issued after G5 |
+| M7 — Go-Live (uPress + FTPS) | **DEFERRED** | `_COMMUNICATION/TEAM_10/MANDATE_UPRESS_VALIDATION.md` — do not execute until G6 is open |
+
+> Team 10 begins M2 only after Gate G1 is signed off by Team 50.
+> Read `_COMMUNICATION/TEAM_50/reports/` to check for the G1 sign-off report.
+
+---
+
+## Spec Documents by Milestone
+
+| Milestone | Primary Mandate | Supporting Specs |
+|-----------|-----------------|-----------------|
+| M2 | `MANDATE_M2_COLLECTION_LAYER.md` | `docs/SOURCE_MAP_MASTER_HE.md`, `docs/PIPELINE_ALGORITHMS_HE.md` |
+| M3 | *(to be issued)* | `docs/NORMALIZER_SPEC_HE.md`, `docs/DATABASE_SCHEMA_SPEC_HE.md` |
+| M4 | *(to be issued)* | `docs/PIPELINE_ALGORITHMS_HE.md`, `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` |
+| M5 | *(to be issued)* | `docs/INTERFACE_MOCKUPS_HE.md`, `docs/DETAILED_SYSTEM_SPEC_HE.md` |
+| M6 | *(to be issued)* | All documents |
+| M7 | `MANDATE_UPRESS_VALIDATION.md` | `docs/UPRESS_VALIDATION_PLAN_HE.md` |
+| Always | — | `docs/GLOSSARY.md`, `docs/ARCHITECTURE_DECISIONS_HE.md` |
+
+> The Hebrew spec docs in `docs/` are legacy reference material.
+> The mandate file is always the authoritative implementation guide.
+> If a mandate and a spec doc conflict, the mandate wins. Flag to Team 100.
+
+---
+
+## Tech Stack (locked)
 
 ```
-Python 3.11+
-Flask 3.x         — Admin UI בלבד (127.0.0.1:5000)
-PostgreSQL 15+    — התקנה ישירה (ללא Docker)
-SQLAlchemy 2.x    — ORM (לא legacy session.query())
-Alembic           — migrations
-httpx             — HTTP async
-BeautifulSoup4    — HTML parsing
-cron              — תזמון יומי (06:00)
-ftplib / ftputil  — FTPS upload
+Python 3.11+       — required, no exceptions
+Flask 3.x          — Admin UI only (127.0.0.1:5000, M5+)
+PostgreSQL 15+     — Direct install (no Docker)
+SQLAlchemy 2.x     — ORM, select() style only (no legacy session.query())
+Alembic            — Migrations (Team 20 owns; do not modify migration files)
+httpx              — HTTP client (synchronous in M2; async if needed in M6+)
+BeautifulSoup4     — HTML parsing
+cron               — Daily schedule 06:00 (M6+)
+ftplib/ftputil     — FTPS upload (M7 only)
 ```
 
 ---
 
-## מבנה הפרויקט הנדרש
+## Project Structure
 
 ```
-smallfarms/
-  collectors/       # קובץ אחד לכל מקור
-  parsers/          # parser class לכל normalizer_type
-  normalizer/       # NormalizerEngine + DB rules
-  aggregator/       # AggregatorEngine + QAEngine
-  publisher/        # PublishEngine + FTPSClient
-  admin/            # Flask blueprints
-  models/           # SQLAlchemy ORM (קובץ לכל קבוצת טבלאות)
-  db/               # session factory + Alembic env
-  scheduler/        # cron wrapper + IngestionRunner
-  utils/            # logging, email alert, checksum
-  tests/            # mirrors src structure
+organic_market_agent/
+  collectors/
+    base.py          # BaseCollector ABC + FetchResult
+    engine.py        # CollectorEngine (dispatches by platform_family/fetch_mode)
+    easyfarm.py      # EasyFarmCollector
+    html_page.py     # StandaloneHTMLCollector
+    govt_benchmark.py
+
+  parsers/
+    base.py          # BaseParser ABC + RawItem dataclass
+    engine.py        # ParserEngine (dispatches by normalizer_type)
+    easyfarm_catalog.py
+    simple_product_grid.py
+    official_wholesale.py
+
+  normalizer/        # NormalizerEngine (M3)
+  aggregator/        # AggregatorEngine + QAEngine (M4)
+  publisher/         # PublishEngine, local + FTPS (M4/M7)
+  admin/             # Flask blueprints (M5)
+  scheduler/
+    run_ingestion.py # CLI: python -m organic_market_agent.scheduler.run_ingestion
+
+  models/            # SQLAlchemy models — Team 20 owns, Team 10 reads only
+  db/                # session factory + Alembic env — Team 20 owns
+  utils/             # logging, config, checksum, exceptions — Team 20 owns
+  tests/
+    test_collectors.py
+    test_parsers.py
+    test_normalizer.py   # (M3)
+    test_aggregator.py   # (M4)
+    ...
 ```
 
 ---
 
-## כללים קריטיים לכתיבת קוד
+## Critical Coding Rules
 
-| כלל | פירוט |
-|-----|-------|
-| **אסור float לכספים** | השתמש ב-`Decimal` / `NUMERIC(12,4)` בלבד |
-| **אסור hardcode שמות מוצרים** | כולם מ-DB |
-| **אסור session.query()** | SQLAlchemy 2.x style בלבד |
-| **חובה TIMESTAMPTZ** | כל timestamp חייב timezone |
-| **חובה log_entries** | כל שגיאה מתועדת |
-| **חובה audit_log** | כל פעולת admin מתועדת |
-| **הנורמליזר מ-DB** | כללים/aliases נטענים מ-DB, לא hardcoded |
-| **אין region בV1** | הוסר מהאפיון |
-
----
-
-## סדר ביצוע (Gates)
-
-```
-G0: uPress FTP validation          ← FIRST — אל תתחיל עד שנמרוד מאשר הגישה
-G1: PostgreSQL schema + Alembic    ← DB מוכן
-G2: Collectors + parsers           ← 3+ מקורות עובדים
-G3: Normalizer engine              ← data-driven, DB aliases
-G4: Aggregator + publish           ← FTPS + manifest
-G5: Admin UI                       ← Flask admin
-G6: Integration test               ← end-to-end
-```
-
-**כל שלב טעון אישור צוות 50 (QA) לפני שממשיכים.**
+| Rule | Detail |
+|------|--------|
+| No `float` for money | Use `Decimal` in Python; `NUMERIC(12,4)` in DB |
+| No hardcoded product names | All products loaded from DB — never in code |
+| No hardcoded URLs | All URLs from `source_fetch_profiles.entry_url` in DB |
+| No `session.query()` | SQLAlchemy 2.x: `session.execute(select(...))` |
+| All timestamps timezone-aware | `datetime.now(timezone.utc)` — never naive datetime |
+| Log to `log_entries` table | All errors persisted, not only printed |
+| Admin actions to `audit_log` | Every admin write must produce an audit row |
+| Normalizer from DB only | Rules, aliases, profiles loaded from DB — not from code |
+| No region filter | Removed from V1 — do not implement |
+| English only | All code, comments, docstrings, variable names, reports |
+| No live HTTP in tests | Always mock httpx — no real network calls in `pytest` |
+| Collector failures non-fatal | One source failure must not abort the full run |
 
 ---
 
-## תבנית דוח אימפלמנטציה
+## Milestone Execution Order
+
+```
+G1 open (Team 20 complete + Team 50 sign-off)
+    ↓
+M2: CollectorEngine + ParserEngine
+    → 3 collectors, 3 parsers, raw_assets + raw_extracted_items populated
+    ↓ G2 open (Team 50 sign-off)
+M3: NormalizerEngine — 7 stages, DB-driven aliases + rules
+    → normalized_observations populated
+    ↓ G3 open
+M4: AggregatorEngine + QAEngine + local viewer (localhost:8080)
+    → daily_aggregates, weekly_snapshots, public_report.json + .html
+    ↓ G4 open
+M5: Flask admin UI — dashboard, sources, runs, normalizer CRUD
+    ↓ G5 open (Team 100 architecture review required)
+M6: cron scheduler + email alerting + staleness checks
+    ↓ G6 open
+M7: uPress FTPS publish + WordPress integration (DEFERRED)
+    ↓ G7 open (Nimrod approval required)
+```
+
+---
+
+## Report Template
 
 ```markdown
-# Team 10 — [נושא הדוח / שם השלב]
-**תאריך:** YYYY-MM-DD  
-**שלב:** G[מספר]  
-**סטטוס:** ✅ הושלם / 🔄 בביצוע / ❌ חסום
+# Team 10 — [Milestone / Topic]
+**Date:** YYYY-MM-DD
+**Milestone:** M[N] / Gate G[N]
+**Status:** COMPLETE | IN PROGRESS | BLOCKED
 
-## מה בוצע
-[תיאור קצר של מה שנעשה]
+## Environment
+- Python version: X.X.X
+- PostgreSQL version: X.X (direct install)
 
-## פלט / תוצרים
-[קבצים שנוצרו, פונקציות שנכתבו]
+## What Was Done
 
-## בדיקות שרצו
-[בדיקות ידניות/אוטומטיות שרצו וצלחו]
+## Deliverables
+(files created, key classes/functions)
 
-## חריגות מהאפיון (אם קיימות)
-[תאר כל סטייה מהאפיון — חייב אישור צוות 100]
+## Test Results
+(paste pytest -v output)
 
-## בלוקרים
-[מה חוסם התקדמות]
+## DB Counts After Run
+(table: row counts for relevant tables)
 
-## [USER ACTION REQUIRED] (אם רלוונטי)
-[מה נמרוד צריך לעשות — credentials, WordPress config, וכו']
+## Deviations from Mandate
+(any deviation requires Team 100 approval before G[N] can open)
 
-## בקשה לפתיחת שער G[מספר]
-[בקשה רשמית לצוות 50 לבדוק ולאשר]
+## Blockers / [USER ACTION REQUIRED]
+(tag [USER ACTION REQUIRED] if Nimrod must act)
+
+## Gate G[N] Request
+Requesting Team 50 to review and sign off on Gate G[N].
+Reference: _COMMUNICATION/TEAM_10/MANDATE_M[N]_*.md
 ```
 
 ---
 
-## כללי זהב לצוות 10
+## Golden Rules
 
-1. **קרא את האפיון לפני שאתה מקודד** — כל פעם
-2. **שאל לפני שאתה מחליט** — כל ספק → כתוב דוח, שאל צוות 100
-3. **אל תעבור שער ללא אישור** — QA (צוות 50) חייב לאשר
-4. **תעד blockers מיד** — במיוחד כשצריך action מנמרוד (credentials, וכו')
-5. **כתוב tests** — לכל פונקציה קריטית יש unit test ב-`tests/`
-6. **Atomic commits** — commit אחד לכל feature/fix
+1. **The mandate is the source of truth** — if this onboarding and the mandate conflict, the mandate wins
+2. **Read the spec before writing a single line** — every milestone, every session
+3. **No gate without QA** — Team 50 must sign off before the next milestone starts
+4. **Flag all deviations** — file a delta report in `_COMMUNICATION/TEAM_100/reports/` and wait for approval
+5. **Never touch `models/`, `db/`, or migration files** — those are Team 20's domain
+6. **No network calls in tests** — always mock httpx
+7. **English only** — code, comments, variable names, reports

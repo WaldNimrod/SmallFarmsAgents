@@ -1,73 +1,101 @@
 ---
-description: SmallFarms project context — goals, stack, key decisions, team structure
+description: MyFarmAgents platform context — goals, stack, key decisions, team structure
 alwaysApply: true
 ---
 
-# SmallFarms Market Data System — Project Context
+# MyFarmAgents Platform — Project Context
 
-## What This Project Is
+## Language Policy (Enforced)
 
-A free community service for Israel's organic/ecological farmers. The first feature is a **price index for organic vegetables** focused on small farms, direct sales, CSA baskets, farmers markets, and farm shops. Data is aggregated from many partial sources, not one authoritative one.
+**ALL documents, code, comments, variable names, and inter-team communication
+are written in English.** No Hebrew in documentation, code, or file names.
 
-## Architecture (decided, not open for discussion)
+Hebrew is used only in direct conversation with project lead Nimrod.
+
+Canonical terminology: `docs/GLOSSARY.md` — read it first.
+
+---
+
+## What This Platform Is
+
+**MyFarmAgents** is a volunteer community initiative by Nimrod — building
+collaborative AI agents that serve Israel's small organic farming community.
+Each agent is an autonomous service module solving one community problem.
+
+**OrganicMarketAgent** is the first agent: a free, transparent price index
+for organic vegetables, aggregating data from small farms, CSAs, farm shops,
+and farmers markets. It shows community what things actually cost at the source.
+
+More agents will follow under the MyFarmAgents umbrella.
+
+---
+
+## OrganicMarketAgent Architecture (locked)
 
 - **Local Data Hub** runs Python pipeline: collect → parse → normalize → aggregate → publish
 - **WordPress (nimrod.bio)** is presentation layer only — reads static artifacts
-- **No real-time connection** between local system and public site
-- **No public API in V1**
+- No real-time connection between local system and public site
+- No public API in V1
 
 ## Tech Stack (locked)
 
 - Language: **Python 3.11+**
-- Admin UI: **Flask** (local only, 127.0.0.1)
-- DB: **PostgreSQL** (direct, no Docker)
+- Package name: `organic_market_agent`
+- Admin UI: **Flask** (local only, 127.0.0.1:5000)
+- DB: **PostgreSQL** (direct install, no Docker)
 - ORM: SQLAlchemy 2.x + Alembic migrations
 - Scraping: httpx + BeautifulSoup4
 - Scheduler: system cron (06:00 daily)
 
 ## Key Decisions (locked)
 
-- Normalizer is **data-driven from DB** — aliases, rules, merges, flags all in PostgreSQL, changeable without deploy
+- Normalizer is **data-driven from DB** — aliases, rules, merges, flags all in
+  PostgreSQL, changeable without deploy
 - Baskets (CSA) are **independent products** — not decomposed to per-kg in V1
 - Public publish = `manifest.json` + versioned `public_report-{ts}.json/html` via FTPS
 - `manifest_last_good.json` maintained as fallback
-- Stale data: warning banner after 3 days, "not relevant" after 8 days (in manifest.staleness_level)
+- Stale data: warning banner at 3 days, "not relevant" at 8 days
 - Min 2 observations from 2 distinct sources for public display
 - Publish threshold: min 2 community sources succeeded
-- uPress FTP validation is a **pre-development gate** (must pass before writing publish code)
+- uPress FTP validation is deferred to M7 (go-live)
 
 ## Spec Documents (source of truth)
 
 All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
-- `EXECUTIVE_SUMMARY_HE.md` — project overview v1.1
-- `DETAILED_SYSTEM_SPEC_HE.md` — full system spec v1.1
-- `ARCHITECTURE_DECISIONS_HE.md` — all architectural decisions v1.1
-- `DATABASE_SCHEMA_SPEC_HE.md` — full PostgreSQL schema (23 tables)
-- `NORMALIZER_SPEC_HE.md` — normalizer engine spec
-- `PIPELINE_ALGORITHMS_HE.md` — all pipeline algorithms
-- `PRODUCT_CATALOG_V1.md` — 29 products, aliases, units
-- `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` — data model v1.1
-- `SOURCE_MAP_MASTER_HE.md` — 20 sources, platform_family, legal flags
-- `INTERFACE_MOCKUPS_HE.md` — UI mockups v1.1
-- `UPRESS_VALIDATION_PLAN_HE.md` — uPress test plan (pre-dev gate)
-- `REVIEW_REPORT_V1.md` — architectural review findings
 
-## Team Structure
+| File | Content |
+|------|---------|
+| `GLOSSARY.md` | Canonical terms — READ FIRST |
+| `DATABASE_SCHEMA_SPEC_HE.md` | Full PostgreSQL schema (23 tables) — pending English rewrite |
+| `NORMALIZER_SPEC_HE.md` | Normalizer engine spec — pending English rewrite |
+| `PIPELINE_ALGORITHMS_HE.md` | All pipeline algorithms — pending English rewrite |
+| `PRODUCT_CATALOG_V1.md` | 29 products, aliases, units — pending English rewrite |
+| `SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family — pending English rewrite |
+| `ARCHITECTURE_DECISIONS_HE.md` | Architectural decisions — pending English rewrite |
+| `DETAILED_SYSTEM_SPEC_HE.md` | Full system spec — pending English rewrite |
+| `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model + publish — pending English rewrite |
+| `UPRESS_VALIDATION_PLAN_HE.md` | uPress test plan (M7 gate) — pending English rewrite |
+| `INTERFACE_MOCKUPS_HE.md` | UI mockups — pending English rewrite |
 
-- **Team 100** — Architecture (this agent). Owns spec, decisions, review.
-- **Team 50** — QA. Validates implementation against spec.
-- **Team 20** — Infrastructure. Python env, PostgreSQL, Alembic, skeleton, utils.
-- **Team 10** — Feature Dev. Collectors, parsers, normalizer, aggregator, admin UI.
+> Hebrew spec docs are legacy. English rewrites will be created per milestone.
+> Until rewritten, use Hebrew docs as reference and GLOSSARY.md for terminology.
 
 ## Development Roadmap
 
-- Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY REFERENCE
+- Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
 - **Current milestone: M1 — Local Foundation (Team 20 active)**
-- Gate system G0–G7: see `_COMMUNICATION/ROADMAP.md`
-- uPress mandate deferred to M7 (go-live)
+- Gate system G1–G7: see ROADMAP.md
+- uPress mandate deferred to M7
+
+## Team Structure
+
+- **Team 100** — Architecture. Owns spec, decisions, review.
+- **Team 50** — QA. Validates implementation against spec.
+- **Team 20** — Infrastructure. DB, env, skeleton. Currently on M1.
+- **Team 10** — Feature Dev. Collectors, parsers, normalizer, admin UI. Starts at M2.
 
 ## Communication
 
-All team reports go to `_COMMUNICATION/{TEAM_ID}/reports/`.
-Onboarding prompts: `_COMMUNICATION/{TEAM_ID}/ONBOARDING.md`.
-Roadmap + gates: `_COMMUNICATION/ROADMAP.md`.
+Reports: `_COMMUNICATION/{TEAM_ID}/reports/`
+Onboarding: `_COMMUNICATION/{TEAM_ID}/ONBOARDING.md`
+Roadmap + gates: `_COMMUNICATION/ROADMAP.md`

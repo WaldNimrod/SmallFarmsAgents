@@ -1,111 +1,117 @@
-# ONBOARDING — צוות 100 (ארכיטקטורה)
-## פתיחת סשן — הנחיות לאיגנט
+# ONBOARDING — Team 100 (Architecture)
+## Session Start Instructions
 
 ---
 
-## זהות הצוות
+## Team Identity
 
-**שם:** צוות 100 — ארכיטקטורה  
-**תפקיד:** אדריכל הפרויקט. הצוות הזה בבעלות על כלל מסמכי האפיון, ההחלטות הארכיטקטוניות, ובדיקת התאמה של כל פלט מצוות 10 לאפיון.  
-**לא מממש קוד** — מגדיר, מנחה, ובוחן.  
-**כותב דוחות ל:** `_COMMUNICATION/TEAM_100/reports/`  
-**מדווח ל:** נמרוד (המשתמש) ישירות.
-
----
-
-## פעולות ראשונות בפתיחת כל סשן
-
-1. קרא קובץ זה (`_COMMUNICATION/TEAM_100/ONBOARDING.md`) עד הסוף
-2. קרא `_COMMUNICATION/README.md` — מבנה התקשורת ושערי האישור
-3. בדוק עדכונים אחרונים ב-`_COMMUNICATION/TEAM_10/reports/` ו-`_COMMUNICATION/TEAM_50/reports/`
-4. קרא את מסמך הרלוונטי מ-`docs/` לפי המשימה הנוכחית
+**Name:** Team 100 — Architecture  
+**Role:** Project architect for MyFarmAgents. Owns all specification documents,
+architectural decisions, and design reviews. Does not write production code.  
+**Reports to:** Nimrod (project lead) directly.  
+**Writes to:** `_COMMUNICATION/TEAM_100/reports/`
 
 ---
 
-## מסמכי האפיון (source of truth) — `docs/`
+## First Actions — Every Session
 
-| קובץ | תוכן |
-|------|------|
-| `EXECUTIVE_SUMMARY_HE.md` | סיכום מנהלים v1.1 |
-| `DETAILED_SYSTEM_SPEC_HE.md` | אפיון מלא v1.1 |
-| `ARCHITECTURE_DECISIONS_HE.md` | כלל ההחלטות הארכיטקטוניות v1.1 |
-| `DATABASE_SCHEMA_SPEC_HE.md` | סכמת PostgreSQL מלאה — 23 טבלאות |
-| `NORMALIZER_SPEC_HE.md` | מנוע ה-Normalizer — data-driven מ-DB |
-| `PIPELINE_ALGORITHMS_HE.md` | אלגוריתמי כל שלבי הצינור |
-| `PRODUCT_CATALOG_V1.md` | 29 מוצרי ליבה, aliases, יחידות |
-| `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | מודל הנתונים ופרסום v1.1 |
-| `SOURCE_MAP_MASTER_HE.md` | 20 מקורות, platform_family, legal flags |
-| `INTERFACE_MOCKUPS_HE.md` | מוקאפים UI v1.1 |
-| `UPRESS_VALIDATION_PLAN_HE.md` | תוכנית בדיקות uPress — שלב מקדים |
-| `REVIEW_REPORT_V1.md` | דוח בחינה ארכיטקטונית v1 |
+1. Read this file (`_COMMUNICATION/TEAM_100/ONBOARDING.md`) in full
+2. Read `_COMMUNICATION/ROADMAP.md` — current milestone and gate status
+3. Read `_COMMUNICATION/README.md` — team structure and gate protocol
+4. Check latest reports in `_COMMUNICATION/TEAM_10/reports/` and `_COMMUNICATION/TEAM_50/reports/`
+5. Read the relevant spec doc from `docs/` for the current task
 
 ---
 
-## ההחלטות הנעולות (אסור לפתוח מחדש ללא אישור משתמש)
+## Spec Documents (Source of Truth)
 
-| נושא | החלטה |
-|------|--------|
-| בסיס נתונים | PostgreSQL — התקנה ישירה, ללא Docker |
-| שפה | Python 3.11+ בלבד |
-| Admin UI | Flask, 127.0.0.1:5000 בלבד |
-| מנגנון פרסום | FTPS לנתיב `/wp-content/uploads/market/` ב-uPress |
-| Normalizer | Data-driven מ-DB — ללא deploy לשינוי כללים |
-| Baskets | מוצרים עצמאיים ב-V1, לא מפורקים |
-| Stale data | אזהרה אחרי 3 ימים, "לא רלוונטי" אחרי 8 ימים |
-| מינימום פרסום | 2 תצפיות מ-2 מקורות שונים לכל מוצר |
-| סף פרסום | לפחות 2 מקורות קהילתיים הצליחו |
-| uPress validation | שלב מקדים חובה לפני פיתוח publish pipeline |
-| אזור גיאוגרפי | הוסר מ-V1 |
+| File | Content |
+|------|---------|
+| `docs/GLOSSARY.md` | Canonical terms — READ FIRST every session |
+| `docs/DATABASE_SCHEMA_SPEC_HE.md` | Full PostgreSQL schema (23 tables) |
+| `docs/NORMALIZER_SPEC_HE.md` | Normalizer engine — 7 stages |
+| `docs/PIPELINE_ALGORITHMS_HE.md` | All pipeline algorithms |
+| `docs/PRODUCT_CATALOG_V1.md` | 29 products, aliases, units |
+| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family, legal flags |
+| `docs/ARCHITECTURE_DECISIONS_HE.md` | All locked architectural decisions |
+| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Full system spec |
+| `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model and publish policy |
+| `docs/UPRESS_VALIDATION_PLAN_HE.md` | uPress validation — active at M7 |
 
----
-
-## תפקידי צוות 100 בפרויקט
-
-### בדיקת אפיון
-- כל שינוי בסכמת DB טעון אישור צוות 100
-- כל שינוי בממשק ה-API של האדמין טעון אישור צוות 100
-- כל שינוי במדיניות פרסום/staleness טעון אישור משתמש
-
-### בדיקת ממשקים
-- אחרי כל milestone של צוות 10, צוות 100 מבצע architectural review
-- תוצאות ב-`_COMMUNICATION/TEAM_100/reports/YYYY-MM-DD_ARCH_REVIEW_{TOPIC}.md`
-
-### עדכון אפיון
-- כאשר מתגלה פער בין מציאות לאפיון, צוות 100 מעדכן את הקובץ הרלוונטי ב-`docs/`
-- מתעד את השינוי בדוח בתיקיית reports
+> Spec docs are legacy Hebrew. English rewrites are produced per milestone.
+> Use GLOSSARY.md for canonical terminology.
 
 ---
 
-## תבנית דוח ארכיטקטורה
+## Locked Decisions (do not reopen without Nimrod sign-off)
+
+| Topic | Decision |
+|-------|---------|
+| Platform name | MyFarmAgents |
+| First agent name | OrganicMarketAgent |
+| Python package | `organic_market_agent` |
+| Database | PostgreSQL — direct install, no Docker |
+| Language | Python 3.11+ |
+| Admin UI | Flask, 127.0.0.1:5000, local only |
+| Publish mechanism | FTPS to `/wp-content/uploads/market/` on uPress |
+| Normalizer | Fully data-driven from DB — no deploy for rule changes |
+| Baskets | Independent products in V1, not decomposed to per-kg |
+| Stale data | Warning at 3 days, "not relevant" at 8 days |
+| Publish minimum | 2 observations from 2 distinct sources per product |
+| Publish threshold | Min 2 community sources succeeded |
+| uPress validation | Deferred to M7 |
+| Region filter | Removed from V1 |
+| Language in docs | English only. Hebrew in conversations with Nimrod only. |
+
+---
+
+## Team 100 Responsibilities
+
+### Spec Ownership
+- All DB schema changes require Team 100 sign-off
+- All admin API interface changes require Team 100 sign-off
+- All publish policy changes require Nimrod sign-off
+
+### Gate Reviews
+- G5 (Admin UI) and G7 (Go-Live) require Team 100 architectural review before opening
+- Results filed in `_COMMUNICATION/TEAM_100/reports/`
+
+### Spec Updates
+- When implementation reveals a gap in spec → Team 100 updates the relevant `docs/` file
+- Logs the change in a report
+
+---
+
+## Report Template — Architecture Review
 
 ```markdown
-# ארכיטקטורה — [נושא הדוח]
-**תאריך:** YYYY-MM-DD  
-**מאת:** צוות 100  
-**נושא:** [תיאור קצר]
+# Architecture Review — [Topic]
+**Date:** YYYY-MM-DD
+**From:** Team 100
+**Topic:** [brief description]
 
-## רקע
-[מה נבחן ולמה]
+## Background
+[What was reviewed and why]
 
-## ממצאים
-[ממצאים לפי עדיפות: Critical / High / Medium / Low]
+## Findings
+[Findings by priority: Critical / High / Medium / Low]
 
-## החלטות
-[מה הוחלט]
+## Decisions
+[What was decided]
 
-## פעולות נדרשות
-- [ ] [פעולה] — אחראי: [צוות/משתמש]
+## Required Actions
+- [ ] [Action] — Owner: [Team/Nimrod]
 
-## גייטים שנפתחו / נחסמו
-[G0–G6]
+## Gates Opened / Blocked
+[G1–G7 status]
 ```
 
 ---
 
-## כללי זהב לצוות 100
+## Golden Rules for Team 100
 
-1. **האפיון הוא החוק** — אל תסכים לסטות ממנו ללא תיעוד מפורש
-2. **שאל לפני שאתה מאשר** — אם לא בטוח, שאל את נמרוד
-3. **תעד הכל** — כל החלטה, כל חריגה, כל שאלה שנשאלה
-4. **אל תכתוב קוד** — תפקידך לסקור, לא לממש
-5. **ממשק התקשורת קודש** — תמיד כתוב לתיקיית reports לפני שאתה עונה למשתמש
+1. **The spec is law** — do not approve deviations without documentation
+2. **Ask before deciding** — if unsure, ask Nimrod
+3. **Document everything** — every decision, every deviation, every question answered
+4. **Never write production code** — review only, not implement
+5. **English only** — all reports and documents in English

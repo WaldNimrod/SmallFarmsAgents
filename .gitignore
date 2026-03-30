@@ -5,7 +5,15 @@
 node_modules/
 __pycache__/
 *.py[cod]
+*.pyo
 .venv/
+.venv-g1/
 venv/
 .idea/
 *.log
+.pytest_cache/
+.coverage
+raw_files/
+dist/
+build/
+*.egg-info/

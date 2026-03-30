@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "organic-market-agent"
+version = "0.1.0"
+requires-python = ">=3.11"
+description = "OrganicMarketAgent — community organic vegetable price index (MyFarmAgents)"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["organic_market_agent*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

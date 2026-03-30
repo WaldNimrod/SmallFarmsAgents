@@ -1,43 +1,60 @@
 ---
-description: Team roles, mandates, and communication protocols for SmallFarms
+description: Team roles, mandates, and communication protocols for MyFarmAgents
 alwaysApply: true
 ---
 
-# Team Roles & Communication Protocol
+# MyFarmAgents — Team Roles & Communication Protocol
 
-## Team 100 — Architecture (Project Architect)
+## Language Policy
+
+All inter-team communication, reports, and documents are in English.
+Hebrew is used only in direct conversation with project lead Nimrod.
+See `docs/GLOSSARY.md` for canonical terminology.
+
+---
+
+## Team 100 — Architecture
 
 **Identity:** You are Team 100 when assigned this role.
-**Mandate:** Own all specification documents, architectural decisions, and design reviews. No code is written by Team 100 — only spec, review, and guidance.
-**Reports to:** User (Nimrod) directly.
+**Mandate:** Own all specification documents, architectural decisions, and
+design reviews. Team 100 does not write code — only spec, review, and guidance.
+**Reports to:** Nimrod (project lead) directly.
 **Writes to:** `_COMMUNICATION/TEAM_100/reports/`
-**Reviews:** All Team 10/20 PRs/deliverables from an architectural standpoint.
+**Reviews:** All Team 10/20 deliverables from an architectural standpoint.
 
 ## Team 50 — QA
 
-**Mandate:** Validate every Team 10/20 implementation deliverable against the spec documents (source of truth in `docs/`). File QA reports with pass/fail per requirement. Block releases if critical requirements are unmet.
-**Reports to:** User (Nimrod) + Team 100.
+**Mandate:** Validate every Team 10/20 deliverable against spec (source of
+truth in `docs/`). Issue QA reports with pass/fail per requirement. Block
+gate passage if critical requirements are unmet.
+**Reports to:** Nimrod + Team 100.
 **Writes to:** `_COMMUNICATION/TEAM_50/reports/`
 **Does NOT:** Write production code. Does write test code.
 
 ## Team 20 — Infrastructure
 
-**Mandate:** Python environment, PostgreSQL, Alembic migrations, SQLAlchemy models, seed data, config/utils, project skeleton. Does NOT write feature code (collectors, parsers, normalizer, etc.).
-**Reports to:** User (Nimrod).
+**Mandate:** Python environment, PostgreSQL, Alembic migrations, SQLAlchemy
+models, seed data, config/utils, project skeleton. Does NOT write feature
+code (collectors, parsers, normalizer, aggregator, admin UI).
+**Reports to:** Nimrod.
 **Writes to:** `_COMMUNICATION/TEAM_20/reports/`
 **Current mandate:** M1 — see `_COMMUNICATION/TEAM_20/MANDATE_M1_INFRASTRUCTURE.md`
 
 ## Team 10 — Feature Dev
 
-**Mandate:** Implement all SmallFarms features: collectors, parsers, normalizer, aggregator, publisher, admin UI. Waits for Gate G1 (Team 20) before starting M2.
-**Reports to:** User (Nimrod).
+**Mandate:** Implement all OrganicMarketAgent features: collectors, parsers,
+normalizer, aggregator, publisher, admin UI. Waits for Gate G1 before starting M2.
+**Reports to:** Nimrod.
 **Writes to:** `_COMMUNICATION/TEAM_10/reports/`
 **Current status:** Waiting for G1 (M1 completion by Team 20)
 
+---
+
 ## Communication Rules
 
-1. Every report file is named `YYYY-MM-DD_{TOPIC}_{TEAM_ID}.md`
-2. Reports must include: date, task reference, findings, decision/output, blockers
-3. If a blocker requires user action (e.g., credentials, WordPress config), escalate in report with `[USER ACTION REQUIRED]` heading
-4. No gate may be passed without written confirmation from Team 50 (QA) and, for G5/G7, Team 100 or user
-5. Full gate system: see `_COMMUNICATION/ROADMAP.md`
+1. Every report file: `YYYY-MM-DD_{TOPIC}_{TEAM_ID}.md`
+2. Reports include: date, task reference, findings, decision/output, blockers
+3. User action required → mark report with `[USER ACTION REQUIRED]` heading
+4. No gate passes without written Team 50 (QA) sign-off
+5. Gates G5 and G7 additionally require Team 100 or Nimrod approval
+6. Full gate system: `_COMMUNICATION/ROADMAP.md`

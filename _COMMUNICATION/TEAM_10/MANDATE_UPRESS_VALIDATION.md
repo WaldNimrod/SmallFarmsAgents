@@ -1,19 +1,19 @@
-# מנדט — צוות 10 / צוות 20: ולידציית uPress
-**מאת:** צוות 100 (ארכיטקטורה)  
-**מתאריך:** 2026-03-29  
-**עודכן:** 2026-03-29  
-**עדיפות:** ~~קריטית — שלב מקדים חובה~~ → **נדחה ל-M7 (Go-Live)**  
-**שער:** G7 (לשעבר G0)  
-**מסמך אפיון:** `docs/UPRESS_VALIDATION_PLAN_HE.md`
+# Mandate — Team 10 / Team 20: uPress Validation (Gate G7)
+**From:** Team 100 (Architecture)  
+**Date:** 2026-03-29  
+**Updated:** 2026-03-29  
+**Priority:** ~~Critical pre-development gate~~ → **DEFERRED to M7 (Go-Live)**  
+**Gate:** G7 (formerly G0)  
+**Spec document:** `docs/UPRESS_VALIDATION_PLAN_HE.md`
 
-> **⚠️ הערת ארכיטקטורה — 2026-03-29**
+> **ARCHITECTURE NOTE — 2026-03-29**
 >
-> מנדט זה **נדחה ל-M7** בהחלטת נמרוד.  
-> הסיבה: מתחילים ממימוש המערכת המקומית וממשק תצוגה מקומי זמני.  
-> uPress validation יבוצע כחלק מתהליך Go-Live (M7) בלבד.  
+> This mandate is **deferred to M7** by Nimrod's decision.
+> Reason: We start with the local system implementation and a temporary local
+> viewer. uPress validation will be executed only as part of the Go-Live process (M7).
 >
-> **אין לבצע את הבדיקות המפורטות במסמך זה לפני פתיחת שער G6.**  
-> **ראה:** `_COMMUNICATION/ROADMAP.md` לסדר ביצוע הנכון.
+> **Do not execute the tests in this document before Gate G6 is open.**
+> See `_COMMUNICATION/ROADMAP.md` for the correct execution order.
 
 ---
 

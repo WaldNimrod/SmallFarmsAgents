@@ -1,22 +1,29 @@
 ---
-description: Python coding standards for SmallFarms implementation
+description: Python coding standards for OrganicMarketAgent (MyFarmAgents platform)
 globs: **/*.py
 alwaysApply: false
 ---
 
-# SmallFarms Python Coding Standards
+# OrganicMarketAgent — Python Coding Standards
+
+## Language Policy
+
+All code, comments, docstrings, variable names, and log messages are in English.
+No Hebrew in source code. See `docs/GLOSSARY.md` for canonical terminology.
+
+---
 
 ## Stack & Versions
 
-- Python 3.11+ only. Use `match` statements, `tomllib`, `ExceptionGroup` where appropriate.
-- SQLAlchemy 2.x (`session.execute(select(...))` style — NOT legacy `session.query()`)
+- Python 3.11+ only. Use `match` statements, `tomllib`, f-strings.
+- SQLAlchemy 2.x — `session.execute(select(...))` style, NOT legacy `session.query()`
 - httpx (async) for HTTP. No `requests` library.
 - Flask for admin UI only (port 5000, 127.0.0.1).
 
 ## Project Layout
 
 ```
-smallfarms/
+organic_market_agent/
   collectors/     # one file per source
   parsers/        # one parser class per normalizer_type
   normalizer/     # NormalizerEngine + DB-driven rules
@@ -26,14 +33,14 @@ smallfarms/
   models/         # SQLAlchemy ORM models (one file per table group)
   db/             # session factory, Alembic env
   scheduler/      # cron wrapper, IngestionRunner
-  utils/          # logging, email alert, checksum
+  utils/          # logging, email alert, checksum, config
   tests/          # mirrors src structure
 ```
 
 ## Naming & Style
 
-- All DB columns: `snake_case`
-- All Python functions: `snake_case`
+- DB columns: `snake_case`
+- Python functions: `snake_case`
 - Classes: `PascalCase`
 - Constants: `UPPER_SNAKE_CASE`
 - Monetary values: `NUMERIC(12,4)` in DB, `Decimal` in Python — never `float`
@@ -42,7 +49,7 @@ smallfarms/
 
 - Never silently swallow exceptions. Always log with structured context.
 - Alert on: ingestion failure, publish failure, stale data threshold breach.
-- Use custom exception hierarchy: `SmallFarmsError > CollectorError, ParserError, PublishError`
+- Exception hierarchy: `MyFarmAgentsError > CollectorError, ParserError, PublishError`
 
 ## Data Rules
 

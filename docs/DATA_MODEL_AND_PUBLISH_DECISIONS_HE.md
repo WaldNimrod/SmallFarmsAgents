@@ -1,3 +1,10 @@
+> **LANGUAGE NOTICE:** This document is a legacy Hebrew specification (MyFarmAgents v1.1).
+> Platform: **MyFarmAgents** | Agent: **OrganicMarketAgent**
+> All new documents are written in English. See `docs/GLOSSARY.md` for canonical terminology.
+> This file is pending English rewrite — scheduled per milestone.
+
+---
+
 # מודל מידע והחלטות Publish
 
 גרסה: 1.1  

@@ -1,97 +1,105 @@
-# ONBOARDING — צוות 20 (Infrastructure)
-## פתיחת סשן — הנחיות לאיגנט
+# ONBOARDING — Team 20 (Infrastructure)
+## Session Start Instructions
 
 ---
 
-## זהות הצוות
+## Team Identity
 
-**שם:** צוות 20 — Infrastructure  
-**תפקיד:** סביבת פיתוח מקומית, PostgreSQL, Python project skeleton, Alembic migrations, SQLAlchemy models, seed data, utils.  
-**לא מממש** collectors, parsers, normalizer, aggregator, admin UI — אלה שייכים לצוות 10.  
-**כותב דוחות ל:** `_COMMUNICATION/TEAM_20/reports/`  
-**מדווח ל:** נמרוד (משתמש).
-
----
-
-## פעולות ראשונות בפתיחת כל סשן
-
-1. קרא קובץ זה (`_COMMUNICATION/TEAM_20/ONBOARDING.md`) עד הסוף
-2. קרא `_COMMUNICATION/ROADMAP.md` — מפת כל אבני הדרך
-3. קרא `_COMMUNICATION/README.md` — מבנה gates ודרישות תקשורת
-4. בדוק שלב נוכחי — קרא הדוחות האחרונים ב-`_COMMUNICATION/TEAM_20/reports/`
-5. קרא מסמך M1: `_COMMUNICATION/TEAM_20/MANDATE_M1_INFRASTRUCTURE.md`
+**Name:** Team 20 — Infrastructure  
+**Role:** Python environment, PostgreSQL, Alembic migrations, SQLAlchemy models,
+seed data, config/utils, project skeleton.  
+**Does NOT** write collectors, parsers, normalizer, aggregator, or admin UI —
+those belong to Team 10.  
+**Reports to:** Nimrod.  
+**Writes to:** `_COMMUNICATION/TEAM_20/reports/`
 
 ---
 
-## אחריות צוות 20 לפי milestone
+## First Actions — Every Session
 
-| Milestone | אחריות |
-|-----------|--------|
-| M1 | **ליבה** — Python skeleton, PostgreSQL, Alembic, models, seed data, utils |
-| M2 | תמיכה ל-Team 10: עזרה ב-DB queries, migration updates |
-| M3–M5 | Alembic migrations נוספות שנדרשות, DB optimization |
-| M6 | **ליבה** — cron job setup, log cleanup |
-| M7 | **ליבה** — uPress FTP setup, environment config לפרודקשן |
+1. Read this file in full
+2. Read `_COMMUNICATION/ROADMAP.md` — current milestone and gate status
+3. Read `_COMMUNICATION/README.md` — team structure and gate protocol
+4. Check latest reports in `_COMMUNICATION/TEAM_20/reports/`
+5. Read current mandate: `_COMMUNICATION/TEAM_20/MANDATE_M1_INFRASTRUCTURE.md`
 
 ---
 
-## מסמכי הבסיס — לקריאה חובה לפני M1
+## Team 20 Responsibilities by Milestone
 
-| מסמך | נדרש לחלק |
-|------|-----------|
-| `docs/DATABASE_SCHEMA_SPEC_HE.md` | כל 23 הטבלאות, types, indexes |
-| `docs/PRODUCT_CATALOG_V1.md` | 29 מוצרים, 11 יחידות, aliases |
-| `docs/SOURCE_MAP_MASTER_HE.md` | 20 מקורות — seed data |
+| Milestone | Responsibility |
+|-----------|---------------|
+| **M1** | **Core** — Python skeleton, PostgreSQL, Alembic, models, seed data, utils |
+| M2 | Support Team 10: DB query help, migration updates as needed |
+| M3–M5 | Additional Alembic migrations, DB optimization |
+| **M6** | **Core** — cron job setup, log cleanup script |
+| **M7** | **Core** — uPress FTP environment config, production settings |
+
+---
+
+## Spec Documents to Read Before M1
+
+| Document | Relevant For |
+|----------|-------------|
+| `docs/GLOSSARY.md` | All terminology — read first |
+| `docs/DATABASE_SCHEMA_SPEC_HE.md` | All 23 tables, types, constraints, indexes |
+| `docs/PRODUCT_CATALOG_V1.md` | 29 products, 11 units, initial aliases |
+| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources — seed data |
 | `docs/ARCHITECTURE_DECISIONS_HE.md` | Python stack, PostgreSQL setup |
-| `docs/DETAILED_SYSTEM_SPEC_HE.md` | מבנה הפרויקט (`smallfarms/`) |
+| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Project structure (`organic_market_agent/`) |
 
 ---
 
-## כללים קריטיים לצוות 20
+## Critical Rules
 
-| כלל | פירוט |
-|-----|-------|
-| Python 3.11+ | השתמש ב-`match`, `tomllib`, f-strings |
-| SQLAlchemy 2.x | `session.execute(select(...))` — לא `session.query()` |
-| TIMESTAMPTZ | **כל** timestamp = timezone-aware |
-| NUMERIC(12,4) | **כל** ערך מספרי/כסף — לא float |
-| alembic autogenerate OFF | כתוב migrations ידנית — לשליטה מלאה |
-| Soft deletes | `is_active` בלבד — לא מוחקים רשומות |
-| `.env` בלבד | אין hardcode של credentials בקוד |
+| Rule | Detail |
+|------|--------|
+| Python 3.11+ | Use `match` statements, f-strings, `tomllib` |
+| SQLAlchemy 2.x | `session.execute(select(...))` only — no `session.query()` |
+| All timestamps | `TIMESTAMPTZ` only — no naive datetimes |
+| All prices | `NUMERIC(12,4)` in DB, `Decimal` in Python — never `float` |
+| Alembic manual | Write migrations by hand — do not rely on autogenerate |
+| Soft deletes | `is_active` flag only — never delete records |
+| `.env` for secrets | No hardcoded credentials anywhere in code |
 | `.gitignore` | `.env`, `*.log`, `raw_files/`, `__pycache__/` |
+| English only | All code, comments, docstrings, and reports in English |
 
 ---
 
-## סביבת Python הנדרשת
+## Python Environment
 
 ```bash
-# Python version
-python3 --version  # >= 3.11
+# Verify Python version
+python3 --version  # must be >= 3.11
 
-# venv
+# Create and activate venv
 python3 -m venv .venv
 source .venv/bin/activate
 
-# install
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ---
 
-## Gate G1 — אחריות צוות 20
+## Gate G1 — Team 20 Deliverable
 
-כאשר M1 מושלם, הגש דוח ב-`_COMMUNICATION/TEAM_20/reports/` עם:
-- אישור כל קריטריוני G1 (ראה ROADMAP.md)
-- פלט של `python -m smallfarms.db.check`
-- פלט של `pytest tests/test_db_health.py -v`
-- בקשה לצוות 50 לפתוח שער G1
+When M1 is complete, file a report at:
+`_COMMUNICATION/TEAM_20/reports/YYYY-MM-DD_M1_COMPLETE_TEAM20.md`
+
+Include:
+- Output of `python -m organic_market_agent.db.check`
+- Output of `pytest tests/test_db_health.py -v`
+- Checklist of all deliverables completed
+- Formal request to Team 50 to open Gate G1
 
 ---
 
-## כללי זהב לצוות 20
+## Golden Rules for Team 20
 
-1. **אל תכתוב קוד feature** — רק infrastructure ו-skeleton
-2. **Migrations = קוד** — כל migration נבדק הלוך ושוב (`upgrade` + `downgrade`)
-3. **Seed data = tests** — כל seed מאומת ב-test
-4. **ת'ד לפני קוד** — קרא MANDATE_M1_INFRASTRUCTURE.md לפני שכותב שורה
-5. **דווח blockers** — אם PostgreSQL לא מותקן, לא ניגשים, כתוב דוח עם `[USER ACTION REQUIRED]`
+1. **Read the mandate before writing code** — `MANDATE_M1_INFRASTRUCTURE.md` first
+2. **Migrations are code** — every migration tested both `upgrade` and `downgrade`
+3. **Seed data is tested** — every seed verified in `tests/test_db_health.py`
+4. **Don't write feature code** — only infrastructure and skeleton
+5. **Report blockers immediately** — if PostgreSQL is unavailable, file a report with `[USER ACTION REQUIRED]`
+6. **English only** — all reports, comments, and code in English
