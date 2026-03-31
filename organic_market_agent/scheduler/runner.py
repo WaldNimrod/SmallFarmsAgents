@@ -80,6 +80,7 @@ def main() -> None:
             run_type="daily",
             triggered_by="cron",
             status="running",
+            started_at=now,
             sources_total=0,
             sources_succeeded=0,
             sources_failed=0,

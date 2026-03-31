@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import difflib
+from collections import Counter
 from urllib.parse import quote, unquote
 
 import sqlalchemy as sa
@@ -49,7 +50,29 @@ def unresolved_list():
         }
         for r in rows
     ]
-    return render_template("admin/unresolved.html", items=items)
+    distinct_unresolved = int(
+        session.execute(
+            text(
+                """
+                SELECT COUNT(*) FROM (
+                    SELECT 1
+                    FROM raw_extracted_items rei
+                    JOIN source_fetch_runs sfr ON sfr.id = rei.source_fetch_run_id
+                    JOIN sources s ON s.id = sfr.source_id
+                    WHERE rei.extraction_status = 'unresolvable'
+                      AND rei.is_quarantined = false
+                    GROUP BY rei.raw_product_name
+                ) x
+                """
+            )
+        ).scalar_one()
+        or 0
+    )
+    return render_template(
+        "admin/unresolved.html",
+        items=items,
+        unresolved_distinct_total=distinct_unresolved,
+    )
 
 
 @bp.route("/unresolved/<path:raw_name_encoded>")
@@ -140,6 +163,15 @@ def unresolved_detail(raw_name_encoded: str):
     all_products_out = [{"code": r[0], "name": r[1]} for r in all_products]
     raw_encoded = quote(raw_name, safe="")
 
+    reason_c = Counter(
+        (o["reason"][:80] + "…") if len(o.get("reason") or "") > 80 else (o.get("reason") or "—")
+        for o in occ_out
+    )
+    occurrence_reason_segments = sorted(reason_c.items(), key=lambda x: (-x[1], x[0]))[:15]
+
+    sug_c = Counter(s["match_type"] for s in alias_suggestions)
+    alias_suggestion_segments = [(k, sug_c[k]) for k in sorted(sug_c.keys())]
+
     return render_template(
         "admin/unresolved_detail.html",
         raw_name=raw_name,
@@ -150,6 +182,8 @@ def unresolved_detail(raw_name_encoded: str):
         unique_reasons=unique_reasons,
         alias_suggestions=alias_suggestions,
         all_products=all_products_out,
+        occurrence_reason_segments=occurrence_reason_segments,
+        alias_suggestion_segments=alias_suggestion_segments,
     )
 
 

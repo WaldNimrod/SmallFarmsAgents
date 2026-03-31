@@ -39,4 +39,11 @@ def qa_flags_list():
         }
         for r in rows
     ]
-    return render_template("admin/qa_flags.html", items=items)
+    total_flags = int(
+        session.execute(text("SELECT COUNT(*) FROM observation_flags")).scalar_one() or 0
+    )
+    return render_template(
+        "admin/qa_flags.html",
+        items=items,
+        qa_flags_total=total_flags,
+    )

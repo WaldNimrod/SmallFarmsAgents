@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 import threading
+from collections import Counter
 from functools import partial
 
 import sqlalchemy as sa
+from datetime import datetime, timezone
+
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
 from flask_login import login_required
 from sqlalchemy import text
@@ -15,6 +18,21 @@ from organic_market_agent.scheduler.pipeline import run_pipeline
 from organic_market_agent.scheduler.run_ingestion import _get_active_sources_with_profiles
 
 bp = Blueprint("runs", __name__)
+
+_IR_STATUS_HE = {
+    "running": "רץ",
+    "completed": "הושלם",
+    "partial": "חלקי",
+    "failed": "נכשל",
+}
+
+_SFR_STATUS_HE = {
+    "success": "הצלחה",
+    "failed": "נכשל",
+    "running": "רץ",
+    "skipped": "דולג",
+    "timeout": "פג זמן",
+}
 
 
 @bp.route("/runs")
@@ -58,10 +76,27 @@ def runs_list():
                 "alert_count": int(r[9] or 0),
             }
         )
+    st_counter = Counter(i["status"] for i in items)
+    run_status_segments = [
+        (_IR_STATUS_HE.get(st, st), st_counter[st]) for st in sorted(st_counter.keys())
+    ]
+    total_runs = int(
+        session.execute(text("SELECT COUNT(*) FROM ingestion_runs")).scalar_one() or 0
+    )
+    seen_ids: set[int] = set()
+    trigger_sources: list[dict[str, str]] = []
+    for src, _prof in _get_active_sources_with_profiles(session):
+        if src.id in seen_ids:
+            continue
+        seen_ids.add(src.id)
+        trigger_sources.append({"code": src.code, "name": src.name or src.code})
     return render_template(
         "admin/runs.html",
         items=items,
         any_running=any_running,
+        run_status_segments=run_status_segments,
+        runs_total=total_runs,
+        trigger_sources=trigger_sources,
     )
 
 
@@ -113,15 +148,23 @@ def run_detail(run_id: int):
     alerts = [
         {"id": a[0], "level": a[1], "message": a[2], "created_at": a[3]} for a in alert_rows
     ]
+    al_c = Counter(a["level"] for a in alerts)
+    alert_level_segments = [(lvl, al_c[lvl]) for lvl in sorted(al_c.keys())]
     duration_secs = None
     if run.started_at is not None and run.finished_at is not None:
         duration_secs = int((run.finished_at - run.started_at).total_seconds())
+    fr = Counter(p["status"] for p in per_source)
+    run_fetch_segments = [
+        (_SFR_STATUS_HE.get(st, st), fr[st]) for st in sorted(fr.keys())
+    ]
     return render_template(
         "admin/run_detail.html",
         run=run,
         per_source=per_source,
         alerts=alerts,
         duration_secs=duration_secs,
+        run_fetch_segments=run_fetch_segments,
+        alert_level_segments=alert_level_segments,
     )
 
 
@@ -146,6 +189,7 @@ def runs_trigger():
         run_type="manual",
         triggered_by="admin",
         status="running",
+        started_at=datetime.now(timezone.utc),
         sources_total=sources_total,
         sources_succeeded=0,
         sources_failed=0,

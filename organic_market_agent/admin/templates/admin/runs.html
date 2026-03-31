@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}הרצות{% endblock %}
 {% block head %}
 {% if any_running %}
@@ -7,12 +8,18 @@
 {% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">הרצות אינג׳סט (50 האחרונות)</h1>
+{{ table_summary_bar(items|length, run_status_segments, note='מוצגות 50 אחרונות · סה״כ הרצות במסד: ' ~ runs_total) }}
 {% if current_user.is_authenticated %}
 <form method="post" action="{{ url_for('runs.runs_trigger') }}" class="mb-4 border rounded p-3 bg-white">
   <div class="row g-2 align-items-end">
-    <div class="col-md-3">
-      <label class="form-label small mb-0">קוד מקור (אופציונלי)</label>
-      <input type="text" name="source_code" class="form-control form-control-sm ltr" placeholder="למשל SRC001">
+    <div class="col-md-4">
+      <label class="form-label small mb-0" for="trigger_source_code">מקור (אופציונלי)</label>
+      <select name="source_code" id="trigger_source_code" class="form-select form-select-sm ltr">
+        <option value="">כל המקורות הפעילים (לפי פרופיל איסוף)</option>
+        {% for s in trigger_sources %}
+        <option value="{{ s.code }}">{{ s.code }} — {{ s.name }}</option>
+        {% endfor %}
+      </select>
     </div>
     <div class="col-md-3">
       <div class="form-check">

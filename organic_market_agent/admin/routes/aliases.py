@@ -41,7 +41,18 @@ def alias_list():
         }
         for r in rows
     ]
-    return render_template("admin/aliases.html", items=items)
+    ac = session.execute(
+        text("SELECT COUNT(*) FROM product_aliases WHERE is_active = true")
+    ).scalar_one()
+    ic = session.execute(
+        text("SELECT COUNT(*) FROM product_aliases WHERE is_active = false")
+    ).scalar_one()
+    return render_template(
+        "admin/aliases.html",
+        items=items,
+        aliases_total_active=int(ac or 0),
+        aliases_total_inactive=int(ic or 0),
+    )
 
 
 @bp.route("/aliases/new", methods=["GET", "POST"])

@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}{{ source.name }}{% endblock %}
 {% block content %}
 
@@ -38,6 +39,7 @@
 {# ── Recent runs ── #}
 <h2 class="h5 mb-3">⏱ הרצות אחרונות</h2>
 {% if recent_runs %}
+{{ table_summary_bar(recent_runs|length, source_recent_run_segments, note='עד 5 אחרונות · לפי סטטוס') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
@@ -75,6 +77,7 @@
 {# ── Products observed ── #}
 <h2 class="h5 mb-3">🥕 מוצרים שנצפו</h2>
 {% if products_seen %}
+{{ table_summary_bar(products_seen|length, None, 'מוצרים עם תצפית מנורמלת ממקור זה') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-striped table-bordered bg-white table-sortable">
     <thead class="table-light">
@@ -112,6 +115,7 @@
 {# ── Unresolved raw names ── #}
 <h2 class="h5 mb-3">❓ שמות גולמיים לא מזוהים <small class="text-muted fs-6">(עד 50 ראשונים)</small></h2>
 {% if unresolved %}
+{{ table_summary_bar(unresolved|length, None, 'סטטוס חילוץ: לא ניתן לפתרון') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">

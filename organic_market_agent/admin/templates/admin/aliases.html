@@ -1,8 +1,10 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}אליאסים{% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">אליאסים פעילים</h1>
 <p class="text-muted small"><a href="{{ url_for('aliases.alias_new') }}" class="btn btn-sm btn-success">+ אליאס חדש</a></p>
+{{ table_summary_bar(items|length, [('פעיל (במסד)', aliases_total_active), ('לא פעיל (במסד)', aliases_total_inactive)], note='רשימה: עד 500 אליאסים פעילים') }}
 <div class="table-responsive">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">

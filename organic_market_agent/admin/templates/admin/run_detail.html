@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}הרצה {{ run.id }}{% endblock %}
 {% block content %}
 <h1 class="h4 mb-2">הרצה <span class="ltr">#{{ run.id }}</span></h1>
@@ -8,6 +9,7 @@
 {% endif %}
 {% if alerts %}
 <h2 class="h6 mt-4">התראות צינור</h2>
+{{ table_summary_bar(alerts|length, alert_level_segments, note='לפי רמה') }}
 <ul class="list-group mb-4">
   {% for a in alerts %}
   <li class="list-group-item d-flex flex-wrap align-items-center gap-2">
@@ -25,6 +27,7 @@
 </ul>
 {% endif %}
 <h2 class="h6 mt-4">לפי מקור</h2>
+{{ table_summary_bar(per_source|length, run_fetch_segments, note='לפי סטטוס fetch למקור') }}
 <div class="table-responsive">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">

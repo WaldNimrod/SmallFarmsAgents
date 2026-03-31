@@ -1,11 +1,15 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}כללי נורמליזציה{% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">כללי נורמליזציה</h1>
 <p><a href="{{ url_for('rules.rule_new') }}" class="btn btn-sm btn-success">+ כלל חדש</a></p>
 {% if grouped %}
+{{ table_summary_bar(rules_total, [('פעיל', rules_active), ('לא פעיל', rules_inactive)], note='סה״כ כללים בכל הפרופילים') }}
 {% for profile_id, rows in grouped.items() %}
 <h2 class="h6 text-muted mt-4">פרופיל #<span class="ltr">{{ profile_id }}</span></h2>
+{% set pr_a = rows|selectattr('is_active')|list|length %}
+{{ table_summary_bar(rows|length, [('פעיל', pr_a), ('לא פעיל', rows|length - pr_a)]) }}
 <div class="table-responsive">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">

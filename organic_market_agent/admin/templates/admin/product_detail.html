@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}{{ prod.canonical_name_he }}{% endblock %}
 {% block content %}
 
@@ -113,6 +114,7 @@
 {# ── Per-source breakdown ── #}
 <h2 class="h5 mb-3">📡 פירוט לפי מקור</h2>
 {% if sources_out %}
+{{ table_summary_bar(sources_out|length, sources_tier_segments, note='לפי סוג מקור (tier)') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
@@ -157,6 +159,7 @@
 {# ── Active aliases ── #}
 <h2 class="h5 mb-3">🔤 אליאסים פעילים <small class="text-muted fs-6">(שמות גולמיים שמוביאים למוצר זה)</small></h2>
 {% if aliases_out %}
+{{ table_summary_bar(aliases_out|length, aliases_scope_segments, note='לפי היקף (מקור / גלובלי)') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-bordered bg-white align-middle table-sortable">
     <thead class="table-light"><tr><th data-sort-type="text">אליאס</th><th data-sort-type="text">היקף</th>{% if current_user.is_authenticated %}<th data-sort-none></th>{% endif %}</tr></thead>
@@ -186,6 +189,7 @@
 <div class="alert alert-warning mb-4">
   <h2 class="h6 mb-2">⚠️ שמות גולמיים לא-מזוהים שעשויים להתאים למוצר זה</h2>
   <p class="small mb-2">אם אחד מהם הוא אכן מוצר זה — ניתן להוסיפו כאליאס ולשפר את אחוז הפתרון:</p>
+  {{ table_summary_bar(unresolved_similar|length, None, 'סטטוס: לא ניתן לפתרון · עד 20 שורות') }}
   <div class="table-responsive">
     <table class="table table-sm mb-0 bg-white table-sortable">
       <thead><tr><th data-sort-type="text">שם גולמי</th><th class="text-end" data-sort-type="number">הופעות</th><th data-sort-type="text">מקורות</th><th data-sort-none></th></tr></thead>
@@ -209,6 +213,10 @@
 
 {# ── Last 50 observations ── #}
 <h2 class="h5 mb-3">📋 50 תצפיות אחרונות</h2>
+<p class="small text-muted mb-2">
+  כשבמקור מופיעה כמות (למשל <span class="ltr">2 יח</span>), הצינור מחלק את מחיר השורה בכמות — המחיר בטבלה הוא <strong>ליחידת מוצר אחת</strong> (יחידת תצוגה: עמודת «יחידה»). עמודת «כמות גולמית» מראה מה נקרא מהדף.
+</p>
+{{ table_summary_bar(obs_out|length, obs_flag_segments, note='לפי סטטוס דגל') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable" style="font-size:0.85rem;">
     <thead class="table-dark">
@@ -220,6 +228,7 @@
         <th data-sort-type="text">שם גולמי</th>
         <th data-sort-type="text">מחיר גולמי</th>
         <th data-sort-type="text">יחידה גולמית</th>
+        <th data-sort-type="text">כמות גולמית</th>
         <th class="text-end" data-sort-type="text">ביטחון</th>
         <th data-sort-type="text">דגל</th>
       </tr>
@@ -238,6 +247,7 @@
         <td class="text-muted small">{{ o.raw_name }}</td>
         <td class="text-muted small ltr">{{ o.raw_price }}</td>
         <td class="text-muted small">{{ o.raw_unit }}</td>
+        <td class="text-muted small">{% if o.raw_qty != '—' %}<span class="ltr">{{ o.raw_qty }}</span>{% else %}—{% endif %}</td>
         <td class="text-end">
           {% if o.confidence is not none %}
             <span class="ltr {% if o.confidence >= 0.8 %}text-success{% elif o.confidence >= 0.5 %}text-warning{% else %}text-danger{% endif %}">

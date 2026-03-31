@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 
 from flask import Blueprint, g, render_template
 from sqlalchemy import text
@@ -44,4 +45,12 @@ def audit_list():
                 "after_json": _j(r[6]),
             }
         )
-    return render_template("admin/audit.html", items=items)
+    total_audit = int(session.execute(text("SELECT COUNT(*) FROM audit_log")).scalar_one() or 0)
+    act_counter = Counter(i["action"] for i in items)
+    audit_action_segments = sorted(act_counter.items(), key=lambda x: (-x[1], x[0]))
+    return render_template(
+        "admin/audit.html",
+        items=items,
+        audit_total=total_audit,
+        audit_action_segments=audit_action_segments,
+    )

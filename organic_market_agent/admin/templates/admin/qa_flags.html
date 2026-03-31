@@ -1,7 +1,20 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}דגלי QA{% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">דגלי QA</h1>
+<p class="small text-muted mb-3">
+  העמוד מציג רשומות מטבלת <span class="ltr">observation_flags</span> — דגלי מדיניות על תצפיות (הסתרה, סקירה, חריגת מחיר, מוצר שגוי), עם קישור אופציונלי לתצפית, מוצר ומקור.
+  <strong>כרגע אין בצינור כתיבה לטבלה הזו</strong> (מנוע ה־QA באגרגטור רק כותב אזהרות ללוג). כשייכנסו יצירת דגלים מהממשק או שמירת ממצאי QA למסד — השורות יופיעו כאן.
+  סטטוס דגל על תצפית בודדת (<span class="ltr">ok / review / ignored / hidden</span>) מופיע בדף פירוט מוצר בטבלת התצפיות — זה שדה אחר ב־<span class="ltr">normalized_observations</span>.
+</p>
+{% set qa_on = items|selectattr('is_active')|list|length %}
+{{ table_summary_bar(items|length, [('פעיל', qa_on), ('לא פעיל', items|length - qa_on)], note='מוצגות 200 · סה״כ דגלים במסד: ' ~ qa_flags_total) }}
+{% if not items %}
+<div class="alert alert-light border mb-3" role="status">
+  אין רשומות — הטבלה במסד ריקה. זה תקין עד שיופעל מקור נתונים לדגלים (למשל טופס אדמין או שלב פרסיסטנטי אחרי QA).
+</div>
+{% endif %}
 <div class="table-responsive">
   <table class="table table-sm table-striped table-bordered bg-white table-sortable">
     <thead class="table-light">

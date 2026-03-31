@@ -1,0 +1,17 @@
+{# Shared line above data tables: total rows + optional status breakdown. #}
+{% macro table_summary_bar(total, segments=None, note=None) %}
+  <div class="table-summary-bar small mb-2">
+    <span class="table-summary-total"><span class="table-summary-num">{{ total }}</span> {% if total == 1 %}רשומה{% else %}רשומות{% endif %}</span>
+    {% if segments %}
+      <span class="table-summary-sep" aria-hidden="true">|</span>
+      <span class="table-summary-segments">
+        {% for label, n in segments %}
+          <span class="table-summary-seg">{{ label }}: <span class="table-summary-num">{{ n }}</span></span>{% if not loop.last %}<span class="table-summary-dot">·</span>{% endif %}
+        {% endfor %}
+      </span>
+    {% endif %}
+    {% if note %}
+      <span class="table-summary-note text-muted d-block d-md-inline mt-1 mt-md-0 ms-md-2">{{ note }}</span>
+    {% endif %}
+  </div>
+{% endmacro %}

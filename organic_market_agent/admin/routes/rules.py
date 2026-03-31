@@ -56,7 +56,20 @@ def rules_list():
                 "notes": r[9],
             }
         )
-    return render_template("admin/rules.html", grouped=grouped)
+    rules_active = rules_inactive = 0
+    for rows in grouped.values():
+        for row in rows:
+            if row["is_active"]:
+                rules_active += 1
+            else:
+                rules_inactive += 1
+    return render_template(
+        "admin/rules.html",
+        grouped=grouped,
+        rules_total=rules_active + rules_inactive,
+        rules_active=rules_active,
+        rules_inactive=rules_inactive,
+    )
 
 
 @bp.route("/rules/new", methods=["GET", "POST"])

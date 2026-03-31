@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}לא מזוהים{% endblock %}
 {% block content %}
 <h1 class="h4 mb-2">🔍 שמות גולמיים לא מזוהים</h1>
@@ -6,6 +7,7 @@
   200 שמות גולמיים שלא הצליחו להיפתר לאחר הנורמליזציה, לפי תדירות הופעה.
   לחיצה על שם תפתח ניתוח מעמיק לשיפור הנורמלייזר.
 </p>
+{{ table_summary_bar(items|length, None, 'שמות גולמיים שונים במסד: ' ~ unresolved_distinct_total ~ ' · סטטוס חילוץ: לא ניתן לפתרון (לא בקוורנטין) · מוצגות עד 200') }}
 <p class="small mb-4 rounded border bg-white px-3 py-2" style="border-color:#d8e0d9;">
   <strong class="text-body">משוב סטטי לצוות:</strong>
   הריצו <code class="ltr small">python3 tools/generate_unresolved_review_html.py</code>

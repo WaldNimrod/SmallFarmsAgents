@@ -1,6 +1,8 @@
 """Product catalog — GET /products, GET /products/<code>"""
 from __future__ import annotations
 
+from collections import Counter
+
 import sqlalchemy as sa
 from flask import Blueprint, abort, flash, g, redirect, render_template, url_for
 from flask_login import login_required
@@ -48,7 +50,14 @@ def product_list():
         }
         for r in rows
     ]
-    return render_template("admin/products.html", products=products)
+    total_products = int(
+        session.execute(text("SELECT COUNT(*) FROM products")).scalar_one() or 0
+    )
+    return render_template(
+        "admin/products.html",
+        products=products,
+        products_total=total_products,
+    )
 
 
 @bp.route("/products/<code>")
@@ -147,7 +156,8 @@ def product_detail(code: str):
                    no.confidence_score,
                    rei.raw_product_name,
                    rei.raw_price_text,
-                   rei.raw_unit_text
+                   rei.raw_unit_text,
+                   rei.raw_quantity_text
             FROM normalized_observations no
             JOIN sources s ON s.id = no.source_id
             LEFT JOIN measurement_units mu_d ON mu_d.id = no.display_unit_id
@@ -171,6 +181,7 @@ def product_detail(code: str):
             "raw_name":       r[7] or "—",
             "raw_price":      r[8] or "—",
             "raw_unit":       r[9] or "—",
+            "raw_qty":        r[10] or "—",
         }
         for r in recent_obs
     ]
@@ -218,6 +229,15 @@ def product_detail(code: str):
         for r in similar_unresolved
     ]
 
+    obs_flag_counts = Counter(o["flag_status"] for o in obs_out)
+    obs_flag_segments = [(k, obs_flag_counts[k]) for k in sorted(obs_flag_counts.keys())]
+
+    tier_c = Counter((s["tier"] or "—") for s in sources_out)
+    sources_tier_segments = [(k, tier_c[k]) for k in sorted(tier_c.keys(), key=str)]
+
+    scope_c = Counter(a["scope"] for a in aliases_out)
+    aliases_scope_segments = [(k, scope_c[k]) for k in sorted(scope_c.keys(), key=str)]
+
     return render_template(
         "admin/product_detail.html",
         prod=prod,
@@ -226,6 +246,9 @@ def product_detail(code: str):
         obs_out=obs_out,
         aliases_out=aliases_out,
         unresolved_similar=unresolved_similar,
+        obs_flag_segments=obs_flag_segments,
+        sources_tier_segments=sources_tier_segments,
+        aliases_scope_segments=aliases_scope_segments,
     )
 
 

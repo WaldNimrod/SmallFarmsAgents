@@ -1,7 +1,10 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}מוצרים{% endblock %}
 {% block content %}
 <h1 class="h4 mb-4">🥦 כיסוי מוצרים</h1>
+{% set n_active = products|selectattr('is_active')|list|length %}
+{{ table_summary_bar(products|length, [('פעיל', n_active), ('לא פעיל', products|length - n_active)], note='מוצגות עד 200 · סה״כ במסד: ' ~ products_total) }}
 <div class="table-responsive">
   <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">

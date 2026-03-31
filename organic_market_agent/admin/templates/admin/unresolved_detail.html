@@ -1,4 +1,5 @@
 {% extends "admin/base.html" %}
+{% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}ניתוח: {{ raw_name }}{% endblock %}
 {% block content %}
 
@@ -49,6 +50,7 @@
 <div class="mb-4">
   <h2 class="h5 mb-2">💡 אליאסים קרובים קיימים <small class="text-muted fs-6">(השוואה אוטומטית)</small></h2>
   <p class="text-muted small">אם אחד מאלה מתאים — הוסף אליאס חדש: <code>"{{ raw_name }}" → [קוד מוצר]</code></p>
+  {{ table_summary_bar(alias_suggestions|length, alias_suggestion_segments, note='לפי סוג התאמה') }}
   <div class="table-responsive">
     <table class="table table-sm table-bordered bg-white table-sortable">
       <thead class="table-light">
@@ -99,6 +101,7 @@
 
 {# ── All occurrences ── #}
 <h2 class="h5 mb-3">📋 מופעים <small class="text-muted fs-6">(עד 100 אחרונים)</small></h2>
+{{ table_summary_bar(occurrences|length, occurrence_reason_segments, note='לפי סיבת אי-זיהוי (מקוצרות)') }}
 <div class="table-responsive mb-4">
   <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">

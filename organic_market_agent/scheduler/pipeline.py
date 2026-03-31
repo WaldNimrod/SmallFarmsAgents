@@ -81,16 +81,37 @@ def run_pipeline(
                     PublishEngine().run(session, Path("output/public"))
                 except PublishAbortError as exc:
                     logger.warning("run_pipeline: publish aborted: %s", exc)
+
+        # Wall-clock end of full pipeline (ingestion already set an earlier finished_at).
+        with SessionFactory() as session:
+            run = session.get(IngestionRun, ingestion_run_id)
+            if run is not None:
+                run.finished_at = datetime.now(timezone.utc)
+                session.commit()
     except Exception:
         logger.exception("run_pipeline failed for ingestion_run_id=%s", ingestion_run_id)
         try:
             with SessionFactory() as session:
                 run = session.get(IngestionRun, ingestion_run_id)
-                if run is not None and run.status == "running":
-                    run.status = "failed"
+                if run is not None:
                     run.finished_at = datetime.now(timezone.utc)
+                    run.status = "failed"
                     session.commit()
         except Exception:
             logger.exception(
                 "run_pipeline: could not mark ingestion_run_id=%s failed", ingestion_run_id
+            )
+    finally:
+        try:
+            with SessionFactory() as session:
+                run = session.get(IngestionRun, ingestion_run_id)
+                if run is not None and run.finished_at is None:
+                    run.finished_at = datetime.now(timezone.utc)
+                    if run.status == "running":
+                        run.status = "failed"
+                    session.commit()
+        except Exception:
+            logger.exception(
+                "run_pipeline: finally cleanup failed for ingestion_run_id=%s",
+                ingestion_run_id,
             )

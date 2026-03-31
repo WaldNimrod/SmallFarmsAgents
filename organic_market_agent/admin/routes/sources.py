@@ -1,6 +1,8 @@
 """Sources list and detail — GET /sources, GET /sources/<code>"""
 from __future__ import annotations
 
+from collections import Counter
+
 import sqlalchemy as sa
 from flask import Blueprint, abort, g, render_template
 from sqlalchemy import text
@@ -8,6 +10,14 @@ from sqlalchemy import text
 from organic_market_agent.models import Source
 
 bp = Blueprint("sources", __name__)
+
+_RUN_ROW_STATUS_HE = {
+    "success": "הצלחה",
+    "failed": "נכשל",
+    "running": "רץ",
+    "partial": "חלקי",
+    "completed": "הושלם",
+}
 
 
 @bp.route("/sources")
@@ -63,7 +73,12 @@ def source_list():
                 "resolution_pct": pct,
             }
         )
-    return render_template("admin/sources.html", sources=out)
+    total_sources = int(session.execute(text("SELECT COUNT(*) FROM sources")).scalar_one() or 0)
+    return render_template(
+        "admin/sources.html",
+        sources=out,
+        sources_total=total_sources,
+    )
 
 
 @bp.route("/sources/<code>")
@@ -154,10 +169,16 @@ def source_detail(code: str):
     ).all()
     unresolved = [{"name": r[0] or "", "count": int(r[1])} for r in unres_rows]
 
+    rsc = Counter(r["status"] for r in runs_out)
+    source_recent_run_segments = [
+        (_RUN_ROW_STATUS_HE.get(st, st), rsc[st]) for st in sorted(rsc.keys())
+    ]
+
     return render_template(
         "admin/source_detail.html",
         source=src,
         recent_runs=runs_out,
         products_seen=prods_out,
         unresolved=unresolved,
+        source_recent_run_segments=source_recent_run_segments,
     )
