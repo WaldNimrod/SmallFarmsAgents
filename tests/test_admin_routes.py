@@ -24,6 +24,7 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
         "/products",
         "/unresolved",
         "/diagnostics/normalizer",
+        "/catalog/scope-skip",
         "/aliases",
         "/rules",
         "/runs",
@@ -74,6 +75,12 @@ def test_t01e_save_baseline_writes_json(logged_in_client, db_session, tmp_path, 
 def test_t01f_catalog_renormalize_requires_login(client):
     r = client.post("/maintenance/catalog-renormalize", follow_redirects=False)
     assert r.status_code == 302
+
+
+def test_t01g_full_data_refresh_requires_login(client):
+    r = client.post("/maintenance/full-data-refresh", follow_redirects=False)
+    assert r.status_code == 302
+    assert "/auth/login" in r.headers.get("Location", "")
 
 
 def test_t02_login_success_sets_session_and_redirects(client, db_session):

@@ -15,6 +15,7 @@ from organic_market_agent.admin.baseline_metrics import (
 )
 from organic_market_agent.db.session import engine
 from organic_market_agent.models import IngestionRun, NormalizedObservation, Product, Source
+from organic_market_agent.utils.data_quality_snapshot import compute_raw_pipeline_counts
 
 bp = Blueprint("dashboard", __name__)
 
@@ -197,6 +198,7 @@ def index():
     snapshot_now = compute_normalizer_snapshot(session)
     baseline_file = load_baseline_json(resolve_baseline_path())
     baseline_diff = diff_against_baseline(snapshot_now, baseline_file) if baseline_file else None
+    data_quality_snapshot = compute_raw_pipeline_counts(session)
 
     chart_resolution_json = _json_chart_resolution(session)
     chart_sources_json = _json_chart_sources(session)
@@ -251,5 +253,6 @@ def index():
         chart_sources_json=chart_sources_json,
         chart_unres_7d_json=chart_unres_7d_json,
         unread_alerts=unread_alerts,
+        data_quality_snapshot=data_quality_snapshot,
         database_url_display=_database_url_display(),
     )

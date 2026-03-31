@@ -192,6 +192,7 @@ def run_pipeline(
                     message=(
                         f"Normalizer finished: resolved={ncounts.get('resolved', 0)} "
                         f"unresolvable={ncounts.get('unresolvable', 0)} "
+                        f"scope_skipped={ncounts.get('scope_skipped', 0)} "
                         f"skipped={ncounts.get('skipped', 0)}"
                     ),
                     ingestion_run_id=ingestion_run_id,
@@ -203,6 +204,7 @@ def run_pipeline(
                     phase="normalize_done",
                     normalizer_resolved=ncounts.get("resolved"),
                     normalizer_unresolvable=ncounts.get("unresolvable"),
+                    normalizer_scope_skipped=ncounts.get("scope_skipped"),
                     normalizer_skipped=ncounts.get("skipped"),
                 )
                 log_session.commit()

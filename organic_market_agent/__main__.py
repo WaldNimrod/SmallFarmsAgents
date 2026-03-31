@@ -98,7 +98,8 @@ def catalog_renormalize_cmd(
     if not skip_normalize:
         click.echo(
             f"Normalizer: resolved={stats.normalizer_resolved} "
-            f"unresolvable={stats.normalizer_unresolvable} skipped={stats.normalizer_skipped}"
+            f"unresolvable={stats.normalizer_unresolvable} "
+            f"scope_skipped={stats.normalizer_scope_skipped} skipped={stats.normalizer_skipped}"
         )
     if not skip_aggregate:
         click.echo(
@@ -111,6 +112,60 @@ def catalog_renormalize_cmd(
         else:
             click.echo(f"PublishEngine: skipped or failed: {stats.publish_error}", err=True)
             raise SystemExit(1)
+
+
+@cli.command("full_data_refresh")
+@click.option(
+    "--all-scopes",
+    is_flag=True,
+    default=False,
+    help="Include non-community sources (default: community sources only).",
+)
+@click.option(
+    "--aggregate-date",
+    default=None,
+    help="YYYY-MM-DD for AggregatorEngine / publish (default: today UTC).",
+)
+@click.option(
+    "--output-dir",
+    default="output/public",
+    show_default=True,
+    help="Publish output directory",
+)
+def full_data_refresh_cmd(all_scopes: bool, aggregate_date: str | None, output_dir: str) -> None:
+    """Delete normalized_observations for community raw rows (normalized+unresolvable), re-normalize, aggregate, publish.
+
+    Does not reset rows already in ignored (approved scope skips). Destructive: use after backup.
+    """
+    from datetime import date as date_cls
+
+    from organic_market_agent.maintenance.full_data_refresh import run_full_data_refresh
+
+    d = date_cls.fromisoformat(aggregate_date) if aggregate_date else None
+    stats = run_full_data_refresh(
+        community_only=not all_scopes,
+        aggregate_date=d,
+        output_dir=Path(output_dir),
+    )
+    click.echo(
+        f"Targets: raw_items={stats.target_raw_item_count} "
+        f"flags_deleted={stats.observation_flags_deleted} "
+        f"obs_deleted={stats.normalized_observations_deleted} reset={stats.raw_items_reset_to_extracted}"
+    )
+    click.echo(
+        f"Normalizer: resolved={stats.normalizer_resolved} "
+        f"unresolvable={stats.normalizer_unresolvable} "
+        f"scope_skipped={stats.normalizer_scope_skipped} skipped={stats.normalizer_skipped}"
+    )
+    click.echo(
+        f"Aggregator ({stats.aggregate_date}): "
+        f"created={stats.aggregate_created} updated={stats.aggregate_updated}"
+    )
+    if stats.publish_ok:
+        click.echo(f"PublishEngine: OK → {output_dir}")
+    else:
+        click.echo(f"PublishEngine: failed: {stats.publish_error}", err=True)
+        raise SystemExit(1)
 
 
 @cli.command("run_normalizer")
@@ -137,7 +192,8 @@ def run_normalizer_cmd(
     )
     click.echo(
         f"NormalizerEngine: resolved={counts['resolved']} "
-        f"unresolvable={counts['unresolvable']} skipped={counts['skipped']}"
+        f"unresolvable={counts['unresolvable']} "
+        f"scope_skipped={counts.get('scope_skipped', 0)} skipped={counts['skipped']}"
     )
 
 

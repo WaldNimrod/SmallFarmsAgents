@@ -28,6 +28,7 @@ class RequeueStats:
     unresolvable_requeued: int
     normalizer_resolved: int
     normalizer_unresolvable: int
+    normalizer_scope_skipped: int
     normalizer_skipped: int
     aggregate_created: int
     aggregate_updated: int
@@ -57,7 +58,8 @@ def requeue_unresolvable_raw_items(session: Session) -> int:
             """
             UPDATE raw_extracted_items
             SET extraction_status = 'extracted',
-                unresolvable_reason = NULL
+                unresolvable_reason = NULL,
+                ignore_reason_code = NULL
             WHERE extraction_status = 'unresolvable'
               AND is_quarantined IS NOT TRUE
             """
@@ -89,12 +91,13 @@ def run_catalog_renormalize(
     with SessionFactory() as session:
         requeued = requeue_unresolvable_raw_items(session)
 
-    n_res = n_unres = n_skip = 0
+    n_res = n_unres = n_scope = n_skip = 0
     if not skip_normalize:
         with SessionFactory() as session:
             counts = NormalizerEngine().run(session, ingestion_run_id=None, source_id=None)
         n_res = int(counts.get("resolved", 0))
         n_unres = int(counts.get("unresolvable", 0))
+        n_scope = int(counts.get("scope_skipped", 0))
         n_skip = int(counts.get("skipped", 0))
 
     cr = cu = 0
@@ -118,6 +121,7 @@ def run_catalog_renormalize(
         unresolvable_requeued=requeued,
         normalizer_resolved=n_res,
         normalizer_unresolvable=n_unres,
+        normalizer_scope_skipped=n_scope,
         normalizer_skipped=n_skip,
         aggregate_created=cr,
         aggregate_updated=cu,

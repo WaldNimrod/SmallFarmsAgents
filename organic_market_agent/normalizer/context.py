@@ -3,7 +3,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
+
+if TYPE_CHECKING:
+    from organic_market_agent.models.catalog_scope_skip import CatalogScopeSkipRule
 
 
 @dataclass
@@ -42,5 +45,8 @@ class NormContext:
 
     stage_failed: Optional[str] = None
     unresolvable_reason: Optional[str] = None
+
+    # Populated by NormalizerEngine; ordered by display_order (first match wins).
+    catalog_scope_skip_rules: tuple["CatalogScopeSkipRule", ...] | None = None
 
     resolution_notes: list[str] = field(default_factory=list)

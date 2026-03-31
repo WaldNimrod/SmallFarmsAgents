@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+{% block title %}קטלוג דילוגי סקופ מאושרים{% endblock %}
+{% block content %}
+<h1 class="h4 mb-2">קטלוג דילוגי סקופ מאושרים <span class="text-muted small">(V1)</span></h1>
+<p class="small text-muted mb-3">
+  רשומות באנגלית לפי מדיניות הפרויקט. שורות מתאימות ל־<span class="ltr">raw_product_name</span> מסומנות כ־
+  <strong>ignored</strong> עם <span class="ltr">approved_scope_skip:…</span> — זה <strong>לא</strong> כשל נרמול.
+  מספר העמודה <span class="ltr">#</span> הוא <span class="ltr">display_order</span> (יציב לאישור).
+</p>
+{% if current_user.is_authenticated %}
+<p class="small mb-3">
+  <a href="{{ url_for('scope_skip_catalog.scope_skip_export_json') }}" class="btn btn-sm btn-outline-primary">הורד JSON</a>
+</p>
+{% endif %}
+
+<div class="table-responsive">
+  <table class="table table-sm table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th scope="col" class="text-end" style="width:4rem;">#</th>
+        <th scope="col">category</th>
+        <th scope="col">match_type</th>
+        <th scope="col">pattern</th>
+        <th scope="col">notes</th>
+        <th scope="col">future_product_code</th>
+        <th scope="col">active</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rules %}
+      <tr>
+        <td class="text-end font-monospace">{{ r.display_order }}</td>
+        <td class="ltr">{{ r.category_code }}</td>
+        <td class="ltr">{{ r.match_type }}</td>
+        <td class="ltr text-break">{{ r.pattern }}</td>
+        <td class="ltr text-break small">{{ r.notes or '—' }}</td>
+        <td class="ltr">{{ r.future_product_code or '—' }}</td>
+        <td>{% if r.is_active %}yes{% else %}no{% endif %}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7" class="text-muted small">אין שורות בקטלוג. לאחר אישור רשימה מלאה — יוזנו דרך מיגרציה.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="small mb-0"><a href="{{ url_for('dashboard.index') }}">← דשבורד</a>
+  · <a href="{{ url_for('diagnostics.normalizer_diagnostics') }}">אבחון נרמול</a></p>
+{% endblock %}

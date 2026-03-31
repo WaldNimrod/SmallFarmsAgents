@@ -6,6 +6,8 @@
 <p class="small mb-3 d-flex flex-wrap align-items-center gap-2">
   <a href="{{ url_for('diagnostics.normalizer_diagnostics') }}">אבחון נרמול</a>
   <span>·</span>
+  <a href="{{ url_for('scope_skip_catalog.scope_skip_list') }}">דילוגי סקופ מאושרים</a>
+  <span>·</span>
   <a href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>
   {% if current_user.is_authenticated %}
   <span>·</span>
@@ -15,6 +17,10 @@
   <form method="post" action="{{ url_for('maintenance.catalog_renormalize_start') }}" class="d-inline m-0"
         onsubmit="return confirm('להפעיל נרמול מחדש לכל השורות «לא ניתן»? הפעולה רצה ברקע ותסתיים בתוך דקות.');">
     <button type="submit" class="btn btn-sm btn-outline-primary">נרמול קטלוג מחדש (רקע)</button>
+  </form>
+  <form method="post" action="{{ url_for('maintenance.full_data_refresh_start') }}" class="d-inline m-0"
+        onsubmit="return confirm('ריענון מלא: יימחקו תצפיות מנורמלות קיימות לכל שורות קהילה במצב מנורמל/לא ניתן, יוחזרו לתור וינורמלו מחדש. שורות ignored (דילוג מאושר) לא ישתנו. להמשיך?');">
+    <button type="submit" class="btn btn-sm btn-outline-danger">ריענון מלא + פרסום (רקע)</button>
   </form>
   {% endif %}
   <span class="text-muted small">נתיב בסיס: <span class="ltr">{{ baseline_path_hint }}</span></span>
@@ -122,6 +128,26 @@
           unres rows <span class="fw-semibold">{{ baseline_diff.unresolvable_count_delta >= 0 and '+' or '' }}{{ baseline_diff.unresolvable_count_delta }}</span>
         </div>
         {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm border-start border-success border-3">
+      <div class="card-body">
+        <h2 class="h6 mb-2">תמונת איכות צינור (מסונכרנת עם <span class="ltr">public_report.json → data_quality</span>)</h2>
+        <p class="small text-muted mb-2">מוצג גם בדוח הציבורי וב־<span class="ltr">manifest.json</span> לאחר פרסום.</p>
+        <div class="row g-2 small">
+          <div class="col-md-4"><span class="text-muted">מנורמל:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.normalized }}</span></div>
+          <div class="col-md-4"><span class="text-muted">לא ניתן:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.unresolvable }}</span></div>
+          <div class="col-md-4"><span class="text-muted">ממתין (<span class="ltr">extracted</span>):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.extracted_pending }}</span></div>
+          <div class="col-md-4"><span class="text-muted">דולג (<span class="ltr">ignored</span>):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.ignored }}</span></div>
+          <div class="col-md-4"><span class="text-muted">דילוג מאושר סקופ:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.ignored_approved_scope_skip }}</span></div>
+          <div class="col-md-4"><span class="text-muted">כללי סקופ פעילים:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.active_scope_skip_rules }}</span></div>
+          <div class="col-md-6"><span class="text-muted">אחוז פתרון (מנורמל / מנורמל+לא ניתן):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.resolution_pct_norm_vs_unres }}%</span></div>
+        </div>
       </div>
     </div>
   </div>

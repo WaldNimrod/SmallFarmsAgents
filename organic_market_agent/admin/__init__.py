@@ -20,6 +20,7 @@ from organic_market_agent.admin.routes import (
     rules,
     runs,
     scheduler,
+    scope_skip_catalog,
     sources,
     unresolved,
 )
@@ -106,5 +107,6 @@ def create_app() -> Flask:
     app.register_blueprint(audit_pages.bp)
     app.register_blueprint(diagnostics.bp)
     app.register_blueprint(maintenance.bp)
+    app.register_blueprint(scope_skip_catalog.bp)
 
     return app

@@ -136,6 +136,7 @@ class RawExtractedItem(Base):
     raw_payload_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
     extraction_status: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, server_default="extracted")
     unresolvable_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    ignore_reason_code: Mapped[Optional[str]] = mapped_column(VARCHAR(80), nullable=True)
     is_quarantined: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false", default=False)
     extracted_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False

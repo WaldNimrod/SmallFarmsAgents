@@ -47,6 +47,31 @@ _TOP_RAW_SQL = text(
     """
 )
 
+_SCOPE_SKIP_BY_CATEGORY_SQL = text(
+    """
+    SELECT
+      CASE
+        WHEN rei.unresolvable_reason LIKE 'approved_scope_skip:%%' THEN
+          split_part(split_part(rei.unresolvable_reason, ':', 2), '#', 1)
+        ELSE 'unknown'
+      END AS category_code,
+      COUNT(*)::int AS cnt
+    FROM raw_extracted_items rei
+    WHERE rei.extraction_status = 'ignored'
+      AND rei.ignore_reason_code = 'approved_scope_skip'
+    GROUP BY 1
+    ORDER BY cnt DESC
+    """
+)
+
+_SCOPE_SKIP_TOTAL_SQL = text(
+    """
+    SELECT COUNT(*)::int FROM raw_extracted_items rei
+    WHERE rei.extraction_status = 'ignored'
+      AND rei.ignore_reason_code = 'approved_scope_skip'
+    """
+)
+
 _BY_SOURCE_SQL = text(
     """
     SELECT s.id, s.code, s.name,
@@ -78,7 +103,7 @@ def _recommendations(reason_rows: list[tuple[str, int]]) -> list[str]:
             "Price parsing failures are high: review parser output per source (HTML selectors) "
             "and normalizer price rules for common ILS formats."
         )
-    if by_bucket.get("empty raw_product_name", 0) > 0:
+    if by_bucket.get("empty_raw_product_name", 0) > 0:
         out.append(
             "empty raw_product_name: fix parser mapping so product title is populated before normalize."
         )
@@ -126,6 +151,11 @@ def _collect_payload(session, raw_limit: int) -> dict[str, Any]:
                 "rate_pct": round(100.0 * ur / tot, 1) if tot else 0.0,
             }
         )
+    scope_skip_total = int(session.execute(_SCOPE_SKIP_TOTAL_SQL).scalar_one() or 0)
+    scope_skip_rows = session.execute(_SCOPE_SKIP_BY_CATEGORY_SQL).all()
+    scope_skip_by_category = [
+        {"category_code": str(r[0]), "count": int(r[1])} for r in scope_skip_rows
+    ]
     return {
         "schema": "normalizer_diagnostics_v1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -133,6 +163,8 @@ def _collect_payload(session, raw_limit: int) -> dict[str, Any]:
         "reason_buckets": reason_out,
         "top_raw_product_names": top_raw_out,
         "sources_30d": src_out,
+        "scope_skip_total": scope_skip_total,
+        "scope_skip_by_category": scope_skip_by_category,
         "recommendations": recs,
     }
 

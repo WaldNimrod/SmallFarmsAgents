@@ -73,6 +73,7 @@ Hebrew in documentation, code comments, or file names.
 | Fetch Profile | פרופיל-איסוף | Technical config for how to fetch a source |
 | Normalizer Profile | פרופיל-נרמול | Which normalizer type applies to a source |
 | Normalizer Rule | כלל-נרמול | A single data-driven rule in the normalizer |
+| Approved Scope Skip | דילוג-סקופ-מאושר | `catalog_scope_skip_rules` match → `raw_extracted_items` set to `ignored` with `approved_scope_skip:{category}#{rule_id}` — intentional V1 out-of-scope, not a normalizer failure |
 | Observation Flag | דגל-תצפית | Admin/system mark on an observation (hide, review, etc.) |
 | Measurement Unit | יחידת-מידה | kg, unit, bunch, basket_small, etc. |
 | Unit Conversion | המרת-יחידות | Factor to convert from one unit to another |

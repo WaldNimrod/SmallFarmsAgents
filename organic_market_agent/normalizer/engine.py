@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
 from organic_market_agent.models import (
+    CatalogScopeSkipRule,
     NormalizedObservation,
     RawExtractedItem,
     Source,
@@ -20,6 +21,7 @@ from . import (
     price_normalizer,
     price_parser,
     quantity_parser,
+    scope_skip,
     unit_resolver,
 )
 from .context import NormContext
@@ -28,6 +30,7 @@ from organic_market_agent.utils.logging_setup import get_logger
 logger = get_logger(__name__)
 
 STAGES = [
+    ("scope_skip", scope_skip.run),
     ("alias", alias_resolver.run),
     ("organic_flag", organic_flag.run),
     ("price_parse", price_parser.run),
@@ -64,7 +67,15 @@ class NormalizerEngine:
 
         items = list(session.scalars(stmt).unique().all())
 
-        counts = {"resolved": 0, "unresolvable": 0, "skipped": 0}
+        rules_tuple = tuple(
+            session.scalars(
+                sa.select(CatalogScopeSkipRule)
+                .where(CatalogScopeSkipRule.is_active.is_(True))
+                .order_by(CatalogScopeSkipRule.display_order)
+            ).all()
+        )
+
+        counts = {"resolved": 0, "unresolvable": 0, "skipped": 0, "scope_skipped": 0}
 
         for item in items:
             fetch_run = session.get(SourceFetchRun, item.source_fetch_run_id)
@@ -90,12 +101,22 @@ class NormalizerEngine:
                 market_scope=src.market_scope,
                 sales_channel=src.sales_channel,
                 is_benchmark=(src.market_scope == "benchmark"),
+                catalog_scope_skip_rules=rules_tuple,
             )
 
             for _stage_name, stage_fn in STAGES:
                 ctx = stage_fn(ctx, session)
+                if ctx.stage_failed == scope_skip.STAGE:
+                    break
                 if ctx.stage_failed in BLOCKING_STAGES:
                     break
+
+            if ctx.stage_failed == scope_skip.STAGE:
+                item.extraction_status = "ignored"
+                item.ignore_reason_code = "approved_scope_skip"
+                item.unresolvable_reason = (ctx.unresolvable_reason or "")[:500]
+                counts["scope_skipped"] += 1
+                continue
 
             if ctx.stage_failed in BLOCKING_STAGES:
                 item.extraction_status = "unresolvable"
@@ -139,9 +160,10 @@ class NormalizerEngine:
 
         session.commit()
         logger.info(
-            "NormalizerEngine complete: resolved=%d unresolvable=%d skipped=%d",
+            "NormalizerEngine complete: resolved=%d unresolvable=%d scope_skipped=%d skipped=%d",
             counts["resolved"],
             counts["unresolvable"],
+            counts["scope_skipped"],
             counts["skipped"],
         )
         return counts

@@ -11,6 +11,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from sqlalchemy.orm import Session
 
 from organic_market_agent.models import DailyAggregate
+from organic_market_agent.utils.data_quality_snapshot import compute_raw_pipeline_counts
 from organic_market_agent.utils.exceptions import PublishAbortError
 from organic_market_agent.utils.logging_setup import get_logger
 
@@ -79,6 +80,7 @@ class PublishEngine:
 
         products_out = build_rolling_publish_products(session, report_date)
         max_observed = max_last_observed_from_products(products_out)
+        data_quality = compute_raw_pipeline_counts(session)
 
         report_payload = {
             "generated_at": gen.isoformat(),
@@ -89,6 +91,7 @@ class PublishEngine:
                 "window_start": d_start.isoformat(),
                 "window_end": d_end.isoformat(),
             },
+            "data_quality": data_quality,
             "products": products_out,
         }
         (output_dir / "public_report.json").write_text(
@@ -111,6 +114,7 @@ class PublishEngine:
             generated_at=gen.isoformat(),
             products=products_out,
             stale_banner=stale_banner,
+            data_quality=data_quality,
         )
         (output_dir / "public_report.html").write_text(html, encoding="utf-8")
 
@@ -124,6 +128,7 @@ class PublishEngine:
             "window_start_date": d_start.isoformat(),
             "window_end_date": d_end.isoformat(),
             "distinct_community_sources_in_window": int(comm_src),
+            "data_quality": data_quality,
         }
         (output_dir / "manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2),

@@ -68,6 +68,37 @@
       color: #92400e;
     }
 
+    /* Data-quality transparency (matches public_report.json → data_quality) */
+    .dq-box {
+      background: #fff;
+      border-radius: 12px;
+      border-inline-start: 4px solid var(--green-mid);
+      padding: 1rem 1.25rem;
+      margin-block-end: 1.25rem;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    }
+    .dq-title {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+      color: var(--green-dark);
+    }
+    .dq-lead {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      line-height: 1.45;
+    }
+    .dq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+      gap: 0.5rem 1rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.88rem;
+    }
+    .dq-grid li span.ltr { font-weight: 600; }
+
     /* Main content */
     .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
 
@@ -179,6 +210,26 @@
 {% endif %}
 
 <div class="container">
+
+{% if data_quality %}
+<div class="dq-box" aria-label="שקיפות צינור נירמול">
+  <h2 class="dq-title">שקיפות — מצב צינור הנירמול</h2>
+  <p class="dq-lead">
+    ספירות לפי מסד הנתונים המקומי (<span class="ltr">raw_extracted_items</span>).
+    אותם ערכים מופיעים בקובץ <span class="ltr">public_report.json</span> תחת <span class="ltr">data_quality</span>.
+    לא משמשים לחישוב המחירים בטבלה למטה.
+  </p>
+  <ul class="dq-grid">
+    <li>מנורמל: <span class="ltr">{{ data_quality.raw_extracted_items.normalized }}</span></li>
+    <li>לא ניתן לזיהוי: <span class="ltr">{{ data_quality.raw_extracted_items.unresolvable }}</span></li>
+    <li>ממתין לעיבוד: <span class="ltr">{{ data_quality.raw_extracted_items.extracted_pending }}</span></li>
+    <li>דולג (<span class="ltr">ignored</span>): <span class="ltr">{{ data_quality.raw_extracted_items.ignored }}</span></li>
+    <li>דילוג מאושר (סקופ): <span class="ltr">{{ data_quality.raw_extracted_items.ignored_approved_scope_skip }}</span></li>
+    <li>כללי סקופ פעילים: <span class="ltr">{{ data_quality.active_scope_skip_rules }}</span></li>
+    <li>אחוז פתרון (מנורמל מול מנורמל+לא ניתן): <span class="ltr">{{ data_quality.resolution_pct_norm_vs_unres }}%</span></li>
+  </ul>
+</div>
+{% endif %}
 
 {# Calculate global price range for proportional bars #}
 {% set all_prices = products | selectattr('min_price', 'ne', none) | map(attribute='min_price') | list +

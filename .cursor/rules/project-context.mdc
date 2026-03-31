@@ -14,6 +14,8 @@ Hebrew is used only in direct conversation with project lead Nimrod.
 
 Canonical terminology: `docs/GLOSSARY.md` — read it first.
 
+Structured documentation hub for agents and operators: `documentation/README.md` (overview, schema, pipelines, CLI, troubleshooting, archive policy).
+
 ---
 
 ## What This Platform Is

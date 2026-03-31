@@ -6,7 +6,25 @@
   דוח סיבות ל־<span class="ltr">unresolvable</span>, שמות גולמיים נפוצים, ומקורות (30 יום).
   <a href="{{ url_for('diagnostics.normalizer_diagnostics_export') }}?raw_limit={{ raw_limit }}" class="ltr">export.json</a>
   (התחברות נדרשת).
+  · <a href="{{ url_for('scope_skip_catalog.scope_skip_list') }}">קטלוג דילוגי סקופ מאושרים</a>
 </p>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-2">דילוגי סקופ מאושרים (<span class="ltr">ignored</span> / <span class="ltr">approved_scope_skip</span>)</h2>
+    <p class="small text-muted mb-2">לא נספרים כ־<span class="ltr">unresolvable</span>; ראו גם <a href="{{ url_for('scope_skip_catalog.scope_skip_list') }}">הקטלוג הממוספר</a>.</p>
+    <p class="mb-2"><strong>סה״כ:</strong> {{ payload.scope_skip_total }}</p>
+    {% if payload.scope_skip_by_category %}
+    <ul class="small mb-0 ltr text-start">
+      {% for row in payload.scope_skip_by_category %}
+      <li><span class="fw-semibold">{{ row.category_code }}</span>: {{ row.count }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="small text-muted mb-0">אין עדיין רשומות (לפני זריעת כללים מאושרים).</p>
+    {% endif %}
+  </div>
+</div>
 
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">

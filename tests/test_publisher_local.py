@@ -169,6 +169,19 @@ def test_publish_writes_json_and_html(pg_session: Session, tmp_path: Path) -> No
         js = json.loads((tmp_path / "public_report.json").read_text(encoding="utf-8"))
         html = (tmp_path / "public_report.html").read_text(encoding="utf-8")
         assert "products" in js
+        assert "data_quality" in js
+        dq = js["data_quality"]
+        assert "raw_extracted_items" in dq
+        for k in (
+            "normalized",
+            "unresolvable",
+            "extracted_pending",
+            "ignored",
+            "ignored_approved_scope_skip",
+        ):
+            assert k in dq["raw_extracted_items"]
+        assert "resolution_pct_norm_vs_unres" in dq
+        assert "active_scope_skip_rules" in dq
         assert js.get("index", {}).get("mode") == "rolling_7d"
         assert isinstance(js["products"], list)
         assert len(js["products"]) >= 1
@@ -249,8 +262,10 @@ def test_publish_manifest_includes_expected_keys(pg_session: Session, tmp_path: 
             "window_start_date",
             "window_end_date",
             "distinct_community_sources_in_window",
+            "data_quality",
         ):
             assert key in man
+        assert "raw_extracted_items" in man["data_quality"]
         assert man["community_sources"] >= 2
         assert man["product_count"] >= 1
         assert man["index_window_days"] == 7

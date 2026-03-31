@@ -127,7 +127,8 @@ def main(source_id: int | None, ingestion_run_id: int | None, metrics: bool) -> 
     )
     click.echo(
         f"NormalizerEngine: resolved={counts['resolved']} "
-        f"unresolvable={counts['unresolvable']} skipped={counts['skipped']}"
+        f"unresolvable={counts['unresolvable']} "
+        f"scope_skipped={counts.get('scope_skipped', 0)} skipped={counts['skipped']}"
     )
 
 
