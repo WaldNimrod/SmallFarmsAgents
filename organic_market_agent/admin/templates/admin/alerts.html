@@ -1,0 +1,155 @@
+{% extends "admin/base.html" %}
+{% block title %}התראות צינור{% endblock %}
+{% block content %}
+<h1 class="h4 mb-2">התראות צינור (<span class="ltr">pipeline_alerts</span>)</h1>
+<p class="small text-muted mb-4">
+  התראות פעילות = שלא סומנו כנקרא. ניתן להעתיק או להוריד <span class="ltr">JSON</span> להעברה לסוכן חיצוני לבדיקה (נדרשת התחברות).
+</p>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h2 class="h6 mb-0">התראות פעילות (לא נקראו) — {{ unread_alerts|length }}</h2>
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        {% if current_user.is_authenticated %}
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-copy-unread-json"
+          data-export-url="{{ url_for('alerts.alerts_export_json', scope='unread') }}">
+          העתק JSON ללוח
+        </button>
+        <a href="{{ url_for('alerts.alerts_export_json', scope='unread') }}" class="btn btn-sm btn-outline-primary" download>הורד JSON</a>
+        <form method="post" action="{{ url_for('alerts.alerts_mark_all_read') }}" class="m-0"
+          onsubmit="return confirm('לסמן את כל התראות הפתוחות כנקרא?');">
+          <button type="submit" class="btn btn-sm btn-outline-secondary">סמן הכל כנקרא</button>
+        </form>
+        {% else %}
+        <span class="small text-muted"><a href="{{ url_for('auth.login') }}">התחברו</a> כדי להעתיק / להוריד JSON.</span>
+        {% endif %}
+      </div>
+    </div>
+    {% if unread_alerts %}
+    <ul class="list-group list-group-flush">
+      {% for a in unread_alerts %}
+      <li class="list-group-item px-0 d-flex flex-wrap align-items-start gap-2">
+        {% if a.level == 'error' %}
+        <span class="badge bg-danger">{{ a.level }}</span>
+        {% elif a.level == 'warning' %}
+        <span class="badge bg-warning text-dark">{{ a.level }}</span>
+        {% else %}
+        <span class="badge bg-info text-dark">{{ a.level }}</span>
+        {% endif %}
+        <div class="flex-grow-1">
+          <div class="text-break">{{ a.message }}</div>
+          <div class="small text-muted"><span class="ltr">{{ a.created_at }}</span>
+            {% if a.ingestion_run_id %}
+            · <a href="{{ url_for('runs.run_detail', run_id=a.ingestion_run_id) }}">הרצה {{ a.ingestion_run_id }}</a>
+            {% endif %}
+          </div>
+        </div>
+        {% if current_user.is_authenticated %}
+        <form method="post" action="{{ url_for('alerts.alert_mark_read', alert_id=a.id) }}" class="m-0">
+          <button type="submit" class="btn btn-sm btn-outline-primary">סמן כנקרא</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="small text-muted mb-0">אין התראות פתוחות.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h2 class="h6 mb-0">התראות ישנות (נקראו)</h2>
+      {% if show_read %}
+      <a href="{{ url_for('alerts.alerts_list') }}" class="btn btn-sm btn-outline-secondary">הסתר נקראו</a>
+      {% else %}
+      <a href="{{ url_for('alerts.alerts_list', show_read=1) }}" class="btn btn-sm btn-outline-secondary">
+        הצג {{ read_limit }} אחרונות
+      </a>
+      {% endif %}
+    </div>
+    {% if show_read %}
+      {% if current_user.is_authenticated %}
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-copy-read-json"
+          data-export-url="{{ url_for('alerts.alerts_export_json', scope='read') }}">
+          העתק JSON (נקראו) ללוח
+        </button>
+        <a href="{{ url_for('alerts.alerts_export_json', scope='read') }}" class="btn btn-sm btn-outline-primary" download>הורד JSON (נקראו)</a>
+      </div>
+      {% endif %}
+      {% if read_alerts %}
+      <p class="small text-muted mb-2">מוצגות עד {{ read_limit }} רשומות אחרונות לפי זמן יצירה.</p>
+      <ul class="list-group list-group-flush">
+        {% for a in read_alerts %}
+        <li class="list-group-item px-0 d-flex flex-wrap align-items-start gap-2 opacity-75">
+          {% if a.level == 'error' %}
+          <span class="badge bg-danger">{{ a.level }}</span>
+          {% elif a.level == 'warning' %}
+          <span class="badge bg-warning text-dark">{{ a.level }}</span>
+          {% else %}
+          <span class="badge bg-info text-dark">{{ a.level }}</span>
+          {% endif %}
+          <div class="flex-grow-1">
+            <div class="text-break">{{ a.message }}</div>
+            <div class="small text-muted"><span class="ltr">{{ a.created_at }}</span>
+              {% if a.ingestion_run_id %}
+              · <a href="{{ url_for('runs.run_detail', run_id=a.ingestion_run_id) }}">הרצה {{ a.ingestion_run_id }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="small text-muted mb-0">אין התראות שנקראו במסד.</p>
+      {% endif %}
+    {% else %}
+    <p class="small text-muted mb-0">לחצו «הצג {{ read_limit }} אחרונות» כדי לטעון רשימת התראות שסומנו כנקרא.</p>
+    {% endif %}
+  </div>
+</div>
+
+<p class="small mb-0"><a href="{{ url_for('dashboard.index') }}">← חזרה לדשבורד</a></p>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% if current_user.is_authenticated %}
+<script>
+(function () {
+  async function copyExport(btn) {
+    var url = btn.getAttribute('data-export-url');
+    if (!url) return;
+    var orig = btn.textContent.trim();
+    btn.disabled = true;
+    try {
+      var r = await fetch(url, { credentials: 'same-origin', redirect: 'manual' });
+      if (r.status === 302 || r.status === 401) {
+        window.location.href = '{{ url_for("auth.login") }}';
+        return;
+      }
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var text = await r.text();
+      if (text.trimStart().charAt(0) !== '{') {
+        throw new Error('Expected JSON — try logging in again');
+      }
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'הועתק ✓';
+      setTimeout(function () { btn.textContent = orig; btn.disabled = false; }, 2000);
+    } catch (e) {
+      alert('העתקה נכשלה: ' + (e && e.message ? e.message : e));
+      btn.disabled = false;
+    }
+  }
+  var u = document.getElementById('btn-copy-unread-json');
+  if (u) u.addEventListener('click', function () { copyExport(u); });
+  var rd = document.getElementById('btn-copy-read-json');
+  if (rd) rd.addEventListener('click', function () { copyExport(rd); });
+})();
+</script>
+{% endif %}
+{% endblock %}

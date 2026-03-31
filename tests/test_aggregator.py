@@ -15,6 +15,7 @@ from organic_market_agent.models import (
     DailyAggregate,
     IngestionRun,
     NormalizedObservation,
+    PipelineAlert,
     Product,
     Source,
     SourceFetchRun,
@@ -75,6 +76,13 @@ def _cleanup_m4(session: Session) -> None:
         {"tag": M4_NOTES},
     )
     session.execute(text("DELETE FROM ingestion_runs WHERE notes = :tag"), {"tag": M4_NOTES})
+    session.execute(
+        text(
+            "DELETE FROM pipeline_alerts WHERE message LIKE '[AGG_PRICE_RULE%' "
+            "AND message LIKE :dfrag"
+        ),
+        {"dfrag": f"%{TEST_DATE.isoformat()}%"},
+    )
     session.commit()
 
 
@@ -181,6 +189,67 @@ def test_aggregator_publish_threshold_false_single_source(pg_session: Session) -
         assert row.meets_publish_threshold is False
         assert row.distinct_sources == 1
         assert row.sample_size == 2
+    finally:
+        _cleanup_m4(pg_session)
+
+
+def test_aggregator_two_source_wide_spread_suppresses_publish_and_alerts(
+    pg_session: Session,
+) -> None:
+    """Per-source averages 10 vs 30 → >100% spread → meets_publish_threshold False + warning alert."""
+    _cleanup_m4(pg_session)
+    try:
+        sid1, sid2, pid, uid = _pick_sources_product(pg_session)
+        rid, _ = _make_run(pg_session)
+        fr1 = _add_fetch(pg_session, rid, sid1)
+        fr2 = _add_fetch(pg_session, rid, sid2)
+        _add_obs(pg_session, sfr_id=fr1, source_id=sid1, product_id=pid, unit_id=uid, price=Decimal("10"))
+        _add_obs(pg_session, sfr_id=fr2, source_id=sid2, product_id=pid, unit_id=uid, price=Decimal("30"))
+        pg_session.commit()
+
+        AggregatorEngine().run(pg_session, TEST_DATE)
+        row = pg_session.execute(
+            sa.select(DailyAggregate).where(
+                DailyAggregate.aggregate_date == TEST_DATE,
+                DailyAggregate.product_id == pid,
+            )
+        ).scalar_one()
+        assert row.meets_publish_threshold is False
+        assert row.distinct_sources == 2
+        alert = pg_session.execute(
+            sa.select(PipelineAlert).where(PipelineAlert.message.like("[AGG_PRICE_RULE%"))
+        ).scalar_one_or_none()
+        assert alert is not None
+        assert "two_source_price_spread_gt_100pct" in alert.message
+    finally:
+        _cleanup_m4(pg_session)
+
+
+def test_aggregator_second_run_same_suppression_no_duplicate_alert(pg_session: Session) -> None:
+    _cleanup_m4(pg_session)
+    try:
+        sid1, sid2, pid, uid = _pick_sources_product(pg_session)
+        rid, _ = _make_run(pg_session)
+        fr1 = _add_fetch(pg_session, rid, sid1)
+        fr2 = _add_fetch(pg_session, rid, sid2)
+        _add_obs(pg_session, sfr_id=fr1, source_id=sid1, product_id=pid, unit_id=uid, price=Decimal("10"))
+        _add_obs(pg_session, sfr_id=fr2, source_id=sid2, product_id=pid, unit_id=uid, price=Decimal("30"))
+        pg_session.commit()
+
+        AggregatorEngine().run(pg_session, TEST_DATE)
+        n1 = pg_session.execute(
+            sa.select(sa.func.count()).select_from(PipelineAlert).where(
+                PipelineAlert.message.like("[AGG_PRICE_RULE%")
+            )
+        ).scalar_one()
+        AggregatorEngine().run(pg_session, TEST_DATE)
+        n2 = pg_session.execute(
+            sa.select(sa.func.count()).select_from(PipelineAlert).where(
+                PipelineAlert.message.like("[AGG_PRICE_RULE%")
+            )
+        ).scalar_one()
+        assert int(n1) == 1
+        assert int(n2) == 1
     finally:
         _cleanup_m4(pg_session)
 

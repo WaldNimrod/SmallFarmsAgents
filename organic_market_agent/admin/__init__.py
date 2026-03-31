@@ -74,8 +74,17 @@ def create_app() -> Flask:
                     text("SELECT COUNT(*) FROM pipeline_alerts WHERE is_read = false")
                 ).scalar_one()
             )
+            g.unread_severity_alert_count = int(
+                g.db_session.execute(
+                    text(
+                        "SELECT COUNT(*) FROM pipeline_alerts "
+                        "WHERE is_read = false AND level IN ('error', 'warning')"
+                    )
+                ).scalar_one()
+            )
         except Exception:
             g.unread_alert_count = 0
+            g.unread_severity_alert_count = 0
 
     @app.teardown_request
     def _close_session(exc: BaseException | None) -> None:

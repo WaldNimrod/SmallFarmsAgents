@@ -123,7 +123,13 @@ def index():
             SELECT id, level, message, created_at, ingestion_run_id
             FROM pipeline_alerts
             WHERE is_read = false
-            ORDER BY created_at DESC
+            ORDER BY
+              CASE level
+                WHEN 'error' THEN 0
+                WHEN 'warning' THEN 1
+                ELSE 2
+              END,
+              created_at DESC
             LIMIT 10
             """
         )

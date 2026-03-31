@@ -4,12 +4,12 @@ from __future__ import annotations
 import json
 import threading
 from collections import Counter
+from datetime import datetime, timezone
 from functools import partial
+from typing import Any
 
 import sqlalchemy as sa
-from datetime import datetime, timezone
-
-from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, Response, abort, flash, g, redirect, render_template, request, url_for
 from flask_login import login_required
 from sqlalchemy import text
 
@@ -37,6 +37,245 @@ _SFR_STATUS_HE = {
     "timeout": "פג זמן",
 }
 
+_SORT_ACTIVE_SENTINEL = "999999999"  # table sort: running jobs last on ascending duration
+
+
+def _started_at_short(dt: datetime | None) -> str:
+    if dt is None:
+        return "—"
+    u = dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+    return u.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M") + " UTC"
+
+
+def _duration_human(secs: int) -> str:
+    if secs < 60:
+        return f"{secs} שנ׳"
+    if secs < 3600:
+        m, s = divmod(secs, 60)
+        return f"{m} דק׳ {s} שנ׳" if s else f"{m} דק׳"
+    h, r = divmod(secs, 3600)
+    m = r // 60
+    return f"{h} שע׳ {m} דק׳" if m else f"{h} שע׳"
+
+
+def _duration_cell(
+    status: str, started_at: datetime | None, finished_at: datetime | None
+) -> tuple[str, str]:
+    """(display_text, data-sort-value for sortable table)."""
+    if status == "running" and finished_at is None:
+        return "פעיל", _SORT_ACTIVE_SENTINEL
+    if started_at is None or finished_at is None:
+        return "—", ""
+    secs = max(0, int((finished_at - started_at).total_seconds()))
+    return _duration_human(secs), str(secs)
+
+
+def _health_tier(
+    status: str,
+    sources_failed: int,
+    sources_total: int,
+    raw_items: int,
+) -> str:
+    if status == "failed":
+        return "danger"
+    if status == "running":
+        return "info"
+    if status == "partial" or (sources_total > 0 and sources_failed > 0):
+        return "warning"
+    if status == "completed" and sources_total == 0 and raw_items == 0:
+        return "secondary"
+    return "success"
+
+
+def _health_summary_he(
+    status: str,
+    sources_total: int,
+    sources_succeeded: int,
+    sources_failed: int,
+    sfr_count: int,
+    raw_items: int,
+    normalized_items: int,
+) -> str:
+    parts = [
+        f"סטטוס {status}",
+        f"מקורות בתכנון {sources_total}",
+        f"ריצות fetch {sfr_count}",
+        f"הצלחו/נכשלו {sources_succeeded}/{sources_failed}",
+        f"פריטים גולמיים {raw_items}",
+        f"נורמלו {normalized_items}",
+    ]
+    return " · ".join(parts)
+
+
+def _run_ingestion_row_dict(run: IngestionRun) -> dict[str, Any]:
+    return {
+        "id": run.id,
+        "run_type": run.run_type,
+        "status": run.status,
+        "started_at": run.started_at.isoformat() if run.started_at else None,
+        "finished_at": run.finished_at.isoformat() if run.finished_at else None,
+        "sources_total": run.sources_total,
+        "sources_succeeded": run.sources_succeeded,
+        "sources_failed": run.sources_failed,
+        "community_sources_succeeded": run.community_sources_succeeded,
+        "triggered_by": run.triggered_by,
+        "notes": run.notes,
+        "progress_json": run.progress_json,
+        "created_at": run.created_at.isoformat() if run.created_at else None,
+    }
+
+
+def _executive_lead_he(
+    run: IngestionRun,
+    sfr_count: int,
+    raw_total: int,
+    norm_total: int,
+) -> str:
+    prog = run.progress_json if isinstance(run.progress_json, dict) else {}
+    phase = prog.get("phase") or "—"
+    if run.status == "running":
+        return f"הריצה פעילה כרגע. שלב צינור אחרון שנרשם: {phase}."
+    if sfr_count == 0 and (run.sources_total or 0) > 0:
+        return (
+            "לא נרשמה אף ריצת fetch למקור — כנראה שהצינור לא הגיע ל־CollectorEngine "
+            "או שבוצעה רק שלבים מחוץ לאיסוף (למשל CLI ללא יצירת SFR)."
+        )
+    if run.status == "failed":
+        return "הריצה מסומנת כנכשלת — עיינו בהתראות צינור וביומן הטכני למטה."
+    if run.status == "partial":
+        return (
+            f"הריצה חלקית: {run.sources_failed} מקורות נכשלו מתוך {run.sources_total} בתכנון, "
+            f"{raw_total} פריטים גולמיים, {norm_total} נורמלו."
+        )
+    if raw_total == 0 and (run.sources_total or 0) > 0:
+        return (
+            "אין פריטים גולמיים שנשמרו — ייתכן דילוג על נכס כפול, כשל fetch, או מקור ללא תוכן שנפרס."
+        )
+    return (
+        f"סיכום: {norm_total} פריטים נורמלו מתוך {raw_total} גולמיים; "
+        f"{sfr_count} ריצות fetch; מקורות בתכנון {run.sources_total}, הצליחו {run.sources_succeeded}."
+    )
+
+
+def _collect_run_export(session, run_id: int) -> dict[str, Any]:
+    run = session.get(IngestionRun, run_id)
+    if not run:
+        return {}
+    rows = session.execute(
+        text(
+            """
+            SELECT s.id, sfr.id, s.code, s.name, sfr.status,
+                   COUNT(rei.id) AS items,
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized') AS resolved,
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable,
+                   sfr.http_status,
+                   sfr.error_message,
+                   sfr.finished_at,
+                   sfr.retry_count
+            FROM source_fetch_runs sfr
+            JOIN sources s ON s.id = sfr.source_id
+            LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
+            WHERE sfr.ingestion_run_id = :rid
+            GROUP BY s.id, s.code, s.name, sfr.status, sfr.id,
+                     sfr.http_status, sfr.error_message, sfr.finished_at, sfr.retry_count
+            ORDER BY s.code, sfr.id
+            """
+        ),
+        {"rid": run_id},
+    ).all()
+    per_source = [
+        {
+            "source_id": int(r[0]),
+            "source_fetch_run_id": int(r[1]),
+            "code": r[2],
+            "name": r[3],
+            "status": r[4],
+            "items": int(r[5] or 0),
+            "resolved": int(r[6] or 0),
+            "unresolvable": int(r[7] or 0),
+            "http_status": r[8],
+            "error_message": (r[9] or "").strip() or None,
+            "fetch_finished_at": r[10].isoformat() if r[10] else None,
+            "retry_count": int(r[11] or 0),
+        }
+        for r in rows
+    ]
+    tot = session.execute(
+        text(
+            """
+            SELECT COUNT(rei.id),
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized')
+            FROM source_fetch_runs sfr
+            LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
+            WHERE sfr.ingestion_run_id = :rid
+            """
+        ),
+        {"rid": run_id},
+    ).one()
+    raw_total, norm_total = int(tot[0] or 0), int(tot[1] or 0)
+    sfr_count = int(
+        session.execute(
+            text("SELECT COUNT(*) FROM source_fetch_runs WHERE ingestion_run_id = :rid"),
+            {"rid": run_id},
+        ).scalar_one()
+        or 0
+    )
+    alert_rows = session.execute(
+        text(
+            """
+            SELECT id, level, message, created_at, is_read
+            FROM pipeline_alerts
+            WHERE ingestion_run_id = :rid
+            ORDER BY created_at ASC
+            """
+        ),
+        {"rid": run_id},
+    ).all()
+    alerts = [
+        {
+            "id": a[0],
+            "level": a[1],
+            "message": a[2],
+            "created_at": a[3].isoformat() if a[3] else None,
+            "is_read": bool(a[4]),
+        }
+        for a in alert_rows
+    ]
+    log_rows = session.execute(
+        text(
+            """
+            SELECT id, level, module, message, created_at, extra_json
+            FROM log_entries
+            WHERE ingestion_run_id = :rid
+            ORDER BY created_at DESC
+            LIMIT 200
+            """
+        ),
+        {"rid": run_id},
+    ).all()
+    logs = [
+        {
+            "id": lr[0],
+            "level": lr[1],
+            "module": lr[2],
+            "message": lr[3],
+            "created_at": lr[4].isoformat() if lr[4] else None,
+            "extra_json": lr[5],
+        }
+        for lr in log_rows
+    ]
+    return {
+        "ingestion_run": _run_ingestion_row_dict(run),
+        "totals": {
+            "source_fetch_runs": sfr_count,
+            "raw_extracted_items": raw_total,
+            "normalized_items": norm_total,
+        },
+        "source_fetch_runs": per_source,
+        "pipeline_alerts": alerts,
+        "log_entries": logs,
+    }
+
 
 @bp.route("/runs")
 def runs_list():
@@ -44,13 +283,34 @@ def runs_list():
     rows = session.execute(
         text(
             """
-            SELECT id, run_type, status, started_at, finished_at,
-                   sources_total, sources_succeeded, sources_failed, community_sources_succeeded,
+            SELECT ir.id, ir.run_type, ir.status, ir.started_at, ir.finished_at,
+                   ir.sources_total, ir.sources_succeeded, ir.sources_failed,
+                   ir.community_sources_succeeded,
+                   ir.progress_json,
                    (SELECT COUNT(*) FROM pipeline_alerts pa
                     WHERE pa.ingestion_run_id = ir.id) AS alert_count,
-                   ir.progress_json
+                   (SELECT COUNT(*) FROM pipeline_alerts pa
+                    WHERE pa.ingestion_run_id = ir.id AND pa.level = 'error') AS alert_error_count,
+                   (SELECT COUNT(*) FROM pipeline_alerts pa
+                    WHERE pa.ingestion_run_id = ir.id AND pa.level = 'warning') AS alert_warning_count,
+                   (SELECT COUNT(*) FROM source_fetch_runs sfr
+                    WHERE sfr.ingestion_run_id = ir.id) AS sfr_count,
+                   (SELECT COUNT(rei.id) FROM source_fetch_runs sfr
+                    JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
+                    WHERE sfr.ingestion_run_id = ir.id) AS raw_items_count,
+                   (SELECT COUNT(rei.id) FROM source_fetch_runs sfr
+                    JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
+                    WHERE sfr.ingestion_run_id = ir.id
+                      AND rei.extraction_status = 'normalized') AS normalized_items_count,
+                   (SELECT STRING_AGG(line, '; ' ORDER BY line)
+                    FROM (
+                        SELECT DISTINCT TRIM(s.code || ' — ' || COALESCE(s.name, '')) AS line
+                        FROM source_fetch_runs sfr2
+                        JOIN sources s ON s.id = sfr2.source_id
+                        WHERE sfr2.ingestion_run_id = ir.id
+                    ) u) AS sources_agg
             FROM ingestion_runs ir
-            ORDER BY id DESC
+            ORDER BY ir.id DESC
             LIMIT 50
             """
         )
@@ -59,26 +319,51 @@ def runs_list():
     any_running = False
     for r in rows:
         started_at, finished_at = r[3], r[4]
-        duration_secs = None
-        if started_at is not None and finished_at is not None:
-            duration_secs = int((finished_at - started_at).total_seconds())
         st = r[2]
         if st == "running":
             any_running = True
+        dur_label, dur_sort = _duration_cell(st, started_at, finished_at)
+        src_total = int(r[5] or 0)
+        src_ok = int(r[6] or 0)
+        src_fail = int(r[7] or 0)
+        community_ok = int(r[8] or 0)
+        prog = r[9]
+        alert_ct = int(r[10] or 0)
+        alert_err = int(r[11] or 0)
+        alert_warn = int(r[12] or 0)
+        sfr_ct = int(r[13] or 0)
+        raw_ct = int(r[14] or 0)
+        norm_ct = int(r[15] or 0)
+        agg = (r[16] or "") or ""
+        if len(agg) > 220:
+            agg = agg[:217] + "…"
         items.append(
             {
                 "id": r[0],
                 "run_type": r[1],
                 "status": st,
                 "started_at": started_at,
+                "started_at_short": _started_at_short(started_at),
                 "finished_at": finished_at,
-                "duration_secs": duration_secs,
-                "sources_total": r[5],
-                "sources_succeeded": r[6],
-                "sources_failed": r[7],
-                "community_sources_succeeded": r[8],
-                "alert_count": int(r[9] or 0),
-                "progress": r[10] if isinstance(r[10], dict) else None,
+                "duration_display": dur_label,
+                "duration_sort_value": dur_sort,
+                "sources_total": src_total,
+                "sources_succeeded": src_ok,
+                "sources_failed": src_fail,
+                "community_sources_succeeded": community_ok,
+                "alert_count": alert_ct,
+                "alert_error_count": alert_err,
+                "alert_warning_count": alert_warn,
+                "sfr_count": sfr_ct,
+                "raw_items_count": raw_ct,
+                "normalized_items_count": norm_ct,
+                "sources_agg": agg,
+                "health_tier": _health_tier(st, src_fail, src_total, raw_ct),
+                "health_line": f"{raw_ct} גולמי · {norm_ct} נורמלו",
+                "health_summary": _health_summary_he(
+                    st, src_total, src_ok, src_fail, sfr_ct, raw_ct, norm_ct
+                ),
+                "progress": prog if isinstance(prog, dict) else None,
             }
         )
     st_counter = Counter(i["status"] for i in items)
@@ -105,6 +390,19 @@ def runs_list():
     )
 
 
+@bp.route("/runs/<int:run_id>/export.json")
+@login_required
+def run_export_json(run_id: int):
+    """Structured JSON for manager analysis (items capped in log_entries)."""
+    payload = _collect_run_export(g.db_session, run_id)
+    if not payload:
+        abort(404)
+    return Response(
+        json.dumps(payload, ensure_ascii=False, default=str),
+        mimetype="application/json; charset=utf-8",
+    )
+
+
 @bp.route("/runs/<int:run_id>")
 def run_detail(run_id: int):
     session = g.db_session
@@ -114,7 +412,7 @@ def run_detail(run_id: int):
     rows = session.execute(
         text(
             """
-            SELECT s.code, s.name, sfr.status,
+            SELECT s.id, sfr.id, s.code, s.name, sfr.status,
                    COUNT(rei.id) AS items,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized') AS resolved,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable,
@@ -135,19 +433,35 @@ def run_detail(run_id: int):
     ).all()
     per_source = [
         {
-            "code": r[0],
-            "name": r[1],
-            "status": r[2],
-            "items": int(r[3] or 0),
-            "resolved": int(r[4] or 0),
-            "unresolvable": int(r[5] or 0),
-            "http_status": r[6],
-            "error_message": (r[7] or "").strip() or None,
-            "fetch_finished_at": r[8],
-            "retry_count": int(r[9] or 0),
+            "source_id": int(r[0]),
+            "source_fetch_run_id": int(r[1]),
+            "code": r[2],
+            "name": r[3],
+            "status": r[4],
+            "items": int(r[5] or 0),
+            "resolved": int(r[6] or 0),
+            "unresolvable": int(r[7] or 0),
+            "http_status": r[8],
+            "error_message": (r[9] or "").strip() or None,
+            "fetch_finished_at": r[10],
+            "retry_count": int(r[11] or 0),
         }
         for r in rows
     ]
+    tot_row = session.execute(
+        text(
+            """
+            SELECT COUNT(rei.id),
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized')
+            FROM source_fetch_runs sfr
+            LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
+            WHERE sfr.ingestion_run_id = :rid
+            """
+        ),
+        {"rid": run_id},
+    ).one()
+    raw_items_total = int(tot_row[0] or 0)
+    normalized_items_total = int(tot_row[1] or 0)
     sfr_count = int(
         session.execute(
             text(
@@ -156,6 +470,10 @@ def run_detail(run_id: int):
             {"rid": run_id},
         ).scalar_one()
         or 0
+    )
+    executive_lead = _executive_lead_he(run, sfr_count, raw_items_total, normalized_items_total)
+    executive_tier = _health_tier(
+        run.status, run.sources_failed, run.sources_total, raw_items_total
     )
 
     alert_rows = session.execute(
@@ -203,6 +521,7 @@ def run_detail(run_id: int):
     duration_secs = None
     if run.started_at is not None and run.finished_at is not None:
         duration_secs = int((run.finished_at - run.started_at).total_seconds())
+    duration_display, _ = _duration_cell(run.status, run.started_at, run.finished_at)
     fr = Counter(p["status"] for p in per_source)
     run_fetch_segments = [
         (_SFR_STATUS_HE.get(st, st), fr[st]) for st in sorted(fr.keys())
@@ -214,12 +533,18 @@ def run_detail(run_id: int):
         per_source=per_source,
         alerts=alerts,
         duration_secs=duration_secs,
+        duration_display=duration_display,
         run_fetch_segments=run_fetch_segments,
         alert_level_segments=alert_level_segments,
         run_status_he=run_status_he,
         sfr_status_he=_SFR_STATUS_HE,
         sfr_count=sfr_count,
         run_logs=run_logs,
+        executive_lead=executive_lead,
+        executive_tier=executive_tier,
+        raw_items_total=raw_items_total,
+        normalized_items_total=normalized_items_total,
+        started_at_short=_started_at_short(run.started_at),
     )
 
 

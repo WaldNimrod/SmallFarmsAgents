@@ -48,6 +48,12 @@ do_start() {
   # shellcheck disable=SC1091
   [[ -f .env ]] && set -a && source .env && set +a
 
+  echo "📦  Alembic: applying pending migrations (upgrade head)…"
+  if ! "$VENV" -m alembic upgrade head; then
+    echo "❌  מיגרציה נכשלה — השרת לא יופעל. בדוק DATABASE_URL וחיבור ל־PostgreSQL."
+    exit 1
+  fi
+
   nohup "$VENV" -m organic_market_agent run_admin --host "$HOST" --port "$PORT" \
     >> "$LOG_FILE" 2>&1 &
   echo $! > "$PID_FILE"

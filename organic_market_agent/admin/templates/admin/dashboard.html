@@ -9,11 +9,14 @@
   <div class="card-body">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
       <h2 class="h6 mb-0">התראות שלא נקראו</h2>
-      {% if current_user.is_authenticated %}
-      <form method="post" action="{{ url_for('alerts.alerts_mark_all_read') }}" class="m-0">
-        <button type="submit" class="btn btn-sm btn-outline-secondary">סמן הכל כנקרא</button>
-      </form>
-      {% endif %}
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <a href="{{ url_for('alerts.alerts_list') }}" class="btn btn-sm btn-outline-primary">דף התראות — JSON / ארכיון</a>
+        {% if current_user.is_authenticated %}
+        <form method="post" action="{{ url_for('alerts.alerts_mark_all_read') }}" class="m-0">
+          <button type="submit" class="btn btn-sm btn-outline-secondary">סמן הכל כנקרא</button>
+        </form>
+        {% endif %}
+      </div>
     </div>
     <ul class="list-group list-group-flush">
       {% for a in unread_alerts %}

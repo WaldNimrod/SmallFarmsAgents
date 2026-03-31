@@ -10,10 +10,29 @@ from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
+from organic_market_agent.models import PipelineAlert, Product
 from organic_market_agent.models.aggregates import DailyAggregate, WeeklySnapshot
 from organic_market_agent.utils.logging_setup import get_logger
 
+from .price_rules import price_rules_allow_publish
+
 logger = get_logger(__name__)
+
+_PER_SOURCE_AVG_SQL = text(
+    """
+    SELECT no.source_id,
+           AVG(COALESCE(no.normalized_price_value, no.price_amount)) AS avg_price
+    FROM normalized_observations no
+    LEFT JOIN raw_extracted_items rei ON rei.id = no.raw_extracted_item_id
+    WHERE (no.observed_at AT TIME ZONE 'UTC')::date = :agg_date
+      AND no.product_id = :pid
+      AND no.market_scope = :ms
+      AND no.sales_channel IS NOT DISTINCT FROM :sc
+      AND no.flag_status = 'ok'
+      AND (rei.id IS NULL OR rei.is_quarantined IS NOT TRUE)
+    GROUP BY no.source_id
+    """
+)
 
 _AGG_SQL = """
 SELECT
@@ -49,6 +68,71 @@ def _week_bounds(d: date) -> tuple[date, date]:
     return start, end
 
 
+def _per_source_avg_prices(
+    session: Session,
+    aggregate_date: date,
+    product_id: int,
+    market_scope: str,
+    sales_channel: str | None,
+) -> dict[int, Decimal]:
+    rows = session.execute(
+        _PER_SOURCE_AVG_SQL,
+        {
+            "agg_date": aggregate_date,
+            "pid": product_id,
+            "ms": market_scope,
+            "sc": sales_channel,
+        },
+    ).all()
+    return {int(r[0]): Decimal(str(r[1])) for r in rows}
+
+
+def _prev_meets_publish(
+    session: Session,
+    aggregate_date: date,
+    product_id: int,
+    market_scope: str,
+    sales_channel: str | None,
+) -> bool | None:
+    q = sa.select(DailyAggregate.meets_publish_threshold).where(
+        DailyAggregate.aggregate_date == aggregate_date,
+        DailyAggregate.product_id == product_id,
+        DailyAggregate.market_scope == market_scope,
+    )
+    if sales_channel is None:
+        q = q.where(DailyAggregate.sales_channel.is_(None))
+    else:
+        q = q.where(DailyAggregate.sales_channel == sales_channel)
+    return session.execute(q).scalar_one_or_none()
+
+
+def _emit_price_rule_alert(
+    session: Session,
+    *,
+    aggregate_date: date,
+    product_id: int,
+    product_code: str,
+    market_scope: str,
+    sales_channel: str | None,
+    rule_code: str,
+    per_source_avgs: dict[int, Decimal],
+) -> None:
+    pairs = ", ".join(f"{sid}:{avg}" for sid, avg in sorted(per_source_avgs.items()))
+    msg = (
+        f"[AGG_PRICE_RULE:{rule_code}] date={aggregate_date.isoformat()} "
+        f"product_id={product_id} product_code={product_code} "
+        f"market_scope={market_scope} sales_channel={sales_channel!r} "
+        f"per_source_avg_ils={{{pairs}}}"
+    )
+    session.add(
+        PipelineAlert(
+            level="warning",
+            message=msg,
+            ingestion_run_id=None,
+        )
+    )
+
+
 class AggregatorEngine:
     """Roll normalized observations into daily_aggregates and weekly_snapshots."""
 
@@ -73,8 +157,37 @@ class AggregatorEngine:
         for row in rows:
             sample_size = int(row["sample_size"])
             distinct_sources = int(row["distinct_sources"])
-            meets = sample_size >= 2 and distinct_sources >= 2
-            key = (row["product_id"], row["market_scope"], row["sales_channel"])
+            base_meets = sample_size >= 2 and distinct_sources >= 2
+            sc = row["sales_channel"]
+            pid = int(row["product_id"])
+            ms = row["market_scope"]
+
+            price_ok = True
+            suppression: str | None = None
+            per_source: dict[int, Decimal] = {}
+            if base_meets:
+                per_source = _per_source_avg_prices(session, aggregate_date, pid, ms, sc)
+                price_ok, suppression = price_rules_allow_publish(per_source)
+
+            meets = base_meets and price_ok
+
+            if base_meets and not price_ok and suppression:
+                prev = _prev_meets_publish(session, aggregate_date, pid, ms, sc)
+                if prev is not False:
+                    prod = session.get(Product, pid)
+                    pcode = prod.code if prod else "?"
+                    _emit_price_rule_alert(
+                        session,
+                        aggregate_date=aggregate_date,
+                        product_id=pid,
+                        product_code=pcode,
+                        market_scope=ms,
+                        sales_channel=sc,
+                        rule_code=suppression,
+                        per_source_avgs=per_source,
+                    )
+
+            key = (pid, ms, sc)
             if key in existing_keys:
                 updated += 1
             else:

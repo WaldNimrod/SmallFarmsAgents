@@ -27,6 +27,7 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
         "/runs",
         "/qa_flags",
         "/audit",
+        "/alerts",
     ]
     for path in paths:
         r = client.get(path)
@@ -351,3 +352,50 @@ def test_t11_audit_lists_prior_actions(logged_in_client, db_session):
     r = logged_in_client.get("/audit")
     assert r.status_code == 200
     assert b"create_alias" in r.data or b"disable_alias" in r.data or b"trigger_run" in r.data
+
+
+def test_t14_runs_list_shows_manager_columns(client):
+    r = client.get("/runs")
+    assert r.status_code == 200
+    assert "מדד / נתונים".encode("utf-8") in r.data
+    assert "התראות צינור".encode("utf-8") in r.data
+
+
+def test_t15_runs_export_json_requires_login(client, db_session):
+    rid = db_session.execute(sa.select(sa.func.max(IngestionRun.id))).scalar_one()
+    if rid is None:
+        pytest.skip("No ingestion run in DB")
+    r = client.get(f"/runs/{int(rid)}/export.json", follow_redirects=False)
+    assert r.status_code in (302, 401)
+
+
+def test_t17_alerts_export_json_requires_login(client):
+    r = client.get("/alerts/export.json", follow_redirects=False)
+    assert r.status_code in (302, 401)
+
+
+def test_t18_alerts_export_json_ok_when_logged_in(logged_in_client, db_session):
+    r = logged_in_client.get("/alerts/export.json?scope=unread")
+    assert r.status_code == 200
+    assert r.content_type.startswith("application/json")
+    body = r.get_json()
+    assert body.get("schema") == "pipeline_alerts_export_v1"
+    assert "exported_at" in body
+    assert "alerts" in body
+    assert isinstance(body["alerts"], list)
+
+
+def test_t16_runs_export_json_ok_when_logged_in(logged_in_client, db_session):
+    rid = db_session.execute(sa.select(sa.func.max(IngestionRun.id))).scalar_one()
+    if rid is None:
+        pytest.skip("No ingestion run in DB")
+    r = logged_in_client.get(f"/runs/{int(rid)}/export.json")
+    assert r.status_code == 200
+    assert r.content_type.startswith("application/json")
+    body = r.get_json()
+    assert body is not None
+    assert "ingestion_run" in body
+    assert "totals" in body
+    assert "source_fetch_runs" in body
+    assert "pipeline_alerts" in body
+    assert "log_entries" in body

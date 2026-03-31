@@ -3,11 +3,28 @@
 {% block title %}הרצה {{ run.id }}{% endblock %}
 {% block content %}
 <h1 class="h4 mb-2">הרצה <span class="ltr">#{{ run.id }}</span></h1>
-<p class="text-muted small mb-3">
+<p class="text-muted small mb-2">
   סוג: <span class="ltr">{{ run.run_type }}</span>
   · סטטוס: <strong>{{ run_status_he }}</strong> <span class="text-muted">(<span class="ltr">{{ run.status }}</span>)</span>
   · הופעל ע״י: <span class="ltr">{{ run.triggered_by }}</span>
+  · התחלה (קצר): <span class="ltr">{{ started_at_short }}</span>
 </p>
+<div class="d-flex flex-wrap gap-2 mb-3">
+  {% if current_user.is_authenticated %}
+  <a href="{{ url_for('runs.run_export_json', run_id=run.id) }}" class="btn btn-sm btn-outline-secondary" download>ייצוא JSON לניתוח</a>
+  {% endif %}
+</div>
+<div class="card border-0 shadow-sm mb-4 border-start border-4 {% if executive_tier == 'danger' %}border-danger{% elif executive_tier == 'warning' %}border-warning{% elif executive_tier == 'success' %}border-success{% elif executive_tier == 'info' %}border-info{% else %}border-secondary{% endif %}">
+  <div class="card-body py-3">
+    <h2 class="h6 mb-2">תקציר למנהל</h2>
+    <p class="mb-2 small">{{ executive_lead }}</p>
+    <p class="mb-0 small text-muted">
+      פריטים גולמיים במסגרת הריצה: <span class="ltr fw-semibold">{{ raw_items_total }}</span>
+      · נורמלו: <span class="ltr fw-semibold">{{ normalized_items_total }}</span>
+      · ריצות fetch: <span class="ltr fw-semibold">{{ sfr_count }}</span>
+    </p>
+  </div>
+</div>
 {% if run.notes and run.notes.startswith('single_source:') %}
 {% set single_code = run.notes.split(':', 1)[1] %}
 <div class="alert alert-info py-2 px-3 small mb-3" role="status">
@@ -32,7 +49,7 @@
       </div>
       <div class="col-6 col-md-4 col-lg-3">
         <span class="text-muted">התחלה</span><br>
-        <span class="ltr fw-semibold">{% if run.started_at %}{{ run.started_at }}{% else %}—{% endif %}</span>
+        <span class="ltr fw-semibold">{{ started_at_short }}</span>
       </div>
       <div class="col-6 col-md-4 col-lg-3">
         <span class="text-muted">סיום</span><br>
@@ -40,7 +57,8 @@
       </div>
       <div class="col-6 col-md-4 col-lg-3">
         <span class="text-muted">משך</span><br>
-        <span class="ltr fw-semibold">{% if duration_secs is not none %}{{ duration_secs }} שני׳{% else %}—{% endif %}</span>
+        <span class="ltr fw-semibold">{{ duration_display }}</span>
+        {% if duration_secs is not none %}<span class="text-muted small"> (<span class="ltr">{{ duration_secs }}</span> שנ׳)</span>{% endif %}
       </div>
       <div class="col-6 col-md-4 col-lg-3">
         <span class="text-muted">מקורות בתכנון</span><br>
@@ -62,6 +80,14 @@
         <span class="text-muted">ריצות fetch בפועל (מסד)</span><br>
         <span class="ltr fw-semibold">{{ sfr_count }}</span>
       </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">פריטים גולמיים (בהרצה)</span><br>
+        <span class="ltr fw-semibold">{{ raw_items_total }}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">נורמלו (בהרצה)</span><br>
+        <span class="ltr fw-semibold">{{ normalized_items_total }}</span>
+      </div>
     </div>
     {% if run.notes %}
     <p class="small mb-0 mt-3"><span class="text-muted">הערות:</span> {{ run.notes }}</p>
@@ -69,17 +95,17 @@
   </div>
 </div>
 
-<h2 class="h6 mt-4">אבחון מהיר</h2>
+<h2 class="h6 mt-4">אבחון מהיר (טכני)</h2>
 <div class="alert alert-secondary small mb-4" role="note">
   <ul class="mb-0 ps-3">
-    <li><span class="ltr">COUNT(source_fetch_runs)</span> עבור הריצה: <strong class="ltr">{{ sfr_count }}</strong>. אם 0 — לא נוצרה אף בקשת איסוף תחת מזהה ההרצה.</li>
+    <li><span class="ltr">COUNT(source_fetch_runs)</span> עבור הריצה: <strong class="ltr">{{ sfr_count }}</strong>. אם 0 — לא נוצרה אף בקשת איסוף תחת מזהה ההרצה (למשל ריצת CLI בלי יצירת SFR, או צינור שנקטע לפני האיסוף).</li>
     <li>אם <span class="ltr">sources_total &gt; 0</span> אבל <span class="ltr">sfr_count = 0</span> והסטטוס עדיין <span class="ltr">running</span>: לרוב התהליך ברקע לא הגיע ללולאת האיסוף (כיבוי שרת, חריגה לפני <code>CollectorEngine</code>, או תור שמעולם לא רץ).</li>
     <li>אם <span class="ltr">sources_total = 0</span> בזמן הטריגר — הריצה לא אמורה להיווצר (ולא אמור להתחיל צינור); אם בכל זאת קיימת, זה מצב ישן או נתיב חריג.</li>
     <li>התראות <span class="ltr">pipeline_alerts</span> נוצרות עכשיו גם כשהצינור נכשל בחריגה; אם אין התראה ואין <span class="ltr">source_fetch_runs</span> — כנראה קוד ישן לפני התיקון, או כשל לפני רישום התראה.</li>
   </ul>
 </div>
 
-<h2 class="h6 mt-4">התראות צינור</h2>
+<h2 class="h6 mt-4" id="pipeline-alerts">התראות צינור</h2>
 {% if alerts %}
 {{ table_summary_bar(alerts|length, alert_level_segments, note='לפי רמה') }}
 <ul class="list-group mb-4">
@@ -143,7 +169,7 @@
 <div class="alert alert-light border mb-4 small">אין רשומות <span class="ltr">log_entries</span> למזהה זה.</div>
 {% endif %}
 
-<h2 class="h6 mt-4">לפי מקור (ריצת fetch)</h2>
+<h2 class="h6 mt-4" id="per-source">לפי מקור (ריצת fetch)</h2>
 <p class="small text-muted mb-2">
   כל שורה היא <span class="ltr">source_fetch_run</span> אחת. עמודת <strong>שגיאה</strong> מגיעה מהאוסף כשהבקשה נכשלת — זה בדרך כלל המקום הכי ברור לראות למה מקור לא עלה.
 </p>
@@ -158,12 +184,14 @@
   <table class="table table-sm table-bordered bg-white table-sortable align-middle">
     <thead class="table-light">
       <tr>
+        <th class="text-end" data-sort-type="number">מזהה מקור</th>
+        <th class="text-end" data-sort-type="number">מזהה SFR</th>
         <th data-sort-type="text">קוד</th>
         <th data-sort-type="text">שם</th>
         <th data-sort-type="text">סטטוס fetch</th>
         <th class="text-end" data-sort-type="number">HTTP</th>
         <th class="text-end" data-sort-type="number">ניסיונות</th>
-        <th data-sort-type="text">סיום fetch</th>
+        <th data-sort-type="date">סיום fetch</th>
         <th data-sort-type="text">שגיאה (אוסף)</th>
         <th class="text-end" data-sort-type="number">פריטים</th>
         <th class="text-end" data-sort-type="number">נורמל</th>
@@ -173,12 +201,14 @@
     <tbody>
       {% for s in per_source %}
       <tr class="{% if s.status == 'failed' %}table-danger{% elif s.status == 'skipped' %}table-secondary{% endif %}">
-        <td class="ltr">{{ s.code }}</td>
+        <td class="text-end ltr">{{ s.source_id }}</td>
+        <td class="text-end ltr">{{ s.source_fetch_run_id }}</td>
+        <td class="ltr"><a href="{{ url_for('sources.source_detail', code=s.code) }}">{{ s.code }}</a></td>
         <td>{{ s.name }}</td>
         <td>{{ sfr_status_he.get(s.status, s.status) }} <span class="text-muted small">(<span class="ltr">{{ s.status }}</span>)</span></td>
         <td class="text-end ltr">{% if s.http_status is not none %}{{ s.http_status }}{% else %}—{% endif %}</td>
         <td class="text-end ltr">{{ s.retry_count }}</td>
-        <td class="small"><span class="ltr">{% if s.fetch_finished_at %}{{ s.fetch_finished_at }}{% else %}—{% endif %}</span></td>
+        <td class="small" data-sort-value="{% if s.fetch_finished_at %}{{ s.fetch_finished_at.isoformat() }}{% endif %}"><span class="ltr">{% if s.fetch_finished_at %}{{ s.fetch_finished_at }}{% else %}—{% endif %}</span></td>
         <td class="small text-break" style="max-width: 28rem;">
           {% if s.error_message %}
           <span class="text-danger" title="{{ s.error_message }}">{{ s.error_message }}</span>

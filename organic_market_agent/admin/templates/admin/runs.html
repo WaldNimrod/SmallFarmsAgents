@@ -56,10 +56,10 @@
         <th data-sort-type="number">מזהה</th>
         <th data-sort-type="text">סוג</th>
         <th data-sort-type="text">סטטוס</th>
+        <th data-sort-type="text">מדד / נתונים</th>
         <th data-sort-type="text">התחלה</th>
-        <th data-sort-type="text">סיום</th>
-        <th data-sort-type="number">משך (שנ׳)</th>
-        <th data-sort-type="number">התראות</th>
+        <th data-sort-type="number">משך</th>
+        <th data-sort-type="number">התראות צינור<br><span class="small fw-normal text-muted">שורות ב־pipeline_alerts</span></th>
         <th data-sort-type="text">מקורות</th>
         <th data-sort-type="text" class="ltr">התקדמות</th>
         <th data-sort-none></th>
@@ -71,11 +71,32 @@
         <td class="ltr">{{ it.id }}</td>
         <td>{{ it.run_type }}</td>
         <td>{{ it.status }}</td>
-        <td class="small"><span class="ltr">{{ it.started_at }}</span></td>
-        <td class="small"><span class="ltr">{{ it.finished_at or '—' }}</span></td>
-        <td class="small ltr">{% if it.duration_secs is not none %}{{ it.duration_secs }}{% else %}—{% endif %}</td>
-        <td class="small ltr">{{ it.alert_count }}</td>
-        <td class="small"><span class="ltr">{{ it.sources_succeeded }}/{{ it.sources_total }}</span> (קהילה: {{ it.community_sources_succeeded }})</td>
+        <td class="small">
+          <span class="badge {% if it.health_tier == 'warning' %}bg-warning text-dark{% else %}bg-{{ it.health_tier }}{% endif %}">{{ it.health_line }}</span>
+          <div class="text-muted mt-1" style="font-size:0.72rem;">{{ it.health_summary }}</div>
+        </td>
+        <td class="small ltr" data-sort-value="{{ it.started_at.isoformat() if it.started_at else '' }}">{{ it.started_at_short }}</td>
+        <td class="small ltr" data-sort-value="{{ it.duration_sort_value }}">{{ it.duration_display }}</td>
+        <td class="small ltr text-center" data-sort-value="{{ it.alert_count }}">
+          {% if it.alert_count > 0 %}
+          <a href="{{ url_for('runs.run_detail', run_id=it.id) }}#pipeline-alerts" class="text-decoration-none">
+            {% if it.alert_error_count %}<span class="text-danger fw-semibold">{{ it.alert_error_count }} שגיאה</span>{% endif %}
+            {% if it.alert_warning_count %}{% if it.alert_error_count %} · {% endif %}<span class="text-warning fw-semibold">{{ it.alert_warning_count }} אזהרה</span>{% endif %}
+            {% if it.alert_count > it.alert_error_count + it.alert_warning_count %}
+              {% if it.alert_error_count or it.alert_warning_count %} · {% endif %}
+              <span class="text-muted">{{ it.alert_count - it.alert_error_count - it.alert_warning_count }} מידע</span>
+            {% endif %}
+          </a>
+          {% else %}<span class="text-muted">0</span>{% endif %}
+        </td>
+        <td class="small">
+          <div>בתכנון <span class="ltr fw-semibold">{{ it.sources_total }}</span> · fetch בפועל <span class="ltr fw-semibold">{{ it.sfr_count }}</span></div>
+          <div class="text-muted" style="font-size:0.75rem;">הצליחו <span class="ltr">{{ it.sources_succeeded }}</span> · נכשלו <span class="ltr">{{ it.sources_failed }}</span> · קהילה <span class="ltr">{{ it.community_sources_succeeded }}</span></div>
+          {% if it.sources_agg %}
+          <div class="text-break mt-1" style="font-size:0.72rem;" title="{{ it.sources_agg }}"><span class="ltr">{{ it.sources_agg }}</span></div>
+          {% endif %}
+          <div class="mt-1"><a href="{{ url_for('runs.run_detail', run_id=it.id) }}#per-source" class="small">רשימה מלאה בפירוט</a></div>
+        </td>
         <td class="small ltr text-break">
           {% if it.progress %}
             <span class="text-primary">{{ it.progress.phase or '—' }}</span>

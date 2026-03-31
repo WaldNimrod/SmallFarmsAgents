@@ -36,6 +36,82 @@ def run_ingestion_cmd(
     )
 
 
+@cli.command("catalog_renormalize")
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    default=False,
+    help="Only print how many unresolvable rows would be re-queued; no DB writes",
+)
+@click.option("--skip-normalize", is_flag=True, default=False, help="Only re-queue rows")
+@click.option("--skip-aggregate", is_flag=True, default=False)
+@click.option("--skip-publish", is_flag=True, default=False)
+@click.option(
+    "--aggregate-date",
+    default=None,
+    help="YYYY-MM-DD for AggregatorEngine (default: today UTC)",
+)
+@click.option(
+    "--output-dir",
+    default="output/public",
+    show_default=True,
+    help="Publish output directory",
+)
+def catalog_renormalize_cmd(
+    dry_run: bool,
+    skip_normalize: bool,
+    skip_aggregate: bool,
+    skip_publish: bool,
+    aggregate_date: str | None,
+    output_dir: str,
+) -> None:
+    """After new products/aliases: re-queue unresolvable raw rows, normalize, aggregate, publish.
+
+    Resets non-quarantined `raw_extracted_items` from `unresolvable` to `extracted`, runs the
+    normalizer on all pending rows, rolls up `daily_aggregates` for one day (default today UTC),
+    then writes public artifacts. Does not reset already-normalized rows.
+    """
+    from datetime import date as date_cls
+
+    from organic_market_agent.db.session import SessionFactory
+    from organic_market_agent.maintenance.catalog_renormalize import (
+        count_unresolvable_requeueable,
+        run_catalog_renormalize,
+    )
+
+    if dry_run:
+        with SessionFactory() as session:
+            n = count_unresolvable_requeueable(session)
+        click.echo(f"Would re-queue {n} raw_extracted_items (unresolvable → extracted).")
+        return
+
+    d = date_cls.fromisoformat(aggregate_date) if aggregate_date else None
+    stats = run_catalog_renormalize(
+        skip_normalize=skip_normalize,
+        skip_aggregate=skip_aggregate,
+        skip_publish=skip_publish,
+        aggregate_date=d,
+        output_dir=Path(output_dir),
+    )
+    click.echo(f"Re-queued unresolvable rows: {stats.unresolvable_requeued}")
+    if not skip_normalize:
+        click.echo(
+            f"Normalizer: resolved={stats.normalizer_resolved} "
+            f"unresolvable={stats.normalizer_unresolvable} skipped={stats.normalizer_skipped}"
+        )
+    if not skip_aggregate:
+        click.echo(
+            f"Aggregator ({stats.aggregate_date}): "
+            f"created={stats.aggregate_created} updated={stats.aggregate_updated}"
+        )
+    if not skip_publish:
+        if stats.publish_ok:
+            click.echo(f"PublishEngine: OK → {output_dir}")
+        else:
+            click.echo(f"PublishEngine: skipped or failed: {stats.publish_error}", err=True)
+            raise SystemExit(1)
+
+
 @cli.command("run_normalizer")
 @click.option("--source-id", default=None, type=int)
 @click.option("--ingestion-run-id", default=None, type=int)
