@@ -175,6 +175,11 @@ def test_t08_rules_disable_with_login(logged_in_client, db_session):
 
 
 def test_t09_runs_trigger_creates_ingestion_run(logged_in_client, db_session):
+    from organic_market_agent.scheduler.run_ingestion import _get_active_sources_with_profiles
+
+    if not _get_active_sources_with_profiles(db_session):
+        pytest.skip("No active sources with fetch profiles")
+
     before = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
     with patch("organic_market_agent.admin.routes.runs.run_pipeline"):
         r = logged_in_client.post("/runs/trigger", follow_redirects=False)
@@ -208,6 +213,8 @@ def test_t09b_runs_trigger_passes_source_code_to_run_pipeline(logged_in_client, 
         )
     )
     expected = int(expected or 0)
+    if expected == 0:
+        pytest.skip("No active SRC001 with fetch profile")
 
     with patch("organic_market_agent.admin.routes.runs.threading.Thread", _ImmediateThread):
         with patch("organic_market_agent.admin.routes.runs.run_pipeline") as rp:

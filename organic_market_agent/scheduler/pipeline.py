@@ -41,9 +41,10 @@ def run_pipeline(
                 pairs = [(s, p) for s, p in pairs if s.code == source_code]
             if not pairs:
                 msg = (
-                    f"No active source matching code={source_code!r}"
+                    f"No active source+fetch_profile for code={source_code!r} at pipeline start "
+                    f"(source or profile may have been deactivated after the run was queued)."
                     if source_code
-                    else "No active sources with fetch profiles"
+                    else "No active sources with fetch profiles at pipeline start"
                 )
                 logger.warning("run_pipeline: %s (ingestion_run_id=%s)", msg, ingestion_run_id)
                 ingestion_run.sources_total = 0

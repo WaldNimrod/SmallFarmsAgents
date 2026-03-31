@@ -3,12 +3,64 @@
 {% block title %}הרצה {{ run.id }}{% endblock %}
 {% block content %}
 <h1 class="h4 mb-2">הרצה <span class="ltr">#{{ run.id }}</span></h1>
-<p class="text-muted small">סוג: {{ run.run_type }} · סטטוס: {{ run.status }} · הופעל ע״י: {{ run.triggered_by }}</p>
-{% if duration_secs is not none %}
-<p class="small">משך הרצה: <span class="ltr">{{ duration_secs }}</span> שניות</p>
+<p class="text-muted small mb-3">
+  סוג: <span class="ltr">{{ run.run_type }}</span>
+  · סטטוס: <strong>{{ run_status_he }}</strong> <span class="text-muted">(<span class="ltr">{{ run.status }}</span>)</span>
+  · הופעל ע״י: <span class="ltr">{{ run.triggered_by }}</span>
+</p>
+{% if run.notes and run.notes.startswith('single_source:') %}
+{% set single_code = run.notes.split(':', 1)[1] %}
+<div class="alert alert-info py-2 px-3 small mb-3" role="status">
+  <strong>ריצת מקור בודד</strong> — הוגדרה מהאדמין רק עבור <span class="ltr fw-semibold">{{ single_code }}</span>.
+  שאר המקורות לא נכללים; מוני ההרצה (<span class="ltr">sources_total</span> וכו׳) מתייחסים לזוגות מקור+פרופיל שתואמים לקוד הזה בלבד.
+</div>
 {% endif %}
-{% if alerts %}
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body py-3">
+    <h2 class="h6 text-muted mb-3">סיכום מונים (בטבלת ההרצה)</h2>
+    <div class="row g-2 small">
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">התחלה</span><br>
+        <span class="ltr fw-semibold">{% if run.started_at %}{{ run.started_at }}{% else %}—{% endif %}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">סיום</span><br>
+        <span class="ltr fw-semibold">{% if run.finished_at %}{{ run.finished_at }}{% else %}—{% endif %}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">משך</span><br>
+        <span class="ltr fw-semibold">{% if duration_secs is not none %}{{ duration_secs }} שני׳{% else %}—{% endif %}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">מקורות בתכנון</span><br>
+        <span class="ltr fw-semibold">{{ run.sources_total }}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">הצליחו</span><br>
+        <span class="ltr fw-semibold text-success">{{ run.sources_succeeded }}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">נכשלו</span><br>
+        <span class="ltr fw-semibold text-danger">{{ run.sources_failed }}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">קהילה שהצליחה</span><br>
+        <span class="ltr fw-semibold">{{ run.community_sources_succeeded }}</span>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">ריצות fetch בפועל</span><br>
+        <span class="ltr fw-semibold">{{ per_source|length }}</span>
+      </div>
+    </div>
+    {% if run.notes %}
+    <p class="small mb-0 mt-3"><span class="text-muted">הערות:</span> {{ run.notes }}</p>
+    {% endif %}
+  </div>
+</div>
+
 <h2 class="h6 mt-4">התראות צינור</h2>
+{% if alerts %}
 {{ table_summary_bar(alerts|length, alert_level_segments, note='לפי רמה') }}
 <ul class="list-group mb-4">
   {% for a in alerts %}
@@ -20,39 +72,70 @@
     {% else %}
     <span class="badge bg-info text-dark">{{ a.level }}</span>
     {% endif %}
-    <span class="flex-grow-1">{{ a.message }}</span>
+    <span class="flex-grow-1 text-break">{{ a.message }}</span>
     <span class="small text-muted ltr">{{ a.created_at }}</span>
   </li>
   {% endfor %}
 </ul>
+{% else %}
+<div class="alert alert-light border mb-4 small" role="status">
+  אין רשומות ב־<code class="small">pipeline_alerts</code> להרצה זו.
+  {% if run.status == 'failed' %}
+  אם ההרצה נכשלה לפני יצירת ריצות מקור — לעיתים מופיעה כאן הודעה; אחרת בדקו את <strong>עמודת השגיאה</strong> בטבלת המקורות למטה או את לוגי השרת.
+  {% endif %}
+</div>
 {% endif %}
-<h2 class="h6 mt-4">לפי מקור</h2>
+
+<h2 class="h6 mt-4">לפי מקור (ריצת fetch)</h2>
+<p class="small text-muted mb-2">
+  כל שורה היא <span class="ltr">source_fetch_run</span> אחת. עמודת <strong>שגיאה</strong> מגיעה מהאוסף כשהבקשה נכשלת — זה בדרך כלל המקום הכי ברור לראות למה מקור לא עלה.
+</p>
+{% if not per_source %}
+<div class="alert alert-warning mb-3 small" role="status">
+  <strong>אין ריצות מקור</strong> — לא נוצרו שורות ב־<code>source_fetch_runs</code> עבור מזהה ההרצה הזה.
+  זה קורה אם הצינור נעצר לפני לולאת האיסוף (למשל אין מקורות פעילים, או סינון מקור שהחזיר רשימה ריקה). בדקו התראות למעלה ואת <span class="ltr">sources_total</span> בסיכום.
+</div>
+{% else %}
 {{ table_summary_bar(per_source|length, run_fetch_segments, note='לפי סטטוס fetch למקור') }}
 <div class="table-responsive">
-  <table class="table table-sm table-bordered bg-white table-sortable">
+  <table class="table table-sm table-bordered bg-white table-sortable align-middle">
     <thead class="table-light">
       <tr>
         <th data-sort-type="text">קוד</th>
         <th data-sort-type="text">שם</th>
         <th data-sort-type="text">סטטוס fetch</th>
-        <th data-sort-type="number">פריטים</th>
-        <th data-sort-type="number">נורמל</th>
-        <th data-sort-type="number">לא ניתן</th>
+        <th class="text-end" data-sort-type="number">HTTP</th>
+        <th class="text-end" data-sort-type="number">ניסיונות</th>
+        <th data-sort-type="text">סיום fetch</th>
+        <th data-sort-type="text">שגיאה (אוסף)</th>
+        <th class="text-end" data-sort-type="number">פריטים</th>
+        <th class="text-end" data-sort-type="number">נורמל</th>
+        <th class="text-end" data-sort-type="number">לא ניתן</th>
       </tr>
     </thead>
     <tbody>
       {% for s in per_source %}
-      <tr>
+      <tr class="{% if s.status == 'failed' %}table-danger{% elif s.status == 'skipped' %}table-secondary{% endif %}">
         <td class="ltr">{{ s.code }}</td>
         <td>{{ s.name }}</td>
-        <td>{{ s.status }}</td>
-        <td class="ltr">{{ s.items }}</td>
-        <td class="ltr">{{ s.resolved }}</td>
-        <td class="ltr">{{ s.unresolvable }}</td>
+        <td>{{ sfr_status_he.get(s.status, s.status) }} <span class="text-muted small">(<span class="ltr">{{ s.status }}</span>)</span></td>
+        <td class="text-end ltr">{% if s.http_status is not none %}{{ s.http_status }}{% else %}—{% endif %}</td>
+        <td class="text-end ltr">{{ s.retry_count }}</td>
+        <td class="small"><span class="ltr">{% if s.fetch_finished_at %}{{ s.fetch_finished_at }}{% else %}—{% endif %}</span></td>
+        <td class="small text-break" style="max-width: 28rem;">
+          {% if s.error_message %}
+          <span class="text-danger" title="{{ s.error_message }}">{{ s.error_message }}</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="text-end ltr">{{ s.items }}</td>
+        <td class="text-end ltr">{{ s.resolved }}</td>
+        <td class="text-end ltr">{{ s.unresolvable }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-<p><a href="{{ url_for('runs.runs_list') }}" class="btn btn-outline-secondary btn-sm">← חזרה</a></p>
+{% endif %}
+
+<p class="mt-3"><a href="{{ url_for('runs.runs_list') }}" class="btn btn-outline-secondary btn-sm">← חזרה</a></p>
 {% endblock %}

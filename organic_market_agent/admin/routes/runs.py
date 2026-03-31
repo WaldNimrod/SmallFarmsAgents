@@ -112,13 +112,18 @@ def run_detail(run_id: int):
             SELECT s.code, s.name, sfr.status,
                    COUNT(rei.id) AS items,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized') AS resolved,
-                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable,
+                   sfr.http_status,
+                   sfr.error_message,
+                   sfr.finished_at,
+                   sfr.retry_count
             FROM source_fetch_runs sfr
             JOIN sources s ON s.id = sfr.source_id
             LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
             WHERE sfr.ingestion_run_id = :rid
-            GROUP BY s.id, s.code, s.name, sfr.status, sfr.id
-            ORDER BY s.code
+            GROUP BY s.id, s.code, s.name, sfr.status, sfr.id,
+                     sfr.http_status, sfr.error_message, sfr.finished_at, sfr.retry_count
+            ORDER BY s.code, sfr.id
             """
         ),
         {"rid": run_id},
@@ -131,6 +136,10 @@ def run_detail(run_id: int):
             "items": int(r[3] or 0),
             "resolved": int(r[4] or 0),
             "unresolvable": int(r[5] or 0),
+            "http_status": r[6],
+            "error_message": (r[7] or "").strip() or None,
+            "fetch_finished_at": r[8],
+            "retry_count": int(r[9] or 0),
         }
         for r in rows
     ]
@@ -157,6 +166,7 @@ def run_detail(run_id: int):
     run_fetch_segments = [
         (_SFR_STATUS_HE.get(st, st), fr[st]) for st in sorted(fr.keys())
     ]
+    run_status_he = _IR_STATUS_HE.get(run.status, run.status)
     return render_template(
         "admin/run_detail.html",
         run=run,
@@ -165,6 +175,8 @@ def run_detail(run_id: int):
         duration_secs=duration_secs,
         run_fetch_segments=run_fetch_segments,
         alert_level_segments=alert_level_segments,
+        run_status_he=run_status_he,
+        sfr_status_he=_SFR_STATUS_HE,
     )
 
 
@@ -182,9 +194,24 @@ def runs_trigger():
         pairs = [(s, p) for s, p in pairs if s.code == source_code]
     sources_total = len(pairs)
 
+    if not pairs:
+        if source_code:
+            flash(
+                f"לא נמצא מקור פעיל עם קוד «{source_code}» ופרופיל איסוף פעיל — לא נוצרה הרצה. "
+                "בדקו שהמקור והפרופיל פעילים ברשימת המקורות.",
+                "warning",
+            )
+        else:
+            flash(
+                "אין מקורות פעילים עם פרופיל איסוף — לא נוצרה הרצה.",
+                "warning",
+            )
+        return redirect(url_for("runs.runs_list"))
+
     sched = session.scalars(sa.select(SchedulerConfig).limit(1)).first()
     retry_attempts = sched.retry_attempts if sched is not None else 2
 
+    run_notes = f"single_source:{source_code}" if source_code else None
     run = IngestionRun(
         run_type="manual",
         triggered_by="admin",
@@ -194,6 +221,7 @@ def runs_trigger():
         sources_succeeded=0,
         sources_failed=0,
         community_sources_succeeded=0,
+        notes=run_notes,
     )
     session.add(run)
     session.flush()
