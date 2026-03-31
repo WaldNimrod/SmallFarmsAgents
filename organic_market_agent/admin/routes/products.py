@@ -53,10 +53,24 @@ def product_list():
     total_products = int(
         session.execute(text("SELECT COUNT(*) FROM products")).scalar_one() or 0
     )
+    products_db_active = int(
+        session.execute(
+            text("SELECT COUNT(*) FROM products WHERE is_active = true")
+        ).scalar_one()
+        or 0
+    )
+    products_db_inactive = int(
+        session.execute(
+            text("SELECT COUNT(*) FROM products WHERE is_active = false")
+        ).scalar_one()
+        or 0
+    )
     return render_template(
         "admin/products.html",
         products=products,
         products_total=total_products,
+        products_db_active=products_db_active,
+        products_db_inactive=products_db_inactive,
     )
 
 

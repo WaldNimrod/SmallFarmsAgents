@@ -47,9 +47,35 @@ def alias_list():
     ic = session.execute(
         text("SELECT COUNT(*) FROM product_aliases WHERE is_active = false")
     ).scalar_one()
+    inactive_rows = session.execute(
+        text(
+            """
+            SELECT pa.id, pa.alias_text, p.code, p.canonical_name_he,
+                   COALESCE(s.code, 'גלובלי') AS scope, pa.created_at
+            FROM product_aliases pa
+            JOIN products p ON p.id = pa.product_id
+            LEFT JOIN sources s ON s.id = pa.source_id
+            WHERE pa.is_active = false
+            ORDER BY pa.alias_text
+            LIMIT 500
+            """
+        )
+    ).all()
+    inactive_items = [
+        {
+            "id": r[0],
+            "alias_text": r[1],
+            "product_code": r[2],
+            "canonical_name_he": r[3],
+            "scope": r[4],
+            "created_at": r[5],
+        }
+        for r in inactive_rows
+    ]
     return render_template(
         "admin/aliases.html",
         items=items,
+        inactive_items=inactive_items,
         aliases_total_active=int(ac or 0),
         aliases_total_inactive=int(ic or 0),
     )

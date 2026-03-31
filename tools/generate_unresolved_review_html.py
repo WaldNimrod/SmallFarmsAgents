@@ -4,6 +4,9 @@
 Uses the same query as Admin GET /unresolved (top 200 by count).
 Each row includes a feedback field; export JSON/TSV for team / automation.
 
+This HTML is a working snapshot: filling fields does not persist to PostgreSQL
+until aliases/rules are created via Admin or migrations from exported data.
+
 Usage (from repo root, with DATABASE_URL or .env):
     python3 tools/generate_unresolved_review_html.py
 """

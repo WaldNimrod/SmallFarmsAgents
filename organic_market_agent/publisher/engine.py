@@ -37,11 +37,13 @@ class PublishEngine:
         report_date: date | None = None,
         generated_at: datetime | None = None,
         reference_now: datetime | None = None,
-    ) -> None:
+    ) -> dict[str, Any]:
         """Generate public_report.json, public_report.html, manifest.json in output_dir.
 
         generated_at: timestamp written into artifacts (default UTC now).
         reference_now: clock for staleness in manifest (default UTC now); override in tests.
+
+        Returns a small summary dict for pipeline logging.
         """
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -158,3 +160,10 @@ class PublishEngine:
             len(products_out),
             output_dir,
         )
+        return {
+            "report_date": report_date.isoformat(),
+            "product_count": len(products_out),
+            "community_sources": int(comm_src),
+            "staleness_level": manifest["staleness_level"],
+            "output_dir": str(output_dir.resolve()),
+        }

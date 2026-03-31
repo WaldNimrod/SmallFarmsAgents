@@ -2,9 +2,13 @@
 {% from "admin/macros/table_summary.html" import table_summary_bar %}
 {% block title %}אליאסים{% endblock %}
 {% block content %}
-<h1 class="h4 mb-3">אליאסים פעילים</h1>
-<p class="text-muted small"><a href="{{ url_for('aliases.alias_new') }}" class="btn btn-sm btn-success">+ אליאס חדש</a></p>
-{{ table_summary_bar(items|length, [('פעיל (במסד)', aliases_total_active), ('לא פעיל (במסד)', aliases_total_inactive)], note='רשימה: עד 500 אליאסים פעילים') }}
+<h1 class="h4 mb-3">אליאסים</h1>
+<p class="text-muted small mb-2">
+  <a href="{{ url_for('aliases.alias_new') }}" class="btn btn-sm btn-success">+ אליאס חדש</a>
+  <span class="ms-2">רק <strong>פעילים</strong> משמשים בנורמליזציה. למטה גם רשימת לא פעילים (מוזמנים במסד).</span>
+</p>
+{{ table_summary_bar(items|length, [('פעיל (במסד)', aliases_total_active), ('לא פעיל (במסד)', aliases_total_inactive)], note='טבלה זו: עד 500 פעילים', full_count=aliases_total_active) }}
+<h2 class="h6 text-muted mt-4">פעילים</h2>
 <div class="table-responsive">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
@@ -33,4 +37,33 @@
     </tbody>
   </table>
 </div>
+
+{% if inactive_items %}
+<h2 class="h6 text-muted mt-4">לא פעילים (לא נטענים בנורמליזציה)</h2>
+{{ table_summary_bar(inactive_items|length, None, note='מקסימום 500 שורות בטבלה זו', full_count=aliases_total_inactive) }}
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white table-sortable table-secondary">
+    <thead class="table-light">
+      <tr>
+        <th data-sort-type="text">אליאס</th>
+        <th data-sort-type="text">מוצר</th>
+        <th data-sort-type="text">היקף</th>
+        <th data-sort-type="text">נוצר</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in inactive_items %}
+      <tr>
+        <td class="fw-semibold text-muted">{{ it.alias_text }}</td>
+        <td><span class="ltr">{{ it.product_code }}</span> — {{ it.canonical_name_he }}</td>
+        <td>{{ it.scope }}</td>
+        <td class="small text-muted"><span class="ltr">{{ it.created_at }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% elif aliases_total_inactive > 0 %}
+<p class="small text-muted">יש {{ aliases_total_inactive }} אליאסים לא פעילים במסד אך לא הוצגו (מעל מגבלת התצוגה).</p>
+{% endif %}
 {% endblock %}

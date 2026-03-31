@@ -42,8 +42,22 @@ def qa_flags_list():
     total_flags = int(
         session.execute(text("SELECT COUNT(*) FROM observation_flags")).scalar_one() or 0
     )
+    qa_flags_db_active = int(
+        session.execute(
+            text("SELECT COUNT(*) FROM observation_flags WHERE is_active = true")
+        ).scalar_one()
+        or 0
+    )
+    qa_flags_db_inactive = int(
+        session.execute(
+            text("SELECT COUNT(*) FROM observation_flags WHERE is_active = false")
+        ).scalar_one()
+        or 0
+    )
     return render_template(
         "admin/qa_flags.html",
         items=items,
         qa_flags_total=total_flags,
+        qa_flags_db_active=qa_flags_db_active,
+        qa_flags_db_inactive=qa_flags_db_inactive,
     )

@@ -42,6 +42,7 @@ class IngestionRun(Base):
     community_sources_succeeded: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     triggered_by: Mapped[str] = mapped_column(VARCHAR(100), nullable=False, server_default="cron")
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    progress_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
     )

@@ -3,8 +3,7 @@
 {% block title %}מקורות{% endblock %}
 {% block content %}
 <h1 class="h4 mb-4">📡 מקורות נתונים</h1>
-{% set s_act = sources|selectattr('is_active')|list|length %}
-{{ table_summary_bar(sources|length, [('פעיל', s_act), ('לא פעיל', sources|length - s_act)], note='מוצגות עד 200 · סה״כ במסד: ' ~ sources_total) }}
+{{ table_summary_bar(sources|length, [('פעיל במסד', sources_db_active), ('לא פעיל במסד', sources_db_inactive)], note='מקסימום 200 שורות בטבלה', full_count=sources_total) }}
 <div class="table-responsive">
   <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">

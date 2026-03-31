@@ -15,11 +15,21 @@
   שאר המקורות לא נכללים; מוני ההרצה (<span class="ltr">sources_total</span> וכו׳) מתייחסים לזוגות מקור+פרופיל שתואמים לקוד הזה בלבד.
 </div>
 {% endif %}
+{% if run.progress_json %}
+<div class="alert alert-secondary py-2 px-3 small mb-3" role="status">
+  <strong class="d-block mb-1">התקדמות צינור (<span class="ltr">progress_json</span>)</strong>
+  <pre class="small mb-0 ltr text-start">{{ run.progress_json | tojson }}</pre>
+</div>
+{% endif %}
 
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body py-3">
     <h2 class="h6 text-muted mb-3">סיכום מונים (בטבלת ההרצה)</h2>
     <div class="row g-2 small">
+      <div class="col-6 col-md-4 col-lg-3">
+        <span class="text-muted">נוצר במסד</span><br>
+        <span class="ltr fw-semibold">{{ run.created_at }}</span>
+      </div>
       <div class="col-6 col-md-4 col-lg-3">
         <span class="text-muted">התחלה</span><br>
         <span class="ltr fw-semibold">{% if run.started_at %}{{ run.started_at }}{% else %}—{% endif %}</span>
@@ -49,14 +59,24 @@
         <span class="ltr fw-semibold">{{ run.community_sources_succeeded }}</span>
       </div>
       <div class="col-6 col-md-4 col-lg-3">
-        <span class="text-muted">ריצות fetch בפועל</span><br>
-        <span class="ltr fw-semibold">{{ per_source|length }}</span>
+        <span class="text-muted">ריצות fetch בפועל (מסד)</span><br>
+        <span class="ltr fw-semibold">{{ sfr_count }}</span>
       </div>
     </div>
     {% if run.notes %}
     <p class="small mb-0 mt-3"><span class="text-muted">הערות:</span> {{ run.notes }}</p>
     {% endif %}
   </div>
+</div>
+
+<h2 class="h6 mt-4">אבחון מהיר</h2>
+<div class="alert alert-secondary small mb-4" role="note">
+  <ul class="mb-0 ps-3">
+    <li><span class="ltr">COUNT(source_fetch_runs)</span> עבור הריצה: <strong class="ltr">{{ sfr_count }}</strong>. אם 0 — לא נוצרה אף בקשת איסוף תחת מזהה ההרצה.</li>
+    <li>אם <span class="ltr">sources_total &gt; 0</span> אבל <span class="ltr">sfr_count = 0</span> והסטטוס עדיין <span class="ltr">running</span>: לרוב התהליך ברקע לא הגיע ללולאת האיסוף (כיבוי שרת, חריגה לפני <code>CollectorEngine</code>, או תור שמעולם לא רץ).</li>
+    <li>אם <span class="ltr">sources_total = 0</span> בזמן הטריגר — הריצה לא אמורה להיווצר (ולא אמור להתחיל צינור); אם בכל זאת קיימת, זה מצב ישן או נתיב חריג.</li>
+    <li>התראות <span class="ltr">pipeline_alerts</span> נוצרות עכשיו גם כשהצינור נכשל בחריגה; אם אין התראה ואין <span class="ltr">source_fetch_runs</span> — כנראה קוד ישן לפני התיקון, או כשל לפני רישום התראה.</li>
+  </ul>
 </div>
 
 <h2 class="h6 mt-4">התראות צינור</h2>
@@ -80,10 +100,47 @@
 {% else %}
 <div class="alert alert-light border mb-4 small" role="status">
   אין רשומות ב־<code class="small">pipeline_alerts</code> להרצה זו.
-  {% if run.status == 'failed' %}
-  אם ההרצה נכשלה לפני יצירת ריצות מקור — לעיתים מופיעה כאן הודעה; אחרת בדקו את <strong>עמודת השגיאה</strong> בטבלת המקורות למטה או את לוגי השרת.
+  {% if run.status in ('failed', 'running', 'partial') %}
+  בריצות שנכשלו או נתקעו לפני גרסה עדכנית של הצינור לא תמיד נרשמה כאן שגיאה — בדקו את <strong>יומן טכני</strong> למטה ואת לוגי השרת.
   {% endif %}
 </div>
+{% endif %}
+
+<h2 class="h6 mt-4">יומן טכני (<span class="ltr">log_entries</span>)</h2>
+<p class="small text-muted mb-2">עד 100 רשומות אחרונות המקושרות למזהה ההרצה (כשהקוד רושם לטבלה).</p>
+{% if run_logs %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-bordered bg-white align-middle" style="font-size:0.8rem;">
+    <thead class="table-light">
+      <tr>
+        <th class="ltr">id</th>
+        <th>רמה</th>
+        <th>מודול</th>
+        <th>הודעה</th>
+        <th class="ltr">extra</th>
+        <th>זמן</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lg in run_logs %}
+      <tr class="{% if lg.level == 'ERROR' or lg.level == 'CRITICAL' %}table-danger{% elif lg.level == 'WARNING' %}table-warning{% endif %}">
+        <td class="ltr">{{ lg.id }}</td>
+        <td class="small">{{ lg.level }}</td>
+        <td class="small ltr text-break">{{ lg.module }}</td>
+        <td class="small text-break">{{ lg.message }}</td>
+        <td class="small ltr text-break">
+          {% if lg.extra_json %}
+          <pre class="mb-0 small text-muted" style="max-width:28rem;white-space:pre-wrap;">{{ lg.extra_json }}</pre>
+          {% else %}—{% endif %}
+        </td>
+        <td class="small text-muted ltr">{{ lg.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-light border mb-4 small">אין רשומות <span class="ltr">log_entries</span> למזהה זה.</div>
 {% endif %}
 
 <h2 class="h6 mt-4">לפי מקור (ריצת fetch)</h2>
@@ -92,8 +149,8 @@
 </p>
 {% if not per_source %}
 <div class="alert alert-warning mb-3 small" role="status">
-  <strong>אין ריצות מקור</strong> — לא נוצרו שורות ב־<code>source_fetch_runs</code> עבור מזהה ההרצה הזה.
-  זה קורה אם הצינור נעצר לפני לולאת האיסוף (למשל אין מקורות פעילים, או סינון מקור שהחזיר רשימה ריקה). בדקו התראות למעלה ואת <span class="ltr">sources_total</span> בסיכום.
+  <strong>אין ריצות מקור</strong> — <span class="ltr">source_fetch_runs = {{ sfr_count }}</span>.
+  סיבות נפוצות: (א) הצינור לא רץ בפועל או נקטע לפני <code>CollectorEngine</code>; (ב) נוצרה ריצה ב־DB אבל ה־thread נעצר (הפסקת שרת אדמין); (ג) במקרה הישן — חריגה בצינור בלי רישום ל־<code>pipeline_alerts</code> (תוקן בקוד עדכני).
 </div>
 {% else %}
 {{ table_summary_bar(per_source|length, run_fetch_segments, note='לפי סטטוס fetch למקור') }}

@@ -21,3 +21,7 @@ data_snapshots/first_full_scan_2026-03-30/SNAPSHOT_MANIFEST.json
 dist/
 build/
 *.egg-info/
+# Local DB dumps (use scripts/backup_postgres.sh)
+backups/*.dump
+backups/*.sql
+backups/*.sql.gz

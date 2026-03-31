@@ -13,7 +13,7 @@ from organic_market_agent.parsers.easyfarm_catalog import EasyFarmCatalogParser
 from organic_market_agent.parsers.official_wholesale import OfficialWholesaleParser
 from organic_market_agent.parsers.simple_product_grid import SimpleProductGridParser
 from organic_market_agent.utils.exceptions import ParserError
-from organic_market_agent.utils.log_persist import persist_error_log
+from organic_market_agent.utils.log_persist import persist_error_log, persist_log
 from organic_market_agent.utils.logging_setup import get_logger
 
 logger = get_logger(__name__)
@@ -50,6 +50,19 @@ class ParserEngine:
                 "No parser for normalizer_type=%r (source=%s). Skipping.",
                 normalizer_type,
                 source.code,
+            )
+            persist_log(
+                session,
+                level="WARNING",
+                module="parsers.engine",
+                message=(
+                    f"No parser registered for normalizer_type={normalizer_type!r} "
+                    f"(source={source.code})"
+                ),
+                ingestion_run_id=ingestion_run_id,
+                entity_type="source",
+                entity_id=source.id,
+                extra={"source_code": source.code, "normalizer_type": normalizer_type},
             )
             return 0
 
@@ -109,6 +122,35 @@ class ParserEngine:
                 "ParserEngine: skipped %d incomplete items (no name or price) for source=%s",
                 skipped_count,
                 source.code,
+            )
+        if not raw_items:
+            persist_log(
+                session,
+                level="WARNING",
+                module="parsers.engine",
+                message=f"Parser returned zero rows for source={source.code} raw_asset={raw_asset.id}",
+                ingestion_run_id=ingestion_run_id,
+                entity_type="raw_asset",
+                entity_id=raw_asset.id,
+                extra={"source_code": source.code, "normalizer_type": normalizer_type},
+            )
+        elif not valid_items and raw_items:
+            persist_log(
+                session,
+                level="WARNING",
+                module="parsers.engine",
+                message=(
+                    f"Parser produced {len(raw_items)} row(s) but none had name+price "
+                    f"(source={source.code} raw_asset={raw_asset.id})"
+                ),
+                ingestion_run_id=ingestion_run_id,
+                entity_type="raw_asset",
+                entity_id=raw_asset.id,
+                extra={
+                    "source_code": source.code,
+                    "normalizer_type": normalizer_type,
+                    "raw_row_count": len(raw_items),
+                },
             )
 
         db_items: list[RawExtractedItem] = [

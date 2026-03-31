@@ -4,6 +4,10 @@
 Uses the same ordering as Admin GET /products: display_order, then code.
 Ensures every row shown under /products appears on the catalog review page.
 
+This HTML file is a read-only snapshot for review. Editing the file or its
+form fields does NOT write to PostgreSQL — apply catalog changes via Alembic
+seeds/migrations or Admin CRUD where implemented.
+
 Usage (from repo root, with DATABASE_URL or .env):
     python3 tools/generate_catalog_review_html.py
 """
@@ -238,6 +242,7 @@ def build_html(catalog: list[dict], generated_at: str, count: int) -> str:
     לרענון: <code class="ltr">python3 tools/generate_catalog_review_html.py</code>
     <br>
     מלאו רק בשורות שדורשות שינוי. הדביקו את הפלט בצ’אט — פורמט JSON לניתוח אוטומטי.
+    <br><strong>חשוב:</strong> שינוי בדף זה לא מעדכן את המסד — רק יצוא/מיגרציה/אדמין מעדכנים את PostgreSQL.
   </p>
 
   <div class="list" id="list"></div>

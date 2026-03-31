@@ -127,6 +127,94 @@ def run_viewer_cmd(host: str, port: int, directory: Path) -> None:
     serve_directory(host, port, directory)
 
 
+@cli.command("prune_raw_pipeline")
+@click.option(
+    "--timezone",
+    default="Asia/Jerusalem",
+    show_default=True,
+    help="IANA zone for 'today' when selecting the run to keep",
+)
+@click.option(
+    "--keep-ingestion-run-id",
+    type=int,
+    default=None,
+    help="Keep this run id instead of auto-picking latest run started local-today",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    default=False,
+    help="Print plan only; no deletes",
+)
+@click.option(
+    "--yes",
+    "confirm",
+    is_flag=True,
+    default=False,
+    help="Required to perform deletes (safety)",
+)
+def prune_raw_pipeline_cmd(
+    timezone: str,
+    keep_ingestion_run_id: int | None,
+    dry_run: bool,
+    confirm: bool,
+) -> None:
+    """Remove raw pipeline data for all ingestion runs except the kept one.
+
+    Default: keep the latest ingestion_run whose started_at falls on today's
+    calendar date in --timezone. Deletes normalized_observations, raw_extracted_items,
+    raw_assets, source_fetch_runs, pipeline_alerts, log_entries for other runs,
+    then those ingestion_runs. Clears publish_runs.ingestion_run_id for pruned runs.
+
+    Does not touch products, aliases, sources, or daily_aggregates — re-run
+    run_aggregator if you need aggregates aligned with remaining observations.
+    """
+    from sqlalchemy import text
+
+    from organic_market_agent.db.session import engine
+    from organic_market_agent.maintenance.prune_raw_pipeline import (
+        build_plan,
+        execute_prune,
+        resolve_keep_run_id,
+    )
+
+    with engine.connect() as conn:
+        keep = keep_ingestion_run_id
+        if keep is None:
+            keep = resolve_keep_run_id(conn, timezone=timezone)
+        if keep is None:
+            raise click.ClickException(
+                "No ingestion_run found for local today — pass --keep-ingestion-run-id ID"
+            )
+        row = conn.execute(
+            text(
+                "SELECT id, run_type, status, started_at FROM ingestion_runs WHERE id = :k"
+            ),
+            {"k": keep},
+        ).one()
+        plan = build_plan(conn, keep)
+
+    click.echo(f"Keeping ingestion_run id={keep} ({row[1]} / {row[2]} / started {row[3]})")
+    click.echo(
+        f"Would remove: runs={plan.doomed_ingestion_run_count} "
+        f"sfr={plan.doomed_sfr_count} no={plan.doomed_no_count} "
+        f"rei={plan.doomed_rei_count} ra={plan.doomed_ra_count}"
+    )
+
+    if dry_run:
+        click.echo("Dry run — no changes.")
+        return
+
+    if not confirm:
+        raise click.ClickException("Refusing to delete without --yes (or use --dry-run)")
+
+    with engine.begin() as conn:
+        stats = execute_prune(conn, keep)
+    click.echo("Done. Rowcounts:")
+    for k, v in sorted(stats.items()):
+        click.echo(f"  {k}: {v}")
+
+
 @cli.command("run_admin")
 @click.option("--host", default="127.0.0.1", show_default=True)
 @click.option("--port", default=5000, type=int, show_default=True)

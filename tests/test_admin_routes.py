@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 import pytest
@@ -186,6 +187,11 @@ def test_t09_runs_trigger_creates_ingestion_run(logged_in_client, db_session):
     assert r.status_code in (302, 303)
     after = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
     assert after > before
+    db_session.expire_all()
+    last = db_session.execute(sa.select(IngestionRun).order_by(IngestionRun.id.desc()).limit(1)).scalar_one()
+    last.status = "failed"
+    last.finished_at = datetime.now(timezone.utc)
+    db_session.commit()
 
 
 class _ImmediateThread:
@@ -235,6 +241,64 @@ def test_t09b_runs_trigger_passes_source_code_to_run_pipeline(logged_in_client, 
         sa.select(IngestionRun).order_by(IngestionRun.id.desc()).limit(1)
     ).scalar_one()
     assert last.sources_total == expected
+    last.status = "failed"
+    last.finished_at = datetime.now(timezone.utc)
+    db_session.commit()
+
+
+def test_t09c_runs_trigger_rejected_when_already_running(logged_in_client, db_session):
+    from organic_market_agent.scheduler.run_ingestion import _get_active_sources_with_profiles
+
+    if not _get_active_sources_with_profiles(db_session):
+        pytest.skip("No active sources with fetch profiles")
+
+    stuck = IngestionRun(
+        run_type="manual",
+        triggered_by="test",
+        status="running",
+        started_at=datetime.now(timezone.utc),
+        sources_total=1,
+        sources_succeeded=0,
+        sources_failed=0,
+        community_sources_succeeded=0,
+    )
+    db_session.add(stuck)
+    db_session.commit()
+    before = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
+    with patch("organic_market_agent.admin.routes.runs.run_pipeline"):
+        r = logged_in_client.post("/runs/trigger", follow_redirects=False)
+    assert r.status_code in (302, 303)
+    after = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
+    assert int(after) == int(before)
+    stuck2 = db_session.get(IngestionRun, stuck.id)
+    assert stuck2 is not None
+    assert stuck2.status == "running"
+    stuck2.status = "failed"
+    stuck2.finished_at = datetime.now(timezone.utc)
+    db_session.commit()
+
+
+def test_t09d_runs_stop_active_marks_running_failed(logged_in_client, db_session):
+    ir = IngestionRun(
+        run_type="manual",
+        triggered_by="test",
+        status="running",
+        started_at=datetime.now(timezone.utc),
+        sources_total=1,
+        sources_succeeded=0,
+        sources_failed=0,
+        community_sources_succeeded=0,
+    )
+    db_session.add(ir)
+    db_session.commit()
+    rid = ir.id
+    r = logged_in_client.post("/runs/stop-active", follow_redirects=False)
+    assert r.status_code in (302, 303)
+    db_session.expire_all()
+    ir2 = db_session.get(IngestionRun, rid)
+    assert ir2 is not None
+    assert ir2.status == "failed"
+    assert ir2.finished_at is not None
 
 
 def test_t10_product_disable_alias_with_login(logged_in_client, db_session):
@@ -265,6 +329,22 @@ def test_t10_product_disable_alias_with_login(logged_in_client, db_session):
         )
     ).scalar_one_or_none()
     assert aud is not None
+
+
+def test_t12_unresolved_export_json_requires_login(client, db_session):
+    r = client.get("/unresolved/export.json")
+    assert r.status_code in (302, 401)
+
+
+def test_t13_unresolved_export_json_ok_when_logged_in(logged_in_client, db_session):
+    r = logged_in_client.get("/unresolved/export.json?limit=5")
+    assert r.status_code == 200
+    assert r.is_json
+    body = r.get_json()
+    assert body.get("schema") == "unresolved_top_aggregate_v1"
+    assert "generated_at" in body
+    assert "items" in body
+    assert isinstance(body["items"], list)
 
 
 def test_t11_audit_lists_prior_actions(logged_in_client, db_session):

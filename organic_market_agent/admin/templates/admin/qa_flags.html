@@ -8,8 +8,7 @@
   <strong>כרגע אין בצינור כתיבה לטבלה הזו</strong> (מנוע ה־QA באגרגטור רק כותב אזהרות ללוג). כשייכנסו יצירת דגלים מהממשק או שמירת ממצאי QA למסד — השורות יופיעו כאן.
   סטטוס דגל על תצפית בודדת (<span class="ltr">ok / review / ignored / hidden</span>) מופיע בדף פירוט מוצר בטבלת התצפיות — זה שדה אחר ב־<span class="ltr">normalized_observations</span>.
 </p>
-{% set qa_on = items|selectattr('is_active')|list|length %}
-{{ table_summary_bar(items|length, [('פעיל', qa_on), ('לא פעיל', items|length - qa_on)], note='מוצגות 200 · סה״כ דגלים במסד: ' ~ qa_flags_total) }}
+{{ table_summary_bar(items|length, [('פעיל במסד', qa_flags_db_active), ('לא פעיל במסד', qa_flags_db_inactive)], note='מקסימום 200 שורות · הפילוח לפי כל הטבלה', full_count=qa_flags_total) }}
 {% if not items %}
 <div class="alert alert-light border mb-3" role="status">
   אין רשומות — הטבלה במסד ריקה. זה תקין עד שיופעל מקור נתונים לדגלים (למשל טופס אדמין או שלב פרסיסטנטי אחרי QA).

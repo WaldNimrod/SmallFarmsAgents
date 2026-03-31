@@ -7,14 +7,24 @@ from datetime import datetime, timezone
 
 import click
 import sqlalchemy as sa
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from organic_market_agent.collectors.engine import CollectorEngine
 from organic_market_agent.db.session import SessionFactory
-from organic_market_agent.models import IngestionRun, NormalizerProfile, Source, SourceFetchProfile
+from organic_market_agent.models import (
+    IngestionRun,
+    NormalizerProfile,
+    Source,
+    SourceFetchProfile,
+    SourceFetchRun,
+)
 from organic_market_agent.normalizer.engine import NormalizerEngine
 from organic_market_agent.parsers.engine import ParserEngine
+from organic_market_agent.scheduler.pipeline_cancel import PipelineRunCancelled, is_cancelled
+from organic_market_agent.scheduler.run_progress import merge_run_progress
 from organic_market_agent.utils.config import config
+from organic_market_agent.utils.log_persist import persist_log
 from organic_market_agent.utils.logging_setup import get_logger
 
 logger = get_logger(__name__)
@@ -49,6 +59,7 @@ def execute_ingestion_for_run(
     pairs: list[tuple[Source, SourceFetchProfile]],
     *,
     retry_attempts: int = 2,
+    defer_terminal_status: bool = False,
 ) -> None:
     """Collect + parse for each source; update ingestion_run counters (no commit).
 
@@ -57,6 +68,10 @@ def execute_ingestion_for_run(
 
     On HTTP/collector failure, each source is retried up to ``retry_attempts``
     additional times (1s pause between attempts).
+
+    If ``defer_terminal_status`` is True (full background pipeline), keep
+    ``status='running'`` and leave ``finished_at`` unset until the pipeline
+    finishes; raises ``PipelineRunCancelled`` if cooperative cancel is set.
     """
     ingestion_run.sources_total = len(pairs)
     succeeded = 0
@@ -66,10 +81,58 @@ def execute_ingestion_for_run(
 
     max_tries = 1 + max(0, retry_attempts)
 
-    for source, profile in pairs:
+    persist_log(
+        session,
+        level="INFO",
+        module="scheduler.run_ingestion",
+        message=f"Ingestion phase started ({len(pairs)} sources, retry_attempts={retry_attempts})",
+        ingestion_run_id=ingestion_run.id,
+        extra={
+            "sources_total": len(pairs),
+            "retry_attempts": retry_attempts,
+            "source_codes": [s.code for s, _ in pairs],
+        },
+    )
+    merge_run_progress(
+        session,
+        ingestion_run.id,
+        phase="ingestion",
+        source_index=0,
+        source_total=len(pairs),
+        current_source_code=None,
+        defer_terminal_status=defer_terminal_status,
+    )
+
+    for i, (source, profile) in enumerate(pairs, start=1):
+        if is_cancelled(ingestion_run.id):
+            ingestion_run.sources_succeeded = succeeded
+            ingestion_run.sources_failed = failed
+            ingestion_run.community_sources_succeeded = community_succeeded
+            ingestion_run.finished_at = datetime.now(timezone.utc)
+            ingestion_run.status = "failed"
+            merge_run_progress(
+                session,
+                ingestion_run.id,
+                phase="cancelled",
+                source_index=i - 1,
+                source_total=len(pairs),
+                current_source_code=source.code,
+            )
+            persist_log(
+                session,
+                level="WARNING",
+                module="scheduler.run_ingestion",
+                message=f"Ingestion cancelled before source {source.code} ({i}/{len(pairs)})",
+                ingestion_run_id=ingestion_run.id,
+                extra={"source_index": i, "source_total": len(pairs), "source_code": source.code},
+            )
+            raise PipelineRunCancelled()
+
         raw_asset = None
         status = "failed"
+        attempts_used = 0
         for attempt in range(max_tries):
+            attempts_used = attempt + 1
             raw_asset, status = collector_engine.run(
                 session,
                 ingestion_run.id,
@@ -81,10 +144,27 @@ def execute_ingestion_for_run(
             if status == "failed" and attempt < max_tries - 1:
                 time.sleep(1)
 
+        fetch_row = session.scalars(
+            select(SourceFetchRun)
+            .where(
+                SourceFetchRun.ingestion_run_id == ingestion_run.id,
+                SourceFetchRun.source_id == source.id,
+            )
+            .order_by(SourceFetchRun.id.desc())
+            .limit(1)
+        ).first()
+        fr_id = fetch_row.id if fetch_row else None
+        fetch_status = fetch_row.status if fetch_row else status
+        fetch_err = (fetch_row.error_message if fetch_row else None) or None
+
+        normalizer_type: str | None = None
+        parser_items = 0
+        parser_note: str | None = None
+
         if status == "success" and raw_asset is not None:
             normalizer_type = _get_normalizer_type(session, source.id)
             if normalizer_type:
-                parser_engine.run(
+                parser_items = parser_engine.run(
                     session,
                     raw_asset,
                     source,
@@ -93,6 +173,8 @@ def execute_ingestion_for_run(
                     charset_hint=profile.charset_hint,
                     selector_overrides=profile.selector_profile,
                 )
+            else:
+                parser_note = "no_active_normalizer_profile"
             succeeded += 1
             if source.market_scope == "community":
                 community_succeeded += 1
@@ -101,12 +183,87 @@ def execute_ingestion_for_run(
         elif status == "skipped":
             skipped += 1
 
+        row_level = "INFO"
+        if fetch_status == "failed" or parser_note == "no_active_normalizer_profile":
+            row_level = "WARNING"
+        persist_log(
+            session,
+            level=row_level,
+            module="scheduler.run_ingestion",
+            message=(
+                f"Source {source.code}: fetch={fetch_status} "
+                f"items_extracted={parser_items}"
+                + (f" ({parser_note})" if parser_note else "")
+            ),
+            ingestion_run_id=ingestion_run.id,
+            entity_type="source",
+            entity_id=source.id,
+            extra={
+                "source_code": source.code,
+                "fetch_status": fetch_status,
+                "source_fetch_run_id": fr_id,
+                "attempts_used": attempts_used,
+                "fetch_retry_count": fetch_row.retry_count if fetch_row else None,
+                "raw_asset_id": raw_asset.id if raw_asset else None,
+                "items_extracted": parser_items,
+                "normalizer_type": normalizer_type,
+                "parser_note": parser_note,
+                "fetch_error_message": fetch_err[:800] if fetch_err else None,
+                "fetch_mode": profile.fetch_mode,
+                "platform_family": profile.platform_family,
+            },
+        )
+        merge_run_progress(
+            session,
+            ingestion_run.id,
+            phase="ingestion",
+            source_index=i,
+            source_total=len(pairs),
+            current_source_code=source.code,
+        )
+
     ingestion_run.sources_succeeded = succeeded
     ingestion_run.sources_failed = failed
     ingestion_run.community_sources_succeeded = community_succeeded
-    ingestion_run.finished_at = datetime.now(timezone.utc)
-    ingestion_run.status = (
+    logical_status = (
         "completed" if failed == 0 else ("partial" if succeeded > 0 else "failed")
+    )
+    if defer_terminal_status:
+        ingestion_run.status = "running"
+        ingestion_run.finished_at = None
+    else:
+        ingestion_run.finished_at = datetime.now(timezone.utc)
+        ingestion_run.status = logical_status
+
+    persist_log(
+        session,
+        level="INFO",
+        module="scheduler.run_ingestion",
+        message=(
+            f"Ingestion phase finished: logical_status={logical_status} "
+            f"ok={succeeded} failed={failed} skipped={skipped} "
+            f"community_ok={community_succeeded}"
+            + (" (terminal status deferred for full pipeline)" if defer_terminal_status else "")
+        ),
+        ingestion_run_id=ingestion_run.id,
+        extra={
+            "sources_total": ingestion_run.sources_total,
+            "sources_succeeded": succeeded,
+            "sources_failed": failed,
+            "sources_skipped": skipped,
+            "community_sources_succeeded": community_succeeded,
+            "run_status": logical_status,
+            "defer_terminal_status": defer_terminal_status,
+        },
+    )
+    merge_run_progress(
+        session,
+        ingestion_run.id,
+        phase="ingestion_done",
+        source_index=len(pairs),
+        source_total=len(pairs),
+        current_source_code=None,
+        ingestion_logical_status=logical_status,
     )
 
 

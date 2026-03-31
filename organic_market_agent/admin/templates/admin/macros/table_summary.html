@@ -1,7 +1,16 @@
-{# Shared line above data tables: total rows + optional status breakdown. #}
-{% macro table_summary_bar(total, segments=None, note=None) %}
-  <div class="table-summary-bar small mb-2">
-    <span class="table-summary-total"><span class="table-summary-num">{{ total }}</span> {% if total == 1 %}רשומה{% else %}רשומות{% endif %}</span>
+{# Shared line above data tables: rows on screen + optional status breakdown.
+   Pass full_count when the query uses LIMIT so the bar shows "displayed of total in DB" when they differ. #}
+{% macro table_summary_bar(total, segments=None, note=None, full_count=None) %}
+  <div class="table-summary-bar small mb-2" data-summary-displayed="{{ total }}"{% if full_count is not none %} data-summary-full="{{ full_count }}"{% endif %}>
+    <span class="table-summary-total">
+      {% if full_count is not none and full_count > total %}
+        מוצגות <span class="table-summary-num">{{ total }}</span>
+        מתוך <span class="table-summary-num">{{ full_count }}</span>
+        {% if full_count == 1 %}רשומה במסד{% else %}רשומות במסד{% endif %}
+      {% else %}
+        <span class="table-summary-num">{{ total }}</span> {% if total == 1 %}רשומה{% else %}רשומות{% endif %}
+      {% endif %}
+    </span>
     {% if segments %}
       <span class="table-summary-sep" aria-hidden="true">|</span>
       <span class="table-summary-segments">

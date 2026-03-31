@@ -2,6 +2,7 @@
 {% block title %}דשבורד{% endblock %}
 {% block content %}
 <h1 class="h4 mb-4">📊 דשבורד ניטור</h1>
+<p class="small text-muted mb-3 ltr text-break">DB: <code>{{ database_url_display }}</code></p>
 
 {% if unread_alerts %}
 <div class="card mb-4 border-0 shadow-sm border-start border-warning border-3">
@@ -56,8 +57,9 @@
   <div class="col-sm-6 col-md-4">
     <div class="card h-100 border-0 shadow-sm">
       <div class="card-body">
-        <div class="text-muted small mb-1">מוצרים בקטלוג</div>
+        <div class="text-muted small mb-1">מוצרים בקטלוג (פעילים)</div>
         <div class="fs-2 fw-bold">{{ total_products_catalog }}</div>
+        <div class="text-muted small">סה״כ שורות במסד: <span class="ltr">{{ total_products_all }}</span></div>
       </div>
     </div>
   </div>
@@ -66,7 +68,7 @@
       <div class="card-body">
         <div class="text-muted small mb-1">מוצרים עם תצפיות</div>
         <div class="fs-2 fw-bold text-primary">{{ products_covered }}</div>
-        <div class="text-muted small">מתוך {{ total_products_catalog }}</div>
+        <div class="text-muted small">מתוך <span class="ltr">{{ total_products_all }}</span> במסד (פעילים: {{ total_products_catalog }})</div>
       </div>
     </div>
   </div>

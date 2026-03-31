@@ -8,7 +8,7 @@
 {% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">הרצות אינג׳סט (50 האחרונות)</h1>
-{{ table_summary_bar(items|length, run_status_segments, note='מוצגות 50 אחרונות · סה״כ הרצות במסד: ' ~ runs_total) }}
+{{ table_summary_bar(items|length, run_status_segments, note='ממוין לפי מזהה יורד · מקס׳ 50 שורות', full_count=runs_total) }}
 {% if current_user.is_authenticated %}
 <form method="post" action="{{ url_for('runs.runs_trigger') }}" class="mb-4 border rounded p-3 bg-white">
   <div class="row g-2 align-items-end">
@@ -39,6 +39,10 @@
     </div>
   </div>
 </form>
+<form method="post" action="{{ url_for('runs.runs_stop_active') }}" class="mb-3" onsubmit='return confirm("לסמן כל הרצות רץ כנכשלות ולשלוח ביטול לתהליך?");'>
+  <button type="submit" class="btn btn-outline-danger btn-sm">עצור כל הרצה פעילה</button>
+  <span class="small text-muted ms-2">מסמן ב־DB כנכשל; תהליך שרץ באותו שרת נבדק בין שלבי צינור.</span>
+</form>
 {% else %}
 <p class="text-muted small">יש להתחבר כדי להפעיל הרצה.</p>
 {% endif %}
@@ -57,6 +61,7 @@
         <th data-sort-type="number">משך (שנ׳)</th>
         <th data-sort-type="number">התראות</th>
         <th data-sort-type="text">מקורות</th>
+        <th data-sort-type="text" class="ltr">התקדמות</th>
         <th data-sort-none></th>
       </tr>
     </thead>
@@ -71,6 +76,15 @@
         <td class="small ltr">{% if it.duration_secs is not none %}{{ it.duration_secs }}{% else %}—{% endif %}</td>
         <td class="small ltr">{{ it.alert_count }}</td>
         <td class="small"><span class="ltr">{{ it.sources_succeeded }}/{{ it.sources_total }}</span> (קהילה: {{ it.community_sources_succeeded }})</td>
+        <td class="small ltr text-break">
+          {% if it.progress %}
+            <span class="text-primary">{{ it.progress.phase or '—' }}</span>
+            {% if it.progress.source_total %}
+              <br><span class="text-muted">{{ it.progress.source_index or 0 }}/{{ it.progress.source_total }}</span>
+              {% if it.progress.current_source_code %}<span class="text-muted"> · {{ it.progress.current_source_code }}</span>{% endif %}
+            {% endif %}
+          {% else %}—{% endif %}
+        </td>
         <td><a href="{{ url_for('runs.run_detail', run_id=it.id) }}">פירוט</a></td>
       </tr>
       {% endfor %}

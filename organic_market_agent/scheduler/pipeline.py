@@ -9,15 +9,45 @@ from organic_market_agent.db.session import SessionFactory
 from organic_market_agent.models import IngestionRun, PipelineAlert
 from organic_market_agent.normalizer.engine import NormalizerEngine
 from organic_market_agent.publisher.engine import PublishEngine
+from organic_market_agent.scheduler.pipeline_cancel import (
+    PipelineRunCancelled,
+    is_cancelled,
+    register_pipeline_run,
+    unregister_pipeline_run,
+)
 from organic_market_agent.scheduler.run_ingestion import (
     _get_active_sources_with_profiles,
     execute_ingestion_for_run,
 )
+from organic_market_agent.scheduler.run_progress import merge_run_progress
 from organic_market_agent.utils.config import config
 from organic_market_agent.utils.exceptions import PublishAbortError
+from organic_market_agent.utils.log_persist import persist_error_log, persist_log
 from organic_market_agent.utils.logging_setup import get_logger
 
 logger = get_logger(__name__)
+
+
+def _exit_if_cancelled(ingestion_run_id: int) -> bool:
+    """If cancel was requested, mark run failed when still running and return True."""
+    if not is_cancelled(ingestion_run_id):
+        return False
+    try:
+        with SessionFactory() as session:
+            run = session.get(IngestionRun, ingestion_run_id)
+            if run is not None and run.status == "running":
+                run.status = "failed"
+                run.finished_at = datetime.now(timezone.utc)
+                note = (run.notes or "").strip()
+                run.notes = (note + " " if note else "") + "marked_failed:cancelled"
+                merge_run_progress(session, ingestion_run_id, phase="cancelled")
+                session.commit()
+            elif run is not None:
+                merge_run_progress(session, ingestion_run_id, phase="cancelled")
+                session.commit()
+    except Exception:
+        logger.exception("run_pipeline: cancel cleanup failed for ingestion_run_id=%s", ingestion_run_id)
+    return True
 
 
 def run_pipeline(
@@ -30,11 +60,24 @@ def run_pipeline(
 ) -> None:
     """Background worker: collect/parse, optional normalizer, aggregator (today UTC), optional publish."""
     config.ensure_dirs()
+    registered = False
     try:
         with SessionFactory() as session:
             ingestion_run = session.get(IngestionRun, ingestion_run_id)
             if ingestion_run is None:
                 logger.error("run_pipeline: IngestionRun id=%s not found", ingestion_run_id)
+                with SessionFactory() as s2:
+                    s2.add(
+                        PipelineAlert(
+                            level="error",
+                            message=(
+                                f"run_pipeline: IngestionRun id={ingestion_run_id} not found "
+                                "(removed or never committed before worker started)."
+                            ),
+                            ingestion_run_id=None,
+                        )
+                    )
+                    s2.commit()
                 return
             pairs = _get_active_sources_with_profiles(session)
             if source_code:
@@ -60,49 +103,250 @@ def run_pipeline(
                         ingestion_run_id=ingestion_run_id,
                     )
                 )
+                persist_log(
+                    session,
+                    level="ERROR",
+                    module="scheduler.pipeline",
+                    message=msg,
+                    ingestion_run_id=ingestion_run_id,
+                    extra={"source_filter": source_code},
+                )
                 session.commit()
                 return
 
+            register_pipeline_run(ingestion_run_id)
+            registered = True
+
+            merge_run_progress(
+                session,
+                ingestion_run_id,
+                phase="pipeline_start",
+                skip_normalize=skip_normalize,
+                skip_publish=skip_publish,
+            )
+            persist_log(
+                session,
+                level="INFO",
+                module="scheduler.pipeline",
+                message="Full pipeline: starting ingestion phase",
+                ingestion_run_id=ingestion_run_id,
+                extra={
+                    "source_filter": source_code,
+                    "active_pairs": len(pairs),
+                    "source_codes": [s.code for s, _ in pairs],
+                    "skip_normalize": skip_normalize,
+                    "skip_publish": skip_publish,
+                    "retry_attempts": retry_attempts,
+                },
+            )
+
             execute_ingestion_for_run(
-                session, ingestion_run, pairs, retry_attempts=retry_attempts
+                session,
+                ingestion_run,
+                pairs,
+                retry_attempts=retry_attempts,
+                defer_terminal_status=True,
+            )
+            persist_log(
+                session,
+                level="INFO",
+                module="scheduler.pipeline",
+                message=(
+                    f"Ingestion stored: logical counters ok={ingestion_run.sources_succeeded} "
+                    f"failed={ingestion_run.sources_failed}"
+                ),
+                ingestion_run_id=ingestion_run_id,
+                extra={
+                    "sources_succeeded": ingestion_run.sources_succeeded,
+                    "sources_failed": ingestion_run.sources_failed,
+                    "community_sources_succeeded": ingestion_run.community_sources_succeeded,
+                },
             )
             session.commit()
 
+        if _exit_if_cancelled(ingestion_run_id):
+            return
+
         if not skip_normalize:
             with SessionFactory() as session:
-                NormalizerEngine().run(session, ingestion_run_id=ingestion_run_id)
+                merge_run_progress(session, ingestion_run_id, phase="normalize")
+                session.commit()
+            ncounts: dict[str, int] = {}
+            with SessionFactory() as session:
+                ncounts = NormalizerEngine().run(session, ingestion_run_id=ingestion_run_id)
+            with SessionFactory() as log_session:
+                persist_log(
+                    log_session,
+                    level="INFO",
+                    module="scheduler.pipeline",
+                    message=(
+                        f"Normalizer finished: resolved={ncounts.get('resolved', 0)} "
+                        f"unresolvable={ncounts.get('unresolvable', 0)} "
+                        f"skipped={ncounts.get('skipped', 0)}"
+                    ),
+                    ingestion_run_id=ingestion_run_id,
+                    extra=dict(ncounts),
+                )
+                merge_run_progress(
+                    log_session,
+                    ingestion_run_id,
+                    phase="normalize_done",
+                    normalizer_resolved=ncounts.get("resolved"),
+                    normalizer_unresolvable=ncounts.get("unresolvable"),
+                    normalizer_skipped=ncounts.get("skipped"),
+                )
+                log_session.commit()
+
+        if _exit_if_cancelled(ingestion_run_id):
+            return
 
         agg_date = datetime.now(timezone.utc).date()
         with SessionFactory() as session:
-            AggregatorEngine().run(session, agg_date)
+            merge_run_progress(session, ingestion_run_id, phase="aggregate", aggregate_date=agg_date.isoformat())
+            session.commit()
+        agg_result: dict[str, int] = {}
+        with SessionFactory() as session:
+            agg_result = AggregatorEngine().run(session, agg_date)
+        with SessionFactory() as log_session:
+            persist_log(
+                log_session,
+                level="INFO",
+                module="scheduler.pipeline",
+                message=(
+                    f"Aggregator finished: created={agg_result.get('created', 0)} "
+                    f"updated={agg_result.get('updated', 0)} "
+                    f"date={agg_date.isoformat()}"
+                ),
+                ingestion_run_id=ingestion_run_id,
+                extra={**agg_result, "aggregate_date": agg_date.isoformat()},
+            )
+            merge_run_progress(
+                log_session,
+                ingestion_run_id,
+                phase="aggregate_done",
+                aggregate_created=agg_result.get("created"),
+                aggregate_updated=agg_result.get("updated"),
+            )
+            log_session.commit()
 
+        if _exit_if_cancelled(ingestion_run_id):
+            return
+
+        publish_summary: dict[str, object] | None = None
+        publish_aborted: str | None = None
         if not skip_publish:
             with SessionFactory() as session:
+                merge_run_progress(session, ingestion_run_id, phase="publish")
+                session.commit()
+            with SessionFactory() as session:
                 try:
-                    PublishEngine().run(session, Path("output/public"))
+                    publish_summary = PublishEngine().run(session, Path("output/public"))
                 except PublishAbortError as exc:
                     logger.warning("run_pipeline: publish aborted: %s", exc)
+                    publish_aborted = str(exc)
+                    with SessionFactory() as s3:
+                        s3.add(
+                            PipelineAlert(
+                                level="warning",
+                                message=f"Publish aborted: {exc}",
+                                ingestion_run_id=ingestion_run_id,
+                            )
+                        )
+                        persist_log(
+                            s3,
+                            level="WARNING",
+                            module="scheduler.pipeline",
+                            message=f"Publish aborted: {exc}",
+                            ingestion_run_id=ingestion_run_id,
+                            extra={"reason": str(exc)},
+                        )
+                        s3.commit()
 
-        # Wall-clock end of full pipeline (ingestion already set an earlier finished_at).
         with SessionFactory() as session:
             run = session.get(IngestionRun, ingestion_run_id)
             if run is not None:
+                if run.status == "running":
+                    run.status = (
+                        "completed"
+                        if run.sources_failed == 0
+                        else ("partial" if run.sources_succeeded > 0 else "failed")
+                    )
                 run.finished_at = datetime.now(timezone.utc)
+                merge_run_progress(
+                    session,
+                    ingestion_run_id,
+                    phase="done",
+                    skip_normalize=skip_normalize,
+                    skip_publish=skip_publish,
+                    publish_summary=publish_summary,
+                    publish_aborted=publish_aborted,
+                )
                 session.commit()
-    except Exception:
+        with SessionFactory() as log_session:
+            persist_log(
+                log_session,
+                level="INFO",
+                module="scheduler.pipeline",
+                message="Full pipeline: wall-clock finished",
+                ingestion_run_id=ingestion_run_id,
+                extra={
+                    "skip_normalize": skip_normalize,
+                    "skip_publish": skip_publish,
+                    "publish_summary": publish_summary,
+                    "publish_aborted": publish_aborted,
+                },
+            )
+            log_session.commit()
+    except PipelineRunCancelled:
+        logger.info("run_pipeline: cooperative cancel ingestion_run_id=%s", ingestion_run_id)
+        try:
+            with SessionFactory() as session:
+                run = session.get(IngestionRun, ingestion_run_id)
+                if run is not None and run.status == "running":
+                    run.status = "failed"
+                    run.finished_at = datetime.now(timezone.utc)
+                    note = (run.notes or "").strip()
+                    run.notes = (note + " " if note else "") + "marked_failed:cancelled"
+                    merge_run_progress(session, ingestion_run_id, phase="cancelled")
+                    session.commit()
+        except Exception:
+            logger.exception(
+                "run_pipeline: could not finalize cancelled ingestion_run_id=%s", ingestion_run_id
+            )
+    except Exception as exc:
         logger.exception("run_pipeline failed for ingestion_run_id=%s", ingestion_run_id)
+        err_msg = f"{type(exc).__name__}: {exc}"
+        if len(err_msg) > 1800:
+            err_msg = err_msg[:1797] + "..."
         try:
             with SessionFactory() as session:
                 run = session.get(IngestionRun, ingestion_run_id)
                 if run is not None:
                     run.finished_at = datetime.now(timezone.utc)
                     run.status = "failed"
+                    session.add(
+                        PipelineAlert(
+                            level="error",
+                            message=f"run_pipeline failed: {err_msg}",
+                            ingestion_run_id=ingestion_run_id,
+                        )
+                    )
+                    persist_error_log(
+                        session,
+                        module="scheduler.pipeline",
+                        message=f"run_pipeline failed: {err_msg}",
+                        ingestion_run_id=ingestion_run_id,
+                        extra={"exception_type": type(exc).__name__},
+                    )
+                    merge_run_progress(session, ingestion_run_id, phase="failed", error=err_msg[:500])
                     session.commit()
         except Exception:
             logger.exception(
                 "run_pipeline: could not mark ingestion_run_id=%s failed", ingestion_run_id
             )
     finally:
+        if registered:
+            unregister_pipeline_run(ingestion_run_id)
         try:
             with SessionFactory() as session:
                 run = session.get(IngestionRun, ingestion_run_id)
@@ -110,6 +354,26 @@ def run_pipeline(
                     run.finished_at = datetime.now(timezone.utc)
                     if run.status == "running":
                         run.status = "failed"
+                    session.add(
+                        PipelineAlert(
+                            level="error",
+                            message=(
+                                "Pipeline finished without setting finished_at (worker may have "
+                                "been interrupted before the success path, or an early exit left "
+                                "the run stuck). Run marked failed."
+                            ),
+                            ingestion_run_id=ingestion_run_id,
+                        )
+                    )
+                    persist_error_log(
+                        session,
+                        module="scheduler.pipeline",
+                        message=(
+                            "Pipeline finished without finished_at; run marked failed "
+                            "(worker interrupt or early exit)."
+                        ),
+                        ingestion_run_id=ingestion_run_id,
+                    )
                     session.commit()
         except Exception:
             logger.exception(

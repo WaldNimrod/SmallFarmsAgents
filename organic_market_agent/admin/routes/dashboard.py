@@ -7,9 +7,18 @@ import sqlalchemy as sa
 from flask import Blueprint, g, render_template
 from sqlalchemy import text
 
+from organic_market_agent.db.session import engine
 from organic_market_agent.models import IngestionRun, NormalizedObservation, Product, Source
 
 bp = Blueprint("dashboard", __name__)
+
+
+def _database_url_display() -> str:
+    """Sanitized DB URL for confirming admin and CLI use the same target."""
+    try:
+        return engine.url.render_as_string(hide_password=True)
+    except Exception:
+        return "(unavailable)"
 
 
 def _json_chart_resolution(session):
@@ -84,8 +93,11 @@ def index():
         sa.select(sa.func.count()).select_from(NormalizedObservation)
     ).scalar_one()
     last_run = session.execute(sa.select(sa.func.max(IngestionRun.finished_at))).scalar_one()
-    total_products = session.execute(
+    total_products_active = session.execute(
         sa.select(sa.func.count()).select_from(Product).where(Product.is_active.is_(True))
+    ).scalar_one()
+    total_products_all = session.execute(
+        sa.select(sa.func.count()).select_from(Product)
     ).scalar_one()
 
     res = session.execute(
@@ -131,11 +143,13 @@ def index():
         "admin/dashboard.html",
         active_sources=active_sources,
         products_covered=products_covered,
-        total_products_catalog=total_products,
+        total_products_catalog=total_products_active,
+        total_products_all=total_products_all,
         total_observations=total_obs,
         last_run=last_run,
         resolution_pct=resolution_pct,
         chart_resolution_json=chart_resolution_json,
         chart_sources_json=chart_sources_json,
         unread_alerts=unread_alerts,
+        database_url_display=_database_url_display(),
     )

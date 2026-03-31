@@ -1,6 +1,7 @@
 """Ingestion runs list, detail, and background pipeline trigger."""
 from __future__ import annotations
 
+import json
 import threading
 from collections import Counter
 from functools import partial
@@ -15,6 +16,8 @@ from sqlalchemy import text
 from organic_market_agent.admin.audit import audit_write
 from organic_market_agent.models import IngestionRun, SchedulerConfig
 from organic_market_agent.scheduler.pipeline import run_pipeline
+from organic_market_agent.scheduler.pipeline_cancel import request_cancel
+from organic_market_agent.scheduler.reconcile import reconcile_stale_running_runs
 from organic_market_agent.scheduler.run_ingestion import _get_active_sources_with_profiles
 
 bp = Blueprint("runs", __name__)
@@ -44,7 +47,8 @@ def runs_list():
             SELECT id, run_type, status, started_at, finished_at,
                    sources_total, sources_succeeded, sources_failed, community_sources_succeeded,
                    (SELECT COUNT(*) FROM pipeline_alerts pa
-                    WHERE pa.ingestion_run_id = ir.id) AS alert_count
+                    WHERE pa.ingestion_run_id = ir.id) AS alert_count,
+                   ir.progress_json
             FROM ingestion_runs ir
             ORDER BY id DESC
             LIMIT 50
@@ -74,6 +78,7 @@ def runs_list():
                 "sources_failed": r[7],
                 "community_sources_succeeded": r[8],
                 "alert_count": int(r[9] or 0),
+                "progress": r[10] if isinstance(r[10], dict) else None,
             }
         )
     st_counter = Counter(i["status"] for i in items)
@@ -143,6 +148,16 @@ def run_detail(run_id: int):
         }
         for r in rows
     ]
+    sfr_count = int(
+        session.execute(
+            text(
+                "SELECT COUNT(*) FROM source_fetch_runs WHERE ingestion_run_id = :rid"
+            ),
+            {"rid": run_id},
+        ).scalar_one()
+        or 0
+    )
+
     alert_rows = session.execute(
         text(
             """
@@ -156,6 +171,32 @@ def run_detail(run_id: int):
     ).all()
     alerts = [
         {"id": a[0], "level": a[1], "message": a[2], "created_at": a[3]} for a in alert_rows
+    ]
+
+    log_rows = session.execute(
+        text(
+            """
+            SELECT id, level, module, message, created_at, extra_json
+            FROM log_entries
+            WHERE ingestion_run_id = :rid
+            ORDER BY created_at DESC
+            LIMIT 100
+            """
+        ),
+        {"rid": run_id},
+    ).all()
+    run_logs = [
+        {
+            "id": r[0],
+            "level": r[1],
+            "module": r[2],
+            "message": r[3],
+            "created_at": r[4],
+            "extra_json": (
+                json.dumps(r[5], ensure_ascii=False, default=str) if r[5] is not None else None
+            ),
+        }
+        for r in log_rows
     ]
     al_c = Counter(a["level"] for a in alerts)
     alert_level_segments = [(lvl, al_c[lvl]) for lvl in sorted(al_c.keys())]
@@ -177,6 +218,8 @@ def run_detail(run_id: int):
         alert_level_segments=alert_level_segments,
         run_status_he=run_status_he,
         sfr_status_he=_SFR_STATUS_HE,
+        sfr_count=sfr_count,
+        run_logs=run_logs,
     )
 
 
@@ -208,8 +251,23 @@ def runs_trigger():
             )
         return redirect(url_for("runs.runs_list"))
 
-    sched = session.scalars(sa.select(SchedulerConfig).limit(1)).first()
+    sched = session.scalars(
+        sa.select(SchedulerConfig).order_by(SchedulerConfig.id).limit(1).with_for_update()
+    ).first()
     retry_attempts = sched.retry_attempts if sched is not None else 2
+
+    n_running = int(
+        session.scalar(
+            sa.select(sa.func.count()).select_from(IngestionRun).where(IngestionRun.status == "running")
+        )
+        or 0
+    )
+    if n_running > 0:
+        flash(
+            "כבר קיימת הרצה פעילה (סטטוס «רץ»). המתן לסיום או עצור אותה לפני הפעלה חדשה.",
+            "danger",
+        )
+        return redirect(url_for("runs.runs_list"))
 
     run_notes = f"single_source:{source_code}" if source_code else None
     run = IngestionRun(
@@ -251,4 +309,42 @@ def runs_trigger():
     thread = threading.Thread(target=target, daemon=True)
     thread.start()
     flash("הרצה הופעלה ברקע.", "success")
+    return redirect(url_for("runs.runs_list"))
+
+
+@bp.route("/runs/stop-active", methods=["POST"])
+@login_required
+def runs_stop_active():
+    """Mark all running ingestion runs failed; signal cooperative cancel for in-process threads."""
+    session = g.db_session
+    running_ids = list(
+        session.scalars(
+            sa.select(IngestionRun.id).where(IngestionRun.status == "running").order_by(IngestionRun.id)
+        ).all()
+    )
+    for rid in running_ids:
+        request_cancel(rid)
+    if not running_ids:
+        flash("אין הרצות במצב «רץ» לעצירה.", "info")
+        return redirect(url_for("runs.runs_list"))
+
+    reconcile_stale_running_runs(
+        session,
+        reason_code="admin_stop_all",
+        message_prefix="Admin stopped active ingestion run(s) (stop-all).",
+        create_summary_alert=True,
+    )
+    audit_write(
+        session,
+        "stop_active_runs",
+        "ingestion_run",
+        entity_id=None,
+        after={"run_ids": running_ids, "count": len(running_ids)},
+    )
+    session.commit()
+    flash(
+        f"סומנו {len(running_ids)} הרצה/ות כנכשלות ונשלח אות ביטול לתהליכים פעילים באותו שרת. "
+        "אם הופעל כפתור בזמן שהצינור רץ באותו תהליך, הוא אמור להיפסק בין שלבים.",
+        "warning",
+    )
     return redirect(url_for("runs.runs_list"))

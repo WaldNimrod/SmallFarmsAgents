@@ -3,7 +3,7 @@
 {% block title %}יומן פעולות{% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">יומן פעולות (200 אחרונות)</h1>
-{{ table_summary_bar(items|length, audit_action_segments, note='מוצגות 200 · סה״כ רשומות במסד: ' ~ audit_total) }}
+{{ table_summary_bar(items|length, audit_action_segments, note='מקסימום 200 שורות · ממוין לפי זמן', full_count=audit_total) }}
 <div class="table-responsive">
   <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">

@@ -22,7 +22,12 @@ from organic_market_agent.admin.routes import (
     unresolved,
 )
 from sqlalchemy import text
+
 from organic_market_agent.db.session import SessionFactory
+from organic_market_agent.scheduler.reconcile import reconcile_stale_running_runs
+from organic_market_agent.utils.logging_setup import get_logger
+
+_logger = get_logger(__name__)
 
 
 def create_app() -> Flask:
@@ -36,6 +41,29 @@ def create_app() -> Flask:
     app.secret_key = os.environ.get("ADMIN_SECRET_KEY", "dev-secret-change-me")
 
     login_manager.init_app(app)
+
+    _reconcile_runs_once = False
+
+    @app.before_request
+    def _reconcile_stale_runs_on_startup() -> None:
+        nonlocal _reconcile_runs_once
+        if _reconcile_runs_once:
+            return
+        _reconcile_runs_once = True
+        try:
+            with SessionFactory() as s:
+                reconcile_stale_running_runs(
+                    s,
+                    reason_code="process_restart",
+                    message_prefix=(
+                        "Stale running ingestion run(s) marked failed after admin process "
+                        "(re)start — no worker was attached."
+                    ),
+                    create_summary_alert=True,
+                )
+                s.commit()
+        except Exception:
+            _logger.exception("admin startup: reconcile_stale_running_runs failed")
 
     @app.before_request
     def _open_session() -> None:

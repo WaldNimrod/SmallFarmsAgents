@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import difflib
 from collections import Counter
+from datetime import datetime, timezone
 from urllib.parse import quote, unquote
 
 import sqlalchemy as sa
-from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, g, jsonify, redirect, render_template, request, url_for
 from flask_login import login_required
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
@@ -16,13 +17,7 @@ from organic_market_agent.models import Product, ProductAlias
 
 bp = Blueprint("unresolved", __name__)
 
-
-@bp.route("/unresolved")
-def unresolved_list():
-    session = g.db_session
-    rows = session.execute(
-        text(
-            """
+_UNRESOLVED_LIST_SQL = """
             SELECT COALESCE(rei.raw_product_name, '') AS raw_product_name,
                    COUNT(*)                            AS cnt,
                    COUNT(DISTINCT sfr.source_id)       AS source_cnt,
@@ -35,10 +30,22 @@ def unresolved_list():
               AND rei.is_quarantined = false
             GROUP BY rei.raw_product_name
             ORDER BY cnt DESC
-            LIMIT 200
-            """
-        )
-    ).all()
+            LIMIT :lim
+"""
+
+
+@bp.after_request
+def _no_store_unresolved(response):
+    """Lists must always reflect current DB; no browser caching of HTML/JSON."""
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    return response
+
+
+@bp.route("/unresolved")
+def unresolved_list():
+    session = g.db_session
+    rows = session.execute(text(_UNRESOLVED_LIST_SQL), {"lim": 200}).all()
     items = [
         {
             "raw_product_name": r[0],
@@ -73,6 +80,55 @@ def unresolved_list():
         items=items,
         unresolved_distinct_total=distinct_unresolved,
     )
+
+
+@bp.route("/unresolved/export.json")
+@login_required
+def unresolved_export_json():
+    """Same unresolvable-name aggregate as the HTML list; built at request time (no cache)."""
+    lim = request.args.get("limit", default=200, type=int)
+    lim = max(1, min(lim, 500))
+    session = g.db_session
+    rows = session.execute(text(_UNRESOLVED_LIST_SQL), {"lim": lim}).all()
+    distinct_unresolved = int(
+        session.execute(
+            text(
+                """
+                SELECT COUNT(*) FROM (
+                    SELECT 1
+                    FROM raw_extracted_items rei
+                    JOIN source_fetch_runs sfr ON sfr.id = rei.source_fetch_run_id
+                    JOIN sources s ON s.id = sfr.source_id
+                    WHERE rei.extraction_status = 'unresolvable'
+                      AND rei.is_quarantined = false
+                    GROUP BY rei.raw_product_name
+                ) x
+                """
+            )
+        ).scalar_one()
+        or 0
+    )
+    items = [
+        {
+            "raw_product_name": r[0],
+            "occurrence_count": int(r[1] or 0),
+            "distinct_sources": int(r[2] or 0),
+            "source_codes": r[3] or "",
+            "last_seen": r[4].strftime("%Y-%m-%d") if r[4] else None,
+        }
+        for r in rows
+    ]
+    payload = {
+        "schema": "unresolved_top_aggregate_v1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "limit": lim,
+        "distinct_unresolved_names_in_db": distinct_unresolved,
+        "returned_rows": len(items),
+        "items": items,
+    }
+    resp = jsonify(payload)
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return resp
 
 
 @bp.route("/unresolved/<path:raw_name_encoded>")

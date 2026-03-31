@@ -74,10 +74,20 @@ def source_list():
             }
         )
     total_sources = int(session.execute(text("SELECT COUNT(*) FROM sources")).scalar_one() or 0)
+    sources_db_active = int(
+        session.execute(text("SELECT COUNT(*) FROM sources WHERE is_active = true")).scalar_one()
+        or 0
+    )
+    sources_db_inactive = int(
+        session.execute(text("SELECT COUNT(*) FROM sources WHERE is_active = false")).scalar_one()
+        or 0
+    )
     return render_template(
         "admin/sources.html",
         sources=out,
         sources_total=total_sources,
+        sources_db_active=sources_db_active,
+        sources_db_inactive=sources_db_inactive,
     )
 
 
