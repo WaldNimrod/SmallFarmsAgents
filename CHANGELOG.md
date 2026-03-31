@@ -11,6 +11,17 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### M7 Planning (Team 100)
+
+- **Reviewed** Team 10's M7 work plan v1; upgraded to v2 with 5 binding architectural decisions
+- **Added** concrete implementation specs: SFTP module interface, manifest v2 schema, upload protocol, body fragment spec, WordPress shortcode, pipeline integration, rollback table
+- **Added** M7 feedback report for Team 10 with action items for all teams
+- **Fixed** identified gaps: test rewrite requirements, known bugs in mandate test code, cleanup protocol, migration 030 for upload_enabled
+- **Updated** plan to v2.1: Nimrod approved M7, SFTP replaces FTPS (paramiko), server root access, child theme for shortcode, page slug `/SmallFarmsAgent`
+- **Created** `.env.upress` credentials template for Nimrod
+- **Updated** `.env.example` with SFTP configuration block
+- **Updated** `ROADMAP.md` — M7 approval recorded, transport and work plan reference added
+
 ---
 
 ## [0.6.1] — 2026-03-31

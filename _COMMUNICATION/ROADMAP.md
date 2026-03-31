@@ -2,7 +2,7 @@
 **Version:** 1.9  
 **Date:** 2026-03-31  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M7 — Public Publishing / Go-Live (pending Nimrod explicit approval)
+**Active Milestone:** M7 — Public Publishing / Go-Live (**Nimrod approved 2026-03-31 — execution active**)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -403,8 +403,11 @@ Phase C — Documentation   (Team 100 + implementing team)
 ## M7 — Public Publishing / Go-Live
 **Teams:** Team 10 + Team 20
 **Dependency:** Gate G6 must be open + **Nimrod explicit approval**
+**Nimrod Approval:** ✅ **Approved 2026-03-31** — immediate execution authorized
+**Transport:** SFTP via `paramiko` (Nimrod confirmed uPress has SFTP)
+**Work Plan:** `_COMMUNICATION/TEAM_100/reports/2026-03-31_M7_WORK_PLAN_FOR_APPROVAL_TEAM100.md` (v2.1 — binding)
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_UPRESS_VALIDATION.md`
-**QA Mandate:** To be issued after G6 opens + Nimrod approval
+**QA Mandate:** To be issued by Team 50
 
 ### Phase A — Implementation (Team 10 + Team 20)
 - uPress validation (Tests U01–U12 from mandate)
