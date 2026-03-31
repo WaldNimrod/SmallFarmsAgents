@@ -1,6 +1,7 @@
 """`python -m organic_market_agent <command>`."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import click
@@ -289,6 +290,29 @@ def prune_raw_pipeline_cmd(
     click.echo("Done. Rowcounts:")
     for k, v in sorted(stats.items()):
         click.echo(f"  {k}: {v}")
+
+
+@cli.command("baseline_snapshot")
+@click.option(
+    "--output",
+    "-o",
+    "output_path",
+    type=click.Path(path_type=Path, dir_okay=False),
+    default=None,
+    help="JSON output path (default: data/normalizer_baseline.json under project root)",
+)
+def baseline_snapshot_cmd(output_path: Path | None) -> None:
+    """Write normalizer baseline snapshot for dashboard delta comparison."""
+    from organic_market_agent.admin.baseline_metrics import (
+        default_baseline_path,
+        write_baseline_snapshot_file,
+    )
+    from organic_market_agent.db.session import SessionFactory
+
+    out = output_path or default_baseline_path()
+    with SessionFactory() as session:
+        written = write_baseline_snapshot_file(session, path=out)
+    click.echo(f"Wrote baseline snapshot to {written.resolve()}")
 
 
 @cli.command("run_admin")

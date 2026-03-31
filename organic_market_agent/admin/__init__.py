@@ -13,6 +13,8 @@ from organic_market_agent.admin.routes import (
     audit_pages,
     auth,
     dashboard,
+    diagnostics,
+    maintenance,
     products,
     qa_flags,
     rules,
@@ -55,10 +57,6 @@ def create_app() -> Flask:
                 reconcile_stale_running_runs(
                     s,
                     reason_code="process_restart",
-                    message_prefix=(
-                        "Stale running ingestion run(s) marked failed after admin process "
-                        "(re)start — no worker was attached."
-                    ),
                     create_summary_alert=True,
                 )
                 s.commit()
@@ -106,5 +104,7 @@ def create_app() -> Flask:
     app.register_blueprint(alerts.bp)
     app.register_blueprint(qa_flags.bp)
     app.register_blueprint(audit_pages.bp)
+    app.register_blueprint(diagnostics.bp)
+    app.register_blueprint(maintenance.bp)
 
     return app

@@ -1,8 +1,8 @@
 """Pipeline writes pipeline_alerts on failure paths.
 
-If you see dashboard alerts like ``RuntimeError: simulated collector failure`` on a shared
-PostgreSQL used for both development and ``pytest``, they come from this module: the test
-patches ``execute_ingestion_for_run`` to raise that error on purpose.
+If you see ``[SIMULATION:test]`` plus ``simulated collector failure`` on a shared PostgreSQL,
+they come from this module: the test patches ``execute_ingestion_for_run`` to raise on purpose;
+teardown deletes the run and its alerts.
 
 Verify suspicious runs in SQL::
 
@@ -91,6 +91,7 @@ def test_run_pipeline_exception_creates_pipeline_alert(db_session, _skip_if_no_p
             .order_by(PipelineAlert.id.desc())
             .limit(1)
         ).scalar_one()
+        assert "[SIMULATION:test]" in (msg or "")
         assert "simulated collector failure" in (msg or "")
     finally:
         db_session.execute(text("DELETE FROM pipeline_alerts WHERE ingestion_run_id = :rid"), {"rid": rid})

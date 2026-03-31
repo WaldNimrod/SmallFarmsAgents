@@ -13,6 +13,7 @@ from organic_market_agent.db.session import SessionFactory
 from organic_market_agent.models import IngestionRun, PipelineAlert, SchedulerConfig
 from organic_market_agent.scheduler.pipeline import run_pipeline
 from organic_market_agent.utils.logging_setup import get_logger
+from organic_market_agent.utils.pipeline_alert_tags import TAG_SCHEDULER_RUN_OUTCOME, tagged_message
 
 logger = get_logger(__name__)
 
@@ -37,18 +38,27 @@ def alert_for_run_outcome(run: IngestionRun) -> tuple[str, str]:
     if run.status == "failed":
         return (
             "error",
-            f"Ingestion run #{run.id} failed "
-            f"(succeeded={run.sources_succeeded}, failed={run.sources_failed}).",
+            tagged_message(
+                TAG_SCHEDULER_RUN_OUTCOME,
+                f"Ingestion run #{run.id} failed "
+                f"(succeeded={run.sources_succeeded}, failed={run.sources_failed}).",
+            ),
         )
     if run.sources_failed > 0:
         return (
             "warning",
-            f"Ingestion run #{run.id} partial: {run.sources_failed} source(s) failed, "
-            f"{run.sources_succeeded} succeeded.",
+            tagged_message(
+                TAG_SCHEDULER_RUN_OUTCOME,
+                f"Ingestion run #{run.id} partial: {run.sources_failed} source(s) failed, "
+                f"{run.sources_succeeded} succeeded.",
+            ),
         )
     return (
         "info",
-        f"Ingestion run #{run.id} completed ({run.sources_succeeded} sources ok).",
+        tagged_message(
+            TAG_SCHEDULER_RUN_OUTCOME,
+            f"Ingestion run #{run.id} completed ({run.sources_succeeded} sources ok).",
+        ),
     )
 
 

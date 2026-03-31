@@ -1,6 +1,7 @@
 """M5 admin HTTP tests (Flask test client)."""
 from __future__ import annotations
 
+import json
 import uuid
 from datetime import datetime, timezone
 from unittest.mock import patch
@@ -22,6 +23,7 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
         "/sources",
         "/products",
         "/unresolved",
+        "/diagnostics/normalizer",
         "/aliases",
         "/rules",
         "/runs",
@@ -35,6 +37,43 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
     dash = client.get("/")
     assert dash.status_code == 200
     assert b"sortable_tables.js" in dash.data
+
+
+def test_t01b_diagnostics_export_requires_login(client):
+    r = client.get("/diagnostics/normalizer/export.json", follow_redirects=False)
+    assert r.status_code == 302
+    assert "/auth/login" in r.headers.get("Location", "")
+
+
+def test_t01c_diagnostics_export_json_when_logged_in(logged_in_client):
+    r = logged_in_client.get("/diagnostics/normalizer/export.json")
+    assert r.status_code == 200
+    assert r.mimetype.startswith("application/json")
+    assert b"normalizer_diagnostics_v1" in r.data
+
+
+def test_t01d_save_baseline_requires_login(client):
+    r = client.post("/maintenance/save-baseline", follow_redirects=False)
+    assert r.status_code == 302
+    assert "/auth/login" in r.headers.get("Location", "")
+
+
+def test_t01e_save_baseline_writes_json(logged_in_client, db_session, tmp_path, monkeypatch):
+    import organic_market_agent.admin.baseline_metrics as bm
+
+    out = tmp_path / "baseline_test.json"
+    monkeypatch.setenv("NORMALIZER_BASELINE_JSON", str(out))
+
+    r = logged_in_client.post("/maintenance/save-baseline", follow_redirects=False)
+    assert r.status_code in (302, 303)
+    assert out.is_file()
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data.get("schema") == bm.SCHEMA
+
+
+def test_t01f_catalog_renormalize_requires_login(client):
+    r = client.post("/maintenance/catalog-renormalize", follow_redirects=False)
+    assert r.status_code == 302
 
 
 def test_t02_login_success_sets_session_and_redirects(client, db_session):

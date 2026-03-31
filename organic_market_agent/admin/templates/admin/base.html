@@ -135,6 +135,7 @@
       <div class="navbar-nav flex-row flex-wrap gap-2 gap-lg-3 align-items-center">
         <a class="nav-link {% if request.endpoint == 'dashboard.index' %}active{% endif %}" href="{{ url_for('dashboard.index') }}">דשבורד</a>
         <a class="nav-link {% if request.endpoint == 'alerts.alerts_list' %}active{% endif %}" href="{{ url_for('alerts.alerts_list') }}">התראות{% if g.unread_alert_count %} <span class="badge bg-secondary">{{ g.unread_alert_count }}</span>{% endif %}</a>
+        <a class="nav-link {% if request.endpoint == 'diagnostics.normalizer_diagnostics' %}active{% endif %}" href="{{ url_for('diagnostics.normalizer_diagnostics') }}">אבחון נרמול</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('sources.') %}active{% endif %}" href="{{ url_for('sources.source_list') }}">מקורות</a>
         <a class="nav-link {% if request.endpoint == 'products.product_list' %}active{% endif %}" href="{{ url_for('products.product_list') }}">מוצרים</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('unresolved.') %}active{% endif %}" href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>

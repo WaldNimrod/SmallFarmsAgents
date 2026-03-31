@@ -10,12 +10,20 @@ import sqlalchemy as sa
 from jinja2 import Environment, PackageLoader, select_autoescape
 from sqlalchemy.orm import Session
 
-from organic_market_agent.models import DailyAggregate, MeasurementUnit, Product
-from organic_market_agent.models.observations import NormalizedObservation
+from organic_market_agent.models import DailyAggregate
 from organic_market_agent.utils.exceptions import PublishAbortError
 from organic_market_agent.utils.logging_setup import get_logger
 
+from .rolling_aggregate import (
+    INDEX_WINDOW_DAYS,
+    build_rolling_publish_products,
+    count_distinct_community_sources_in_window,
+    max_last_observed_from_products,
+    rolling_window_bounds,
+)
+
 logger = get_logger(__name__)
+
 
 def _staleness_level(generated_at: datetime, reference_now: datetime) -> str:
     """Mandate: current <=3d, warning 4–7d, irrelevant >7d (8-day legacy wording)."""
@@ -28,7 +36,7 @@ def _staleness_level(generated_at: datetime, reference_now: datetime) -> str:
 
 
 class PublishEngine:
-    """Write local publish artifacts from daily_aggregates (community, threshold met)."""
+    """Write local publish artifacts from a rolling 7-day community index (latest per source)."""
 
     def run(
         self,
@@ -60,65 +68,27 @@ class PublishEngine:
                 sa.select(sa.func.max(DailyAggregate.aggregate_date))
             ).scalar_one_or_none() or gen.date()
 
-        comm_src = session.execute(
-            sa.select(sa.func.count(sa.distinct(NormalizedObservation.source_id))).where(
-                sa.func.date(sa.func.timezone("UTC", NormalizedObservation.observed_at))
-                == report_date,
-                NormalizedObservation.market_scope == "community",
-                NormalizedObservation.flag_status == "ok",
-            )
-        ).scalar_one()
+        d_start, d_end = rolling_window_bounds(report_date)
+        comm_src = count_distinct_community_sources_in_window(session, report_date)
         if comm_src < 2:
             raise PublishAbortError(
-                f"Publish requires at least 2 community sources for report_date={report_date}; got {comm_src}"
+                f"Publish requires at least 2 distinct community sources in the "
+                f"{INDEX_WINDOW_DAYS}d UTC window ending {report_date}; "
+                f"window=[{d_start}..{d_end}]; got {comm_src}"
             )
 
-        rows = session.execute(
-            sa.select(DailyAggregate, Product, MeasurementUnit)
-            .join(Product, Product.id == DailyAggregate.product_id)
-            .outerjoin(MeasurementUnit, MeasurementUnit.id == DailyAggregate.normalized_unit_id)
-            .where(
-                DailyAggregate.aggregate_date == report_date,
-                DailyAggregate.market_scope == "community",
-                DailyAggregate.meets_publish_threshold.is_(True),
-            )
-        ).all()
-
-        products_out: list[dict[str, Any]] = []
-        max_observed: datetime | None = None
-        for da, prod, mu in rows:
-            if da.last_observed_at:
-                max_observed = (
-                    max(max_observed, da.last_observed_at)
-                    if max_observed
-                    else da.last_observed_at
-                )
-            unit_label = mu.name_he if mu else ""
-            products_out.append(
-                {
-                    "product_id": prod.code,
-                    "canonical_name_he": prod.canonical_name_he,
-                    "market_scope": da.market_scope,
-                    "meets_publish_threshold": True,
-                    "sample_size": da.sample_size,
-                    "distinct_sources": da.distinct_sources,
-                    "min_price": float(da.min_price) if da.min_price is not None else None,
-                    "max_price": float(da.max_price) if da.max_price is not None else None,
-                    "avg_price": float(da.unweighted_avg_price)
-                    if da.unweighted_avg_price is not None
-                    else None,
-                    "median_price": float(da.median_price) if da.median_price is not None else None,
-                    "stddev_price": float(da.stddev_price) if da.stddev_price is not None else None,
-                    "normalized_unit": unit_label,
-                    "last_observed_at": da.last_observed_at.isoformat()
-                    if da.last_observed_at
-                    else None,
-                }
-            )
+        products_out = build_rolling_publish_products(session, report_date)
+        max_observed = max_last_observed_from_products(products_out)
 
         report_payload = {
             "generated_at": gen.isoformat(),
             "report_date": report_date.isoformat(),
+            "index": {
+                "mode": "rolling_7d",
+                "window_days": INDEX_WINDOW_DAYS,
+                "window_start": d_start.isoformat(),
+                "window_end": d_end.isoformat(),
+            },
             "products": products_out,
         }
         (output_dir / "public_report.json").write_text(
@@ -150,15 +120,20 @@ class PublishEngine:
             "product_count": len(products_out),
             "staleness_level": _staleness_level(gen, ref),
             "community_sources": int(comm_src),
+            "index_window_days": INDEX_WINDOW_DAYS,
+            "window_start_date": d_start.isoformat(),
+            "window_end_date": d_end.isoformat(),
+            "distinct_community_sources_in_window": int(comm_src),
         }
         (output_dir / "manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
         logger.info(
-            "PublishEngine: wrote %d products to %s",
+            "PublishEngine: wrote %d products to %s (rolling %dd window)",
             len(products_out),
             output_dir,
+            INDEX_WINDOW_DAYS,
         )
         return {
             "report_date": report_date.isoformat(),

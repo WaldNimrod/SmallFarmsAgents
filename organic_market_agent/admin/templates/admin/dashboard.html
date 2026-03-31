@@ -3,6 +3,22 @@
 {% block content %}
 <h1 class="h4 mb-4">📊 דשבורד ניטור</h1>
 <p class="small text-muted mb-3 ltr text-break">DB: <code>{{ database_url_display }}</code></p>
+<p class="small mb-3 d-flex flex-wrap align-items-center gap-2">
+  <a href="{{ url_for('diagnostics.normalizer_diagnostics') }}">אבחון נרמול</a>
+  <span>·</span>
+  <a href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>
+  {% if current_user.is_authenticated %}
+  <span>·</span>
+  <form method="post" action="{{ url_for('maintenance.save_baseline') }}" class="d-inline m-0">
+    <button type="submit" class="btn btn-sm btn-outline-secondary">שמור בסיס השוואה (JSON)</button>
+  </form>
+  <form method="post" action="{{ url_for('maintenance.catalog_renormalize_start') }}" class="d-inline m-0"
+        onsubmit="return confirm('להפעיל נרמול מחדש לכל השורות «לא ניתן»? הפעולה רצה ברקע ותסתיים בתוך דקות.');">
+    <button type="submit" class="btn btn-sm btn-outline-primary">נרמול קטלוג מחדש (רקע)</button>
+  </form>
+  {% endif %}
+  <span class="text-muted small">נתיב בסיס: <span class="ltr">{{ baseline_path_hint }}</span></span>
+</p>
 
 {% if unread_alerts %}
 <div class="card mb-4 border-0 shadow-sm border-start border-warning border-3">
@@ -100,10 +116,59 @@
         <div class="fs-2 fw-bold {% if resolution_pct >= 50 %}text-success{% else %}text-warning{% endif %}">
           <span class="ltr">{{ resolution_pct }}%</span>
         </div>
+        {% if baseline_diff %}
+        <div class="small text-muted mt-2 ltr">
+          vs baseline: resolution <span class="fw-semibold">{{ baseline_diff.resolution_pct_delta >= 0 and '+' or '' }}{{ baseline_diff.resolution_pct_delta }}%</span>,
+          unres rows <span class="fw-semibold">{{ baseline_diff.unresolvable_count_delta >= 0 and '+' or '' }}{{ baseline_diff.unresolvable_count_delta }}</span>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">שורות גולמיות — ממתינות (<span class="ltr">extracted</span>)</div>
+        <div class="fs-4 fw-bold ltr">{{ rei_extracted_pending }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">מנורמל / לא ניתן</div>
+        <div class="fs-6 ltr"><span class="text-success fw-semibold">{{ rei_normalized }}</span> / <span class="text-danger fw-semibold">{{ rei_unresolvable }}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">מקורות קהילה בחלון 7 ימים (UTC)</div>
+        <div class="fs-4 fw-bold ltr {% if rolling_community_sources_7d < 2 %}text-danger{% else %}text-success{% endif %}">{{ rolling_community_sources_7d }}</div>
+        <div class="small text-muted">פרסום מתגלגל דורש ≥2</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="card h-100 border-0 shadow-sm">
+      <div class="card-body py-3">
+        <div class="text-muted small mb-1">דולגו (<span class="ltr">ignored</span>)</div>
+        <div class="fs-4 fw-bold ltr">{{ rei_ignored }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if top_unresolvable_sources %}
+<div class="alert alert-light border small mb-4" role="status">
+  <strong>Top unresolvable by source (30d):</strong>
+  <span class="ltr">{% for row in top_unresolvable_sources %}{{ row[0] }} ({{ row[1] }}){% if not loop.last %} · {% endif %}{% endfor %}</span>
+</div>
+{% endif %}
 
 <div class="row g-4 mb-4">
   <div class="col-lg-6">
@@ -119,6 +184,14 @@
       <div class="card-body">
         <h2 class="h6 mb-3">הצלחה / כישלון מקורות לפי הרצה</h2>
         <canvas id="chartSources" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h2 class="h6 mb-3">שיעור לא ניתן לנרמול (7 ימים, UTC)</h2>
+        <canvas id="chartUnres7d" height="80"></canvas>
       </div>
     </div>
   </div>
@@ -143,6 +216,21 @@
     },
     options: { plugins: { legend: { display: true } } }
   });
+  const unr = {{ chart_unres_7d_json | safe }};
+  if (document.getElementById('chartUnres7d')) {
+    new Chart(document.getElementById('chartUnres7d'), {
+      type: 'bar',
+      data: {
+        labels: unr.map(r => r.day),
+        datasets: [{
+          label: 'לא ניתן (%)',
+          data: unr.map(r => r.rate_pct),
+          backgroundColor: 'rgba(220, 53, 69, 0.35)',
+        }]
+      },
+      options: { scales: { y: { max: 100, beginAtZero: true } } }
+    });
+  }
   const sd = {{ chart_sources_json | safe }};
   new Chart(document.getElementById('chartSources'), {
     type: 'bar',

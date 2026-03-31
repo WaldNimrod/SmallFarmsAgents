@@ -12,19 +12,36 @@ from organic_market_agent.utils.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
-_PRICE_RE = re.compile(r"(?:₪|NIS)?\s*(\d{1,6}(?:[.,]\d{1,4})?)")
+_PRICE_RE = re.compile(
+    r"(?:₪|NIS)?\s*(\d{1,6}(?:[.,]\d{1,4})?)",
+    re.IGNORECASE,
+)
+# Digits followed by common ILS suffixes (e.g. "18 שח", "12 ש״ח")
+_PRICE_RE_SUFFIX = re.compile(
+    r"(\d{1,6}(?:[.,]\d{1,4})?)\s*(?:שקלים?|ש[\"׳']?\s*ח|שח\b|₪|nis\b)",
+    re.IGNORECASE,
+)
 
 
 def _parse(text: str) -> Optional[Decimal]:
     text = text.strip()
-    match = _PRICE_RE.search(text)
-    if not match:
-        return None
-    raw = match.group(1).replace(",", ".")
-    try:
-        return Decimal(raw).quantize(Decimal("0.0001"))
-    except InvalidOperation:
-        return None
+
+    def _from_group1(match: re.Match[str]) -> Optional[Decimal]:
+        raw = match.group(1).replace(",", ".")
+        try:
+            return Decimal(raw).quantize(Decimal("0.0001"))
+        except InvalidOperation:
+            return None
+
+    m = _PRICE_RE.search(text)
+    if m:
+        got = _from_group1(m)
+        if got is not None:
+            return got
+    m2 = _PRICE_RE_SUFFIX.search(text)
+    if m2:
+        return _from_group1(m2)
+    return None
 
 
 def run(ctx: NormContext, session: Session) -> NormContext:

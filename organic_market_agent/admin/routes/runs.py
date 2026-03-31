@@ -656,7 +656,6 @@ def runs_stop_active():
     reconcile_stale_running_runs(
         session,
         reason_code="admin_stop_all",
-        message_prefix="Admin stopped active ingestion run(s) (stop-all).",
         create_summary_alert=True,
     )
     audit_write(

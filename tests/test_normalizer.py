@@ -82,6 +82,20 @@ def test_price_parser_returns_decimal_not_float():
     assert isinstance(result.price_amount, Decimal)
 
 
+def test_price_parser_trailing_shekel_word():
+    ctx = _ctx(raw_price_text="18 שח")
+    result = price_parser.run(ctx, MagicMock())
+    assert result.stage_failed is None
+    assert result.price_amount == Decimal("18.0000")
+
+
+def test_price_parser_trailing_nis_word():
+    ctx = _ctx(raw_price_text="12.5 nis")
+    result = price_parser.run(ctx, MagicMock())
+    assert result.stage_failed is None
+    assert result.price_amount == Decimal("12.5000")
+
+
 # --- quantity_parser ---
 
 

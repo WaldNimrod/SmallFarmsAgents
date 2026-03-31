@@ -24,6 +24,15 @@ from organic_market_agent.utils.config import config
 from organic_market_agent.utils.exceptions import PublishAbortError
 from organic_market_agent.utils.log_persist import persist_error_log, persist_log
 from organic_market_agent.utils.logging_setup import get_logger
+from organic_market_agent.utils.pipeline_alert_tags import (
+    TAG_PIPELINE_FAILURE,
+    TAG_PIPELINE_MISSING_RUN,
+    TAG_PIPELINE_NO_ACTIVE_SOURCES,
+    TAG_PIPELINE_PUBLISH_ABORT,
+    TAG_PIPELINE_UNFINISHED,
+    TAG_SIMULATION_TEST,
+    tagged_message,
+)
 
 logger = get_logger(__name__)
 
@@ -70,9 +79,10 @@ def run_pipeline(
                     s2.add(
                         PipelineAlert(
                             level="error",
-                            message=(
+                            message=tagged_message(
+                                TAG_PIPELINE_MISSING_RUN,
                                 f"run_pipeline: IngestionRun id={ingestion_run_id} not found "
-                                "(removed or never committed before worker started)."
+                                "(removed or never committed before worker started).",
                             ),
                             ingestion_run_id=None,
                         )
@@ -99,7 +109,7 @@ def run_pipeline(
                 session.add(
                     PipelineAlert(
                         level="error",
-                        message=msg,
+                        message=tagged_message(TAG_PIPELINE_NO_ACTIVE_SOURCES, msg),
                         ingestion_run_id=ingestion_run_id,
                     )
                 )
@@ -248,7 +258,7 @@ def run_pipeline(
                         s3.add(
                             PipelineAlert(
                                 level="warning",
-                                message=f"Publish aborted: {exc}",
+                                message=tagged_message(TAG_PIPELINE_PUBLISH_ABORT, f"Publish aborted: {exc}"),
                                 ingestion_run_id=ingestion_run_id,
                             )
                         )
@@ -324,10 +334,13 @@ def run_pipeline(
                 if run is not None:
                     run.finished_at = datetime.now(timezone.utc)
                     run.status = "failed"
+                    is_test = (run.triggered_by or "").strip().lower() == "test"
+                    tag = TAG_SIMULATION_TEST if is_test else TAG_PIPELINE_FAILURE
+                    level = "warning" if is_test else "error"
                     session.add(
                         PipelineAlert(
-                            level="error",
-                            message=f"run_pipeline failed: {err_msg}",
+                            level=level,
+                            message=tagged_message(tag, f"run_pipeline failed: {err_msg}"),
                             ingestion_run_id=ingestion_run_id,
                         )
                     )
@@ -354,13 +367,17 @@ def run_pipeline(
                     run.finished_at = datetime.now(timezone.utc)
                     if run.status == "running":
                         run.status = "failed"
+                    is_test = (run.triggered_by or "").strip().lower() == "test"
+                    tag = TAG_SIMULATION_TEST if is_test else TAG_PIPELINE_UNFINISHED
+                    level = "warning" if is_test else "error"
                     session.add(
                         PipelineAlert(
-                            level="error",
-                            message=(
+                            level=level,
+                            message=tagged_message(
+                                tag,
                                 "Pipeline finished without setting finished_at (worker may have "
                                 "been interrupted before the success path, or an early exit left "
-                                "the run stuck). Run marked failed."
+                                "the run stuck). Run marked failed.",
                             ),
                             ingestion_run_id=ingestion_run_id,
                         )

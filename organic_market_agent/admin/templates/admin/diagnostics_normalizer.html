@@ -1,0 +1,101 @@
+{% extends "admin/base.html" %}
+{% block title %}אבחון נרמול{% endblock %}
+{% block content %}
+<h1 class="h4 mb-2">אבחון נרמול (<span class="ltr">Normalizer diagnostics</span>)</h1>
+<p class="small text-muted mb-3">
+  דוח סיבות ל־<span class="ltr">unresolvable</span>, שמות גולמיים נפוצים, ומקורות (30 יום).
+  <a href="{{ url_for('diagnostics.normalizer_diagnostics_export') }}?raw_limit={{ raw_limit }}" class="ltr">export.json</a>
+  (התחברות נדרשת).
+</p>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6">המלצות (אנגלית — להעברה לסוכנים)</h2>
+    <ul class="small mb-0">
+      {% for line in payload.recommendations %}
+      <li class="mb-1 ltr text-start">{{ line }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-3">סה״כ <span class="ltr">unresolvable</span>: {{ payload.unresolvable_total }}</h2>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered bg-white">
+        <thead class="table-light"><tr><th>סיבה (מקובצת)</th><th class="text-end">כמות</th><th class="text-end">%</th></tr></thead>
+        <tbody>
+          {% for r in payload.reason_buckets %}
+          <tr>
+            <td class="ltr">{{ r.bucket }}</td>
+            <td class="text-end">{{ r.count }}</td>
+            <td class="text-end">{{ r.pct }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-3">שמות מוצר גולמיים — {{ raw_limit }} הראשונים</h2>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered bg-white table-sortable">
+        <thead class="table-light">
+          <tr>
+            <th data-sort-type="text">שם גולמי</th>
+            <th class="text-end" data-sort-type="number">כמות</th>
+            <th data-sort-type="text">דוגמת סיבה</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in payload.top_raw_product_names %}
+          <tr>
+            <td class="small">{{ r.raw_product_name or '—' }}</td>
+            <td class="text-end">{{ r.count }}</td>
+            <td class="small ltr text-break">{{ r.sample_reason }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-3">מקורות — כישלונות ב־30 יום אחרונים</h2>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered bg-white table-sortable">
+        <thead class="table-light">
+          <tr>
+            <th class="text-end" data-sort-type="number">מזהה</th>
+            <th data-sort-type="text">קוד</th>
+            <th data-sort-type="text">שם</th>
+            <th class="text-end" data-sort-type="number">לא ניתן</th>
+            <th class="text-end" data-sort-type="number">סה״ד שורות</th>
+            <th class="text-end" data-sort-type="number">%</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in payload.sources_30d %}
+          <tr>
+            <td class="text-end ltr">{{ s.source_id }}</td>
+            <td class="ltr"><a href="{{ url_for('sources.source_detail', code=s.code) }}">{{ s.code }}</a></td>
+            <td>{{ s.name }}</td>
+            <td class="text-end">{{ s.unresolvable_count }}</td>
+            <td class="text-end">{{ s.total_rows_30d }}</td>
+            <td class="text-end">{{ s.rate_pct }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<p class="small mb-0"><a href="{{ url_for('unresolved.unresolved_list') }}">רשימת לא מזוהים</a> · <a href="{{ url_for('dashboard.index') }}">דשבורד</a></p>
+{% endblock %}

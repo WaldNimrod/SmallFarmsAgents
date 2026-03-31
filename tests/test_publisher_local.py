@@ -12,7 +12,6 @@ from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
-from organic_market_agent.aggregator import AggregatorEngine
 from organic_market_agent.models import IngestionRun, NormalizedObservation, Product, Source, SourceFetchRun
 from organic_market_agent.publisher import PublishEngine
 from organic_market_agent.utils.exceptions import PublishAbortError
@@ -118,7 +117,6 @@ def _seed_two_community_obs(session: Session) -> None:
             )
         )
     session.commit()
-    AggregatorEngine().run(session, PUB_DATE)
 
 
 def test_publish_abort_fewer_than_two_community_sources(pg_session: Session, tmp_path: Path) -> None:
@@ -157,7 +155,7 @@ def test_publish_abort_fewer_than_two_community_sources(pg_session: Session, tmp
         )
         pg_session.commit()
 
-        with pytest.raises(PublishAbortError, match="at least 2 community sources"):
+        with pytest.raises(PublishAbortError, match="at least 2 distinct community sources"):
             PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
     finally:
         _cleanup_pub(pg_session)
@@ -171,6 +169,7 @@ def test_publish_writes_json_and_html(pg_session: Session, tmp_path: Path) -> No
         js = json.loads((tmp_path / "public_report.json").read_text(encoding="utf-8"))
         html = (tmp_path / "public_report.html").read_text(encoding="utf-8")
         assert "products" in js
+        assert js.get("index", {}).get("mode") == "rolling_7d"
         assert isinstance(js["products"], list)
         assert len(js["products"]) >= 1
         p0 = js["products"][0]
@@ -246,9 +245,104 @@ def test_publish_manifest_includes_expected_keys(pg_session: Session, tmp_path: 
             "product_count",
             "staleness_level",
             "community_sources",
+            "index_window_days",
+            "window_start_date",
+            "window_end_date",
+            "distinct_community_sources_in_window",
         ):
             assert key in man
         assert man["community_sources"] >= 2
         assert man["product_count"] >= 1
+        assert man["index_window_days"] == 7
+    finally:
+        _cleanup_pub(pg_session)
+
+
+def test_publish_rolling_two_sources_different_days_in_window(pg_session: Session, tmp_path: Path) -> None:
+    """Two community sources contribute on different UTC days inside the 7d window — no daily_aggregate."""
+    _cleanup_pub(pg_session)
+    try:
+        sid1, sid2, pid, uid = _pick_sources_product(pg_session)
+        ir = IngestionRun(
+            run_type="manual",
+            status="completed",
+            finished_at=datetime.now(timezone.utc),
+            notes=M4_NOTES,
+        )
+        pg_session.add(ir)
+        pg_session.flush()
+        t_early = datetime(2099, 8, 10, 12, 0, tzinfo=timezone.utc)
+        t_late = datetime(2099, 8, 12, 12, 0, tzinfo=timezone.utc)
+        for sid, ts in ((sid1, t_early), (sid2, t_late)):
+            sfr = SourceFetchRun(
+                ingestion_run_id=ir.id,
+                source_id=sid,
+                status="success",
+                finished_at=datetime.now(timezone.utc),
+            )
+            pg_session.add(sfr)
+            pg_session.flush()
+            pg_session.add(
+                NormalizedObservation(
+                    source_id=sid,
+                    source_fetch_run_id=sfr.id,
+                    product_id=pid,
+                    market_scope="community",
+                    sales_channel="community_direct",
+                    price_amount=Decimal("11"),
+                    display_unit_id=uid,
+                    normalized_price_value=Decimal("11"),
+                    observed_at=ts,
+                    flag_status="ok",
+                )
+            )
+        pg_session.commit()
+        PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+        js = json.loads((tmp_path / "public_report.json").read_text(encoding="utf-8"))
+        assert len(js["products"]) >= 1
+    finally:
+        _cleanup_pub(pg_session)
+
+
+def test_publish_rolling_abort_observations_outside_window(pg_session: Session, tmp_path: Path) -> None:
+    """Observations exist but outside 7d window ending report_date — not enough sources in window."""
+    _cleanup_pub(pg_session)
+    try:
+        sid1, sid2, pid, uid = _pick_sources_product(pg_session)
+        ir = IngestionRun(
+            run_type="manual",
+            status="completed",
+            finished_at=datetime.now(timezone.utc),
+            notes=M4_NOTES,
+        )
+        pg_session.add(ir)
+        pg_session.flush()
+        old = datetime(2099, 8, 1, 12, 0, tzinfo=timezone.utc)
+        for sid in (sid1, sid2):
+            sfr = SourceFetchRun(
+                ingestion_run_id=ir.id,
+                source_id=sid,
+                status="success",
+                finished_at=datetime.now(timezone.utc),
+            )
+            pg_session.add(sfr)
+            pg_session.flush()
+            pg_session.add(
+                NormalizedObservation(
+                    source_id=sid,
+                    source_fetch_run_id=sfr.id,
+                    product_id=pid,
+                    market_scope="community",
+                    sales_channel="community_direct",
+                    price_amount=Decimal("5"),
+                    display_unit_id=uid,
+                    normalized_price_value=Decimal("5"),
+                    observed_at=old,
+                    flag_status="ok",
+                )
+            )
+        pg_session.commit()
+        with pytest.raises(PublishAbortError, match="7d UTC window"):
+            PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
     finally:
         _cleanup_pub(pg_session)
