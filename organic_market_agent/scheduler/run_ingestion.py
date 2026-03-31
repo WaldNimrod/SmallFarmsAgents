@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import sys
+import time
 from datetime import datetime, timezone
 
 import click
@@ -46,11 +47,16 @@ def execute_ingestion_for_run(
     session: Session,
     ingestion_run: IngestionRun,
     pairs: list[tuple[Source, SourceFetchProfile]],
+    *,
+    retry_attempts: int = 2,
 ) -> None:
     """Collect + parse for each source; update ingestion_run counters (no commit).
 
     Plain Python helper — no Click decoration. Called by pipeline.run_pipeline
     (background thread) and by run_ingestion() (CLI path).
+
+    On HTTP/collector failure, each source is retried up to ``retry_attempts``
+    additional times (1s pause between attempts).
     """
     ingestion_run.sources_total = len(pairs)
     succeeded = 0
@@ -58,13 +64,22 @@ def execute_ingestion_for_run(
     skipped = 0
     community_succeeded = 0
 
+    max_tries = 1 + max(0, retry_attempts)
+
     for source, profile in pairs:
-        raw_asset, status = collector_engine.run(
-            session,
-            ingestion_run.id,
-            source,
-            profile,
-        )
+        raw_asset = None
+        status = "failed"
+        for attempt in range(max_tries):
+            raw_asset, status = collector_engine.run(
+                session,
+                ingestion_run.id,
+                source,
+                profile,
+            )
+            if status in ("success", "skipped"):
+                break
+            if status == "failed" and attempt < max_tries - 1:
+                time.sleep(1)
 
         if status == "success" and raw_asset is not None:
             normalizer_type = _get_normalizer_type(session, source.id)

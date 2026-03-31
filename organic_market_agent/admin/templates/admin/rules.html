@@ -7,18 +7,18 @@
 {% for profile_id, rows in grouped.items() %}
 <h2 class="h6 text-muted mt-4">פרופיל #<span class="ltr">{{ profile_id }}</span></h2>
 <div class="table-responsive">
-  <table class="table table-sm table-bordered bg-white">
+  <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
       <tr>
-        <th>מקור</th>
-        <th>סוג</th>
-        <th>תבנית</th>
-        <th>התאמה</th>
-        <th>החלפה</th>
-        <th>עדיפות</th>
-        <th>פעיל</th>
-        <th>הערות</th>
-        <th></th>
+        <th data-sort-type="text">מקור</th>
+        <th data-sort-type="text">סוג</th>
+        <th data-sort-type="text">תבנית</th>
+        <th data-sort-type="text">התאמה</th>
+        <th data-sort-type="text">החלפה</th>
+        <th data-sort-type="number">עדיפות</th>
+        <th data-sort-type="text">פעיל</th>
+        <th data-sort-type="text">הערות</th>
+        <th data-sort-none></th>
       </tr>
     </thead>
     <tbody>

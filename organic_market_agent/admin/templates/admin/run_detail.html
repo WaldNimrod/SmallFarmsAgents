@@ -3,17 +3,38 @@
 {% block content %}
 <h1 class="h4 mb-2">הרצה <span class="ltr">#{{ run.id }}</span></h1>
 <p class="text-muted small">סוג: {{ run.run_type }} · סטטוס: {{ run.status }} · הופעל ע״י: {{ run.triggered_by }}</p>
+{% if duration_secs is not none %}
+<p class="small">משך הרצה: <span class="ltr">{{ duration_secs }}</span> שניות</p>
+{% endif %}
+{% if alerts %}
+<h2 class="h6 mt-4">התראות צינור</h2>
+<ul class="list-group mb-4">
+  {% for a in alerts %}
+  <li class="list-group-item d-flex flex-wrap align-items-center gap-2">
+    {% if a.level == 'error' %}
+    <span class="badge bg-danger">{{ a.level }}</span>
+    {% elif a.level == 'warning' %}
+    <span class="badge bg-warning text-dark">{{ a.level }}</span>
+    {% else %}
+    <span class="badge bg-info text-dark">{{ a.level }}</span>
+    {% endif %}
+    <span class="flex-grow-1">{{ a.message }}</span>
+    <span class="small text-muted ltr">{{ a.created_at }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
 <h2 class="h6 mt-4">לפי מקור</h2>
 <div class="table-responsive">
-  <table class="table table-sm table-bordered bg-white">
+  <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
       <tr>
-        <th>קוד</th>
-        <th>שם</th>
-        <th>סטטוס fetch</th>
-        <th>פריטים</th>
-        <th>נורמל</th>
-        <th>לא ניתן</th>
+        <th data-sort-type="text">קוד</th>
+        <th data-sort-type="text">שם</th>
+        <th data-sort-type="text">סטטוס fetch</th>
+        <th data-sort-type="number">פריטים</th>
+        <th data-sort-type="number">נורמל</th>
+        <th data-sort-type="number">לא ניתן</th>
       </tr>
     </thead>
     <tbody>

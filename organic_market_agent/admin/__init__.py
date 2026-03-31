@@ -9,6 +9,7 @@ from flask import Flask, g
 from organic_market_agent.admin.auth import login_manager
 from organic_market_agent.admin.routes import (
     aliases,
+    alerts,
     audit_pages,
     auth,
     dashboard,
@@ -16,9 +17,11 @@ from organic_market_agent.admin.routes import (
     qa_flags,
     rules,
     runs,
+    scheduler,
     sources,
     unresolved,
 )
+from sqlalchemy import text
 from organic_market_agent.db.session import SessionFactory
 
 
@@ -27,7 +30,8 @@ def create_app() -> Flask:
     app = Flask(
         __name__,
         template_folder=str(base / "templates"),
-        static_folder=None,
+        static_folder=str(base / "static"),
+        static_url_path="/static",
     )
     app.secret_key = os.environ.get("ADMIN_SECRET_KEY", "dev-secret-change-me")
 
@@ -36,6 +40,14 @@ def create_app() -> Flask:
     @app.before_request
     def _open_session() -> None:
         g.db_session = SessionFactory()
+        try:
+            g.unread_alert_count = int(
+                g.db_session.execute(
+                    text("SELECT COUNT(*) FROM pipeline_alerts WHERE is_read = false")
+                ).scalar_one()
+            )
+        except Exception:
+            g.unread_alert_count = 0
 
     @app.teardown_request
     def _close_session(exc: BaseException | None) -> None:
@@ -53,6 +65,8 @@ def create_app() -> Flask:
     app.register_blueprint(aliases.bp)
     app.register_blueprint(rules.bp)
     app.register_blueprint(runs.bp)
+    app.register_blueprint(scheduler.bp)
+    app.register_blueprint(alerts.bp)
     app.register_blueprint(qa_flags.bp)
     app.register_blueprint(audit_pages.bp)
 

@@ -7,6 +7,7 @@ from organic_market_agent.models.runs import IngestionRun, RawAsset, RawExtracte
 from organic_market_agent.models.observations import NormalizedObservation, ObservationFlag
 from organic_market_agent.models.aggregates import DailyAggregate, WeeklySnapshot
 from organic_market_agent.models.publishing import PublishArtifact, PublishRun
+from organic_market_agent.models.scheduler import PipelineAlert, SchedulerConfig
 from organic_market_agent.models.users import AuditLog, LogEntry, User
 
 __all__ = [
@@ -33,4 +34,6 @@ __all__ = [
     "User",
     "AuditLog",
     "LogEntry",
+    "SchedulerConfig",
+    "PipelineAlert",
 ]

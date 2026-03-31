@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>לא מזוהים — משוב וטיוטת פעולות</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6f3;
+      --card: #fff;
+      --accent: #6b4c1e;
+      --accent2: #2d5a27;
+      --border: #d8e0d4;
+      --muted: #5c6658;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Heebo", system-ui, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 1rem 1rem 6rem;
+      color: #1a1f18;
+      line-height: 1.45;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(244, 246, 243, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      margin: -1rem -1rem 1rem;
+      padding-inline: 1rem;
+    }
+    .toolbar-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+      color: var(--accent2);
+    }
+    .sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      max-width: 1000px;
+      margin-inline: auto;
+    }
+    .sub code { direction: ltr; unicode-bidi: isolate; font-size: 0.85em; }
+    button {
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.875rem;
+      background: var(--accent2);
+      color: #fff;
+    }
+    button.secondary { background: #3d5c80; }
+    button.ghost {
+      background: #e8ece6;
+      color: #1a1f18;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    .admin-base {
+      max-width: 1000px;
+      margin: 0 auto 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .admin-base input {
+      flex: 1;
+      min-width: 220px;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      direction: ltr;
+      text-align: left;
+    }
+    .list {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: grid;
+      gap: 0.65rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .row {
+        grid-template-columns: 1fr minmax(12rem, 16rem) 1fr;
+        align-items: start;
+      }
+    }
+    .raw-name {
+      font-weight: 700;
+      font-size: 1rem;
+      word-break: break-word;
+    }
+    .raw-name.empty { color: #888; font-style: italic; }
+    .stats {
+      font-size: 0.8rem;
+      color: var(--muted);
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: right;
+    }
+    .stats strong { color: #3d4a3a; }
+    .codes {
+      font-size: 0.78rem;
+      color: var(--muted);
+      direction: ltr;
+      unicode-bidi: isolate;
+      word-break: break-word;
+    }
+    a.row-link {
+      font-size: 0.8rem;
+      color: var(--accent2);
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 0.35rem;
+    }
+    a.row-link:hover { text-decoration: underline; }
+    textarea {
+      width: 100%;
+      min-height: 3.6rem;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      line-height: 1.4;
+    }
+    textarea:focus {
+      outline: 2px solid var(--accent2);
+      outline-offset: 1px;
+    }
+    textarea::placeholder { color: #9aa396; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <div style="flex:1; min-width:200px">
+        <strong>ייצוא</strong>
+        <span class="status" id="status"></span>
+      </div>
+      <button type="button" id="btnCopyJson">העתק JSON (רק עם משוב)</button>
+      <button type="button" class="secondary" id="btnCopyJsonAll">העתק JSON (הכל)</button>
+      <button type="button" class="ghost" id="btnCopyTsv">העתק TSV</button>
+      <button type="button" class="ghost" id="btnDownloadJson">הורד .json</button>
+    </div>
+  </div>
+
+  <h1 style="max-width:1000px;margin:0 auto 0.25rem;text-align:center">שמות גולמיים לא מזוהים — משוב</h1>
+  <p class="sub" style="text-align:center">
+    מקור: אותה שאילתה כמו בניהול <strong>לא מזוהים</strong> (<code>/unresolved</code>) — עד 200 שורות לפי תדירות.
+    נוצר: <span class="ltr">2026-03-31 01:23 UTC</span> · <span class="ltr">200</span> שורות.
+    לרענון: <code class="ltr">python3 tools/generate_unresolved_review_html.py</code>
+    <br>
+    מלאו משוב רק כשיש החלטה (אליאס, מוצר חדש, תיקון מקור, להתעלם וכו׳). ניתן להדביק JSON בצ׳אט או לשמור קובץ.
+  </p>
+
+  <div class="admin-base">
+    <label for="adminBaseUrl">כתובת בסיס לניהול (אופציונלי, לקישור &quot;ניתוח&quot;):</label>
+    <input type="url" id="adminBaseUrl" placeholder="http://127.0.0.1:5001" autocomplete="off">
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <script type="application/json" id="items-json">
+[
+  {
+    "raw_product_name": "סל אורגני משפחתי ליום",
+    "count": 10,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20%D7%9E%D7%A9%D7%A4%D7%97%D7%AA%D7%99%20%D7%9C%D7%99%D7%95%D7%9D"
+  },
+  {
+    "raw_product_name": "תרומה למנזר סנט וינסנט",
+    "count": 8,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A8%D7%95%D7%9E%D7%94%20%D7%9C%D7%9E%D7%A0%D7%96%D7%A8%20%D7%A1%D7%A0%D7%98%20%D7%95%D7%99%D7%A0%D7%A1%D7%A0%D7%98"
+  },
+  {
+    "raw_product_name": "תרומת ירקות - הסל הנדי",
+    "count": 8,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A8%D7%95%D7%9E%D7%AA%20%D7%99%D7%A8%D7%A7%D7%95%D7%AA%20-%20%D7%94%D7%A1%D7%9C%20%D7%94%D7%A0%D7%93%D7%99"
+  },
+  {
+    "raw_product_name": "בדיוק - תערובת לחליטה",
+    "count": 8,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%93%D7%99%D7%95%D7%A7%20-%20%D7%AA%D7%A2%D7%A8%D7%95%D7%91%D7%AA%20%D7%9C%D7%97%D7%9C%D7%99%D7%98%D7%94"
+  },
+  {
+    "raw_product_name": "מלח אטלנטי אפור לח",
+    "count": 7,
+    "source_cnt": 2,
+    "source_codes": "SRC002, SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%9C%D7%97%20%D7%90%D7%98%D7%9C%D7%A0%D7%98%D7%99%20%D7%90%D7%A4%D7%95%D7%A8%20%D7%9C%D7%97"
+  },
+  {
+    "raw_product_name": "ארטישוק אורגני",
+    "count": 7,
+    "source_cnt": 2,
+    "source_codes": "SRC002, SRC005",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אפונה ירוקה יבשה אורגנ",
+    "count": 7,
+    "source_cnt": 2,
+    "source_codes": "SRC002, SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A4%D7%95%D7%A0%D7%94%20%D7%99%D7%A8%D7%95%D7%A7%D7%94%20%D7%99%D7%91%D7%A9%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "קולורבי אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%95%D7%9C%D7%95%D7%A8%D7%91%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "פסטה ספגטי מקמח מלא או",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%A1%D7%98%D7%94%20%D7%A1%D7%A4%D7%92%D7%98%D7%99%20%D7%9E%D7%A7%D7%9E%D7%97%20%D7%9E%D7%9C%D7%90%20%D7%90%D7%95"
+  },
+  {
+    "raw_product_name": "מיקס נבטים לסלט אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%99%D7%A7%D7%A1%20%D7%A0%D7%91%D7%98%D7%99%D7%9D%20%D7%9C%D7%A1%D7%9C%D7%98%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "דלעת אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%93%D7%9C%D7%A2%D7%AA%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "סילאן אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%99%D7%9C%D7%90%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "לימון אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9C%D7%99%D7%9E%D7%95%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "סלרי שורש אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%9C%D7%A8%D7%99%20%D7%A9%D7%95%D7%A8%D7%A9%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "מנגולד אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A0%D7%92%D7%95%D7%9C%D7%93%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "שמן MCT C8 אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A9%D7%9E%D7%9F%20MCT%20C8%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "דלורית אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%93%D7%9C%D7%95%D7%A8%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "תבלין קינמון אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%91%D7%9C%D7%99%D7%9F%20%D7%A7%D7%99%D7%A0%D7%9E%D7%95%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תפוח עץ אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A4%D7%95%D7%97%20%D7%A2%D7%A5%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "נבטוטי עדשים אורגניים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%95%D7%98%D7%99%20%D7%A2%D7%93%D7%A9%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "נבטים סיניים אורגניים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%D7%9D%20%D7%A1%D7%99%D7%A0%D7%99%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "אבקת ריישי אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A8%D7%99%D7%99%D7%A9%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "אבקת קורדיספס אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A7%D7%95%D7%A8%D7%93%D7%99%D7%A1%D7%A4%D7%A1%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "פסטה פנה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%A1%D7%98%D7%94%20%D7%A4%D7%A0%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אפונת שלג אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A4%D7%95%D7%A0%D7%AA%20%D7%A9%D7%9C%D7%92%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "2 חב' קייל אדום אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "2%20%D7%97%D7%91%27%20%D7%A7%D7%99%D7%99%D7%9C%20%D7%90%D7%93%D7%95%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "כורכום טרי אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%95%D7%A8%D7%9B%D7%95%D7%9D%20%D7%98%D7%A8%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אבקת כלורלה",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%9B%D7%9C%D7%95%D7%A8%D7%9C%D7%94"
+  },
+  {
+    "raw_product_name": "בננה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A0%D7%A0%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "פלפל כתום / צהוב אורגנ",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%9C%D7%A4%D7%9C%20%D7%9B%D7%AA%D7%95%D7%9D%20%2F%20%D7%A6%D7%94%D7%95%D7%91%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "קמח חיטה מלא אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%9E%D7%97%20%D7%97%D7%99%D7%98%D7%94%20%D7%9E%D7%9C%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תה ירוק לימונית לואיזה",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%94%20%D7%99%D7%A8%D7%95%D7%A7%20%D7%9C%D7%99%D7%9E%D7%95%D7%A0%D7%99%D7%AA%20%D7%9C%D7%95%D7%90%D7%99%D7%96%D7%94"
+  },
+  {
+    "raw_product_name": "פשתן זרעים אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%A9%D7%AA%D7%9F%20%D7%96%D7%A8%D7%A2%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "פלפל חריף אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%9C%D7%A4%D7%9C%20%D7%97%D7%A8%D7%99%D7%A3%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "קינואה אדומה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%99%D7%A0%D7%95%D7%90%D7%94%20%D7%90%D7%93%D7%95%D7%9E%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "קמח חיטה מלא 70% אורגנ",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%9E%D7%97%20%D7%97%D7%99%D7%98%D7%94%20%D7%9E%D7%9C%D7%90%2070%25%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "שומר אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A9%D7%95%D7%9E%D7%A8%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תבלין קארי אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%91%D7%9C%D7%99%D7%9F%20%D7%A7%D7%90%D7%A8%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תמר מג'הול אורגני 1 ק\"",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%9E%D7%A8%20%D7%9E%D7%92%27%D7%94%D7%95%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%201%20%D7%A7%22"
+  },
+  {
+    "raw_product_name": "דלעת ערמונים אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%93%D7%9C%D7%A2%D7%AA%20%D7%A2%D7%A8%D7%9E%D7%95%D7%A0%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "2 חב' סלרי עלים אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "2%20%D7%97%D7%91%27%20%D7%A1%D7%9C%D7%A8%D7%99%20%D7%A2%D7%9C%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אבקת שוקו מאקה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A9%D7%95%D7%A7%D7%95%20%D7%9E%D7%90%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "אבקת רעמת האריה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A8%D7%A2%D7%9E%D7%AA%20%D7%94%D7%90%D7%A8%D7%99%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "מקלות בייגלה כוסמין או",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A7%D7%9C%D7%95%D7%AA%20%D7%91%D7%99%D7%99%D7%92%D7%9C%D7%94%20%D7%9B%D7%95%D7%A1%D7%9E%D7%99%D7%9F%20%D7%90%D7%95"
+  },
+  {
+    "raw_product_name": "חומץ תפוחים אורגני 1 ל",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%201%20%D7%9C"
+  },
+  {
+    "raw_product_name": "תה צ'אי מאסאלה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%94%20%D7%A6%27%D7%90%D7%99%20%D7%9E%D7%90%D7%A1%D7%90%D7%9C%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "ריישי כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A8%D7%99%D7%99%D7%A9%D7%99%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "קישוא כהה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%99%D7%A9%D7%95%D7%90%20%D7%9B%D7%94%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "קטשופ מופחת סוכר אורגנ",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%98%D7%A9%D7%95%D7%A4%20%D7%9E%D7%95%D7%A4%D7%97%D7%AA%20%D7%A1%D7%95%D7%9B%D7%A8%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "אבקת פאוור פורמולה אור",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A4%D7%90%D7%95%D7%95%D7%A8%20%D7%A4%D7%95%D7%A8%D7%9E%D7%95%D7%9C%D7%94%20%D7%90%D7%95%D7%A8"
+  },
+  {
+    "raw_product_name": "ביצי חופש אורגניות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%99%D7%A6%D7%99%20%D7%97%D7%95%D7%A4%D7%A9%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "ערמונים קלופים אורגנים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A2%D7%A8%D7%9E%D7%95%D7%A0%D7%99%D7%9D%20%D7%A7%D7%9C%D7%95%D7%A4%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "מאצ'ה כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%90%D7%A6%27%D7%94%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "סל אורגני רגיל ליום ב'",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20%D7%A8%D7%92%D7%99%D7%9C%20%D7%9C%D7%99%D7%95%D7%9D%20%D7%91%27"
+  },
+  {
+    "raw_product_name": "לא משמינים מאוכל",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9C%D7%90%20%D7%9E%D7%A9%D7%9E%D7%99%D7%A0%D7%99%D7%9D%20%D7%9E%D7%90%D7%95%D7%9B%D7%9C"
+  },
+  {
+    "raw_product_name": "אורז בשמתי מלא אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%95%D7%A8%D7%96%20%D7%91%D7%A9%D7%9E%D7%AA%D7%99%20%D7%9E%D7%9C%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אבקת ספירולינה 5",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A1%D7%A4%D7%99%D7%A8%D7%95%D7%9C%D7%99%D7%A0%D7%94%205"
+  },
+  {
+    "raw_product_name": "לוח שנה בגינה",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9C%D7%95%D7%97%20%D7%A9%D7%A0%D7%94%20%D7%91%D7%92%D7%99%D7%A0%D7%94"
+  },
+  {
+    "raw_product_name": "פשתן טחון אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%A9%D7%AA%D7%9F%20%D7%98%D7%97%D7%95%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "גרעיני חמניה אורגניים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%92%D7%A8%D7%A2%D7%99%D7%A0%D7%99%20%D7%97%D7%9E%D7%A0%D7%99%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "אבקת עשב שעורה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A2%D7%A9%D7%91%20%D7%A9%D7%A2%D7%95%D7%A8%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "פומלית אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%95%D7%9E%D7%9C%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "עדש ירוק אורגני 0.5 ק\"",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A2%D7%93%D7%A9%20%D7%99%D7%A8%D7%95%D7%A7%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%200.5%20%D7%A7%22"
+  },
+  {
+    "raw_product_name": "אמרנט אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%9E%D7%A8%D7%A0%D7%98%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "עדש צהוב אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A2%D7%93%D7%A9%20%D7%A6%D7%94%D7%95%D7%91%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "סל אורגני רגיל ליום ה'",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20%D7%A8%D7%92%D7%99%D7%9C%20%D7%9C%D7%99%D7%95%D7%9D%20%D7%94%27"
+  },
+  {
+    "raw_product_name": "פאוור פורמולה כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%90%D7%95%D7%95%D7%A8%20%D7%A4%D7%95%D7%A8%D7%9E%D7%95%D7%9C%D7%94%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "פוקוס פורמולה כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%95%D7%A7%D7%95%D7%A1%20%D7%A4%D7%95%D7%A8%D7%9E%D7%95%D7%9C%D7%94%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "פלפל רמירו אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%9C%D7%A4%D7%9C%20%D7%A8%D7%9E%D7%99%D7%A8%D7%95%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "פפאיה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A4%D7%A4%D7%90%D7%99%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "קורדיספס כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%95%D7%A8%D7%93%D7%99%D7%A1%D7%A4%D7%A1%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "קייל אדום אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%99%D7%99%D7%9C%20%D7%90%D7%93%D7%95%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "2 חב' מנגולד אורגני ב-",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "2%20%D7%97%D7%91%27%20%D7%9E%D7%A0%D7%92%D7%95%D7%9C%D7%93%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20%D7%91-"
+  },
+  {
+    "raw_product_name": "קלמנטינה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%9C%D7%9E%D7%A0%D7%98%D7%99%D7%A0%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "קפה שחור פטריות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%A4%D7%94%20%D7%A9%D7%97%D7%95%D7%A8%20%D7%A4%D7%98%D7%A8%D7%99%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "רעמת האריה כמוסות",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A8%D7%A2%D7%9E%D7%AA%20%D7%94%D7%90%D7%A8%D7%99%D7%94%20%D7%9B%D7%9E%D7%95%D7%A1%D7%95%D7%AA"
+  },
+  {
+    "raw_product_name": "שמן זית אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A9%D7%9E%D7%9F%20%D7%96%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "שמן זרעי ענבים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A9%D7%9E%D7%9F%20%D7%96%D7%A8%D7%A2%D7%99%20%D7%A2%D7%A0%D7%91%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "אבקת עשב חיטה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A2%D7%A9%D7%91%20%D7%97%D7%99%D7%98%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תפוח אדמה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A4%D7%95%D7%97%20%D7%90%D7%93%D7%9E%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "2 חב' שורש סלרי אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "2%20%D7%97%D7%91%27%20%D7%A9%D7%95%D7%A8%D7%A9%20%D7%A1%D7%9C%D7%A8%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "משקה שקדים אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%A9%D7%A7%D7%93%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "ארטישוק ירושלמי אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7%20%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%9E%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "נבטי אלפלפא אורגניים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%20%D7%90%D7%9C%D7%A4%D7%9C%D7%A4%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "משקה שיבולת שועל אורגנ",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%A9%D7%99%D7%91%D7%95%D7%9C%D7%AA%20%D7%A9%D7%95%D7%A2%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "אשכולית אדומה אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A9%D7%9B%D7%95%D7%9C%D7%99%D7%AA%20%D7%90%D7%93%D7%95%D7%9E%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "סלרי עלים אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A1%D7%9C%D7%A8%D7%99%20%D7%A2%D7%9C%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אבוקדו אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%95%D7%A7%D7%93%D7%95%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "בטטה אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%98%D7%98%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "עדש שחור אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A2%D7%93%D7%A9%20%D7%A9%D7%97%D7%95%D7%A8%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "צימוקים אורגניים",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A6%D7%99%D7%9E%D7%95%D7%A7%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "תפוח עץ גרני סמיט אורג",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A4%D7%95%D7%97%20%D7%A2%D7%A5%20%D7%92%D7%A8%D7%A0%D7%99%20%D7%A1%D7%9E%D7%99%D7%98%20%D7%90%D7%95%D7%A8%D7%92"
+  },
+  {
+    "raw_product_name": "תפוח אדמה אדום אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A4%D7%95%D7%97%20%D7%90%D7%93%D7%9E%D7%94%20%D7%90%D7%93%D7%95%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תפוז אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A4%D7%95%D7%96%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תה ירוק נענע אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%94%20%D7%99%D7%A8%D7%95%D7%A7%20%D7%A0%D7%A2%D7%A0%D7%A2%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "דלעת יפנית אורגנית",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%93%D7%9C%D7%A2%D7%AA%20%D7%99%D7%A4%D7%A0%D7%99%D7%AA%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "קמח תירס אורגני",
+    "count": 5,
+    "source_cnt": 1,
+    "source_codes": "SRC002",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A7%D7%9E%D7%97%20%D7%AA%D7%99%D7%A8%D7%A1%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "תרומה למשפחות נזקקות-ס",
+    "count": 4,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A8%D7%95%D7%9E%D7%94%20%D7%9C%D7%9E%D7%A9%D7%A4%D7%97%D7%95%D7%AA%20%D7%A0%D7%96%D7%A7%D7%A7%D7%95%D7%AA-%D7%A1"
+  },
+  {
+    "raw_product_name": "תרומת ירקות לאתנחתא -",
+    "count": 4,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A8%D7%95%D7%9E%D7%AA%20%D7%99%D7%A8%D7%A7%D7%95%D7%AA%20%D7%9C%D7%90%D7%AA%D7%A0%D7%97%D7%AA%D7%90%20-"
+  },
+  {
+    "raw_product_name": "תרומת ירקות למשפחות נז",
+    "count": 4,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%AA%D7%A8%D7%95%D7%9E%D7%AA%20%D7%99%D7%A8%D7%A7%D7%95%D7%AA%20%D7%9C%D7%9E%D7%A9%D7%A4%D7%97%D7%95%D7%AA%20%D7%A0%D7%96"
+  },
+  {
+    "raw_product_name": "גמבה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%92%D7%9E%D7%91%D7%94"
+  },
+  {
+    "raw_product_name": "גביעונית רב פעמית לווס",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%92%D7%91%D7%99%D7%A2%D7%95%D7%A0%D7%99%D7%AA%20%D7%A8%D7%91%20%D7%A4%D7%A2%D7%9E%D7%99%D7%AA%20%D7%9C%D7%95%D7%95%D7%A1"
+  },
+  {
+    "raw_product_name": "אזוב טחון (120 מ״ל)",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%96%D7%95%D7%91%20%D7%98%D7%97%D7%95%D7%9F%20%28120%20%D7%9E%D7%B4%D7%9C%29"
+  },
+  {
+    "raw_product_name": "ג'ל כביסה מרוכז 1 ליטר",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%92%27%D7%9C%20%D7%9B%D7%91%D7%99%D7%A1%D7%94%20%D7%9E%D7%A8%D7%95%D7%9B%D7%96%201%20%D7%9C%D7%99%D7%98%D7%A8"
+  },
+  {
+    "raw_product_name": "כלי השרשה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%9C%D7%99%20%D7%94%D7%A9%D7%A8%D7%A9%D7%94"
+  },
+  {
+    "raw_product_name": "בריסטה משקה שיבולת שוע",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A8%D7%99%D7%A1%D7%98%D7%94%20%D7%9E%D7%A9%D7%A7%D7%94%20%D7%A9%D7%99%D7%91%D7%95%D7%9C%D7%AA%20%D7%A9%D7%95%D7%A2"
+  },
+  {
+    "raw_product_name": "אורז פרא מעורב אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%95%D7%A8%D7%96%20%D7%A4%D7%A8%D7%90%20%D7%9E%D7%A2%D7%95%D7%A8%D7%91%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "ברידג' משקה סויה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A8%D7%99%D7%93%D7%92%27%20%D7%9E%D7%A9%D7%A7%D7%94%20%D7%A1%D7%95%D7%99%D7%94"
+  },
+  {
+    "raw_product_name": "יין רוזה מבעבע יבש אור",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%99%D7%99%D7%9F%20%D7%A8%D7%95%D7%96%D7%94%20%D7%9E%D7%91%D7%A2%D7%91%D7%A2%20%D7%99%D7%91%D7%A9%20%D7%90%D7%95%D7%A8"
+  },
+  {
+    "raw_product_name": "ברידג' משקה אורז שקדים",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A8%D7%99%D7%93%D7%92%27%20%D7%9E%D7%A9%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%96%20%D7%A9%D7%A7%D7%93%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "טיפ לשליח",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%98%D7%99%D7%A4%20%D7%9C%D7%A9%D7%9C%D7%99%D7%97"
+  },
+  {
+    "raw_product_name": "טחינה מלאה אורגנית קיל",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%98%D7%97%D7%99%D7%A0%D7%94%20%D7%9E%D7%9C%D7%90%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%20%D7%A7%D7%99%D7%9C"
+  },
+  {
+    "raw_product_name": "בקצ'וי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A7%D7%A6%27%D7%95%D7%99"
+  },
+  {
+    "raw_product_name": "טחינה אורגנית קילו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%98%D7%97%D7%99%D7%A0%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%20%D7%A7%D7%99%D7%9C%D7%95"
+  },
+  {
+    "raw_product_name": "טופו קדיתא 300 גרם - י",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC005",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%98%D7%95%D7%A4%D7%95%20%D7%A7%D7%93%D7%99%D7%AA%D7%90%20300%20%D7%92%D7%A8%D7%9D%20-%20%D7%99"
+  },
+  {
+    "raw_product_name": "כדורי חלבה קוקוס אגוזי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%93%D7%95%D7%A8%D7%99%20%D7%97%D7%9C%D7%91%D7%94%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20%D7%90%D7%92%D7%95%D7%96%D7%99"
+  },
+  {
+    "raw_product_name": "כוסמת ירוקה אורגנית 50",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%95%D7%A1%D7%9E%D7%AA%20%D7%99%D7%A8%D7%95%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%2050"
+  },
+  {
+    "raw_product_name": "כורכום טחון אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%95%D7%A8%D7%9B%D7%95%D7%9D%20%D7%98%D7%97%D7%95%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "בקבוק- מנקה רב תכליתי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A7%D7%91%D7%95%D7%A7-%20%D7%9E%D7%A0%D7%A7%D7%94%20%D7%A8%D7%91%20%D7%AA%D7%9B%D7%9C%D7%99%D7%AA%D7%99"
+  },
+  {
+    "raw_product_name": "אורז בסמטי לבן אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%95%D7%A8%D7%96%20%D7%91%D7%A1%D7%9E%D7%98%D7%99%20%D7%9C%D7%91%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "כליל מגבונים לחים טבעי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%9C%D7%99%D7%9C%20%D7%9E%D7%92%D7%91%D7%95%D7%A0%D7%99%D7%9D%20%D7%9C%D7%97%D7%99%D7%9D%20%D7%98%D7%91%D7%A2%D7%99"
+  },
+  {
+    "raw_product_name": "כמון טחון אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%9E%D7%95%D7%9F%20%D7%98%D7%97%D7%95%D7%9F%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "כפיתה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%A4%D7%99%D7%AA%D7%94"
+  },
+  {
+    "raw_product_name": "כשל\"פ כדורי חלבה ומייפ",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9B%D7%A9%D7%9C%22%D7%A4%20%D7%9B%D7%93%D7%95%D7%A8%D7%99%20%D7%97%D7%9C%D7%91%D7%94%20%D7%95%D7%9E%D7%99%D7%99%D7%A4"
+  },
+  {
+    "raw_product_name": "500 מ\"ל- מיץ תפוחים טב",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "500%20%D7%9E%22%D7%9C-%20%D7%9E%D7%99%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%98%D7%91"
+  },
+  {
+    "raw_product_name": "חרדל אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%A8%D7%93%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "אורז אדום אורגני 500 ג",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%95%D7%A8%D7%96%20%D7%90%D7%93%D7%95%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20500%20%D7%92"
+  },
+  {
+    "raw_product_name": "חמוציות ללא סוכר (לא א",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9E%D7%95%D7%A6%D7%99%D7%95%D7%AA%20%D7%9C%D7%9C%D7%90%20%D7%A1%D7%95%D7%9B%D7%A8%20%28%D7%9C%D7%90%20%D7%90"
+  },
+  {
+    "raw_product_name": "חמאת שיאה אורגנית",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9E%D7%90%D7%AA%20%D7%A9%D7%99%D7%90%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "בננה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%A0%D7%A0%D7%94"
+  },
+  {
+    "raw_product_name": "אבקת חרוב אורגנית 400",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%97%D7%A8%D7%95%D7%91%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%20400"
+  },
+  {
+    "raw_product_name": "חמאת גוף",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9E%D7%90%D7%AA%20%D7%92%D7%95%D7%A3"
+  },
+  {
+    "raw_product_name": "חמאת בוטנים אורגנית- p",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9E%D7%90%D7%AA%20%D7%91%D7%95%D7%98%D7%A0%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA-%20p"
+  },
+  {
+    "raw_product_name": "ביצים",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%99%D7%A6%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "חליטת שקט פנימי - בדיו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%AA%20%D7%A9%D7%A7%D7%98%20%D7%A4%D7%A0%D7%99%D7%9E%D7%99%20-%20%D7%91%D7%93%D7%99%D7%95"
+  },
+  {
+    "raw_product_name": "חליטת עין גדי - שומר ו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%AA%20%D7%A2%D7%99%D7%9F%20%D7%92%D7%93%D7%99%20-%20%D7%A9%D7%95%D7%9E%D7%A8%20%D7%95"
+  },
+  {
+    "raw_product_name": "אגוזי לוז (לא אורגני)",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%92%D7%95%D7%96%D7%99%20%D7%9C%D7%95%D7%96%20%28%D7%9C%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%29"
+  },
+  {
+    "raw_product_name": "אבקת הלבנה אקולוגית לכ",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%94%D7%9C%D7%91%D7%A0%D7%94%20%D7%90%D7%A7%D7%95%D7%9C%D7%95%D7%92%D7%99%D7%AA%20%D7%9C%D7%9B"
+  },
+  {
+    "raw_product_name": "חליטת הגליל - לימונית",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%AA%20%D7%94%D7%92%D7%9C%D7%99%D7%9C%20-%20%D7%9C%D7%99%D7%9E%D7%95%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "חליטה רפואה שלמה - בדי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%94%20%D7%A8%D7%A4%D7%95%D7%90%D7%94%20%D7%A9%D7%9C%D7%9E%D7%94%20-%20%D7%91%D7%93%D7%99"
+  },
+  {
+    "raw_product_name": "ביסקוטי כוסמין ואגוזי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%99%D7%A1%D7%A7%D7%95%D7%98%D7%99%20%D7%9B%D7%95%D7%A1%D7%9E%D7%99%D7%9F%20%D7%95%D7%90%D7%92%D7%95%D7%96%D7%99"
+  },
+  {
+    "raw_product_name": "חליטה לשינה שלווה- בדי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%94%20%D7%9C%D7%A9%D7%99%D7%A0%D7%94%20%D7%A9%D7%9C%D7%95%D7%95%D7%94-%20%D7%91%D7%93%D7%99"
+  },
+  {
+    "raw_product_name": "חליטה לנשימה נקייה - ב",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%94%20%D7%9C%D7%A0%D7%A9%D7%99%D7%9E%D7%94%20%D7%A0%D7%A7%D7%99%D7%99%D7%94%20-%20%D7%91"
+  },
+  {
+    "raw_product_name": "בטטה אורגנית- ישראלית,",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC005",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%98%D7%98%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA-%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99%D7%AA%2C"
+  },
+  {
+    "raw_product_name": "אגוז מקדמיה (לא אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%92%D7%95%D7%96%20%D7%9E%D7%A7%D7%93%D7%9E%D7%99%D7%94%20%28%D7%9C%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "חליטה למערכת חיסון חזק",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%9C%D7%99%D7%98%D7%94%20%D7%9C%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA%20%D7%97%D7%99%D7%A1%D7%95%D7%9F%20%D7%97%D7%96%D7%A7"
+  },
+  {
+    "raw_product_name": "נוזל לניקוי אסלות אקופ",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9C%D7%A0%D7%99%D7%A7%D7%95%D7%99%20%D7%90%D7%A1%D7%9C%D7%95%D7%AA%20%D7%90%D7%A7%D7%95%D7%A4"
+  },
+  {
+    "raw_product_name": "חטיפי קוקוס ושוקולדצ׳י",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%98%D7%99%D7%A4%D7%99%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20%D7%95%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93%D7%A6%D7%B3%D7%99"
+  },
+  {
+    "raw_product_name": "חטיף קוקוס טבעי אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%98%D7%99%D7%A3%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20%D7%98%D7%91%D7%A2%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "נוזל כלים לבנדר ללא SL",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9B%D7%9C%D7%99%D7%9D%20%D7%9C%D7%91%D7%A0%D7%93%D7%A8%20%D7%9C%D7%9C%D7%90%20SL"
+  },
+  {
+    "raw_product_name": "חטיף קוקוס וקקאו אורגנ",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%98%D7%99%D7%A3%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20%D7%95%D7%A7%D7%A7%D7%90%D7%95%20%D7%90%D7%95%D7%A8%D7%92%D7%A0"
+  },
+  {
+    "raw_product_name": "בטטה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%98%D7%98%D7%94"
+  },
+  {
+    "raw_product_name": "אגוז ברזיל (לא אורגני)",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%92%D7%95%D7%96%20%D7%91%D7%A8%D7%96%D7%99%D7%9C%20%28%D7%9C%D7%90%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%29"
+  },
+  {
+    "raw_product_name": "500 מ\"ל- מיץ תפוח גרני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "500%20%D7%9E%22%D7%9C-%20%D7%9E%D7%99%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%20%D7%92%D7%A8%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "נר ריחני-  האפי האוור",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%A8%20%D7%A8%D7%99%D7%97%D7%A0%D7%99-%20%20%D7%94%D7%90%D7%A4%D7%99%20%D7%94%D7%90%D7%95%D7%95%D7%A8"
+  },
+  {
+    "raw_product_name": "חומץ תפוחים קיימא",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%A7%D7%99%D7%99%D7%9E%D7%90"
+  },
+  {
+    "raw_product_name": "חומץ תפוחים גדול",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%92%D7%93%D7%95%D7%9C"
+  },
+  {
+    "raw_product_name": "בזיליקום",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%96%D7%99%D7%9C%D7%99%D7%A7%D7%95%D7%9D"
+  },
+  {
+    "raw_product_name": "נבטי אמרנטוס",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%20%D7%90%D7%9E%D7%A8%D7%A0%D7%98%D7%95%D7%A1"
+  },
+  {
+    "raw_product_name": "חומץ תפוחים אורגני 750",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20750"
+  },
+  {
+    "raw_product_name": "בורגול אורגני 500 גרם",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%91%D7%95%D7%A8%D7%92%D7%95%D7%9C%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20500%20%D7%92%D7%A8%D7%9D"
+  },
+  {
+    "raw_product_name": "חומץ תפוחים אורגני (לא",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%AA%D7%A4%D7%95%D7%97%D7%99%D7%9D%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20%28%D7%9C%D7%90"
+  },
+  {
+    "raw_product_name": "משקה דגנים אינקה ‏",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%93%D7%92%D7%A0%D7%99%D7%9D%20%D7%90%D7%99%D7%A0%D7%A7%D7%94%20%E2%80%8F"
+  },
+  {
+    "raw_product_name": "חומץ ענבים",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%A2%D7%A0%D7%91%D7%99%D7%9D"
+  },
+  {
+    "raw_product_name": "משקה אורז שקדים אישי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%96%20%D7%A9%D7%A7%D7%93%D7%99%D7%9D%20%D7%90%D7%99%D7%A9%D7%99"
+  },
+  {
+    "raw_product_name": "מרלו - יין אדום יבש או",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%9C%D7%95%20-%20%D7%99%D7%99%D7%9F%20%D7%90%D7%93%D7%95%D7%9D%20%D7%99%D7%91%D7%A9%20%D7%90%D7%95"
+  },
+  {
+    "raw_product_name": "חומץ בלסמי ממודנה 500",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%A5%20%D7%91%D7%9C%D7%A1%D7%9E%D7%99%20%D7%9E%D7%9E%D7%95%D7%93%D7%A0%D7%94%20500"
+  },
+  {
+    "raw_product_name": "חומוס אורגני 500 גרם",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%97%D7%95%D7%9E%D7%95%D7%A1%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%20500%20%D7%92%D7%A8%D7%9D"
+  },
+  {
+    "raw_product_name": "אבקת שמרי בירה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%91%D7%A7%D7%AA%20%D7%A9%D7%9E%D7%A8%D7%99%20%D7%91%D7%99%D7%A8%D7%94"
+  },
+  {
+    "raw_product_name": "מרכך כביסה מרוכז קסם א",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%9B%D7%9A%20%D7%9B%D7%91%D7%99%D7%A1%D7%94%20%D7%9E%D7%A8%D7%95%D7%9B%D7%96%20%D7%A7%D7%A1%D7%9D%20%D7%90"
+  },
+  {
+    "raw_product_name": "מרכך כביסה מרוכז פריחת",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%9B%D7%9A%20%D7%9B%D7%91%D7%99%D7%A1%D7%94%20%D7%9E%D7%A8%D7%95%D7%9B%D7%96%20%D7%A4%D7%A8%D7%99%D7%97%D7%AA"
+  },
+  {
+    "raw_product_name": "זרעי צ'יה 300 גרם",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%96%D7%A8%D7%A2%D7%99%20%D7%A6%27%D7%99%D7%94%20300%20%D7%92%D7%A8%D7%9D"
+  },
+  {
+    "raw_product_name": "מרכך הדרים 500 מ\"ל",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%9B%D7%9A%20%D7%94%D7%93%D7%A8%D7%99%D7%9D%20500%20%D7%9E%22%D7%9C"
+  },
+  {
+    "raw_product_name": "מרכך הדרים 1 ליטר",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%9B%D7%9A%20%D7%94%D7%93%D7%A8%D7%99%D7%9D%201%20%D7%9C%D7%99%D7%98%D7%A8"
+  },
+  {
+    "raw_product_name": "זעתר",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%96%D7%A2%D7%AA%D7%A8"
+  },
+  {
+    "raw_product_name": "משקה אורז ירוק ויטאריז",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%96%20%D7%99%D7%A8%D7%95%D7%A7%20%D7%95%D7%99%D7%98%D7%90%D7%A8%D7%99%D7%96"
+  },
+  {
+    "raw_product_name": "מרווה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A8%D7%95%D7%95%D7%94"
+  },
+  {
+    "raw_product_name": "משקה אורז שקדים כחול ו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%90%D7%95%D7%A8%D7%96%20%D7%A9%D7%A7%D7%93%D7%99%D7%9D%20%D7%9B%D7%97%D7%95%D7%9C%20%D7%95"
+  },
+  {
+    "raw_product_name": "מקריש צמחי טבעי אורגני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A7%D7%A8%D7%99%D7%A9%20%D7%A6%D7%9E%D7%97%D7%99%20%D7%98%D7%91%D7%A2%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "זיתי קלמטה אורגניים (ת",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%96%D7%99%D7%AA%D7%99%20%D7%A7%D7%9C%D7%9E%D7%98%D7%94%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D%20%28%D7%AA"
+  },
+  {
+    "raw_product_name": "מקרוני מקמח כוסמין אור",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A7%D7%A8%D7%95%D7%A0%D7%99%20%D7%9E%D7%A7%D7%9E%D7%97%20%D7%9B%D7%95%D7%A1%D7%9E%D7%99%D7%9F%20%D7%90%D7%95%D7%A8"
+  },
+  {
+    "raw_product_name": "משקה שקדים ויטסי (אורג",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A9%D7%A7%D7%94%20%D7%A9%D7%A7%D7%93%D7%99%D7%9D%20%D7%95%D7%99%D7%98%D7%A1%D7%99%20%28%D7%90%D7%95%D7%A8%D7%92"
+  },
+  {
+    "raw_product_name": "מקלות קינמון ציילון או",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A7%D7%9C%D7%95%D7%AA%20%D7%A7%D7%99%D7%A0%D7%9E%D7%95%D7%9F%20%D7%A6%D7%99%D7%99%D7%9C%D7%95%D7%9F%20%D7%90%D7%95"
+  },
+  {
+    "raw_product_name": "אשכולית",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A9%D7%9B%D7%95%D7%9C%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "ארטישוק בסגנון א-לה רו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7%20%D7%91%D7%A1%D7%92%D7%A0%D7%95%D7%9F%20%D7%90-%D7%9C%D7%94%20%D7%A8%D7%95"
+  },
+  {
+    "raw_product_name": "נבטי אפונה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%20%D7%90%D7%A4%D7%95%D7%A0%D7%94"
+  },
+  {
+    "raw_product_name": "נבטי צנונית",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%20%D7%A6%D7%A0%D7%95%D7%A0%D7%99%D7%AA"
+  },
+  {
+    "raw_product_name": "נבטי קייל",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%91%D7%98%D7%99%20%D7%A7%D7%99%D7%99%D7%9C"
+  },
+  {
+    "raw_product_name": "מסכת הזנה ארומתרפית לש",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A1%D7%9B%D7%AA%20%D7%94%D7%96%D7%A0%D7%94%20%D7%90%D7%A8%D7%95%D7%9E%D7%AA%D7%A8%D7%A4%D7%99%D7%AA%20%D7%9C%D7%A9"
+  },
+  {
+    "raw_product_name": "נוזל כביסה אקולוגי בני",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9B%D7%91%D7%99%D7%A1%D7%94%20%D7%90%D7%A7%D7%95%D7%9C%D7%95%D7%92%D7%99%20%D7%91%D7%A0%D7%99"
+  },
+  {
+    "raw_product_name": "הולי נאטס- אגוזי קשיו",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%94%D7%95%D7%9C%D7%99%20%D7%A0%D7%90%D7%98%D7%A1-%20%D7%90%D7%92%D7%95%D7%96%D7%99%20%D7%A7%D7%A9%D7%99%D7%95"
+  },
+  {
+    "raw_product_name": "נוזל כלים לימון 1 ליטר",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9B%D7%9C%D7%99%D7%9D%20%D7%9C%D7%99%D7%9E%D7%95%D7%9F%201%20%D7%9C%D7%99%D7%98%D7%A8"
+  },
+  {
+    "raw_product_name": "נוזל כלים לימון אלוורה",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9B%D7%9C%D7%99%D7%9D%20%D7%9C%D7%99%D7%9E%D7%95%D7%9F%20%D7%90%D7%9C%D7%95%D7%95%D7%A8%D7%94"
+  },
+  {
+    "raw_product_name": "נוזל כלים-לימון כליל",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%9B%D7%9C%D7%99%D7%9D-%D7%9C%D7%99%D7%9E%D7%95%D7%9F%20%D7%9B%D7%9C%D7%99%D7%9C"
+  },
+  {
+    "raw_product_name": "מסכה לשיער רגיל עד יבש",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A1%D7%9B%D7%94%20%D7%9C%D7%A9%D7%99%D7%A2%D7%A8%20%D7%A8%D7%92%D7%99%D7%9C%20%D7%A2%D7%93%20%D7%99%D7%91%D7%A9"
+  },
+  {
+    "raw_product_name": "נוזל קוקוס 250 מ\"ל ARO",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20250%20%D7%9E%22%D7%9C%20ARO"
+  },
+  {
+    "raw_product_name": "נוזל קוקוס 500 מ\"ל",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%A7%D7%95%D7%A7%D7%95%D7%A1%20500%20%D7%9E%22%D7%9C"
+  },
+  {
+    "raw_product_name": "נוזל רצפות אקולוגי  4",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%95%D7%96%D7%9C%20%D7%A8%D7%A6%D7%A4%D7%95%D7%AA%20%D7%90%D7%A7%D7%95%D7%9C%D7%95%D7%92%D7%99%20%204"
+  },
+  {
+    "raw_product_name": "נטורפוד- מגבונים טבעיי",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%A0%D7%98%D7%95%D7%A8%D7%A4%D7%95%D7%93-%20%D7%9E%D7%92%D7%91%D7%95%D7%A0%D7%99%D7%9D%20%D7%98%D7%91%D7%A2%D7%99%D7%99"
+  },
+  {
+    "raw_product_name": "מסיכת פנים טבעית עם פח",
+    "count": 2,
+    "source_cnt": 1,
+    "source_codes": "SRC004",
+    "last_seen": "2026-03-30",
+    "url_encoded": "%D7%9E%D7%A1%D7%99%D7%9B%D7%AA%20%D7%A4%D7%A0%D7%99%D7%9D%20%D7%98%D7%91%D7%A2%D7%99%D7%AA%20%D7%A2%D7%9D%20%D7%A4%D7%97"
+  }
+]
+  </script>
+  <script>
+    const ITEMS = JSON.parse(document.getElementById("items-json").textContent.trim());
+
+    const listEl = document.getElementById("list");
+    const statusEl = document.getElementById("status");
+    const adminBaseInput = document.getElementById("adminBaseUrl");
+
+    const LS_KEY = "unresolved_review_admin_base";
+
+    function loadBase() {
+      try {
+        const v = localStorage.getItem(LS_KEY);
+        if (v) adminBaseInput.value = v;
+      } catch (e) {}
+    }
+    function saveBase() {
+      try {
+        localStorage.setItem(LS_KEY, adminBaseInput.value.trim());
+      } catch (e) {}
+    }
+    adminBaseInput.addEventListener("change", () => { saveBase(); wireDetailLinks(); });
+    adminBaseInput.addEventListener("input", () => { wireDetailLinks(); });
+    loadBase();
+
+    function setStatus(msg, ok) {
+      statusEl.textContent = msg || "";
+      statusEl.style.color = ok === false ? "#a33" : "var(--muted)";
+    }
+
+    function adminDetailHref(enc) {
+      const b = adminBaseInput.value.trim().replace(/\/+$/, "");
+      if (!b) return null;
+      return b + "/unresolved/" + enc;
+    }
+
+    function wireDetailLinks() {
+      document.querySelectorAll("a.row-link[data-enc]").forEach((a) => {
+        const enc = a.getAttribute("data-enc");
+        const h = adminDetailHref(enc);
+        if (h) a.setAttribute("href", h);
+        else a.setAttribute("href", "#");
+      });
+    }
+
+    function buildRows() {
+      ITEMS.forEach((item, i) => {
+        const raw = item.raw_product_name;
+        const display = raw === "" ? "(ריק)" : raw;
+        const emptyClass = raw === "" ? " empty" : "";
+        const row = document.createElement("div");
+        row.className = "row";
+        row.dataset.index = String(i);
+        const linkHtml = `<a class="row-link" href="#" data-enc="${escapeAttr(item.url_encoded)}" target="_blank" rel="noopener">פתח ניתוח בניהול ↗</a>`;
+        row.innerHTML = `
+          <div>
+            <div class="raw-name${emptyClass}">${escapeHtml(display)}</div>
+            ${linkHtml}
+          </div>
+          <div>
+            <div class="stats"><strong>${item.count}</strong> הופעות · <strong>${item.source_cnt}</strong> מקורות</div>
+            <div class="meta" style="font-size:0.75rem;color:var(--muted);margin-top:0.25rem">נצפה אחרון: <span class="ltr">${escapeHtml(item.last_seen)}</span></div>
+          </div>
+          <div>
+            <div class="codes" title="קודי מקור">${escapeHtml(item.source_codes || "—")}</div>
+            <textarea id="note-${i}" placeholder="משוב / החלטה (למשל: אליאס ל־PRD008, שם שגוי במקור SRC00x, להוסיף מוצר…)" rows="3"></textarea>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+      wireDetailLinks();
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML;
+    }
+    function escapeAttr(s) {
+      return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+
+    function collectPayload(onlyWithNote) {
+      return ITEMS.map((item, i) => {
+        const note = document.getElementById("note-" + i).value.trim();
+        return {
+          raw_product_name: item.raw_product_name,
+          count: item.count,
+          source_cnt: item.source_cnt,
+          source_codes: item.source_codes,
+          last_seen: item.last_seen,
+          feedback: note,
+        };
+      }).filter((r) => !onlyWithNote || r.feedback.length > 0);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("הועתק ללוח.", true);
+      } catch (e) {
+        setStatus("לא ניתן להעתיק אוטומטית — נסו הורדה או העתקה ידנית.", false);
+      }
+    }
+
+    function wrapExport(items) {
+      return {
+        exported_at: new Date().toISOString(),
+        source: "tools/unresolved_review.html",
+        schema: "unresolved_change_requests_v1",
+        generated_from: "postgresql.raw_extracted_items (unresolvable, top 200)",
+        items,
+      };
+    }
+
+    document.getElementById("btnCopyJson").addEventListener("click", () => {
+      copyText(JSON.stringify(wrapExport(collectPayload(true)), null, 2));
+    });
+
+    document.getElementById("btnCopyJsonAll").addEventListener("click", () => {
+      copyText(JSON.stringify(wrapExport(collectPayload(false)), null, 2));
+    });
+
+    document.getElementById("btnCopyTsv").addEventListener("click", () => {
+      const rows = collectPayload(false);
+      const header = ["raw_product_name", "count", "source_cnt", "source_codes", "last_seen", "feedback"].join("\t");
+      const lines = rows.map((r) =>
+        [
+          r.raw_product_name.replace(/\t/g, " ").replace(/\n/g, " "),
+          r.count,
+          r.source_cnt,
+          (r.source_codes || "").replace(/\t/g, " "),
+          r.last_seen,
+          r.feedback.replace(/\t/g, " ").replace(/\n/g, " "),
+        ].join("\t")
+      );
+      copyText([header, ...lines].join("\n"));
+    });
+
+    document.getElementById("btnDownloadJson").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(wrapExport(collectPayload(false)), null, 2)], {
+        type: "application/json;charset=utf-8",
+      });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "unresolved_change_requests_" + new Date().toISOString().slice(0, 10) + ".json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      setStatus("הקובץ הורד.", true);
+    });
+
+    listEl.addEventListener("click", (e) => {
+      const a = e.target.closest("a.row-link");
+      if (!a) return;
+      if (a.getAttribute("href") === "#") {
+        e.preventDefault();
+        setStatus("הזינו כתובת בסיס לניהול בשדה למעלה", false);
+      }
+    });
+
+    buildRows();
+  </script>
+</body>
+</html>

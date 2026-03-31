@@ -50,9 +50,9 @@
   <h2 class="h5 mb-2">💡 אליאסים קרובים קיימים <small class="text-muted fs-6">(השוואה אוטומטית)</small></h2>
   <p class="text-muted small">אם אחד מאלה מתאים — הוסף אליאס חדש: <code>"{{ raw_name }}" → [קוד מוצר]</code></p>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered bg-white">
+    <table class="table table-sm table-bordered bg-white table-sortable">
       <thead class="table-light">
-        <tr><th>אליאס קיים</th><th>מוצר קאנוני</th><th>קוד מוצר</th><th>סוג התאמה</th></tr>
+        <tr><th data-sort-type="text">אליאס קיים</th><th data-sort-type="text">מוצר קאנוני</th><th data-sort-type="text">קוד מוצר</th><th data-sort-type="text">סוג התאמה</th></tr>
       </thead>
       <tbody>
         {% for s in alias_suggestions %}
@@ -100,14 +100,14 @@
 {# ── All occurrences ── #}
 <h2 class="h5 mb-3">📋 מופעים <small class="text-muted fs-6">(עד 100 אחרונים)</small></h2>
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
       <tr>
-        <th>תאריך חילוץ</th>
-        <th>מקור</th>
-        <th>מחיר גולמי</th>
-        <th>יחידה גולמית</th>
-        <th>סיבת אי-זיהוי</th>
+        <th data-sort-type="text">תאריך חילוץ</th>
+        <th data-sort-type="text">מקור</th>
+        <th data-sort-type="text">מחיר גולמי</th>
+        <th data-sort-type="text">יחידה גולמית</th>
+        <th data-sort-type="text">סיבת אי-זיהוי</th>
       </tr>
     </thead>
     <tbody>

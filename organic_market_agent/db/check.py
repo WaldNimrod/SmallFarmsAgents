@@ -33,11 +33,13 @@ REQUIRED_TABLES = [
     "users",
     "audit_log",
     "log_entries",
+    "scheduler_config",
+    "pipeline_alerts",
 ]
 
 REQUIRED_COUNTS = {
     "measurement_units": 11,
-    "products": 29,
+    "products": 67,
     "sources": 20,
 }
 
@@ -78,6 +80,16 @@ def check() -> bool:
             f"users (active admin): {admin_count} rows (expected >= 1)"
         )
         if not admin_ok:
+            all_pass = False
+
+        result = conn.execute(text("SELECT COUNT(*) FROM scheduler_config"))
+        sc_count = result.scalar()
+        sc_ok = sc_count == 1
+        print(
+            f"  {'OK' if sc_ok else 'FAIL'}  "
+            f"scheduler_config: {sc_count} rows (expected exactly 1)"
+        )
+        if not sc_ok:
             all_pass = False
 
     audit_indexes = insp.get_indexes("audit_log")

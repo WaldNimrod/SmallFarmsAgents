@@ -3,19 +3,19 @@
 {% block content %}
 <h1 class="h4 mb-4">📡 מקורות נתונים</h1>
 <div class="table-responsive">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
       <tr>
-        <th>קוד</th>
-        <th>שם</th>
-        <th>סוג</th>
-        <th>פעיל</th>
-        <th>הרצה אחרונה</th>
-        <th class="text-end">פריטים</th>
-        <th class="text-end">פוּתרו</th>
-        <th class="text-end">לא פוּתרו</th>
-        <th class="text-end">% פתרון</th>
-        <th></th>
+        <th data-sort-type="text">קוד</th>
+        <th data-sort-type="text">שם</th>
+        <th data-sort-type="text">סוג</th>
+        <th data-sort-type="text">פעיל</th>
+        <th data-sort-type="text">הרצה אחרונה</th>
+        <th class="text-end" data-sort-type="number">פריטים</th>
+        <th class="text-end" data-sort-type="number">פוּתרו</th>
+        <th class="text-end" data-sort-type="number">לא פוּתרו</th>
+        <th class="text-end" data-sort-type="number">% פתרון</th>
+        <th data-sort-none></th>
       </tr>
     </thead>
     <tbody>

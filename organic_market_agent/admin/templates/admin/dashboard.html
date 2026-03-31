@@ -2,6 +2,48 @@
 {% block title %}דשבורד{% endblock %}
 {% block content %}
 <h1 class="h4 mb-4">📊 דשבורד ניטור</h1>
+
+{% if unread_alerts %}
+<div class="card mb-4 border-0 shadow-sm border-start border-warning border-3">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h2 class="h6 mb-0">התראות שלא נקראו</h2>
+      {% if current_user.is_authenticated %}
+      <form method="post" action="{{ url_for('alerts.alerts_mark_all_read') }}" class="m-0">
+        <button type="submit" class="btn btn-sm btn-outline-secondary">סמן הכל כנקרא</button>
+      </form>
+      {% endif %}
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for a in unread_alerts %}
+      <li class="list-group-item px-0 d-flex flex-wrap align-items-start gap-2">
+        {% if a.level == 'error' %}
+        <span class="badge bg-danger">{{ a.level }}</span>
+        {% elif a.level == 'warning' %}
+        <span class="badge bg-warning text-dark">{{ a.level }}</span>
+        {% else %}
+        <span class="badge bg-info text-dark">{{ a.level }}</span>
+        {% endif %}
+        <div class="flex-grow-1">
+          <div>{{ a.message }}</div>
+          <div class="small text-muted"><span class="ltr">{{ a.created_at }}</span>
+            {% if a.ingestion_run_id %}
+            · <a href="{{ url_for('runs.run_detail', run_id=a.ingestion_run_id) }}">הרצה {{ a.ingestion_run_id }}</a>
+            {% endif %}
+          </div>
+        </div>
+        {% if current_user.is_authenticated %}
+        <form method="post" action="{{ url_for('alerts.alert_mark_read', alert_id=a.id) }}" class="m-0">
+          <button type="submit" class="btn btn-sm btn-outline-primary">סמן כנקרא</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
 <div class="row g-3 mb-4">
   <div class="col-sm-6 col-md-4">
     <div class="card h-100 border-0 shadow-sm">
@@ -57,4 +99,60 @@
     </div>
   </div>
 </div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h2 class="h6 mb-3">שיעור פתרון יומי (14 יום)</h2>
+        <canvas id="chartResolution" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body">
+        <h2 class="h6 mb-3">הצלחה / כישלון מקורות לפי הרצה</h2>
+        <canvas id="chartSources" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  try {
+  const res = {{ chart_resolution_json | safe }};
+  new Chart(document.getElementById('chartResolution'), {
+    type: 'line',
+    data: {
+      labels: res.map(r => r.day),
+      datasets: [{
+        label: 'שיעור פתרון (%)',
+        data: res.map(r => r.total > 0 ? Math.round(r.resolved / r.total * 100) : 0),
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: { plugins: { legend: { display: true } } }
+  });
+  const sd = {{ chart_sources_json | safe }};
+  new Chart(document.getElementById('chartSources'), {
+    type: 'bar',
+    data: {
+      labels: sd.map(r => String(r.day) + ' #' + r.id),
+      datasets: [
+        { label: 'הצליחו', data: sd.map(r => r.sources_succeeded), stack: 'a' },
+        { label: 'נכשלו', data: sd.map(r => r.sources_failed), stack: 'a' }
+      ]
+    },
+    options: { scales: { x: { stacked: true }, y: { stacked: true } } }
+  });
+  } catch (e) {
+    console.error("[dashboard] chart init failed:", e);
+  }
+})();
+</script>
 {% endblock %}

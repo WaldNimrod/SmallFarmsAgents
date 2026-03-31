@@ -2,20 +2,25 @@
 {% block title %}לא מזוהים{% endblock %}
 {% block content %}
 <h1 class="h4 mb-2">🔍 שמות גולמיים לא מזוהים</h1>
-<p class="text-muted small mb-4">
+<p class="text-muted small mb-2">
   200 שמות גולמיים שלא הצליחו להיפתר לאחר הנורמליזציה, לפי תדירות הופעה.
   לחיצה על שם תפתח ניתוח מעמיק לשיפור הנורמלייזר.
 </p>
+<p class="small mb-4 rounded border bg-white px-3 py-2" style="border-color:#d8e0d9;">
+  <strong class="text-body">משוב סטטי לצוות:</strong>
+  הריצו <code class="ltr small">python3 tools/generate_unresolved_review_html.py</code>
+  ואז פתחו את <code class="ltr small">tools/unresolved_review.html</code> בדפדפן — אותן שורות, שדה משוב לכל רשומה, ייצוא JSON/TSV.
+</p>
 <div class="table-responsive">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
       <tr>
-        <th>שם גולמי</th>
-        <th class="text-end">הופעות</th>
-        <th class="text-end">מקורות</th>
-        <th>קודי מקור</th>
-        <th>נצפה לאחרונה</th>
-        <th></th>
+        <th data-sort-type="text">שם גולמי</th>
+        <th class="text-end" data-sort-type="number">הופעות</th>
+        <th class="text-end" data-sort-type="number">מקורות</th>
+        <th data-sort-type="text">קודי מקור</th>
+        <th data-sort-type="text">נצפה לאחרונה</th>
+        <th data-sort-none></th>
       </tr>
     </thead>
     <tbody>

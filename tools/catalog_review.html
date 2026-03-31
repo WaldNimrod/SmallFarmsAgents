@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>קטלוג — טיוטת שינויים (ייצוא לצוות)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f6f3;
+      --card: #fff;
+      --accent: #2d5a27;
+      --border: #d8e0d4;
+      --muted: #5c6658;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Heebo", system-ui, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 1rem 1rem 6rem;
+      color: #1a1f18;
+      line-height: 1.45;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(244, 246, 243, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      margin: -1rem -1rem 1rem;
+      padding-inline: 1rem;
+    }
+    .toolbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+      color: var(--accent);
+    }
+    .sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      max-width: 960px;
+      margin-inline: auto;
+    }
+    .sub code { direction: ltr; unicode-bidi: isolate; font-size: 0.85em; }
+    button {
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.875rem;
+      background: var(--accent);
+      color: #fff;
+    }
+    button.secondary { background: #3d5c80; }
+    button.ghost {
+      background: #e8ece6;
+      color: #1a1f18;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    .list {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: 1fr;
+    }
+    .row.inactive { opacity: 0.85; border-color: #c5c5c5; }
+    @media (min-width: 640px) {
+      .row {
+        grid-template-columns: 7.5rem 1fr 1.2fr;
+        align-items: start;
+      }
+    }
+    .code {
+      font-weight: 700;
+      direction: ltr;
+      unicode-bidi: isolate;
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+    .meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: right;
+    }
+    .name { font-weight: 600; }
+    .badge-inactive {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: #6c757d;
+      color: #fff;
+      margin-inline-start: 0.35rem;
+      vertical-align: middle;
+    }
+    textarea {
+      width: 100%;
+      min-height: 3.2rem;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      line-height: 1.4;
+    }
+    textarea:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    textarea::placeholder { color: #9aa396; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <div style="flex:1; min-width:200px">
+        <strong>ייצוא</strong>
+        <span class="status" id="status"></span>
+      </div>
+      <button type="button" id="btnCopyJson">העתק JSON (רק עם הערה)</button>
+      <button type="button" class="secondary" id="btnCopyJsonAll">העתק JSON (הכל)</button>
+      <button type="button" class="ghost" id="btnCopyTsv">העתק TSV</button>
+      <button type="button" class="ghost" id="btnDownloadJson">הורד .json</button>
+    </div>
+  </div>
+
+  <h1 style="max-width:960px;margin:0 auto 0.25rem;text-align:center">טיוטת שינויים — קטלוג מוצרים</h1>
+  <p class="sub" style="text-align:center">
+    מקור רשימה: טבלת <code>products</code> ב־PostgreSQL — אותה רצף כמו בניהול
+    <strong>מוצרים</strong> (<code>/products</code>), כולל מוצרים לא פעילים.
+    נוצר: <span class="ltr">2026-03-31 01:23 UTC</span> · <span class="ltr">67</span> שורות.
+    לרענון: <code class="ltr">python3 tools/generate_catalog_review_html.py</code>
+    <br>
+    מלאו רק בשורות שדורשות שינוי. הדביקו את הפלט בצ’אט — פורמט JSON לניתוח אוטומטי.
+  </p>
+
+  <div class="list" id="list"></div>
+
+  <script type="application/json" id="catalog-json">
+[
+  {
+    "code": "PRD001",
+    "canonical_name_he": "עגבנייה",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD002",
+    "canonical_name_he": "עגבנייה שרי",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD003",
+    "canonical_name_he": "פלפל אדום",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD004",
+    "canonical_name_he": "פלפל ירוק",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD005",
+    "canonical_name_he": "מלפפון",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD006",
+    "canonical_name_he": "חציל",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "קיץ-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD007",
+    "canonical_name_he": "קישוא",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD008",
+    "canonical_name_he": "חסה",
+    "default_measurement_unit_code": "unit",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD009",
+    "canonical_name_he": "עלי תרד",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD010",
+    "canonical_name_he": "רוקט",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD011",
+    "canonical_name_he": "כוסברה",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD012",
+    "canonical_name_he": "פטרוזיליה",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD013",
+    "canonical_name_he": "גזר",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD014",
+    "canonical_name_he": "סלק",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD015",
+    "canonical_name_he": "לפת",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD016",
+    "canonical_name_he": "צנון",
+    "default_measurement_unit_code": "bunch",
+    "category": "root_vegetables",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD017",
+    "canonical_name_he": "בצל יבש",
+    "default_measurement_unit_code": "kg",
+    "category": "alliums",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD018",
+    "canonical_name_he": "בצל ירוק",
+    "default_measurement_unit_code": "bunch",
+    "category": "alliums",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD019",
+    "canonical_name_he": "שום",
+    "default_measurement_unit_code": "kg",
+    "category": "alliums",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD020",
+    "canonical_name_he": "כרישה",
+    "default_measurement_unit_code": "unit",
+    "category": "alliums",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD021",
+    "canonical_name_he": "כרוב לבן",
+    "default_measurement_unit_code": "unit",
+    "category": "brassicas",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD022",
+    "canonical_name_he": "כרובית",
+    "default_measurement_unit_code": "unit",
+    "category": "brassicas",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD023",
+    "canonical_name_he": "ברוקולי",
+    "default_measurement_unit_code": "unit",
+    "category": "brassicas",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD024",
+    "canonical_name_he": "שעועית ירוקה",
+    "default_measurement_unit_code": "kg",
+    "category": "legumes_fresh",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD025",
+    "canonical_name_he": "סל ירקות קטן",
+    "default_measurement_unit_code": "basket_small",
+    "category": "baskets",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD026",
+    "canonical_name_he": "סל ירקות בינוני",
+    "default_measurement_unit_code": "basket_medium",
+    "category": "baskets",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD027",
+    "canonical_name_he": "סל ירקות גדול",
+    "default_measurement_unit_code": "basket_large",
+    "category": "baskets",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD028",
+    "canonical_name_he": "סל ירקות משפחתי",
+    "default_measurement_unit_code": "basket_family",
+    "category": "baskets",
+    "seasonality_notes": "כל השנה",
+    "is_active": false
+  },
+  {
+    "code": "PRD029",
+    "canonical_name_he": "ארגז CSA שבועי",
+    "default_measurement_unit_code": "basket_medium",
+    "category": "baskets",
+    "seasonality_notes": "כל השנה",
+    "is_active": false
+  },
+  {
+    "code": "PRD030",
+    "canonical_name_he": "חסה זן מובחר",
+    "default_measurement_unit_code": "unit",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD031",
+    "canonical_name_he": "פלפל סוויט בייט",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD032",
+    "canonical_name_he": "פלפל חריף",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD033",
+    "canonical_name_he": "נבטים",
+    "default_measurement_unit_code": "unit",
+    "category": "leafy_greens",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD034",
+    "canonical_name_he": "תערובת לחליטה",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD035",
+    "canonical_name_he": "ארטישוק",
+    "default_measurement_unit_code": "unit",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD036",
+    "canonical_name_he": "קולורבי",
+    "default_measurement_unit_code": "kg",
+    "category": "brassicas",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD037",
+    "canonical_name_he": "דלעת",
+    "default_measurement_unit_code": "kg",
+    "category": "cucurbits",
+    "seasonality_notes": "קיץ-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD038",
+    "canonical_name_he": "לימון",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD039",
+    "canonical_name_he": "סלרי שורש",
+    "default_measurement_unit_code": "bunch",
+    "category": "root_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD040",
+    "canonical_name_he": "מנגולד",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD041",
+    "canonical_name_he": "דלורית",
+    "default_measurement_unit_code": "kg",
+    "category": "cucurbits",
+    "seasonality_notes": "קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD042",
+    "canonical_name_he": "תפוח עץ",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "סתיו-חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD043",
+    "canonical_name_he": "אפונה טריה",
+    "default_measurement_unit_code": "kg",
+    "category": "legumes_fresh",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD044",
+    "canonical_name_he": "קייל",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD045",
+    "canonical_name_he": "כורכום טרי",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD046",
+    "canonical_name_he": "בננה",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD047",
+    "canonical_name_he": "פלפל צהוב / כתום",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD048",
+    "canonical_name_he": "שומר",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD049",
+    "canonical_name_he": "תמר",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD050",
+    "canonical_name_he": "סלרי עלים",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD051",
+    "canonical_name_he": "פומלית",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD052",
+    "canonical_name_he": "אמרנט",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD053",
+    "canonical_name_he": "פלפל רמירו",
+    "default_measurement_unit_code": "kg",
+    "category": "fruiting_vegetables",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD054",
+    "canonical_name_he": "פפאיה",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD055",
+    "canonical_name_he": "קלמנטינה",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD056",
+    "canonical_name_he": "תפוח אדמה",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD057",
+    "canonical_name_he": "ארטישוק ירושלמי",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "סתיו-חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD058",
+    "canonical_name_he": "אשכולית אדומה",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD059",
+    "canonical_name_he": "אבוקדו",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD060",
+    "canonical_name_he": "בטטה",
+    "default_measurement_unit_code": "kg",
+    "category": "root_vegetables",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  },
+  {
+    "code": "PRD061",
+    "canonical_name_he": "תפוז",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "חורף",
+    "is_active": true
+  },
+  {
+    "code": "PRD062",
+    "canonical_name_he": "בוקצ'וי",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "אביב-סתיו",
+    "is_active": true
+  },
+  {
+    "code": "PRD063",
+    "canonical_name_he": "בזיליקום",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD064",
+    "canonical_name_he": "מרווה",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD065",
+    "canonical_name_he": "אשכולית",
+    "default_measurement_unit_code": "kg",
+    "category": "fruits",
+    "seasonality_notes": "חורף-אביב",
+    "is_active": true
+  },
+  {
+    "code": "PRD066",
+    "canonical_name_he": "אזוב",
+    "default_measurement_unit_code": "bunch",
+    "category": "leafy_greens",
+    "seasonality_notes": "אביב-קיץ",
+    "is_active": true
+  },
+  {
+    "code": "PRD067",
+    "canonical_name_he": "ביצים",
+    "default_measurement_unit_code": "unit",
+    "category": "eggs",
+    "seasonality_notes": "כל השנה",
+    "is_active": true
+  }
+]
+  </script>
+  <script>
+    const CATALOG = JSON.parse(document.getElementById("catalog-json").textContent.trim());
+
+    const listEl = document.getElementById("list");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(msg, ok) {
+      statusEl.textContent = msg || "";
+      statusEl.style.color = ok === false ? "#a33" : "var(--muted)";
+    }
+
+    function buildRows() {
+      CATALOG.forEach((item, i) => {
+        const code = item.code;
+        const nameHe = item.canonical_name_he;
+        const unitCode = item.default_measurement_unit_code;
+        const category = item.category;
+        const season = item.seasonality_notes || "";
+        const active = item.is_active !== false;
+        const row = document.createElement("div");
+        row.className = "row" + (active ? "" : " inactive");
+        row.dataset.code = code;
+        const badge = active ? "" : '<span class="badge-inactive">לא פעיל</span>';
+        row.innerHTML = `
+          <div>
+            <div class="code">${code}</div>
+            <div class="meta">${unitCode} · ${category}</div>
+          </div>
+          <div>
+            <div class="name">${escapeHtml(nameHe)}${badge}</div>
+            <div class="meta">${escapeHtml(season)}</div>
+          </div>
+          <div>
+            <textarea id="note-${i}" placeholder="השינוי הנדרש (למשל: למזג ל-PRD027, לשנות שם, להסיר מקטלוג…)" rows="2"></textarea>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function collectPayload(onlyWithNote) {
+      return CATALOG.map((item, i) => {
+        const note = document.getElementById("note-" + i).value.trim();
+        return {
+          code: item.code,
+          canonical_name_he: item.canonical_name_he,
+          default_measurement_unit_code: item.default_measurement_unit_code,
+          category: item.category,
+          seasonality_notes: item.seasonality_notes || "",
+          is_active: item.is_active,
+          change_request: note,
+        };
+      }).filter((r) => !onlyWithNote || r.change_request.length > 0);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("הועתק ללוח.", true);
+      } catch (e) {
+        setStatus("לא ניתן להעתיק אוטומטית — השתמשו בהורדה או סמנו ידנית.", false);
+      }
+    }
+
+    document.getElementById("btnCopyJson").addEventListener("click", () => {
+      const data = collectPayload(true);
+      const wrap = {
+        exported_at: new Date().toISOString(),
+        source: "tools/catalog_review.html",
+        schema: "catalog_change_requests_v1",
+        generated_from: "postgresql.products",
+        items: data,
+      };
+      copyText(JSON.stringify(wrap, null, 2));
+    });
+
+    document.getElementById("btnCopyJsonAll").addEventListener("click", () => {
+      const data = collectPayload(false);
+      const wrap = {
+        exported_at: new Date().toISOString(),
+        source: "tools/catalog_review.html",
+        schema: "catalog_change_requests_v1",
+        generated_from: "postgresql.products",
+        items: data,
+      };
+      copyText(JSON.stringify(wrap, null, 2));
+    });
+
+    document.getElementById("btnCopyTsv").addEventListener("click", () => {
+      const rows = collectPayload(false);
+      const header = ["code", "canonical_name_he", "category", "unit", "season", "is_active", "change_request"].join("\t");
+      const lines = rows.map(
+        (r) =>
+          [r.code, r.canonical_name_he, r.category, r.default_measurement_unit_code, r.seasonality_notes, r.is_active ? "true" : "false", r.change_request.replace(/\t/g, " ").replace(/\n/g, " ")].join("\t")
+      );
+      copyText([header, ...lines].join("\n"));
+    });
+
+    document.getElementById("btnDownloadJson").addEventListener("click", () => {
+      const wrap = {
+        exported_at: new Date().toISOString(),
+        source: "tools/catalog_review.html",
+        schema: "catalog_change_requests_v1",
+        generated_from: "postgresql.products",
+        items: collectPayload(false),
+      };
+      const blob = new Blob([JSON.stringify(wrap, null, 2)], { type: "application/json;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "catalog_change_requests_" + new Date().toISOString().slice(0, 10) + ".json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      setStatus("הקובץ הורד.", true);
+    });
+
+    buildRows();
+  </script>
+</body>
+</html>

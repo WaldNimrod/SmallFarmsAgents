@@ -30,6 +30,9 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
     for path in paths:
         r = client.get(path)
         assert r.status_code == 200, path
+    dash = client.get("/")
+    assert dash.status_code == 200
+    assert b"sortable_tables.js" in dash.data
 
 
 def test_t02_login_success_sets_session_and_redirects(client, db_session):
@@ -88,6 +91,10 @@ def test_t05_aliases_new_with_login_creates_row_and_audit(logged_in_client, db_s
         select(AuditLog).where(AuditLog.action == "create_alias").order_by(AuditLog.id.desc()).limit(5)
     ).scalars().all()
     assert any(a.entity_id == pa.id for a in aud)
+    # Teardown: avoid leaving m5-test-alias-* rows in DB for local / CI noise
+    logged_in_client.post(f"/aliases/{pa.id}/disable", follow_redirects=False)
+    db_session.expire_all()
+    assert db_session.get(ProductAlias, pa.id).is_active is False
 
 
 def test_t06_disable_alias_with_login(logged_in_client, db_session):
@@ -174,6 +181,53 @@ def test_t09_runs_trigger_creates_ingestion_run(logged_in_client, db_session):
     assert r.status_code in (302, 303)
     after = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
     assert after > before
+
+
+class _ImmediateThread:
+    """Runs thread target synchronously (for testing partial(run_pipeline, ...))."""
+
+    def __init__(self, target=None, args=(), kwargs=None, daemon=None):
+        self._target = target
+
+    def start(self):
+        if self._target is not None:
+            self._target()
+
+
+def test_t09b_runs_trigger_passes_source_code_to_run_pipeline(logged_in_client, db_session):
+    from organic_market_agent.models import Source, SourceFetchProfile
+
+    expected = db_session.scalar(
+        sa.select(sa.func.count())
+        .select_from(Source)
+        .join(SourceFetchProfile, SourceFetchProfile.source_id == Source.id)
+        .where(
+            Source.is_active.is_(True),
+            SourceFetchProfile.is_active.is_(True),
+            Source.code == "SRC001",
+        )
+    )
+    expected = int(expected or 0)
+
+    with patch("organic_market_agent.admin.routes.runs.threading.Thread", _ImmediateThread):
+        with patch("organic_market_agent.admin.routes.runs.run_pipeline") as rp:
+            r = logged_in_client.post(
+                "/runs/trigger",
+                data={"source_code": "SRC001"},
+                follow_redirects=False,
+            )
+    assert r.status_code in (302, 303)
+    rp.assert_called_once()
+    _args, kwargs = rp.call_args
+    assert kwargs.get("source_code") == "SRC001"
+    assert kwargs.get("skip_normalize") is False
+    assert kwargs.get("skip_publish") is False
+
+    db_session.expire_all()
+    last = db_session.execute(
+        sa.select(IngestionRun).order_by(IngestionRun.id.desc()).limit(1)
+    ).scalar_one()
+    assert last.sources_total == expected
 
 
 def test_t10_product_disable_alias_with_login(logged_in_client, db_session):

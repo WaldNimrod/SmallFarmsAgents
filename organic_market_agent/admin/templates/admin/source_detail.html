@@ -39,15 +39,15 @@
 <h2 class="h5 mb-3">⏱ הרצות אחרונות</h2>
 {% if recent_runs %}
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-bordered bg-white">
+  <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
       <tr>
-        <th>מזהה הרצה</th>
-        <th>תחילה</th>
-        <th>סטטוס</th>
-        <th class="text-end">פוּתרו</th>
-        <th class="text-end">לא פוּתרו</th>
-        <th class="text-end">סה״כ פריטים</th>
+        <th data-sort-type="text">מזהה הרצה</th>
+        <th data-sort-type="text">תחילה</th>
+        <th data-sort-type="text">סטטוס</th>
+        <th class="text-end" data-sort-type="number">פוּתרו</th>
+        <th class="text-end" data-sort-type="number">לא פוּתרו</th>
+        <th class="text-end" data-sort-type="number">סה״כ פריטים</th>
       </tr>
     </thead>
     <tbody>
@@ -76,15 +76,15 @@
 <h2 class="h5 mb-3">🥕 מוצרים שנצפו</h2>
 {% if products_seen %}
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-striped table-bordered bg-white">
+  <table class="table table-sm table-striped table-bordered bg-white table-sortable">
     <thead class="table-light">
       <tr>
-        <th>מוצר</th>
-        <th>קוד</th>
-        <th class="text-end">מחיר ממוצע</th>
-        <th>יחידה</th>
-        <th class="text-end">תצפיות</th>
-        <th>נצפה לאחרונה</th>
+        <th data-sort-type="text">מוצר</th>
+        <th data-sort-type="text">קוד</th>
+        <th class="text-end" data-sort-type="number">מחיר ממוצע</th>
+        <th data-sort-type="text">יחידה</th>
+        <th class="text-end" data-sort-type="number">תצפיות</th>
+        <th data-sort-type="text">נצפה לאחרונה</th>
       </tr>
     </thead>
     <tbody>
@@ -113,9 +113,9 @@
 <h2 class="h5 mb-3">❓ שמות גולמיים לא מזוהים <small class="text-muted fs-6">(עד 50 ראשונים)</small></h2>
 {% if unresolved %}
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-bordered bg-white">
+  <table class="table table-sm table-bordered bg-white table-sortable">
     <thead class="table-light">
-      <tr><th>שם גולמי</th><th class="text-end">כמות</th></tr>
+      <tr><th data-sort-type="text">שם גולמי</th><th class="text-end" data-sort-type="number">כמות</th></tr>
     </thead>
     <tbody>
       {% for u in unresolved %}

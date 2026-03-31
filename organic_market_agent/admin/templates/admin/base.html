@@ -6,24 +6,117 @@
   <title>{% block title %}ניהול{% endblock %} — MyFarmAgents</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  {% block head %}{% endblock %}
   <style>
-    body { font-family: 'Heebo', sans-serif; }
-    .navbar-brand { font-weight: 700; letter-spacing: 0.5px; }
-    .nav-link { font-weight: 500; }
-    .table th { font-weight: 600; }
-    .badge-tier-price_grid  { background: #198754; }
-    .badge-tier-basket      { background: #0d6efd; }
+    /* Align with public report palette (organic / sand) */
+    :root {
+      --pub-green-dark: #1b4332;
+      --pub-green-mid: #2d6a4f;
+      --pub-sand: #f5f0e8;
+      --pub-sand-veil: #faf8f4;
+      --admin-text: #1a1a1a;
+      --admin-muted: #5c6560;
+      --admin-row-alt: rgba(245, 240, 232, 0.55);
+      --admin-row-hover: #eef6f0;
+    }
+    body.admin-skin {
+      font-family: 'Heebo', sans-serif;
+      background-color: var(--pub-sand) !important;
+      color: var(--admin-text);
+    }
+    .navbar.admin-nav {
+      background: linear-gradient(180deg, var(--pub-green-dark) 0%, #152e24 100%) !important;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+    }
+    .navbar.admin-nav .navbar-brand {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .navbar.admin-nav .nav-link { font-weight: 500; opacity: 0.92; }
+    .navbar.admin-nav .nav-link:hover { opacity: 1; background-color: rgba(255, 255, 255, 0.08); border-radius: 6px; }
+    .navbar.admin-nav .nav-link.active { opacity: 1; font-weight: 600; }
+    /* Table headers: no fill — same for every table (overrides thead.table-dark / .table-light) */
+    main .table thead th {
+      background-color: transparent !important;
+      background-image: none !important;
+      color: var(--admin-text) !important;
+      border-color: #d8e0d9 !important;
+      font-weight: 600;
+      vertical-align: middle;
+      box-shadow: none !important;
+    }
+    main .table thead.table-dark th,
+    main .table thead.table-light th {
+      --bs-table-bg: transparent;
+      --bs-table-color: var(--admin-text);
+      --bs-table-border-color: #d8e0d9;
+    }
+    main .table.table-striped {
+      --bs-table-striped-bg: rgba(237, 230, 218, 0.5);
+    }
+    main .table.table-hover {
+      --bs-table-hover-bg: var(--admin-row-hover);
+    }
+    main .table-bordered { border-color: #d8e0d9; }
+    main .table-bordered td,
+    main .table-bordered th { border-color: #d8e0d9; }
+    .badge-tier-price_grid  { background: #2d6a4f; }
+    .badge-tier-basket      { background: #40916c; }
     .badge-tier-discovery   { background: #6c757d; }
-    .badge-tier-benchmark   { background: #ffc107; color: #212529; }
+    .badge-tier-benchmark   { background: #c9a84c; color: #1a1a1a; }
     .ltr { direction: ltr; display: inline-block; }
     .range-bar-wrap { position: relative; height: 6px; background: #dee2e6; border-radius: 3px; min-inline-size: 80px; }
-    .range-bar-fill { position: absolute; inset-block: 0; background: #198754; border-radius: 3px; }
+    .range-bar-fill { position: absolute; inset-block: 0; background: #2d6a4f; border-radius: 3px; }
+    th.sortable-th {
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      position: relative;
+      padding-inline-end: 1.65rem;
+    }
+    th.sortable-th .sort-th-glyph {
+      position: absolute;
+      inset-inline-end: 0.3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      line-height: 0;
+      color: var(--pub-green-dark);
+      opacity: 0.45;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+    /* Hover: only the sort icon reacts (no whole-cell highlight) */
+    th.sortable-th:hover .sort-th-glyph {
+      opacity: 1;
+      transform: translateY(calc(-50% - 3px));
+    }
+    th.sortable-th.sort-asc:hover .sort-th-glyph,
+    th.sortable-th.sort-desc:hover .sort-th-glyph {
+      transform: translateY(calc(-50% - 3px)) scale(1.08);
+    }
+    th.sortable-th.sort-asc .sort-th-glyph,
+    th.sortable-th.sort-desc .sort-th-glyph {
+      opacity: 1;
+      color: var(--pub-green-mid);
+    }
+    th.sortable-th .sort-th-svg { display: block; }
+    .admin-footer {
+      border-color: rgba(27, 67, 50, 0.12) !important;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.45));
+    }
+    .admin-footer a { color: var(--admin-muted) !important; }
   </style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+<body class="admin-skin">
+  <nav class="navbar navbar-expand-lg navbar-dark admin-nav mb-3">
     <div class="container-fluid flex-wrap gap-2">
       <a class="navbar-brand" href="{{ url_for('dashboard.index') }}">🌿 MyFarmAgents</a>
       <div class="navbar-nav flex-row flex-wrap gap-2 gap-lg-3 align-items-center">
@@ -33,7 +126,8 @@
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('unresolved.') %}active{% endif %}" href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('aliases.') %}active{% endif %}" href="{{ url_for('aliases.alias_list') }}">אליאסים</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('rules.') %}active{% endif %}" href="{{ url_for('rules.rules_list') }}">כללים</a>
-        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('runs.') %}active{% endif %}" href="{{ url_for('runs.runs_list') }}">הרצות</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('runs.') %}active{% endif %}" href="{{ url_for('runs.runs_list') }}">הרצות{% if g.unread_alert_count %} <span class="badge bg-danger">{{ g.unread_alert_count }}</span>{% endif %}</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('scheduler.') %}active{% endif %}" href="{{ url_for('scheduler.scheduler_page') }}">תזמון</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('qa_flags.') %}active{% endif %}" href="{{ url_for('qa_flags.qa_flags_list') }}">דגלי QA</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('audit_pages.') %}active{% endif %}" href="{{ url_for('audit_pages.audit_list') }}">יומן פעולות</a>
         <span class="nav-link py-0">|</span>
@@ -59,9 +153,13 @@
     {% endwith %}
     {% block content %}{% endblock %}
   </main>
-  <footer class="text-center text-muted small py-3 border-top">
+  <footer class="text-center small py-3 border-top admin-footer text-secondary">
     <a href="https://www.nimrod.bio" target="_blank" rel="noopener" class="text-muted text-decoration-none">🌱 nimrod.bio</a>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {# Table sort: sync (no defer) — runs right after tbody exists; placed before Chart.js. #}
+  <script src="{{ url_for('static', filename='sortable_tables.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -66,12 +66,15 @@ V1 מתמקד בירקות אורגניים בלבד, בערוצי מכירה ק
 | PRD005 | מלפפון | kg | fruiting_vegetables | true | אביב-קיץ | |
 | PRD006 | חציל | kg | fruiting_vegetables | true | קיץ-סתיו | |
 | PRD007 | קישוא | kg | fruiting_vegetables | true | אביב-קיץ | |
+| PRD031 | פלפל סוויט בייט | kg | fruiting_vegetables | true | אביב-סתיו | לא PRD003; בייבי / sweet bite |
+| PRD032 | פלפל חריף | kg | fruiting_vegetables | true | אביב-סתיו | נפרד מפלפל ירוק מתוק (PRD004) |
 
 ### ירקות עלים (leafy_greens)
 
 | id | canonical_name_he | default_unit | category | is_organic_required | seasonality | notes |
 |---|---|---|---|---|---|---|
-| PRD008 | חסה | unit | leafy_greens | true | חורף-אביב | לפי ראש; לעיתים לפי ק"ג |
+| PRD008 | חסה | unit | leafy_greens | true | חורף-אביב | לפי ראש; לעיתים לפי ק"ג; גנרי |
+| PRD030 | חסה זן מובחר | unit | leafy_greens | true | חורף-אביב | זני אייסברג / חמאה / לאליק / סלאנובה |
 | PRD009 | עלי תרד | bunch | leafy_greens | true | חורף | לפי צרור |
 | PRD010 | רוקט | bunch | leafy_greens | true | חורף-אביב | |
 | PRD011 | כוסברה | bunch | leafy_greens | true | כל השנה | |
@@ -114,10 +117,10 @@ V1 מתמקד בירקות אורגניים בלבד, בערוצי מכירה ק
 | id | canonical_name_he | default_unit | category | is_organic_required | seasonality | notes |
 |---|---|---|---|---|---|---|
 | PRD025 | סל ירקות קטן | basket_small | baskets | true | כל השנה | ~2-3 ק"ג, אינו מפורק בV1 |
-| PRD026 | סל ירקות בינוני | basket_medium | baskets | true | כל השנה | ~4-6 ק"ג |
-| PRD027 | סל ירקות גדול | basket_large | baskets | true | כל השנה | ~7-10 ק"ג |
-| PRD028 | סל ירקות משפחתי | basket_family | baskets | true | כל השנה | 10+ ק"ג או ריבוי אנשים |
-| PRD029 | ארגז CSA שבועי | basket_medium | baskets | true | כל השנה | מנוי שבועי |
+| PRD026 | סל ירקות בינוני | basket_medium | baskets | true | כל השנה | ~4-6 ק"ג; כולל לשעבר PRD029 (CSA שבועי) |
+| PRD027 | סל ירקות גדול | basket_large | baskets | true | כל השנה | ~7-10 ק"ג; כולל לשעבר PRD028 (סל משפחתי) |
+| PRD028 | סל ירקות משפחתי | basket_family | baskets | false | כל השנה | **Inactive** — ממוזג ל־PRD027 (DB migration 017) |
+| PRD029 | ארגז CSA שבועי | basket_medium | baskets | false | כל השנה | **Inactive** — ממוזג ל־PRD026 (DB migration 017) |
 
 ---
 
@@ -158,10 +161,34 @@ V1 מתמקד בירקות אורגניים בלבד, בערוצי מכירה ק
 | alias_text | source_id | confidence |
 |---|---|---|
 | חסה ראש | null | 1.0 |
-| חסה איסברג | null | 0.85 |
-| חסה חמאה | null | 0.85 |
 | חסה לייחידה | null | 0.9 |
 | lettuce | null | 0.9 |
+
+### חסה זן מובחר (PRD030)
+
+| alias_text | source_id | confidence |
+|---|---|---|
+| חסה אייסברג | null | 1.0 |
+| חסה חמאה | null | 1.0 |
+| חסה לאליק | null | 1.0 |
+| חסה סלאנובה | null | 1.0 |
+
+### פלפל סוויט בייט (PRD031)
+
+| alias_text | source_id | confidence |
+|---|---|---|
+| פלפל אדום בייבי | null | 1.0 |
+| פלפל סוויט בייט | null | 1.0 |
+| sweet bite | null | 0.9 |
+| sweetbite | null | 0.85 |
+
+### פלפל חריף (PRD032)
+
+| alias_text | source_id | confidence |
+|---|---|---|
+| פלפל חריף ירוק | null | 1.0 |
+| פלפל חריף | null | 1.0 |
+| פלפל חריף אדום | null | 0.95 |
 
 ### גזר (PRD013)
 
@@ -204,15 +231,21 @@ V1 מתמקד בירקות אורגניים בלבד, בערוצי מכירה ק
 | סל בינוני | null | 1.0 |
 | סל זוגי | null | 0.9 |
 | ארגז בינוני | null | 0.85 |
+| ארגז שבועי | null | 1.0 | לשעבר PRD029 |
+| מנוי שבועי | null | 0.9 | לשעבר PRD029 |
+| סל מנוי | null | 0.85 | לשעבר PRD029 |
+| קופסת ירקות | null | 0.8 | לשעבר PRD029 |
 
-### ארגז CSA שבועי (PRD029)
+### סל ירקות גדול (PRD027)
 
 | alias_text | source_id | confidence |
 |---|---|---|
-| ארגז שבועי | null | 1.0 |
-| מנוי שבועי | null | 0.9 |
-| סל מנוי | null | 0.85 |
-| קופסת ירקות | null | 0.8 |
+| סל גדול | null | 1.0 |
+| סל ירקות גדול | null | 1.0 |
+| ארגז גדול | null | 0.85 |
+| סל משפחתי | null | 1.0 | לשעבר PRD028 |
+| סל ירקות משפחתי | null | 1.0 | לשעבר PRD028 |
+| ארגז משפחתי | null | 0.85 | לשעבר PRD028 |
 
 ---
 

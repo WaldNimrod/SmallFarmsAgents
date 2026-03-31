@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.7  
+**Version:** 1.8  
 **Date:** 2026-03-31  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M6 — Automation + Resilience (Phase A: pending M6 mandate issuance)
+**Active Milestone:** M7 — Public Publishing / Go-Live (pending Nimrod explicit approval)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -334,49 +334,62 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 ---
 
 ## M6 — Automation + Resilience
-**Teams:** Team 10 (code) + Team 20 (cron setup)
-**Dependency:** Gate G5 must be open
-**Mandate:** To be issued by Team 100
-**QA Mandate:** To be issued by Team 100
-**Status:** 🟡 PHASE A — pending M6 mandate issuance
+**Teams:** Team 10 (code) + Team 20 (cron + migration)
+**Dependency:** Gate G5 ✅ PASS
+**Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M6_AUTOMATION_TEAM10.md` ✅ ISSUED
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` ✅ ISSUED
+**Schema Mandate:** `_COMMUNICATION/TEAM_20/MANDATE_M6_SCHEMA_TEAM20.md` ✅ ISSUED
+**Status:** ✅ COMPLETE — G6 PASS (sign-off: `ARCH-20260331-G6-PASS-M6-COMPLETE`)
 
 ### Phase A — Implementation (Team 10 + Team 20)
-- cron job: `0 6 * * * python -m organic_market_agent.scheduler.runner`
-- Email alerting (SMTP): ingestion failure, partial run, stale data (3d + 8d)
-- Full retry logic + error recovery
-- `log_entries` auto-cleanup (90 days)
+
+**Team 20 (migration 016):**
+- `scheduler_config` table — single-row settings (is_enabled, run_hour, run_minute, retry_attempts, cleanup_enabled, cleanup_after_days)
+- `pipeline_alerts` table — in-app alerts (level, message, is_read, ingestion_run_id FK)
+- Seed: one row in `scheduler_config` with defaults (enabled, 06:00, retry=2, cleanup=90d)
+
+**Team 10 (features):**
+- `scheduler/runner.py` — cron entrypoint: reads `scheduler_config`, self-gates on is_enabled + hour/minute, calls `run_pipeline()`, writes alert on failure/partial
+- `run_pipeline()` extended: optional `source_code`, `skip_normalize`, `skip_publish` parameters for focused runs
+- `/runs/trigger` form extended with source_code, skip_normalize, skip_publish options; polling for live status
+- New blueprint `/scheduler` — schedule enable/disable/edit, cleanup trigger with row-count feedback
+- New blueprint `/alerts` — mark-read endpoint
+- Dashboard charts (Chart.js CDN): 14-day resolution rate line chart + source success/fail stacked bar
+- Alert badge in nav + unread alerts panel on dashboard
+- Log cleanup: deletes `source_fetch_runs` (+ cascade) older than `cleanup_after_days`
+- Cron line: `* * * * * cd /path/to/repo && python -m organic_market_agent.scheduler.runner`
+  (runs every minute; runner self-gates on configured hour/minute)
 
 **Unit tests required (Phase A):**
-- `tests/test_alerting.py` — 6+ tests (mock SMTP)
-  - Ingestion failure → alert email constructed correctly
-  - Stale data 3d → `staleness_level=warning` email triggered
-  - Stale data 8d → `staleness_level=irrelevant` email triggered
-  - Successful run → no alert sent
-- `tests/test_scheduler.py` — 4+ tests
-  - Runner handles partial failure gracefully (some sources succeed, some fail)
-  - `ingestion_runs.status='partial'` on mixed results
+- `tests/test_runner.py` — 4+ tests: gates on is_enabled=false, gates on wrong hour, executes at correct hour, partial run writes warning alert
+- `tests/test_scheduler_routes.py` — 4+ tests: GET /scheduler 200, POST toggle, POST cleanup (mock), alert mark-read
+- `tests/test_admin_routes.py` extended: focused trigger with source_code parameter
 
 ### Phase B — QA Validation (Team 50)
 
 | Test Type | Scope |
 |-----------|-------|
-| Unit | `pytest tests/test_alerting.py tests/test_scheduler.py` — all PASS |
-| Operational | cron entry visible in `crontab -l`; runs automatically at 06:00 |
-| Resilience | Simulate 1 failed source: partial run completes, alert sent, other sources unaffected |
-| Alert | Mock SMTP or real test inbox: verify failure email delivered with correct content |
-| Staleness Alert | Set `last_published_at = now() - interval '3 days'`; verify warning email sent |
-| 7-Day Stability | Observe 7 consecutive automatic runs without manual intervention |
-| Cleanup | After 90-day-old synthetic `log_entries` inserted: verify cleanup removes them |
+| Unit | `pytest tests/` — 0 failures |
+| Scheduler UI | GET /scheduler 200; toggle enable/disable; edit hour/minute saves to DB |
+| Focused trigger | POST /runs/trigger with source_code → only that source in run |
+| Alert badge | Partial/failed run → unread alert appears in dashboard nav |
+| Dashboard charts | Two Chart.js canvases render with real data |
+| Cleanup | POST /scheduler/run-cleanup returns row-count flash; DB rows removed |
+| Retry | retry_attempts=2 config verified in DB; runner respects setting |
+| Regression | All G5 baselines (sources=20, products=29, aliases≥97) still met |
 
 ### Gate G6 — Acceptance Criteria
-- [ ] `pytest tests/test_alerting.py tests/test_scheduler.py` — all PASS
-- [ ] cron job configured and running (verified via `crontab -l`)
-- [ ] 7 consecutive automatic runs without intervention
-- [ ] Alert sent on ingestion failure (evidence: email received)
-- [ ] Staleness warning at 3 days; irrelevant at 8 days
-- [ ] ≥2 retries before `status=failed`
-- [ ] `log_entries` cleanup runs correctly
-- [ ] Team 50 full integration sign-off
+- [ ] `pytest tests/` — 0 failures
+- [ ] `/scheduler` page: enable/disable + time edit functional, changes persist to DB
+- [ ] Manual cleanup trigger returns row-count confirmation
+- [ ] Dashboard shows 2 Chart.js graphs with real data
+- [ ] Alert badge appears on dashboard after a partial/failed run
+- [ ] Focused trigger (`source_code`) creates run scoped to that source only
+- [ ] Retry logic: `retry_attempts` column confirmed in `scheduler_config`; runner reads it
+- [ ] Cron line installed and visible in `crontab -l`
+- [ ] All G5 regression baselines met
+- [ ] Team 50 written sign-off
+- [ ] **Team 100 architectural review + approval** (required)
 
 ---
 
@@ -441,7 +454,8 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 | G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3_v2.md` (v2 — active) |
 | G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` ✅ ISSUED |
 | G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED · ✅ PASS |
-| G6–G7 | To be issued when the preceding gate opens |
+| G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` ✅ ISSUED · ✅ PASS |
+| G7 | To be issued after G6 opens + Nimrod approval |
 
 ---
 

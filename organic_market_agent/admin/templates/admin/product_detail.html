@@ -114,17 +114,17 @@
 <h2 class="h5 mb-3">📡 פירוט לפי מקור</h2>
 {% if sources_out %}
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
       <tr>
-        <th>מקור</th>
-        <th>סוג</th>
-        <th class="text-end">תצפיות</th>
-        <th class="text-end">מחיר מינ׳</th>
-        <th class="text-end">מחיר מקס׳</th>
-        <th class="text-end">ממוצע</th>
-        <th>יחידה</th>
-        <th>נצפה לאחרונה</th>
+        <th data-sort-type="text">מקור</th>
+        <th data-sort-type="text">סוג</th>
+        <th class="text-end" data-sort-type="number">תצפיות</th>
+        <th class="text-end" data-sort-type="number">מחיר מינ׳</th>
+        <th class="text-end" data-sort-type="number">מחיר מקס׳</th>
+        <th class="text-end" data-sort-type="number">ממוצע</th>
+        <th data-sort-type="text">יחידה</th>
+        <th data-sort-type="text">נצפה לאחרונה</th>
       </tr>
     </thead>
     <tbody>
@@ -158,8 +158,8 @@
 <h2 class="h5 mb-3">🔤 אליאסים פעילים <small class="text-muted fs-6">(שמות גולמיים שמוביאים למוצר זה)</small></h2>
 {% if aliases_out %}
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-bordered bg-white align-middle">
-    <thead class="table-light"><tr><th>אליאס</th><th>היקף</th>{% if current_user.is_authenticated %}<th></th>{% endif %}</tr></thead>
+  <table class="table table-sm table-bordered bg-white align-middle table-sortable">
+    <thead class="table-light"><tr><th data-sort-type="text">אליאס</th><th data-sort-type="text">היקף</th>{% if current_user.is_authenticated %}<th data-sort-none></th>{% endif %}</tr></thead>
     <tbody>
       {% for a in aliases_out %}
       <tr>
@@ -187,8 +187,8 @@
   <h2 class="h6 mb-2">⚠️ שמות גולמיים לא-מזוהים שעשויים להתאים למוצר זה</h2>
   <p class="small mb-2">אם אחד מהם הוא אכן מוצר זה — ניתן להוסיפו כאליאס ולשפר את אחוז הפתרון:</p>
   <div class="table-responsive">
-    <table class="table table-sm mb-0 bg-white">
-      <thead><tr><th>שם גולמי</th><th class="text-end">הופעות</th><th>מקורות</th><th></th></tr></thead>
+    <table class="table table-sm mb-0 bg-white table-sortable">
+      <thead><tr><th data-sort-type="text">שם גולמי</th><th class="text-end" data-sort-type="number">הופעות</th><th data-sort-type="text">מקורות</th><th data-sort-none></th></tr></thead>
       <tbody>
         {% for u in unresolved_similar %}
         <tr>
@@ -210,18 +210,18 @@
 {# ── Last 50 observations ── #}
 <h2 class="h5 mb-3">📋 50 תצפיות אחרונות</h2>
 <div class="table-responsive mb-4">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle" style="font-size:0.85rem;">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable" style="font-size:0.85rem;">
     <thead class="table-dark">
       <tr>
-        <th>תאריך</th>
-        <th>מקור</th>
-        <th class="text-end">מחיר</th>
-        <th>יחידה</th>
-        <th>שם גולמי</th>
-        <th>מחיר גולמי</th>
-        <th>יחידה גולמית</th>
-        <th class="text-end">ביטחון</th>
-        <th>דגל</th>
+        <th data-sort-type="text">תאריך</th>
+        <th data-sort-type="text">מקור</th>
+        <th class="text-end" data-sort-type="number">מחיר</th>
+        <th data-sort-type="text">יחידה</th>
+        <th data-sort-type="text">שם גולמי</th>
+        <th data-sort-type="text">מחיר גולמי</th>
+        <th data-sort-type="text">יחידה גולמית</th>
+        <th class="text-end" data-sort-type="text">ביטחון</th>
+        <th data-sort-type="text">דגל</th>
       </tr>
     </thead>
     <tbody>

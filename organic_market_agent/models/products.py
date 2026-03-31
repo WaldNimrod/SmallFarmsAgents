@@ -32,7 +32,7 @@ class Product(Base):
         CheckConstraint(
             "category IN ("
             "'root_vegetables','fruiting_vegetables','leafy_greens','brassicas',"
-            "'alliums','cucurbits','legumes_fresh','baskets')",
+            "'alliums','cucurbits','legumes_fresh','baskets','fruits','eggs')",
             name="chk_p_category",
         ),
     )

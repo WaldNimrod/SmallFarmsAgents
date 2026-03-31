@@ -3,18 +3,18 @@
 {% block content %}
 <h1 class="h4 mb-4">🥦 כיסוי מוצרים</h1>
 <div class="table-responsive">
-  <table class="table table-sm table-striped table-bordered bg-white align-middle">
+  <table class="table table-sm table-striped table-bordered bg-white align-middle table-sortable">
     <thead class="table-dark">
       <tr>
-        <th>קוד</th>
-        <th>שם</th>
-        <th>יחידת ברירת מחדל</th>
-        <th class="text-end">מחיר ממוצע</th>
-        <th class="text-end">תצפיות</th>
-        <th class="text-end">מקורות</th>
-        <th>נצפה לאחרונה</th>
-        <th>פעיל</th>
-        <th></th>
+        <th data-sort-type="text">קוד</th>
+        <th data-sort-type="text">שם</th>
+        <th data-sort-type="text">יחידת ברירת מחדל</th>
+        <th class="text-end" data-sort-type="number">מחיר ממוצע</th>
+        <th class="text-end" data-sort-type="number">תצפיות</th>
+        <th class="text-end" data-sort-type="number">מקורות</th>
+        <th data-sort-type="text">נצפה לאחרונה</th>
+        <th data-sort-type="text">פעיל</th>
+        <th data-sort-none></th>
       </tr>
     </thead>
     <tbody>
