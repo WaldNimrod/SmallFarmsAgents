@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block title %}הצעת מוצר חדשה{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">הצעת מוצר חדשה</h1>
+<form method="post" class="card card-body border-0 shadow-sm" style="max-width: 36rem;">
+  <div class="mb-3">
+    <label class="form-label">שם קנוני בעברית <span class="text-danger">*</span></label>
+    <input type="text" name="canonical_name_he" class="form-control" required maxlength="200" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">קוד מוצר מוצע (אופציונלי)</label>
+    <input type="text" name="proposed_code" class="form-control ltr" maxlength="32" placeholder="PRD0xx" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">הערות (אנגלית מומלץ)</label>
+    <textarea name="notes" class="form-control ltr" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">שמור כ־pending</button>
+  <a href="{{ url_for('catalog_inbox.suggestions_list') }}" class="btn btn-link">ביטול</a>
+</form>
+{% endblock %}

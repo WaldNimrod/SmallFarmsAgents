@@ -179,6 +179,47 @@ def source_detail(code: str):
     ).all()
     unresolved = [{"name": r[0] or "", "count": int(r[1])} for r in unres_rows]
 
+    raw_recent_rows = session.execute(
+        text(
+            """
+            SELECT rei.id,
+                   rei.raw_product_name,
+                   rei.raw_price_text,
+                   rei.raw_unit_text,
+                   rei.extraction_status,
+                   du.name_he AS display_unit_he,
+                   nu.name_he AS normalized_unit_he
+            FROM raw_extracted_items rei
+            JOIN source_fetch_runs sfr ON sfr.id = rei.source_fetch_run_id
+            LEFT JOIN LATERAL (
+                SELECT no.display_unit_id, no.normalized_unit_id
+                FROM normalized_observations no
+                WHERE no.raw_extracted_item_id = rei.id
+                ORDER BY no.id DESC
+                LIMIT 1
+            ) no ON true
+            LEFT JOIN measurement_units du ON du.id = no.display_unit_id
+            LEFT JOIN measurement_units nu ON nu.id = no.normalized_unit_id
+            WHERE sfr.source_id = :sid
+            ORDER BY rei.id DESC
+            LIMIT 100
+            """
+        ),
+        {"sid": src.id},
+    ).all()
+    raw_recent_out = [
+        {
+            "id": int(r[0]),
+            "raw_product_name": r[1] or "",
+            "raw_price_text": r[2] or "—",
+            "raw_unit_text": r[3] or "—",
+            "extraction_status": r[4] or "",
+            "display_unit_he": r[5] or "—",
+            "normalized_unit_he": r[6] or "—",
+        }
+        for r in raw_recent_rows
+    ]
+
     rsc = Counter(r["status"] for r in runs_out)
     source_recent_run_segments = [
         (_RUN_ROW_STATUS_HE.get(st, st), rsc[st]) for st in sorted(rsc.keys())
@@ -190,5 +231,6 @@ def source_detail(code: str):
         recent_runs=runs_out,
         products_seen=prods_out,
         unresolved=unresolved,
+        raw_recent_rows=raw_recent_out,
         source_recent_run_segments=source_recent_run_segments,
     )

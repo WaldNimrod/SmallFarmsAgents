@@ -23,6 +23,9 @@ Issue QA reports. Sign off on gates.
    - `_COMMUNICATION/TEAM_20/reports/`
 4. Check what you have already reviewed: `_COMMUNICATION/TEAM_50/reports/`
 5. Read the QA Mandate for the gate under review before running any test
+6. **Read the relevant spec documents** for the area under review (see Spec Documents table below)
+
+**Do NOT run tests without first reading the spec that defines the expected behavior.**
 
 ---
 
@@ -50,11 +53,15 @@ Verbal or informal gate decisions have no authority.
 
 ## QA Mandate Files (always read before testing)
 
-| Gate | Mandate |
-|------|---------|
-| G1 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md` |
-| G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` |
-| G3–G7 | Issued when preceding gate opens |
+| Gate | Mandate | Status |
+|------|---------|--------|
+| G1 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md` | ✅ PASS |
+| G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` | ✅ PASS |
+| G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3_v2.md` (v2) | ✅ PASS |
+| G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` | ✅ PASS |
+| G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` | ✅ PASS |
+| G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` | ✅ PASS |
+| G7 | To be issued after Nimrod approval | PENDING |
 
 ---
 
@@ -244,6 +251,8 @@ deviation is approved by Team 100.
 | No hardcoded product names | Review new code files for string literals that look like product names |
 | log_entries used | After any run with a failure: `SELECT COUNT(*) FROM log_entries WHERE level='ERROR';` → must be > 0 |
 | English only | `grep -rn "[א-ת]" organic_market_agent/` → must return 0 (Hebrew only in seed data values) |
+| **Changelog updated** | **`CHANGELOG.md` has entries for all changes introduced since last gate — FAIL if missing** |
+| **Spec compliance** | **Verify changes match the relevant spec docs, not just "working code"** |
 
 ---
 
@@ -290,12 +299,35 @@ Gate G[N]: [OPEN / BLOCKED]
 
 ---
 
+## Spec Documents (QA Reference)
+
+**MANDATORY: Read the relevant spec document BEFORE testing any area.**
+QA validates against the spec — not against "what works."
+
+| Document | Use When Testing |
+|----------|-----------------|
+| `docs/GLOSSARY.md` | Always — READ FIRST every session |
+| `documentation/README.md` | English documentation hub |
+| `docs/DATABASE_SCHEMA_SPEC_HE.md` | Schema checks, data type validation, constraint testing |
+| `docs/NORMALIZER_SPEC_HE.md` | Normalizer behavior, stage order, blocking/non-blocking rules |
+| `docs/PIPELINE_ALGORITHMS_HE.md` | End-to-end pipeline flow, collector/parser behavior |
+| `docs/PRODUCT_CATALOG_V1.md` | Product count, aliases, unit mapping |
+| `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Publish thresholds, aggregation rules |
+| `docs/ARCHITECTURE_DECISIONS_HE.md` | Locked decisions, stack constraints |
+| `docs/RTL_DEVELOPMENT_GUIDE.md` | UI/UX checks for Hebrew RTL |
+| `docs/OPERATIONS.md` | Scheduler, cron, operational behavior |
+
+---
+
 ## Golden Rules for Team 50
 
 1. **The spec and mandate always win** — working code that deviates from spec is a FAIL
-2. **Evidence for every finding** — not "looks wrong", but exact file/line/SQL/output
-3. **Never fix code** — report and block; Team 10/20 fix, Team 50 re-verifies
-4. **Regression always** — every gate from G3 onward includes a regression check of prior tables
-5. **Document your SQL** — paste the exact queries and outputs in the QA report
-6. **Conditional PASS** — use it only when blockers are minor and well-defined; list exact conditions
-7. **English only** — all reports in English
+2. **Read the spec before testing** — always consult the relevant spec documents before running QA
+3. **Evidence for every finding** — not "looks wrong", but exact file/line/SQL/output
+4. **Never fix code** — report and block; Team 10/20 fix, Team 50 re-verifies
+5. **Regression always** — every gate from G3 onward includes a regression check of prior tables
+6. **Document your SQL** — paste the exact queries and outputs in the QA report
+7. **Conditional PASS** — use it only when blockers are minor and well-defined; list exact conditions
+8. **English only** — all reports in English
+9. **Verify changelog** — at every gate, check that `CHANGELOG.md` is updated with all changes since the last gate; FAIL if missing
+10. **Verify spec compliance** — check that changes align with spec doc intent, not just "pass the tests"

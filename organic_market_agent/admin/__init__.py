@@ -12,6 +12,7 @@ from organic_market_agent.admin.routes import (
     alerts,
     audit_pages,
     auth,
+    catalog_inbox,
     dashboard,
     diagnostics,
     maintenance,
@@ -108,5 +109,6 @@ def create_app() -> Flask:
     app.register_blueprint(diagnostics.bp)
     app.register_blueprint(maintenance.bp)
     app.register_blueprint(scope_skip_catalog.bp)
+    app.register_blueprint(catalog_inbox.bp)
 
     return app

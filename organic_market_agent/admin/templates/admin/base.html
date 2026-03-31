@@ -139,6 +139,7 @@
         <a class="nav-link {% if request.endpoint == 'scope_skip_catalog.scope_skip_list' %}active{% endif %}" href="{{ url_for('scope_skip_catalog.scope_skip_list') }}">דילוגי סקופ</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('sources.') %}active{% endif %}" href="{{ url_for('sources.source_list') }}">מקורות</a>
         <a class="nav-link {% if request.endpoint == 'products.product_list' %}active{% endif %}" href="{{ url_for('products.product_list') }}">מוצרים</a>
+        <a class="nav-link {% if request.endpoint and request.endpoint.startswith('catalog_inbox.') %}active{% endif %}" href="{{ url_for('catalog_inbox.suggestions_list') }}">תור קטלוג</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('unresolved.') %}active{% endif %}" href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('aliases.') %}active{% endif %}" href="{{ url_for('aliases.alias_list') }}">אליאסים</a>
         <a class="nav-link {% if request.endpoint and request.endpoint.startswith('rules.') %}active{% endif %}" href="{{ url_for('rules.rules_list') }}">כללים</a>

@@ -22,6 +22,9 @@ those belong to Team 10.
 3. Read `_COMMUNICATION/README.md` — team structure and gate protocol
 4. Check latest reports in `_COMMUNICATION/TEAM_20/reports/`
 5. Read current active mandate in `_COMMUNICATION/TEAM_20/`
+6. **Read the relevant spec documents** for the area you will be working on (see Spec Documents table below)
+
+**Do NOT modify schema, models, or migrations without first reading `docs/DATABASE_SCHEMA_SPEC_HE.md`.**
 
 ---
 
@@ -59,16 +62,29 @@ _COMMUNICATION/TEMPLATES/
 
 ---
 
-## Spec Documents to Read Before M1
+## Spec Documents to Read Before Working
 
-| Document | Relevant For |
-|----------|-------------|
-| `docs/GLOSSARY.md` | All terminology — read first |
-| `docs/DATABASE_SCHEMA_SPEC_HE.md` | All 23 tables, types, constraints, indexes |
-| `docs/PRODUCT_CATALOG_V1.md` | 29 products, 11 units, initial aliases |
-| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources — seed data |
-| `docs/ARCHITECTURE_DECISIONS_HE.md` | Python stack, PostgreSQL setup |
-| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Project structure (`organic_market_agent/`) |
+**MANDATORY: Read the relevant spec document BEFORE making any change in that area.**
+
+| Document | Relevant For | When to Read |
+|----------|-------------|-------------|
+| `docs/GLOSSARY.md` | All terminology | Always — READ FIRST every session |
+| `documentation/README.md` | English documentation hub — structured by topic | Always |
+| `docs/DATABASE_SCHEMA_SPEC_HE.md` | 29 tables, types, constraints, indexes (legacy Hebrew) | Before ANY migration or model change |
+| `docs/PRODUCT_CATALOG_V1.md` | 67 products, 11 units, aliases (original 29 + expansions) | Before changing seed data |
+| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources — seed data | Before changing source data |
+| `docs/ARCHITECTURE_DECISIONS_HE.md` | Python stack, PostgreSQL setup | Before any structural change |
+| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Project structure (`organic_market_agent/`) | Before adding new modules |
+
+**By area (for ad-hoc changes):**
+
+| If you're changing... | Read first |
+|-----------------------|-----------|
+| Tables, columns, constraints | `docs/DATABASE_SCHEMA_SPEC_HE.md` |
+| Products, units, aliases (seed data) | `docs/PRODUCT_CATALOG_V1.md` |
+| Source configurations | `docs/SOURCE_MAP_MASTER_HE.md` |
+| Package structure | `docs/DETAILED_SYSTEM_SPEC_HE.md` |
+| Environment, Docker, config | `docs/ARCHITECTURE_DECISIONS_HE.md` |
 
 ---
 
@@ -137,8 +153,11 @@ Include:
 ## Golden Rules for Team 20
 
 1. **Read the mandate before writing code** — `MANDATE_M1_INFRASTRUCTURE.md` first
-2. **Migrations are code** — every migration tested both `upgrade` and `downgrade`
-3. **Seed data is tested** — every seed verified in `tests/test_db_health.py`
-4. **Don't write feature code** — only infrastructure and skeleton
-5. **Report blockers immediately** — if PostgreSQL is unavailable, file a report with `[USER ACTION REQUIRED]`
-6. **English only** — all reports, comments, and code in English
+2. **Read the spec before changing schema** — `docs/DATABASE_SCHEMA_SPEC_HE.md` for every migration
+3. **Migrations are code** — every migration tested both `upgrade` and `downgrade`
+4. **Seed data is tested** — every seed verified in `tests/test_db_health.py`
+5. **Don't write feature code** — only infrastructure and skeleton
+6. **Report blockers immediately** — if PostgreSQL is unavailable, file a report with `[USER ACTION REQUIRED]`
+7. **English only** — all reports, comments, and code in English
+8. **Log every code change in `CHANGELOG.md`** — under the `[Unreleased]` section, before the session ends
+9. **Spec before schema** — understand the design intent from spec docs, not just the current implementation

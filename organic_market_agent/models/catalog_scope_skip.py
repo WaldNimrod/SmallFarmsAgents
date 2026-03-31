@@ -25,7 +25,7 @@ class CatalogScopeSkipRule(Base):
     __tablename__ = "catalog_scope_skip_rules"
     __table_args__ = (
         CheckConstraint(
-            "category_code IN ('donation','cleaning','dry_grocery','other')",
+            "category_code IN ('donation','cleaning','dry_grocery','grocery','other')",
             name="chk_cssr_category",
         ),
         CheckConstraint(

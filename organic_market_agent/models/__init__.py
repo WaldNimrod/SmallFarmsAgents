@@ -8,6 +8,7 @@ from organic_market_agent.models.observations import NormalizedObservation, Obse
 from organic_market_agent.models.aggregates import DailyAggregate, WeeklySnapshot
 from organic_market_agent.models.publishing import PublishArtifact, PublishRun
 from organic_market_agent.models.catalog_scope_skip import CatalogScopeSkipRule
+from organic_market_agent.models.catalog_inbox import PendingProductAlias, ProductCatalogSuggestion
 from organic_market_agent.models.scheduler import PipelineAlert, SchedulerConfig
 from organic_market_agent.models.users import AuditLog, LogEntry, User
 
@@ -38,4 +39,6 @@ __all__ = [
     "SchedulerConfig",
     "PipelineAlert",
     "CatalogScopeSkipRule",
+    "ProductCatalogSuggestion",
+    "PendingProductAlias",
 ]

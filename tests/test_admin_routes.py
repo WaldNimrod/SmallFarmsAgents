@@ -25,6 +25,8 @@ def test_t01_readonly_get_routes_return_200(client, db_session):
         "/unresolved",
         "/diagnostics/normalizer",
         "/catalog/scope-skip",
+        "/catalog/suggestions",
+        "/catalog/pending-aliases",
         "/aliases",
         "/rules",
         "/runs",

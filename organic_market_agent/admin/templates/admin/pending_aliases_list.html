@@ -1,0 +1,91 @@
+{% extends "admin/base.html" %}
+{% block title %}אליאסים ממתינים לאישור{% endblock %}
+{% block content %}
+<h1 class="h4 mb-2">אליאסים ממתינים לאישור</h1>
+<p class="small text-muted mb-3">
+  אישור מעתיק ל־<span class="ltr">product_aliases</span>. לאחר מכן להריץ:
+  <code class="ltr small">python3 -m organic_market_agent catalog_renormalize</code>
+</p>
+<p class="mb-3">
+  {% for st in ['pending', 'approved', 'rejected', 'all'] %}
+  <a href="{{ url_for('catalog_inbox.pending_aliases_list', status=st) }}"
+     class="btn btn-sm {% if filter_status == st %}btn-secondary{% else %}btn-outline-secondary{% endif %}"><span class="ltr">{{ st }}</span></a>
+  {% endfor %}
+</p>
+
+{% if current_user.is_authenticated %}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6">הוספת הצעת אליאס</h2>
+    <form method="post" action="{{ url_for('catalog_inbox.pending_aliases_new') }}" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small">טקסט אליאס</label>
+        <input type="text" name="alias_text" class="form-control" required maxlength="200" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">מוצר</label>
+        <select name="product_code" class="form-select ltr" required>
+          <option value="">—</option>
+          {% for code, name in products_for_select %}
+          <option value="{{ code }}">{{ name }} ({{ code }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label small">מקור (אופציונלי)</label>
+        <select name="source_id" class="form-select ltr">
+          <option value="">גלובלי</option>
+          {% for sid, scode, sname in sources_for_select %}
+          <option value="{{ sid }}">{{ scode }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">הוסף pending</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th class="text-end"><span class="ltr">id</span></th>
+        <th>אליאס</th>
+        <th>מוצר</th>
+        <th><span class="ltr">normalized</span></th>
+        <th><span class="ltr">status</span></th>
+        {% if current_user.is_authenticated %}<th></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      {% set p = it.row %}
+      <tr>
+        <td class="text-end"><span class="ltr">{{ p.id }}</span></td>
+        <td>{{ p.alias_text }}</td>
+        <td>{{ it.product_name_he }} <span class="ltr text-muted small">({{ it.product_code }})</span></td>
+        <td><span class="ltr small">{{ p.alias_text_normalized }}</span></td>
+        <td><span class="ltr">{{ p.status }}</span></td>
+        {% if current_user.is_authenticated %}
+        <td>
+          {% if p.status == 'pending' %}
+          <form method="post" action="{{ url_for('catalog_inbox.pending_aliases_approve', aid=p.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-success">אשר → אליאס</button>
+          </form>
+          <form method="post" action="{{ url_for('catalog_inbox.pending_aliases_reject', aid=p.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger">דחה</button>
+          </form>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+      {% else %}
+      <tr><td colspan="{% if current_user.is_authenticated %}6{% else %}5{% endif %}" class="text-muted">אין רשומות.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

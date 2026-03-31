@@ -1,5 +1,5 @@
 {
-  "last_published_at": "2026-03-31T19:10:34.956465+00:00",
+  "last_published_at": "2026-03-31T19:32:21.881255+00:00",
   "report_date": "2026-03-31",
   "product_count": 21,
   "staleness_level": "current",
@@ -10,13 +10,13 @@
   "distinct_community_sources_in_window": 3,
   "data_quality": {
     "raw_extracted_items": {
-      "normalized": 165,
-      "unresolvable": 262,
+      "normalized": 161,
+      "unresolvable": 9,
       "extracted_pending": 7,
-      "ignored": 68,
-      "ignored_approved_scope_skip": 68
+      "ignored": 325,
+      "ignored_approved_scope_skip": 325
     },
-    "resolution_pct_norm_vs_unres": 38.64,
-    "active_scope_skip_rules": 13
+    "resolution_pct_norm_vs_unres": 94.71,
+    "active_scope_skip_rules": 302
   }
 }

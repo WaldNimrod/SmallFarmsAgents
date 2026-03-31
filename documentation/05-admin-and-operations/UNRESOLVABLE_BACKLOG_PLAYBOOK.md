@@ -58,6 +58,12 @@ After DB rule changes: run **`catalog_renormalize`** (default). Use **`full_data
 - **Weekly:** Phases 1 → small Phase 2 batch → Phase 3 snapshot.
 - **Monthly / milestone:** Phase 4 retro + optional baseline update (with sign-off).
 
+## Related
+
+- **Baseline versioning (dated snapshots):** [`BASELINE_VERSIONING.md`](BASELINE_VERSIONING.md)
+- **Pre-publish review:** [`PUBLISH_CHECKLIST.md`](PUBLISH_CHECKLIST.md)
+- **Catalog inbox (suggestions + pending aliases):** admin nav **תור קטלוג** → `/catalog/suggestions`, `/catalog/pending-aliases`
+
 ---
 
 *Aligned with Team 10 execution report under `_COMMUNICATION/TEAM_10/reports/`.*

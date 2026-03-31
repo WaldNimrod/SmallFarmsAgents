@@ -9,6 +9,8 @@
   <a href="{{ url_for('scope_skip_catalog.scope_skip_list') }}">דילוגי סקופ מאושרים</a>
   <span>·</span>
   <a href="{{ url_for('unresolved.unresolved_list') }}">לא מזוהים</a>
+  <span>·</span>
+  <a href="{{ url_for('catalog_inbox.suggestions_list') }}">תור קטלוג</a>
   {% if current_user.is_authenticated %}
   <span>·</span>
   <form method="post" action="{{ url_for('maintenance.save_baseline') }}" class="d-inline m-0">
@@ -25,6 +27,7 @@
   {% endif %}
   <span class="text-muted small">נתיב בסיס: <span class="ltr">{{ baseline_path_hint }}</span></span>
 </p>
+<p class="small text-muted mb-3"><span class="ltr">Pre-publish checklist (repo):</span> <code class="ltr small">documentation/05-admin-and-operations/PUBLISH_CHECKLIST.md</code></p>
 
 {% if unread_alerts %}
 <div class="card mb-4 border-0 shadow-sm border-start border-warning border-3">

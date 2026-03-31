@@ -112,6 +112,44 @@
 <p class="text-muted mb-4">אין תצפיות מנורמלות עדיין.</p>
 {% endif %}
 
+{# ── Recent raw rows: source unit vs normalized units ── #}
+<h2 class="h5 mb-3">📋 שורות גולמיות אחרונות <small class="text-muted fs-6">(עד 100)</small></h2>
+<p class="small text-muted mb-2">
+  מחיר ויחידה <strong>כפי שחולצו מהמקור</strong> לעומת יחידת תצוגה ויחידת נירמול מהתצפית המנורמלת (אם קיימת).
+</p>
+{% if raw_recent_rows %}
+<div class="table-responsive mb-4">
+  <table class="table table-sm table-bordered bg-white table-sortable">
+    <thead class="table-light">
+      <tr>
+        <th class="text-end" data-sort-type="number"><span class="ltr">id</span></th>
+        <th data-sort-type="text">שם גולמי</th>
+        <th data-sort-type="text">מחיר גולמי</th>
+        <th data-sort-type="text">יחידה מהמקור</th>
+        <th data-sort-type="text">סטטוס</th>
+        <th data-sort-type="text">יחידת תצוגה (מנורמל)</th>
+        <th data-sort-type="text">יחידת נירמול</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in raw_recent_rows %}
+      <tr>
+        <td class="text-end"><span class="ltr text-muted">{{ row.id }}</span></td>
+        <td>{{ row.raw_product_name or '—' }}</td>
+        <td><span class="ltr">{{ row.raw_price_text }}</span></td>
+        <td><span class="ltr">{{ row.raw_unit_text }}</span></td>
+        <td><span class="ltr small">{{ row.extraction_status }}</span></td>
+        <td>{{ row.display_unit_he }}</td>
+        <td>{{ row.normalized_unit_he }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted mb-4">אין שורות גולמיות למקור זה.</p>
+{% endif %}
+
 {# ── Unresolved raw names ── #}
 <h2 class="h5 mb-3">❓ שמות גולמיים לא מזוהים <small class="text-muted fs-6">(עד 50 ראשונים)</small></h2>
 {% if unresolved %}

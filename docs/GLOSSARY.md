@@ -1,6 +1,6 @@
 # MyFarmAgents — Canonical Glossary
-**Version:** 1.0  
-**Date:** 2026-03-29  
+**Version:** 1.1  
+**Date:** 2026-03-31  
 **Maintainer:** Team 100 (Architecture)
 
 > This glossary is the single source of truth for all terminology used across
@@ -74,6 +74,11 @@ Hebrew in documentation, code comments, or file names.
 | Normalizer Profile | פרופיל-נרמול | Which normalizer type applies to a source |
 | Normalizer Rule | כלל-נרמול | A single data-driven rule in the normalizer |
 | Approved Scope Skip | דילוג-סקופ-מאושר | `catalog_scope_skip_rules` match → `raw_extracted_items` set to `ignored` with `approved_scope_skip:{category}#{rule_id}` — intentional V1 out-of-scope, not a normalizer failure |
+| Catalog Scope Skip Rule | כלל-דילוג-סקופ | A pattern rule in `catalog_scope_skip_rules` table — matches by exact, prefix, contains, or regex against raw product names; categorized (grocery, dry_grocery, donation, cleaning) |
+| Catalog Inbox | תיבת-קטלוג | Workflow tables (`product_catalog_suggestions`, `pending_product_aliases`) for proposing new products and aliases |
+| Full Data Refresh | רענון-נתונים-מלא | Maintenance operation: resets `normalized`/`unresolvable` items to `extracted` and re-runs the pipeline; does NOT touch approved `ignored` rows |
+| Catalog Renormalize | נרמול-קטלוג-מחדש | Maintenance operation: re-queues only `unresolvable` items for re-normalization |
+| Pipeline Alert | התראת-צינור | In-app alert stored in `pipeline_alerts` table; prefixed by class (`[OPS:…]`, `[PIPELINE:…]`, etc.) |
 | Observation Flag | דגל-תצפית | Admin/system mark on an observation (hide, review, etc.) |
 | Measurement Unit | יחידת-מידה | kg, unit, bunch, basket_small, etc. |
 | Unit Conversion | המרת-יחידות | Factor to convert from one unit to another |
@@ -92,6 +97,19 @@ Hebrew in documentation, code comments, or file names.
 | Community Products | מוצרים-קהילתיים | Products from community (non-benchmark) sources |
 | Benchmark Products | מוצרי-השוואה | Products from retail/govt benchmark sources |
 | Basket Products | מוצרי-סל | CSA baskets — not decomposed to per-kg in V1 |
+| Data Quality Snapshot | תמונת-איכות-נתונים | Pipeline counts embedded in `public_report.json` and `manifest.json` — computed by `utils/data_quality_snapshot.py` |
+| Price Dispersion Rule | כלל-פיזור-מחירים | Price spread check: 2-source >100% or 3+-source >2σ — suppresses publish + emits alert |
+
+---
+
+## Automation Terms
+
+| English Term | Hebrew | Notes |
+|---|---|---|
+| Scheduler Config | הגדרות-תזמון | Single-row `scheduler_config` table: `is_enabled`, `run_hour`, `run_minute`, `retry_attempts`, `cleanup_enabled`, `cleanup_after_days` |
+| Cron Runner | מריץ-קרון | `scheduler/runner.py` — self-gating entrypoint (runs every minute, only executes at configured time) |
+| Focused Run | ריצה-ממוקדת | Pipeline run scoped to a single source (`source_code` parameter) |
+| Normalizer Baseline | בסיס-נורמלייזר | Frozen JSON snapshot of pipeline counts for before/after comparison (`data/normalizer_baseline.json`) |
 
 ---
 

@@ -19,7 +19,10 @@ architectural decisions, and design reviews. Does not write production code.
 2. Read `_COMMUNICATION/ROADMAP.md` — current milestone and gate status
 3. Read `_COMMUNICATION/README.md` — team structure and gate protocol
 4. Check latest reports in `_COMMUNICATION/TEAM_10/reports/` and `_COMMUNICATION/TEAM_50/reports/`
-5. Read the relevant spec doc from `docs/` for the current task
+5. **Read the relevant spec documents** from the table below for the current task
+6. Read `CHANGELOG.md` — verify it reflects recent changes
+
+**Do NOT issue mandates or review implementations without first reading the spec that governs the area.**
 
 ---
 
@@ -47,21 +50,44 @@ _COMMUNICATION/TEMPLATES/
 
 ## Spec Documents (Source of Truth)
 
-| File | Content |
+**MANDATORY: Read the relevant spec document BEFORE issuing mandates or reviewing implementations.**
+
+### Design Intent Documents (read first — they explain WHY)
+
+| File | Governs | Read Before |
+|------|---------|-------------|
+| `docs/GLOSSARY.md` | Canonical terms — READ FIRST every session | Always |
+| `docs/ARCHITECTURE_DECISIONS_HE.md` | All locked architectural decisions | Any structural review |
+| `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model and publish policy | Publish or aggregation changes |
+| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Full system spec | New modules or major features |
+
+### Implementation Reference Documents (they explain HOW)
+
+| File | Governs | Read Before |
+|------|---------|-------------|
+| `documentation/README.md` | **English documentation hub** — structured by topic | Always |
+| `docs/DATABASE_SCHEMA_SPEC_HE.md` | PostgreSQL schema (29 tables) — legacy Hebrew | Schema review or sign-off |
+| `docs/NORMALIZER_SPEC_HE.md` | Normalizer engine — 8 stages (scope_skip → confidence) | Normalizer changes |
+| `docs/PIPELINE_ALGORITHMS_HE.md` | All pipeline algorithms | Pipeline changes |
+| `docs/PRODUCT_CATALOG_V1.md` | Product catalog (67 products, original 29 + expansions) | Product/alias changes |
+| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family, legal flags | Source configuration |
+| `docs/RTL_DEVELOPMENT_GUIDE.md` | Hebrew RTL development best practices | UI reviews |
+| `docs/OPERATIONS.md` | Operational runbook (cron, verification) | Operational reviews |
+
+### Plan Documents (they explain SCOPE)
+
+| File | Governs |
 |------|---------|
-| `docs/GLOSSARY.md` | Canonical terms — READ FIRST every session |
-| `docs/DATABASE_SCHEMA_SPEC_HE.md` | Full PostgreSQL schema (23 tables) |
-| `docs/NORMALIZER_SPEC_HE.md` | Normalizer engine — 7 stages |
-| `docs/PIPELINE_ALGORITHMS_HE.md` | All pipeline algorithms |
-| `docs/PRODUCT_CATALOG_V1.md` | 29 products, aliases, units |
-| `docs/SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family, legal flags |
-| `docs/ARCHITECTURE_DECISIONS_HE.md` | All locked architectural decisions |
-| `docs/DETAILED_SYSTEM_SPEC_HE.md` | Full system spec |
-| `docs/DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model and publish policy |
+| `docs/INTERFACE_MOCKUPS_HE.md` | UI mockups |
 | `docs/UPRESS_VALIDATION_PLAN_HE.md` | uPress validation — active at M7 |
 
-> Spec docs are legacy Hebrew. English rewrites are produced per milestone.
+> Spec docs are legacy Hebrew. `documentation/` hub and English mandates are the authoritative guides.
 > Use GLOSSARY.md for canonical terminology.
+
+## Changelog
+
+**All code changes are tracked in `CHANGELOG.md` at the project root.**
+Team 100 is responsible for verifying changelog discipline at every gate review.
 
 ---
 
@@ -72,18 +98,22 @@ _COMMUNICATION/TEMPLATES/
 | Platform name | MyFarmAgents |
 | First agent name | OrganicMarketAgent |
 | Python package | `organic_market_agent` |
-| Database | PostgreSQL — direct install, no Docker |
+| Database | PostgreSQL 15 via Docker (`docker-compose.yml` at repo root) |
 | Language | Python 3.11+ |
-| Admin UI | Flask, 127.0.0.1:5000, local only |
+| Admin UI | Flask, 127.0.0.1:5001, local only, Hebrew RTL, Flask-Login + bcrypt |
+| Public viewer | Static HTML, 127.0.0.1:8080 |
 | Publish mechanism | FTPS to `/wp-content/uploads/market/` on uPress |
-| Normalizer | Fully data-driven from DB — no deploy for rule changes |
+| Normalizer | 8-stage data-driven pipeline from DB — scope_skip → alias → organic → price → unit → quantity → price_norm → basket → confidence |
+| Scope-skip rules | `catalog_scope_skip_rules` (301 active) — non-food/out-of-scope filtering |
 | Baskets | Independent products in V1, not decomposed to per-kg |
 | Stale data | Warning at 3 days, "not relevant" at 8 days |
 | Publish minimum | 2 observations from 2 distinct sources per product |
 | Publish threshold | Min 2 community sources succeeded |
+| Price dispersion | 2-source spread >100% or 3+-source >2σ → suppress + alert |
+| Alerts | In-app only (no SMTP), stored in `pipeline_alerts` |
 | uPress validation | Deferred to M7 |
 | Region filter | Removed from V1 |
-| Language in docs | English only. Hebrew in conversations with Nimrod only. |
+| Language in docs | English only. Hebrew in conversations with Nimrod only. UI is Hebrew RTL. |
 
 ---
 
@@ -137,3 +167,6 @@ _COMMUNICATION/TEMPLATES/
 3. **Document everything** — every decision, every deviation, every question answered
 4. **Never write production code** — review only, not implement
 5. **English only** — all reports and documents in English
+6. **Read specs before reviewing** — always consult the relevant spec documents (see table above) before issuing mandates or reviewing implementations
+7. **Changelog discipline** — verify that all code changes are logged in `CHANGELOG.md`; at milestone end, ensure version bump and documentation update are performed
+8. **Spec documents are living documents** — when implementation reveals a gap, update the spec AND log the change

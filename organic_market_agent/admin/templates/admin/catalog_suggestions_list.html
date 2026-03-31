@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+{% block title %}הצעות מוצר לקטלוג{% endblock %}
+{% block content %}
+<h1 class="h4 mb-2">הצעות מוצר לקטלוג <span class="text-muted small">(V1+ backlog)</span></h1>
+<p class="small text-muted mb-3">
+  English notes in DB per project policy. No automatic <span class="ltr">products</span> row — approved ideas go to Team 20 / migration.
+</p>
+<p class="mb-3">
+  <a href="{{ url_for('catalog_inbox.suggestions_new') }}" class="btn btn-sm btn-primary">הצעה חדשה</a>
+  {% for st in ['pending', 'approved', 'rejected', 'all'] %}
+  <a href="{{ url_for('catalog_inbox.suggestions_list', status=st) }}"
+     class="btn btn-sm {% if filter_status == st %}btn-secondary{% else %}btn-outline-secondary{% endif %}"><span class="ltr">{{ st }}</span></a>
+  {% endfor %}
+</p>
+<div class="table-responsive">
+  <table class="table table-sm table-bordered bg-white">
+    <thead class="table-light">
+      <tr>
+        <th class="text-end"><span class="ltr">id</span></th>
+        <th>שם קנוני (עברית)</th>
+        <th><span class="ltr">proposed_code</span></th>
+        <th><span class="ltr">status</span></th>
+        <th><span class="ltr">created</span></th>
+        {% if current_user.is_authenticated %}<th></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in suggestions %}
+      <tr>
+        <td class="text-end"><span class="ltr">{{ s.id }}</span></td>
+        <td>{{ s.canonical_name_he }}</td>
+        <td><span class="ltr small">{{ s.proposed_code or '—' }}</span></td>
+        <td><span class="ltr">{{ s.status }}</span></td>
+        <td><span class="ltr small">{{ s.created_at }}</span></td>
+        {% if current_user.is_authenticated %}
+        <td>
+          {% if s.status == 'pending' %}
+          <form method="post" action="{{ url_for('catalog_inbox.suggestions_set_status', sid=s.id) }}" class="d-inline">
+            <input type="hidden" name="status" value="approved" />
+            <button type="submit" class="btn btn-sm btn-success">אשר</button>
+          </form>
+          <form method="post" action="{{ url_for('catalog_inbox.suggestions_set_status', sid=s.id) }}" class="d-inline">
+            <input type="hidden" name="status" value="rejected" />
+            <button type="submit" class="btn btn-sm btn-outline-danger">דחה</button>
+          </form>
+          {% else %}
+          <form method="post" action="{{ url_for('catalog_inbox.suggestions_set_status', sid=s.id) }}" class="d-inline">
+            <input type="hidden" name="status" value="pending" />
+            <button type="submit" class="btn btn-sm btn-outline-secondary">החזר ל־pending</button>
+          </form>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+      {% if s.notes %}
+      <tr><td colspan="{% if current_user.is_authenticated %}6{% else %}5{% endif %}" class="small text-muted"><span class="ltr">{{ s.notes }}</span></td></tr>
+      {% endif %}
+      {% else %}
+      <tr><td colspan="{% if current_user.is_authenticated %}6{% else %}5{% endif %}" class="text-muted">אין רשומות.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

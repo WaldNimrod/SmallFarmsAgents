@@ -11,10 +11,40 @@ alwaysApply: true
 are written in English.** No Hebrew in documentation, code, or file names.
 
 Hebrew is used only in direct conversation with project lead Nimrod.
+**UI is full Hebrew RTL** — see `docs/RTL_DEVELOPMENT_GUIDE.md`.
 
 Canonical terminology: `docs/GLOSSARY.md` — read it first.
 
 Structured documentation hub for agents and operators: `documentation/README.md` (overview, schema, pipelines, CLI, troubleshooting, archive policy).
+
+---
+
+## Iron Rules (Enforced — All Teams)
+
+### 1. Spec Study Before Code Change
+
+**Before modifying ANY code, every agent MUST:**
+1. Read the relevant spec documents listed in the Spec Documents table below
+2. Read the active mandate for the current milestone
+3. Understand the design intent — not just the current implementation
+4. If the change contradicts a spec, STOP and flag to Team 100
+
+**Spec documents define WHAT the system should do and WHY. Code defines HOW.**
+Never change code without understanding the spec that governs that area.
+
+### 2. Changelog Discipline
+
+**Every code change MUST be logged in `CHANGELOG.md` (project root).**
+
+- Log each change under the `[Unreleased]` section as it happens
+- Include: date, team, scope (file/module), and brief description
+- At the end of each significant phase (milestone, major fix, improvement cycle):
+  1. Update `CHANGELOG.md` — move unreleased items to a new versioned section
+  2. Bump the version in relevant documents
+  3. Update `documentation/` hub files to reflect the changes
+  4. Verify all spec references are still accurate
+
+**Do NOT postpone logging. If you changed code, log it before the session ends.**
 
 ---
 
@@ -43,60 +73,153 @@ More agents will follow under the MyFarmAgents umbrella.
 
 - Language: **Python 3.11+**
 - Package name: `organic_market_agent`
-- Admin UI: **Flask** (local only, 127.0.0.1:5000)
+- Admin UI: **Flask** (local only, 127.0.0.1:5001 — Hebrew RTL, Flask-Login + bcrypt auth)
+- Public viewer: **static HTML** (local only, 127.0.0.1:8080)
 - DB: **PostgreSQL 15 via Docker** (`docker-compose.yml` at repo root)
 - Docker container: `oma-postgres` (port 5433) for fresh installs; `oma-g2-ev` (port 55435) for current dev DB
 - `DATABASE_URL` in `.env` — see `.env.example`
-- ORM: SQLAlchemy 2.x + Alembic migrations
+- ORM: SQLAlchemy 2.x + Alembic migrations (29 revisions, head=029)
 - Scraping: httpx + BeautifulSoup4
-- Scheduler: system cron (06:00 daily)
+- Scheduler: system cron → `python -m organic_market_agent.scheduler.runner` (self-gates on `scheduler_config` table)
+- Charts: Chart.js (CDN) for admin dashboard graphs
+- Server management: `scripts/admin_server.sh`, `scripts/viewer_server.sh`, `scripts/restart_all_servers.sh`
 
 ## Key Decisions (locked)
 
-- Normalizer is **data-driven from DB** — aliases, rules, merges, flags all in
+- Normalizer is **data-driven from DB** — aliases, scope-skip rules, merges, flags all in
   PostgreSQL, changeable without deploy
+- **8-stage normalizer pipeline**: scope_skip → alias → organic_flag → price_parse → unit_resolve → quantity → price_norm → basket → confidence
+- **Scope-skip** (`catalog_scope_skip_rules`, 301 active rules) runs first to filter non-food/out-of-scope items → `ignored` status
+- **Alias resolver** matches raw names to products (exact → global → substring). 232 active aliases, 67 products
 - Baskets (CSA) are **independent products** — not decomposed to per-kg in V1
 - Public publish = `manifest.json` + versioned `public_report-{ts}.json/html` via FTPS
 - `manifest_last_good.json` maintained as fallback
 - Stale data: warning banner at 3 days, "not relevant" at 8 days
 - Min 2 observations from 2 distinct sources for public display
 - Publish threshold: min 2 community sources succeeded
+- **Price dispersion rules**: 2-source spread >100% or 3+-source outlier >2σ → suppress publish + alert
 - uPress FTP validation is deferred to M7 (go-live)
+
+## Current System State (as of 2026-03-31)
+
+- **29 database tables** (original 23 + scheduler_config, pipeline_alerts, catalog_scope_skip_rules, product_catalog_suggestions, pending_product_aliases, product_merges)
+- **67 products**, **232 active aliases**, **301 active scope-skip rules**
+- **20 sources** (7 active, 13 deactivated/candidate)
+- **174 normalized observations**, **100% resolution rate** (0 unresolvable)
+- **29 Alembic migrations** (001–029, no 009)
+- **127 tests passing**, 2 skipped (QA001 waiver + env skip)
+- Gates G1–G6 all PASS. M7 pending Nimrod approval.
+
+## Database Key Tables
+
+| Table | Role |
+|-------|------|
+| `products`, `product_aliases`, `product_merges` | Product catalog and raw-name mapping |
+| `sources`, `source_fetch_profiles`, `normalizer_profiles` | Source configuration |
+| `ingestion_runs`, `source_fetch_runs`, `raw_assets` | Run tracking and raw responses |
+| `raw_extracted_items` | Parsed rows; `extraction_status`: extracted / normalized / unresolvable / **ignored** |
+| `catalog_scope_skip_rules` | Approved V1 out-of-scope patterns → `ignored` |
+| `normalizer_rules` | Per-source normalizer config rules |
+| `normalized_observations` | Publishable price observations |
+| `daily_aggregates`, `weekly_snapshots` | Statistical rollups |
+| `pipeline_alerts` | Operator-facing alerts (in-app, no SMTP) |
+| `scheduler_config` | Single-row cron settings |
+| `users`, `audit_log` | Admin auth and write audit trail |
+| `product_catalog_suggestions`, `pending_product_aliases` | Catalog inbox workflow |
+
+## Admin UI Routes
+
+| Path | Purpose |
+|------|---------|
+| `/` | Dashboard — KPIs, Chart.js graphs (14-day resolution + source success), alert panel |
+| `/sources`, `/sources/<code>` | Source list and detail (stats, last fetch, link to website) |
+| `/products`, `/products/<id>` | Product list and detail (drill-down: observations, source origin, timestamps) |
+| `/unresolved`, `/unresolved/<id>` | Unresolvable items — drill-down for normalizer optimization |
+| `/aliases`, `/aliases/new` | Product alias CRUD |
+| `/rules`, `/rules/new` | Normalizer rule CRUD |
+| `/qa-flags` | Observation flags view |
+| `/catalog/scope-skip` | Scope-skip rules catalog (+ JSON export) |
+| `/catalog/suggestions`, `/catalog/pending-aliases` | Catalog inbox for new product suggestions |
+| `/diagnostics/normalizer` | Normalizer diagnostics — reason buckets, top raw names |
+| `/runs`, `/runs/<id>` | Ingestion runs — trigger (manual/focused), detail, live status |
+| `/scheduler` | Schedule control — enable/disable, time edit, cleanup trigger |
+| `/alerts` | Pipeline alerts — mark read, bulk mark-all |
+| `/audit` | Audit log viewer |
+
+## Maintenance Commands
+
+| Command | Purpose |
+|---------|---------|
+| `python -m organic_market_agent catalog_renormalize` | Re-queue `unresolvable` → normalize → aggregate → publish |
+| `python -m organic_market_agent full_data_refresh` | Community full refresh (reset normalized/unresolvable → re-run). Does NOT reset approved `ignored` rows. |
+| `python -m organic_market_agent baseline_snapshot` | Write normalizer baseline JSON (`data/normalizer_baseline.json`) |
+| `python -m organic_market_agent prune_raw_pipeline` | Prune old pipeline data (destructive) |
 
 ## Spec Documents (source of truth)
 
+**MANDATORY: Read the relevant spec document BEFORE making any change in that area.**
+
 All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 
-| File | Content |
-|------|---------|
-| `GLOSSARY.md` | Canonical terms — READ FIRST |
-| `DATABASE_SCHEMA_SPEC_HE.md` | Full PostgreSQL schema (23 tables) — pending English rewrite |
-| `NORMALIZER_SPEC_HE.md` | Normalizer engine spec — pending English rewrite |
-| `PIPELINE_ALGORITHMS_HE.md` | All pipeline algorithms — pending English rewrite |
-| `PRODUCT_CATALOG_V1.md` | 29 products, aliases, units — pending English rewrite |
-| `SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family — pending English rewrite |
-| `ARCHITECTURE_DECISIONS_HE.md` | Architectural decisions — pending English rewrite |
-| `DETAILED_SYSTEM_SPEC_HE.md` | Full system spec — pending English rewrite |
-| `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model + publish — pending English rewrite |
-| `UPRESS_VALIDATION_PLAN_HE.md` | uPress test plan (M7 gate) — pending English rewrite |
-| `INTERFACE_MOCKUPS_HE.md` | UI mockups — pending English rewrite |
+### Design Intent Documents (read first — they explain WHY)
 
-> Hebrew spec docs are legacy. English rewrites will be created per milestone.
+| File | Governs | Read Before Changing |
+|------|---------|---------------------|
+| `GLOSSARY.md` | All terminology | Always — READ EVERY SESSION |
+| `ARCHITECTURE_DECISIONS_HE.md` | Architectural decisions | Any structural change |
+| `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model + publish policy | Schema, publish, or aggregation changes |
+| `DETAILED_SYSTEM_SPEC_HE.md` | Full system design | Any new module or major feature |
+
+### Implementation Reference Documents (read for HOW)
+
+| File | Governs | Read Before Changing |
+|------|---------|---------------------|
+| `DATABASE_SCHEMA_SPEC_HE.md` | PostgreSQL schema (29 tables) | Any migration or model change |
+| `NORMALIZER_SPEC_HE.md` | Normalizer engine — 8 stages | Any normalizer stage, alias, or scope-skip change |
+| `PIPELINE_ALGORITHMS_HE.md` | Pipeline algorithms | Any collector, parser, aggregator, or publisher change |
+| `PRODUCT_CATALOG_V1.md` | Product catalog (67 products) | Product, alias, or unit changes |
+| `SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family | Source config or collector changes |
+| `RTL_DEVELOPMENT_GUIDE.md` | Hebrew RTL best practices | Any UI template or CSS change |
+| `OPERATIONS.md` | Operational runbook | Scheduler, cron, or server script changes |
+
+### Plan Documents (read for SCOPE)
+
+| File | Governs | Read Before Changing |
+|------|---------|---------------------|
+| `INTERFACE_MOCKUPS_HE.md` | UI mockups | Admin UI layout or page changes |
+| `UPRESS_VALIDATION_PLAN_HE.md` | uPress test plan (M7 gate) | Publish or FTPS changes |
+
+### Operational Playbooks (read for PROCEDURE)
+
+| File | Location |
+|------|----------|
+| Unresolvable Backlog Playbook | `documentation/05-admin-and-operations/UNRESOLVABLE_BACKLOG_PLAYBOOK.md` |
+| Baseline Versioning SOP | `documentation/05-admin-and-operations/BASELINE_VERSIONING.md` |
+| Publish Checklist | `documentation/05-admin-and-operations/PUBLISH_CHECKLIST.md` |
+| WordPress Go-Live Runbook | `documentation/05-admin-and-operations/WORDPRESS_PUBLIC_PUBLISH_RUNBOOK.md` |
+
+> Hebrew spec docs are legacy. English mandates and `documentation/` hub are the authoritative guides.
 > Until rewritten, use Hebrew docs as reference and GLOSSARY.md for terminology.
+
+## Changelog
+
+**All code changes are logged in `CHANGELOG.md` at the project root.**
+Current version: see `CHANGELOG.md` header. Every agent must update this file when making changes.
 
 ## Development Roadmap
 
 - Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
 - **Current milestone: M7 — Public Publishing / Go-Live (pending Nimrod explicit approval)**
-- Gate system G1–G7: see ROADMAP.md
-- uPress mandate deferred to M7
+- Gates G1–G6 all PASS. M7 is the final milestone.
+- uPress FTP validation + WordPress integration are M7 deliverables
+- Pipeline resolution improvement complete: 100% resolution rate achieved
 
 ## Team Structure
 
-- **Team 100** — Architecture. Owns spec, decisions, review.
-- **Team 50** — QA. Validates implementation against spec.
-- **Team 20** — Infrastructure. DB, env, skeleton. Currently on M1.
-- **Team 10** — Feature Dev. Collectors, parsers, normalizer, admin UI. Starts at M2.
+- **Team 100** — Architecture. Owns spec, decisions, review. Issues mandates.
+- **Team 50** — QA. Validates implementation against spec. Signs off on gates.
+- **Team 20** — Infrastructure. DB, env, Alembic, models, seed data.
+- **Team 10** — Feature Dev. Collectors, parsers, normalizer, aggregator, admin UI, publisher.
 
 ## Communication
 

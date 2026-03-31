@@ -1,5 +1,5 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.8  
+**Version:** 1.9  
 **Date:** 2026-03-31  
 **Author:** Team 100 (Architecture)  
 **Active Milestone:** M7 — Public Publishing / Go-Live (pending Nimrod explicit approval)
@@ -35,13 +35,20 @@ Tm20   Tm10   Tm10   Tm10   Tm10  Tm10  Tm10+20
 ```
 Phase A — Implementation  (executing team: Team 20 or Team 10)
     └─ Delivers code + unit tests
+    └─ Logs ALL changes in CHANGELOG.md under [Unreleased]
 Phase B — QA Validation   (Team 50)
     └─ Runs integration/data quality/regression/E2E tests
+    └─ Verifies CHANGELOG.md is complete for the milestone
     └─ Files QA report + PASS/FAIL/CONDITIONAL
 Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
+Phase C — Documentation   (Team 100 + implementing team)
+    └─ Move [Unreleased] entries in CHANGELOG.md to versioned section
+    └─ Bump version in relevant docs
+    └─ Update documentation/ hub to reflect changes
 ```
 
 **No team advances to the next milestone until the gate is formally open.**
+**Documentation update (Phase C) must be completed before next milestone starts.**
 
 ---
 
@@ -464,13 +471,39 @@ Gate Gₙ opens            (Team 50 sign-off, Team 100 for G5, Nimrod for G7)
 | Document | Location |
 |----------|---------|
 | Canonical Glossary | `docs/GLOSSARY.md` |
-| Database Schema (23 tables) | `docs/DATABASE_SCHEMA_SPEC_HE.md` |
-| Pipeline Algorithms | `docs/PIPELINE_ALGORITHMS_HE.md` |
-| Normalizer Spec | `docs/NORMALIZER_SPEC_HE.md` |
-| Product Catalog (29 products) | `docs/PRODUCT_CATALOG_V1.md` |
-| Source Map (20 sources) | `docs/SOURCE_MAP_MASTER_HE.md` |
-| Architecture Decisions | `docs/ARCHITECTURE_DECISIONS_HE.md` |
-| uPress Validation Plan | `docs/UPRESS_VALIDATION_PLAN_HE.md` |
+| RTL Development Guide | `docs/RTL_DEVELOPMENT_GUIDE.md` |
+| Operations Runbook | `docs/OPERATIONS.md` |
+| Database Schema (29 tables) | `docs/DATABASE_SCHEMA_SPEC_HE.md` (legacy Hebrew) |
+| Pipeline Algorithms | `docs/PIPELINE_ALGORITHMS_HE.md` (legacy Hebrew) |
+| Normalizer Spec | `docs/NORMALIZER_SPEC_HE.md` (legacy Hebrew) |
+| Product Catalog (67 products) | `docs/PRODUCT_CATALOG_V1.md` (original 29 + expansions) |
+| Source Map (20 sources) | `docs/SOURCE_MAP_MASTER_HE.md` (legacy Hebrew) |
+| Architecture Decisions | `docs/ARCHITECTURE_DECISIONS_HE.md` (legacy Hebrew) |
+| uPress Validation Plan | `docs/UPRESS_VALIDATION_PLAN_HE.md` (M7 gate) |
+| Documentation Hub (English) | `documentation/README.md` |
+| Normalizer Baseline | `data/normalizer_baseline.json` |
 
 > All `_HE.md` spec documents are legacy Hebrew.
-> English mandates are the authoritative implementation and QA guides.
+> English mandates and `documentation/` hub are the authoritative implementation and QA guides.
+
+---
+
+## Post-M6 Pipeline Resolution Achievement
+
+After M6, a focused initiative improved normalizer resolution from 38.6% to **100%**:
+
+| Metric | Baseline (post-M6) | After Resolution Work | Delta |
+|--------|--------------------|-----------------------|-------|
+| Resolution rate | 38.6% | **100%** | +61.4pp |
+| Unresolvable items | 262 | **0** | −262 (−100%) |
+| Normalized observations | 165 | **174** | +9 |
+| Ignored (scope-skip) | 68 | **334** | +266 |
+| Scope-skip rules | 13 | **301** | +288 |
+| Product aliases | 121 | **232** | +111 |
+| Products in catalog | 29 | **67** | +38 |
+| Alembic migrations | 016 | **029** | +13 |
+
+Key artifacts:
+- `_COMMUNICATION/TEAM_100/reports/2026-03-31_PIPELINE_RESOLUTION_SIGNOFF_TEAM100.md`
+- `_COMMUNICATION/TEAM_100/reports/2026-03-31_NORMALIZER_SUCCESS_IMPROVEMENTS_NIMROD_PLAN_TEAM100.md`
+- `data/normalizer_baseline.json` — frozen baseline snapshot

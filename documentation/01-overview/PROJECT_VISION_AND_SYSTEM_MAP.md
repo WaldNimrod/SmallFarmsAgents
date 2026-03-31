@@ -89,7 +89,24 @@ Canonical vocabulary: [`docs/GLOSSARY.md`](../../docs/GLOSSARY.md).
 ## Milestones and process
 
 - Roadmap and gates: [`_COMMUNICATION/ROADMAP.md`](../../_COMMUNICATION/ROADMAP.md).
-- **M1** focuses on local foundation (DB, skeleton, admin); feature-heavy work is gated (e.g. G1).
+- **M1–M6 COMPLETE** (G1–G6 all PASS). **M7** (Public Publishing / Go-Live) pending Nimrod approval.
+- Pipeline resolution rate: **100%** (0 unresolvable items out of 508 total).
+- 67 products, 232 aliases, 301 scope-skip rules, 174 normalized observations, 29 database tables.
+
+---
+
+## System health (as of 2026-03-31)
+
+| Metric | Value |
+|--------|-------|
+| Resolution rate | 100% |
+| Products | 67 (62 with observations) |
+| Active sources | 7 of 20 |
+| Active aliases | 232 |
+| Scope-skip rules | 301 |
+| Alembic migrations | 29 (head: 029) |
+| Tests | 127 passed, 2 skipped |
+| DB check | PASS |
 
 ---
 

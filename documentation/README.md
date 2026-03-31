@@ -27,7 +27,9 @@ All files under `documentation/` are **English only** (project language policy).
 
 1. Read [`docs/GLOSSARY.md`](../docs/GLOSSARY.md).
 2. Open the section above that matches the task (schema change → `03`, pipeline bug → `04`, etc.).
-3. Prefer **code** under `organic_market_agent/` as source of truth; this tree summarizes and links.
+3. **Read the relevant spec document** before making any change (see categorized table in `project-context.mdc` or team onboarding files).
+4. Prefer **code** under `organic_market_agent/` as source of truth; this tree summarizes and links.
+5. **Log every code change** in [`CHANGELOG.md`](../CHANGELOG.md) under `[Unreleased]` before the session ends.
 4. For team process and gates, see [`external-references/`](external-references/) → `_COMMUNICATION/ROADMAP.md`.
 5. When a temporary spec or work package is **finished**, move or copy it into [`archive/`](archive/) per [`archive/README.md`](archive/README.md).
 
@@ -47,4 +49,4 @@ All files under `documentation/` are **English only** (project language policy).
 
 ---
 
-*Last updated: 2026-03-31 (vision/system map + doc hub link fix).*
+*Last updated: 2026-03-31 (post-M6 pipeline resolution improvements, full documentation refresh).*

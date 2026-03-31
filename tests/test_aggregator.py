@@ -212,12 +212,17 @@ def test_aggregator_two_source_wide_spread_suppresses_publish_and_alerts(
             sa.select(DailyAggregate).where(
                 DailyAggregate.aggregate_date == TEST_DATE,
                 DailyAggregate.product_id == pid,
+                DailyAggregate.market_scope == "community",
             )
         ).scalar_one()
         assert row.meets_publish_threshold is False
         assert row.distinct_sources == 2
+        date_frag = f"%{TEST_DATE.isoformat()}%"
         alert = pg_session.execute(
-            sa.select(PipelineAlert).where(PipelineAlert.message.like("[AGG_PRICE_RULE%"))
+            sa.select(PipelineAlert).where(
+                PipelineAlert.message.like("[AGG_PRICE_RULE%"),
+                PipelineAlert.message.like(date_frag),
+            )
         ).scalar_one_or_none()
         assert alert is not None
         assert "two_source_price_spread_gt_100pct" in alert.message
@@ -237,15 +242,18 @@ def test_aggregator_second_run_same_suppression_no_duplicate_alert(pg_session: S
         pg_session.commit()
 
         AggregatorEngine().run(pg_session, TEST_DATE)
+        date_frag = f"%{TEST_DATE.isoformat()}%"
         n1 = pg_session.execute(
             sa.select(sa.func.count()).select_from(PipelineAlert).where(
-                PipelineAlert.message.like("[AGG_PRICE_RULE%")
+                PipelineAlert.message.like("[AGG_PRICE_RULE%"),
+                PipelineAlert.message.like(date_frag),
             )
         ).scalar_one()
         AggregatorEngine().run(pg_session, TEST_DATE)
         n2 = pg_session.execute(
             sa.select(sa.func.count()).select_from(PipelineAlert).where(
-                PipelineAlert.message.like("[AGG_PRICE_RULE%")
+                PipelineAlert.message.like("[AGG_PRICE_RULE%"),
+                PipelineAlert.message.like(date_frag),
             )
         ).scalar_one()
         assert int(n1) == 1

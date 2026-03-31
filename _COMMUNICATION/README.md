@@ -16,6 +16,25 @@ Canonical terminology: `docs/GLOSSARY.md`
 
 ---
 
+## Iron Rules (All Teams)
+
+### 1. Spec Study Before Code Change
+
+**Before modifying ANY code, read the relevant spec documents.**
+Spec docs define WHAT the system should do and WHY. The mandate defines WHAT to implement NOW.
+If a change contradicts a spec, STOP and flag to Team 100.
+
+See each team's `ONBOARDING.md` for the categorized spec document table.
+
+### 2. Changelog Discipline
+
+**Every code change must be logged in `CHANGELOG.md` (project root) under `[Unreleased]`.**
+At milestone end (after gate PASS), entries are moved to a versioned section with documentation update.
+
+This is verified by Team 50 at every gate — missing changelog entries are a gate blocker.
+
+---
+
 ## ⚠️ Canonical Templates — Mandatory
 
 All inter-team communication **must** use the canonical templates defined in:

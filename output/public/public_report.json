@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-31T19:10:34.956465+00:00",
+  "generated_at": "2026-03-31T19:32:21.881255+00:00",
   "report_date": "2026-03-31",
   "index": {
     "mode": "rolling_7d",
@@ -9,14 +9,14 @@
   },
   "data_quality": {
     "raw_extracted_items": {
-      "normalized": 165,
-      "unresolvable": 262,
+      "normalized": 161,
+      "unresolvable": 9,
       "extracted_pending": 7,
-      "ignored": 68,
-      "ignored_approved_scope_skip": 68
+      "ignored": 325,
+      "ignored_approved_scope_skip": 325
     },
-    "resolution_pct_norm_vs_unres": 38.64,
-    "active_scope_skip_rules": 13
+    "resolution_pct_norm_vs_unres": 94.71,
+    "active_scope_skip_rules": 302
   },
   "products": [
     {
@@ -32,7 +32,7 @@
       "median_price": 17.25,
       "stddev_price": 3.182,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.345794+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.476848+00:00"
     },
     {
       "product_id": "PRD057",
@@ -47,7 +47,7 @@
       "median_price": 30.0,
       "stddev_price": 2.8284,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.349269+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.480228+00:00"
     },
     {
       "product_id": "PRD060",
@@ -62,7 +62,22 @@
       "median_price": 19.25,
       "stddev_price": 3.8891,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.352015+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.483388+00:00"
+    },
+    {
+      "product_id": "PRD046",
+      "canonical_name_he": "בננה",
+      "market_scope": "community",
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 19.9,
+      "max_price": 20.0,
+      "avg_price": 19.95,
+      "median_price": 19.95,
+      "stddev_price": 0.0707,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-03-31T19:32:21.657681+00:00"
     },
     {
       "product_id": "PRD017",
@@ -77,7 +92,7 @@
       "median_price": 18.0,
       "stddev_price": 5.6569,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.906888+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.727051+00:00"
     },
     {
       "product_id": "PRD018",
@@ -92,7 +107,7 @@
       "median_price": 7.0,
       "stddev_price": 1.4142,
       "normalized_unit": "צרור",
-      "last_observed_at": "2026-03-31T19:05:38.923038+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.742314+00:00"
     },
     {
       "product_id": "PRD023",
@@ -107,7 +122,7 @@
       "median_price": 11.75,
       "stddev_price": 2.4749,
       "normalized_unit": "יחידה",
-      "last_observed_at": "2026-03-31T19:05:38.506037+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.644077+00:00"
     },
     {
       "product_id": "PRD013",
@@ -122,7 +137,7 @@
       "median_price": 17.75,
       "stddev_price": 6.0104,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.903521+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.723448+00:00"
     },
     {
       "product_id": "PRD008",
@@ -137,7 +152,7 @@
       "median_price": 7.0,
       "stddev_price": 1.4142,
       "normalized_unit": "יחידה",
-      "last_observed_at": "2026-03-31T19:05:38.926119+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.745825+00:00"
     },
     {
       "product_id": "PRD006",
@@ -152,7 +167,7 @@
       "median_price": 11.5,
       "stddev_price": 2.1213,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.374004+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.508944+00:00"
     },
     {
       "product_id": "PRD011",
@@ -167,7 +182,7 @@
       "median_price": 7.0,
       "stddev_price": 1.4142,
       "normalized_unit": "צרור",
-      "last_observed_at": "2026-03-31T19:05:38.462704+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.605038+00:00"
     },
     {
       "product_id": "PRD021",
@@ -182,7 +197,7 @@
       "median_price": 15.5,
       "stddev_price": 4.9497,
       "normalized_unit": "יחידה",
-      "last_observed_at": "2026-03-31T19:05:38.726091+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.696627+00:00"
     },
     {
       "product_id": "PRD033",
@@ -197,7 +212,7 @@
       "median_price": 11.75,
       "stddev_price": 2.4749,
       "normalized_unit": "יחידה",
-      "last_observed_at": "2026-03-31T19:05:38.511350+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.650798+00:00"
     },
     {
       "product_id": "PRD014",
@@ -212,7 +227,7 @@
       "median_price": 10.5,
       "stddev_price": 3.5355,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.932902+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.753682+00:00"
     },
     {
       "product_id": "PRD001",
@@ -227,7 +242,7 @@
       "median_price": 9.995,
       "stddev_price": 0.0071,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.959564+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.775052+00:00"
     },
     {
       "product_id": "PRD009",
@@ -242,7 +257,7 @@
       "median_price": 9.0,
       "stddev_price": 1.4142,
       "normalized_unit": "צרור",
-      "last_observed_at": "2026-03-31T19:05:38.493720+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.632386+00:00"
     },
     {
       "product_id": "PRD012",
@@ -257,7 +272,7 @@
       "median_price": 8.0,
       "stddev_price": 2.8284,
       "normalized_unit": "צרור",
-      "last_observed_at": "2026-03-31T19:05:38.478993+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.618668+00:00"
     },
     {
       "product_id": "PRD003",
@@ -272,7 +287,7 @@
       "median_price": 17.75,
       "stddev_price": 2.4749,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.366979+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.501515+00:00"
     },
     {
       "product_id": "PRD007",
@@ -287,22 +302,7 @@
       "median_price": 21.25,
       "stddev_price": 3.8891,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:10:34.488733+00:00"
-    },
-    {
-      "product_id": "PRD055",
-      "canonical_name_he": "קלמנטינה",
-      "market_scope": "community",
-      "meets_publish_threshold": true,
-      "sample_size": 2,
-      "distinct_sources": 2,
-      "min_price": 9.0,
-      "max_price": 14.5,
-      "avg_price": 11.75,
-      "median_price": 11.75,
-      "stddev_price": 3.8891,
-      "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:10:34.516182+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.559770+00:00"
     },
     {
       "product_id": "PRD048",
@@ -317,7 +317,7 @@
       "median_price": 14.5,
       "stddev_price": 2.1213,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:05:38.425334+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.566251+00:00"
     },
     {
       "product_id": "PRD056",
@@ -332,7 +332,7 @@
       "median_price": 10.25,
       "stddev_price": 0.3536,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-03-31T19:10:34.497419+00:00"
+      "last_observed_at": "2026-03-31T19:32:21.574666+00:00"
     }
   ]
 }
