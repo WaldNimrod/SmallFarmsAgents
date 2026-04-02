@@ -1,218 +1,119 @@
-<!DOCTYPE html>
-<html dir="rtl" lang="he">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>מחירי ירקות אורגניים — 2026-03-31</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --green-dark:  #1b4332;
-      --green-mid:   #2d6a4f;
-      --green-light: #52b788;
-      --sand:        #f5f0e8;
-      --sand-dark:   #e8dfc8;
-      --gold:        #c9a84c;
-      --text:        #1a1a1a;
-      --muted:       #6b7280;
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { font-size: 16px; }
-    body {
-      font-family: 'Heebo', sans-serif;
-      background: var(--sand);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-    }
 
-    /* Header */
-    .site-header {
-      background: var(--green-dark);
-      color: #fff;
-      padding: 2rem 1.5rem 1.5rem;
-      text-align: center;
-    }
-    .site-header .brand {
-      font-family: 'Frank Ruhl Libre', serif;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-block-end: 0.25rem;
-    }
-    .site-header .sub {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-    .report-meta {
-      background: var(--green-mid);
-      color: #fff;
-      padding: 0.6rem 1.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      font-size: 0.85rem;
-      flex-wrap: wrap;
-    }
-    .report-meta span { direction: ltr; }
-
-    /* Stale banner */
-    .stale-banner {
-      background: #fef3c7;
-      border-inline-start: 4px solid var(--gold);
-      padding: 0.75rem 1.25rem;
-      margin: 1rem 1.5rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      color: #92400e;
-    }
-
-    /* Data-quality transparency (matches public_report.json → data_quality) */
-    .dq-box {
-      background: #fff;
-      border-radius: 12px;
-      border-inline-start: 4px solid var(--green-mid);
-      padding: 1rem 1.25rem;
-      margin-block-end: 1.25rem;
-      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
-    }
-    .dq-title {
-      font-size: 1rem;
-      margin: 0 0 0.5rem;
-      color: var(--green-dark);
-    }
-    .dq-lead {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin: 0 0 0.75rem;
-      line-height: 1.45;
-    }
-    .dq-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
-      gap: 0.5rem 1rem;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.88rem;
-    }
-    .dq-grid li span.ltr { font-weight: 600; }
-
-    /* Main content */
-    .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
-
-    /* Table */
-    .price-table-wrap {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.08);
-      overflow: hidden;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.92rem;
-    }
-    thead tr {
-      background: var(--green-dark);
-      color: #fff;
-    }
-    thead th {
-      padding: 0.9rem 1rem;
-      font-weight: 600;
-      text-align: start;
-      white-space: nowrap;
-    }
-    thead th.num { text-align: end; }
-    tbody tr { border-block-end: 1px solid #f0ede6; }
-    tbody tr:last-child { border-block-end: none; }
-    tbody tr:nth-child(even) { background: #fafaf8; }
-    tbody tr:hover { background: #f0faf4; }
-    td {
-      padding: 0.75rem 1rem;
-      vertical-align: middle;
-    }
-    td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
-    .product-name { font-weight: 600; font-size: 1rem; }
-    .product-emoji { font-size: 1.3rem; margin-inline-end: 0.4rem; }
-    .unit-badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      background: var(--sand-dark);
-      color: var(--green-dark);
-      border-radius: 4px;
-      padding: 1px 5px;
-      font-weight: 500;
-      margin-inline-start: 4px;
-      direction: rtl;
-    }
-    .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
-    .price-secondary { color: var(--muted); font-size: 0.88rem; }
-    /* range bar */
-    .range-bar-wrap {
-      position: relative;
-      height: 6px;
-      background: #e5e7eb;
-      border-radius: 3px;
-      min-inline-size: 80px;
-      margin-block: 4px;
-    }
-    .range-bar-fill {
-      position: absolute;
-      inset-block: 0;
-      background: linear-gradient(to left, var(--green-light), var(--green-dark));
-      border-radius: 3px;
-    }
-    .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
-    .stddev-text { font-size: 0.78rem; color: var(--muted); }
-    .sources-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* Footer */
-    .site-footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-    .site-footer a { color: var(--green-mid); text-decoration: none; }
-    .site-footer a:hover { text-decoration: underline; }
-
-    @media (max-width: 640px) {
-      .hide-mobile { display: none; }
-      thead th, td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
-    }
-  </style>
-</head>
-<body>
-
-<header class="site-header">
-  <div class="brand">🌿 מחירי ירקות אורגניים</div>
-  <div class="sub">נתוני מחיר מקהילת המגדלים האורגנית</div>
-</header>
-
-<div class="report-meta">
-  <span>תאריך דוח: 2026-03-31</span>
-  <span>עודכן: 2026-04-02 09:28</span>
-  <span>34 מוצרים</span>
-</div>
+<div class="sfagent-market-report" dir="rtl" lang="he">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap');
+  .sfagent-market-report {
+    --green-dark:  #1b4332;
+    --green-mid:   #2d6a4f;
+    --green-light: #52b788;
+    --sand:        #f5f0e8;
+    --sand-dark:   #e8dfc8;
+    --gold:        #c9a84c;
+    --text:        #1a1a1a;
+    --muted:       #6b7280;
+    font-family: 'Heebo', sans-serif;
+    color: var(--text);
+    line-height: 1.5;
+    box-sizing: border-box;
+  }
+  .sfagent-market-report *, .sfagent-market-report *::before, .sfagent-market-report *::after { box-sizing: border-box; }
+  .sfagent-market-report .stale-banner {
+    background: #fef3c7;
+    border-right: 4px solid var(--gold);
+    padding: 0.75rem 1.25rem;
+    margin: 0 0 1.25rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #92400e;
+  }
+  .sfagent-market-report .dq-box {
+    background: #fff;
+    border-radius: 12px;
+    border-right: 4px solid var(--green-mid);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  }
+  .sfagent-market-report .dq-title { font-size: 1rem; margin: 0 0 0.5rem; color: var(--green-dark); font-weight: 700; }
+  .sfagent-market-report .dq-meta {
+    display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem;
+    font-size: 0.88rem; color: var(--muted); margin-bottom: 0.75rem;
+    padding-bottom: 0.6rem; border-bottom: 1px solid #f0ede6;
+  }
+  .sfagent-market-report .dq-meta span { white-space: nowrap; }
+  .sfagent-market-report .dq-meta .ltr { direction: ltr; display: inline; }
+  .sfagent-market-report .dq-lead { font-size: 0.82rem; color: var(--muted); margin: 0 0 0.6rem; line-height: 1.45; }
+  .sfagent-market-report .dq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 0.5rem 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+  }
+  .sfagent-market-report .dq-grid li span.ltr { font-weight: 600; }
+  .sfagent-market-report .sf-container { max-width: 1100px; margin: 0 auto; padding: 1rem 0; }
+  .sfagent-market-report .price-table-wrap {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    overflow: hidden;
+  }
+  .sfagent-market-report table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .sfagent-market-report thead tr { background: var(--green-dark); color: #fff; }
+  .sfagent-market-report thead th { padding: 0.9rem 1rem; font-weight: 600; text-align: start; white-space: nowrap; }
+  .sfagent-market-report thead th.num { text-align: end; }
+  .sfagent-market-report tbody tr { border-bottom: 1px solid #f0ede6; }
+  .sfagent-market-report tbody tr:last-child { border-bottom: none; }
+  .sfagent-market-report tbody tr:nth-child(even) { background: #fafaf8; }
+  .sfagent-market-report tbody tr:hover { background: #f0faf4; }
+  .sfagent-market-report td { padding: 0.75rem 1rem; vertical-align: middle; }
+  .sfagent-market-report td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
+  .sfagent-market-report .product-name { font-weight: 600; font-size: 1rem; }
+  .sfagent-market-report .product-emoji { font-size: 1.3rem; margin-left: 0.4rem; }
+  .sfagent-market-report .unit-badge {
+    display: inline-block; font-size: 0.72rem; background: var(--sand-dark);
+    color: var(--green-dark); border-radius: 4px; padding: 1px 5px;
+    font-weight: 500; margin-right: 4px; direction: rtl;
+  }
+  .sfagent-market-report .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
+  .sfagent-market-report .price-secondary { color: var(--muted); font-size: 0.88rem; }
+  .sfagent-market-report .range-bar-wrap {
+    position: relative; height: 6px; background: #e5e7eb;
+    border-radius: 3px; min-width: 80px; margin: 4px 0;
+  }
+  .sfagent-market-report .range-bar-fill {
+    position: absolute; top: 0; bottom: 0;
+    background: linear-gradient(to left, var(--green-light), var(--green-dark));
+    border-radius: 3px;
+  }
+  .sfagent-market-report .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
+  .sfagent-market-report .stddev-text { font-size: 0.78rem; color: var(--muted); }
+  .sfagent-market-report .sources-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 0.78rem; color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .sfagent-market-report .hide-mobile { display: none; }
+    .sfagent-market-report thead th, .sfagent-market-report td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+  }
+</style>
 
 
 
-<div class="container">
+<div class="sf-container">
 
 
 <div class="dq-box" aria-label="שקיפות צינור נירמול">
   <h2 class="dq-title">שקיפות — מצב צינור הנירמול</h2>
+  <div class="dq-meta">
+    <span>תאריך דוח: <span class="ltr">2026-03-31</span></span>
+    <span>עודכן: <span class="ltr">2026-04-02 09:28</span></span>
+    <span>34 מוצרים</span>
+  </div>
   <p class="dq-lead">
     ספירות לפי מסד הנתונים המקומי (<span class="ltr">raw_extracted_items</span>).
-    אותם ערכים מופיעים בקובץ <span class="ltr">public_report.json</span> תחת <span class="ltr">data_quality</span>.
     לא משמשים לחישוב המחירים בטבלה למטה.
   </p>
   <ul class="dq-grid">
@@ -222,11 +123,9 @@
     <li>דולג (<span class="ltr">ignored</span>): <span class="ltr">334</span></li>
     <li>דילוג מאושר (סקופ): <span class="ltr">324</span></li>
     <li>כללי סקופ פעילים: <span class="ltr">301</span></li>
-    <li>אחוז פתרון (מנורמל מול מנורמל+לא ניתן): <span class="ltr">54.48%</span></li>
+    <li>אחוז פתרון: <span class="ltr">54.48%</span></li>
   </ul>
 </div>
-
-
 
 
 
@@ -272,7 +171,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 12.3%; inline-size: 6.2%;"></div>
@@ -313,7 +211,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -358,7 +255,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 30.1%; inline-size: 5.5%;"></div>
@@ -399,7 +295,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -444,7 +339,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 24.7%; inline-size: 4.1%;"></div>
@@ -485,7 +379,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -530,7 +423,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 0.0%; inline-size: 5.5%;"></div>
@@ -571,7 +463,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -616,7 +507,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 9.6%; inline-size: 12.3%;"></div>
@@ -657,7 +547,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -702,7 +591,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 5.5%; inline-size: 4.1%;"></div>
@@ -743,7 +631,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -788,7 +675,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 8.2%; inline-size: 38.4%;"></div>
@@ -829,7 +715,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -874,7 +759,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 8.9%; inline-size: 4%;"></div>
@@ -915,7 +799,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -960,7 +843,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 2.7%; inline-size: 4%;"></div>
@@ -1001,7 +883,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1046,7 +927,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 0.0%; inline-size: 9.6%;"></div>
@@ -1087,7 +967,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1132,7 +1011,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 4.1%; inline-size: 4.1%;"></div>
@@ -1173,7 +1051,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1218,7 +1095,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 2.7%; inline-size: 4%;"></div>
@@ -1259,7 +1135,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1304,7 +1179,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 13.7%; inline-size: 4.8%;"></div>
@@ -1345,7 +1219,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1390,7 +1263,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 32.9%; inline-size: 4%;"></div>
@@ -1431,7 +1303,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1476,7 +1347,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 0.0%; inline-size: 4%;"></div>
@@ -1517,7 +1387,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1562,7 +1431,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 4.1%; inline-size: 7.5%;"></div>
@@ -1603,7 +1471,6 @@
         </td>
         <td>
           
-            
             
             
             <div class="range-bar-wrap">
@@ -1648,7 +1515,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 4.1%; inline-size: 6.8%;"></div>
@@ -1691,7 +1557,6 @@
           
             
             
-            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
                    style="inset-inline-end: 4.1%; inline-size: 4%;"></div>
@@ -1717,14 +1582,9 @@
   </table>
 </div>
 
-<p class="text-center mt-3" style="font-size:0.8rem; color: var(--muted);">
+<p style="font-size:0.8rem; color: var(--muted); text-align: center; margin-top: 1rem;">
   נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
 </p>
 </div>
 
-<footer class="site-footer">
-  <p>🌱 <a href="https://www.nimrod.bio" target="_blank" rel="noopener">nimrod.bio</a> — חקלאות אקולוגית מקומית אורגנית</p>
-</footer>
-
-</body>
-</html>
+</div>

@@ -1,4 +1,4 @@
-"""Full pipeline: ingestion for an existing run, then normalize, aggregate, publish."""
+"""Full pipeline: ingestion for an existing run, then normalize, aggregate, publish, upload."""
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -6,9 +6,13 @@ from pathlib import Path
 
 from organic_market_agent.aggregator.engine import AggregatorEngine
 from organic_market_agent.db.session import SessionFactory
-from organic_market_agent.models import IngestionRun, PipelineAlert
+from organic_market_agent.models import IngestionRun, PipelineAlert, SchedulerConfig
 from organic_market_agent.normalizer.engine import NormalizerEngine
 from organic_market_agent.publisher.engine import PublishEngine
+from organic_market_agent.publisher.ftps_upload import (
+    MissingCredentialsError,
+    upload_artifacts,
+)
 from organic_market_agent.scheduler.pipeline_cancel import (
     PipelineRunCancelled,
     is_cancelled,
@@ -25,6 +29,9 @@ from organic_market_agent.utils.exceptions import PublishAbortError
 from organic_market_agent.utils.log_persist import persist_error_log, persist_log
 from organic_market_agent.utils.logging_setup import get_logger
 from organic_market_agent.utils.pipeline_alert_tags import (
+    TAG_FTPS_UPLOAD_FAILURE,
+    TAG_FTPS_UPLOAD_PARTIAL,
+    TAG_FTPS_UPLOAD_SUCCESS,
     TAG_PIPELINE_FAILURE,
     TAG_PIPELINE_MISSING_RUN,
     TAG_PIPELINE_NO_ACTIVE_SOURCES,
@@ -65,9 +72,10 @@ def run_pipeline(
     source_code: str | None = None,
     skip_normalize: bool = False,
     skip_publish: bool = False,
+    skip_upload: bool = False,
     retry_attempts: int = 2,
 ) -> None:
-    """Background worker: collect/parse, optional normalizer, aggregator (today UTC), optional publish."""
+    """Background worker: collect/parse, optional normalizer, aggregator (today UTC), optional publish, optional FTPS upload."""
     config.ensure_dirs()
     registered = False
     try:
@@ -274,6 +282,76 @@ def run_pipeline(
                         )
                         s3.commit()
 
+        # --- FTPS upload phase (M7) ---
+        upload_result_summary: dict[str, object] | None = None
+        if not skip_upload and publish_summary is not None:
+            upload_enabled = False
+            with SessionFactory() as session:
+                cfg = session.scalars(
+                    __import__("sqlalchemy").select(SchedulerConfig).limit(1)
+                ).first()
+                upload_enabled = cfg.upload_enabled if cfg else False
+
+            if upload_enabled and config.upress_configured():
+                with SessionFactory() as session:
+                    merge_run_progress(session, ingestion_run_id, phase="ftps_upload")
+                    session.commit()
+                try:
+                    output_dir = Path(publish_summary.get("output_dir", "output/public"))
+                    file_list = publish_summary.get("files", [])
+                    result = upload_artifacts(output_dir, file_list)
+                    upload_result_summary = {
+                        "success": result.success,
+                        "uploaded": result.files_uploaded,
+                        "failed": result.files_failed,
+                        "error": result.error,
+                    }
+                    with SessionFactory() as session:
+                        if result.success:
+                            session.add(PipelineAlert(
+                                level="info",
+                                message=tagged_message(
+                                    TAG_FTPS_UPLOAD_SUCCESS,
+                                    f"FTPS upload OK: {len(result.files_uploaded)} files to {result.remote_base}",
+                                ),
+                                ingestion_run_id=ingestion_run_id,
+                            ))
+                        elif result.files_uploaded:
+                            session.add(PipelineAlert(
+                                level="warning",
+                                message=tagged_message(
+                                    TAG_FTPS_UPLOAD_PARTIAL,
+                                    f"FTPS partial: {len(result.files_uploaded)} ok, "
+                                    f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+                                ),
+                                ingestion_run_id=ingestion_run_id,
+                            ))
+                        else:
+                            session.add(PipelineAlert(
+                                level="error",
+                                message=tagged_message(
+                                    TAG_FTPS_UPLOAD_FAILURE,
+                                    f"FTPS upload FAILED: {result.error or 'all files failed'}",
+                                ),
+                                ingestion_run_id=ingestion_run_id,
+                            ))
+                        merge_run_progress(session, ingestion_run_id, phase="ftps_upload_done")
+                        session.commit()
+                except MissingCredentialsError as exc:
+                    logger.warning("run_pipeline: FTPS credentials missing, skipping upload: %s", exc)
+                except Exception as exc:
+                    logger.error("run_pipeline: FTPS upload unexpected error: %s", exc)
+                    with SessionFactory() as session:
+                        session.add(PipelineAlert(
+                            level="error",
+                            message=tagged_message(
+                                TAG_FTPS_UPLOAD_FAILURE,
+                                f"FTPS upload error: {exc}",
+                            ),
+                            ingestion_run_id=ingestion_run_id,
+                        ))
+                        session.commit()
+
         with SessionFactory() as session:
             run = session.get(IngestionRun, ingestion_run_id)
             if run is not None:
@@ -292,6 +370,7 @@ def run_pipeline(
                     skip_publish=skip_publish,
                     publish_summary=publish_summary,
                     publish_aborted=publish_aborted,
+                    upload_result=upload_result_summary,
                 )
                 session.commit()
         with SessionFactory() as log_session:
@@ -304,8 +383,10 @@ def run_pipeline(
                 extra={
                     "skip_normalize": skip_normalize,
                     "skip_publish": skip_publish,
+                    "skip_upload": skip_upload,
                     "publish_summary": publish_summary,
                     "publish_aborted": publish_aborted,
+                    "upload_result": upload_result_summary,
                 },
             )
             log_session.commit()

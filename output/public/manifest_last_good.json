@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "artifact_version": "20260402_092858",
-  "last_published_at": "2026-04-02T09:28:58.559764+00:00",
+  "artifact_version": "20260402_092414",
+  "last_published_at": "2026-04-02T09:24:14.939400+00:00",
   "report_date": "2026-03-31",
   "product_count": 34,
   "staleness_level": "current",
@@ -13,9 +13,9 @@
   "distinct_community_sources_in_window": 4,
   "upload_base": "https://nimrod.bio/wp-content/uploads/market",
   "artifacts": {
-    "json": "public_report-20260402_092858.json",
-    "html": "public_report-20260402_092858.html",
-    "body": "public_report_body-20260402_092858.html"
+    "json": "public_report-20260402_092414.json",
+    "html": "public_report-20260402_092414.html",
+    "body": "public_report_body-20260402_092414.html"
   },
   "fixed_names": {
     "json": "public_report.json",

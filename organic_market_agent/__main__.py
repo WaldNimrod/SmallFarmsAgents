@@ -227,16 +227,39 @@ def run_aggregator_cmd(agg_date: str | None) -> None:
     show_default=True,
     help="Directory to write public_report.json / .html and manifest.json",
 )
-def run_publisher_cmd(output_dir: str) -> None:
-    """Generate publish artifacts (public_report.json, .html, manifest.json)."""
+@click.option(
+    "--upload",
+    is_flag=True,
+    default=False,
+    help="After publishing, upload artifacts to uPress via FTPS",
+)
+def run_publisher_cmd(output_dir: str, upload: bool) -> None:
+    """Generate publish artifacts (public_report.json, .html, manifest.json) and optionally upload."""
     from organic_market_agent.db.session import SessionFactory
     from organic_market_agent.publisher.engine import PublishEngine
+    from organic_market_agent.publisher.ftps_upload import upload_artifacts
     from organic_market_agent.utils.exceptions import PublishAbortError
 
     try:
         with SessionFactory() as session:
-            PublishEngine().run(session, Path(output_dir))
+            summary = PublishEngine().run(session, Path(output_dir))
         click.echo(f"PublishEngine: artifacts written to {output_dir}")
+
+        if upload:
+            result = upload_artifacts(
+                Path(summary["output_dir"]),
+                summary["files"],
+            )
+            if result.success:
+                click.echo(f"FTPS upload OK: {len(result.files_uploaded)} files uploaded")
+            else:
+                click.echo(
+                    f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
+                    f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+                    err=True,
+                )
+                raise SystemExit(2)
+
     except PublishAbortError as exc:
         click.echo(f"PublishEngine ABORTED: {exc}", err=True)
         raise SystemExit(1)
@@ -379,6 +402,52 @@ def run_admin_cmd(host: str, port: int) -> None:
     from organic_market_agent.admin import create_app
 
     create_app().run(host=host, port=port, debug=False)
+
+
+@cli.command("run_upload")
+@click.option(
+    "--output-dir",
+    "output_dir",
+    default="output/public",
+    show_default=True,
+    help="Directory containing publish artifacts",
+)
+@click.option("--dry-run", is_flag=True, default=False, help="Log what would be uploaded without connecting")
+def run_upload_cmd(output_dir: str, dry_run: bool) -> None:
+    """Upload existing local publish artifacts to uPress via FTPS."""
+    from organic_market_agent.publisher.ftps_upload import upload_artifacts
+
+    odir = Path(output_dir)
+    manifest = odir / "manifest.json"
+    if not manifest.exists():
+        click.echo(f"No manifest.json in {output_dir} — run 'run_publisher' first.", err=True)
+        raise SystemExit(1)
+
+    manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
+    files_to_upload: list[str] = []
+
+    for key in ("json", "html", "body"):
+        versioned = manifest_data.get("artifacts", {}).get(key)
+        if versioned:
+            files_to_upload.append(versioned)
+    for key in ("json", "html", "body"):
+        fixed = manifest_data.get("fixed_names", {}).get(key)
+        if fixed:
+            files_to_upload.append(fixed)
+    if (odir / "manifest_last_good.json").exists():
+        files_to_upload.append("manifest_last_good.json")
+    files_to_upload.append("manifest.json")
+
+    result = upload_artifacts(odir, files_to_upload, dry_run=dry_run)
+    if result.success:
+        click.echo(f"FTPS upload {'(dry-run) ' if dry_run else ''}OK: {len(result.files_uploaded)} files")
+    else:
+        click.echo(
+            f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
+            f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+            err=True,
+        )
+        raise SystemExit(2)
 
 
 def main() -> None:

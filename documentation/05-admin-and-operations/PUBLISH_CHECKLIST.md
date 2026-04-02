@@ -18,10 +18,17 @@ Run this after **material** changes: new or changed `product_aliases`, parser / 
 - [ ] If scope rules changed: confirm new rows appear on **`/catalog/scope-skip`** and category breakdown on **`/diagnostics/normalizer`**.
 - [ ] If aliases changed: confirm **`/catalog/pending-aliases`** queue is drained or intentional, then `catalog_renormalize` was run.
 
-## 4. External publish (when applicable)
+## 4. External publish (M7 — FTPS to uPress)
 
-- [ ] FTPS upload of versioned artifacts + `manifest.json` per ops runbook (M7 / uPress when gated).
-- [ ] WordPress or static consumer still reads the expected paths.
+- [ ] Verify `.env` has `UPRESS_SFTP_HOST`, `UPRESS_SFTP_USER`, `UPRESS_SFTP_PASS` set (from `.env.upress`).
+- [ ] Run publish with upload: `python -m organic_market_agent run_publisher --upload`
+  — OR run standalone: `python -m organic_market_agent run_upload --output-dir output/public`
+- [ ] Confirm versioned artifacts uploaded: `public_report-{ts}.json`, `public_report-{ts}.html`, `public_report_body-{ts}.html`
+- [ ] Confirm fixed-name copies uploaded: `public_report.json`, `public_report.html`, `public_report_body.html`
+- [ ] Confirm `manifest_last_good.json` uploaded before `manifest.json` (atomic upload order).
+- [ ] Verify public access: `curl -s -o /dev/null -w "%{http_code}" https://nimrod.bio/wp-content/uploads/market/public_report.json` → 200
+- [ ] Verify WordPress page: `curl -s -o /dev/null -w "%{http_code}" https://nimrod.bio/SmallFarmsAgent` → 200
+- [ ] If automated: confirm `upload_enabled=true` in `scheduler_config` (admin UI → Scheduler page).
 
 ## 5. Sign-off
 

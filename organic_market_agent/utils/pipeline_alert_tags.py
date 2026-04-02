@@ -34,6 +34,11 @@ TAG_SIMULATION_TEST = "[SIMULATION:test]"
 # --- Maintenance jobs (admin-triggered)
 # [MAINTENANCE:...] — kept in admin/routes/maintenance.py
 
+# --- FTPS upload to uPress (M7 Go-Live)
+TAG_FTPS_UPLOAD_SUCCESS = "[FTPS:upload_ok]"
+TAG_FTPS_UPLOAD_FAILURE = "[FTPS:upload_fail]"
+TAG_FTPS_UPLOAD_PARTIAL = "[FTPS:upload_partial]"
+
 
 def tagged_message(tag: str, body: str) -> str:
     """Prefix a single tag; body should not repeat the same bracket tag."""

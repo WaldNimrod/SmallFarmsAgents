@@ -57,7 +57,7 @@ def test_t2_scheduler_exits_when_time_does_not_match():
             mock_sess = MagicMock()
             mock_cm.__enter__.return_value = mock_sess
             mock_cm.__exit__.return_value = None
-            cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=2)
+            cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=2, upload_enabled=False)
             mock_sess.scalars.return_value.first.return_value = cfg
             with patch("organic_market_agent.scheduler.runner.SessionFactory", return_value=mock_cm):
                 main()
@@ -80,7 +80,7 @@ def test_t3_scheduler_calls_run_pipeline_when_gates_pass():
     mock_cm.__enter__.return_value = mock_sess
     mock_cm.__exit__.return_value = None
 
-    cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=3)
+    cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=3, upload_enabled=False)
     mock_sess.scalars.return_value.first.return_value = cfg
     mock_sess.execute.return_value.scalar_one.return_value = 0
     mock_sess.add.side_effect = track_add
@@ -101,7 +101,7 @@ def test_t3_scheduler_calls_run_pipeline_when_gates_pass():
         ):
             with patch("organic_market_agent.scheduler.runner.SessionFactory", return_value=mock_cm):
                 main()
-        rp.assert_called_once_with(77, retry_attempts=3)
+        rp.assert_called_once_with(77, retry_attempts=3, skip_upload=True)
 
     adds = [c.args[0] for c in mock_sess.add.call_args_list]
     assert any(getattr(a, "level", None) == "info" for a in adds)
@@ -123,7 +123,7 @@ def test_t4_main_writes_warning_pipeline_alert_for_partial():
     mock_cm.__enter__.return_value = mock_sess
     mock_cm.__exit__.return_value = None
 
-    cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=2)
+    cfg = SimpleNamespace(is_enabled=True, run_hour=6, run_minute=0, retry_attempts=2, upload_enabled=False)
     mock_sess.scalars.return_value.first.return_value = cfg
     mock_sess.execute.return_value.scalar_one.return_value = 0
     mock_sess.add.side_effect = track_add

@@ -472,6 +472,31 @@ def run_detail(run_id: int):
         or 0
     )
     executive_lead = _executive_lead_he(run, sfr_count, raw_items_total, normalized_items_total)
+    # One row per source: retries create multiple SFR rows with the same source_id.
+    failed_by_source: dict[int, dict[str, Any]] = {}
+    for p in per_source:
+        st = str(p.get("status") or "").strip().lower()
+        if st != "failed":
+            continue
+        sid = int(p["source_id"])
+        prev = failed_by_source.get(sid)
+        if prev is None or int(p["source_fetch_run_id"]) > int(prev["source_fetch_run_id"]):
+            failed_by_source[sid] = p
+    failed_fetch_rows = list(failed_by_source.values())
+    failed_fetch_rows.sort(key=lambda x: (x.get("code") or ""))
+    if failed_fetch_rows:
+        parts: list[str] = []
+        for p in failed_fetch_rows:
+            code = p.get("code") or "?"
+            nm = (p.get("name") or "").strip()
+            tail = f" ({nm})" if nm else ""
+            parts.append(f"«{code}»{tail} — SFR #{p.get('source_fetch_run_id', '?')}")
+        executive_lead = (
+            executive_lead
+            + " כשל איסוף (fetch) בפועל עבור: "
+            + " · ".join(parts)
+            + "."
+        )
     executive_tier = _health_tier(
         run.status, run.sources_failed, run.sources_total, raw_items_total
     )
@@ -531,6 +556,7 @@ def run_detail(run_id: int):
         "admin/run_detail.html",
         run=run,
         per_source=per_source,
+        failed_fetch_rows=failed_fetch_rows,
         alerts=alerts,
         duration_secs=duration_secs,
         duration_display=duration_display,

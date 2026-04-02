@@ -173,6 +173,24 @@
 <p class="small text-muted mb-2">
   כל שורה היא <span class="ltr">source_fetch_run</span> אחת. עמודת <strong>שגיאה</strong> מגיעה מהאוסף כשהבקשה נכשלת — זה בדרך כלל המקום הכי ברור לראות למה מקור לא עלה.
 </p>
+{% if failed_fetch_rows %}
+<div class="alert alert-danger border-0 shadow-sm py-3 px-3 mb-3" role="status">
+  <strong class="d-block mb-2">מקורות שנכשלו באיסוף (fetch) — יש לבדוק את השורות האדומות בטבלה</strong>
+  <ul class="mb-0 small ps-3">
+    {% for f in failed_fetch_rows %}
+    <li class="mb-1">
+      <span class="ltr fw-semibold"><a href="{{ url_for('sources.source_detail', code=f['code']) }}">{{ f['code'] }}</a></span>
+      {% if f['name'] %}<span> — {{ f['name'] }}</span>{% endif %}
+      <span class="text-muted"> · <span class="ltr">SFR #{{ f['source_fetch_run_id'] }}</span></span>
+      {% if f['http_status'] is not none %}<span class="text-muted"> · HTTP <span class="ltr">{{ f['http_status'] }}</span></span>{% endif %}
+      {% if f['error_message'] %}
+      <br><span class="text-break ltr d-inline-block mt-1" dir="ltr">{{ f['error_message'] }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 {% if not per_source %}
 <div class="alert alert-warning mb-3 small" role="status">
   <strong>אין ריצות מקור</strong> — <span class="ltr">source_fetch_runs = {{ sfr_count }}</span>.
@@ -214,7 +232,7 @@
           <span class="text-danger" title="{{ s.error_message }}">{{ s.error_message }}</span>
           {% else %}—{% endif %}
         </td>
-        <td class="text-end ltr">{{ s.items }}</td>
+        <td class="text-end ltr">{{ s['items'] }}</td>
         <td class="text-end ltr">{{ s.resolved }}</td>
         <td class="text-end ltr">{{ s.unresolvable }}</td>
       </tr>

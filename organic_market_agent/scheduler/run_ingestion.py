@@ -61,7 +61,13 @@ def execute_ingestion_for_run(
     retry_attempts: int = 2,
     defer_terminal_status: bool = False,
 ) -> None:
-    """Collect + parse for each source; update ingestion_run counters (no commit).
+    """Collect + parse for each source; update ingestion_run counters.
+
+    Commits after ingestion start, after each source, and after the ingestion
+    summary so other DB sessions (admin UI, JSON export) see ``source_fetch_runs``,
+    logs, and ``progress_json`` while the run is still in progress. Without this,
+    the whole ingestion phase stayed in one transaction until all sources finished,
+    so a slow or stuck first fetch looked like a frozen run with zero rows.
 
     Plain Python helper — no Click decoration. Called by pipeline.run_pipeline
     (background thread) and by run_ingestion() (CLI path).
@@ -102,6 +108,7 @@ def execute_ingestion_for_run(
         current_source_code=None,
         defer_terminal_status=defer_terminal_status,
     )
+    session.commit()
 
     for i, (source, profile) in enumerate(pairs, start=1):
         if is_cancelled(ingestion_run.id):
@@ -221,6 +228,7 @@ def execute_ingestion_for_run(
             source_total=len(pairs),
             current_source_code=source.code,
         )
+        session.commit()
 
     ingestion_run.sources_succeeded = succeeded
     ingestion_run.sources_failed = failed
@@ -265,6 +273,7 @@ def execute_ingestion_for_run(
         current_source_code=None,
         ingestion_logical_status=logical_status,
     )
+    session.commit()
 
 
 def run_ingestion(

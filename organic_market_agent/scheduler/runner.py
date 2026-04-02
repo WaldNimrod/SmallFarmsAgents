@@ -73,6 +73,7 @@ def main() -> None:
             return
 
         retry_attempts = cfg.retry_attempts
+        upload_enabled = cfg.upload_enabled
         now = datetime.now(timezone.utc)
         if not scheduled_time_matches(now, cfg.run_hour, cfg.run_minute):
             return
@@ -101,7 +102,7 @@ def main() -> None:
         run_id = run.id
         session.commit()
 
-    run_pipeline(run_id, retry_attempts=retry_attempts)
+    run_pipeline(run_id, retry_attempts=retry_attempts, skip_upload=not upload_enabled)
 
     with SessionFactory() as session:
         finished = session.get(IngestionRun, run_id)

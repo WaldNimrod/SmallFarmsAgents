@@ -11,16 +11,58 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### M7 Implementation — Public Publishing / Go-Live (Team 100)
+
+**Config & Foundation:**
+- **Added** uPress FTPS config properties to `Config` class (host, port, user, pass, public base, upload path, page slug, `upress_configured()`)
+- **Added** FTPS alert tags: `TAG_FTPS_UPLOAD_SUCCESS`, `TAG_FTPS_UPLOAD_FAILURE`, `TAG_FTPS_UPLOAD_PARTIAL`
+- **Added** Migration 030: `upload_enabled` boolean column on `scheduler_config` (default false)
+
+**FTPS Upload Module:**
+- **Created** `organic_market_agent/publisher/ftps_upload.py` — `ReusedSessionFTP_TLS` subclass (critical: TLS session reuse prevents 425 errors), `upload_artifacts()` with retry logic (3 attempts, exponential backoff), `FtpsUploadResult` dataclass, `MissingCredentialsError`
+- **Created** `tests/test_ftps_upload.py` — 8 unit tests (mocked FTP): all-success, partial failure, total connection failure, missing local file, dry-run, missing credentials, TLS connection, quit cleanup
+
+**PublishEngine Enhancements:**
+- **Updated** `organic_market_agent/publisher/engine.py` — versioned filenames (`public_report-{ts}.json/html`, `public_report_body-{ts}.html`), fixed-name copies, `manifest_last_good.json`, manifest v2 schema (`schema_version`, `artifact_version`, `staleness_days`, `artifacts{}`, `fixed_names{}`, `upload_base`), body fragment rendering, file list in summary
+- **Created** `organic_market_agent/publisher/templates/public_report_body.html` — scoped CSS body fragment for WordPress embedding (`.sfagent-market-report` wrapper, no `<html>`/`<head>`)
+- **Updated** `tests/test_publisher_local.py` — 3 new tests (body fragment, versioned filenames, manifest_last_good), updated manifest key assertions for v2 schema
+
+**Pipeline & CLI Integration:**
+- **Updated** `organic_market_agent/scheduler/pipeline.py` — FTPS upload phase after publish (checks `upload_enabled` from scheduler_config + `config.upress_configured()`), creates pipeline alerts on success/partial/failure
+- **Updated** `organic_market_agent/scheduler/runner.py` — reads `upload_enabled` from `SchedulerConfig`, passes `skip_upload` to `run_pipeline`
+- **Updated** `organic_market_agent/__main__.py` — `--upload` flag on `run_publisher`, new `run_upload` standalone CLI command (reads manifest for file list, supports `--dry-run`)
+
+**WordPress Integration:**
+- **Created** `scripts/wp_shortcode_install.py` — downloads `functions.php` from flatsome-child via FTPS, appends `[sfagent_market_report]` shortcode if missing, creates WordPress page at `/SmallFarmsAgent` via WP REST API
+
+**Tests:**
+- **Created** `tests/test_upress_validation.py` — U01–U12 live server validation tests (marked `@pytest.mark.upress`): login, TLS, write, overwrite, versioned upload, manifest order, public HTTP access, cache TTL, WP page, JSON endpoint, manifest_last_good, full upload cycle
+- **Created** `tests/test_pipeline_upload.py` — 2 integration tests (mocked): upload called when enabled, upload skipped when disabled
+
+**QA & Documentation:**
+- **Created** `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` — 12 test criteria, gate pass matrix
+
 ### M7 Planning (Team 100)
 
 - **Reviewed** Team 10's M7 work plan v1; upgraded to v2 with 5 binding architectural decisions
-- **Added** concrete implementation specs: SFTP module interface, manifest v2 schema, upload protocol, body fragment spec, WordPress shortcode, pipeline integration, rollback table
+- **Added** concrete implementation specs: FTPS module interface, manifest v2 schema, upload protocol, body fragment spec, WordPress shortcode, pipeline integration, rollback table
 - **Added** M7 feedback report for Team 10 with action items for all teams
 - **Fixed** identified gaps: test rewrite requirements, known bugs in mandate test code, cleanup protocol, migration 030 for upload_enabled
-- **Updated** plan to v2.1: Nimrod approved M7, SFTP replaces FTPS (paramiko), server root access, child theme for shortcode, page slug `/SmallFarmsAgent`
-- **Created** `.env.upress` credentials template for Nimrod
-- **Updated** `.env.example` with SFTP configuration block
+- **Updated** plan to v2.1: Nimrod approved M7; child theme `flatsome-child` for shortcode; page slug `/SmallFarmsAgent`
+- **Created** `.env.upress` credentials template for Nimrod — fully filled (FTPS, phpMyAdmin, WP admin, DB creds)
+- **Updated** `.env.example` with FTPS configuration block (port 21)
 - **Updated** `ROADMAP.md` — M7 approval recorded, transport and work plan reference added
+
+### M7 Server Validation (Team 100 — 2026-03-31)
+
+- **CONFIRMED** transport: FTPS (FTP over TLS) on port 21; SSH/SFTP port 22 is blocked
+- **CONFIRMED** FTP root = WordPress root (no `public_html/` prefix)
+- **CONFIRMED** child theme: `flatsome-child` with existing `functions.php` (WooCommerce overrides)
+- **Created** `wp-content/uploads/market/` directory on uPress server
+- **Extracted** DB credentials from `wp-config.php` → added to `.env.upress`
+- **Updated** M7 work plan v2.1: all SFTP references corrected to FTPS, upload path corrected, M7-0b marked DONE, all §10 items marked complete
+- **Updated** `.env.example` port default: 22 → 21
+- **CRITICAL**: `ReusedSessionFTP_TLS` subclass required — standard `FTP_TLS` gets 425 errors without TLS session reuse
 
 ---
 

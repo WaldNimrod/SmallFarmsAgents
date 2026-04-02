@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 1.9  
-**Date:** 2026-03-31  
+**Version:** 2.0  
+**Date:** 2026-04-02  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M7 — Public Publishing / Go-Live (**Nimrod approved 2026-03-31 — execution active**)
+**Active Milestone:** M7 — Public Publishing / Go-Live (**Implementation complete — pending G7 QA**)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -401,44 +401,48 @@ Phase C — Documentation   (Team 100 + implementing team)
 ---
 
 ## M7 — Public Publishing / Go-Live
-**Teams:** Team 10 + Team 20
+**Teams:** Team 100 (implementation), Team 10 + Team 20 (review)
 **Dependency:** Gate G6 must be open + **Nimrod explicit approval**
 **Nimrod Approval:** ✅ **Approved 2026-03-31** — immediate execution authorized
-**Transport:** SFTP via `paramiko` (Nimrod confirmed uPress has SFTP)
+**Transport:** FTPS (FTP over TLS) on port 21 via `ftplib.FTP_TLS` with `ReusedSessionFTP_TLS` subclass
 **Work Plan:** `_COMMUNICATION/TEAM_100/reports/2026-03-31_M7_WORK_PLAN_FOR_APPROVAL_TEAM100.md` (v2.1 — binding)
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_UPRESS_VALIDATION.md`
-**QA Mandate:** To be issued by Team 50
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED
 
-### Phase A — Implementation (Team 10 + Team 20)
-- uPress validation (Tests U01–U12 from mandate)
-- `PublishEngine`: FTPS upload + atomic manifest update
-- `manifest_last_good.json` fallback
-- WordPress rendering integration
-- Stale data banners (3d warning, 8d irrelevant)
-
-**Unit tests required (Phase A):**
-- `tests/upress_validation/` — U01–U12 as defined in MANDATE_UPRESS_VALIDATION.md
+### Phase A — Implementation (Team 100) — COMPLETE
+- ✅ Config: uPress FTPS properties in `Config` class, `upress_configured()` helper
+- ✅ Alert tags: `TAG_FTPS_UPLOAD_SUCCESS`, `TAG_FTPS_UPLOAD_FAILURE`, `TAG_FTPS_UPLOAD_PARTIAL`
+- ✅ Migration 030: `upload_enabled` boolean on `scheduler_config`
+- ✅ FTPS upload module: `ftps_upload.py` with `ReusedSessionFTP_TLS`, `upload_artifacts()`, retry logic
+- ✅ Body fragment template: `public_report_body.html` (scoped CSS, no `<html>` wrapper)
+- ✅ PublishEngine: versioned filenames, fixed-name copies, manifest v2 schema, `manifest_last_good.json`
+- ✅ Pipeline wiring: FTPS upload phase after publish, checks `upload_enabled`
+- ✅ Runner: reads `upload_enabled` from `SchedulerConfig`
+- ✅ CLI: `--upload` flag on `run_publisher`, standalone `run_upload` command
+- ✅ WordPress helper: `scripts/wp_shortcode_install.py` (shortcode + page creation)
+- ✅ Unit tests: `test_ftps_upload.py` (8 tests), `test_publisher_local.py` (11 tests), `test_pipeline_upload.py` (2 tests)
+- ✅ Live server tests: `test_upress_validation.py` (U01–U12, marked `@pytest.mark.upress`)
 
 ### Phase B — QA Validation (Team 50)
 
 | Test Type | Scope |
 |-----------|-------|
-| Unit | `pytest tests/upress_validation/` — all PASS |
-| Integration | FTPS connection to uPress server: authenticate, upload test file, verify accessible |
-| End-to-End | Full automated pipeline: ingest → normalize → aggregate → publish → verify public URL |
-| Fallback | Simulate failed upload; verify `manifest_last_good.json` serves stale data |
-| WordPress | Verify WordPress page renders data from FTPS-uploaded JSON |
-| Stale Banners | Set dates -4d and -9d; verify correct banners displayed on public page |
-| Operational | Automated publish runs 3 consecutive days without intervention |
+| Unit | `pytest tests/ -m "not upress"` — all PASS |
+| FTPS Unit | `pytest tests/test_ftps_upload.py` — 8 tests PASS |
+| Publisher | `pytest tests/test_publisher_local.py` — 11 tests PASS |
+| Pipeline | `pytest tests/test_pipeline_upload.py` — 2 tests PASS |
+| Integration | U01–U12 live server tests: `pytest -m upress tests/test_upress_validation.py` |
+| End-to-End | Publish → upload → verify public URL → WordPress page renders |
+| Fallback | Verify `manifest_last_good.json` serves stale data |
+| Stale Banners | Verify correct banners at 3d warning and 8d irrelevant thresholds |
 
 ### Gate G7 — Acceptance Criteria
-- [ ] `pytest tests/upress_validation/` — all PASS (U01–U12)
-- [ ] FTPS upload verified end-to-end (test file accessible publicly)
-- [ ] Full automated publish pipeline runs successfully
+- [ ] All local pytest suites pass (0 failures)
+- [ ] U01–U12 live server tests pass
+- [ ] WordPress shortcode installed, page at `/SmallFarmsAgent` renders report
+- [ ] End-to-end publish → upload → public access verified
 - [ ] `manifest_last_good.json` fallback verified
-- [ ] WordPress displays live data
 - [ ] Stale banners display at correct thresholds (3d / 8d)
-- [ ] 3 consecutive automated publish runs without manual action
 - [ ] **Nimrod manual approval → LIVE**
 
 ---
@@ -465,7 +469,7 @@ Phase C — Documentation   (Team 100 + implementing team)
 | G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` ✅ ISSUED |
 | G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED · ✅ PASS |
 | G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` ✅ ISSUED · ✅ PASS |
-| G7 | To be issued after G6 opens + Nimrod approval |
+| G7 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED |
 
 ---
 

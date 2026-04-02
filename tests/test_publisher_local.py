@@ -253,22 +253,31 @@ def test_publish_manifest_includes_expected_keys(pg_session: Session, tmp_path: 
         PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
         man = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
         for key in (
+            "schema_version",
+            "artifact_version",
             "last_published_at",
             "report_date",
             "product_count",
             "staleness_level",
+            "staleness_days",
             "community_sources",
             "index_window_days",
             "window_start_date",
             "window_end_date",
             "distinct_community_sources_in_window",
-            "data_quality",
+            "upload_base",
+            "artifacts",
+            "fixed_names",
         ):
-            assert key in man
-        assert "raw_extracted_items" in man["data_quality"]
+            assert key in man, f"Missing manifest key: {key}"
+        assert man["schema_version"] == "2.0"
         assert man["community_sources"] >= 2
         assert man["product_count"] >= 1
         assert man["index_window_days"] == 7
+        assert "json" in man["artifacts"]
+        assert "html" in man["artifacts"]
+        assert "body" in man["artifacts"]
+        assert "json" in man["fixed_names"]
     finally:
         _cleanup_pub(pg_session)
 
@@ -359,5 +368,58 @@ def test_publish_rolling_abort_observations_outside_window(pg_session: Session, 
         pg_session.commit()
         with pytest.raises(PublishAbortError, match="7d UTC window"):
             PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+    finally:
+        _cleanup_pub(pg_session)
+
+
+def test_publish_body_fragment_generated(pg_session: Session, tmp_path: Path) -> None:
+    """M7: body fragment HTML is generated for WordPress embedding."""
+    _cleanup_pub(pg_session)
+    try:
+        _seed_two_community_obs(pg_session)
+        summary = PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+        body = (tmp_path / "public_report_body.html").read_text(encoding="utf-8")
+        assert "sfagent-market-report" in body
+        assert "<html" not in body.lower()
+        assert "<!DOCTYPE" not in body
+        assert "מחירי ירקות אורגניים" in body
+        av = summary["artifact_version"]
+        versioned = tmp_path / f"public_report_body-{av}.html"
+        assert versioned.exists()
+    finally:
+        _cleanup_pub(pg_session)
+
+
+def test_publish_versioned_filenames(pg_session: Session, tmp_path: Path) -> None:
+    """M7: versioned filenames exist alongside fixed-name copies."""
+    _cleanup_pub(pg_session)
+    try:
+        _seed_two_community_obs(pg_session)
+        summary = PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+        av = summary["artifact_version"]
+        for ext in ("json", "html"):
+            assert (tmp_path / f"public_report-{av}.{ext}").exists()
+            assert (tmp_path / f"public_report.{ext}").exists()
+        assert (tmp_path / f"public_report_body-{av}.html").exists()
+        assert (tmp_path / "public_report_body.html").exists()
+        assert "files" in summary
+        assert len(summary["files"]) == 8
+    finally:
+        _cleanup_pub(pg_session)
+
+
+def test_manifest_last_good_created(pg_session: Session, tmp_path: Path) -> None:
+    """M7: second publish creates manifest_last_good.json from previous manifest."""
+    _cleanup_pub(pg_session)
+    try:
+        _seed_two_community_obs(pg_session)
+        PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+        assert (tmp_path / "manifest.json").exists()
+        assert not (tmp_path / "manifest_last_good.json").exists()
+
+        PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
+        assert (tmp_path / "manifest_last_good.json").exists()
+        good = json.loads((tmp_path / "manifest_last_good.json").read_text(encoding="utf-8"))
+        assert "schema_version" in good
     finally:
         _cleanup_pub(pg_session)

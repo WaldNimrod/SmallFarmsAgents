@@ -1,7 +1,11 @@
-"""PublishEngine — local public_report.json, public_report.html, manifest.json."""
+"""PublishEngine — local public_report.json, public_report.html, manifest.json.
+
+M7 additions: versioned filenames, body fragment, manifest v2, manifest_last_good.json.
+"""
 from __future__ import annotations
 
 import json
+import shutil
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -11,6 +15,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from sqlalchemy.orm import Session
 
 from organic_market_agent.models import DailyAggregate
+from organic_market_agent.utils.config import config
 from organic_market_agent.utils.data_quality_snapshot import compute_raw_pipeline_counts
 from organic_market_agent.utils.exceptions import PublishAbortError
 from organic_market_agent.utils.logging_setup import get_logger
@@ -25,6 +30,8 @@ from .rolling_aggregate import (
 
 logger = get_logger(__name__)
 
+MANIFEST_SCHEMA_VERSION = "2.0"
+
 
 def _staleness_level(generated_at: datetime, reference_now: datetime) -> str:
     """Mandate: current <=3d, warning 4–7d, irrelevant >7d (8-day legacy wording)."""
@@ -34,6 +41,14 @@ def _staleness_level(generated_at: datetime, reference_now: datetime) -> str:
     if age <= 7:
         return "warning"
     return "irrelevant"
+
+
+def _staleness_days(generated_at: datetime, reference_now: datetime) -> int:
+    return (reference_now.date() - generated_at.date()).days
+
+
+def _artifact_version(gen: datetime) -> str:
+    return gen.strftime("%Y%m%d_%H%M%S")
 
 
 class PublishEngine:
@@ -47,12 +62,16 @@ class PublishEngine:
         generated_at: datetime | None = None,
         reference_now: datetime | None = None,
     ) -> dict[str, Any]:
-        """Generate public_report.json, public_report.html, manifest.json in output_dir.
+        """Generate all publish artifacts in *output_dir*.
 
-        generated_at: timestamp written into artifacts (default UTC now).
-        reference_now: clock for staleness in manifest (default UTC now); override in tests.
+        Artifacts produced:
+        - Versioned: ``public_report-{ts}.json``, ``public_report-{ts}.html``,
+          ``public_report_body-{ts}.html``
+        - Fixed-name copies: ``public_report.json``, ``.html``, ``public_report_body.html``
+        - ``manifest_last_good.json`` (snapshot of previous manifest before overwrite)
+        - ``manifest.json`` (v2 schema)
 
-        Returns a small summary dict for pipeline logging.
+        Returns a summary dict for pipeline logging.
         """
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -82,6 +101,9 @@ class PublishEngine:
         max_observed = max_last_observed_from_products(products_out)
         data_quality = compute_raw_pipeline_counts(session)
 
+        av = _artifact_version(gen)
+
+        # --- JSON report ---
         report_payload = {
             "generated_at": gen.isoformat(),
             "report_date": report_date.isoformat(),
@@ -94,20 +116,23 @@ class PublishEngine:
             "data_quality": data_quality,
             "products": products_out,
         }
-        (output_dir / "public_report.json").write_text(
-            json.dumps(report_payload, ensure_ascii=False, indent=2),
-            encoding="utf-8",
-        )
+        json_text = json.dumps(report_payload, ensure_ascii=False, indent=2)
+        (output_dir / f"public_report-{av}.json").write_text(json_text, encoding="utf-8")
+        (output_dir / "public_report.json").write_text(json_text, encoding="utf-8")
 
+        # --- Stale banner ---
         stale_banner = False
         if max_observed:
             days_old = (ref.date() - max_observed.date()).days
             stale_banner = days_old > 3
 
+        # --- Jinja templates ---
         env = Environment(
             loader=PackageLoader("organic_market_agent.publisher", "templates"),
             autoescape=select_autoescape(["html", "xml"]),
         )
+
+        # Full standalone HTML page
         tpl = env.get_template("public_report.html")
         html = tpl.render(
             report_date=report_date.isoformat(),
@@ -116,34 +141,87 @@ class PublishEngine:
             stale_banner=stale_banner,
             data_quality=data_quality,
         )
+        (output_dir / f"public_report-{av}.html").write_text(html, encoding="utf-8")
         (output_dir / "public_report.html").write_text(html, encoding="utf-8")
 
+        # Body fragment for WordPress embedding
+        body_tpl = env.get_template("public_report_body.html")
+        body_html = body_tpl.render(
+            report_date=report_date.isoformat(),
+            generated_at=gen.isoformat(),
+            products=products_out,
+            stale_banner=stale_banner,
+            data_quality=data_quality,
+        )
+        (output_dir / f"public_report_body-{av}.html").write_text(body_html, encoding="utf-8")
+        (output_dir / "public_report_body.html").write_text(body_html, encoding="utf-8")
+
+        # --- manifest_last_good.json ---
+        manifest_path = output_dir / "manifest.json"
+        if manifest_path.exists():
+            shutil.copy2(manifest_path, output_dir / "manifest_last_good.json")
+
+        # --- Manifest v2 ---
+        stale_lvl = _staleness_level(gen, ref)
+        stale_d = _staleness_days(gen, ref)
+        upload_base = config.UPRESS_PUBLIC_BASE.rstrip("/") + "/" + config.UPRESS_UPLOAD_PATH
+
         manifest = {
+            "schema_version": MANIFEST_SCHEMA_VERSION,
+            "artifact_version": av,
             "last_published_at": gen.isoformat(),
             "report_date": report_date.isoformat(),
             "product_count": len(products_out),
-            "staleness_level": _staleness_level(gen, ref),
+            "staleness_level": stale_lvl,
+            "staleness_days": stale_d,
             "community_sources": int(comm_src),
             "index_window_days": INDEX_WINDOW_DAYS,
             "window_start_date": d_start.isoformat(),
             "window_end_date": d_end.isoformat(),
             "distinct_community_sources_in_window": int(comm_src),
-            "data_quality": data_quality,
+            "upload_base": upload_base,
+            "artifacts": {
+                "json": f"public_report-{av}.json",
+                "html": f"public_report-{av}.html",
+                "body": f"public_report_body-{av}.html",
+            },
+            "fixed_names": {
+                "json": "public_report.json",
+                "html": "public_report.html",
+                "body": "public_report_body.html",
+            },
         }
-        (output_dir / "manifest.json").write_text(
+        manifest_path.write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+
         logger.info(
-            "PublishEngine: wrote %d products to %s (rolling %dd window)",
+            "PublishEngine: wrote %d products to %s (rolling %dd window, version=%s)",
             len(products_out),
             output_dir,
             INDEX_WINDOW_DAYS,
+            av,
         )
+
+        # File list for FTPS upload (artifacts first, manifest last)
+        all_files = [
+            f"public_report-{av}.json",
+            f"public_report-{av}.html",
+            f"public_report_body-{av}.html",
+            "public_report.json",
+            "public_report.html",
+            "public_report_body.html",
+            "manifest_last_good.json",
+            "manifest.json",
+        ]
+
         return {
             "report_date": report_date.isoformat(),
             "product_count": len(products_out),
             "community_sources": int(comm_src),
-            "staleness_level": manifest["staleness_level"],
+            "staleness_level": stale_lvl,
+            "artifact_version": av,
             "output_dir": str(output_dir.resolve()),
+            "files": all_files,
         }
