@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-02T13:52:43.240262+00:00",
+  "generated_at": "2026-04-02T13:50:19.764816+00:00",
   "report_date": "2026-04-02",
   "index": {
     "mode": "rolling_7d",
@@ -9,13 +9,13 @@
   },
   "data_quality": {
     "raw_extracted_items": {
-      "normalized": 585,
+      "normalized": 584,
       "unresolvable": 630,
-      "extracted_pending": 9,
+      "extracted_pending": 8,
       "ignored": 334,
       "ignored_approved_scope_skip": 324
     },
-    "resolution_pct_norm_vs_unres": 48.15,
+    "resolution_pct_norm_vs_unres": 48.11,
     "active_scope_skip_rules": 301
   },
   "products": [
@@ -341,13 +341,13 @@
       "meets_publish_threshold": true,
       "sample_size": 3,
       "distinct_sources": 3,
-      "min_price": 9.99,
+      "min_price": 10.0,
       "max_price": 20.0,
-      "avg_price": 13.33,
-      "median_price": 10.0,
-      "stddev_price": 5.7764,
+      "avg_price": 15.3333,
+      "median_price": 16.0,
+      "stddev_price": 5.0332,
       "normalized_unit": "קילוגרם",
-      "last_observed_at": "2026-04-02T13:52:26.062990+00:00"
+      "last_observed_at": "2026-04-02T13:24:35.676712+00:00"
     },
     {
       "product_id": "PRD009",

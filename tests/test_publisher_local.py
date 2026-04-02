@@ -379,10 +379,10 @@ def test_publish_body_fragment_generated(pg_session: Session, tmp_path: Path) ->
         _seed_two_community_obs(pg_session)
         summary = PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
         body = (tmp_path / "public_report_body.html").read_text(encoding="utf-8")
-        assert "sfagent-market-report" in body
+        assert 'class="sfagent"' in body
         assert "<html" not in body.lower()
         assert "<!DOCTYPE" not in body
-        assert "מחירי ירקות אורגניים" in body
+        assert "מדד מחירי חקלאות אורגנית" in body
         av = summary["artifact_version"]
         versioned = tmp_path / f"public_report_body-{av}.html"
         assert versioned.exists()

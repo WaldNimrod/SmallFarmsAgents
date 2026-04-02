@@ -1,0 +1,360 @@
+/*
+ * sfagent-base.css — SmallFarmsAgent shared CSS layer
+ * Deployed to: wp-content/themes/flatsome-child/sfagent-base.css
+ * Loaded via:  wp_enqueue_scripts on pages with [sfagent_market_report] shortcode
+ *
+ * Layer 2 in the three-layer CSS architecture:
+ *   Layer 1: Flatsome parent + child theme (buttons, typography, grid)
+ *   Layer 2: This file (SFA tokens, shared components, utilities)
+ *   Layer 3: Inline <style> in each template (page-specific rules only)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap');
+
+/* ═══════════════════════════════════════════════
+   ROOT SCOPE + DESIGN TOKENS
+   ═══════════════════════════════════════════════ */
+
+.sfagent {
+  --sfa-green-dark:  #1b4332;
+  --sfa-green-mid:   #2d6a4f;
+  --sfa-green-light: #52b788;
+  --sfa-sand:        #f5f0e8;
+  --sfa-sand-dark:   #e8dfc8;
+  --sfa-gold:        #c9a84c;
+  --sfa-text:        #1a1a1a;
+  --sfa-muted:       #6b7280;
+
+  font-family: 'Heebo', sans-serif;
+  color: var(--sfa-text);
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.sfagent *,
+.sfagent *::before,
+.sfagent *::after {
+  box-sizing: border-box;
+}
+
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-container {
+  padding: 0;
+}
+
+
+/* ═══════════════════════════════════════════════
+   CARD
+   Generic white card with shadow. Use sfa-card--accent
+   for the green-bordered variant (transparency block).
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+  overflow: hidden;
+}
+
+.sfagent .sfa-card--accent {
+  background: #fff;
+  border-radius: 12px;
+  border-right: 4px solid var(--sfa-green-mid);
+  padding: 1rem 1.25rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sfagent .sfa-card-title {
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  color: var(--sfa-green-dark);
+  font-weight: 700;
+}
+
+.sfagent .sfa-card-lead {
+  font-size: 0.82rem;
+  color: var(--sfa-muted);
+  margin: 0 0 0.6rem;
+  line-height: 1.45;
+}
+
+.sfagent .sfa-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 0.5rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.sfagent .sfa-card-grid li span.sfa-ltr {
+  font-weight: 600;
+}
+
+
+/* ═══════════════════════════════════════════════
+   BADGE
+   Small inline pill (unit labels, tags).
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  background: var(--sfa-sand-dark);
+  color: var(--sfa-green-dark);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: 500;
+  direction: rtl;
+}
+
+
+/* ═══════════════════════════════════════════════
+   STALE BANNER
+   Warning strip for outdated data.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-stale-banner {
+  background: #fef3c7;
+  border-right: 4px solid var(--sfa-gold);
+  padding: 0.75rem 1.25rem;
+  margin: 0 0 1.25rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #92400e;
+}
+
+
+/* ═══════════════════════════════════════════════
+   MODAL
+   Full-screen overlay + centered box.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.sfagent .sfa-modal-overlay.hidden {
+  display: none;
+}
+
+.sfagent .sfa-modal-box {
+  background: #fff;
+  border: 2px solid var(--sfa-sand-dark);
+  border-radius: 12px;
+  max-width: 520px;
+  width: 100%;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  position: relative;
+  direction: rtl;
+  text-align: start;
+}
+
+.sfagent .sfa-modal-box h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--sfa-green-dark);
+}
+
+.sfagent .sfa-modal-box p {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--sfa-text);
+  line-height: 1.55;
+}
+
+
+/* ═══════════════════════════════════════════════
+   BUTTON
+   Primary action button. Used in modals, CTAs, forms.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-btn {
+  display: inline-block;
+  background: var(--sfa-green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+  font-family: 'Heebo', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.sfagent .sfa-btn:hover {
+  background: var(--sfa-green-mid);
+}
+
+
+/* ═══════════════════════════════════════════════
+   CTA BANNER (M8)
+   Community call-to-action strip.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-cta-banner {
+  background: var(--sfa-sand);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.sfagent .sfa-cta-banner p {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  color: var(--sfa-green-dark);
+  font-weight: 500;
+}
+
+
+/* ═══════════════════════════════════════════════
+   PRIVACY BLOCK (M8)
+   Prominent privacy statement with icon + bullets.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-privacy-block {
+  background: #f0faf4;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  margin: 0.6rem 0;
+  font-size: 0.82rem;
+  color: var(--sfa-green-dark);
+  line-height: 1.5;
+}
+
+.sfagent .sfa-privacy-block strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.sfagent .sfa-privacy-block ul {
+  margin: 0;
+  padding: 0 1.2rem 0 0;
+  list-style: disc;
+}
+
+.sfagent .sfa-privacy-block li {
+  margin-bottom: 0.15rem;
+}
+
+
+/* ═══════════════════════════════════════════════
+   TOOLTIP (M8)
+   Info-icon + popup for header cells.
+   ═══════════════════════════════════════════════ */
+
+.sfagent [data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+.sfagent [data-tooltip]::after {
+  content: ' \24D8';          /* circled-i */
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.sfagent .sfa-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--sfa-green-dark);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  max-width: 250px;
+  min-width: 160px;
+  white-space: normal;
+  text-align: center;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.sfagent .sfa-tooltip.visible {
+  opacity: 1;
+}
+
+
+/* ═══════════════════════════════════════════════
+   BRIDGE LINK (M8)
+   Subtle "how?" link connecting table to dq-box.
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-bridge-link {
+  font-size: 0.78rem;
+  color: var(--sfa-muted);
+  margin: 0.25rem 0 0.75rem;
+  text-align: left;
+}
+
+.sfagent .sfa-bridge-link a {
+  color: var(--sfa-green-mid);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sfagent .sfa-bridge-link a:hover {
+  text-decoration: underline;
+}
+
+.sfagent .sfa-bridge-target {
+  font-size: 0.82rem;
+  color: var(--sfa-green-mid);
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+
+
+/* ═══════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+
+.sfagent .sfa-ltr {
+  font-weight: 600;
+}
+
+.sfagent .sfa-muted {
+  color: var(--sfa-muted);
+}
+
+@media (max-width: 640px) {
+  .sfagent .sfa-hide-mobile {
+    display: none;
+  }
+  .sfagent .sfa-cta-banner .sfa-btn {
+    display: block;
+    text-align: center;
+  }
+}

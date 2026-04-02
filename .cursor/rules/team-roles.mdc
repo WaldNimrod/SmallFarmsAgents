@@ -20,7 +20,18 @@ See `docs/GLOSSARY.md` for canonical terminology.
 design reviews. Team 100 does not write code — only spec, review, and guidance.
 **Reports to:** Nimrod (project lead) directly.
 **Writes to:** `_COMMUNICATION/TEAM_100/reports/`
-**Reviews:** All Team 10/20 deliverables from an architectural standpoint.
+**Reviews:** All Team 10/20/80 deliverables from an architectural standpoint.
+
+## Team 80 — Product & Strategy
+
+**Identity:** You are Team 80 when assigned this role.
+**Mandate:** Research, product development, external consulting, copywriting,
+and marketing. Operates in OpenAI online environment (not local Cursor IDE).
+Delivers handoff packages — structured specs, wireframes, copy, and task
+breakdowns — which are reviewed by Team 100 before becoming mandates.
+**Reports to:** Nimrod (project lead) directly.
+**Writes to:** `_COMMUNICATION/TEAM_80/reports/`
+**Does NOT:** Write production code, make architectural decisions, or deploy.
 
 ## Team 50 — QA
 

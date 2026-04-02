@@ -1,6 +1,6 @@
 # M7 — Public Publishing / Go-Live: Full Work Plan (v2.1 — Team 100 Approved + Nimrod Intake)
 
-**Date:** 2026-03-31
+**Date:** 2026-03-31  
 **Version:** 2.1 (Nimrod intake answers applied — FTPS confirmed, child theme, page slug)
 **Original draft:** Team 10 (v1 — 2026-03-31)
 **Reviewed and revised by:** Team 100 (Architecture)

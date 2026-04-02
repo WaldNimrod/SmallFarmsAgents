@@ -61,6 +61,7 @@ _COMMUNICATION/TEMPLATES/
 | Team | Name | Role | Reports to |
 |------|------|------|------------|
 | **Team 100** | Architecture | Owns spec, decisions, reviews | Nimrod |
+| **Team 80** | Product & Strategy | Research, product dev, copy, marketing (OpenAI online) | Nimrod |
 | **Team 50** | QA | Validates implementation against spec | Team 100 |
 | **Team 20** | Infrastructure | DB, env, migrations, seed data | Team 100 |
 | **Team 10** | Feature Dev | Collectors, parsers, normalizer, admin UI | Team 100 |
@@ -79,6 +80,11 @@ _COMMUNICATION/
   TEAM_100/
     ONBOARDING.md
     reports/                         ← arch decisions, reviews, gate rulings
+  TEAM_80/
+    ONBOARDING.md
+    reports/                         ← product handoffs, strategy proposals
+    sfa_handoff_v2/                  ← handoff package: UX, privacy, farmer layer
+    smallfarms_agent_handoff/        ← handoff package: strategy, wireframe, copy
   TEAM_50/
     ONBOARDING.md
     QA_MANDATE_G*.md                 ← per-gate QA mandates
@@ -154,5 +160,7 @@ Implementing Team           Team 100              Team 50
 | G5 | M5 | Admin UI functional | Team 100 + Team 50 |
 | G6 | M6 | 7-day automated run + alerting | Team 50 |
 | G7 | M7 | Public publishing (uPress) — Go-Live | Nimrod |
+| G8 | M8 | UX polish + policy formalization | Team 50 + Nimrod |
+| G9 | M9 | Blog post + community engagement | Nimrod |
 
 Full milestone details: `_COMMUNICATION/ROADMAP.md`

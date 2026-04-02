@@ -32,31 +32,22 @@
     text-decoration: underline;
   }
 
-  /* Table framing title (M8 Item 6) */
-  .sfagent .table-framing {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--sfa-green-dark);
-    margin: 0.75rem 0 0.35rem;
-  }
-
   /* Price table */
   .sfagent table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
   .sfagent thead tr { background: var(--sfa-green-dark); color: #fff; }
   .sfagent thead th { padding: 0.9rem 1rem; font-weight: 600; text-align: start; white-space: nowrap; }
-  .sfagent thead th.num { text-align: center; }
+  .sfagent thead th.num { text-align: end; }
   .sfagent tbody tr { border-bottom: 1px solid #f0ede6; }
   .sfagent tbody tr:last-child { border-bottom: none; }
   .sfagent tbody tr:nth-child(even) { background: #fafaf8; }
   .sfagent tbody tr:hover { background: #f0faf4; }
   .sfagent td { padding: 0.75rem 1rem; vertical-align: middle; }
-  .sfagent td.num { text-align: center; font-variant-numeric: tabular-nums; direction: ltr; }
+  .sfagent td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
   .sfagent .product-name { font-weight: 600; font-size: 1rem; }
   .sfagent .product-emoji { font-size: 1.3rem; margin-left: 0.4rem; }
   .sfagent .sfa-badge { margin-right: 4px; }
-  /* M8 Item 3: Visual hierarchy — average dominant, median secondary */
-  .sfagent .price-main { font-size: 1.15rem; font-weight: 800; color: var(--sfa-green-dark); }
-  .sfagent .price-secondary { color: #9ca3af; font-size: 0.8rem; }
+  .sfagent .price-main { font-size: 1.05rem; font-weight: 700; color: var(--sfa-green-dark); }
+  .sfagent .price-secondary { color: var(--sfa-muted); font-size: 0.88rem; }
   .sfagent .range-bar-wrap {
     position: relative; height: 6px; background: #e5e7eb;
     border-radius: 3px; min-width: 80px; margin: 4px 0;
@@ -66,7 +57,7 @@
     background: linear-gradient(to left, var(--sfa-green-light), var(--sfa-green-dark));
     border-radius: 3px;
   }
-  .sfagent .range-text { font-size: 0.75rem; color: var(--sfa-muted); direction: ltr; }
+  .sfagent .range-text { font-size: 0.78rem; color: var(--sfa-muted); direction: ltr; }
   .sfagent .stddev-text { font-size: 0.78rem; color: var(--sfa-muted); }
   .sfagent .sources-badge {
     display: inline-flex; align-items: center; gap: 3px;
@@ -125,12 +116,7 @@
 </div>
 
 <div class="report-update-line">
-  עודכן: 2026-04-02 13:52 · 34 מוצרים · תאריך דוח: 2026-04-02
-</div>
-
-
-<div class="sfa-bridge-link">
-  איך הנתונים נוצרים? <a href="#sfagent-dq-box">↓ ראה פירוט מתחת לטבלה</a>
+  עודכן: 2026-04-02 12:48 · 34 מוצרים · תאריך דוח: 2026-03-31
 </div>
 
 
@@ -141,22 +127,18 @@
 
 
 
-
-
-<h2 class="table-framing">מדד מחירים מבוסס נתונים אמיתיים מהשטח</h2>
 
 <div class="sfa-card">
   <table>
     <thead>
       <tr>
         <th>מוצר</th>
-        
-        <th class="num" data-tooltip="הממוצע החשבוני של כל התצפיות ב-7 הימים האחרונים">ממוצע ₪</th>
-        <th class="num" data-tooltip="הערך האמצעי — 50% מהתצפיות מעל, 50% מתחת">חציון ₪</th>
-        <th data-tooltip="המחיר הנמוך והגבוה ביותר שנצפו">טווח מחירים</th>
-        <th class="num sfa-hide-mobile" data-tooltip="מדד לפיזור המחירים — ערך נמוך = מחירים דומים">סטיית תקן</th>
-        <th class="num" data-tooltip="מספר דיווחי מחיר שנאספו עבור המוצר">תצפיות</th>
-        <th class="num" data-tooltip="מספר חוות שונות (ללא חשיפה של חווה ספציפית)">מקורות</th>
+        <th class="num">ממוצע ₪</th>
+        <th class="num">חציון ₪</th>
+        <th>טווח מחירים</th>
+        <th class="num sfa-hide-mobile">סטיית תקן</th>
+        <th class="num">תצפיות</th>
+        <th class="num">מקורות</th>
       </tr>
     </thead>
     <tbody>
@@ -168,8 +150,7 @@
           <span class="product-name">אבוקדו</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">17.25</span>
           
@@ -211,8 +192,7 @@
           <span class="product-name">ארטישוק</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">17.25</span>
           
@@ -254,8 +234,7 @@
           <span class="product-name">ארטישוק ירושלמי</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">30.00</span>
           
@@ -297,8 +276,7 @@
           <span class="product-name">בטטה</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">18.50</span>
           
@@ -340,8 +318,7 @@
           <span class="product-name">ביצים</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">25.50</span>
           
@@ -383,8 +360,7 @@
           <span class="product-name">בצל יבש</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">15.67</span>
           
@@ -426,8 +402,7 @@
           <span class="product-name">בצל ירוק</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">8.00</span>
           
@@ -469,8 +444,7 @@
           <span class="product-name">ברוקולי</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">11.75</span>
           
@@ -512,8 +486,7 @@
           <span class="product-name">גזר</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">16.17</span>
           
@@ -555,8 +528,7 @@
           <span class="product-name">חסה</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">6.67</span>
           
@@ -598,8 +570,7 @@
           <span class="product-name">חציל</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">11.50</span>
           
@@ -641,8 +612,7 @@
           <span class="product-name">כוסברה</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">6.67</span>
           
@@ -684,8 +654,7 @@
           <span class="product-name">כרוב לבן</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">23.67</span>
           
@@ -727,8 +696,7 @@
           <span class="product-name">כרישה</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">13.33</span>
           
@@ -770,8 +738,7 @@
           <span class="product-name">לימון</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">13.40</span>
           
@@ -813,8 +780,7 @@
           <span class="product-name">מלפפון</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">35.67</span>
           
@@ -856,8 +822,7 @@
           <span class="product-name">מנגולד</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">9.00</span>
           
@@ -899,8 +864,7 @@
           <span class="product-name">נבטים</span>
           <span class="sfa-badge">יחידה</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">11.75</span>
           
@@ -942,8 +906,7 @@
           <span class="product-name">סלק</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">9.00</span>
           
@@ -985,8 +948,7 @@
           <span class="product-name">סלרי עלים</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">8.33</span>
           
@@ -1028,8 +990,7 @@
           <span class="product-name">סלרי שורש</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">10.50</span>
           
@@ -1071,15 +1032,14 @@
           <span class="product-name">עגבנייה</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
-            <span class="price-main">13.33</span>
+            <span class="price-main">15.33</span>
           
         </td>
         <td class="num">
           
-            <span class="price-secondary">10.00</span>
+            <span class="price-secondary">16.00</span>
           
         </td>
         <td>
@@ -1090,12 +1050,12 @@
               <div class="range-bar-fill"
                    style="inset-inline-end: 5.5%; inline-size: 13.7%;"></div>
             </div>
-            <div class="range-text">9.99 – 20.00</div>
+            <div class="range-text">10.00 – 20.00</div>
           
         </td>
         <td class="num sfa-hide-mobile">
           
-            <span class="stddev-text">5.78</span>
+            <span class="stddev-text">5.03</span>
           
         </td>
         <td class="num">3</td>
@@ -1114,8 +1074,7 @@
           <span class="product-name">עלי תרד</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">9.00</span>
           
@@ -1157,8 +1116,7 @@
           <span class="product-name">פטרוזיליה</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">7.33</span>
           
@@ -1200,8 +1158,7 @@
           <span class="product-name">פלפל אדום</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">17.75</span>
           
@@ -1243,8 +1200,7 @@
           <span class="product-name">פלפל רמירו</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">23.00</span>
           
@@ -1286,8 +1242,7 @@
           <span class="product-name">פפאיה</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">31.00</span>
           
@@ -1329,8 +1284,7 @@
           <span class="product-name">קולורבי</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">13.50</span>
           
@@ -1372,8 +1326,7 @@
           <span class="product-name">קייל</span>
           <span class="sfa-badge">צרור</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">7.00</span>
           
@@ -1415,8 +1368,7 @@
           <span class="product-name">קישוא</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">21.25</span>
           
@@ -1458,8 +1410,7 @@
           <span class="product-name">קלמנטינה</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">11.75</span>
           
@@ -1501,8 +1452,7 @@
           <span class="product-name">שומר</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">21.73</span>
           
@@ -1544,8 +1494,7 @@
           <span class="product-name">תפוז</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">11.50</span>
           
@@ -1587,8 +1536,7 @@
           <span class="product-name">תפוח אדמה</span>
           <span class="sfa-badge">קילוגרם</span>
         </td>
-        
-        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+        <td class="num">
           
             <span class="price-main">9.83</span>
           
@@ -1628,16 +1576,8 @@
 </div>
 
 
-<div class="sfa-cta-banner">
-  <p>יש לך נתונים מדויקים יותר? עזור לשפר את המדד — זה משרת את כל הקהילה.</p>
-  <a class="sfa-btn" href="https://wa.me/972547776770?text=היי, אני רוצה לשתף נתוני מחירים למדד">שלח בוואטסאפ</a>
-</div>
 
-
-
-<div class="sfa-card--accent" id="sfagent-dq-box" aria-label="שקיפות צינור נירמול">
-  
-  <p class="sfa-bridge-target">הטבלה מעל מבוססת על תהליך זה:</p>
+<div class="sfa-card--accent" aria-label="שקיפות צינור נירמול">
   <h2 class="sfa-card-title">שקיפות — מצב צינור הנירמול</h2>
   <p class="sfa-card-lead">
     נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
@@ -1648,76 +1588,18 @@
   <p class="sfa-card-lead">
     ספירות לפי מסד הנתונים המקומי. לא משמשים לחישוב המחירים בטבלה למעלה.
   </p>
-  
-  <div class="sfa-privacy-block">
-    <strong>🔒 פרטיות:</strong>
-    <ul>
-      <li>המערכת מציגה נתונים מצרפיים בלבד.</li>
-      <li>אין חשיפה של מחירים ברמת חווה בודדת.</li>
-      <li>לא ניתן לזהות מגדל ספציפי.</li>
-    </ul>
-  </div>
   <ul class="sfa-card-grid">
-    <li>מנורמל: <span class="sfa-ltr">585</span></li>
-    <li>לא ניתן לזיהוי: <span class="sfa-ltr">630</span></li>
-    <li>ממתין לעיבוד: <span class="sfa-ltr">9</span></li>
+    <li>מנורמל: <span class="sfa-ltr">380</span></li>
+    <li>לא ניתן לזיהוי: <span class="sfa-ltr">315</span></li>
+    <li>ממתין לעיבוד: <span class="sfa-ltr">5</span></li>
     <li>דולג (<span class="sfa-ltr">ignored</span>): <span class="sfa-ltr">334</span></li>
     <li>דילוג מאושר (סקופ): <span class="sfa-ltr">324</span></li>
     <li>כללי סקופ פעילים: <span class="sfa-ltr">301</span></li>
-    <li>אחוז פתרון: <span class="sfa-ltr">48.15%</span></li>
+    <li>אחוז פתרון: <span class="sfa-ltr">54.68%</span></li>
   </ul>
 </div>
 
 
 </div>
-
-
-<script>
-(function() {
-  var report = document.querySelector('.sfagent');
-  if (!report) return;
-  var headers = report.querySelectorAll('[data-tooltip]');
-  var activeTooltip = null;
-
-  function showTooltip(th) {
-    hideTooltip();
-    var tip = document.createElement('div');
-    tip.className = 'sfa-tooltip';
-    tip.textContent = th.getAttribute('data-tooltip');
-    th.style.position = 'relative';
-    th.appendChild(tip);
-    requestAnimationFrame(function() {
-      var rect = tip.getBoundingClientRect();
-      if (rect.left < 8) tip.style.transform = 'translateX(0)';
-      if (rect.right > window.innerWidth - 8) tip.style.transform = 'translateX(-100%)';
-      tip.classList.add('visible');
-    });
-    activeTooltip = { el: tip, th: th };
-  }
-
-  function hideTooltip() {
-    if (activeTooltip) {
-      activeTooltip.el.remove();
-      activeTooltip = null;
-    }
-  }
-
-  var isTouchDevice = 'ontouchstart' in window;
-
-  headers.forEach(function(th) {
-    if (!isTouchDevice) {
-      th.addEventListener('mouseenter', function() { showTooltip(th); });
-      th.addEventListener('mouseleave', hideTooltip);
-    }
-    th.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (activeTooltip && activeTooltip.th === th) { hideTooltip(); }
-      else { showTooltip(th); }
-    });
-  });
-
-  document.addEventListener('click', hideTooltip);
-})();
-</script>
 
 </div>

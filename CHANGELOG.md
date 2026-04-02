@@ -11,6 +11,20 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### M9 Phase 8 — SEO, Caching, Forms Finalization (Team 100)
+
+**SEO Migration:**
+- **Disabled** AIOSEO plugin via FTPS (renamed `all-in-one-seo-pack` to `.disabled`). Yoast SEO installed by Nimrod via uPress premium library with data import from AIOSEO.
+
+**Caching:**
+- ezCache (uPress native) installed by Nimrod, replacing WP Rocket (removed from server by Nimrod).
+
+**Contact Form (zero-plugin replacement for WPForms):**
+- **Updated** `flatsome-child/functions.php` — removed all WPForms dequeue code (dead after plugin removal), added `sfagent_contact_form` shortcode (name, email, phone, message fields), `sfagent_handle_contact_form` submission handler via `admin-post.php` with nonce + honeypot anti-spam + `wp_mail()`, `sfagent_contact_form_styles` conditional CSS loader
+- **Updated** `flatsome-child/style.css` — removed 381 bytes of dead WPForms CSS rules (`.wpforms-one-third`, `.wpforms-first`, `div.wpforms-container-full`)
+
+**Active plugins now:** admin-menu-editor, booter-bots-crawlers-manager, duplicate-post, ezcache, google-analytics-for-wordpress, tiny-compress-images, types, validator-pizza, wordpress-seo (Yoast), wp-views, wpconsent-cookies-banner-privacy-suite (11 total, including 2 new Nimrod additions)
+
 ### M7 Implementation — Public Publishing / Go-Live (Team 100)
 
 **Config & Foundation:**

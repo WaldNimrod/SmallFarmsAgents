@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 2.0  
+**Version:** 3.0  
 **Date:** 2026-04-02  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M7 — Public Publishing / Go-Live (**Implementation complete — pending G7 QA**)
+**Active Milestone:** M9 — Site Optimization and Maintenance (COMPLETE)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -14,6 +14,7 @@
 | Team | Name | Role |
 |------|------|------|
 | **Team 100** | Architecture | Owns spec and decisions. No code. |
+| **Team 80** | Product & Strategy | Research, product dev, copy, marketing. OpenAI online. |
 | **Team 50** | QA | Validates every deliverable against spec. Signs off on gates. |
 | **Team 20** | Infrastructure | Env, DB, Alembic, models, seed data, utils. |
 | **Team 10** | Feature Dev | Collectors, parsers, normalizer, aggregator, admin UI. |
@@ -23,11 +24,11 @@
 ## Milestone Flow
 
 ```
-M1 ──► M2 ──► M3 ──► M4 ──► M5 ──► M6 ──► M7
-DB    Collect  Norm   Agg   Admin  Auto  Go-Live
-Tm20   Tm10   Tm10   Tm10   Tm10  Tm10  Tm10+20
-  ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA    ↑QA
-  G1    G2    G3    G4    G5    G6     G7
+M1 ──► M2 ──► M3 ──► M4 ──► M5 ──► M6 ──► M7 ──► M8 ──► M9 ──► M10
+DB    Collect  Norm   Agg   Admin  Auto  Live   UX   Content  Spec
+Tm20   Tm10   Tm10   Tm10   Tm10  Tm10  Tm100 Tm10  Tm80    Tm100
+  ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA  ↑QA   ↑Nimrod  (plan)
+  G1    G2    G3    G4    G5    G6    G7   G8    G9     —
 ```
 
 ### Each milestone has three phases:
@@ -447,6 +448,115 @@ Phase C — Documentation   (Team 100 + implementing team)
 
 ---
 
+## M8 — UX Polish + Policy Formalization
+**Teams:** Team 10 (template), Team 80 (SEO guidance)
+**Dependency:** M7 Go-Live complete
+**Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M8_UX_POLISH_TEAM10.md`
+**Spec:** `_COMMUNICATION/TEAM_100/reports/2026-04-02_M8_M10_DETAILED_SPEC_TEAM100.md`
+**Status:** ACTIVE
+
+### Phase A — Implementation
+
+**Team 10 (template changes):**
+- Item 1: Tooltip layer — custom JS tooltips on table headers (6 terms)
+- Item 2: Community CTA banner — below table, WhatsApp link with pre-filled message
+- Item 3: Visual hierarchy — CSS adjustments to emphasize average price
+- Item 5: Privacy paragraph — add to transparency block in template
+
+**Team 80 (guidance — no code):**
+- Item 4: SEO — provide meta title, description, OG tag recommendations for WordPress admin
+
+**Team 100 (spec):**
+- Privacy Policy spec: `docs/PRIVACY_POLICY.md` ✅ CREATED
+
+### Gate G8 — Acceptance Criteria
+- [ ] All 6 tooltips functional on desktop (hover) and mobile (tap)
+- [ ] CTA banner renders between table and transparency block
+- [ ] WhatsApp link opens with pre-filled Hebrew message
+- [ ] Average price is clearly the visual anchor in each row
+- [ ] Privacy paragraph appears in transparency block
+- [ ] SEO meta data updated in WordPress admin
+- [ ] All existing tests still pass (no regression)
+- [ ] Nimrod visual sign-off on public page
+- [ ] Team 50 written sign-off
+
+---
+
+## M9 — Site Optimization and Maintenance
+**Teams:** Team 10 (implementation), Team 100 (spec)
+**Dependency:** Gate G8 must be open
+**Status:** COMPLETE — Implementation done, pending Nimrod WP Admin actions
+
+### Phase A — Implementation (Team 10)
+- 7-phase optimization plan executed:
+  - Phase 1: Security hardening (Yoast removal, readme.html, security headers)
+  - Phase 2: Plugin cleanup (9 plugins disabled: Yoast, CF7 comments, OptinMonster, TrustPulse, GSheetConnector, CRED, Layouts, Access, Regenerate Thumbnails)
+  - Phase 3: Facebook SDK removal from header.php + IE conditional cleanup
+  - Phase 4: Toolset audit and optimization (CRED, Layouts, Access disabled)
+  - Phase 5: WPForms conditional loading, admin asset dequeuing
+  - Phase 6: File system cleanup (14 legacy dirs, 16 WC images, 27 old reports, 4 unused themes)
+  - Phase 7: SEO preparation (documented WP Admin actions for Nimrod)
+- Report rotation added to FTPS upload pipeline
+- Dead WooCommerce code removed from functions.php
+- **Phase 8 (Nimrod-initiated):** SEO, caching, and forms finalization:
+  - SEO migrated from AIOSEO to Yoast SEO (included in uPress Pro plan). AIOSEO disabled.
+  - Caching switched from WP Rocket to ezCache (uPress native). WP Rocket removed by Nimrod.
+  - WPForms removed. Replaced with zero-plugin `[sfagent_contact_form]` shortcode in functions.php.
+  - New plugins added by Nimrod: validator-pizza, wpconsent-cookies-banner-privacy-suite
+  - functions.php cleaned: removed all WPForms dequeue code, added contact form handler
+  - style.css cleaned: removed WPForms CSS remnants
+- Results: 20→10 active plugins, 29→11 scripts, 12→4 stylesheets, 0 console errors
+
+### Completion Report
+`_COMMUNICATION/TEAM_10/reports/2026-04-02_M9_SITE_OPTIMIZATION_COMPLETE_TEAM10.md`
+
+---
+
+## M9-Content — Content + Community Engagement (formerly M9)
+**Teams:** Team 80 (blog post), Team 10 (integration), Nimrod (approval)
+**Dependency:** M9 optimization complete
+**Mandate:** `_COMMUNICATION/TEAM_80/MANDATE_M9_BLOG_POST_TEAM80.md`
+**Status:** PLANNED
+
+### Phase A — Implementation
+
+**Team 80 (content):**
+- Item 6: Blog post draft in Hebrew — "Why My Farm Wasn't Profitable"
+  - Requires Nimrod briefing: talking points, tone, boundaries
+  - 800–1200 words, structured per Team 80 outline
+  - Nimrod approval required before publication
+
+**Team 10 (integration):**
+- Item 7: WhatsApp data submission protocol
+  - Document intake process in `documentation/05-admin-and-operations/`
+  - Add blog post link to vision block on public page
+  - Process at least one test submission end-to-end
+
+### Gate G9 — Acceptance Criteria
+- [ ] Blog post published on nimrod.bio
+- [ ] Blog post linked from SmallFarmsAgent page
+- [ ] Content approved by Nimrod
+- [ ] WhatsApp intake protocol documented
+- [ ] At least one test data submission processed
+- [ ] Nimrod sign-off
+
+---
+
+## M10 — Advanced Interaction (Specification Only)
+**Teams:** Team 100 (architecture), Team 80 (product input)
+**Dependency:** Gate G9
+**Status:** PLANNED — produces documents only, no code
+
+### Deliverables (spec documents)
+- Item 8: WordPress Farmer Roles — architecture decision document
+- Item 9: FarmCostAgent — concept brief for new agent under MyFarmAgents
+- Item 10: In-Page Submission Form — technical spec (depends on Item 8)
+
+### Gate — None
+M10 is a planning milestone. Its outputs feed future milestones (M11+).
+
+---
+
 ## Gate Passage Policy
 
 1. Executing team files a completion report in their `reports/` folder
@@ -470,6 +580,8 @@ Phase C — Documentation   (Team 100 + implementing team)
 | G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED · ✅ PASS |
 | G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` ✅ ISSUED · ✅ PASS |
 | G7 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED |
+| G8 | Pending — to be issued with M8 mandate |
+| G9 | Pending — Nimrod content approval |
 
 ---
 
@@ -486,6 +598,7 @@ Phase C — Documentation   (Team 100 + implementing team)
 | Product Catalog (67 products) | `docs/PRODUCT_CATALOG_V1.md` (original 29 + expansions) |
 | Source Map (20 sources) | `docs/SOURCE_MAP_MASTER_HE.md` (legacy Hebrew) |
 | Architecture Decisions | `docs/ARCHITECTURE_DECISIONS_HE.md` (legacy Hebrew) |
+| Privacy Policy | `docs/PRIVACY_POLICY.md` |
 | uPress Validation Plan | `docs/UPRESS_VALIDATION_PLAN_HE.md` (M7 gate) |
 | Documentation Hub (English) | `documentation/README.md` |
 | Normalizer Baseline | `data/normalizer_baseline.json` |

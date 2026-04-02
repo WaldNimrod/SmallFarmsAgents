@@ -159,6 +159,9 @@ def upload_artifacts(
 
         result.success = len(result.files_failed) == 0
 
+        if result.success:
+            _rotate_old_reports(ftp, remote_base)
+
     except MissingCredentialsError:
         raise
     except Exception as exc:
@@ -175,3 +178,47 @@ def upload_artifacts(
                     pass
 
     return result
+
+
+KEEP_REPORTS = 3
+
+
+def _rotate_old_reports(
+    ftp: ReusedSessionFTP_TLS,
+    remote_base: str,
+    keep: int = KEEP_REPORTS,
+) -> None:
+    """Delete old timestamped report versions, keeping the most recent *keep* of each type."""
+    from collections import defaultdict
+
+    try:
+        ftp.cwd(remote_base)
+        all_files = ftp.nlst()
+
+        by_type: dict[str, list[str]] = defaultdict(list)
+        for f in all_files:
+            if f in (".", ".."):
+                continue
+            if "-2" in f and "public_report" in f:
+                base = f.split("-2")[0]
+                suffix = f.rsplit(".", 1)[-1]
+                by_type[f"{base}.{suffix}"].append(f)
+
+        deleted = 0
+        for _key, files in by_type.items():
+            files_sorted = sorted(files)
+            for old in files_sorted[:-keep]:
+                try:
+                    ftp.delete(f"{remote_base}/{old}")
+                    deleted += 1
+                except Exception:
+                    pass
+
+        if deleted:
+            logger.info(
+                "Report rotation: deleted %d old versions (kept %d per type)",
+                deleted,
+                keep,
+            )
+    except Exception as exc:
+        logger.debug("Report rotation skipped: %s", exc)

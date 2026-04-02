@@ -18,7 +18,11 @@ from organic_market_agent.utils.logging_setup import get_logger
 
 logger = get_logger(__name__)
 
+CHILD_THEME_PATH = "wp-content/themes/flatsome-child"
+
 SHORTCODE_MARKER = "sfagent_market_report_shortcode"
+ENQUEUE_MARKER = "sfagent_enqueue_styles"
+
 SHORTCODE_PHP = """
 // SmallFarmsAgent market report shortcode (M7 Go-Live)
 function sfagent_market_report_shortcode($atts) {
@@ -32,6 +36,25 @@ function sfagent_market_report_shortcode($atts) {
 add_shortcode('sfagent_market_report', 'sfagent_market_report_shortcode');
 """
 
+ENQUEUE_PHP = """
+// SmallFarmsAgent shared CSS — loaded in <head> on pages with SFA shortcode
+function sfagent_enqueue_styles() {
+    global $post;
+    if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'sfagent_market_report')) {
+        $css_file = get_stylesheet_directory() . '/sfagent-base.css';
+        if (file_exists($css_file)) {
+            wp_enqueue_style(
+                'sfagent-base',
+                get_stylesheet_directory_uri() . '/sfagent-base.css',
+                array(),
+                filemtime($css_file)
+            );
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'sfagent_enqueue_styles');
+"""
+
 
 def _connect_ftps() -> ReusedSessionFTP_TLS:
     ftp = ReusedSessionFTP_TLS()
@@ -43,31 +66,70 @@ def _connect_ftps() -> ReusedSessionFTP_TLS:
 
 
 def install_shortcode() -> bool:
-    """Download functions.php from the active child theme, append shortcode if missing, re-upload."""
+    """Download functions.php from the active child theme, append shortcode + enqueue hook if missing, re-upload."""
     import io
     import ftplib
 
-    remote_path = "wp-content/themes/flatsome-child/functions.php"
+    remote_path = f"{CHILD_THEME_PATH}/functions.php"
     ftp = _connect_ftps()
     try:
         buf = io.BytesIO()
         ftp.retrbinary(f"RETR {remote_path}", buf.write)
         content = buf.getvalue().decode("utf-8")
 
-        if SHORTCODE_MARKER in content:
-            logger.info("Shortcode already present in %s — skipping", remote_path)
+        changed = False
+
+        if SHORTCODE_MARKER not in content:
+            content += "\n" + SHORTCODE_PHP.strip() + "\n"
+            changed = True
+            logger.info("Shortcode appended to %s", remote_path)
+        else:
             print(f"[OK] Shortcode already installed in {remote_path}")
-            return True
 
-        content += "\n" + SHORTCODE_PHP.strip() + "\n"
+        if ENQUEUE_MARKER not in content:
+            content += "\n" + ENQUEUE_PHP.strip() + "\n"
+            changed = True
+            logger.info("CSS enqueue hook appended to %s", remote_path)
+        else:
+            print(f"[OK] CSS enqueue hook already installed in {remote_path}")
 
-        upload_buf = io.BytesIO(content.encode("utf-8"))
-        ftp.storbinary(f"STOR {remote_path}", upload_buf)
-        logger.info("Shortcode appended to %s", remote_path)
-        print(f"[OK] Shortcode installed in {remote_path}")
+        if changed:
+            upload_buf = io.BytesIO(content.encode("utf-8"))
+            ftp.storbinary(f"STOR {remote_path}", upload_buf)
+            print(f"[OK] functions.php updated in {remote_path}")
+
         return True
     except ftplib.all_errors as exc:
-        logger.error("Failed to install shortcode: %s", exc)
+        logger.error("Failed to install shortcode/enqueue: %s", exc)
+        print(f"[FAIL] FTP error: {exc}", file=sys.stderr)
+        return False
+    finally:
+        try:
+            ftp.quit()
+        except Exception:
+            ftp.close()
+
+
+def deploy_shared_css() -> bool:
+    """Upload sfagent-base.css to the child theme directory via FTPS."""
+    import io
+    import ftplib
+
+    local_css = Path(__file__).resolve().parents[1] / "organic_market_agent" / "publisher" / "static" / "sfagent-base.css"
+    if not local_css.exists():
+        print(f"[FAIL] Local CSS file not found: {local_css}", file=sys.stderr)
+        return False
+
+    remote_path = f"{CHILD_THEME_PATH}/sfagent-base.css"
+    ftp = _connect_ftps()
+    try:
+        with open(local_css, "rb") as f:
+            ftp.storbinary(f"STOR {remote_path}", f)
+        logger.info("Shared CSS uploaded: %s → %s", local_css.name, remote_path)
+        print(f"[OK] Shared CSS deployed to {remote_path}")
+        return True
+    except ftplib.all_errors as exc:
+        logger.error("Failed to deploy shared CSS: %s", exc)
         print(f"[FAIL] FTP error: {exc}", file=sys.stderr)
         return False
     finally:
@@ -137,9 +199,10 @@ def main():
         sys.exit(1)
 
     ok1 = install_shortcode()
-    ok2 = create_wp_page()
+    ok2 = deploy_shared_css()
+    ok3 = create_wp_page()
 
-    if ok1 and ok2:
+    if ok1 and ok2 and ok3:
         print()
         print("All done. Visit:", config.UPRESS_PUBLIC_BASE.rstrip("/") + "/" + config.UPRESS_PAGE_SLUG.strip("/"))
     else:

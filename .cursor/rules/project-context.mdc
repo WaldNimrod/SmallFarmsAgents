@@ -68,6 +68,19 @@ More agents will follow under the MyFarmAgents umbrella.
 - **WordPress (nimrod.bio)** is presentation layer only — reads static artifacts
 - No real-time connection between local system and public site
 - No public API in V1
+- **CSS Architecture (M8):** Three-layer system:
+  - Layer 1: Flatsome parent + child theme (buttons, typography, grid)
+  - Layer 2: `sfagent-base.css` in `flatsome-child/` (SFA shared tokens, components, utilities)
+  - Layer 3: Inline `<style>` in each template (page-specific rules only)
+  - Deploy: `scripts/wp_shortcode_install.py` handles CSS + PHP hooks via FTPS
+  - Root CSS scope: `.sfagent`, shared prefix: `.sfa-*`
+- **Hosting: uPress.co.il** (managed WordPress, shared Pro plan, server s887)
+  - FTPS on port 21 (`ftp.s887.upress.link`), SSH/SFTP blocked
+  - Built-in: SuperCache (server-level), CDN, SSL, daily backups, dev environments
+  - **Caching: ezCache** (uPress native plugin, replaced WP Rocket)
+  - **SEO: Yoast SEO** v27.3 (imported from AIOSEO, included in uPress premium library)
+  - **Contact form:** Custom `[sfagent_contact_form]` shortcode in `functions.php` (zero-plugin)
+  - Premium plugins library available via uPress panel
 
 ## Tech Stack (locked)
 
@@ -78,7 +91,7 @@ More agents will follow under the MyFarmAgents umbrella.
 - DB: **PostgreSQL 15 via Docker** (`docker-compose.yml` at repo root)
 - Docker container: `oma-postgres` (port 5433) for fresh installs; `oma-g2-ev` (port 55435) for current dev DB
 - `DATABASE_URL` in `.env` — see `.env.example`
-- ORM: SQLAlchemy 2.x + Alembic migrations (29 revisions, head=029)
+- ORM: SQLAlchemy 2.x + Alembic migrations (30 revisions, head=030)
 - Scraping: httpx + BeautifulSoup4
 - Scheduler: system cron → `python -m organic_market_agent.scheduler.runner` (self-gates on `scheduler_config` table)
 - Charts: Chart.js (CDN) for admin dashboard graphs
@@ -106,7 +119,7 @@ More agents will follow under the MyFarmAgents umbrella.
 - **67 products**, **232 active aliases**, **301 active scope-skip rules**
 - **20 sources** (7 active, 13 deactivated/candidate)
 - **174 normalized observations**, **100% resolution rate** (0 unresolvable)
-- **29 Alembic migrations** (001–029, no 009)
+- **30 Alembic migrations** (001–030, no 009)
 - **127 tests passing**, 2 skipped (QA001 waiver + env skip)
 - Gates G1–G6 all PASS. M7 pending Nimrod approval.
 
@@ -167,6 +180,7 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 |------|---------|---------------------|
 | `GLOSSARY.md` | All terminology | Always — READ EVERY SESSION |
 | `ARCHITECTURE_DECISIONS_HE.md` | Architectural decisions | Any structural change |
+| `PRIVACY_POLICY.md` | Privacy rules — aggregation, no farm-level data | Any public output or data collection change |
 | `DATA_MODEL_AND_PUBLISH_DECISIONS_HE.md` | Data model + publish policy | Schema, publish, or aggregation changes |
 | `DETAILED_SYSTEM_SPEC_HE.md` | Full system design | Any new module or major feature |
 
@@ -180,6 +194,7 @@ All in `/Users/nimrod/Documents/SmallFarmsAgents/docs/`:
 | `PRODUCT_CATALOG_V1.md` | Product catalog (67 products) | Product, alias, or unit changes |
 | `SOURCE_MAP_MASTER_HE.md` | 20 sources, platform_family | Source config or collector changes |
 | `RTL_DEVELOPMENT_GUIDE.md` | Hebrew RTL best practices | Any UI template or CSS change |
+| `PRIVACY_POLICY.md` | Privacy policy spec | Any data exposure or public output change |
 | `OPERATIONS.md` | Operational runbook | Scheduler, cron, or server script changes |
 
 ### Plan Documents (read for SCOPE)
@@ -209,14 +224,16 @@ Current version: see `CHANGELOG.md` header. Every agent must update this file wh
 ## Development Roadmap
 
 - Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
-- **Current milestone: M7 — Public Publishing / Go-Live (pending Nimrod explicit approval)**
-- Gates G1–G6 all PASS. M7 is the final milestone.
-- uPress FTP validation + WordPress integration are M7 deliverables
-- Pipeline resolution improvement complete: 100% resolution rate achieved
+- **Current milestone: M9 — Site Optimization and Maintenance (IMPLEMENTATION COMPLETE)**
+- Gates G1–G6 all PASS. M7 implementation complete (pending G7 QA).
+- M8 implementation complete: CSS refactored to 3-layer architecture (Flatsome + sfagent-base.css in child theme + inline page-specific). All 6 M8 items live.
+- M9 implementation complete: SEO migrated to Yoast (from AIOSEO), caching switched to ezCache (WP Rocket removed), WPForms replaced with zero-plugin `[sfagent_contact_form]` shortcode. 10 plugins disabled total, security headers, Facebook SDK removed, report rotation, child theme cleaned. Active plugins: 20 -> 10, scripts: 29 -> 11, stylesheets: 12 -> 4.
+- M10 planned from Team 80 recommendations (approved by Nimrod 2026-04-02)
 
 ## Team Structure
 
 - **Team 100** — Architecture. Owns spec, decisions, review. Issues mandates.
+- **Team 80** — Product & Strategy. Research, product dev, copy, marketing. Operates in OpenAI online. Delivers handoff packages.
 - **Team 50** — QA. Validates implementation against spec. Signs off on gates.
 - **Team 20** — Infrastructure. DB, env, Alembic, models, seed data.
 - **Team 10** — Feature Dev. Collectors, parsers, normalizer, aggregator, admin UI, publisher.
