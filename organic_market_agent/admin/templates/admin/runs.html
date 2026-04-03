@@ -8,6 +8,32 @@
 {% endblock %}
 {% block content %}
 <h1 class="h4 mb-3">הרצות אינג׳סט (50 האחרונות)</h1>
+<div class="row g-2 mb-3">
+  <div class="col-auto">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body py-2 px-3">
+        <div class="text-muted small">סה״כ הרצות</div>
+        <div class="fw-bold">{{ runs_total }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body py-2 px-3">
+        <div class="text-muted small">שיעור הצלחה (אמיתיות)</div>
+        <div class="fw-bold">{{ success_rate }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body py-2 px-3">
+        <div class="text-muted small">הרצה מוצלחת אחרונה</div>
+        <div class="fw-bold ltr">{{ last_success_at }}</div>
+      </div>
+    </div>
+  </div>
+</div>
 {{ table_summary_bar(items|length, run_status_segments, note='ממוין לפי מזהה יורד · מקס׳ 50 שורות', full_count=runs_total) }}
 {% if current_user.is_authenticated %}
 <form method="post" action="{{ url_for('runs.runs_trigger') }}" class="mb-4 border rounded p-3 bg-white">
@@ -43,6 +69,24 @@
   <button type="submit" class="btn btn-outline-danger btn-sm">עצור כל הרצה פעילה</button>
   <span class="small text-muted ms-2">מסמן ב־DB כנכשל; תהליך שרץ באותו שרת נבדק בין שלבי צינור.</span>
 </form>
+{% if stale_running_count > 0 %}
+<div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </svg>
+  <div>
+    <strong>{{ stale_running_count }} הרצה/ות עם סטטוס «רץ» מעל 30 דקות</strong> — ככל הנראה תקועות ממפעלה קודמת. ניתן לנקות ידנית:
+    <form method="post" action="{{ url_for('runs.runs_reconcile_stale') }}" class="d-inline ms-2">
+      <button type="submit" class="btn btn-warning btn-sm">נקה הרצות תקועות</button>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+<form method="post" action="{{ url_for('runs.runs_upload_now') }}" class="mb-3" onsubmit='return confirm("לדחוף את הפלט הנוכחי לשרת nimrod.bio?");'>
+  <button type="submit" class="btn btn-outline-success btn-sm">דחוף לשרת (FTPS)</button>
+  <span class="small text-muted ms-2">מעלה את output/public למיקום uPress — דורש manifest.json ופרטי FTPS.</span>
+</form>
 {% else %}
 <p class="text-muted small">יש להתחבר כדי להפעיל הרצה.</p>
 {% endif %}
@@ -55,6 +99,7 @@
       <tr>
         <th data-sort-type="number">מזהה</th>
         <th data-sort-type="text">סוג</th>
+        <th data-sort-type="text">מקור הפעלה</th>
         <th data-sort-type="text">סטטוס</th>
         <th data-sort-type="text">מדד / נתונים</th>
         <th data-sort-type="text">התחלה</th>
@@ -62,6 +107,7 @@
         <th data-sort-type="number">התראות צינור<br><span class="small fw-normal text-muted">שורות ב־pipeline_alerts</span></th>
         <th data-sort-type="text">מקורות</th>
         <th data-sort-type="text" class="ltr">התקדמות</th>
+        <th data-sort-type="text">הערות</th>
         <th data-sort-none></th>
       </tr>
     </thead>
@@ -70,6 +116,14 @@
       <tr>
         <td class="ltr">{{ it.id }}</td>
         <td>{{ it.run_type }}</td>
+        <td>
+          {% if it.triggered_by == 'admin' %}<span class="badge bg-primary">admin</span>
+          {% elif it.triggered_by == 'cron' %}<span class="badge bg-secondary">cron</span>
+          {% elif it.triggered_by == 'cli' %}<span class="badge bg-info text-dark">cli</span>
+          {% elif it.triggered_by == 'test' %}<span class="badge bg-dark">test</span>
+          {% else %}<span class="badge bg-light text-dark">{{ it.triggered_by }}</span>
+          {% endif %}
+        </td>
         <td>{{ it.status }}</td>
         <td class="small">
           <span class="badge {% if it.health_tier == 'warning' %}bg-warning text-dark{% else %}bg-{{ it.health_tier }}{% endif %}">{{ it.health_line }}</span>
@@ -106,6 +160,7 @@
             {% endif %}
           {% else %}—{% endif %}
         </td>
+        <td class="small text-muted text-break" style="max-width:160px;">{{ it.notes or '—' }}</td>
         <td><a href="{{ url_for('runs.run_detail', run_id=it.id) }}">פירוט</a></td>
       </tr>
       {% endfor %}

@@ -38,6 +38,15 @@
                value="{{ cfg.retry_attempts }}">
       </div>
       <div class="col-12">
+        <h3 class="h6 mt-2">העלאה לשרת (FTPS)</h3>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" name="upload_enabled" id="ul_en"
+                 {% if cfg.upload_enabled %}checked{% endif %}>
+          <label class="form-check-label" for="ul_en">העלאה אוטומטית מופעלת</label>
+        </div>
+        <p class="text-muted small mb-0">כשמסומן, סיום ריצת צינור מוצלחת דוחף באופן אוטומטי את הפלט לשרת uPress.</p>
+      </div>
+      <div class="col-12">
         <h3 class="h6 mt-2">ניקוי לוגים</h3>
         <div class="form-check mb-2">
           <input class="form-check-input" type="checkbox" name="cleanup_enabled" id="cl_en"

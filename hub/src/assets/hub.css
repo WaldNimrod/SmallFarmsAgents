@@ -1,0 +1,9 @@
+/* hub.css — SmallFarmsAgents project layer
+ * Loads AFTER hub-base.css. Add SFA-specific overrides here.
+ * DO NOT duplicate base styles — override CSS variables or add new classes only.
+ *
+ * Standard: CLIENT_HUB_STANDARD_v1.md §11.2
+ */
+
+/* SFA-specific variable overrides (if needed in the future) */
+/* :root { --accent: #7a5c3e; } */

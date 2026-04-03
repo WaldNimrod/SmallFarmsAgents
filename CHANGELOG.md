@@ -11,6 +11,14 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Accessibility Compliance — WP Accessibility (Team 100)
+
+- **Installed** WP Accessibility v2.3.3 (Joe Dolson) — activated by Nimrod via WP Admin
+- **Updated** `flatsome-child/functions.php` — added `sfagent_configure_wpa()` one-time config (focus outlines with `#4c3113` brown matching site theme), `sfagent_wpa_hebrew_labels()` filter for Hebrew form labels (חיפוש, שם, אימייל, אתר, תגובה), `sfagent_accessibility_statement_shortcode` for Israeli law IS 5568 compliance page
+- **Active features:** Keyboard focus outlines, form label injection (Hebrew), tabindex cleanup, viewport scaling fix, target attribute removal, RTL/lang detection
+- **Zero UI interference:** No toolbar or floating widget — all fixes are code-level
+- **Active plugins now:** 12 total (added: wp-accessibility)
+
 ### M9 Phase 8 — SEO, Caching, Forms Finalization (Team 100)
 
 **SEO Migration:**

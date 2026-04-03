@@ -17,11 +17,11 @@
     <button type="submit" class="btn btn-sm btn-outline-secondary">שמור בסיס השוואה (JSON)</button>
   </form>
   <form method="post" action="{{ url_for('maintenance.catalog_renormalize_start') }}" class="d-inline m-0"
-        onsubmit="return confirm('להפעיל נרמול מחדש לכל השורות «לא ניתן»? הפעולה רצה ברקע ותסתיים בתוך דקות.');">
+        onsubmit="return confirm('להפעיל נרמול מחדש לכל השורות «לא מזוהה»? הפעולה רצה ברקע ותסתיים בתוך דקות.');">
     <button type="submit" class="btn btn-sm btn-outline-primary">נרמול קטלוג מחדש (רקע)</button>
   </form>
   <form method="post" action="{{ url_for('maintenance.full_data_refresh_start') }}" class="d-inline m-0"
-        onsubmit="return confirm('ריענון מלא: יימחקו תצפיות מנורמלות קיימות לכל שורות קהילה במצב מנורמל/לא ניתן, יוחזרו לתור וינורמלו מחדש. שורות ignored (דילוג מאושר) לא ישתנו. להמשיך?');">
+        onsubmit="return confirm('ריענון מלא: יימחקו תצפיות מנורמלות קיימות לכל שורות קהילה במצב מנורמל/לא מזוהה, יוחזרו לתור וינורמלו מחדש. שורות ignored (דילוג מאושר) לא ישתנו. להמשיך?');">
     <button type="submit" class="btn btn-sm btn-outline-danger">ריענון מלא + פרסום (רקע)</button>
   </form>
   {% endif %}
@@ -144,12 +144,12 @@
         <p class="small text-muted mb-2">מוצג גם בדוח הציבורי וב־<span class="ltr">manifest.json</span> לאחר פרסום.</p>
         <div class="row g-2 small">
           <div class="col-md-4"><span class="text-muted">מנורמל:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.normalized }}</span></div>
-          <div class="col-md-4"><span class="text-muted">לא ניתן:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.unresolvable }}</span></div>
+          <div class="col-md-4"><span class="text-muted">לא מזוהה (דורש טיפול):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.unresolvable }}</span></div>
           <div class="col-md-4"><span class="text-muted">ממתין (<span class="ltr">extracted</span>):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.extracted_pending }}</span></div>
           <div class="col-md-4"><span class="text-muted">דולג (<span class="ltr">ignored</span>):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.ignored }}</span></div>
           <div class="col-md-4"><span class="text-muted">דילוג מאושר סקופ:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.raw_extracted_items.ignored_approved_scope_skip }}</span></div>
           <div class="col-md-4"><span class="text-muted">כללי סקופ פעילים:</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.active_scope_skip_rules }}</span></div>
-          <div class="col-md-6"><span class="text-muted">אחוז פתרון (מנורמל / מנורמל+לא ניתן):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.resolution_pct_norm_vs_unres }}%</span></div>
+          <div class="col-md-6"><span class="text-muted">אחוז פתרון (מנורמל / מנורמל+לא מזוהה):</span> <span class="ltr fw-semibold">{{ data_quality_snapshot.resolution_pct_norm_vs_unres }}%</span></div>
         </div>
       </div>
     </div>
@@ -168,7 +168,7 @@
   <div class="col-sm-6 col-md-3">
     <div class="card h-100 border-0 shadow-sm">
       <div class="card-body py-3">
-        <div class="text-muted small mb-1">מנורמל / לא ניתן</div>
+        <div class="text-muted small mb-1">מנורמל / לא מזוהה</div>
         <div class="fs-6 ltr"><span class="text-success fw-semibold">{{ rei_normalized }}</span> / <span class="text-danger fw-semibold">{{ rei_unresolvable }}</span></div>
       </div>
     </div>
@@ -185,8 +185,8 @@
   <div class="col-sm-6 col-md-3">
     <div class="card h-100 border-0 shadow-sm">
       <div class="card-body py-3">
-        <div class="text-muted small mb-1">דולגו (<span class="ltr">ignored</span>)</div>
-        <div class="fs-4 fw-bold ltr">{{ rei_ignored }}</div>
+        <div class="text-muted small mb-1">דולגו — תקין (<span class="ltr">ignored</span>)</div>
+        <div class="fs-4 fw-bold ltr text-secondary">{{ rei_ignored }}</div>
       </div>
     </div>
   </div>
@@ -219,7 +219,7 @@
   <div class="col-lg-12">
     <div class="card border-0 shadow-sm h-100">
       <div class="card-body">
-        <h2 class="h6 mb-3">שיעור לא ניתן לנרמול (7 ימים, UTC)</h2>
+        <h2 class="h6 mb-3">שיעור לא מזוהה (7 ימים, UTC)</h2>
         <canvas id="chartUnres7d" height="80"></canvas>
       </div>
     </div>
@@ -252,7 +252,7 @@
       data: {
         labels: unr.map(r => r.day),
         datasets: [{
-          label: 'לא ניתן (%)',
+          label: 'לא מזוהה (%)',
           data: unr.map(r => r.rate_pct),
           backgroundColor: 'rgba(220, 53, 69, 0.35)',
         }]

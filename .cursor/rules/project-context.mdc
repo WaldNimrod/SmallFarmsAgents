@@ -66,6 +66,14 @@ More agents will follow under the MyFarmAgents umbrella.
 
 - **Local Data Hub** runs Python pipeline: collect → parse → normalize → aggregate → publish
 - **WordPress (nimrod.bio)** is presentation layer only — reads static artifacts
+- **Client Hub:** `https://nimrod.bio/sfa-hub/` — status dashboard for milestones, tasks, open decisions
+  - **Standard:** `docs/CLIENT_HUB_STANDARD_v1.md` (v1.1, 2026-04-09) — canonical for all Agents OS hubs (platform-agnostic)
+  - Build: `python3 scripts/build_sfa_client_hub.py` → `hub/dist/`
+  - Deploy: `python3 scripts/ftp_publish_sfa_client_hub.py` → `/sfa-hub/` on uPress
+  - Ingest: `python3 scripts/ingest_sfa_feedback_json.py` → `hub/ssot/responses/`
+  - Data: `hub/data/*.json` (roadmap, updates, tasks, decisions)
+  - SSOT: `hub/ssot/` (manifest + responses)
+  - Branding: "Agents OS @ nimrod.bio" + WhatsApp link on all hub pages
 - No real-time connection between local system and public site
 - No public API in V1
 - **CSS Architecture (M8):** Three-layer system:
@@ -75,12 +83,30 @@ More agents will follow under the MyFarmAgents umbrella.
   - Deploy: `scripts/wp_shortcode_install.py` handles CSS + PHP hooks via FTPS
   - Root CSS scope: `.sfagent`, shared prefix: `.sfa-*`
 - **Hosting: uPress.co.il** (managed WordPress, shared Pro plan, server s887)
+  - **Cross-project standard:** `docs/UPRESS_WORDPRESS_STANDARD_v2.md` (v2.0, 2026-04-08) — normative procedures for all uPress + WordPress projects
+  - **Project-specific reference:** `docs/UPRESS_WORDPRESS_AGENT_PLAYBOOK.md` (v1.0, superseded — retained for nimrod.bio-specific details)
   - FTPS on port 21 (`ftp.s887.upress.link`), SSH/SFTP blocked
   - Built-in: SuperCache (server-level), CDN, SSL, daily backups, dev environments
   - **Caching: ezCache** (uPress native plugin, replaced WP Rocket)
   - **SEO: Yoast SEO** v27.3 (imported from AIOSEO, included in uPress premium library)
   - **Contact form:** Custom `[sfagent_contact_form]` shortcode in `functions.php` (zero-plugin)
+  - **Accessibility:** WP Accessibility v2.3.3 (Joe Dolson) — focus outlines, form labels, tabindex fix, viewport fix, Hebrew labels via `wpa_labels` filter. Accessibility statement shortcode: `[sfagent_accessibility_statement]`
   - Premium plugins library available via uPress panel
+
+## WordPress Infrastructure
+
+> **Canonical reference:** `docs/UPRESS_WORDPRESS_STANDARD_v2.md` (v2.0, 2026-04-08)
+> All uPress hosting procedures, FTP/TLS policies, REST API auth, phpMyAdmin, functions.php
+> patterns, credentials, and deployment workflows are defined there. Do NOT duplicate here.
+
+**Project-specific quick facts (nimrod.bio / server s887):**
+- 4 access channels: FTPS (port 21), REST API (authenticated, 178 admin caps), phpMyAdmin, functions.php hooks
+- Credentials: `.env.upress` (dotenv format, gitignored)
+- DB table prefix: `qvj_`
+- REST API: 250 routes across 10 namespaces (wp/v2, yoast/v1, ezcache/v1, toolset-views/v1, etc.)
+- Active plugins: 12 (Admin Menu Editor, Booter, ezCache, MonsterInsights, MailCheck.ai, TinyPNG, Toolset Views, WP Accessibility, WPConsent, Yoast Duplicate Post, Yoast SEO + AIOSEO disabled)
+- Content: 23 pages, 134 posts, 62K+ comments (pending cleanup), 683 media, 3 menus, 14 widgets
+- Key pages: `smallfarmsagent` (ID 91325), homepage (ID 2516)
 
 ## Tech Stack (locked)
 
@@ -122,6 +148,9 @@ More agents will follow under the MyFarmAgents umbrella.
 - **30 Alembic migrations** (001–030, no 009)
 - **127 tests passing**, 2 skipped (QA001 waiver + env skip)
 - Gates G1–G6 all PASS. M7 pending Nimrod approval.
+- **G7 PASS** — formally closed 2026-04-02 (12/12 tests). Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G7_REPORT_TEAM50.md`
+- **G8 PASS** — formally closed 2026-04-02 (14/14 tests). Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G8_REPORT_TEAM50.md`
+- **G9 PASS** — formally closed 2026-04-02. All 7 WP Admin tasks resolved programmatically. Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G9_RERUN_REPORT_TEAM50.md`
 
 ## Database Key Tables
 
@@ -223,12 +252,14 @@ Current version: see `CHANGELOG.md` header. Every agent must update this file wh
 
 ## Development Roadmap
 
-- Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference
-- **Current milestone: M9 — Site Optimization and Maintenance (IMPLEMENTATION COMPLETE)**
-- Gates G1–G6 all PASS. M7 implementation complete (pending G7 QA).
+- Full roadmap: `_COMMUNICATION/ROADMAP.md` — PRIMARY reference (v4.0)
+- **Current milestone: All gates G1–G9 PASS and CLOSED. Next: M9-Content (planned, not yet started)**
+- Gates G1–G8 all PASS. G7 formally closed 2026-04-02. G8 formally closed 2026-04-02.
+- **G9 PASS** — all 7 WP Admin tasks resolved programmatically via functions.php. Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G9_RERUN_REPORT_TEAM50.md`
 - M8 implementation complete: CSS refactored to 3-layer architecture (Flatsome + sfagent-base.css in child theme + inline page-specific). All 6 M8 items live.
-- M9 implementation complete: SEO migrated to Yoast (from AIOSEO), caching switched to ezCache (WP Rocket removed), WPForms replaced with zero-plugin `[sfagent_contact_form]` shortcode. 10 plugins disabled total, security headers, Facebook SDK removed, report rotation, child theme cleaned. Active plugins: 20 -> 10, scripts: 29 -> 11, stylesheets: 12 -> 4.
+- M9 implementation complete: SEO migrated to Yoast (from AIOSEO), caching switched to ezCache (WP Rocket removed), WPForms replaced with zero-plugin `[sfagent_contact_form]` shortcode. 10 plugins disabled total, security headers, Facebook SDK removed, report rotation, child theme cleaned. Active plugins: 20 -> 11, scripts: 29 -> 12, stylesheets: 12 -> 5. WP Accessibility v2.3.3 added for Israeli accessibility law compliance (IS 5568 / WCAG 2.0 AA).
 - M10 planned from Team 80 recommendations (approved by Nimrod 2026-04-02)
+- M11 Vision milestone added: captures all unimplemented Team 80 recommendations (UX enhancements, farmer interaction layer, personal calculator, AI agent)
 
 ## Team Structure
 

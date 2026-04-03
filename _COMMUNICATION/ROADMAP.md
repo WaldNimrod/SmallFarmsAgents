@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 3.0  
+**Version:** 4.0  
 **Date:** 2026-04-02  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M9 — Site Optimization and Maintenance (COMPLETE)
+**Active Milestone:** M9 — Site Optimization (G9 PASS — CLOSED)
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -24,11 +24,12 @@
 ## Milestone Flow
 
 ```
-M1 ──► M2 ──► M3 ──► M4 ──► M5 ──► M6 ──► M7 ──► M8 ──► M9 ──► M10
-DB    Collect  Norm   Agg   Admin  Auto  Live   UX   Content  Spec
-Tm20   Tm10   Tm10   Tm10   Tm10  Tm10  Tm100 Tm10  Tm80    Tm100
-  ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA  ↑QA   ↑Nimrod  (plan)
-  G1    G2    G3    G4    G5    G6    G7   G8    G9     —
+M1 ──► M2 ──► M3 ──► M4 ──► M5 ──► M6 ──► M7 ──► M8 ──► M9 ──► M9C ──► M10 ──► M11
+DB    Collect  Norm   Agg   Admin  Auto  Live   UX   SiteOpt  Content  Spec   Vision
+Tm20   Tm10   Tm10   Tm10   Tm10  Tm10  Tm100 Tm10  Tm10    Tm80    Tm100  Tm100
+  ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA   ↑QA  ↑QA   ↑QA    ↑Nimrod  (plan) (plan)
+  G1    G2    G3    G4    G5    G6    G7   G8    G9     G9C     —      —
+ PASS  PASS  PASS  PASS  PASS  PASS  PASS PASS  PASS    —      —      —
 ```
 
 ### Each milestone has three phases:
@@ -408,7 +409,10 @@ Phase C — Documentation   (Team 100 + implementing team)
 **Transport:** FTPS (FTP over TLS) on port 21 via `ftplib.FTP_TLS` with `ReusedSessionFTP_TLS` subclass
 **Work Plan:** `_COMMUNICATION/TEAM_100/reports/2026-03-31_M7_WORK_PLAN_FOR_APPROVAL_TEAM100.md` (v2.1 — binding)
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_UPRESS_VALIDATION.md`
-**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED (amended 2026-04-02)
+**QA Report:** `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G7_REPORT_TEAM50.md` ✅ PASS
+**Acknowledgment:** `_COMMUNICATION/TEAM_100/reports/2026-04-02_G7_ACKNOWLEDGMENT_TEAM100.md`
+**Status:** ✅ COMPLETE — G7 PASS (12/12 tests, all Critical met)
 
 ### Phase A — Implementation (Team 100) — COMPLETE
 - ✅ Config: uPress FTPS properties in `Config` class, `upress_configured()` helper
@@ -453,7 +457,10 @@ Phase C — Documentation   (Team 100 + implementing team)
 **Dependency:** M7 Go-Live complete
 **Mandate:** `_COMMUNICATION/TEAM_10/MANDATE_M8_UX_POLISH_TEAM10.md`
 **Spec:** `_COMMUNICATION/TEAM_100/reports/2026-04-02_M8_M10_DETAILED_SPEC_TEAM100.md`
-**Status:** ACTIVE
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G8.md` ✅ ISSUED
+**QA Report:** `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G8_REPORT_TEAM50.md` ✅ PASS
+**Acknowledgment:** `_COMMUNICATION/TEAM_100/reports/2026-04-02_G8_ACKNOWLEDGMENT_TEAM100.md`
+**Status:** ✅ COMPLETE — G8 PASS (14/14 tests, all Critical met)
 
 ### Phase A — Implementation
 
@@ -485,7 +492,10 @@ Phase C — Documentation   (Team 100 + implementing team)
 ## M9 — Site Optimization and Maintenance
 **Teams:** Team 10 (implementation), Team 100 (spec)
 **Dependency:** Gate G8 must be open
-**Status:** COMPLETE — Implementation done, pending Nimrod WP Admin actions
+**QA Mandate:** `_COMMUNICATION/TEAM_50/QA_MANDATE_G9.md` ✅ ISSUED
+**QA Report:** `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G9_RERUN_REPORT_TEAM50.md` ✅ PASS
+**Acknowledgment:** `_COMMUNICATION/TEAM_100/reports/2026-04-02_G9_ACKNOWLEDGMENT_TEAM100.md`
+**Status:** ✅ COMPLETE — G9 PASS (13/14 tests, all Critical met)
 
 ### Phase A — Implementation (Team 10)
 - 7-phase optimization plan executed:
@@ -509,14 +519,29 @@ Phase C — Documentation   (Team 100 + implementing team)
 
 ### Completion Report
 `_COMMUNICATION/TEAM_10/reports/2026-04-02_M9_SITE_OPTIMIZATION_COMPLETE_TEAM10.md`
+`_COMMUNICATION/TEAM_10/reports/2026-04-02_M9_COMPLETION_REPORT_TEAM10_v2.md` (v2 — includes accessibility + WP Admin status)
+
+### G9 Blockers — RESOLVED
+
+All 7 WP Admin tasks resolved programmatically via `functions.php` init hooks (2026-04-02):
+
+| ID | Task | Status |
+|----|------|--------|
+| F9-1 | Replace `[wpforms id="90050"]` with `[sfagent_contact_form]` | ✅ DONE |
+| F9-2 | Update phone to `054-7776770` | ✅ DONE |
+| F9-3 | Update email to `nimrod@mezoo.co` | ✅ DONE |
+| F9-4 | Remove "הזמנות" from navigation menu | ✅ DONE |
+| F9-5 | Update footer business hours | ✅ DONE |
+| F9-6 | Yoast SEO active with meta/OG | ✅ DONE |
+| F9-7 | Delete WooCommerce orphan pages | ✅ DONE |
 
 ---
 
-## M9-Content — Content + Community Engagement (formerly M9)
+## M9-Content (M9C) — Content + Community Engagement
 **Teams:** Team 80 (blog post), Team 10 (integration), Nimrod (approval)
-**Dependency:** M9 optimization complete
+**Dependency:** G9 must be PASS
 **Mandate:** `_COMMUNICATION/TEAM_80/MANDATE_M9_BLOG_POST_TEAM80.md`
-**Status:** PLANNED
+**Status:** PLANNED — NOT to be implemented until G9 closure
 
 ### Phase A — Implementation
 
@@ -532,7 +557,7 @@ Phase C — Documentation   (Team 100 + implementing team)
   - Add blog post link to vision block on public page
   - Process at least one test submission end-to-end
 
-### Gate G9 — Acceptance Criteria
+### Gate G9C — Acceptance Criteria
 - [ ] Blog post published on nimrod.bio
 - [ ] Blog post linked from SmallFarmsAgent page
 - [ ] Content approved by Nimrod
@@ -544,7 +569,7 @@ Phase C — Documentation   (Team 100 + implementing team)
 
 ## M10 — Advanced Interaction (Specification Only)
 **Teams:** Team 100 (architecture), Team 80 (product input)
-**Dependency:** Gate G9
+**Dependency:** Gate G9C
 **Status:** PLANNED — produces documents only, no code
 
 ### Deliverables (spec documents)
@@ -554,6 +579,58 @@ Phase C — Documentation   (Team 100 + implementing team)
 
 ### Gate — None
 M10 is a planning milestone. Its outputs feed future milestones (M11+).
+
+---
+
+## M11 — Vision / Future Features
+**Teams:** Team 100 (architecture), Team 80 (product input), Team 10 (implementation)
+**Dependency:** M10 spec documents
+**Status:** VISION — captures all unimplemented Team 80 recommendations for future development
+
+### Source Documents
+
+| Document | Location |
+|----------|---------|
+| UX Adjustments | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/02_ux_adjustments.md` |
+| Farmer Interaction Layer | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/03_farmer_layer.md` |
+| Tool Enhancements | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/04_tool_enhancements.md` |
+| Development Tasks | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/05_dev_tasks.md` |
+| Strategy | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/01_strategy.md` |
+| Wireframe | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/02_wireframe.md` |
+| UI Spec | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/03_ui_spec.md` |
+| Functional Spec | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/04_functional_spec.md` |
+| Roadmap Vision | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/07_roadmap.md` |
+
+### Feature Backlog (from Team 80)
+
+#### UX Enhancements (source: `02_ux_adjustments.md`, `04_tool_enhancements.md`)
+- In-table CTA: "יש לך נתונים מדויקים יותר? עזור לשפר" (inline, not only below table)
+- Extended tooltips: labor cost, yield, normalization meaning
+- Data confidence visibility: icon / color / label indicators
+- Micro-editing: allow editing 1–2 key fields with instant recalculation
+- Visual hierarchy: highlight cost-per-unit and recommended-price outputs
+- Data context labels: "מבוסס על X מקורות" inline in table cells
+- Transparency block: refine into visual flow (sources → normalization → output)
+
+#### Farmer Interaction Layer (source: `03_farmer_layer.md`, `05_dev_tasks.md`)
+- WordPress roles: `pending_farmer`, `farmer` (admin approval flow)
+- Guest → view-only; registered → limited; farmer → full interaction; admin → approve
+- Registration with "אני חקלאי" checkbox
+- Pre-login disabled editable fields with hint: "זמין לחקלאים מאומתים"
+- Feature unlock: editable inputs, save scenarios
+
+#### Phase 2 Tools (source: `07_roadmap.md`)
+- Personal calculator
+- Save profiles / compare data
+- Decision-support surface (table → interactive tool)
+
+#### Phase 3 — AI Agent (source: `07_roadmap.md`)
+- AI agent for farm cost analysis
+- Smart recommendations engine
+- Conversational interface for farmers
+
+### Gate — None
+M11 is a vision milestone. Items will be broken into concrete milestones (M12+) when prioritized.
 
 ---
 
@@ -571,17 +648,18 @@ M10 is a planning milestone. Its outputs feed future milestones (M11+).
 
 ## QA Mandate Files
 
-| Gate | QA Mandate |
-|------|-----------|
-| G1 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md` |
-| G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` |
-| G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3_v2.md` (v2 — active) |
-| G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` ✅ ISSUED |
-| G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` ✅ ISSUED · ✅ PASS |
-| G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` ✅ ISSUED · ✅ PASS |
-| G7 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` ✅ ISSUED |
-| G8 | Pending — to be issued with M8 mandate |
-| G9 | Pending — Nimrod content approval |
+| Gate | QA Mandate | Status |
+|------|-----------|--------|
+| G1 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G1.md` | ✅ PASS |
+| G2 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G2.md` | ✅ PASS |
+| G3 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G3_v2.md` (v2 — active) | ✅ PASS |
+| G4 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G4.md` | ✅ PASS |
+| G5 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G5.md` | ✅ PASS |
+| G6 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G6.md` | ✅ PASS |
+| G7 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G7.md` (amended 2026-04-02) | ✅ PASS |
+| G8 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G8.md` | ✅ PASS |
+| G9 | `_COMMUNICATION/TEAM_50/QA_MANDATE_G9.md` | ✅ PASS (re-run) |
+| G9C | Pending — Nimrod content approval | — |
 
 ---
 

@@ -91,7 +91,7 @@ def _json_chart_unres_7d(session):
             """
             SELECT (rei.extracted_at AT TIME ZONE 'UTC')::date AS day,
                    COUNT(*) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unres,
-                   COUNT(*) AS total
+                   COUNT(*) FILTER (WHERE rei.extraction_status != 'ignored') AS total
             FROM raw_extracted_items rei
             WHERE (rei.extracted_at AT TIME ZONE 'UTC')::date >=
                   (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date - interval '6 days'

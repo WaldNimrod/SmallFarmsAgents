@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "currentFocusId": "M9C",
+  "summaryHe": "מפת הדרכים של MyFarmAgents — מערכת מודיעין קהילתית למחירי ירקות אורגניים. 9 אבני דרך הושלמו בהצלחה, כולל צנרת נתונים מלאה, ממשק ניהול, אוטומציה, פרסום חי, ליטוש חווית משתמש ואופטימיזציית אתר.",
+  "milestones": [
+    {
+      "id": "M1",
+      "code": "M1",
+      "titleHe": "תשתית מקומית",
+      "status": "completed",
+      "detailHe": "מבנה פרויקט Python, PostgreSQL דרך Docker, 23 טבלאות, Alembic, נתוני גרעין. G1 PASS."
+    },
+    {
+      "id": "M2",
+      "code": "M2",
+      "titleHe": "שכבת איסוף",
+      "status": "completed",
+      "detailHe": "CollectorEngine, 3 אספנים, ParserEngine, מנוע הזנה. G2 PASS."
+    },
+    {
+      "id": "M3",
+      "code": "M3",
+      "titleHe": "מנוע נרמול",
+      "status": "completed",
+      "detailHe": "NormalizerEngine עם 8 שלבים, מונע מבסיס נתונים — כינויים, יחידות, מחירים, ביטחון. G3 PASS."
+    },
+    {
+      "id": "M4",
+      "code": "M4",
+      "titleHe": "אגרגציה + מציג מקומי + לוח בקרה",
+      "status": "completed",
+      "detailHe": "AggregatorEngine, QAEngine, PublishEngine מקומי, מציג localhost:8080, לוח בקרה Flask. G4 PASS."
+    },
+    {
+      "id": "M5",
+      "code": "M5",
+      "titleHe": "ממשק ניהול",
+      "status": "completed",
+      "detailHe": "Flask admin עם 7 blueprints, CRUD מלא לכינויים/חוקים/מיזוגים/דגלים, אימות, יומן ביקורת. G5 PASS."
+    },
+    {
+      "id": "M6",
+      "code": "M6",
+      "titleHe": "אוטומציה + חוסן",
+      "status": "completed",
+      "detailHe": "תזמון cron, הרצות ממוקדות, התראות, גרפים Chart.js, ניקוי לוגים, ניסיונות חוזרים. G6 PASS."
+    },
+    {
+      "id": "M7",
+      "code": "M7",
+      "titleHe": "פרסום ציבורי / Go-Live",
+      "status": "completed",
+      "detailHe": "FTPS upload ל-uPress, תבנית WordPress, manifest v2, stale banners, שורטקוד. עמוד חי ב-nimrod.bio/SmallFarmsAgent. G7 PASS."
+    },
+    {
+      "id": "M8",
+      "code": "M8",
+      "titleHe": "ליטוש UX + מדיניות",
+      "status": "completed",
+      "detailHe": "Tooltips, CTA קהילתי, היררכיה ויזואלית, פסקת פרטיות, CSS שלוש שכבות. G8 PASS."
+    },
+    {
+      "id": "M9",
+      "code": "M9",
+      "titleHe": "אופטימיזציית אתר + תחזוקה",
+      "status": "completed",
+      "detailHe": "אבטחה, ניקוי תוספים (20→12), הסרת Facebook SDK, Yoast SEO, ezCache, טופס מותאם, WP Accessibility, עדכוני תוכן. G9 PASS."
+    },
+    {
+      "id": "M9C",
+      "code": "M9C",
+      "titleHe": "תוכן + מעורבות קהילתית",
+      "status": "not_started",
+      "detailHe": "פוסט בלוג בעברית, פרוטוקול קליטת נתונים ב-WhatsApp, אישור נימרוד."
+    },
+    {
+      "id": "M10",
+      "code": "M10",
+      "titleHe": "אינטראקציה מתקדמת (מפרט בלבד)",
+      "status": "not_started",
+      "detailHe": "תפקידי WordPress לחקלאים, קונספט FarmCostAgent, מפרט טופס הגשה. אין קוד — מסמכי תכנון בלבד."
+    },
+    {
+      "id": "M11",
+      "code": "M11",
+      "titleHe": "חזון / פיצ'רים עתידיים",
+      "status": "not_started",
+      "detailHe": "שיפורי UX, שכבת אינטראקציה לחקלאים, מחשבון אישי, סוכן AI. מאגר רעיונות מצוות 80."
+    }
+  ],
+  "currentFocusBreakdown": {
+    "milestoneId": "M9C",
+    "titleHe": "M9C — תוכן + מעורבות קהילתית",
+    "introHe": "השלב הבא מתמקד ביצירת תוכן ראשון ובניית ערוץ קליטת נתונים מהקהילה.",
+    "sections": [
+      {
+        "id": "content",
+        "titleHe": "יצירת תוכן",
+        "tasks": [
+          {
+            "id": "T-9C-01",
+            "titleHe": "טיוטת פוסט בלוג — ״למה החווה שלי לא הייתה רווחית״",
+            "status": "not_started",
+            "stateHe": "ממתין לתדריך נימרוד — נקודות מפתח, טון, גבולות"
+          },
+          {
+            "id": "T-9C-02",
+            "titleHe": "אישור נימרוד לפוסט לפני פרסום",
+            "status": "not_started",
+            "stateHe": "תלוי ב-T-9C-01"
+          },
+          {
+            "id": "T-9C-03",
+            "titleHe": "פרסום פוסט ב-nimrod.bio + קישור מעמוד SmallFarmsAgent",
+            "status": "not_started",
+            "stateHe": "תלוי באישור"
+          }
+        ]
+      },
+      {
+        "id": "community",
+        "titleHe": "מעורבות קהילתית",
+        "tasks": [
+          {
+            "id": "T-9C-04",
+            "titleHe": "תיעוד פרוטוקול קליטת נתונים ב-WhatsApp",
+            "status": "not_started",
+            "stateHe": "יתועד ב-documentation/05-admin-and-operations/"
+          },
+          {
+            "id": "T-9C-05",
+            "titleHe": "עיבוד לפחות הגשת נתונים אחת מקצה לקצה",
+            "status": "not_started",
+            "stateHe": "ממתין לפרוטוקול"
+          }
+        ]
+      }
+    ]
+  }
+}

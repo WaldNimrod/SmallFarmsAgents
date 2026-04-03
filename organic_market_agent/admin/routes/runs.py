@@ -165,7 +165,7 @@ def _collect_run_export(session, run_id: int) -> dict[str, Any]:
         text(
             """
             SELECT s.id, sfr.id, s.code, s.name, sfr.status,
-                   COUNT(rei.id) AS items,
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status != 'ignored') AS items,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized') AS resolved,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable,
                    sfr.http_status,
@@ -203,7 +203,7 @@ def _collect_run_export(session, run_id: int) -> dict[str, Any]:
     tot = session.execute(
         text(
             """
-            SELECT COUNT(rei.id),
+            SELECT COUNT(rei.id) FILTER (WHERE rei.extraction_status != 'ignored'),
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized')
             FROM source_fetch_runs sfr
             LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
@@ -297,7 +297,8 @@ def runs_list():
                     WHERE sfr.ingestion_run_id = ir.id) AS sfr_count,
                    (SELECT COUNT(rei.id) FROM source_fetch_runs sfr
                     JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
-                    WHERE sfr.ingestion_run_id = ir.id) AS raw_items_count,
+                    WHERE sfr.ingestion_run_id = ir.id
+                      AND rei.extraction_status != 'ignored') AS raw_items_count,
                    (SELECT COUNT(rei.id) FROM source_fetch_runs sfr
                     JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
                     WHERE sfr.ingestion_run_id = ir.id
@@ -308,7 +309,9 @@ def runs_list():
                         FROM source_fetch_runs sfr2
                         JOIN sources s ON s.id = sfr2.source_id
                         WHERE sfr2.ingestion_run_id = ir.id
-                    ) u) AS sources_agg
+                    ) u) AS sources_agg,
+                   ir.triggered_by,
+                   ir.notes
             FROM ingestion_runs ir
             ORDER BY ir.id DESC
             LIMIT 50
@@ -337,11 +340,15 @@ def runs_list():
         agg = (r[16] or "") or ""
         if len(agg) > 220:
             agg = agg[:217] + "…"
+        triggered_by = r[17] or "—"
+        notes = (r[18] or "").strip()
         items.append(
             {
                 "id": r[0],
                 "run_type": r[1],
                 "status": st,
+                "triggered_by": triggered_by,
+                "notes": notes,
                 "started_at": started_at,
                 "started_at_short": _started_at_short(started_at),
                 "finished_at": finished_at,
@@ -359,7 +366,7 @@ def runs_list():
                 "normalized_items_count": norm_ct,
                 "sources_agg": agg,
                 "health_tier": _health_tier(st, src_fail, src_total, raw_ct),
-                "health_line": f"{raw_ct} גולמי · {norm_ct} נורמלו",
+                "health_line": f"{raw_ct} פעילים · {norm_ct} נורמלו",
                 "health_summary": _health_summary_he(
                     st, src_total, src_ok, src_fail, sfr_ct, raw_ct, norm_ct
                 ),
@@ -373,6 +380,40 @@ def runs_list():
     total_runs = int(
         session.execute(text("SELECT COUNT(*) FROM ingestion_runs")).scalar_one() or 0
     )
+    stale_running_count = int(
+        session.execute(
+            text(
+                "SELECT COUNT(*) FROM ingestion_runs "
+                "WHERE status = 'running' "
+                "AND started_at < NOW() - INTERVAL '30 minutes'"
+            )
+        ).scalar_one() or 0
+    )
+    last_success_row = session.execute(
+        text(
+            "SELECT started_at FROM ingestion_runs "
+            "WHERE status IN ('completed', 'partial') AND sources_succeeded > 0 "
+            "ORDER BY id DESC LIMIT 1"
+        )
+    ).first()
+    last_success_at = _started_at_short(last_success_row[0]) if last_success_row else "—"
+    real_runs_total = int(
+        session.execute(
+            text(
+                "SELECT COUNT(*) FROM ingestion_runs "
+                "WHERE triggered_by != 'test' AND sources_total > 0"
+            )
+        ).scalar_one() or 0
+    )
+    real_runs_ok = int(
+        session.execute(
+            text(
+                "SELECT COUNT(*) FROM ingestion_runs "
+                "WHERE triggered_by != 'test' AND sources_succeeded > 0"
+            )
+        ).scalar_one() or 0
+    )
+    success_rate = f"{real_runs_ok}/{real_runs_total}" if real_runs_total else "—"
     seen_ids: set[int] = set()
     trigger_sources: list[dict[str, str]] = []
     for src, _prof in _get_active_sources_with_profiles(session):
@@ -387,6 +428,9 @@ def runs_list():
         run_status_segments=run_status_segments,
         runs_total=total_runs,
         trigger_sources=trigger_sources,
+        stale_running_count=stale_running_count,
+        last_success_at=last_success_at,
+        success_rate=success_rate,
     )
 
 
@@ -413,7 +457,7 @@ def run_detail(run_id: int):
         text(
             """
             SELECT s.id, sfr.id, s.code, s.name, sfr.status,
-                   COUNT(rei.id) AS items,
+                   COUNT(rei.id) FILTER (WHERE rei.extraction_status != 'ignored') AS items,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized') AS resolved,
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'unresolvable') AS unresolvable,
                    sfr.http_status,
@@ -451,7 +495,7 @@ def run_detail(run_id: int):
     tot_row = session.execute(
         text(
             """
-            SELECT COUNT(rei.id),
+            SELECT COUNT(rei.id) FILTER (WHERE rei.extraction_status != 'ignored'),
                    COUNT(rei.id) FILTER (WHERE rei.extraction_status = 'normalized')
             FROM source_fetch_runs sfr
             LEFT JOIN raw_extracted_items rei ON rei.source_fetch_run_id = sfr.id
@@ -697,4 +741,92 @@ def runs_stop_active():
         "אם הופעל כפתור בזמן שהצינור רץ באותו תהליך, הוא אמור להיפסק בין שלבים.",
         "warning",
     )
+    return redirect(url_for("runs.runs_list"))
+
+
+@bp.route("/runs/reconcile-stale", methods=["POST"])
+@login_required
+def runs_reconcile_stale():
+    """Manually mark stale running rows as failed (replaces the old auto-reconcile on page load)."""
+    session = g.db_session
+    affected = reconcile_stale_running_runs(
+        session,
+        reason_code="admin_manual_reconcile",
+        create_summary_alert=True,
+    )
+    audit_write(
+        session,
+        "manual_reconcile",
+        "ingestion_run",
+        entity_id=None,
+        after={"affected": affected},
+    )
+    session.commit()
+    if affected:
+        flash(f"סומנו {len(affected)} הרצה/ות ישנות כנכשלות.", "warning")
+    else:
+        flash("אין הרצות ישנות לניקוי.", "info")
+    return redirect(url_for("runs.runs_list"))
+
+
+@bp.route("/runs/upload-now", methods=["POST"])
+@login_required
+def runs_upload_now():
+    """Manually push existing publish artifacts to uPress via FTPS."""
+    import json as _json
+    from pathlib import Path as _Path
+
+    from organic_market_agent.publisher.ftps_upload import (
+        MissingCredentialsError,
+        upload_artifacts,
+    )
+
+    output_dir = _Path("output/public")
+    manifest_path = output_dir / "manifest.json"
+    if not manifest_path.exists():
+        flash("לא נמצא manifest.json — יש להפעיל ריצת צינור מלאה לפני דחיפה לשרת.", "danger")
+        return redirect(url_for("runs.runs_list"))
+
+    manifest_data = _json.loads(manifest_path.read_text(encoding="utf-8"))
+    files_to_upload: list[str] = []
+    for key in ("json", "html", "body"):
+        versioned = manifest_data.get("artifacts", {}).get(key)
+        if versioned:
+            files_to_upload.append(versioned)
+    for key in ("json", "html", "body"):
+        fixed = manifest_data.get("fixed_names", {}).get(key)
+        if fixed:
+            files_to_upload.append(fixed)
+    if (output_dir / "manifest_last_good.json").exists():
+        files_to_upload.append("manifest_last_good.json")
+    files_to_upload.append("manifest.json")
+
+    try:
+        result = upload_artifacts(output_dir, files_to_upload)
+    except MissingCredentialsError:
+        flash("חסרים פרטי FTPS — הגדר UPRESS_SFTP_HOST/USER/PASS ב-env.", "danger")
+        return redirect(url_for("runs.runs_list"))
+
+    session = g.db_session
+    audit_write(
+        session,
+        "manual_upload",
+        "publish",
+        entity_id=None,
+        after={
+            "files_uploaded": result.files_uploaded,
+            "files_failed": result.files_failed,
+            "success": result.success,
+        },
+    )
+    session.commit()
+
+    if result.success:
+        flash(f"הועלו {len(result.files_uploaded)} קבצים לשרת בהצלחה.", "success")
+    else:
+        flash(
+            f"העלאה חלקית: {len(result.files_uploaded)} הצליחו, "
+            f"{len(result.files_failed)} נכשלו — {result.error or 'ראו לוגים'}",
+            "danger",
+        )
     return redirect(url_for("runs.runs_list"))

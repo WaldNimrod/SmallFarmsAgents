@@ -19,7 +19,7 @@ from organic_market_agent.utils.pipeline_alert_tags import (
     tagged_message,
 )
 
-ReasonCode = Literal["process_restart", "admin_stop_all"]
+ReasonCode = Literal["process_restart", "admin_stop_all", "admin_manual_reconcile"]
 
 _OPS_BODY: dict[ReasonCode, tuple[str, str]] = {
     "process_restart": (
@@ -30,6 +30,10 @@ _OPS_BODY: dict[ReasonCode, tuple[str, str]] = {
     "admin_stop_all": (
         TAG_OPS_ADMIN_STOP_ALL,
         "Admin stopped active ingestion run(s) (stop-all).",
+    ),
+    "admin_manual_reconcile": (
+        TAG_OPS_PROCESS_RESTART,
+        "Admin manually reconciled stale running ingestion run(s).",
     ),
 }
 

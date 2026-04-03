@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from organic_market_agent.models import NormalizerProfile, RawAsset, RawExtractedItem, Source
 from organic_market_agent.parsers.base import BaseParser, RawItem
 from organic_market_agent.parsers.easyfarm_catalog import EasyFarmCatalogParser
+from organic_market_agent.parsers.farmerim import FarmerimParser
 from organic_market_agent.parsers.official_wholesale import OfficialWholesaleParser
 from organic_market_agent.parsers.simple_product_grid import SimpleProductGridParser
 from organic_market_agent.utils.exceptions import ParserError
@@ -20,6 +21,7 @@ logger = get_logger(__name__)
 
 _PARSER_MAP: dict[str, type[BaseParser]] = {
     "easyfarm_catalog": EasyFarmCatalogParser,
+    "farmerim": FarmerimParser,
     "simple_product_grid": SimpleProductGridParser,
     "basket_only": SimpleProductGridParser,
     "official_wholesale": OfficialWholesaleParser,
@@ -80,6 +82,8 @@ class ParserEngine:
 
         if parser_cls is EasyFarmCatalogParser:
             parser: BaseParser = EasyFarmCatalogParser(selector_overrides)
+        elif parser_cls is FarmerimParser:
+            parser = FarmerimParser(selector_overrides)
         else:
             parser = parser_cls()
 

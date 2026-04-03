@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "id": "content-updates",
+      "titleHe": "עדכוני תוכן — nimrod.bio",
+      "tasks": [
+        {
+          "id": "CT-01",
+          "titleHe": "עדכון טקסטים בעמוד הבית + About",
+          "status": "not_started",
+          "priorityHe": "גבוהה",
+          "stateHe": "המסרים הנוכחיים מתייחסים לחווה שנסגרה. יש לעדכן לשקף שירותי תוכנה, הקמת מערכות הידרופוניות ושירותים נלווים."
+        },
+        {
+          "id": "CT-02",
+          "titleHe": "תוכן בלוג עדכני",
+          "status": "not_started",
+          "priorityHe": "בינונית",
+          "stateHe": "24 פוסטים מפורסמים — רובם ישנים. נדרש פוסט חדש (M9C) ובחינת עדכון/הסרת תוכן ישן."
+        },
+        {
+          "id": "CT-03",
+          "titleHe": "ניקוי 62,000+ תגובות ספאם",
+          "status": "not_started",
+          "priorityHe": "גבוהה",
+          "stateHe": "0 מאושרות, 58,078 ממתינות, 4,019 ספאם. נדרש ניקוי בכמות. תוסף MailCheck.ai מותקן למניעת ספאם עתידי."
+        },
+        {
+          "id": "CT-04",
+          "titleHe": "עדכון מדיה ותמונות",
+          "status": "not_started",
+          "priorityHe": "נמוכה",
+          "stateHe": "683 קבצי מדיה — יש לבחון רלוונטיות ולנקות תמונות שאינן בשימוש."
+        },
+        {
+          "id": "CT-05",
+          "titleHe": "סידור תפריטי ניווט",
+          "status": "completed",
+          "priorityHe": "גבוהה",
+          "stateHe": "הושלם — הוסר כפתור ״הזמנות״, נותרו 3 תפריטים פעילים."
+        }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "titleHe": "תחזוקה טכנית",
+      "tasks": [
+        {
+          "id": "MT-01",
+          "titleHe": "עדכון תוספים",
+          "status": "completed",
+          "priorityHe": "גבוהה",
+          "stateHe": "הושלם — 12 תוספים פעילים, כולם מעודכנים."
+        },
+        {
+          "id": "MT-02",
+          "titleHe": "בדיקת תקינות SSL ואבטחה",
+          "status": "completed",
+          "priorityHe": "גבוהה",
+          "stateHe": "תקין — HTTPS פעיל, headers מוגדרים, readme.html הוסר."
+        },
+        {
+          "id": "MT-03",
+          "titleHe": "אופטימיזציית ביצועים",
+          "status": "completed",
+          "priorityHe": "גבוהה",
+          "stateHe": "הושלם — ezCache פעיל, 29→11 סקריפטים, 12→4 גליונות סגנון, 0 שגיאות קונסולה."
+        },
+        {
+          "id": "MT-04",
+          "titleHe": "גיבוי מסד נתונים וקבצים",
+          "status": "not_started",
+          "priorityHe": "בינונית",
+          "stateHe": "uPress מספק גיבויים אוטומטיים — יש לוודא תצורה ולתעד נוהל שחזור."
+        },
+        {
+          "id": "MT-05",
+          "titleHe": "ניטור זמינות האתר",
+          "status": "not_started",
+          "priorityHe": "נמוכה",
+          "stateHe": "אין ניטור אוטומטי כרגע. מומלץ UptimeRobot או דומה."
+        }
+      ]
+    },
+    {
+      "id": "pipeline-next",
+      "titleHe": "שלבים הבאים — צנרת נתונים",
+      "tasks": [
+        {
+          "id": "PL-01",
+          "titleHe": "הפעלת צנרת אוטומטית",
+          "status": "not_started",
+          "priorityHe": "גבוהה",
+          "stateHe": "התזמון מוגדר אך טרם הופעל בפרודקשן. נדרש cron על שרת/Docker."
+        },
+        {
+          "id": "PL-02",
+          "titleHe": "הוספת מקורות נתונים חדשים",
+          "status": "not_started",
+          "priorityHe": "בינונית",
+          "stateHe": "כרגע 3 מקורות אמינים מתוך 20. יש להוסיף ולשפר כיסוי."
+        },
+        {
+          "id": "PL-03",
+          "titleHe": "שיפור כיסוי מוצרים",
+          "status": "not_started",
+          "priorityHe": "בינונית",
+          "stateHe": "22 מוצרים שונים בהרצה. קטלוג כולל 67 — יש לשפר כיסוי."
+        }
+      ]
+    }
+  ]
+}

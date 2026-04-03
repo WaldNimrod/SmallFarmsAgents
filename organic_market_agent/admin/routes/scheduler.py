@@ -47,6 +47,7 @@ def scheduler_update():
         return redirect(url_for("scheduler.scheduler_page"))
 
     cleanup_enabled = request.form.get("cleanup_enabled") == "on"
+    upload_enabled = request.form.get("upload_enabled") == "on"
 
     if not (0 <= run_hour <= 23):
         flash("שעה חייבת להיות 0–23.", "danger")
@@ -67,12 +68,14 @@ def scheduler_update():
         "retry_attempts": cfg.retry_attempts,
         "cleanup_enabled": cfg.cleanup_enabled,
         "cleanup_after_days": cfg.cleanup_after_days,
+        "upload_enabled": cfg.upload_enabled,
     }
     cfg.run_hour = run_hour
     cfg.run_minute = run_minute
     cfg.retry_attempts = retry_attempts
     cfg.cleanup_enabled = cleanup_enabled
     cfg.cleanup_after_days = cleanup_after_days
+    cfg.upload_enabled = upload_enabled
     cfg.updated_at = datetime.now(timezone.utc)
 
     audit_write(
@@ -87,6 +90,7 @@ def scheduler_update():
             "retry_attempts": retry_attempts,
             "cleanup_enabled": cleanup_enabled,
             "cleanup_after_days": cleanup_after_days,
+            "upload_enabled": upload_enabled,
         },
     )
     session.commit()

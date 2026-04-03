@@ -132,13 +132,16 @@ ls -la output/public/
 
 ### T07 — Body fragment structure
 
+> **Amendment (2026-04-02):** M8 CSS architecture refactor changed root class from
+> `sfagent-market-report` to `sfagent`. Updated grep target accordingly.
+
 ```bash
-grep -c "sfagent-market-report" output/public/public_report_body.html
+grep -c 'class="sfagent"' output/public/public_report_body.html
 grep -c "<html" output/public/public_report_body.html
 ```
 
 **Pass criterion:**
-- `sfagent-market-report` count >= 1
+- `class="sfagent"` count >= 1
 - `<html` count = 0 (no full HTML wrapper)
 
 **Weight:** High
@@ -225,9 +228,12 @@ curl -s -o /dev/null -w "%{http_code}" https://nimrod.bio/SmallFarmsAgent
 # Expected: 200
 
 # 5. Verify body fragment in page
-curl -s https://nimrod.bio/SmallFarmsAgent | grep -c "sfagent-market-report"
+curl -s https://nimrod.bio/SmallFarmsAgent | grep -c 'class="sfagent"'
 # Expected: >= 1
 ```
+
+> **Amendment (2026-04-02):** Updated grep target from `sfagent-market-report` to
+> `class="sfagent"` per M8 CSS architecture refactor.
 
 **Pass criterion:** All HTTP requests return 200, page contains market report.  
 **Weight:** Critical
