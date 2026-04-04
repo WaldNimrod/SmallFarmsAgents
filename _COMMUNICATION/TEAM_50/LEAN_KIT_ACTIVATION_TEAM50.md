@@ -64,7 +64,7 @@ Validate **PD1–PD5** (five files under `SmallFarmsAgents/_COMMUNICATION/`) aga
 | PAC-02 | All 4 team activation docs exist in correct `_COMMUNICATION/TEAM_{100,10,20,50}/` paths |
 | PAC-03 | Each activation doc has YAML frontmatter with `role`, `sfa_team`, `engine`; ≥150 words; begins with identity + first action |
 | PAC-04 | sfa_team_50 (you) can validate this package — i.e., PD5 gives you enough context to act as CONSTITUTIONAL_VALIDATOR immediately |
-| PAC-05 | No application code modified — only `_COMMUNICATION/` files added (verify `git diff --name-only HEAD~1` in SmallFarmsAgents) |
+| PAC-05 | No application code modified — only `_COMMUNICATION/` files added (verify `git diff --name-only HEAD~1 HEAD` in SmallFarmsAgents — **committed** diff only, not working tree) |
 | PAC-06 | All 5 files committed to SmallFarmsAgents `main` (not agents-os) |
 | PAC-07 | `agents-os/projects/sfa/roadmap.yaml` `SFA-P001-WP001.current_lean_gate` updated to `L-GATE_V` |
 | PAC-08 | `LEAN_KIT_INTEGRATION.md` references `agents-os/projects/sfa/` paths correctly (§6 "Where to find docs") |
