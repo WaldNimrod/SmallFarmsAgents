@@ -11,6 +11,11 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Documentation — waldhomeserver / Team 61 (Team 100)
+
+- **Added** [`documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md) — canonical file-based handoff (Mac `~/Documents/_agent_comm/outbox/` → `scp` → `~/agent_comm/inbox/`), hosts, verification, anti-patterns.
+- **Updated** [`documentation/05-admin-and-operations/README.md`](documentation/05-admin-and-operations/README.md), [`documentation/README.md`](documentation/README.md), [`.cursor/rules/project-context.mdc`](.cursor/rules/project-context.mdc) — linked summary for agents.
+
 ### Admin UI — `/runs` template (Team 10)
 
 - **Fixed** [`organic_market_agent/admin/templates/admin/runs.html`](organic_market_agent/admin/templates/admin/runs.html) — removed a stray `{% endif %}` introduced with the stale-running alert so `{% if current_user.is_authenticated %}` / `{% else %}` nest correctly (resolves Jinja2 `TemplateSyntaxError: Encountered unknown tag 'else'` on `/runs`).

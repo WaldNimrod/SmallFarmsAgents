@@ -14,7 +14,7 @@ All files under `documentation/` are **English only** (project language policy).
 | Architecture | [`02-architecture/`](02-architecture/) | Modules, boundaries, key code locations |
 | Data & schema | [`03-data-and-schema/`](03-data-and-schema/) | PostgreSQL, Alembic, ORM models, important tables |
 | Pipelines & runtime | [`04-pipelines-and-runtime/`](04-pipelines-and-runtime/) | Collect → parse → normalize → aggregate → publish |
-| Admin & operations | [`05-admin-and-operations/`](05-admin-and-operations/) | Local Flask admin, maintenance, alerts, env |
+| Admin & operations | [`05-admin-and-operations/`](05-admin-and-operations/) | Local Flask admin, maintenance, alerts, env, **waldhomeserver ↔ Team 61 inbox** ([`WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md)) |
 | Scripts & CLI | [`06-scripts-and-cli/`](06-scripts-and-cli/) | Shell scripts and `python -m organic_market_agent` |
 | Testing | [`07-testing/`](07-testing/) | Pytest layout and commands |
 | Troubleshooting | [`08-troubleshooting/`](08-troubleshooting/) | Debugging, alert tags, DB sanity checks |
@@ -49,4 +49,4 @@ All files under `documentation/` are **English only** (project language policy).
 
 ---
 
-*Last updated: 2026-03-31 (post-M6 pipeline resolution improvements, full documentation refresh).*
+*Last updated: 2026-04-10 (waldhomeserver / Team 61 canonical communication doc).*

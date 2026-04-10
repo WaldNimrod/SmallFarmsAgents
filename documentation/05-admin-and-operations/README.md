@@ -63,6 +63,10 @@ All alerts are persisted in `pipeline_alerts` table (in-app only, no SMTP). Pref
 
 Filter in SQL or UI; see `08-troubleshooting/`.
 
+## Home staging server (waldhomeserver) and Team 61
+
+- **File-based handoff (canonical):** [`WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](WALD_HOME_SERVER_AGENT_COMMUNICATION.md) — Mac `~/Documents/_agent_comm/outbox/` → `scp` → server `~/agent_comm/inbox/` for Team 61. Use this whenever server agents must see a written task or receipt; do not rely on SSH alone for that visibility.
+
 ## Playbooks
 
 - **Unresolvable backlog (4 phases):** [`UNRESOLVABLE_BACKLOG_PLAYBOOK.md`](UNRESOLVABLE_BACKLOG_PLAYBOOK.md)
