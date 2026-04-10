@@ -82,7 +82,6 @@
   </div>
 </div>
 {% endif %}
-{% endif %}
 <form method="post" action="{{ url_for('runs.runs_upload_now') }}" class="mb-3" onsubmit='return confirm("לדחוף את הפלט הנוכחי לשרת nimrod.bio?");'>
   <button type="submit" class="btn btn-outline-success btn-sm">דחוף לשרת (FTPS)</button>
   <span class="small text-muted ms-2">מעלה את output/public למיקום uPress — דורש manifest.json ופרטי FTPS.</span>

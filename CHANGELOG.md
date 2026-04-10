@@ -11,6 +11,11 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Admin UI — `/runs` template (Team 10)
+
+- **Fixed** [`organic_market_agent/admin/templates/admin/runs.html`](organic_market_agent/admin/templates/admin/runs.html) — removed a stray `{% endif %}` introduced with the stale-running alert so `{% if current_user.is_authenticated %}` / `{% else %}` nest correctly (resolves Jinja2 `TemplateSyntaxError: Encountered unknown tag 'else'` on `/runs`).
+- **Added** [`tests/test_admin_jinja_templates.py`](tests/test_admin_jinja_templates.py) — compile check for `admin/runs.html` to catch similar regressions.
+
 ### Accessibility Compliance — WP Accessibility (Team 100)
 
 - **Installed** WP Accessibility v2.3.3 (Joe Dolson) — activated by Nimrod via WP Admin
