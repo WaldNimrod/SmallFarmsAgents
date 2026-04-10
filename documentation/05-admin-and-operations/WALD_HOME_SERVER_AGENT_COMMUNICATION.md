@@ -64,6 +64,16 @@ Verify on the server:
 ssh nimrodw@10.100.102.2 'ls -la ~/agent_comm/inbox/MSG-YYYYMMDD-NNN.md'
 ```
 
+### 3.1 Pull responses from Team 61 (canonical feedback on Mac)
+
+Replies and reports are written by the server agent to **`~/agent_comm/outbox/`** on waldhomeserver. The Mac **does not** receive them automatically. Pull into your local **`~/Documents/_agent_comm/inbox/`**:
+
+```bash
+scp nimrodw@10.100.102.2:~/agent_comm/outbox/* ~/Documents/_agent_comm/inbox/
+```
+
+Use **Tailscale** when LAN is unavailable (`nimrodw@100.125.98.56`). If a message (e.g. **MSG-011** RFI) appears missing on the Mac, run this pull **before** re-sending the request.
+
 ---
 
 ## 4. Message format (minimum)

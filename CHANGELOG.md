@@ -11,6 +11,12 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Communication — Team 100 / Post-M9 direction (LOD200)
+
+- **Added** [`_COMMUNICATION/TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md`](_COMMUNICATION/TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md) — canonical package `SFA-PKG-POST-M9-001` (WP-A1 moderated submissions for registered users; WP-A2 non-AI farmer economics calculator; frozen legacy M10 bundle; Team 61 RFI / M9C scope notes).
+- **Added** [`_COMMUNICATION/TEAM_190/inbox/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md`](_COMMUNICATION/TEAM_190/inbox/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md) — Team 190 review copy (inbox mirror).
+- **Updated** [`_COMMUNICATION/ROADMAP.md`](_COMMUNICATION/ROADMAP.md) — v5.0 (2026-04-11): Team 190 row, Post-M9 LOD200 block, M10 marked **FROZEN**, M11 reframed as **vision backlog (reference only)** aligned with WP-A1/WP-A2.
+
 ### Documentation — waldhomeserver / Team 61 (Team 100)
 
 - **Added** [`documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md) — canonical file-based handoff (Mac `~/Documents/_agent_comm/outbox/` → `scp` → `~/agent_comm/inbox/`), hosts, verification, anti-patterns.

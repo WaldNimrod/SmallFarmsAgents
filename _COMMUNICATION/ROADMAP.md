@@ -1,8 +1,8 @@
 # MyFarmAgents — Development Roadmap
-**Version:** 4.0  
-**Date:** 2026-04-02  
+**Version:** 5.0  
+**Date:** 2026-04-11  
 **Author:** Team 100 (Architecture)  
-**Active Milestone:** M9 — Site Optimization (G9 PASS — CLOSED)
+**Active program:** Post-M9 realignment — **OrganicMarketAgent** implementation tracks **WP-A1** / **WP-A2** (see LOD200 package); **M9** site work **CLOSED** (G9 PASS).
 
 > PRIMARY REFERENCE for all development decisions.
 > Read this file at the start of every session.
@@ -18,6 +18,25 @@
 | **Team 50** | QA | Validates every deliverable against spec. Signs off on gates. |
 | **Team 20** | Infrastructure | Env, DB, Alembic, models, seed data, utils. |
 | **Team 10** | Feature Dev | Collectors, parsers, normalizer, aggregator, admin UI. |
+| **Team 190** | Package / constitutional review | Reviews LOD200+ governance packages before execution mandates. |
+
+---
+
+## Post-M9 direction (LOD200 — canonical)
+
+**Package ID:** `SFA-PKG-POST-M9-001`  
+**Spec:** [`_COMMUNICATION/TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md`](TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md) (Team 190 inbox mirror: [`TEAM_190/inbox/`](TEAM_190/inbox/))
+
+| Track | Name | Summary |
+|-------|------|---------|
+| **WP-A1** | Moderated user submissions | Any **registered user** submits structured content → **moderation** before public/index use (replaces prior “farmer layer” **phase 1** ladder). |
+| **WP-A2** | Farmer economics calculator | **Simple deterministic** calculator or UI (unit price, margin, costs) — **no AI agent** in phase 1. |
+
+**Frozen:** Legacy **M10** spec bundle (former Items 8–10) — see package §2 **D4**. **Not** scheduled for implementation until thawed by Team 100.
+
+**Out of scope (dev team):** **M9C** content/blog — Team 80 + Nimrod (**D2**). **Roadmap YAML** procedure in **Agents OS** — not this repo (**D1**).
+
+**Operations:** Pull Team 61 replies from `waldhomeserver:~/agent_comm/outbox/` into Mac `~/Documents/_agent_comm/inbox/` before assuming missing RFI responses — see [`documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](../documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md) §3.1. Template to re-flight **MSG-011**: [`_COMMUNICATION/TEAM_100/outbox_templates/MSG-20260411_013_SFA_OPS_RFI_RESEND.md`](TEAM_100/outbox_templates/MSG-20260411_013_SFA_OPS_RFI_RESEND.md).
 
 ---
 
@@ -539,9 +558,9 @@ All 7 WP Admin tasks resolved programmatically via `functions.php` init hooks (2
 
 ## M9-Content (M9C) — Content + Community Engagement
 **Teams:** Team 80 (blog post), Team 10 (integration), Nimrod (approval)
-**Dependency:** G9 must be PASS
+**Dependency:** G9 must be PASS (✅ satisfied)
 **Mandate:** `_COMMUNICATION/TEAM_80/MANDATE_M9_BLOG_POST_TEAM80.md`
-**Status:** PLANNED — NOT to be implemented until G9 closure
+**Status:** PLANNED — **owned by Team 80 + Nimrod**; **not** SmallFarmsAgents **Team 10** feature scope per **SFA-PKG-POST-M9-001** §2 D2
 
 ### Phase A — Implementation
 
@@ -567,30 +586,24 @@ All 7 WP Admin tasks resolved programmatically via `functions.php` init hooks (2
 
 ---
 
-## M10 — Advanced Interaction (Specification Only)
-**Teams:** Team 100 (architecture), Team 80 (product input)
-**Dependency:** Gate G9C
-**Status:** PLANNED — produces documents only, no code
+## M10 — Advanced Interaction (legacy specification bundle) — **FROZEN**
 
-### Deliverables (spec documents)
-- Item 8: WordPress Farmer Roles — architecture decision document
-- Item 9: FarmCostAgent — concept brief for new agent under MyFarmAgents
-- Item 10: In-Page Submission Form — technical spec (depends on Item 8)
+**Status:** **FROZEN** as of **2026-04-11** by **SFA-PKG-POST-M9-001** §2 D4. **No implementation or new spec work** on the former Items 8–10 until Team 100 explicitly **thaws** this bundle.
 
-### Gate — None
-M10 is a planning milestone. Its outputs feed future milestones (M11+).
+Former intent (archival): WordPress farmer roles, FarmCostAgent concept brief, in-page submission form — superseded by **WP-A1** / **WP-A2** in the LOD200 package.
+
+### Gate — None (frozen)
 
 ---
 
-## M11 — Vision / Future Features
-**Teams:** Team 100 (architecture), Team 80 (product input), Team 10 (implementation)
-**Dependency:** M10 spec documents
-**Status:** VISION — captures all unimplemented Team 80 recommendations for future development
+## M11 — Vision backlog (reference only)
 
-### Source Documents
+**Status:** **Reference material** — detailed UX/farmer-layer ideas remain in Team 80 handoff files below for **future** breakdown. **First implementation waves** are **WP-A1** (moderated submissions for **registered users**) and **WP-A2** (simple **non-AI** calculator) per LOD200; the multi-role farmer ladder and AI tools are **not** the near-term path.
+
+### Source Documents (historical)
 
 | Document | Location |
-|----------|---------|
+|----------|----------|
 | UX Adjustments | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/02_ux_adjustments.md` |
 | Farmer Interaction Layer | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/03_farmer_layer.md` |
 | Tool Enhancements | `_COMMUNICATION/TEAM_80/sfa_handoff_v2/04_tool_enhancements.md` |
@@ -601,36 +614,13 @@ M10 is a planning milestone. Its outputs feed future milestones (M11+).
 | Functional Spec | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/04_functional_spec.md` |
 | Roadmap Vision | `_COMMUNICATION/TEAM_80/smallfarms_agent_handoff/07_roadmap.md` |
 
-### Feature Backlog (from Team 80)
+### Deferred UX / advanced ideas (not current sprint)
 
-#### UX Enhancements (source: `02_ux_adjustments.md`, `04_tool_enhancements.md`)
-- In-table CTA: "יש לך נתונים מדויקים יותר? עזור לשפר" (inline, not only below table)
-- Extended tooltips: labor cost, yield, normalization meaning
-- Data confidence visibility: icon / color / label indicators
-- Micro-editing: allow editing 1–2 key fields with instant recalculation
-- Visual hierarchy: highlight cost-per-unit and recommended-price outputs
-- Data context labels: "מבוסס על X מקורות" inline in table cells
-- Transparency block: refine into visual flow (sources → normalization → output)
-
-#### Farmer Interaction Layer (source: `03_farmer_layer.md`, `05_dev_tasks.md`)
-- WordPress roles: `pending_farmer`, `farmer` (admin approval flow)
-- Guest → view-only; registered → limited; farmer → full interaction; admin → approve
-- Registration with "אני חקלאי" checkbox
-- Pre-login disabled editable fields with hint: "זמין לחקלאים מאומתים"
-- Feature unlock: editable inputs, save scenarios
-
-#### Phase 2 Tools (source: `07_roadmap.md`)
-- Personal calculator
-- Save profiles / compare data
-- Decision-support surface (table → interactive tool)
-
-#### Phase 3 — AI Agent (source: `07_roadmap.md`)
-- AI agent for farm cost analysis
-- Smart recommendations engine
-- Conversational interface for farmers
+- Rich UX (tooltips, CTA, micro-edits, transparency block) — **P2-class**; **frozen** until reprioritized alongside LOD200 execution.
+- Multi-role farmer certification, AI agent, conversational UI — **explicitly out of scope** for WP-A1/WP-A2 phase 1.
 
 ### Gate — None
-M11 is a vision milestone. Items will be broken into concrete milestones (M12+) when prioritized.
+Backlog items are scheduled only after **Team 190** review of `SFA-PKG-POST-M9-001` and Team 100 mandates for WP-A1/A2.
 
 ---
 
