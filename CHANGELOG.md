@@ -25,6 +25,10 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 
 - **Added** [`_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md`](_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md) — dev vs waldhomeserver snapshot and 2026-04-10 ingestion run analysis.
 
+### Communication — Team 80
+
+- **Added** [`_COMMUNICATION/TEAM_80/reports/2026-04-10_FAMELY_NEUSLETTER_EXEC_SUMMARY_AND_LIVE_VALIDATION_TEAM80.md`](_COMMUNICATION/TEAM_80/reports/2026-04-10_FAMELY_NEUSLETTER_EXEC_SUMMARY_AND_LIVE_VALIDATION_TEAM80.md) — Famely Neusletter executive synthesis (Team 61 MSG-009/010), live `nimrod.bio` validation, open tasks; notes gap vs Team 61 “no example.com” claim (placeholder `href`s + mock history string on published HTML).
+
 ### Admin UI — `/runs` template (Team 10)
 
 - **Fixed** [`organic_market_agent/admin/templates/admin/runs.html`](organic_market_agent/admin/templates/admin/runs.html) — removed a stray `{% endif %}` introduced with the stale-running alert so `{% if current_user.is_authenticated %}` / `{% else %}` nest correctly (resolves Jinja2 `TemplateSyntaxError: Encountered unknown tag 'else'` on `/runs`).
