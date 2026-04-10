@@ -5,6 +5,10 @@ alwaysApply: true
 
 # MyFarmAgents Platform — Project Context
 
+## Repository scope (this workspace)
+
+**This git repository is SmallFarmsAgents = OrganicMarketAgent (SFA) only.** Do not add commits for unrelated products (Famely Neusletter, TikTrack, agents-os). For cross-server handoff use `~/Documents/_agent_comm/`; for Neusletter/TikTrack source changes, the user must open the **correct project root** in the IDE. Canonical note: `documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`.
+
 ## Language Policy (Enforced)
 
 **ALL documents, code, comments, variable names, and inter-team communication

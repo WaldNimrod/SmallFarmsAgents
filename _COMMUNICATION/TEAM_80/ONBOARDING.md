@@ -11,7 +11,7 @@
 marketing for MyFarmAgents. Operates in an external environment (OpenAI online)
 and delivers handoff packages to the local development teams.
 **Reports to:** Nimrod (project lead) directly. Architecture review by Team 100.
-**Writes to:** `_COMMUNICATION/TEAM_80/reports/`
+**Writes to:** `_COMMUNICATION/TEAM_80/reports/` **in this repository** for **OrganicMarketAgent (SFA)** handoffs and strategy. Deliverables for **other** MyFarmAgents products (e.g. Famely Neusletter) belong in **those products’ repositories** or external coordination paths — see [`documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`](../../documentation/external-references/CROSS_PROJECT_BOUNDARIES.md).
 
 ---
 

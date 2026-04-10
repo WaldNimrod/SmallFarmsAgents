@@ -16,6 +16,14 @@ Canonical terminology: `docs/GLOSSARY.md`
 
 ---
 
+## Repository scope (SmallFarmsAgents git)
+
+This repository tracks **OrganicMarketAgent (SFA)** only: application code under `organic_market_agent/`, tests, Alembic, and **`_COMMUNICATION/` content that governs SFA** (mandates, QA, SFA handoffs).
+
+**Do not** commit primary artifacts for **other products** (Famely Neusletter, TikTrack, agents-os) here. Use **their own repositories** or **machine-level paths** (e.g. `~/Documents/_agent_comm/`) for cross-project coordination. See [`documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`](../documentation/external-references/CROSS_PROJECT_BOUNDARIES.md).
+
+---
+
 ## Iron Rules (All Teams)
 
 ### 1. Spec Study Before Code Change

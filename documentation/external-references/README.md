@@ -16,6 +16,12 @@ These paths are **not** moved into the documentation tree; they are linked here 
 | [`../../docs/`](../../docs/) | `GLOSSARY.md` (English); other files may be Hebrew or bilingual pending English rewrite |
 | [`../../docs/PRODUCT_CATALOG_V1.md`](../../docs/PRODUCT_CATALOG_V1.md) | Product list — may contain Hebrew product names in tables (data, not prose policy exception as needed) |
 
+## Multi-product boundary (read before cross-topic work)
+
+| Path | Content |
+|------|---------|
+| [`CROSS_PROJECT_BOUNDARIES.md`](CROSS_PROJECT_BOUNDARIES.md) | **SmallFarmsAgents** vs Famely Neusletter / TikTrack / agents-os — what belongs in this repo |
+
 ## Team process and communication
 
 | Path | Content |

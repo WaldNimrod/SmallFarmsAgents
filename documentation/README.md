@@ -19,7 +19,7 @@ All files under `documentation/` are **English only** (project language policy).
 | Testing | [`07-testing/`](07-testing/) | Pytest layout and commands |
 | Troubleshooting | [`08-troubleshooting/`](08-troubleshooting/) | Debugging, alert tags, DB sanity checks |
 | **Archive** | [`archive/`](archive/) | **Completed** time-bound specs and handoff notes |
-| External references | [`external-references/`](external-references/) | Where `docs/`, `_COMMUNICATION/`, and legacy specs live |
+| External references | [`external-references/`](external-references/) | Where `docs/`, `_COMMUNICATION/`, and legacy specs live; **[`CROSS_PROJECT_BOUNDARIES.md`](external-references/CROSS_PROJECT_BOUNDARIES.md)** (SFA vs other repos) |
 
 ---
 

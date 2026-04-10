@@ -25,9 +25,13 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 
 - **Added** [`_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md`](_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md) — dev vs waldhomeserver snapshot and 2026-04-10 ingestion run analysis.
 
-### Communication — Team 80
+### Communication — Team 100 / process (corrective)
 
-- **Added** [`_COMMUNICATION/TEAM_80/reports/2026-04-10_FAMELY_NEUSLETTER_EXEC_SUMMARY_AND_LIVE_VALIDATION_TEAM80.md`](_COMMUNICATION/TEAM_80/reports/2026-04-10_FAMELY_NEUSLETTER_EXEC_SUMMARY_AND_LIVE_VALIDATION_TEAM80.md) — Famely Neusletter executive synthesis (Team 61 MSG-009/010), live `nimrod.bio` validation, open tasks; notes gap vs Team 61 “no example.com” claim (placeholder `href`s + mock history string on published HTML).
+- **Removed** misplaced Famely Neusletter-only report from `_COMMUNICATION/TEAM_80/reports/` (that product is **not** versioned in SmallFarmsAgents; Neusletter artifacts belong in the Famely repo or `~/Documents/_agent_comm/`).
+- **Added** [`documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`](documentation/external-references/CROSS_PROJECT_BOUNDARIES.md) — which artifacts belong in this repo vs other MyFarmAgents products; root-cause note on workspace confusion.
+- **Added** [`_COMMUNICATION/TEAM_80/reports/README.md`](_COMMUNICATION/TEAM_80/reports/README.md) — SFA-only scope for this folder.
+- **Updated** [`_COMMUNICATION/README.md`](_COMMUNICATION/README.md), [`.cursor/rules/project-context.mdc`](.cursor/rules/project-context.mdc), [`documentation/external-references/README.md`](documentation/external-references/README.md), [`documentation/README.md`](documentation/README.md) — repository scope pointers.
+- **Added** [`AGENTS.md`](AGENTS.md) — short default product scope for AI agents at repo root.
 
 ### Admin UI — `/runs` template (Team 10)
 
