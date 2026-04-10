@@ -63,6 +63,10 @@ All alerts are persisted in `pipeline_alerts` table (in-app only, no SMTP). Pref
 
 Filter in SQL or UI; see `08-troubleshooting/`.
 
+## Development vs production scheduling
+
+- **Dev workstations — no automated daily runs:** [`DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md`](DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md) (manual / on-demand ingestion only; do not install cron for the runner on coding machines).
+
 ## Home staging server (waldhomeserver) and Team 61
 
 - **File-based handoff (canonical):** [`WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](WALD_HOME_SERVER_AGENT_COMMUNICATION.md) — Mac `~/Documents/_agent_comm/outbox/` → `scp` → server `~/agent_comm/inbox/` for Team 61. Use this whenever server agents must see a written task or receipt; do not rely on SSH alone for that visibility.

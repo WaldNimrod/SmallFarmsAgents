@@ -123,6 +123,10 @@ More agents will follow under the MyFarmAgents umbrella.
 - Charts: Chart.js (CDN) for admin dashboard graphs
 - Server management: `scripts/admin_server.sh`, `scripts/viewer_server.sh`, `scripts/restart_all_servers.sh`
 
+### Development workstation — scheduler
+
+**Developer machines do not run automated daily ingestion.** No `cron` / LaunchAgent for `organic_market_agent.scheduler.runner` on laptops used for coding; ingestion is **manual or on-demand only** (`/runs` trigger, explicit CLI, or tests). Canonical policy: **`documentation/05-admin-and-operations/DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md`**.
+
 ### Home staging server (waldhomeserver) and Team 61
 
 OrganicMarketAgent may be deployed on the home staging host **waldhomeserver** (user `nimrodw`, project path `/data/projects/smallfarmsagents`, systemd unit `sfa-admin`, admin port **5001**). **Coordination with the server-side agent (Team 61) is file-based and canonical:** write `MSG-YYYYMMDD-NNN.md` under **`~/Documents/_agent_comm/outbox/`** on the Mac, then **`scp`** to **`~/agent_comm/inbox/`** on the server. Direct SSH for `git pull` / `systemctl` does **not** replace the inbox when Team 61 must see a written handoff. Full paths, commands, and anti-patterns: **`documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md`**.

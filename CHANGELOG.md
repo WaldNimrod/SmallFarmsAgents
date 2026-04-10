@@ -16,6 +16,15 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 - **Added** [`documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md`](documentation/05-admin-and-operations/WALD_HOME_SERVER_AGENT_COMMUNICATION.md) — canonical file-based handoff (Mac `~/Documents/_agent_comm/outbox/` → `scp` → `~/agent_comm/inbox/`), hosts, verification, anti-patterns.
 - **Updated** [`documentation/05-admin-and-operations/README.md`](documentation/05-admin-and-operations/README.md), [`documentation/README.md`](documentation/README.md), [`.cursor/rules/project-context.mdc`](.cursor/rules/project-context.mdc) — linked summary for agents.
 
+### Documentation — development workstation scheduler (Team 100)
+
+- **Added** [`documentation/05-admin-and-operations/DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md`](documentation/05-admin-and-operations/DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md) — no automated daily ingestion on developer laptops; manual/on-demand only.
+- **Updated** [`docs/OPERATIONS.md`](docs/OPERATIONS.md) — warning at top; [`documentation/05-admin-and-operations/README.md`](documentation/05-admin-and-operations/README.md); [`.cursor/rules/project-context.mdc`](.cursor/rules/project-context.mdc).
+
+### Communication — Team 10
+
+- **Added** [`_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md`](_COMMUNICATION/TEAM_10/reports/2026-04-10_SYSTEM_STATUS_DEV_AND_WALD_SERVER_TEAM10.md) — dev vs waldhomeserver snapshot and 2026-04-10 ingestion run analysis.
+
 ### Admin UI — `/runs` template (Team 10)
 
 - **Fixed** [`organic_market_agent/admin/templates/admin/runs.html`](organic_market_agent/admin/templates/admin/runs.html) — removed a stray `{% endif %}` introduced with the stale-running alert so `{% if current_user.is_authenticated %}` / `{% else %}` nest correctly (resolves Jinja2 `TemplateSyntaxError: Encountered unknown tag 'else'` on `/runs`).

@@ -1,5 +1,11 @@
 # Operations — OrganicMarketAgent
 
+## Development workstations (read first)
+
+**Do not install the cron line below on a developer laptop used for coding.** Scheduled ingestion is **disabled by policy** on dev machines; runs are **manual / on-demand only**. See [`documentation/05-admin-and-operations/DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md`](../documentation/05-admin-and-operations/DEVELOPMENT_WORKSTATION_SCHEDULER_POLICY.md).
+
+---
+
 ## Scheduled pipeline (cron)
 
 The admin scheduler stores UTC hour/minute in `scheduler_config`. The host runs the runner **every minute**; the runner exits unless the current time matches the configured slot (±1 minute).
