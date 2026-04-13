@@ -11,6 +11,10 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Communication — Team 10 (cross-infrastructure validation)
+
+- **Added** [`_COMMUNICATION/TEAM_10/reports/2026-04-11_FAMELY_NEUSLETTER_NIMROD_BIO_VALIDATION.md`](_COMMUNICATION/TEAM_10/reports/2026-04-11_FAMELY_NEUSLETTER_NIMROD_BIO_VALIDATION.md) — executive synthesis from Team 61 inbox (**MSG-009/010/004**), live `curl` validation of `nimrod.bio/agents/` + pilot newsletter HTML, pass/fail table (Famely product; see `documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`).
+
 ### Communication — Team 100 / Post-M9 direction (LOD200)
 
 - **Added** [`_COMMUNICATION/TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md`](_COMMUNICATION/TEAM_100/specs/SFA_POST_M9_PRODUCT_DIRECTION_LOD200_v1.0.0.md) — canonical package `SFA-PKG-POST-M9-001` (WP-A1 moderated submissions for registered users; WP-A2 non-AI farmer economics calculator; frozen legacy M10 bundle; Team 61 RFI / M9C scope notes).
