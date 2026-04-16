@@ -1,0 +1,6 @@
+work_packages:
+  - id: "AOS-VTEST-BAD-PROG"
+    label: "Bad Progression WP"
+    status: DRAFT
+    lod_status: LOD500_LOCKED
+    gate_history: []

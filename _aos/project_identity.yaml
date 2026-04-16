@@ -1,0 +1,38 @@
+# _aos/project_identity.yaml — Cross-Project Boundary Declaration
+# SSoT: lean-kit/modules/project-governance/config_templates/project_identity.yaml.template
+# AOS L0 spoke — full governance pipeline active since 2026-04-12.
+
+project_id: "smallfarmsagents"
+display_name: "SmallFarmsAgents — OrganicMarketAgent"
+domain: "organic_market"
+profile: L0
+
+is_hub: false
+managed_projects: []
+
+boundaries:
+  allowed_write_roots:
+    - "_aos/"
+    - "_COMMUNICATION/"
+    - "organic_market_agent/"
+    - "hub/"
+    - "scripts/"
+    - "tools/"
+    - "tests/"
+    - "data/"
+    - "docs/"
+    - "documentation/"
+    - "_scripts/"
+
+  forbidden_patterns:
+    - "from tiktrack"
+    - "import tiktrack"
+    - "from agents_os"
+    - "import agents_os"
+    - "from eyalamit"
+    - "from microgreens"
+    - "Project: tiktrack"
+    - "Project: agents-os"
+    - "Project: famely"
+
+  cross_project_routing: "Route cross-project queries to agents-os hub via Team 00 (Nimrod) only. No direct cross-repo imports."

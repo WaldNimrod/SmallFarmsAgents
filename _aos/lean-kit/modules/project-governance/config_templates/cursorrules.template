@@ -1,0 +1,113 @@
+# .cursorrules — {{PROJECT_DISPLAY_NAME}}
+# AOS Profile: {{PROFILE}}
+# ================================================================
+# AI agent context rules for this project.
+# Instantiate by replacing all {{PLACEHOLDER}} values.
+# Two variants below — use L0 for minimal projects, L2 for full AOS.
+# Remove the variant you don't need before deploying.
+# ================================================================
+
+# ════════════════════════════════════════════════════════════════
+# VARIANT A — L0 (minimal, governance-only)
+# Use for: AOS-Sandbox-Lean, simple proof-of-concept projects
+# ════════════════════════════════════════════════════════════════
+#
+# ## Identity
+# **Repo:** {{PROJECT_ID}} — {{PROJECT_DISPLAY_NAME}}
+# **Path:** {{LOCAL_PATH}}
+# **Owner:** {{OWNER_NAME}} (Team 00)
+# **Profile:** L0 — lean governance only
+#
+# ## What this repo is
+# {{ONE_LINE_DESCRIPTION}}
+#
+# ## Mandatory session startup
+# 1. Read `_aos/roadmap.yaml` — active WPs and milestone
+# 2. Read `_COMMUNICATION/team_00/` — any active mandates
+#
+# ## Writing authority
+# - Write to: `_COMMUNICATION/team_100/` and `_aos/` only
+# - Do NOT modify `_aos/lean-kit/` (read-only snapshot)
+#
+# ## Iron Rules
+# 1. Physical lean-kit snapshots only — never symlinks
+# 2. Inter-team communication = artifact file in `_COMMUNICATION/`
+# 3. Spoke repos never modify hub files directly
+#
+# ════════════════════════════════════════════════════════════════
+# END VARIANT A — delete from here up if using L2
+# ════════════════════════════════════════════════════════════════
+
+
+# ════════════════════════════════════════════════════════════════
+# VARIANT B — L2 (full AOS: governance + engine + dashboard)
+# Use for: TikTrack, AOS-Sandbox-Full, production projects
+# ════════════════════════════════════════════════════════════════
+
+## Identity
+**Repo:** {{PROJECT_ID}} — {{PROJECT_DISPLAY_NAME}}
+**Path:** {{LOCAL_PATH}}
+**Hub path:** {{HUB_PATH}}
+**Owner:** {{OWNER_NAME}} (Team 00)
+**Profile:** {{PROFILE}}
+
+## What this repo is
+{{ONE_LINE_DESCRIPTION}}
+
+## §BOUNDARY — Cross-Project Isolation
+**SSoT:** `_aos/project_identity.yaml` (machine-readable boundary)
+- This is an AOS **spoke** project — governance files are read-only snapshots from hub
+- Do NOT modify `_aos/governance/` files (propagated from hub, overwritten on next sync)
+- Do NOT write to other project repos from here
+- Cross-project handoff only via: `~/Documents/_agent_comm/outbox/`
+- `validate_aos.sh` Check 12 enforces `forbidden_patterns` from `project_identity.yaml`
+
+## Mandatory session startup
+1. Read `_aos/roadmap.yaml` — active milestone, programs, WPs
+2. Read `_COMMUNICATION/team_00/` — architect working documents
+3. Read `_aos/context/PROJECT_CONTEXT.md` — project background
+
+## Writing authority
+- Write to: `_COMMUNICATION/team_100/` and project source directories
+- Do NOT modify `_aos/governance/` — read-only (hub propagates)
+- Do NOT modify `_aos/lean-kit/` — read-only snapshot
+
+## Key paths
+- Project source: `{{SOURCE_ROOT}}/`
+- AOS governance: `_aos/`
+- Inter-team comms: `_COMMUNICATION/`
+- Validation: `_aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh`
+
+## Team model
+- Team 00: {{OWNER_NAME}} (human, system designer)
+- Team 100: Claude Code (chief system architect)
+- Team 110: Claude Opus (domain architect / builder)
+- Team 190: OpenAI Codex (constitutional validator, cross-engine)
+- All communication = canonical artifact file in `_COMMUNICATION/`
+
+## Iron Rules
+1. Cross-engine: builder engine MUST differ from validator engine
+2. Physical lean-kit snapshots only (no symlinks)
+3. Project owns its `roadmap.yaml`
+4. Inter-team = artifact file (present path to {{OWNER_NAME}} for routing)
+5. Every agent needs activation prompt as trigger
+6. Team 190 validates at L-GATE_V (independent)
+7. WP-scoped files go in `_COMMUNICATION/team_[ID]/[WP-ID]/[filename].md`
+8. Spoke repos never modify hub governance files directly
+
+## Gate model
+```
+L-GATE_E → L-GATE_S → L-GATE_B → L-GATE_V
+ (Entry)    (Spec)     (Build)    (Validate)
+```
+Track B adds L-GATE_C (Concept) for complex WPs.
+
+## Validate
+```bash
+bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
+```
+Expected: 12 PASS / 0 FAIL
+
+# ════════════════════════════════════════════════════════════════
+# END VARIANT B
+# ════════════════════════════════════════════════════════════════

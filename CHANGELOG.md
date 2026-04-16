@@ -11,6 +11,11 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Governance — archive canonicalization (Team 100 mandate)
+
+- **Archived** completed WP `S001-P001-WP001` artifacts from `_COMMUNICATION/TEAM_190/` to [`_archive/S001-P001-WP001/`](_archive/S001-P001-WP001/) (`L-GATE_V_result.md`, `TEAM_100_TO_TEAM_190_SFA_MIGRATION_VALIDATION_v1.0.0.md`) with [`ARCHIVE_MANIFEST.md`](_archive/S001-P001-WP001/ARCHIVE_MANIFEST.md).
+- **Updated** [`_COMMUNICATION/README.md`](_COMMUNICATION/README.md), [`_COMMUNICATION/TEAM_190/README.md`](_COMMUNICATION/TEAM_190/README.md) — pointers to `_archive/` for closed WPs.
+
 ### Communication — Team 10 (cross-infrastructure validation)
 
 - **Added** [`_COMMUNICATION/TEAM_10/reports/2026-04-11_FAMELY_NEUSLETTER_NIMROD_BIO_VALIDATION.md`](_COMMUNICATION/TEAM_10/reports/2026-04-11_FAMELY_NEUSLETTER_NIMROD_BIO_VALIDATION.md) — executive synthesis from Team 61 inbox (**MSG-009/010/004**), live `curl` validation of `nimrod.bio/agents/` + pilot newsletter HTML, pass/fail table (Famely product; see `documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`).

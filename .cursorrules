@@ -1,0 +1,38 @@
+# SmallFarmsAgents — Cursor Rules
+
+## Project Identity
+- **Repo:** SmallFarmsAgents — OrganicMarketAgent (SFA)
+- **Owner:** Nimrod (Team 00)
+- **Domain:** organic_market — vegetable price index on nimrod.bio
+- **Profile:** standalone (not AOS-managed pipeline)
+
+## §BOUNDARY — Cross-Project Isolation (IMMUTABLE)
+- **This repository is:** SmallFarmsAgents (OrganicMarketAgent — Python data hub, admin UI, PostgreSQL, uPress)
+- **This repository is NOT:** TikTrack, agents-os, Famely Newsletter
+- **SSoT:** `_aos/project_identity.yaml` — machine-readable boundary declaration
+- **Rules:**
+  1. NEVER create files for TikTrack, agents-os, or Famely Newsletter in this repo
+  2. NEVER commit CHANGELOG entries, release notes, or app code for other products
+  3. NEVER import from `tiktrack`, `agents_os`, or other project packages
+  4. If user requests work on another project → respond: "This belongs in [project]. Please switch workspace."
+  5. Shared infrastructure (waldhomeserver, nimrod.bio, uPress) can be REFERENCED but files stay HERE
+  6. Cross-project handoff: write to `~/Documents/_agent_comm/outbox/` only
+  7. `_COMMUNICATION/` in THIS repo is for SFA-relevant material ONLY — not "all Team 80 output"
+
+## AOS data authority (V320+)
+AOS WP/gate state: **file-first** in `_aos/roadmap.yaml` for L0; if this repo uses a shared **AOS v3 DB** for structured state, follow hub **ADR034** (API + `deploy_cascade`) — see `/Users/nimrod/Documents/agents-os/governance/directives/ADR034_DATA_AUTHORITY_DB_SSOT_ALL_PROFILES.md`. Run `validate_aos.sh` before gates (**17 PASS / 2 SKIP** typical on spoke).
+
+## Default Scope
+In this workspace: implement and document **SFA** unless user explicitly names another repo.
+
+## Key Directories
+- `organic_market_agent/` — main Python package
+- `hub/` — data hub integration
+- `scripts/`, `tools/` — operational scripts
+- `tests/` — test suite
+- `documentation/` — project docs
+- `_COMMUNICATION/` — team artifacts (SFA scope only)
+
+## Cross-Project Coordination
+- **File handoff:** `~/Documents/_agent_comm/outbox/` (machine-level, all products)
+- **Boundary reference:** `documentation/external-references/CROSS_PROJECT_BOUNDARIES.md`

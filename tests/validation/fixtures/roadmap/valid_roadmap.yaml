@@ -1,0 +1,11 @@
+work_packages:
+  - id: "AOS-VTEST-SYNTHETIC"
+    label: "Synthetic Test WP"
+    status: COMPLETE
+    lod_status: LOD500_LOCKED
+    gate_history:
+      - gate: L-GATE_SPEC
+        result: PASS
+        date: "2026-01-01"
+        validator: team_190
+        report_path: "tests/validation/fixtures/verdicts/valid_verdict_t190/VERDICT_VTEST_LGATE_VALIDATE_v1.0.0.md"

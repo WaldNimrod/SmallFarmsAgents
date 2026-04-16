@@ -1,0 +1,58 @@
+# _aos/team_assignments.yaml — Team Registry (Schema v1.1)
+# SSoT for WHO executes on this project and WHICH engine they use.
+# Iron Rule #1: cross_engine_validator.engine MUST differ from builder_agent.engine
+
+schema_version: "1.1"
+project_id: smallfarmsagents
+lean_kit_version: "3.1.7+c546ed4"
+
+teams:
+  - id: sfa_sd
+    role_type: system_designer
+    engine: human
+    name: "Nimrod Wald"
+    skills:
+      - vision
+      - stakeholder_management
+      - final_authority
+      - gate_5_signoff
+    notes: "Single human operator. All Iron Rules set by this role. Cannot be delegated."
+
+  - id: sfa_arch
+    role_type: architecture_agent
+    engine: claude-code
+    name: "Architecture Agent — Claude Code"
+    skills:
+      - system_architecture
+      - lod400_authoring
+      - gate_review
+      - data_model_design
+      - pipeline_architecture
+    notes: "Default agent role in this repo. Team 100 equivalent. Session context via CLAUDE.md."
+
+  - id: sfa_build
+    role_type: builder_agent
+    engine: cursor-composer
+    name: "Builder Agent — Cursor Composer"
+    skills:
+      - python
+      - postgresql
+      - data_pipeline
+      - fastapi
+      - docker
+      - scraping
+    notes: "Team 110 equivalent. Implements against LOD400. Must NOT be same engine as validator."
+
+  - id: sfa_val
+    role_type: validator_agent
+    engine: openai
+    name: "Validator Agent — OpenAI"
+    skills:
+      - constitutional_validation
+      - cross_engine_review
+      - lod500_sign_off
+      - gate_v_authority
+    notes: "Team 190 equivalent. Independent of builder. Owns L-GATE_V. Cross-engine guaranteed."
+
+cross_engine_validator: sfa_val
+# Verification: sfa_build.engine (cursor-composer) != sfa_val.engine (openai)

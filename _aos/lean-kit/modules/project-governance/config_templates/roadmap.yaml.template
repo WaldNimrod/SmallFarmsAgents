@@ -1,0 +1,68 @@
+# roadmap.yaml — L0 Work Package State Registry (Schema v1.1)
+# -----------------------------------------------------------
+# This file is the SSOT for WP state in this project.
+# Mirrors AOS DB schema — enables clean L0→L2 migration.
+# One entry per work package.
+#
+# SSOT RULE: roadmap.yaml project.profile is AUTHORITATIVE.
+# dashboard_config.yaml profile = read-only mirror. Divergence → roadmap.yaml wins.
+#
+# ENUM VALUES (canonical):
+#   status:             PLANNED | IN_PROGRESS | COMPLETE | BLOCKED
+#   track:              A | B
+#   current_lean_gate:  L-GATE_E | L-GATE_C | L-GATE_S | L-GATE_B | L-GATE_V | COMPLETE
+#   lod_status:         LOD100 | LOD200 | LOD300 | LOD400 | LOD500
+#   profile:            L0 | L2 | L3
+
+project:
+  id: "[project-id]"
+  name: "[Project Name]"
+  profile: L0                          # L0 | L2 | L3
+  lean_kit_version: "[version+sha]"    # e.g. "3.1.0+abc1234"
+  created: "[YYYY-MM-DD]"
+  owner: "[project-prefix]_sd"         # system_designer team ID
+  active_milestone: "[milestone-id]"   # currently active milestone
+  notes: ""                            # project-level notes
+
+# WP ID FORMAT: S[stage]-P[program]-WP[number]
+#
+#   S[stage]    — Major product milestone (e.g. S003, S004). Matches MILESTONE_MAP.md.
+#   P[program]  — Delivery stream within the stage (e.g. P001, P002). Groups related WPs.
+#                 Sequential within the stage. P001 = first program in stage.
+#   WP[number]  — Atomic execution unit (e.g. WP001, WP002). Sequential within program.
+#
+#   Example:    S003-P003-WP005
+#               Stage 3 (GATE-A milestone) → Program 3 (frontend cohort) → WP 5 (settings pages)
+#
+#   Full reference: lean-kit/modules/project-governance/WP_ID_STANDARD.md
+#
+# DIRECTORY:  _aos/work_packages/[WP-ID]/LOD400_spec.md  (per-WP, required at L-GATE_S)
+# STAGE DOC:  _aos/work_packages/S[N]/LOD300_milestone.md (planning doc, covers all WPs in stage)
+#
+# REGISTRATION RULE:
+#   WP MUST be in roadmap.yaml no later than L-GATE_S.
+#   Before per-WP LOD400 exists, spec_ref may point to the stage LOD300_milestone.md.
+#   At L-GATE_S: spec_ref MUST point to per-WP LOD400_spec.md.
+
+work_packages:
+  - id: "S[stage]-P[program]-WP[number]"    # e.g. S003-P001-WP001 — see WP_ID_STANDARD.md
+    label: "[Brief descriptive label — what pages/features this WP delivers]"
+    status: PLANNED                          # PLANNED | IN_PROGRESS | COMPLETE | BLOCKED
+    track: A                                 # A (4-gate: E→S→B→V) | B (5-gate: E→C→S→B→V)
+    current_lean_gate: L-GATE_E              # current gate position
+    lod_status: LOD100                       # highest LOD document authored for this WP
+    assigned_builder: "[project-prefix]_build"      # slug: ^[a-z][a-z0-9]*_[a-z]+$
+    assigned_validator: "[project-prefix]_val"      # MUST differ from builder engine (Iron Rule)
+    created_at: "[YYYY-MM-DD]"
+    milestone_ref: "S[stage]"               # stage ID — matches MILESTONE_MAP.md entry
+    spec_ref: "_aos/work_packages/[WP-ID]/LOD400_spec.md"
+    # ↑ At L-GATE_S and beyond: must be per-WP LOD400
+    # ↑ Before LOD400 exists but LOD300 is authored: "_aos/work_packages/S[N]/LOD300_milestone.md"
+    # ↑ Before any spec artifact exists (early registration): TBD
+    #   validate_aos.sh Check 4 skips file resolution for spec_ref: TBD
+    gate_history:
+      - gate: L-GATE_E
+        result: PASS
+        date: "[YYYY-MM-DD]"
+        notes: ""
+    notes: ""

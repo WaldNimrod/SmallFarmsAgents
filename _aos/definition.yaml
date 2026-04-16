@@ -1,0 +1,60 @@
+# _aos/definition.yaml — Project Team Definition Snapshot
+#
+# SNAPSHOT of relevant teams from the hub's core/definition.yaml.
+# Enables this project to function independently (Iron Rule #8).
+#
+# Source: agents-os/core/definition.yaml (hub SSoT)
+# Snapshot date: 2026-04-12
+# Snapshot by: Team 100 (AOS canonization — SmallFarmsAgents migration)
+#
+# IRON RULE: Physical copy only — never symlink. Updates via explicit refresh.
+# Contains: active project teams only (team_00, team_100, team_110, team_190).
+
+version: "1.0.0"
+source_ref: "core/definition.yaml"
+snapshot_date: "2026-04-12"
+profile: L0
+
+# ============================================================
+# MULTI-DOMAIN TEAMS (shared across all AOS projects)
+# ============================================================
+
+team_00:
+  id: team_00
+  label: Team 00
+  name: System Designer (Principal)
+  engine: human
+  group: leadership
+  profession: principal
+  role_description: "Human owner. Sets all Iron Rules, holds final approval, defines product vision and constraints."
+
+team_100:
+  id: team_100
+  label: Team 100
+  name: Chief System Architect
+  engine: claude-code
+  group: architecture
+  profession: chief_architect
+  role_description: "Program-level architecture and synthesis. GATE_2 owner. Coordinates domain architects and execution teams."
+
+team_190:
+  id: team_190
+  label: Team 190
+  name: Constitutional Validator
+  engine: openai
+  group: governance
+  profession: constitutional_validator
+  role_description: "Cross-engine validation authority. L-GATE_V constitutional review. Must differ from builder engine (Iron Rule #1)."
+
+# ============================================================
+# UNIVERSAL PROJECT TEAMS (active in this project only)
+# ============================================================
+
+team_110:
+  id: team_110
+  label: Team 110
+  name: Domain Builder Agent
+  engine: cursor-composer
+  group: implementation
+  profession: domain_builder
+  role_description: "Implements against LOD400 specs. Owns L-GATE_B exit. Must differ from validator engine."

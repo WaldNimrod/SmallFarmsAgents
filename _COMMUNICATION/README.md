@@ -172,3 +172,13 @@ Implementing Team           Team 100              Team 50
 | G9 | M9 | Blog post + community engagement | Nimrod |
 
 Full milestone details: `_COMMUNICATION/ROADMAP.md`
+
+---
+
+## Completed work packages (archived)
+
+Per AOS archive policy, **completed** WP communication artifacts live under **`_archive/<WP-ID>/`** at the repository root (with `ARCHIVE_MANIFEST.md` per WP). Active `_COMMUNICATION/` holds ongoing mandates, QA, and handoffs — not closed WP deliverables that have been moved to archive.
+
+| WP ID | Archive path |
+|-------|----------------|
+| S001-P001-WP001 | [`_archive/S001-P001-WP001/`](../_archive/S001-P001-WP001/) |

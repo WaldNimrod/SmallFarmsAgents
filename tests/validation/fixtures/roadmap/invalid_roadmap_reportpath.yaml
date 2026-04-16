@@ -1,0 +1,11 @@
+work_packages:
+  - id: "AOS-VTEST-BAD-PATH"
+    label: "Bad Report Path WP"
+    status: COMPLETE
+    lod_status: LOD400_APPROVED
+    gate_history:
+      - gate: L-GATE_SPEC
+        result: PASS
+        date: "2026-01-01"
+        validator: team_190
+        report_path: "_COMMUNICATION/team_190/THIS_FILE_DOES_NOT_EXIST.md"
