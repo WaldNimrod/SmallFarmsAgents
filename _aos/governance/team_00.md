@@ -16,6 +16,28 @@
 - Architect, not a generic implementation squad — mandates route to Teams 10–61.
 - GATE_4 Phase 4.3 (UX/vision sign-off): no delegation of human sign-off. (GATE_7 = retired alias for this phase.)
 - Project-level Iron Rules (operational context per project) are in each project's `CLAUDE.md`. The rules in this contract are Team 00 agent operating rules — not a superset of all Iron Rules.
+- **API-only mutations (Iron Rule #7):** When the AOS v3 database is online, structured hub/spoke state mutations MUST go through the API; direct edits to `roadmap.yaml`, `definition.yaml`, or `projects.yaml` for canonical fields are forbidden per ADR034.
+
+## Offline DB Protocol (ADR034 R8)
+
+When the AOS v3 database is unreachable (`AOS_V3_DATABASE_URL` unset or connection fails), offline work is permitted on feature branches using the Offline Changelog Protocol:
+
+**Offline Workflow (6 Steps):**
+1. Check database status: `python3 -c "from agents_os_v3.modules.management.db import probe_database; print(probe_database())"`
+2. Create feature branch: `offline/YYYY-MM-DD-{project_id}-{scope}`
+3. Create `_aos/PENDING_DB_SYNC.yaml` from template with pending mutations
+4. Make offline edits to roadmap.yaml, definition.yaml, etc.
+5. Push PR with labels: `[offline-work]` `[pending-db-sync]`
+6. When DB is available, run `bash scripts/sync_offline_to_db.sh --force` and apply `[offline-sync-complete]` label
+
+**Key Rules:**
+- Offline edits MUST be on a named branch (main is forbidden when DB is offline)
+- `PENDING_DB_SYNC.yaml` MUST accompany all offline mutations
+- `gate_history[]` and prose fields remain file-authored (exemption from R2)
+- Local validation (Check 25) warns of pending sync; CI/CD gate enforces merge blocking
+
+See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0.md`  
+See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
 ## TikTrack Domain Rules
 
@@ -58,22 +80,24 @@ Applies only when working in the **TikTrack** product domain. Full rules: `_aos/
 
 ```yaml
 writes_to:
-  - "_COMMUNICATION/team_00/"
-  - "_COMMUNICATION/team_00/*/"
+- _COMMUNICATION/team_00/
+- _COMMUNICATION/team_00/*/
 gate_authority:
-  L-GATE_ELIGIBILITY: owner
   L-GATE_SPEC: owner
   L-GATE_BUILD: owner
   L-GATE_VALIDATE: owner
+  L-GATE_ELIGIBILITY: owner
 iron_rules:
-  - "No guessing — read the file first."
-  - "Architect, not a generic implementation squad — mandates route to Teams 10–61."
-  - "GATE_4 Phase 4.3 (UX/vision sign-off): no delegation of human sign-off. (GATE_7 = retired alias for this phase.)"
-  - "Project-level Iron Rules (operational context per project) are in each project's `CLAUDE.md`. The rules in this contract are Team 00 agent operating rules — not a superset of all Iron Rules."
-  - "API-only mutations: when AOS DB is running, all structured data mutations (WP status, gate, lod_status, team engine/environment, project metadata) MUST go through the API. Direct edits to roadmap.yaml, definition.yaml, projects.yaml for structured fields are FORBIDDEN per Iron Rule #7."
+- No guessing — read the file first.
+- Architect, not a generic implementation squad — mandates route to Teams 10–61.
+- 'GATE_4 Phase 4.3 (UX/vision sign-off): no delegation of human sign-off. (GATE_7
+  = retired alias for this phase.)'
+- Project-level Iron Rules (operational context per project) are in each project's
+  `CLAUDE.md`. The rules in this contract are Team 00 agent operating rules — not
+  a superset of all Iron Rules.
 mandatory_reads:
-  - "core/definition.yaml"
-  - "_aos/roadmap.yaml"
+- core/definition.yaml
+- _aos/roadmap.yaml
 ```
 
 ## Governance Change Requests
