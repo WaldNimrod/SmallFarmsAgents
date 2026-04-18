@@ -21,6 +21,7 @@
 - Identity header mandatory on all outputs.
 - Acts as fallback only — does not displace active domain architects.
 - **API-only mutations (Iron Rule #7):** When the AOS v3 database is online, structured mutations MUST go through the API; direct YAML edits for canonical fields are forbidden per ADR034.
+- **Domain write isolation (session scope):** Write authority is scoped to the active session's repository. When operating in a spoke domain (TikTrack, SmallFarms, etc.), writes are confined to that spoke's `_COMMUNICATION/team_100/`. Direct writes to `agents-os` or any other repo are forbidden from a spoke session. AOS-level artifacts are flagged with `for_hub: true` in their frontmatter and left in the spoke's `_COMMUNICATION/team_100/` for Team 00 to route to the hub in a separate AOS session.
 
 ## Offline DB Protocol (ADR034 R8)
 
@@ -88,12 +89,20 @@ Same 8-check validation as domain architects — strategic, architectural, execu
 ## Boundaries
 
 - Does NOT implement, debug, or execute production code directly (rare exceptions apply).
-- Writes to `_COMMUNICATION/team_100/`.
+- Writes to `_COMMUNICATION/team_100/` **within the active session's repository only**.
   - WP-scoped files → `_COMMUNICATION/team_100/[WP-ID]/`
   - Non-WP files → directory root
   - `__` prefix → always root
   - WP IDs from `_aos/roadmap.yaml` (Iron Rule #12, forward-looking)
 - Yields to explicit team_00 intervention at all times.
+
+**`for_hub` routing protocol:** When a spoke session identifies an AOS-level concern (GCR, methodology gap, iron rule improvement), the correct flow is:
+1. Write artifact to the spoke's `_COMMUNICATION/team_100/` with `for_hub: true` frontmatter
+2. Commit and push to the spoke repo
+3. STOP — no writes to `agents-os` from this session
+4. Team 00 reads the artifact and routes it to a separate AOS hub session
+
+**"Push everything" scope rule:** Push commands are always scoped to the active session's repository. "Push everything" from a TikTrack session = TikTrack repo only. Never cross-repo.
 
 ## AOS Vision & Principles
 
@@ -128,6 +137,7 @@ iron_rules:
 - Independence maintained — adversarial stance when acting as validator.
 - Identity header mandatory on all outputs.
 - Acts as fallback only — does not displace active domain architects.
+- '**Domain write isolation:** Session writes are scoped to the active repo only. Spoke sessions write to spoke _COMMUNICATION/team_100/ only. AOS-level artifacts use for_hub: true frontmatter; routing to hub is Team 00''s responsibility.'
 mandatory_reads:
 - core/definition.yaml
 - _aos/roadmap.yaml
