@@ -27,7 +27,7 @@ You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0
 1. Read `_aos/roadmap.yaml` — current WP and gate position
 2. Read `_aos/context/PROJECT_CONTEXT.md` — project background
 3. Read `_aos/definition.yaml` (L2) or `_aos/context/ACTIVATION_*.md` (L0) — your role
-4. **DB probe (mandatory):** Read `/Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json` — hub canonical DB status. If `status: online` → all structured mutations go via API (Iron Rule #7 / ADR034). If `status: offline` → **stop and fix before proceeding**; offline work requires ADR034 R8 protocol on a named branch (never main). **DB is always available in normal operation.** To refresh: `python3 -c "import sys; sys.path.insert(0, '/Users/nimrod/Documents/agents-os'); from agents_os_v3.modules.management.db import probe_database; print(probe_database())"`
+4. **DB probe (mandatory):** `cat "/Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json"` — hub canonical DB status. If `status: online` → all structured mutations go via API (Iron Rule #7 / ADR034). If `status: offline` → **STOP and notify Team 00** with the `reason` field; offline work requires ADR034 R8 protocol on a named branch (never main). To refresh hub status: run the hub DB probe from the hub session.
 5. **Validation:** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` — expect **0 FAIL** on this spoke
 6. **AOS identity onboarding (first session only):** read `/Users/nimrod/Documents/agents-os/methodology/AOS_IDENTITY_ONBOARDING_v1.0.0.md`
 
