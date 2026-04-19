@@ -173,6 +173,21 @@ mandatory_reads:
 - _aos/governance/team_200.md
 ```
 
+## Canonical Output Header
+
+All deliverables authored by this team must begin with the standard AOS artifact header:
+
+```markdown
+# {ARTIFACT_TYPE} — {WP_ID} — {TEAM_ID} — v{VERSION}
+
+**Date:** {YYYY-MM-DD}
+**Author:** {TEAM_ID}
+**WP:** {WP_ID}
+**Type:** {ARTIFACT_TYPE}
+```
+
+See `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` for canonical filename conventions.
+
 ## Governance Change Requests
 
 This contract is managed by Team 00 + Team 100 in `core/governance/` (SSoT).

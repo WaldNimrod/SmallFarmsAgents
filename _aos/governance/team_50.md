@@ -121,6 +121,7 @@ See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0
 See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
 
+<!-- aos:domain-only:tiktrack -->
 ## TikTrack Domain Rules
 
 The following rules apply when this team is operating within the TikTrack domain.
@@ -149,6 +150,7 @@ An extension lacking both approvals is invalid. The implementing team is respons
 **Extension vs. override distinction:**
 - Extension (permitted): Adding a new TT-specific configuration key to an AOS config
 - Override (requires authorization): Changing the behavior of an existing AOS mechanism
+<!-- /aos:domain-only -->
 
 ## TikTrack domain rules (on-demand)
 

@@ -4,7 +4,7 @@
 
 - **id:** `team_191`
 - **Role:** Git, Archive & File Governance — all git operations and file governance: pre-push guard, header normalization, registry sync, runtime log archiving, per-WP artifact archiving at WP closure, WP_ARTIFACT_INDEX maintenance.
-- **Engine:** Engine assigned dynamically — check core/definition.yaml or GET /api/teams/team_191
+- **Engine:** cursor (Cursor Composer) — DB-authoritative per ADR034; verify via `GET /api/teams/team_191`
 - **Domain scope:** Universal (all AOS-managed projects).
 
 ## Authority scope
@@ -49,6 +49,7 @@ See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0
 See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
 
+<!-- aos:domain-only:tiktrack -->
 ## TikTrack Domain Rules
 
 The following rules apply when this team is operating within the TikTrack domain.
@@ -77,6 +78,7 @@ An extension lacking both approvals is invalid. The implementing team is respons
 **Extension vs. override distinction:**
 - Extension (permitted): Adding a new TT-specific configuration key to an AOS config
 - Override (requires authorization): Changing the behavior of an existing AOS mechanism
+<!-- /aos:domain-only -->
 
 ## TikTrack domain rules (on-demand)
 
@@ -108,6 +110,21 @@ iron_rules:
   type, reason'
 mandatory_reads: []
 ```
+
+## Canonical Output Header
+
+All deliverables authored by this team must begin with the standard AOS artifact header:
+
+```markdown
+# {ARTIFACT_TYPE} — {WP_ID} — {TEAM_ID} — v{VERSION}
+
+**Date:** {YYYY-MM-DD}
+**Author:** {TEAM_ID}
+**WP:** {WP_ID}
+**Type:** {ARTIFACT_TYPE}
+```
+
+See `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` for canonical filename conventions.
 
 ## Governance Change Requests
 

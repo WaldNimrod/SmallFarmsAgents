@@ -1,90 +1,78 @@
 # CLAUDE.md — SmallFarmsAgents
 
-**AOS Profile:** L0 | **Lean-kit:** 3.1.7 | **Active milestone:** see `_aos/roadmap.yaml`
+<!-- AOS-CANONICAL-TEMPLATE v1.0.0 — rendered by scripts/aos_sync_all.sh. DO NOT hand-edit content between <!-- aos:canonical:start --> and <!-- aos:canonical:end -->. Project-specific additions go in the "Domain rules" section below. -->
 
----
+<!-- aos:canonical:start -->
+## ⚠ AOS Spoke Notice (READ FIRST)
 
-## Mandatory Startup Sequence
+You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0`.
 
-Read these files at every session start, in order:
+- **AOS = multi-domain, multi-engine infrastructure** for managing agents and projects across the organization. It is NOT a product. It governs how agents collaborate across product repos (spokes).
+- **AOS hub:** `/Users/nimrod/Documents/agents-os` — SSOT for governance, lean-kit, canon, directives.
+- **`_aos/` in this repo is a READ-ONLY SNAPSHOT** propagated from the hub via `aos_sync_all.sh` / `propagate_governance.sh`.
+- **Do NOT edit** `_aos/governance/`, `_aos/lean-kit/`, `_aos/project_identity.yaml`, or any other AOS-layer file directly.
+- **To request a governance change:** file `GOVERNANCE_CHANGE_REQUEST` artifact in `_COMMUNICATION/team_XX/` → route to `team_100` in the hub. Template: `/Users/nimrod/Documents/agents-os/lean-kit/modules/project-governance/config_templates/GOVERNANCE_CHANGE_REQUEST.md.template`
+- **Governance procedures are LOCKED to AOS teams** (`team_00`, `team_100`) per Iron Rule #12 / ADR040. Non-AOS teams cannot invoke `/AOS_gov-update` or `/AOS_gov-sync`.
 
-1. `_aos/roadmap.yaml` — active WPs and gate status
-2. `_aos/context/PROJECT_CONTEXT.md` — project overview
-3. `_aos/context/ACTIVATION_ARCH.md` — architecture agent role (default role for Claude Code sessions)
-4. **Data authority:** hub `methodology/AOS_CONCEPT_AND_PRINCIPLES.md` (Iron Rule #7) and `governance/directives/ADR034_DATA_AUTHORITY_DB_SSOT_ALL_PROFILES.md`. This repo is **L0 file-first** for AOS WP state unless/until connected to a shared AOS v3 DB — then API + `deploy_cascade()` apply to **AOS structured** fields.
-5. **Validation:** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` — expect **17 PASS / 2 SKIP / 0 FAIL** on this spoke.
+## Identity
 
----
+- **Repo:** `SmallFarmsAgents`
+- **Path:** `/Users/nimrod/Documents/SmallFarmsAgents`
+- **Profile:** `L0`
+- **AOS hub:** `/Users/nimrod/Documents/agents-os`
+- **Domain:** `smallfarms`
 
-## Project Identity
+## Mandatory session startup (canonical — uniform across all AOS domains)
 
-| Field | Value |
-|-------|-------|
-| Project | SmallFarmsAgents — OrganicMarketAgent |
-| Domain | organic_market — community price index for organic vegetables |
-| Stack | Python 3.11 + PostgreSQL + FastAPI + Alembic + Docker |
-| Repo | github.com/WaldNimrod/SmallFarmsAgents |
-| AOS profile | L0 (governance in-repo; no AOS v3 engine tree in this repo) |
+1. Read `_aos/roadmap.yaml` — current WP and gate position
+2. Read `_aos/context/PROJECT_CONTEXT.md` — project background
+3. Read `_aos/definition.yaml` (L2) or `_aos/context/ACTIVATION_*.md` (L0) — your role
+4. **DB probe (mandatory):** Read `/Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json` — hub canonical DB status. If `status: online` → all structured mutations go via API (Iron Rule #7 / ADR034). If `status: offline` → **stop and fix before proceeding**; offline work requires ADR034 R8 protocol on a named branch (never main). **DB is always available in normal operation.** To refresh: `python3 -c "import sys; sys.path.insert(0, '/Users/nimrod/Documents/agents-os'); from agents_os_v3.modules.management.db import probe_database; print(probe_database())"`
+5. **Validation:** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` — expect **0 FAIL** on this spoke
+6. **AOS identity onboarding (first session only):** read `/Users/nimrod/Documents/agents-os/methodology/AOS_IDENTITY_ONBOARDING_v1.0.0.md`
 
----
+## Iron Rules (uniform across all AOS domains)
 
-## Default Agent Role
+1. Cross-engine: builder engine ≠ validator engine
+2. Physical lean-kit snapshots only (no symlinks in `_aos/lean-kit/`)
+3. Repo-internal `spec_ref` paths only
+4. Single logical writer on `roadmap.yaml` (subject to API-only rule when DB online)
+5. Final validation owned by `team_190` (constitutional, cross-engine, immutable)
+6. Inter-team communication via canonical artifact in `_COMMUNICATION/`
+7. **API-only structured mutations when DB online** (ADR034)
+8. **Port canon** — `lean-kit/modules/12-home-server-infrastructure/deployment/port-registry.yaml` is SSOT for all long-running listeners (Team 60)
+9. Universal team numbering
+10. Governance flows source → snapshot only; no reverse (Iron Rule #11)
+11. **Iron Rule #12: `gov-update` + `gov-sync` locked to `team_00` / `team_100` only** (ADR040). Other teams must file canonical GCR.
 
-You are **sfa_arch** — Architecture Agent (Team 100), engine: claude-code.
+## Directory Authority (uniform)
 
-For implementation tasks (Python, data pipeline): activate **sfa_build** (Team 110, Cursor).
-For validation: activate **sfa_val** (Team 190, OpenAI).
+| Team | May write to |
+|------|-------------|
+| `team_00` (Principal) | Anywhere (final human authority) |
+| `team_100` (Chief Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` (hub only — SSOT edits) |
+| `team_191` (Git/Files) | `_COMMUNICATION/team_191/`, `_archive/`, `_aos/` (bootstrap/propagation under mandate) |
+| **All other teams** | `_COMMUNICATION/team_[ID]/` + application source ONLY — NEVER `_aos/` |
 
----
+## Governance File Protection
 
-## Team Model
+- `_aos/governance/team_*.md` files in this repo are READ-ONLY snapshots of the hub SSOT at `/Users/nimrod/Documents/agents-os/core/governance/team_*.md`
+- Any direct edit will be reverted on next `aos_sync_all.sh` run
+- Validated by hub `validate_aos.sh` Checks 27–29
+- Change-request workflow: GCR artifact → team_100 → Team 00 approval → hub edit + sync
+<!-- aos:canonical:end -->
 
-| Slot | ID | Engine | Role |
-|------|----|--------|------|
-| Team 00 | sfa_sd | human | Nimrod — system designer, final authority |
-| Team 100 | sfa_arch | claude-code | Architecture, specs, roadmap (default) |
-| Team 110 | sfa_build | cursor-composer | Python + data pipeline implementation |
-| Team 190 | sfa_val | openai | Constitutional validator (L-GATE_VALIDATE) |
+<!-- aos:project-specific:start -->
+## Domain rules
 
----
+<!-- Project-specific rules, commands, paths, and conventions go here.
+     This section is PRESERVED across aos_sync_all.sh runs. -->
 
-## Iron Rules (Project-Level)
+## Domain rules
 
-1. **Cross-engine validation** — builder (cursor-composer) != validator (openai). Constitutional.
-2. **Physical lean-kit** — `_aos/lean-kit/` is always a physical copy, never a symlink.
-3. **Repo-internal specs** — `spec_ref` paths in roadmap.yaml never leave this repository.
-4. **Single-writer roadmap** — sfa_arch holds write authority on `_aos/roadmap.yaml` for **AOS** WP state (subject to ADR034 API-only rules if AOS v3 DB is online for structured fields).
-5. **L-GATE_VALIDATE independence** — always sfa_val (openai), immutable, non-delegatable.
-6. **Data integrity** — scraping is read-only; never modify source data.
-7. **Artifact communication** — inter-team artifacts go to `_COMMUNICATION/` files, not inline chat.
-8. **AOS data authority (V320+)** — When an AOS v3 DB is authoritative for structured AOS state, mutations go through the **API** / `deploy_cascade`, not hand-edited YAML for canonical fields (`_aos/governance/team_*.md`).
+<!-- Project-specific rules, commands, paths, and conventions go here.
+     This section is PRESERVED across aos_sync_all.sh runs. -->
 
----
+<!-- No project-specific content yet. Add rules, commands, paths here. -->
 
-## Key Paths
-
-| Path | Purpose |
-|------|---------|
-| `_aos/roadmap.yaml` | AOS WP registry + gate history (file SSoT for L0; ADR034 if DB connected) |
-| `_aos/governance/` | Team contract snapshots |
-| `_aos/context/` | Activation files |
-| `_aos/work_packages/` | LOD specs |
-| `organic_market_agent/` | Main Python package |
-| `hub/` | Data hub integration |
-| `scripts/` | Operational scripts |
-| `tests/` | Test suite (127+ tests) |
-| `_COMMUNICATION/` | All inter-team artifacts |
-
----
-
-## Gate Model (Track A)
-
-```
-L-GATE_ELIGIBILITY  ->  L-GATE_SPEC  ->  L-GATE_BUILD  ->  L-GATE_VALIDATE
-```
-
-Validation command (run before L-GATE_BUILD):
-
-```bash
-bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
-```
+<!-- aos:project-specific:end -->

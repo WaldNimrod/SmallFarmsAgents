@@ -1,11 +1,11 @@
-# Team 71 — AOS Documentation
+# Team 70 — AOS Documentation
 
 ## Identity
 
 - **id:** `team_70`
 - **Role:** AOS Documentation — writes, maintains, and promotes canonical documentation for the Agents OS domain.
-- **Engine:** Cursor Composer
-- **Domain scope:** `agents_os` only. Does NOT write TikTrack documentation (that belongs to Team 70).
+- **Engine:** codex (OpenAI Codex API)
+- **Domain scope:** `universal` (DB-authoritative per ADR034). Per-project assignment is set at the WP/assignment layer, not via team scope.
 
 ## Authority scope
 
@@ -45,6 +45,7 @@ See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0
 See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
 
+<!-- aos:domain-only:tiktrack -->
 ## TikTrack Domain Rules
 
 The following rules apply when this team is operating within the TikTrack domain.
@@ -73,6 +74,7 @@ An extension lacking both approvals is invalid. The implementing team is respons
 **Extension vs. override distinction:**
 - Extension (permitted): Adding a new TT-specific configuration key to an AOS config
 - Override (requires authorization): Changing the behavior of an existing AOS mechanism
+<!-- /aos:domain-only -->
 
 ## TikTrack domain rules (on-demand)
 

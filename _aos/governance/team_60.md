@@ -1,11 +1,11 @@
-# Team 61 — AOS DevOps & Platform
+# Team 60 — AOS DevOps & Platform
 
 ## Identity
 
 - **id:** `team_60`
 - **Role:** AOS DevOps & Platform — infrastructure, database migrations, deployment, and environment setup for the Agents OS domain.
 - **Engine:** Cursor Composer
-- **Domain scope:** `agents_os` only. Does NOT work on TikTrack infrastructure.
+- **Domain scope:** `universal` (DB-authoritative per ADR034). Per-project assignment is set at the WP/assignment layer, not via team scope.
 
 ## Authority scope
 
@@ -46,6 +46,7 @@ When the AOS v3 database is unreachable (`AOS_V3_DATABASE_URL` unset or connecti
 See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0.md`  
 See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
+<!-- aos:domain-only:tiktrack -->
 ## TikTrack Domain Rules
 
 The following rules apply when this team is operating within the TikTrack domain.
@@ -74,6 +75,7 @@ An extension lacking both approvals is invalid. The implementing team is respons
 **Extension vs. override distinction:**
 - Extension (permitted): Adding a new TT-specific configuration key to an AOS config
 - Override (requires authorization): Changing the behavior of an existing AOS mechanism
+<!-- /aos:domain-only -->
 
 ## TikTrack domain rules (on-demand)
 

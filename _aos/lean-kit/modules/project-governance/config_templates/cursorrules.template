@@ -25,14 +25,24 @@
 # 1. Read `_aos/roadmap.yaml` — active WPs and milestone
 # 2. Read `_COMMUNICATION/team_00/` — any active mandates
 #
-# ## Writing authority
-# - Write to: `_COMMUNICATION/team_100/` and `_aos/` only
-# - Do NOT modify `_aos/lean-kit/` (read-only snapshot)
+# ## Directory Authority
+#
+# | Team | May write to |
+# |------|-------------|
+# | Team 00 (Principal) | Anywhere |
+# | Team 100 (Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` |
+# | Team 191 (Git/Files) | `_COMMUNICATION/team_191/`, `_archive/`, `_aos/` (bootstrap, under mandate) |
+# | ALL OTHER TEAMS | `_COMMUNICATION/team_[ID]/` and application source ONLY |
+#
+# `_aos/` is the governance layer — OFF LIMITS for all non-governance teams.
+# Do NOT write to `_aos/lean-kit/` (read-only snapshot).
+# Route required roadmap/gate updates via report artifact to Team 100.
 #
 # ## Iron Rules
 # 1. Physical lean-kit snapshots only — never symlinks
 # 2. Inter-team communication = artifact file in `_COMMUNICATION/`
 # 3. Spoke repos never modify hub files directly
+# 4. NEVER write to `_aos/` unless you are Team 00/100/191 under mandate
 #
 # ════════════════════════════════════════════════════════════════
 # END VARIANT A — delete from here up if using L2
@@ -67,10 +77,18 @@
 2. Read `_COMMUNICATION/team_00/` — architect working documents
 3. Read `_aos/context/PROJECT_CONTEXT.md` — project background
 
-## Writing authority
-- Write to: `_COMMUNICATION/team_100/` and project source directories
-- Do NOT modify `_aos/governance/` — read-only (hub propagates)
-- Do NOT modify `_aos/lean-kit/` — read-only snapshot
+## Directory Authority
+
+| Team | May write to |
+|------|-------------|
+| Team 00 (Principal) | Anywhere |
+| Team 100 (Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` |
+| Team 191 (Git/Files) | `_COMMUNICATION/team_191/`, `_archive/`, `_aos/` (bootstrap/propagation, under mandate) |
+| ALL OTHER TEAMS | `_COMMUNICATION/team_[ID]/` and application source ONLY |
+
+`_aos/` is the governance layer — **OFF LIMITS for all non-governance teams**.
+Non-AOS teams route required roadmap/gate updates via report artifact to Team 100.
+Canonical authority table: `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` Part 5 (see hub).
 
 ## Key paths
 - Project source: `{{SOURCE_ROOT}}/`
@@ -91,16 +109,17 @@
 3. Project owns its `roadmap.yaml`
 4. Inter-team = artifact file (present path to {{OWNER_NAME}} for routing)
 5. Every agent needs activation prompt as trigger
-6. Team 190 validates at L-GATE_V (independent)
+6. Team 190 validates at L-GATE_VALIDATE (independent)
 7. WP-scoped files go in `_COMMUNICATION/team_[ID]/[WP-ID]/[filename].md`
 8. Spoke repos never modify hub governance files directly
+9. NEVER write to `_aos/` unless you are Team 00/100/191 under mandate — all other teams use `_COMMUNICATION/team_[ID]/`
 
 ## Gate model
 ```
-L-GATE_E → L-GATE_S → L-GATE_B → L-GATE_V
+L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE
  (Entry)    (Spec)     (Build)    (Validate)
 ```
-Track B adds L-GATE_C (Concept) for complex WPs.
+Track B adds L-GATE_CONCEPT (Concept) for complex WPs.
 
 ## Validate
 ```bash

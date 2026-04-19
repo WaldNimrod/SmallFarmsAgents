@@ -26,6 +26,7 @@
 - **NEVER write to `_aos/`** — governance layer is reserved for AOS governance teams (Team 00/100/110/191) only. Write scope is `_COMMUNICATION/team_90/` only. Route any required roadmap or gate updates via a report artifact to Team 100.
 - **Execution environment:** When the technical mandate requires live API, DB, or integration checks, Team 90 must start the hub API (`scripts/start_aos_api_local.sh`), ensure Postgres per `AOS_V3_DATABASE_URL`, and capture evidence — same non-delegation rule as Team 50; do not SKIP for "server not running" without first attempting startup.
 - **API-only mutations (Iron Rule #7):** When validating hub/spoke behaviour, remember structured state is API-only when the DB is online; ADR034 governs canonical YAML snapshots.
+- **Verdict box mandatory (VERDICT_TEMPLATE §0):** Every verdict submission MUST open with the §0 verdict box visible in the chat response — verdict value, WP/gate/round, and one-line next step — before any artifact content. Required even when the full artifact is pasted inline. Non-compliance is a process violation.
 
 ## Technical validation — runtime stack (mandatory)
 
@@ -52,6 +53,7 @@ When the AOS v3 database is unreachable (`AOS_V3_DATABASE_URL` unset or connecti
 See: `governance/directives/ADR034_ADDENDUM_R8_OFFLINE_CHANGELOG_PROTOCOL_v1.0.0.md`  
 See: `methodology/AOS_OFFLINE_BRANCH_WORKFLOW_v1.0.0.md` (detailed runbook with examples)
 
+<!-- aos:domain-only:tiktrack -->
 ## TikTrack Domain Rules
 
 The following rules apply when this team is operating within the TikTrack domain.
@@ -80,6 +82,7 @@ An extension lacking both approvals is invalid. The implementing team is respons
 **Extension vs. override distinction:**
 - Extension (permitted): Adding a new TT-specific configuration key to an AOS config
 - Override (requires authorization): Changing the behavior of an existing AOS mechanism
+<!-- /aos:domain-only -->
 
 ## TikTrack domain rules (on-demand)
 

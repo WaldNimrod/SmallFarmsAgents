@@ -53,7 +53,7 @@ S[stage] - P[program] - WP[number]
 **Rules:**
 - Every stage with ≥1 WP should have a `LOD300_milestone.md` (or the scope must appear at program or WP level)
 - The `LOD300_milestone.md` is authored by the architecture team (Team 100/110) before WPs are split
-- It is a planning artifact — does NOT substitute for per-WP LOD400 at L-GATE_S
+- It is a planning artifact — does NOT substitute for per-WP LOD400 at L-GATE_SPEC
 - The file MUST be named `LOD300_milestone.md` (not `LOD300_spec.md`) to be distinguishable from per-WP LODs
 
 ---
@@ -90,14 +90,14 @@ S[stage] - P[program] - WP[number]
 
 | File | LOD | Gate | Required? |
 |------|-----|------|-----------|
-| `LOD100_scope.md` | LOD100 | L-GATE_E | YES — before L-GATE_E |
-| `LOD200_concept.md` | LOD200 | L-GATE_C (Track B only) | Track B only |
-| `LOD400_spec.md` | LOD400 | L-GATE_S | YES — before L-GATE_S |
-| `LOD500_asbuilt.md` | LOD500 | L-GATE_B | YES — before L-GATE_B |
+| `LOD100_scope.md` | LOD100 | L-GATE_ELIGIBILITY | YES — before L-GATE_ELIGIBILITY |
+| `LOD200_concept.md` | LOD200 | L-GATE_CONCEPT (Track B only) | Track B only |
+| `LOD400_spec.md` | LOD400 | L-GATE_SPEC | YES — before L-GATE_SPEC |
+| `LOD500_asbuilt.md` | LOD500 | L-GATE_BUILD | YES — before L-GATE_BUILD |
 
 **Rules:**
-- WP directory is created when LOD100 is authored (may be deferred to L-GATE_E)
-- LOD400 MUST exist and be referenced in `spec_ref` before L-GATE_S can be declared
+- WP directory is created when LOD100 is authored (may be deferred to L-GATE_ELIGIBILITY)
+- LOD400 MUST exist and be referenced in `spec_ref` before L-GATE_SPEC can be declared
 - If the LOD300_milestone.md is sufficient scope, LOD100 may point to it via `spec_ref`
 - LOD500 documents what was actually built — never edited retroactively
 
@@ -105,7 +105,7 @@ S[stage] - P[program] - WP[number]
 
 ## 3. Registration in roadmap.yaml
 
-**Registration rule:** Every WP MUST be registered in `_aos/roadmap.yaml` no later than **L-GATE_S** (spec gate). Best practice: register as PLANNED at first identification.
+**Registration rule:** Every WP MUST be registered in `_aos/roadmap.yaml` no later than **L-GATE_SPEC** (spec gate). Best practice: register as PLANNED at first identification.
 
 **Minimal valid entry (before LOD400 exists — WP is at pre-spec stage):**
 ```yaml
@@ -113,7 +113,7 @@ S[stage] - P[program] - WP[number]
   label: "Settings pages — Preferences, System Management, Admin (D39, D40, D41)"
   status: IN_PROGRESS
   track: A
-  current_lean_gate: L-GATE_S             # ← pre-spec stage; LOD400 needed before this gate
+  current_lean_gate: L-GATE_SPEC             # ← pre-spec stage; LOD400 needed before this gate
   lod_status: LOD300                       # milestone LOD300 is the best available spec
   assigned_builder: tiktrack_build
   assigned_validator: tiktrack_val
@@ -121,12 +121,12 @@ S[stage] - P[program] - WP[number]
   milestone_ref: "S003"
   spec_ref: "_aos/work_packages/S003/LOD300_milestone.md"  # → per-WP LOD400 when authored
   gate_history: []
-  notes: "Executing via cowork package. Canonical ID assigned 2026-04-11. LOD400 to be authored before L-GATE_S."
+  notes: "Executing via cowork package. Canonical ID assigned 2026-04-11. LOD400 to be authored before L-GATE_SPEC."
 ```
 
-> **Gate/LOD rule:** `lod_status: LOD300` means the WP has only a milestone-level scope. The next required gate is therefore `L-GATE_S` (spec gate). Setting `current_lean_gate: L-GATE_B` with `lod_status: LOD300` would be a contradiction — L-GATE_B requires LOD400 to already exist.
+> **Gate/LOD rule:** `lod_status: LOD300` means the WP has only a milestone-level scope. The next required gate is therefore `L-GATE_SPEC` (spec gate). Setting `current_lean_gate: L-GATE_BUILD` with `lod_status: LOD300` would be a contradiction — L-GATE_BUILD requires LOD400 to already exist.
 
-**At L-GATE_S, spec_ref MUST be updated to the per-WP LOD400:**
+**At L-GATE_SPEC, spec_ref MUST be updated to the per-WP LOD400:**
 ```yaml
   spec_ref: "_aos/work_packages/S003-P003-WP005/LOD400_spec.md"
 ```
@@ -143,8 +143,8 @@ _aos/work_packages/
     LOD300_milestone.md                     ← Milestone scope (planning doc, LOD300)
   S003-P003-WP001/                          ← WP directory (ID = directory name)
     LOD100_scope.md                         ← Scope statement
-    LOD400_spec.md                          ← Executable spec (required at L-GATE_S)
-    LOD500_asbuilt.md                       ← As-built record (required at L-GATE_B)
+    LOD400_spec.md                          ← Executable spec (required at L-GATE_SPEC)
+    LOD500_asbuilt.md                       ← As-built record (required at L-GATE_BUILD)
   S003-P003-WP002/
     LOD400_spec.md
   S003-P003-WP005/                          ← Currently IN_PROGRESS
@@ -162,13 +162,13 @@ _aos/work_packages/
 
 | LOD | Level | File | Gate | Notes |
 |-----|-------|------|------|-------|
-| LOD100 | WP | `WP-ID/LOD100_scope.md` | L-GATE_E | What + why, team assignment |
-| LOD200 | WP | `WP-ID/LOD200_concept.md` | L-GATE_C (Track B) | How (architecture) |
+| LOD100 | WP | `WP-ID/LOD100_scope.md` | L-GATE_ELIGIBILITY | What + why, team assignment |
+| LOD200 | WP | `WP-ID/LOD200_concept.md` | L-GATE_CONCEPT (Track B) | How (architecture) |
 | LOD300 | **Stage** | `S[N]/LOD300_milestone.md` | Pre-planning | Milestone scope covering all WPs |
-| LOD400 | WP | `WP-ID/LOD400_spec.md` | L-GATE_S | Acceptance criteria, interfaces |
-| LOD500 | WP | `WP-ID/LOD500_asbuilt.md` | L-GATE_B | What was actually delivered |
+| LOD400 | WP | `WP-ID/LOD400_spec.md` | L-GATE_SPEC | Acceptance criteria, interfaces |
+| LOD500 | WP | `WP-ID/LOD500_asbuilt.md` | L-GATE_BUILD | What was actually delivered |
 
-**Key rule:** LOD300_milestone.md is a STAGE-level planning artifact. It does NOT satisfy the LOD400 requirement at L-GATE_S. Per-WP LOD400 must be authored before L-GATE_S.
+**Key rule:** LOD300_milestone.md is a STAGE-level planning artifact. It does NOT satisfy the LOD400 requirement at L-GATE_SPEC. Per-WP LOD400 must be authored before L-GATE_SPEC.
 
 ---
 
@@ -176,24 +176,24 @@ _aos/work_packages/
 
 Before each gate:
 
-**Before L-GATE_E:**
+**Before L-GATE_ELIGIBILITY:**
 - [ ] WP has canonical ID in format `S[N]-P[M]-WP[K]`
 - [ ] WP registered in `_aos/roadmap.yaml` with at minimum: id, label, status, milestone_ref
 - [ ] `spec_ref` points to an existing file (LOD300_milestone.md is acceptable at this stage), OR is set to `TBD` if the spec artifact has not been authored yet
 
-> **`spec_ref: TBD` rule:** `validate_aos.sh` Check 4 skips file-resolution for `spec_ref: TBD`. Use this for WPs registered early (e.g., at roadmap planning, before LOD300 or LOD400 exists). `spec_ref` MUST be updated to a real file path no later than L-GATE_S.
+> **`spec_ref: TBD` rule:** `validate_aos.sh` Check 4 skips file-resolution for `spec_ref: TBD`. Use this for WPs registered early (e.g., at roadmap planning, before LOD300 or LOD400 exists). `spec_ref` MUST be updated to a real file path no later than L-GATE_SPEC.
 
-**Before L-GATE_S:**
+**Before L-GATE_SPEC:**
 - [ ] Per-WP directory `_aos/work_packages/[WP-ID]/` exists
 - [ ] `LOD400_spec.md` authored and in the WP directory
 - [ ] `spec_ref` in `roadmap.yaml` updated to point to per-WP LOD400
 - [ ] `lod_status` in `roadmap.yaml` updated to LOD400
 
-**Before L-GATE_B:**
+**Before L-GATE_BUILD:**
 - [ ] LOD500 being authored during build
-- [ ] roadmap.yaml `current_lean_gate` = L-GATE_B
+- [ ] roadmap.yaml `current_lean_gate` = L-GATE_BUILD
 
-**At L-GATE_B:**
+**At L-GATE_BUILD:**
 - [ ] `LOD500_asbuilt.md` written and in WP directory
 - [ ] `roadmap.yaml` status updated to COMPLETE (or gate_history updated)
 - [ ] `lod_status` = LOD500
@@ -206,11 +206,11 @@ Before each gate:
 |---|---|---|
 | Informal labels as IDs (WP-A1, WP-A2...) | Not searchable, not canonical, breaks roadmap.yaml | Assign `S[N]-P[M]-WP[K]` ID before execution |
 | Cowork/execution shorthand ≠ canonical ID | Creates ID drift between execution docs and governance | The cowork doc is internal; canonical ID goes in roadmap.yaml and spec_ref |
-| Milestone-level LOD300 as spec_ref at L-GATE_S | LOD300_milestone is planning; LOD400 is the spec | Create per-WP LOD400 before L-GATE_S |
+| Milestone-level LOD300 as spec_ref at L-GATE_SPEC | LOD300_milestone is planning; LOD400 is the spec | Create per-WP LOD400 before L-GATE_SPEC |
 | `spec_ref` pointing to a non-existent file (not TBD) | Check 4 FAIL; spec_ref must always resolve | Either create the file or set `spec_ref: TBD` (Check 4 skips TBD) |
 | `[PROJECT-PREFIX]-P001-WP001` format | Doesn't encode stage; breaks hierarchy legibility | Always use `S[N]-P[M]-WP[K]` |
 | Work_packages/ directory named by stage only (`S003/WP001/`) | Hides program level; breaks canonicality of ID | Use full ID as directory name: `S003-P003-WP001/` |
-| Starting WP execution without roadmap.yaml entry | Status untracked, WP invisible to governance | Register in roadmap.yaml no later than L-GATE_S (best practice: at identification or L-GATE_E) |
+| Starting WP execution without roadmap.yaml entry | Status untracked, WP invisible to governance | Register in roadmap.yaml no later than L-GATE_SPEC (best practice: at identification or L-GATE_ELIGIBILITY) |
 
 ---
 
@@ -251,4 +251,39 @@ When cowork packages use informal execution labels (e.g., WP-A1, WP-A2), reconci
 
 ---
 
-*AOS Lean Kit | Module 01 — Project Governance | WP ID Standard | 2026-04-11*
+## 10. CONTENT_SUBSTRATE — Nimrod Book WP ID profile (exception path)
+
+**Scope:** Project id `nimrod-book` (`lifecycle_archetype: CONTENT_SUBSTRATE`), milestone bands `NB-Vn`.
+
+**Pattern (reserved):** `NB-V{n}-WP-{token}` where `{n}` is a positive integer milestone band and `{token}` is an alphanumeric token (e.g. `A`, `B1`, `B2`, `G`).
+
+**Regex:** `^NB-V[0-9]+-WP-[A-Za-z0-9]+(-[0-9]+)?$`
+
+**Rules:**
+
+| Rule | Detail |
+|------|--------|
+| **Uniqueness** | WP ids are unique within the project roadmap and in DB when synced |
+| **API** | Hub `create_work_package` accepts NB IDs matching §10 regex (Team 00 Option B, 2026-04-17). L0 file-first + seed remain valid for spoke registration |
+| **Hierarchy** | Ordering uses `depends_on` and `milestone_ref`; optional `parent_work_package_id` in DB (migration 010+) when epic/sub-WP is modeled |
+| **vs default canon** | This profile is an **exception** to §1 for this project; **Team 00** may direct migration to `S[N]-P[M]-WP[K]` later |
+
+**Cross-ref:** `_COMMUNICATION/team_100/TEAM100_BRIEF_CANONICAL_WP_HIERARCHY_NIMROD_BOOK_v1.0.0.md`, `RECOMMENDATION_TEAM00_CONTENT_SUBSTRATE_WP_ID_NIMROD_BOOK_v1.0.0.md`.
+
+---
+
+## 11. Global uniqueness of `work_packages.id` (hub database)
+
+In the AOS v3 hub Postgres schema, `work_packages.id` is the **primary key for all projects**. It is **not** namespaced per `project_id` at the key level.
+
+**Implications:**
+
+- The default `SNNN-PNNN-WPNNN` pattern can still collide across unrelated spokes if two projects reuse the same triple (e.g. two L0 roadmaps both use `S001-P001-WP001`).
+- **Mitigation:** Use **project-prefixed** or otherwise unique IDs for L0 spokes when syncing to the shared hub DB (examples from practice: `SFA-…`, `HH-…`, or distinct `S/P` staging). See `_COMMUNICATION/team_100/RISK_SUMMARY_DUAL_SPOKE_WP_ID_COLLISIONS_v1.0.3.md`.
+- **CONTENT_SUBSTRATE** NB IDs (`NB-Vn-WP-*`) are reserved for project `nimrod-book` and are distinct from generic `S-P-WP` collisions by pattern.
+
+**Rule:** Before adding a new WP to the hub DB, confirm the id does not already exist for another project (query or seed ordering).
+
+---
+
+*AOS Lean Kit | Module 01 — Project Governance | WP ID Standard | 2026-04-17*

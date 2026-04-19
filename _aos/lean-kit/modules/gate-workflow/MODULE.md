@@ -12,7 +12,7 @@ depends_on: [project-governance]
 # Module 02 — Gate & Workflow
 
 ## Purpose
-L-GATE definitions (E/C/S/B/V), Track A (4-gate) and Track B (5-gate) sequences,
+L-GATE definitions (L-GATE_ELIGIBILITY / L-GATE_CONCEPT / L-GATE_SPEC / L-GATE_BUILD / L-GATE_VALIDATE), Track A (4-gate) and Track B (5-gate) sequences,
 handoff procedure, rollback policy. Optional for simple projects.
 
 ## Contents

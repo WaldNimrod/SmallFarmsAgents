@@ -1,9 +1,58 @@
 # AOS Profile Selection Guide
-# Version: 1.0.0 | Updated: 2026-04-11
+# Version: 1.1.1 | Updated: 2026-04-15
 
 ---
 
-## Which profile should this WP use?
+## Optional: domain SSOT templates (Module 11.3)
+
+When a spoke needs structured **domain** documentation (maturity KPIs, AC↔standard mapping, convention exception maps) without duplicating hub gate artifacts, copy templates from `lean-kit/modules/standards-conventions/templates/`. These are **optional**, domain-scoped, and distinct from `validation-quality` MANDATE/VERDICT templates.
+
+---
+
+## Two decisions, not one
+
+Starting a new project or WP requires two independent governance decisions:
+
+1. **What lifecycle archetype applies?** — What *kind* of work is this?
+2. **Which profile level?** — How much *enforcement infrastructure* does this need?
+
+These are orthogonal. A 3D modeling project at L0 and a 3D modeling project at L2 use the same archetype (`3D_CREATIVE`) with different enforcement profiles. The gate spine (`L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE`) is the same in both cases — only the automation level differs.
+
+---
+
+## Step 1 — Select lifecycle archetype
+
+**Reference:** `methodology/lifecycle-archetypes/README.md` and individual PLA files.
+
+```
+Is the primary deliverable running software (web app, API, automation, agent infrastructure)?
+  → SOFTWARE (default — no field needed)
+
+Is the primary deliverable a knowledge corpus, document bundle, or context substrate?
+  → CONTENT_SUBSTRATE
+  Examples: nimrod-book, prompt libraries, knowledge bases
+
+Is the primary deliverable a 3D model, visual asset, or spatial system?
+  → 3D_CREATIVE
+  Examples: Israel Microgreens (BlenderV2), CAD/Rhino/SketchUp projects
+
+Is the primary deliverable an AI agent designed for a specific real-world domain?
+  → DOMAIN_AGENT
+  Examples: SmallFarmsAgents / OrganicMarketAgent
+```
+
+**Declare in projects.yaml and roadmap.yaml project block:**
+```yaml
+lifecycle_archetype: CONTENT_SUBSTRATE   # or SOFTWARE | 3D_CREATIVE | DOMAIN_AGENT
+```
+
+**Absent field = defaults to SOFTWARE.** Existing projects need no change.
+
+Each archetype defines: stage sequence, gate mapping, deliverable types, team roles, validation criteria, and canonical `stage_mapping` values for WP entries. See the corresponding PLA file for details.
+
+---
+
+## Step 2 — Select profile level
 
 **Profile is declared in LOD100 by Team 00 at WP creation. It is immutable once set.**
 
@@ -37,7 +86,7 @@ Does this WP have any of these?
 | **Human gates** | 0 (automated) | 0 (automated) | 2 mandatory (Team 00 only, non-delegatable) |
 | **Cross-engine validation** | Optional | Optional | Mandatory at every LOD step |
 | **Engine required?** | No | Yes | Yes (extends L2) |
-| **Gate sequence** | L-GATE_E/S/B/V | L-GATE_E/S/B/V | L25-PH1 through L25-PH6 (11 sub-phases) |
+| **Gate sequence** | L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE | L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE | L25-PH1 through L25-PH6 (11 sub-phases) |
 | **Mockup** | Optional | Optional | Mandatory (produced in PH2B) |
 | **FCP protocol** | Not defined | Not defined | FCP-1/2/3/4 + circuit breaker |
 | **Canonicalized** | v3.1.1 | v3.1.1 | v3.1.3 (2026-04-11) |
@@ -78,7 +127,7 @@ Does this WP have any of these?
 1. Copy lean-kit snapshot
 2. Deploy `core/` engine (FastAPI + DB)
 3. Seed via `core/seed.py`
-4. WPs flow through L-GATE_E → L-GATE_S → L-GATE_B → L-GATE_V
+4. WPs flow through L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE
 5. Agents activated manually per gate
 
 **Profile file:** `lean-kit/profiles/L2.yaml`
@@ -154,6 +203,11 @@ Profile is **immutable** once set. If complexity changes mid-WP, create a new LO
 
 | What | Where |
 |------|-------|
+| **Lifecycle archetypes** | `methodology/lifecycle-archetypes/README.md` |
+| SOFTWARE archetype | `methodology/lifecycle-archetypes/PLA_SOFTWARE.md` |
+| CONTENT_SUBSTRATE archetype | `methodology/lifecycle-archetypes/PLA_CONTENT_SUBSTRATE.md` |
+| 3D_CREATIVE archetype | `methodology/lifecycle-archetypes/PLA_3D_CREATIVE.md` |
+| DOMAIN_AGENT archetype | `methodology/lifecycle-archetypes/PLA_DOMAIN_AGENT.md` |
 | L0 profile | `lean-kit/profiles/L0.yaml` |
 | L2 profile | `lean-kit/profiles/L2.yaml` |
 | L2.5 profile | `lean-kit/profiles/L2.5.yaml` |

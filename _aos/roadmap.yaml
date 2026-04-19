@@ -15,37 +15,44 @@ project:
   notes: >
     Community AI agent platform for Israel's organic farming market.
     OrganicMarketAgent: community price index for organic vegetables.
-    Pre-AOS milestones M1-M9 complete. M10 (UX + publish) and M11 (community features) are backlog.
+    Pre-AOS milestones M1-M9 complete. M10 (UX + publish) and M11 (community features)
+    are backlog.
     S001 AOS canonization COMPLETE — 2026-04-12. L-GATE_V PASS (Team 90).
 
 work_packages:
-  - id: S001-P001-WP001
-    label: "_aos/ Foundation — governance structure + lean-kit snapshot"
-    status: COMPLETE
-    track: A
-    current_lean_gate: L-GATE_V
-    lod_status: LOD500
-    assigned_builder: sfa_arch
-    assigned_validator: sfa_val
-    created_at: "2026-04-12"
-    milestone_ref: "S001"
-    spec_ref: "_aos/work_packages/S001/S001-P001-WP001/LOD400_spec.md"
-    gate_history:
-      - gate: L-GATE_E
-        result: PASS
-        date: "2026-04-12"
-        notes: "Eligibility confirmed. AOS migration approved by Team 00."
-      - gate: L-GATE_S
-        result: PASS
-        date: "2026-04-12"
-        notes: "LOD400 spec authored. Migration scope approved."
-      - gate: L-GATE_B
-        result: PASS
-        date: "2026-04-12"
-        notes: "validate_aos.sh 12/12 PASS. All 15 _aos/ files created. lean-kit v3.1.3 deployed."
-      - gate: L-GATE_V
-        result: PASS
-        date: "2026-04-12"
-        validator: team_90
-        notes: "Team 90 (cursor-composer) constitutional validation PASS. AC-01–AC-09 all verified. Cross-engine confirmed."
-    notes: "COMPLETE 2026-04-12. AOS canonization. S001 milestone closed. validate_aos.sh 12/12 PASS."
+  # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
+  # registered S001-P001-WP001 — SFA canonical row uses a namespaced id (same on-disk paths).
+- id: SFA-S001-P001-WP001
+  label: "_aos/ Foundation — governance structure + lean-kit snapshot"
+  status: COMPLETE
+  track: A
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500
+  assigned_builder: sfa_arch
+  assigned_validator: sfa_val
+  created_at: "2026-04-12"
+  milestone_ref: "S001"
+  spec_ref: "_aos/work_packages/S001/S001-P001-WP001/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-04-12"
+    notes: "Eligibility confirmed. AOS migration approved by Team 00."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-04-12"
+    notes: "LOD400 spec authored. Migration scope approved."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-04-12"
+    notes: "validate_aos.sh 12/12 PASS. All 15 _aos/ files created. lean-kit v3.1.3
+      deployed."
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-04-12"
+    validator: team_90
+    notes: "Team 90 (cursor-composer) constitutional validation PASS. AC-01–AC-09
+      all verified. Cross-engine confirmed."
+  notes: "COMPLETE 2026-04-12. AOS canonization. S001 milestone closed. validate_aos.sh
+    12/12 PASS."
+  profile: L0

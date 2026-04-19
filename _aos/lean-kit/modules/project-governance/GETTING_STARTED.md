@@ -13,7 +13,7 @@ Every AOS-managed project has an `_aos/` directory at its root. This is the gove
 ```
 my-project/
   _aos/
-    roadmap.yaml              # WP registry + gate_history; AOS file-first L0 unless AOS v3 DB connected — then DB/API + deploy (hub `governance/directives/ADR034_DATA_AUTHORITY_DB_SSOT_ALL_PROFILES.md`)
+    roadmap.yaml              # WP registry + gate_history; when engine DB is online, canonical structured fields are DB/API + deploy (see hub `governance/directives/ADR034_DATA_AUTHORITY_DB_SSOT_ALL_PROFILES.md`)
     ideas.json                # Idea pipeline (pre-GATE_0 incubator)
     team_assignments.yaml     # Team-to-role mapping
     metadata.yaml             # Lean-kit version + active modules
@@ -69,7 +69,7 @@ L0/L2 projects use `_aos/` for governance. L2 adds the `core/` engine. L2.5 exte
 
 ## 3. New Project Setup — 17-Item Checklist
 
-Complete all 17 items. Run `validate_aos.sh .` at the end — must reach **PASS / 0 FAIL** on the checks your profile runs (this L0 spoke: typically **17 PASS / 2 SKIP**; hub **19** — Module 08).
+Complete all 17 items. Run `validate_aos.sh .` at the end — must reach **PASS / 0 FAIL** on the checks your profile runs (minimal L0 spoke bootstrap often **12** checks; **agents-os hub** with full modules: **19** checks as of Lean Kit 3.1.7 — see Module 08).
 
 ### Phase A — Directory Structure
 
@@ -172,6 +172,18 @@ Fill in: `project_id`, `display_name`, `domain`, `profile`, `is_hub: false`, `al
 
 ### Phase C — Governance
 
+**□ 9b. Create `_aos/definition.yaml`**  ⚠️ Required for validate_aos.sh Check 13
+
+Source: `lean-kit/modules/project-governance/config_templates/definition.yaml.template`
+
+Fill in: `{{PROJECT_ID}}`, `{{DATE}}`, `{{AUTHOR}}`, `{{PROFILE}}`.
+
+**Rule:** include ONLY teams that appear in `team_assignments.yaml`. The template pre-fills the 3 always-required teams (team_00, team_100, team_190) and team_110 (domain builder). Remove any other team entry that is not assigned.
+
+**Iron Rule:** every `team_XX` key in this file must have a corresponding `_aos/governance/team_XX.md` — Check 13 enforces this. Ghost teams (defined here but not governed) will fail validation.
+
+---
+
 **□ 10. Run governance propagation (creates `_aos/governance/`)**
 
 New projects are not yet in the `--all` registry. Use legacy (single-target) mode from hub:
@@ -221,14 +233,23 @@ Source: `lean-kit/modules/project-governance/config_templates/__ONBOARDING_TEAM.
 
 One file per team directory in `_COMMUNICATION/`. File stays at root of the team directory (not in a WP subfolder).
 
+**QA requests (when Team 50 is active):** Any team may request functional acceptance testing by submitting a QA request artifact to `_COMMUNICATION/team_50/[WP-ID]/`. Use the template:
+
+Source: `lean-kit/modules/project-governance/config_templates/QA_REQUEST.md.template`
+
+See `_aos/governance/team_50.md` §QA Request Intake for the intake validation rules Team 50 applies before starting any test run.
+
 ---
 
 ### Phase F — IDE / Claude Settings
 
 **□ 16. Create `CLAUDE.md` (project root)**
 
-Write project-specific instructions. See hub `CLAUDE.md` as reference.
-Must include: Identity, §BOUNDARY, Mandatory startup, Writing authority, Key paths, Team model, Iron Rules.
+Instantiate from: `lean-kit/modules/project-governance/config_templates/CLAUDE.md.template` (replace all `{{PLACEHOLDER}}` values).
+
+Must include: Identity, §BOUNDARY, Mandatory startup, **Directory Authority** (align with `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` Part 5), Key paths, Team model, Iron Rules.
+
+Hub reference: `agents-os/CLAUDE.md`.
 
 **□ 17. Create `.cursorrules` (project root)**
 
@@ -252,7 +273,7 @@ Optionally create `.claude/settings.json` with `additionalDirectories` pointing 
 bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
 ```
 
-**Expected result:** Typically **`17 PASS / 2 SKIP / 0 FAIL`** on this spoke; hub **19 PASS** when all hub modules active.
+**Expected result:** New spoke bootstrap (minimal modules): **at least `12 PASS / 0 SKIP / 0 FAIL`** when only the lean subset is active. Full **agents-os** hub with all active modules: typically **`19 PASS / 0 SKIP / 0 FAIL`** (includes Checks 16–19: slash commands, `PROJECT_CONTEXT` headings, `_aos/` write authority, API-only clause in team contracts).
 
 If any check fails, the output will state exactly what is missing. Fix and re-run.
 
@@ -263,18 +284,18 @@ If any check fails, the output will state exactly what is missing. Fix and re-ru
 Each work package progresses through gates:
 
 ```
-L-GATE_E  →  L-GATE_S  →  L-GATE_B  →  L-GATE_V
+L-GATE_ELIGIBILITY  →  L-GATE_SPEC  →  L-GATE_BUILD  →  L-GATE_VALIDATE
  (Entry)      (Spec)       (Build)      (Validate)
 ```
 
 | Gate | Who | What |
 |------|-----|------|
-| L-GATE_E | Architect | Scope defined, team assigned |
-| L-GATE_S | Architect | LOD400 spec approved |
-| L-GATE_B | Builder | Implementation complete, self-QA passed |
-| L-GATE_V | Validator (Team 190) | Independent cross-engine validation |
+| L-GATE_ELIGIBILITY | Architect | Scope defined, team assigned |
+| L-GATE_SPEC | Architect | LOD400 spec approved |
+| L-GATE_BUILD | Builder | Implementation complete, self-QA passed |
+| L-GATE_VALIDATE | Validator (Team 190) | Independent cross-engine validation |
 
-Track B adds L-GATE_C (Concept) between E and S for complex WPs.
+Track B adds L-GATE_CONCEPT (Concept) between E and S for complex WPs.
 
 ---
 
@@ -282,10 +303,10 @@ Track B adds L-GATE_C (Concept) between E and S for complex WPs.
 
 | Level | Name | Purpose | Gate |
 |-------|------|---------|------|
-| LOD100 | Scope | What and why | L-GATE_E |
-| LOD200 | Concept | How (architecture level) | L-GATE_C (Track B) |
-| LOD400 | Spec | Acceptance criteria, interfaces, file paths | L-GATE_S |
-| LOD500 | As-Built | What was actually delivered, fidelity record | L-GATE_B |
+| LOD100 | Scope | What and why | L-GATE_ELIGIBILITY |
+| LOD200 | Concept | How (architecture level) | L-GATE_CONCEPT (Track B) |
+| LOD400 | Spec | Acceptance criteria, interfaces, file paths | L-GATE_SPEC |
+| LOD500 | As-Built | What was actually delivered, fidelity record | L-GATE_BUILD |
 
 ---
 
@@ -305,18 +326,18 @@ _aos/work_packages/
   S003/                          ← Stage directory
     LOD300_milestone.md          ← Milestone scope (covers ALL WPs in stage, optional)
   S003-P003-WP001/               ← WP directory (full ID = directory name)
-    LOD400_spec.md               ← Required at L-GATE_S
-    LOD500_asbuilt.md            ← Required at L-GATE_B
+    LOD400_spec.md               ← Required at L-GATE_SPEC
+    LOD500_asbuilt.md            ← Required at L-GATE_BUILD
 ```
 
-**Registration rule:** Every WP MUST be in `roadmap.yaml` no later than L-GATE_S.
+**Registration rule:** Every WP MUST be in `roadmap.yaml` no later than L-GATE_SPEC.
 - Before LOD400 exists: `spec_ref` may point to `S[N]/LOD300_milestone.md`
-- At L-GATE_S: `spec_ref` MUST be updated to `S[N]-P[M]-WP[K]/LOD400_spec.md`
+- At L-GATE_SPEC: `spec_ref` MUST be updated to `S[N]-P[M]-WP[K]/LOD400_spec.md`
 
 **Anti-patterns (forbidden):**
 - `WP-A1`, `WP-1`, `GATE-A-WP1` — execution shorthand only, never canonical IDs
-- Milestone-level LOD300 as the spec_ref at L-GATE_S
-- Starting L-GATE_B without a roadmap.yaml entry
+- Milestone-level LOD300 as the spec_ref at L-GATE_SPEC
+- Starting L-GATE_BUILD without a roadmap.yaml entry
 
 → Full standard: `lean-kit/modules/project-governance/WP_ID_STANDARD.md`
 
@@ -328,15 +349,39 @@ _aos/work_packages/
 2. **Physical lean-kit:** `_aos/lean-kit/` is always a physical copy, never symlink
 3. **Repo-internal refs:** `spec_ref` paths never point outside the repo
 4. **Single-writer roadmap:** One agent writes `roadmap.yaml` at a time
-5. **L-GATE_V independence:** Always Team 190, constitutional, cross-engine, immutable
+5. **L-GATE_VALIDATE independence:** Always Team 190, constitutional, cross-engine, immutable
 6. **Inter-team = artifact:** Communication via file in `_COMMUNICATION/`, not chat
 7. **WP subfolder rule:** WP-scoped files go in `_COMMUNICATION/team_[ID]/[WP-ID]/[filename].md`
 8. **project_identity.yaml required:** Every spoke project must have this file (Check 12)
-9. **WP canonical ID required:** Every WP uses `S[N]-P[M]-WP[K]` format, registered in roadmap.yaml before L-GATE_S
+9. **WP canonical ID required:** Every WP uses `S[N]-P[M]-WP[K]` format, registered in roadmap.yaml before L-GATE_SPEC
 
 ---
 
-## 8. Reference Projects
+## 8. Directory Authority — who may write where
+
+`_aos/` is the **governance layer**. It is NOT a working directory for feature teams.
+
+See canonical table: `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` Part 5.
+
+Quick reference: only Team 00/100/110/191 may write to `_aos/` (per paths in that table).
+All other teams: `_COMMUNICATION/team_[ID]/` and application source only.
+
+| Team | `_aos/roadmap.yaml` | `_aos/work_packages/` | `_aos/lean-kit/` | `_aos/governance/` | `_COMMUNICATION/` |
+|------|:-------------------:|:---------------------:|:----------------:|:------------------:|:-----------------:|
+| team_00 | ✓ | ✓ | read only | ✓ (via hub) | ✓ |
+| team_100 | ✓ | ✓ | read only | ✗ (via hub) | ✓ team_100/ |
+| team_110 | ✗ | ✓ (mandated) | read only | ✗ | ✓ team_110/ |
+| team_191 | mandate only | mandate only | read only | propagation only | ✓ team_191/ |
+| team_10/20/30/40/50/60/70/80/90/99/170/190 | ✗ | ✗ | read only | ✗ | ✓ own team/ only |
+
+**Rule:** If you are not Team 00/100/110/191, produce your output in `_COMMUNICATION/team_[ID]/`
+and let Team 100 make any required `_aos/` updates.
+Non-governance teams must never create or edit files under `_aos/` — even when `_aos/` is present
+as a snapshot in their project folder.
+
+---
+
+## 9. Reference Projects
 
 | Project | Profile | What it demonstrates |
 |---------|---------|---------------------|
@@ -349,4 +394,4 @@ Clone a sandbox to see a complete working example.
 
 ---
 
-*AOS Lean Kit | Module 01 — Project Governance | v3.1.3*
+*AOS Lean Kit | Module 01 — Project Governance | v3.1.5*

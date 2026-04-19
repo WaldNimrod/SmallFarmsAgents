@@ -1,15 +1,18 @@
 ---
 id: AOS_GATE_MANDATE_CANON
-version: v1.1.0
+version: v1.4.0
 status: LOCKED
 date: '2026-04-17'
-amended: '2026-04-18'
+amended: '2026-04-19'
 amendment_note: >-
   v1.0.1 — Mandatory numbered WP options; default WP row first in Table A;
   explicit default-gate line before Table B.
   v1.0.2 — Phase 3.5: verify remediation before resubmission mandate / re-validation request.
   v1.0.3 — Phase -1: Session Context Check added before Phase 0. Phase 0.5/Phase 1 gated behind explicit user WP confirmation.
   v1.1.0 — Phase -1 expanded to three-signal model (Signal A: within-WP next gate; Signal B: WP-complete next WP; Signal C: resubmit to same validator). Phase 0 DB-first data access. Manual override branch made explicit.
+  v1.2.0 — Phase -1: Signal D added (spec-authored trigger). DEFAULT_WP computation: extended active-status set (IN_PROGRESS|IN_VALIDATION|READY_FOR_SPEC_REVIEW|READY_FOR_BUILD). Phase 1: enhancement WP L-GATE_ELIGIBILITY auto-waiver. Phase 4: context level default applied from hint (no mandatory stop). Phase 0.5: dependency activation-condition cross-check warning.
+  v1.3.0 — Signal B split into B.0 (Team 191 archive mandate — mandatory before next WP) + B-next (next WP routing). "WP closure" definition added. LOD500_LOCKED defined as requiring Team 191 archive completion, not just Team 190 verdict.
+  v1.4.0 — Phase 5: mandatory §8 Post-Mandate Routing block added to every mandate (PASS/FAIL/BLOCK deterministic next-step table with exact /AOS_gate-mandate invocation). Gate alias terminology locked: full canonical gate names only in all human-facing text; single-letter alias forms (defined in pre_gate_ordering.yaml) are machine-script-only and must not appear in documentation.
 authority: Team 00 (principal) + Team 100 (chief architect)
 scope: >-
   Binding for all AOS methodology deployments: agents-os hub, spoke projects (all domains),
@@ -59,7 +62,7 @@ claude_command_stub: .claude/commands/AOS_gate-mandate.md
 
 1. Read `_aos/roadmap.yaml` (including top-level `project:`).
 2. Let `M = project.active_milestone` when present (e.g. `V320`).
-3. Collect all `work_packages[]` entries with `status: IN_PROGRESS`.
+3. Collect all `work_packages[]` entries with `status` in: `IN_PROGRESS | IN_VALIDATION | READY_FOR_SPEC_REVIEW | READY_FOR_BUILD`.
 4. If `M` is set, let `C` = those entries with `milestone_ref == M`. If `C` is non-empty, use `C`; otherwise use the full `IN_PROGRESS` set from step 3.
 5. Sort candidates by `updated_at` descending (ISO-8601 string). If `updated_at` is missing, use `created_at` or empty string.
 6. **Tie-break:** equal `updated_at` → choose the entry that appears **later** in the `work_packages` list (document order = most recently listed active WP wins).
@@ -118,6 +121,7 @@ Scan session context for the most recent gate event. Classify as one of three si
 | **A — Within-WP gate advance** | Gate G = PASS / PASS_WITH_FINDINGS for WP-X, and G is NOT the final gate in WP-X's track | Mandate for next gate (G+1) of same WP-X |
 | **B — WP-complete advance** | FINAL gate PASS for WP-X (all gates in track complete per GATE_REGISTRY) | Mandate for first gate of next WP in roadmap, OR handoff |
 | **C — Resubmit after rejection** | Gate G = FAIL / BLOCK for WP-X in session, OR session contains fix actions following a prior FAIL verdict | Resubmission mandate for same gate G of WP-X to same validator |
+| **D — Spec Authored** | Session wrote LOD300 or LOD400 artifact AND advanced `roadmap.yaml` `current_lean_gate` to `L-GATE_SPEC` (or updated `lod_status` to LOD400) for WP-X in this session | Mandate for L-GATE_SPEC of WP-X |
 | *(none)* | No gate event found in session | Fall through to Manual Override (Phase 0 with DB-first) |
 
 ---
@@ -148,13 +152,51 @@ Generate mandate for {NEXT_GATE}?
 
 ### Signal B — WP-Complete Advance
 
-**Extract:** `SESSION_WP` (WP with final gate PASS).  
+**Extract:** `SESSION_WP` (WP with final gate PASS).
+
+---
+
+#### Signal B.0 — Archive Mandate (mandatory pre-step)
+
+**WP closure definition:** A WP is only fully closed when BOTH conditions are met:
+1. Team 190 issued L-GATE_VALIDATE PASS → status=COMPLETE in DB + roadmap
+2. Team 191 completed archival → `lod_status=LOD500_LOCKED` in roadmap + ARCHIVE_MANIFEST.md written
+
+Signal B.0 must run before Signal B-next. Skipping it is non-canonical and must be explicitly recorded.
+
+**Confirmation prompt:**
+```
+────────────────────────────────────────────────────────────────
+{SESSION_WP} — L-GATE_VALIDATE PASS. Gates complete.
+
+⚠️  WP CLOSURE REQUIRES ARCHIVE MANDATE (per L-GATE_VALIDATE.md §Post-Gate)
+    Team 191 — Git, Archive & File Governance
+    Scope: artifact archival to _archive/{WP_ID}/, ARCHIVE_MANIFEST.md,
+           roadmap lod_status → LOD500_LOCKED, validate_aos Check 15
+
+[Y] Generate Team 191 archive mandate (canonical — recommended)
+[S] Skip — advance to next WP now (non-canonical; recorded in frontmatter)
+[N] Choose different WP
+────────────────────────────────────────────────────────────────
+```
+
+→ **[Y]:** Generate MANDATE to Team 191 using file:
+  `_COMMUNICATION/team_191/MANDATE_{WP_ID}_ARCHIVE_CLOSURE_v1.0.0.md`
+  Content per `lean-kit/modules/gate-workflow/POST_GATE_ARCHIVE_PROCEDURE.md`.
+  After mandate is written, proceed to Signal B-next.
+→ **[S]:** Record `archive_skip: true` in routing frontmatter. Proceed to Signal B-next.
+→ **[N]:** Fall to Manual Override.
+
+---
+
+#### Signal B-next — Next WP Routing
+
 **Compute:** `NEXT_WP` = next WP in roadmap with same `milestone_ref`, `status: BACKLOG|PLANNED`, ordered by phase sequence. `FIRST_GATE` = first gate in NEXT_WP's track per GATE_REGISTRY. `FIRST_TEAM` = gate_authority for FIRST_GATE from SSoT.
 
 **Confirmation prompt:**
 ```
 ────────────────────────────────────────────────────────────────
-{SESSION_WP} — ALL GATES COMPLETE.
+{SESSION_WP} — archive mandate issued (or skipped).
 
 Next WP in pipeline:
 → {NEXT_WP_ID} — {NEXT_WP_LABEL}
@@ -191,10 +233,39 @@ Fixes applied in this session? Generate re-check mandate?
 
 ---
 
+### Signal D — Spec Authored
+
+**Extract:** `SESSION_WP` (WP whose `roadmap.yaml` entry was advanced to L-GATE_SPEC / LOD400 in this session).  
+**Compute:** `SELECTED_GATE = L-GATE_SPEC`. `NEXT_TEAM` = gate authority for L-GATE_SPEC from SSoT.
+
+**Detection rule (apply in order):**
+1. Was a LOD300 or LOD400 file written in this session for a specific WP-X?
+2. Was `roadmap.yaml` updated for the same WP-X — either `current_lean_gate` set to `L-GATE_SPEC` or `lod_status` updated to `LOD400`?
+3. If both: Signal D fires for WP-X. If ambiguous (multiple WPs touched): use the last WP updated in roadmap.yaml.
+
+**Confirmation prompt:**
+```
+────────────────────────────────────────────────────────────────
+Spec authored: {SESSION_WP} — {WP_LABEL}
+LOD: {LOD_STATUS} | Gate advanced to: L-GATE_SPEC
+
+Next gate:
+→ L-GATE_SPEC — validator: {NEXT_TEAM}
+
+Generate mandate for L-GATE_SPEC?
+[Y] Generate mandate   [N] Choose different WP/gate
+────────────────────────────────────────────────────────────────
+```
+
+→ **[Y]:** Set `SELECTED_WP = SESSION_WP`, `SELECTED_GATE = L-GATE_SPEC`. Proceed to Phase 0. Skip Table A/B — already confirmed.  
+→ **[N]:** Fall to Manual Override.
+
+---
+
 ### Manual Override (no signal OR user declined)
 
 1. **DB-first WP list:** Read `_aos/db_connectivity_status.json` → field `status`.
-   - `status == "online"` → `GET /api/work-packages?project_id={id}&status=IN_PROGRESS` — use API result as WP list. On HTTP error, fall back to roadmap.yaml.
+   - `status == "online"` → `GET /api/work-packages?project_id={id}&status=IN_PROGRESS,IN_VALIDATION,READY_FOR_SPEC_REVIEW,READY_FOR_BUILD` — use API result as WP list. On HTTP error, fall back to roadmap.yaml.
    - `status != "online"` → read `_aos/roadmap.yaml`, compute DEFAULT_WP per §Computed defaults.
 2. Present Table A (IN_PROGRESS WPs), Table B (valid gates), numbered options per §Defaults & option menus.
 3. **Interactive pause (mandatory):** STOP — wait for user to confirm WP/gate selection before Phase 0.5 or Phase 1.
@@ -242,6 +313,7 @@ Before generating anything, run automatic checks and fix trivial issues that wou
 - `spec_ref` file does not exist at the declared path → WARN: "spec_ref not found — mandate will reference a missing file"
 - LOD artifacts exist but are marked `draft` in their frontmatter → WARN: "draft LOD — may not satisfy LOD gate requirement"
 - Gate prereqs: preceding gate has no `result: PASS` in gate_history → WARN (handled fully in Phase 1)
+- **Dependency activation-condition cross-check (v1.2.0):** If the WP entry has `depends_on:` referencing another WP, or a prior routing artifact for this WP contains an `activation_condition:` that names another WP's gate (e.g. `"D38 L-GATE_VALIDATE PASS confirmed"`): locate the latest `VERDICT_*{dep_wp}*.md` in `_COMMUNICATION/team_{validator}/`. If that verdict carries `result: FAIL` or `result: BLOCK` → WARN: "Dependency {dep_wp} has FAIL/BLOCK verdict on file — verify activation condition before routing." Non-blocking; proceed with mandate generation.
 
 **Report pre-flight result:**
 ```
@@ -265,6 +337,18 @@ Check that **`SELECTED_GATE`** is valid for this WP's track:
 | L0 Track B | L-GATE_ELIGIBILITY → L-GATE_CONCEPT → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE |
 | L2 | GATE_0 → GATE_1 → GATE_2 → GATE_3 → GATE_4 → GATE_5 |
 | L2.5 | EXT-CP1 → PH1..PH6 (with EXT-CP2 between PH4A and PH4B) |
+
+**Enhancement WP L-GATE_ELIGIBILITY auto-waiver (check before prerequisite enforcement):**
+
+If `SELECTED_GATE == L-GATE_SPEC` and the following conditions are ALL met, auto-waive the L-GATE_ELIGIBILITY prerequisite:
+1. WP entry in roadmap.yaml has a `parent_wp:` field, AND
+2. Parent WP's `gate_history` includes `L-GATE_ELIGIBILITY: PASS` OR parent WP `status` is `COMPLETE`, AND
+3. WP entry has `type: ENHANCEMENT` or `ENHANCEMENT` appears in the WP label or id
+
+On auto-waiver:
+- Add to mandate frontmatter: `eligibility_waived: true` + `eligibility_waiver_reason: "Enhancement to COMPLETE parent WP — auto-waived per CANON v1.2.0 §Phase 1"`
+- Emit pre-flight note: `WAIVER: L-GATE_ELIGIBILITY prerequisite waived for enhancement WP {WP_ID} (parent: {PARENT_WP_ID})`
+- No user interaction required — proceed with prerequisites check for remaining gates
 
 **Prerequisite checks:**
 1. The preceding gate must have `result: PASS` (or `PASS_WITH_FINDINGS` or `CLEAR`)
@@ -405,7 +489,9 @@ Wait for user input. If `[Y]` or Enter → proceed with detected values.
 
 ## Phase 4 — Context Level Selection
 
-Display selection screen — user always chooses, no auto-apply:
+**Default application rule (v1.2.0):** Apply the hint as the automatic default. No interactive stop required. Display the selection screen as informational (shows which level was chosen and why). Proceed with the computed default unless the user has already specified a level in the current turn via `--context N` argument or an inline instruction such as "use level 1".
+
+Display selection screen (informational — default applied, override still available):
 
 ```
 === ROUTING CONTEXT LEVEL ====================================
@@ -428,14 +514,12 @@ Round:      #{N}
        Includes: all identity layers, mandatory reads, first action
        Lines: ~50
 
-Hint (based on round only): Round #1 → [3], Round #2 → [2], Round #3+ → [1]
-You know the session state — override freely.
-
-→ Enter 1, 2, or 3:
+Default applied: Round #1 → [3], Round #2 → [2], Round #3+ → [1]  ← APPLIED AUTOMATICALLY
+Override: re-invoke with --context 1/2/3, or reply with your level choice before the mandate is generated.
 =============================================================
 ```
 
-Wait for user input. No default is applied — user must select explicitly.
+Proceed immediately with the computed default level. No wait for user input unless the user has already provided an override in this turn.
 
 ---
 
@@ -467,7 +551,7 @@ supersedes: {prior mandate id}  # only for resubmissions
 ---
 ```
 
-### Body Structure (7 sections — all required):
+### Body Structure (8 sections — all required):
 
 1. **Header** — gate type, WP label, track/profile/risk
 2. **Prior Gate History** — table with Gate/Result/Date/Validator/Notes columns
@@ -476,6 +560,41 @@ supersedes: {prior mandate id}  # only for resubmissions
 5. **Files to Review** — spec documents, implementation files, prior artifacts
 6. **Resolved Findings** (resubmission only) — findings from prior BLOCK with fix applied + verification path
 7. **Output** — verdict path using unified naming (`VERDICT_{WP_ID}_{GATE}_v{VERSION}.md`), constraints (cross-engine, independence, evidence, enforcement mode)
+8. **Post-Mandate Routing** ← **mandatory, always last** — deterministic next-step table (see below)
+
+### §8 Post-Mandate Routing (mandatory in every mandate)
+
+This section removes all ambiguity about what to do after the mandate is executed.
+The executing team reads this section **after writing the verdict** to know exactly what to invoke next.
+
+**Template (insert at end of every generated mandate):**
+
+```markdown
+## Post-Mandate Routing
+
+When verdict is written to `{VERDICT_PATH}`, invoke the following based on outcome:
+
+| Outcome | Next Invocation | Signal |
+|---------|----------------|--------|
+| **PASS** | `/AOS_gate-mandate {WP_ID} {NEXT_GATE}` | A — within-WP gate advance to {NEXT_GATE} / {NEXT_TEAM} |
+| **PASS** (final gate only) | `/AOS_gate-mandate {WP_ID}` | B.0 — WP complete → Team 191 archive mandate first |
+| **PASS_WITH_FINDINGS** | Same as PASS above — surface notes to Team 00 first | |
+| **FAIL** | Return verdict to Team 00. Builder applies fixes. Then: `/AOS_gate-mandate {WP_ID} {THIS_GATE}` | C — resubmission to same validator |
+| **BLOCK** | Return verdict to `{ASSIGNED_BUILDER_TEAM}` (architect responsible for this WP). Builder resolves blockers. Escalate to Team 00 only if blockers require a principal decision. | — |
+
+**This gate:** `{THIS_GATE}` | **This WP:** `{WP_ID}`
+**Next gate (if PASS):** `{NEXT_GATE}` → validator: `{NEXT_TEAM}` (engine: `{NEXT_ENGINE}`)
+**Final gate in track?** {YES → Signal B.0 applies | NO → Signal A applies}
+```
+
+**Populate at generation time:**
+- `{THIS_GATE}` = SELECTED_GATE
+- `{WP_ID}` = SELECTED_WP
+- `{NEXT_GATE}` = next gate in GATE_REGISTRY track chain after SELECTED_GATE
+- `{NEXT_TEAM}` = gate_authority for NEXT_GATE from SSoT
+- `{NEXT_ENGINE}` = engine for NEXT_TEAM from SSoT
+- **Final gate check:** Is SELECTED_GATE the last gate in the track? → YES = Signal B.0 row applies; NO = Signal A row applies
+- If SELECTED_GATE is the final gate: replace Signal A row with Signal B.0 row; omit Signal A row entirely to avoid confusion
 
 ---
 
