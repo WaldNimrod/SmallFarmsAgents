@@ -29,6 +29,10 @@ Run this after **material** changes: new or changed `product_aliases`, parser / 
 - [ ] Verify public access: `curl -s -o /dev/null -w "%{http_code}" https://nimrod.bio/wp-content/uploads/market/public_report.json` → 200
 - [ ] Verify WordPress page: `curl -s -o /dev/null -w "%{http_code}" https://nimrod.bio/SmallFarmsAgent` → 200
 - [ ] If automated: confirm `upload_enabled=true` in `scheduler_config` (admin UI → Scheduler page).
+- [ ] **Production pipeline host (waldhomeserver):** The machine that runs the daily cron must keep **`upload_enabled=true`** so a successful publish triggers FTPS to `wp-content/uploads/market/` without a manual `run_upload`. Confirm `UPRESS_SFTP_*` in `/data/projects/smallfarmsagents/.env`.
+- [ ] **FTPS path parity (critical):** `UPRESS_UPLOAD_PATH` must be **`wp-content/uploads/market`** (same tree the WordPress shortcode reads — see [`scripts/wp_shortcode_install.py`](../../scripts/wp_shortcode_install.py)). **`UPRESS_PUBLIC_BASE`** must be the **site origin only** (e.g. `https://www.nimrod.bio`), not a subdirectory such as `/agents/sfa`, or manifest `upload_base` and public URLs will not match the real file layout.
+- [ ] **Post-upload HTTP check:** `curl` `https://www.nimrod.bio/wp-content/uploads/market/manifest.json` and confirm `artifact_version` matches `output/public/manifest.json` on the pipeline host. If it does not (stale `product_count` / old `artifact_version` while FTP shows the new file), **purge site cache** in uPress (ezCache) and re-check. Optional: set `UPRESS_VERIFY_PUBLIC_MANIFEST=1` in `.env` to log a warning from [`ftps_upload.py`](../../organic_market_agent/publisher/ftps_upload.py) when public JSON lags behind the local manifest after upload.
+- [ ] If publish aborts (e.g. rolling-window gate), upload is skipped — see pipeline log / `pipeline_alerts`.
 
 ## 5. Sign-off
 

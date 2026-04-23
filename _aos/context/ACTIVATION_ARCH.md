@@ -67,4 +67,4 @@ You lead through L-GATE_SPEC; builders execute L-GATE_BUILD; sfa_val owns L-GATE
 bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
 ```
 
-Expect **17 PASS / 2 SKIP / 0 FAIL** on this spoke.
+Require **0 FAIL**. As of 2026-04, this spoke’s lean-kit run reports **26 PASS / 9 SKIP / 0 FAIL**; older **17 / 2 / 0** notes are outdated for PASS/SKIP only. **SSoT:** [`PROJECT_CONTEXT.md`](./PROJECT_CONTEXT.md) (Validation bullet).

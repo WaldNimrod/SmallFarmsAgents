@@ -1,8 +1,4 @@
-{# Body fragment for WordPress embedding via shortcode.
-   Inherits the site's page style — no standalone header/footer.
-   Shared CSS loaded from sfagent-base.css (child theme, enqueued in <head>).
-   Only page-specific rules remain inline below.
-#}
+
 <div class="sfagent" dir="rtl" lang="he">
 <style>
   /* ── Page-specific: Market Report ── */
@@ -82,7 +78,7 @@
   }
 </style>
 
-{# ── Disclaimer modal ── #}
+
 <div class="sfa-modal-overlay" id="sfagentDisclaimer">
   <div class="sfa-modal-box">
     <h3>אודות מדד המחירים</h3>
@@ -99,12 +95,12 @@
   </div>
 </div>
 
-{# ── Main content ── #}
+
 <div class="sfa-container">
 
 <h1 style="margin: 0 0 0.5rem; text-align: center;">מדד מחירי חקלאות אורגנית</h1>
 
-{# ── Vision & CTA block (above table) ── #}
+
 <div class="vision-block">
   <p>
     מי שניהל פעם חווה קטנה יודע — לתמחר תוצרת אורגנית בשוק שמשתנה כל שבוע זה
@@ -129,53 +125,24 @@
 </div>
 
 <div class="report-update-line">
-  עודכן: {{ generated_at[:16].replace("T", " ") }} · {{ products | length }} מוצרים · תאריך דוח: {{ report_date }}
+  עודכן: 2026-04-17 00:38 · 1 מוצרים · תאריך דוח: 2099-08-12
 </div>
 
-{# ── M8 Item 5: Transparency bridge (above table → dq-box) ── #}
+
 <div class="sfa-bridge-link">
   איך הנתונים נוצרים? <a href="#sfagent-dq-box">↓ ראה פירוט מתחת לטבלה</a>
 </div>
 
-{% if stale_banner %}
-<div class="sfa-stale-banner">
-  ⚠️ הנתונים עשויים שלא להיות עדכניים — מעל 3 ימים מאז התצפית האחרונה.
-</div>
-{% endif %}
 
-{% set all_prices = products | selectattr('min_price', 'ne', none) | map(attribute='min_price') | list +
-                   products | selectattr('max_price', 'ne', none) | map(attribute='max_price') | list %}
-{% set global_min = all_prices | min if all_prices else 0 %}
-{% set global_max = all_prices | max if all_prices else 100 %}
-{% set price_span = (global_max - global_min) if global_max != global_min else 1 %}
 
-{% set EMOJIS = {
-  'עגבנייה':       '🍅',
-  'עגבנייה שרי':   '🍅',
-  'פלפל אדום':     '🫑',
-  'פלפל צהוב':     '🫑',
-  'פלפל ירוק':     '🫑',
-  'מלפפון':        '🥒',
-  'חציל':          '🍆',
-  'קישוא':         '🥬',
-  'גזר':           '🥕',
-  'סלק':           '🟣',
-  'תפוח אדמה':     '🥔',
-  'בצל יבש':       '🧅',
-  'שום':           '🧄',
-  'עלי תרד':       '🥬',
-  'חסה':           '🥬',
-  'רוקט':          '🥗',
-  'כרוב':          '🥦',
-  'פטרוזיליה':     '🌿',
-  'כוסברה':        '🌿',
-  'צנון':          '🔴',
-  'סל ירקות גדול': '🧺',
-  'סל ירקות קטן':  '🧺',
-  'סל ירקות בינוני':'🧺',
-} %}
 
-{# ── M8 Item 6: Table perception framing ── #}
+
+
+
+
+
+
+
 <h2 class="table-framing">מדד מחירים מבוסס נתונים אמיתיים מהשטח</h2>
 
 <div class="sfa-card">
@@ -184,7 +151,7 @@
     <thead>
       <tr>
         <th>מוצר</th>
-        {# M8 Item 1: Tooltips on statistical headers #}
+        
         <th class="num" data-tooltip="הממוצע החשבוני של כל התצפיות ב-7 הימים האחרונים">ממוצע ₪</th>
         <th class="num" data-tooltip="הערך האמצעי — 50% מהתצפיות מעל, 50% מתחת">חציון ₪</th>
         <th data-tooltip="המחיר הנמוך והגבוה ביותר שנצפו">טווח מחירים</th>
@@ -194,126 +161,122 @@
       </tr>
     </thead>
     <tbody>
-      {% for p in products %}
-      {% set emoji = EMOJIS.get(p.canonical_name_he, '🥬') %}
+      
+      
       <tr>
         <td>
-          <span class="product-emoji">{{ emoji }}</span>
-          <span class="product-name">{{ p.canonical_name_he }}</span>
-          <span class="sfa-badge">{{ p.normalized_unit }}</span>
+          <span class="product-emoji">🍅</span>
+          <span class="product-name">עגבנייה</span>
+          <span class="sfa-badge">קילוגרם</span>
         </td>
-        {# M8 Item 3: Green border on average price column #}
+        
         <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
-          {% if p.avg_price is not none %}
-            <span class="price-main">{{ "%.2f"|format(p.avg_price) }}</span>
-          {% else %}—{% endif %}
+          
+            <span class="price-main">12.00</span>
+          
         </td>
         <td class="num">
-          {% if p.median_price is not none %}
-            <span class="price-secondary">{{ "%.2f"|format(p.median_price) }}</span>
-          {% else %}—{% endif %}
+          
+            <span class="price-secondary">12.00</span>
+          
         </td>
         <td>
-          {% if p.min_price is not none and p.max_price is not none %}
-            {% set bar_start_pct = ((p.min_price - global_min) / price_span * 100) | round(1) %}
-            {% set bar_width_pct = ((p.max_price - p.min_price) / price_span * 100) | round(1) %}
+          
+            
+            
             <div class="range-bar-wrap">
               <div class="range-bar-fill"
-                   style="inset-inline-end: {{ bar_start_pct }}%; inline-size: {{ [bar_width_pct, 4] | max }}%;"></div>
+                   style="inset-inline-end: 0.0%; inline-size: 4%;"></div>
             </div>
-            <div class="range-text">{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</div>
-          {% else %}—{% endif %}
+            <div class="range-text">12.00 – 12.00</div>
+          
         </td>
         <td class="num">
-          {% if p.stddev_price is defined and p.stddev_price is not none %}
-            <span class="stddev-text">{{ "%.2f"|format(p.stddev_price) }}</span>
-          {% else %}
+          
             <span class="stddev-text sfa-muted">—</span>
-          {% endif %}
+          
         </td>
-        <td class="num">{{ p.sample_size }}</td>
+        <td class="num">2</td>
         <td class="num">
           <span class="sources-badge">
-            {% for i in range(p.distinct_sources) %}●{% endfor %}
-            {{ p.distinct_sources }}
+            ●●
+            2
           </span>
         </td>
       </tr>
-      {% endfor %}
+      
     </tbody>
   </table>
   </div>
   <div class="sfa-report-mobile-cards" role="list">
-    {% for p in products %}
-    {% set emoji = EMOJIS.get(p.canonical_name_he, '🥬') %}
+    
+    
     <article class="sfa-product-card" role="listitem">
       <div class="sfa-product-card__head">
-        <span class="product-emoji">{{ emoji }}</span>
-        <span class="product-name">{{ p.canonical_name_he }}</span>
-        <span class="sfa-badge">{{ p.normalized_unit }}</span>
+        <span class="product-emoji">🍅</span>
+        <span class="product-name">עגבנייה</span>
+        <span class="sfa-badge">קילוגרם</span>
       </div>
       <dl class="sfa-product-card__stats">
         <div class="sfa-product-card__row">
           <dt>ממוצע ₪</dt>
-          <dd>{% if p.avg_price is not none %}<span class="price-main">{{ "%.2f"|format(p.avg_price) }}</span>{% else %}—{% endif %}</dd>
+          <dd><span class="price-main">12.00</span></dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>חציון ₪</dt>
-          <dd>{% if p.median_price is not none %}<span class="price-secondary">{{ "%.2f"|format(p.median_price) }}</span>{% else %}—{% endif %}</dd>
+          <dd><span class="price-secondary">12.00</span></dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>טווח מחירים</dt>
           <dd>
-            {% if p.min_price is not none and p.max_price is not none %}
-              {% set bar_start_pct = ((p.min_price - global_min) / price_span * 100) | round(1) %}
-              {% set bar_width_pct = ((p.max_price - p.min_price) / price_span * 100) | round(1) %}
+            
+              
+              
               <div class="range-bar-wrap">
                 <div class="range-bar-fill"
-                     style="inset-inline-end: {{ bar_start_pct }}%; inline-size: {{ [bar_width_pct, 4] | max }}%;"></div>
+                     style="inset-inline-end: 0.0%; inline-size: 4%;"></div>
               </div>
-              <div class="range-text">{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</div>
-            {% else %}—{% endif %}
+              <div class="range-text">12.00 – 12.00</div>
+            
           </dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>סטיית תקן</dt>
           <dd>
-            {% if p.stddev_price is defined and p.stddev_price is not none %}
-              <span class="stddev-text">{{ "%.2f"|format(p.stddev_price) }}</span>
-            {% else %}
+            
               <span class="stddev-text sfa-muted">—</span>
-            {% endif %}
+            
           </dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>תצפיות</dt>
-          <dd>{{ p.sample_size }}</dd>
+          <dd>2</dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>מקורות</dt>
           <dd>
             <span class="sources-badge">
-              {% for i in range(p.distinct_sources) %}●{% endfor %}
-              {{ p.distinct_sources }}
+              ●●
+              2
             </span>
           </dd>
         </div>
       </dl>
     </article>
-    {% endfor %}
+    
   </div>
 </div>
 
-{# ── M8 Item 2: Community CTA banner ── #}
+
 <div class="sfa-cta-banner">
   <p>יש לך נתונים מדויקים יותר? עזור לשפר את המדד — זה משרת את כל הקהילה.</p>
   <a class="sfa-btn" href="https://wa.me/972547776770?text=היי, אני רוצה לשתף נתוני מחירים למדד">שלח בוואטסאפ</a>
 </div>
 
-{# ── Transparency block (below table) ── #}
-{% if data_quality %}
+
+
 <div class="sfa-card--accent" id="sfagent-dq-box" aria-label="שקיפות צינור נירמול">
-  {# M8 Item 5: Bridge target #}
+  
   <p class="sfa-bridge-target">הטבלה מעל מבוססת על תהליך זה:</p>
   <h2 class="sfa-card-title">שקיפות — מצב צינור הנירמול</h2>
   <p class="sfa-card-lead">
@@ -325,7 +288,7 @@
   <p class="sfa-card-lead">
     ספירות לפי מסד הנתונים המקומי. לא משמשים לחישוב המחירים בטבלה למעלה.
   </p>
-  {# M8 Item 4: Privacy block with lock icon + bullets #}
+  
   <div class="sfa-privacy-block">
     <strong>🔒 פרטיות:</strong>
     <ul>
@@ -335,20 +298,20 @@
     </ul>
   </div>
   <ul class="sfa-card-grid">
-    <li>מנורמל: <span class="sfa-ltr">{{ data_quality.raw_extracted_items.normalized }}</span></li>
-    <li>לא ניתן לזיהוי: <span class="sfa-ltr">{{ data_quality.raw_extracted_items.unresolvable }}</span></li>
-    <li>ממתין לעיבוד: <span class="sfa-ltr">{{ data_quality.raw_extracted_items.extracted_pending }}</span></li>
-    <li>דולג (<span class="sfa-ltr">ignored</span>): <span class="sfa-ltr">{{ data_quality.raw_extracted_items.ignored }}</span></li>
-    <li>דילוג מאושר (סקופ): <span class="sfa-ltr">{{ data_quality.raw_extracted_items.ignored_approved_scope_skip }}</span></li>
-    <li>כללי סקופ פעילים: <span class="sfa-ltr">{{ data_quality.active_scope_skip_rules }}</span></li>
-    <li>אחוז פתרון: <span class="sfa-ltr">{{ data_quality.resolution_pct_norm_vs_unres }}%</span></li>
+    <li>מנורמל: <span class="sfa-ltr">0</span></li>
+    <li>לא ניתן לזיהוי: <span class="sfa-ltr">0</span></li>
+    <li>ממתין לעיבוד: <span class="sfa-ltr">0</span></li>
+    <li>דולג (<span class="sfa-ltr">ignored</span>): <span class="sfa-ltr">0</span></li>
+    <li>דילוג מאושר (סקופ): <span class="sfa-ltr">0</span></li>
+    <li>כללי סקופ פעילים: <span class="sfa-ltr">50</span></li>
+    <li>אחוז פתרון: <span class="sfa-ltr">0.0%</span></li>
   </ul>
 </div>
-{% endif %}
+
 
 </div>
 
-{# ── M8 Item 1: Tooltip JS (desktop hover + mobile tap) ── #}
+
 <script>
 (function() {
   var report = document.querySelector('.sfagent');
@@ -397,4 +360,4 @@
 })();
 </script>
 
-</div>{# end .sfagent #}
+</div>

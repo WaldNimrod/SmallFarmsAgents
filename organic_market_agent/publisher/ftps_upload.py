@@ -6,9 +6,14 @@ ftplib.FTP_TLS fails with 425 without the ReusedSessionFTP_TLS subclass below.
 """
 from __future__ import annotations
 
+import base64
 import ftplib
 import io
+import json
+import os
 import time
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -177,7 +182,103 @@ def upload_artifacts(
                 except Exception:
                     pass
 
+    if result.success:
+        # After FTPS closes: purge CDN (optional) then verify public URL (optional).
+        _maybe_purge_ezcache_after_upload()
+        _maybe_verify_public_manifest(local_dir)
+
     return result
+
+
+def _maybe_purge_ezcache_after_upload() -> None:
+    """If UPRESS_EZCACHE_PURGE_AFTER_UPLOAD=1|true|yes and WP app password is set, POST ezCache purge."""
+    flag = os.getenv("UPRESS_EZCACHE_PURGE_AFTER_UPLOAD", "").lower()
+    if flag not in ("1", "true", "yes"):
+        return
+    rest = (config.UPRESS_WP_REST_BASE or "").strip().rstrip("/")
+    user = (config.UPRESS_WP_APP_USER or "").strip()
+    pw = (config.UPRESS_WP_APP_PASS or "").strip()
+    if not (rest and user and pw):
+        logger.info(
+            "ezCache purge skipped: set UPRESS_WP_REST_BASE, UPRESS_WP_APP_USER, UPRESS_WP_APP_PASS "
+            "(Application Password in WordPress)"
+        )
+        return
+    url = f"{rest}/ezcache/v1/cache"
+    auth = base64.b64encode(f"{user}:{pw}".encode()).decode()
+    req = urllib.request.Request(
+        url,
+        data=json.dumps({"action": "purge"}).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Basic {auth}",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            status = resp.status
+            _ = resp.read()
+        logger.info("ezCache purge requested OK (HTTP %s)", status)
+    except urllib.error.HTTPError as exc:
+        logger.warning(
+            "ezCache purge failed HTTP %s — purge manually in uPress panel if uploads/market is stale over HTTPS",
+            exc.code,
+        )
+    except Exception as exc:
+        logger.warning("ezCache purge error: %s — manual panel purge may be needed", exc)
+
+
+def _maybe_verify_public_manifest(local_dir: Path) -> None:
+    """If UPRESS_VERIFY_PUBLIC_MANIFEST=1|true|yes, GET public manifest.json and compare artifact_version."""
+    flag = os.getenv("UPRESS_VERIFY_PUBLIC_MANIFEST", "").lower()
+    if flag not in ("1", "true", "yes"):
+        return
+    manifest_path = local_dir / "manifest.json"
+    if not manifest_path.exists():
+        return
+    try:
+        local_av = json.loads(manifest_path.read_text(encoding="utf-8")).get("artifact_version")
+    except (OSError, json.JSONDecodeError) as exc:
+        logger.warning("FTPS verify: could not read local manifest: %s", exc)
+        return
+    base = config.UPRESS_PUBLIC_BASE.rstrip("/")
+    path = config.UPRESS_UPLOAD_PATH.strip("/")
+    url = f"{base}/{path}/manifest.json"
+    req = urllib.request.Request(
+        url,
+        headers={
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "User-Agent": (
+                "Mozilla/5.0 (compatible; OrganicMarketAgent/1.0; +https://www.nimrod.bio/) "
+                "FTPS-post-verify"
+            ),
+        },
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            remote = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        logger.warning(
+            "FTPS verify: could not fetch or parse public manifest %s — %s "
+            "(CDN may still be warming; purge ezCache if this persists)",
+            url,
+            exc,
+        )
+        return
+    remote_av = remote.get("artifact_version")
+    if local_av and remote_av == local_av:
+        logger.info("FTPS verify: public manifest artifact_version matches (%s)", local_av)
+    else:
+        logger.warning(
+            "FTPS verify: public manifest mismatch — local artifact_version=%s remote=%s URL=%s "
+            "(purge site cache in uPress / ezCache)",
+            local_av,
+            remote_av,
+            url,
+        )
 
 
 KEEP_REPORTS = 3

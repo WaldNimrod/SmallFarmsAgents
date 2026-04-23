@@ -20,18 +20,20 @@ All files under `documentation/` are **English only** (project language policy).
 | Troubleshooting | [`08-troubleshooting/`](08-troubleshooting/) | Debugging, alert tags, DB sanity checks |
 | **Archive** | [`archive/`](archive/) | **Completed** time-bound specs and handoff notes |
 | External references | [`external-references/`](external-references/) | Where `docs/`, `_COMMUNICATION/`, and legacy specs live; **[`CROSS_PROJECT_BOUNDARIES.md`](external-references/CROSS_PROJECT_BOUNDARIES.md)** (SFA vs other repos) |
+| AOS + domain context | [`../_aos/context/PROJECT_CONTEXT.md`](../_aos/context/PROJECT_CONTEXT.md) | `validate_aos.sh` expectations, uPress/FTPS parity, links to runbooks and Team 10/50/190 reports (with [`CHANGELOG.md`](../CHANGELOG.md) close-out) |
 
 ---
 
 ## For AI agents (continuation / incident response)
 
 1. Read [`docs/GLOSSARY.md`](../docs/GLOSSARY.md).
-2. Open the section above that matches the task (schema change → `03`, pipeline bug → `04`, etc.).
-3. **Read the relevant spec document** before making any change (see categorized table in `project-context.mdc` or team onboarding files).
-4. Prefer **code** under `organic_market_agent/` as source of truth; this tree summarizes and links.
-5. **Log every code change** in [`CHANGELOG.md`](../CHANGELOG.md) under `[Unreleased]` before the session ends.
-4. For team process and gates, see [`external-references/`](external-references/) → `_COMMUNICATION/ROADMAP.md`.
-5. When a temporary spec or work package is **finished**, move or copy it into [`archive/`](archive/) per [`archive/README.md`](archive/README.md).
+2. For AOS `validate_aos` expectations, WordPress publish path, and 2026-04 production parity: [`_aos/context/PROJECT_CONTEXT.md`](../_aos/context/PROJECT_CONTEXT.md).
+3. Open the quick-map section above that matches the task (schema change → `03`, pipeline bug → `04`, etc.).
+4. **Read the relevant spec document** before making any change (see categorized table in `project-context.mdc` or team onboarding files).
+5. Prefer **code** under `organic_market_agent/` as source of truth; this tree summarizes and links.
+6. **Log every code change** in [`CHANGELOG.md`](../CHANGELOG.md) under `[Unreleased]` before the session ends.
+7. For team process and gates, see [`external-references/`](external-references/) → `_COMMUNICATION/ROADMAP.md`.
+8. When a temporary spec or work package is **finished**, move or copy it into [`archive/`](archive/) per [`archive/README.md`](archive/README.md).
 
 ---
 
@@ -49,4 +51,4 @@ All files under `documentation/` are **English only** (project language policy).
 
 ---
 
-*Last updated: 2026-04-10 (waldhomeserver / Team 61 canonical communication doc).*
+*Last updated: 2026-04-17 — PROJECT_CONTEXT + hub map (`documentation/README.md`); AOS `validate_aos` and production parity cross-links.*

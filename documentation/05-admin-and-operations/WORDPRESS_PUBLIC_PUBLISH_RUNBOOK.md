@@ -4,6 +4,14 @@
 
 **Architecture (locked):** Local hub builds **static artifacts** → upload to hosting → WordPress **reads files only** (no live DB to WordPress). See [`PROJECT_VISION_AND_SYSTEM_MAP.md`](../01-overview/PROJECT_VISION_AND_SYSTEM_MAP.md).
 
+### Canonical public page (what users open)
+
+The **primary end-user URL** for the market index on nimrod.bio is the **WordPress page** (Flatsome header/footer + page content area), not the raw static file:
+
+- **Example:** `https://www.nimrod.bio/smallfarmsagent/` (slug may vary; see `UPRESS_PAGE_SLUG` in `.env`).
+- **Content:** The page body contains the shortcode `[sfagent_market_report]` (installed via [`scripts/wp_shortcode_install.py`](../../scripts/wp_shortcode_install.py)). PHP reads **`wp-content/uploads/market/public_report_body.html`** and echoes it. Shared layout/CSS comes from **`wp-content/themes/flatsome-child/sfagent-base.css`**, enqueued when that shortcode is present.
+- **Implication:** UI/responsive work for “the public page” must target **`public_report_body.html` + `sfagent-base.css`**, then **FTPS-upload** both the uploads bundle **and** the child-theme CSS when it changes. The standalone `public_report.html` in `uploads/market/` is an alternate full-document URL; it is **not** the same shell as `/smallfarmsagent/`.
+
 ---
 
 ## 1. What the pipeline produces today
@@ -12,7 +20,8 @@ After a successful publish (local [`PublishEngine`](../../organic_market_agent/p
 
 | File | Role |
 |------|------|
-| `output/public/public_report.html` | Standalone RTL Hebrew page (table + `data_quality` block + stale banner logic) |
+| `output/public/public_report_body.html` | **WordPress embed fragment** — inner markup for `/smallfarmsagent/` (and same shortcode); primary surface for themed public UX |
+| `output/public/public_report.html` | Standalone RTL Hebrew full document (optional direct link to `uploads/market/public_report.html`) |
 | `output/public/public_report.json` | Machine-readable index + `data_quality` |
 | `output/public/manifest.json` | Small summary: dates, staleness, source counts, `data_quality` |
 
@@ -77,6 +86,16 @@ Custom HTML + JS: fetch `manifest.json` + `public_report.json` and build the tab
 
 **Target state for “no unnecessary manual work”:** **Tier 2** — credentials on the machine that runs the pipeline; **one-time** WordPress page creation (Option A landing, then Option B when body-fragment + shortcode exist); **no** daily WP login.
 
+### Production home server (waldhomeserver)
+
+The **staging/production** OrganicMarketAgent host at `/data/projects/smallfarmsagents` runs the **daily scheduler** (`organic_market_agent.scheduler.runner`). For nimrod.bio to receive **automatic** FTPS uploads after each successful publish, set **`scheduler_config.upload_enabled = true`** (Flask admin → **Scheduler** page, or SQL on the single `scheduler_config` row). This is independent of developer laptops (which should not run unattended ingestion).
+
+**Path parity (mandatory):** FTPS must write to the **same directory** WordPress reads for the shortcode: **`UPRESS_UPLOAD_PATH=wp-content/uploads/market`**. **`UPRESS_PUBLIC_BASE`** must be the **canonical site origin only** (e.g. `https://www.nimrod.bio`) — not a subdirectory path. A previous misconfiguration used a separate FTP tree (`/sfa`) while the shortcode loads `wp-content/uploads/market/public_report_body.html`, which caused “good data on FTP / stale JSON over HTTPS” symptoms. Ensure `.env` defines **`UPRESS_SFTP_*`**, **`UPRESS_UPLOAD_PATH`**, and **`UPRESS_PUBLIC_BASE`** consistently with [`organic_market_agent/publisher/engine.py`](../../organic_market_agent/publisher/engine.py) (`upload_base` = public base + upload path).
+
+**Cache:** uPress **CDN / ezCache** may serve an older `manifest.json` after upload even when FTP `LIST` shows a fresh `manifest.json` (different `Last-Modified` / `content-length` over HTTPS vs FTP). **Always** compare FTP `RETR manifest.json` to `output/public/manifest.json` first; if they match but HTTPS is stale, purge cache. **Options:** (1) uPress panel → ezCache / site cache purge; (2) WordPress REST `POST /wp-json/ezcache/v1/cache` with `{"action":"purge"}` and an Application Password (see [`docs/UPRESS_WORDPRESS_STANDARD_v2.md`](../../docs/UPRESS_WORDPRESS_STANDARD_v2.md)); (3) pipeline host `.env`: `UPRESS_EZCACHE_PURGE_AFTER_UPLOAD=1` plus `UPRESS_WP_REST_BASE`, `UPRESS_WP_APP_USER`, `UPRESS_WP_APP_PASS` — [`ftps_upload.py`](../../organic_market_agent/publisher/ftps_upload.py) calls purge after a successful upload (may return HTTP 403 from some client networks; then use the panel). Optional: `UPRESS_VERIFY_PUBLIC_MANIFEST=1` logs a warning when public JSON still lags after purge.
+
+After a run, verify **`TAG_FTPS_UPLOAD_SUCCESS`** in logs / `pipeline_alerts` and **`last_published_at`** in the public manifest once cache has caught up.
+
 ---
 
 ## 5. Stability and accuracy checks
@@ -118,4 +137,4 @@ Per [`_COMMUNICATION/ROADMAP.md`](../../_COMMUNICATION/ROADMAP.md) (v1.8): **M6 
 
 ---
 
-*Last updated: 2026-03-31.*
+*Last updated: 2026-04-17.*

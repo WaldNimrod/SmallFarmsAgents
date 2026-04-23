@@ -197,6 +197,8 @@ def test_publish_writes_json_and_html(pg_session: Session, tmp_path: Path) -> No
             assert key in p0
         assert "<html" in html.lower()
         assert 'dir="rtl"' in html or "dir='rtl'" in html
+        assert "sfa-report-mobile-cards" in html
+        assert "sfa-product-card" in html
     finally:
         _cleanup_pub(pg_session)
 
@@ -380,6 +382,8 @@ def test_publish_body_fragment_generated(pg_session: Session, tmp_path: Path) ->
         summary = PublishEngine().run(pg_session, tmp_path, report_date=PUB_DATE)
         body = (tmp_path / "public_report_body.html").read_text(encoding="utf-8")
         assert 'class="sfagent"' in body
+        assert "sfa-report-mobile-cards" in body
+        assert "sfa-product-card" in body
         assert "<html" not in body.lower()
         assert "<!DOCTYPE" not in body
         assert "מדד מחירי חקלאות אורגנית" in body

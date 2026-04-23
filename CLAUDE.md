@@ -67,6 +67,8 @@ You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0
 
 ## Domain rules
 
+- **SFA product + ops context:** `_aos/context/PROJECT_CONTEXT.md` — `validate_aos.sh` result expectations (0 FAIL; PASS/SKIP drift), WordPress/FTPS publish tree and runbook links, 2026-04 production parity sign-offs. Complements `AGENTS.md` and `documentation/README.md`.
+
 <!-- Project-specific rules, commands, paths, and conventions go here.
      This section is PRESERVED across aos_sync_all.sh runs. -->
 <!-- aos:project-specific:end -->

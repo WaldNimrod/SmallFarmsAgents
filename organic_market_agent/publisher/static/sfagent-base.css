@@ -332,6 +332,87 @@
 
 
 /* ═══════════════════════════════════════════════
+   MARKET REPORT — responsive (Team 30)
+   Desktop: full table. Narrow: stacked cards with all metrics (no hidden columns).
+   ═══════════════════════════════════════════════ */
+
+.sfagent .sfa-report-desktop {
+  display: block;
+}
+
+.sfagent .sfa-report-mobile-cards {
+  display: none;
+}
+
+.sfagent .sfa-product-card {
+  background: #fafaf8;
+  border-radius: 10px;
+  border: 1px solid #e8e4dc;
+  padding: 0.85rem 1rem;
+  text-align: start;
+}
+
+.sfagent .sfa-product-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-block-end: 0.65rem;
+  padding-block-end: 0.5rem;
+  border-block-end: 1px solid #e8e4dc;
+}
+
+.sfagent .sfa-product-card__stats {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sfagent .sfa-product-card__row {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 38%) 1fr;
+  gap: 0.35rem 0.75rem;
+  align-items: baseline;
+  font-size: 0.88rem;
+}
+
+.sfagent .sfa-product-card__row dt {
+  margin: 0;
+  color: var(--sfa-muted);
+  font-weight: 500;
+}
+
+.sfagent .sfa-product-card__row dd {
+  margin: 0;
+  text-align: end;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+}
+
+.sfagent .sfa-product-card__row dd .price-main {
+  font-size: 1.1rem;
+}
+
+.sfagent .sfa-product-card .range-bar-wrap {
+  min-inline-size: 100%;
+}
+
+@media (max-width: 640px) {
+  .sfagent .sfa-report-desktop {
+    display: none;
+  }
+
+  .sfagent .sfa-report-mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
    UTILITIES
    ═══════════════════════════════════════════════ */
 
@@ -350,9 +431,6 @@
 }
 
 @media (max-width: 640px) {
-  .sfagent .sfa-hide-mobile {
-    display: none;
-  }
   .sfagent .sfa-cta-banner .sfa-btn {
     display: block;
     text-align: center;

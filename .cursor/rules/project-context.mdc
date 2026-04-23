@@ -21,6 +21,8 @@ Canonical terminology: `docs/GLOSSARY.md` — read it first.
 
 Structured documentation hub for agents and operators: `documentation/README.md` (overview, schema, pipelines, CLI, troubleshooting, archive policy).
 
+**AOS + domain (current counts, uPress/FTPS parity, report links):** `_aos/context/PROJECT_CONTEXT.md` — read with `_aos/roadmap.yaml` at session start. Includes **`validate_aos.sh` expectations** (0 FAIL; PASS/SKIP drift — 26/9/0 as of 2026-04-22 per Team 190), **full paths** to `documentation/05-admin-and-operations/PUBLISH_CHECKLIST.md`, `WORDPRESS_PUBLIC_PUBLISH_RUNBOOK.md`, `docs/UPRESS_WORDPRESS_STANDARD_v2.md`, `AGENTS.md`, and production parity sign-offs under `_COMMUNICATION/TEAM_10/`, `TEAM_50/`, `TEAM_190/`.
+
 ---
 
 ## Iron Rules (Enforced — All Teams)
@@ -149,7 +151,7 @@ OrganicMarketAgent may be deployed on the home staging host **waldhomeserver** (
 - Min 2 observations from 2 distinct sources for public display
 - Publish threshold: min 2 community sources succeeded
 - **Price dispersion rules**: 2-source spread >100% or 3+-source outlier >2σ → suppress publish + alert
-- uPress FTP validation is deferred to M7 (go-live)
+- Production pipeline uses FTPS to `UPRESS_UPLOAD_PATH` (e.g. `wp-content/uploads/market`) with optional HTTP manifest verification and ezCache hooks — see `_aos/context/PROJECT_CONTEXT.md` and operational playbooks below.
 
 ## Current System State (as of 2026-03-31)
 
@@ -163,6 +165,7 @@ OrganicMarketAgent may be deployed on the home staging host **waldhomeserver** (
 - **G7 PASS** — formally closed 2026-04-02 (12/12 tests). Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G7_REPORT_TEAM50.md`
 - **G8 PASS** — formally closed 2026-04-02 (14/14 tests). Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G8_REPORT_TEAM50.md`
 - **G9 PASS** — formally closed 2026-04-02. All 7 WP Admin tasks resolved programmatically. Report: `_COMMUNICATION/TEAM_50/reports/2026-04-02_GATE_G9_RERUN_REPORT_TEAM50.md`
+- **2026-04 — production data / FTPS path parity (ops):** waldhomeserver `UPRESS_*` aligned with the WordPress-served tree; optional verify + ezCache; Team 50 QA + Team 190 L0 validation **PASS**. **Full references:** `_aos/context/PROJECT_CONTEXT.md` (WordPress section); `CHANGELOG.md` [Unreleased]; `_COMMUNICATION/TEAM_10/reports/2026-04-18_PRODUCTION_DATA_PARITY_SIGNOFF_TEAM10.md`; `_COMMUNICATION/TEAM_50/reports/2026-04-21_ProductionParity_QA_FINDINGS_TEAM50.md`; `_COMMUNICATION/TEAM_190/reports/2026-04-22_VALIDATION_RESULT_PRODUCTION_DATA_PARITY_TEAM190.md`.
 
 ## Database Key Tables
 

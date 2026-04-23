@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(_PROJECT_ROOT / ".env")
+# uPress / WP secrets often live in `.env.upress` (see docs/UPRESS_WORDPRESS_STANDARD_v2.md)
+load_dotenv(_PROJECT_ROOT / ".env.upress", override=False)
 
 
 class Config:
@@ -30,6 +32,10 @@ class Config:
     UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
     UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "wp-content/uploads/market")
     UPRESS_PAGE_SLUG: str = os.getenv("UPRESS_PAGE_SLUG", "/SmallFarmsAgent")
+    # WordPress Application Password (optional) — ezCache REST purge after FTPS; see docs/UPRESS_WORDPRESS_STANDARD_v2.md
+    UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "")
+    UPRESS_WP_APP_USER: str = os.getenv("UPRESS_WP_APP_USER", "")
+    UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
 
     @classmethod
     def upress_configured(cls) -> bool:
