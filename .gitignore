@@ -25,3 +25,6 @@ build/
 backups/*.dump
 backups/*.sql
 backups/*.sql.gz
+# _COMMUNICATION — large PDF attachments not tracked; NotebookLM source packages are exceptions
+_COMMUNICATION/**/*.pdf
+!_COMMUNICATION/team_100/**/*.pdf
