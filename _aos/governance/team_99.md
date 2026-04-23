@@ -151,7 +151,9 @@ Applies only when working in the **TikTrack** product domain. Full rules: `_aos/
 - `/server --cc` — open Claude Code in continue mode on server
 - `/server --ssh` — interactive SSH session
 - `/AOS_mail` — check incoming messages (canonical; replaces retired `/mail`)
+- `/AOS_mail --watch MSG-ID` — watch for response to a specific message (SSE + poll fallback)
 - `/AOS_SendMail` — send message to a team (canonical; replaces retired `/send`)
+- `/AOS_dispatch team_XX "task"` — send task MSG + show activation prompt + watch command
 
 **Managed services:**
 - aos-api — AOS dashboard and pipeline API
