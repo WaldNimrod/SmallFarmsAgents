@@ -30,7 +30,7 @@ status: COMPLETE
 
 ## Validation
 
-- `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` — run after commit; **target: 0 FAIL** (Check 32 requires a clean committed `_aos/` tree).
+- `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` (after closure commit): **26 PASS / 9 SKIP / 0 FAIL** — L-GATE_BUILD exit criterion satisfied.
 
 ## Git
 
