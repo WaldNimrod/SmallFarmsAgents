@@ -27,7 +27,7 @@ work_packages:
   status: COMPLETE
   track: A
   current_lean_gate: L-GATE_V
-  lod_status: LOD500
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_arch
   assigned_validator: sfa_val
   created_at: "2026-04-12"
