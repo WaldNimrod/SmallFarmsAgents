@@ -72,8 +72,8 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -84,6 +84,11 @@ work_packages:
     result: PASS
     date: "2026-05-07"
     notes: "team_00 in-session approval of SFA-S002-P001 program structure (release-prep)."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD400 spec authored with audit input (AUDIT_WP001_M10_SPIKE.md). Strategy C extract+reapply. Migration renumbering 031 collision resolved. Precision gate satisfied — junior dev can execute."
+    validator: team_100
   notes: "Source: cursor/m10-doc-mandates-spike@bb981ed. Migrations 072/073, basket_tier_resolver, PRD025/026/027."
   profile: L0
 
@@ -92,8 +97,8 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -105,6 +110,11 @@ work_packages:
     result: PASS
     date: "2026-05-07"
     notes: "team_00 in-session approval. Raw material (Tend exports + MasterClass) DO NOT TOUCH."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD400 spec authored with audit input (AUDIT_WP002_MYPIPS.md). 4 priority sources (mashtelatharoe, anatiyot, fruit4soul, finerotem). Phase 2C Playwright architecture. Raw-material guardrails explicit in AC. Precision gate satisfied."
+    validator: team_100
   notes: "Source: cursor/mypips-communication-and-handoffs@732121e (MyPIPS portion only)."
   profile: L0
 
@@ -113,8 +123,8 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: team_60
   assigned_validator: external
   created_at: "2026-05-07"
@@ -125,6 +135,11 @@ work_packages:
     result: PASS
     date: "2026-05-07"
     notes: "team_00 in-session approval. Server-side authority per ADR-049."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD400 spec authored. AC matrix covers 7 areas (scheduler, freshness, logs, FTPS round-trip, page render, index integrity, docs). Read-only verification WP — no code changes expected. Two-pass verification (baseline + post-WP001/WP002). Precision gate satisfied."
+    validator: team_100
   notes: "Production scraping freshness + log integrity verification before launch."
   profile: L0
 
@@ -133,8 +148,8 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -145,6 +160,11 @@ work_packages:
     result: PASS
     date: "2026-05-07"
     notes: "team_00 in-session approval."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD400 spec authored. 7 AC: viewports 375/414/768, RTL Hebrew, filter bar (post-WP002), data table, Lighthouse mobile ≥85, cross-device smoke, stale banner. File-level deliverables enumerated. Precision gate satisfied — independent of upstream WPs."
+    validator: team_100
   notes: "Lighthouse mobile ≥85, RTL Hebrew, viewports 375/414/768."
   profile: L0
 
@@ -153,8 +173,8 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: team_100
   assigned_validator: external
   created_at: "2026-05-07"
@@ -166,5 +186,10 @@ work_packages:
     result: PASS
     date: "2026-05-07"
     notes: "team_00 in-session approval."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD400 spec authored. Meta-WP — produces external validation bundle (no code). 7 AC covering bundle composition, rollback plan, aos_mail prompt, sign-off matrix. Cross-engine constraint enforced. Precision gate satisfied."
+    validator: team_100
   notes: "Final gate: PUBLISH_CHECKLIST + external QA bundle + rollback plan + aos_mail dispatch."
   profile: L0
