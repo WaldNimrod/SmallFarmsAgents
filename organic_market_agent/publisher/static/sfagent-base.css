@@ -9,7 +9,12 @@
  *   Layer 3: Inline <style> in each template (page-specific rules only)
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap');
+/*
+ * NOTE: Google Fonts import removed (WP004 — no external CDN).
+ * Using system-ui Hebrew-capable fallback stack instead.
+ * Heebo remains first choice when pre-loaded by parent theme;
+ * system-ui + Arial cover iOS/Android without external request.
+ */
 
 /* ═══════════════════════════════════════════════
    ROOT SCOPE + DESIGN TOKENS
@@ -25,7 +30,8 @@
   --sfa-text:        #1a1a1a;
   --sfa-muted:       #6b7280;
 
-  font-family: 'Heebo', sans-serif;
+  /* WP004: system-ui stack — no external CDN (Iron Rule §6.7) */
+  font-family: 'Heebo', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
   color: var(--sfa-text);
   line-height: 1.5;
   box-sizing: border-box;
@@ -44,6 +50,9 @@
 
 .sfagent .sfa-container {
   padding: 0;
+  /* WP004: avoid 100vw trap on RTL — use max-width: 100% */
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 
@@ -435,4 +444,238 @@
     display: block;
     text-align: center;
   }
+}
+
+
+/* ═══════════════════════════════════════════════
+   WP004 — MOBILE UI PARITY
+   Source-type filter bar (post-WP002 stash UI)
+   ═══════════════════════════════════════════════ */
+
+/* Filter nav container */
+.sfagent .sfa-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1rem;
+  padding: 0;
+  list-style: none;
+  /* role=tablist / nav — semantics in HTML */
+}
+
+/* Individual filter button */
+.sfagent .sfa-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* WCAG 2.5.5 + iOS HIG: 44×44 px minimum touch target */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border: 1.5px solid var(--sfa-sand-dark);
+  border-radius: 22px;
+  font-family: inherit;
+  font-size: clamp(0.82rem, 2vw, 0.92rem);
+  font-weight: 500;
+  color: var(--sfa-green-dark);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  /* Ensure active state works without hover (mobile) */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sfagent .sfa-filter-btn:hover,
+.sfagent .sfa-filter-btn:focus-visible {
+  background: var(--sfa-sand);
+  border-color: var(--sfa-green-mid);
+  outline: 2px solid var(--sfa-green-mid);
+  outline-offset: 2px;
+}
+
+/* Active/selected state — visible without hover (AC-03) */
+.sfagent .sfa-filter-btn[aria-selected="true"],
+.sfagent .sfa-filter-btn.is-active {
+  background: var(--sfa-green-dark);
+  border-color: var(--sfa-green-dark);
+  color: #fff;
+  font-weight: 700;
+}
+
+.sfagent .sfa-filter-btn[aria-selected="true"]:hover,
+.sfagent .sfa-filter-btn.is-active:hover {
+  background: var(--sfa-green-mid);
+  border-color: var(--sfa-green-mid);
+}
+
+
+/* ═══════════════════════════════════════════════
+   WP004 — RESPONSIVE BREAKPOINTS
+   375px / 414px / 640px / 768px
+   ═══════════════════════════════════════════════ */
+
+/* ── 375px (iPhone SE / older Android) ── */
+@media (max-width: 414px) {
+  .sfagent {
+    /* fluid font: 14px at 375px → 16px at 414px */
+    font-size: clamp(0.875rem, 3.5vw, 1rem);
+  }
+
+  .sfagent .sfa-container {
+    padding: 0;
+  }
+
+  /* Filter bar: full-width buttons on very narrow screens */
+  .sfagent .sfa-filter-bar {
+    gap: 0.4rem;
+  }
+
+  .sfagent .sfa-filter-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 0.82rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  /* Stale banner: flush to edges */
+  .sfagent .sfa-stale-banner {
+    margin-inline: 0;
+    border-radius: 0;
+    padding: 0.65rem 1rem;
+    /* Ensure above-fold visibility at 375px (AC-07) */
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Data-quality grid: single column (AC-07) */
+  .sfagent .sfa-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Card padding: tighter on 375 */
+  .sfagent .sfa-product-card {
+    padding: 0.7rem 0.85rem;
+  }
+
+  /* Modal: full width with safe-area insets */
+  .sfagent .sfa-modal-box {
+    padding: 1.25rem 1rem;
+    padding-inline-end: max(1rem, env(safe-area-inset-right));
+    padding-inline-start: max(1rem, env(safe-area-inset-left));
+    border-radius: 8px;
+  }
+
+  /* CTA banner */
+  .sfagent .sfa-cta-banner {
+    padding: 0.85rem 0.85rem;
+  }
+
+  /* Bridge link */
+  .sfagent .sfa-bridge-link {
+    font-size: 0.75rem;
+  }
+}
+
+/* ── 414px (iPhone Pro / typical Android) ── */
+@media (min-width: 415px) and (max-width: 640px) {
+  .sfagent {
+    font-size: clamp(0.9rem, 3vw, 1rem);
+  }
+
+  .sfagent .sfa-filter-btn {
+    font-size: 0.88rem;
+  }
+}
+
+/* ── 640px mobile/narrow tablet switchover ── */
+@media (max-width: 640px) {
+  .sfagent .sfa-report-desktop {
+    display: none;
+  }
+
+  .sfagent .sfa-report-mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  /* Safe-area insets for bottom bar (notched phones) */
+  .sfagent .sfa-container {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Buttons: full-width in CTA banner on mobile */
+  .sfagent .sfa-cta-banner .sfa-btn {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Ensure sfa-btn has touch target (AC-03) */
+  .sfagent .sfa-btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ── 768px (tablet portrait) ── */
+@media (min-width: 641px) and (max-width: 900px) {
+  /* Desktop table visible — but tighten columns */
+  .sfagent thead th,
+  .sfagent td {
+    padding: 0.7rem 0.65rem;
+    font-size: 0.88rem;
+  }
+
+  /* Prioritize: show product name + avg price. Allow secondary columns to wrap */
+  .sfagent .range-bar-wrap {
+    min-width: 60px;
+  }
+
+  .sfagent .sfa-filter-bar {
+    gap: 0.5rem;
+  }
+
+  .sfagent .sfa-filter-btn {
+    font-size: 0.9rem;
+  }
+}
+
+/* ── Global touch-target enforcement (all interactive in .sfagent) ── */
+@media (pointer: coarse) {
+  /* Touch device: ensure 44px tap targets on all interactive elements */
+  .sfagent .sfa-filter-btn,
+  .sfagent .sfa-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ── Safe-area insets (notched/dynamic-island phones) ── */
+@supports (padding: max(0px, env(safe-area-inset-left))) {
+  .sfagent .sfa-container {
+    padding-inline-start: max(0px, env(safe-area-inset-left));
+    padding-inline-end: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* ── Hebrew: prefer wrap over ellipsis on RTL text (AC-02) ── */
+.sfagent .product-name,
+.sfagent .sfa-product-card__row dt {
+  overflow-wrap: break-word;
+  word-break: normal;
+  /* Avoid ellipsis on Hebrew labels (LOD400 §5) */
+  text-overflow: clip;
+}
+
+/* ── BDI currency: explicit LTR isolation within RTL flow (AC-02) ── */
+.sfagent bdi {
+  unicode-bidi: isolate;
+  direction: ltr;
+  display: inline;
 }
