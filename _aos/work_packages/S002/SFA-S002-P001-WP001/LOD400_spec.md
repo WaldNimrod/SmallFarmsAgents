@@ -4,31 +4,159 @@
 **Author:** team_100
 **WP:** SFA-S002-P001-WP001
 **Type:** LOD400_SPEC
-**Status:** STUB — full LOD400 authoring pending (next phase)
+**Status:** READY for L-GATE_S
+**Builder:** sfa_build (Sonnet, Team 10)
+**QA:** Team 50 (Haiku)
+**Validator:** external
+
+**Audit input:** [`AUDIT_WP001_M10_SPIKE.md`](../../../../_COMMUNICATION/TEAM_100/SFA-S002-P001/AUDIT_WP001_M10_SPIKE.md) — read first.
 
 ---
 
-## Scope (carried from program package §4)
+## 1. Goal
 
-Revive parked work from `cursor/m10-doc-mandates-spike` (commit `bb981ed`):
-- Migrations 072 (`cq_p01_alias_batch.py`), 073 (`src_wa_pending_manual.py`)
-- `organic_market_agent/normalizer/basket_tier_resolver.py` + tests (PRD025/026/027 small/medium/large basket tiers)
-- LOD400 communications v1.1, dev stack docs, SQL verification scripts
+Thaw M10 (decision D4 of `SFA-PKG-POST-M9-001`, now superseded) and integrate the parked M10 spike work from `cursor/m10-doc-mandates-spike@bb981ed` into `main`. Strategy per audit: **Extract files + reapply (Strategy C)** with migration renumbering.
 
-Reconcile against current main (58 commits ahead). Deliverable: clean rebase or extracted-and-reapplied changes, all tests green.
+---
 
-## Pending sections (to be authored in LOD400 phase)
+## 2. Integration strategy (binding)
 
-- Acceptance Criteria (AC-01 .. AC-NN)
-- File-level change list (every file to add/modify/delete)
-- Test plan (unit + integration)
-- Migration safety review (072/073)
-- Conflict-surface analysis (M10 spike vs current main)
-- Cross-references to canon (PRD025/026/027 ARCH spec)
+**Strategy C — Extract files + reapply.** Direct rebase/merge is forbidden because:
+- 58 commits behind main.
+- Migration 031 numbering collision: branch's `031_mypips_candidate_sources_workbook` conflicts with main's `031_deactivate_src017_pricez`.
 
-## References
+Builder MUST work on the offline branch `offline/2026-05-07-smallfarmsagents-release-prep` and produce a **single coherent integration commit** (or a small ordered series).
 
+---
+
+## 3. Acceptance Criteria
+
+### AC-01 — Migrations integrated
+- Branch migrations 072 (`cq_p01_alias_batch`) + 073 (`src_wa_pending_manual`) extracted, renumbered to **032 + 033** (or next available after main's 031), with `down_revision` adjusted to point to main's 031.
+- Branch migrations 031–071 (41 migrations from `9177d9f`): apply only those that are **not duplicated** by main's pre-2026-05-07 state. The audit's recommendation is to preserve the branch's 031 (`mypips_candidate_sources_workbook`) by renumbering it to 034+ since main's 031 is the authoritative deactivate. Builder verifies via `alembic upgrade head` on a clean DB and adjusts.
+- `alembic upgrade head` succeeds on a freshly bootstrapped DB.
+- `alembic downgrade -1` then `upgrade head` succeeds (reversibility).
+
+### AC-02 — Basket tier resolver landed
+- `organic_market_agent/normalizer/basket_tier_resolver.py` present, identical in behavior to branch version (commit `bb981ed`).
+- PRD025/026/027 mapping (small/medium/large) per ARCH-20260406-CQ-MASTER §3.7.2.
+- Item-count priority over price; fallback PRD026 when count < 5.
+
+### AC-03 — Tests landed and green
+- `tests/test_basket_tier_resolver.py` — tier resolution + edge cases.
+- `tests/test_extraction_status_pending_manual.py` — constraint validation.
+- `tests/test_db_health.py` — connectivity + `require_postgres` skip.
+- `tests/test_admin_routes.py`, `tests/test_publisher_local.py` — admin + publisher coverage.
+- Full test suite passes (`pytest tests/`).
+
+### AC-04 — Conflict-likely files reconciled
+For each:
+- `organic_market_agent/publisher/rolling_aggregate.py` — preserve main's `1.2` change AND branch's deltas. Manual diff review documented.
+- `organic_market_agent/models/runs.py` — preserve main's 3 commits AND branch's schema changes. Manual diff review documented.
+- `organic_market_agent/utils/config.py` — branch deltas applied without breaking main's defaults.
+
+Reconciliation rationale recorded in [`_COMMUNICATION/team_10/SFA-S002-P001-WP001/RECONCILIATION_NOTES.md`](../../../../_COMMUNICATION/team_10/SFA-S002-P001-WP001/RECONCILIATION_NOTES.md) (CREATE).
+
+### AC-05 — `db/check.py` health endpoint landed
+- `organic_market_agent/db/check.py` present (or wired into existing health module).
+- Admin route exposes health probe (consistent with branch implementation).
+
+### AC-06 — Config + docs landed
+- `.python-version` set to `3.11`.
+- `.env.example` reconciled — branch's 28-line addition merged with main's evolution; no duplicate keys.
+- `CHANGELOG.md` `[Unreleased]` section updated with M10 thaw entry referencing this WP.
+- `CLAUDE.md` (project root) — branch version reconciled with current; preserve newer wisdom from either side.
+- `_COMMUNICATION/ROADMAP.md` — v5.7 content from branch consolidated with current main; M10-frozen language replaced with "M10 THAWED 2026-05-07 → SFA-S002-P001-WP001".
+
+### AC-07 — Generated outputs and harness configs NOT carried over
+- `output/public/*` — discard (regenerated by pipeline).
+- `.run/admin_server.pid` — discard.
+- `.claude/settings.json` — keep main's version (do not overwrite).
+
+### AC-08 — Branch lifecycle preserved
+- `cursor/m10-doc-mandates-spike` is **NOT deleted**.
+- Tag created: `archive/m10-spike-bb981ed` pointing to commit `bb981ed`.
+
+### AC-09 — Validation
+- `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns 0 FAIL.
+
+---
+
+## 4. File-level deliverables
+
+### CREATE
+- `organic_market_agent/db/versions/032_cq_p01_alias_batch.py` (renumbered from 072)
+- `organic_market_agent/db/versions/033_src_wa_pending_manual.py` (renumbered from 073)
+- `organic_market_agent/normalizer/basket_tier_resolver.py`
+- `organic_market_agent/db/check.py` (or merge into existing)
+- `tests/test_basket_tier_resolver.py`
+- `tests/test_extraction_status_pending_manual.py`
+- `tests/test_db_health.py`
+- `_COMMUNICATION/team_10/SFA-S002-P001-WP001/RECONCILIATION_NOTES.md`
+- Tag `archive/m10-spike-bb981ed`
+
+### UPDATE
+- `organic_market_agent/publisher/rolling_aggregate.py` (merge)
+- `organic_market_agent/models/runs.py` (merge)
+- `organic_market_agent/utils/config.py` (merge)
+- `tests/test_admin_routes.py` (merge or extend)
+- `tests/test_publisher_local.py` (merge or extend)
+- `.python-version`, `.env.example`
+- `CHANGELOG.md`, `CLAUDE.md`, `_COMMUNICATION/ROADMAP.md`
+
+### DISCARD (do NOT carry over)
+- `output/public/manifest*.json`, `output/public/public_report*.html`
+- `.run/admin_server.pid`
+- `.claude/settings.json`
+
+### CONDITIONAL — branch migrations 031–071
+Builder evaluates each migration in branch range 031–071 and decides per-migration:
+- **CARRY** — apply (renumbered to fit main chain) if main does not already have equivalent functionality.
+- **SKIP** — main already has this functionality (e.g., main's own 031 is the authoritative `deactivate_src017_pricez`).
+- Document per-migration disposition in `RECONCILIATION_NOTES.md`.
+
+---
+
+## 5. Test plan
+
+1. Fresh PostgreSQL DB created; `alembic upgrade head` runs cleanly.
+2. Full pytest suite green.
+3. Spot-check admin UI endpoints touched by `models/runs.py` reconciliation.
+4. Spot-check publisher output: `python -m organic_market_agent run_publisher` (no upload) — verify output JSON shape unchanged.
+
+---
+
+## 6. Risks and mitigations
+
+| Risk | Mitigation |
+|------|-----------|
+| Migration renumber breaks `down_revision` chain | Rebuild chain incrementally; alembic test on each step |
+| `rolling_aggregate.py` reconcile loses main's 1.2 fix | Cross-reference commit 75e1fcb diff line-by-line; document |
+| Branch migrations 031–071 contain dependencies on now-removed code | Per-migration smoke; SKIP migrations that fail to apply cleanly |
+| 9177d9f-era assumptions about source registry differ from current | Verify `sources` table contents post-upgrade; document seed deltas |
+
+---
+
+## 7. Sprint estimate
+
+**MEDIUM (3–5 days)** per audit. Single sprint cap (Iron Rule §42 sprint discipline ≤3).
+
+---
+
+## 8. Out of scope
+
+- M11 features (community), M13 pre-stage (deferred to future WP).
+- Removing or renaming `cursor/m10-doc-mandates-spike` branch.
+- Backporting the integration to any other branch.
+
+---
+
+## 9. References
+
+- Audit report: [`AUDIT_WP001_M10_SPIKE.md`](../../../../_COMMUNICATION/TEAM_100/SFA-S002-P001/AUDIT_WP001_M10_SPIKE.md)
 - Program package: [`PROGRAM_PACKAGE_LOD200_v1.0.0.md`](../../../../_COMMUNICATION/TEAM_100/SFA-S002-P001/PROGRAM_PACKAGE_LOD200_v1.0.0.md)
 - Source branch: `cursor/m10-doc-mandates-spike@bb981ed`
 
-*Stub created during program initialization. Full LOD400 spec required before L-GATE_S verdict.*
+---
+
+*LOD400 ready for L-GATE_S verdict.*
