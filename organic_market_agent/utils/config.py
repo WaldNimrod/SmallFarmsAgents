@@ -32,14 +32,20 @@ class Config:
     UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
     UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "wp-content/uploads/market")
     UPRESS_PAGE_SLUG: str = os.getenv("UPRESS_PAGE_SLUG", "/SmallFarmsAgent")
-    # WordPress Application Password (optional) — ezCache REST purge after FTPS; see docs/UPRESS_WORDPRESS_STANDARD_v2.md
-    UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "")
+    # WordPress REST API (WP007 — primary upload via HTTPS port 443; replaces FTPS port 21 as default)
+    # Also used by ftps_upload.py for optional ezCache purge — see docs/UPRESS_WORDPRESS_STANDARD_v2.md
+    UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json")
     UPRESS_WP_APP_USER: str = os.getenv("UPRESS_WP_APP_USER", "")
     UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
 
     @classmethod
     def upress_configured(cls) -> bool:
         return bool(cls.UPRESS_SFTP_HOST and cls.UPRESS_SFTP_USER and cls.UPRESS_SFTP_PASS)
+
+    @classmethod
+    def wp_rest_configured(cls) -> bool:
+        """True when WP REST API credentials are set (primary upload path, WP007)."""
+        return bool(cls.UPRESS_WP_REST_BASE and cls.UPRESS_WP_APP_USER and cls.UPRESS_WP_APP_PASS)
 
     @classmethod
     def ensure_dirs(cls) -> None:

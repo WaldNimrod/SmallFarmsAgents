@@ -219,6 +219,66 @@ def run_aggregator_cmd(agg_date: str | None) -> None:
     )
 
 
+def _do_upload(output_dir: Path, ftps_file_list: list[str]) -> None:
+    """Upload artifacts via WP REST API (primary) or FTPS fallback (if UPRESS_FALLBACK_FTPS=1).
+
+    Exits with code 2 on failure.
+    """
+    import os
+
+    from organic_market_agent.publisher.wp_upload import (
+        MissingCredentialsError as WpMissingCredentialsError,
+        upload_all_artifacts,
+    )
+
+    fallback_ftps = os.getenv("UPRESS_FALLBACK_FTPS", "").lower() in ("1", "true", "yes")
+    wp_user = os.getenv("UPRESS_WP_APP_USER", "").strip()
+    wp_pass = os.getenv("UPRESS_WP_APP_PASS", "").strip()
+
+    if wp_user and wp_pass and not fallback_ftps:
+        # Primary path: WP REST API
+        try:
+            results = upload_all_artifacts(output_dir)
+            click.echo(f"WP REST upload OK: {len(results)} artifacts uploaded")
+            for canonical, (mid, url) in results.items():
+                click.echo(f"  {canonical} → media_id={mid} url={url}")
+            return
+        except WpMissingCredentialsError as exc:
+            click.echo(f"WP REST upload: credentials error — {exc}", err=True)
+            raise SystemExit(2)
+        except Exception as exc:
+            click.echo(f"WP REST upload FAILED: {exc}", err=True)
+            if not fallback_ftps:
+                raise SystemExit(2)
+            click.echo("Attempting FTPS fallback (UPRESS_FALLBACK_FTPS not set — skipped)", err=True)
+            raise SystemExit(2)
+
+    if fallback_ftps:
+        # Fallback path: FTPS (legacy, gated on UPRESS_FALLBACK_FTPS=1)
+        from organic_market_agent.publisher.ftps_upload import upload_artifacts as ftps_upload_artifacts
+
+        click.echo("WP REST skipped: UPRESS_FALLBACK_FTPS=1 — using FTPS fallback")
+        result = ftps_upload_artifacts(output_dir, ftps_file_list)
+        if result.success:
+            click.echo(f"FTPS upload OK: {len(result.files_uploaded)} files uploaded")
+        else:
+            click.echo(
+                f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
+                f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+                err=True,
+            )
+            raise SystemExit(2)
+        return
+
+    # Neither WP REST creds nor FTPS fallback flag
+    click.echo(
+        "Upload skipped: set UPRESS_WP_APP_USER + UPRESS_WP_APP_PASS for WP REST upload, "
+        "or UPRESS_FALLBACK_FTPS=1 for FTPS fallback.",
+        err=True,
+    )
+    raise SystemExit(2)
+
+
 @cli.command("run_publisher")
 @click.option(
     "--output-dir",
@@ -231,13 +291,19 @@ def run_aggregator_cmd(agg_date: str | None) -> None:
     "--upload",
     is_flag=True,
     default=False,
-    help="After publishing, upload artifacts to uPress via FTPS",
+    help="After publishing, upload artifacts to uPress via WP REST API (primary) or FTPS fallback",
 )
 def run_publisher_cmd(output_dir: str, upload: bool) -> None:
-    """Generate publish artifacts (public_report.json, .html, manifest.json) and optionally upload."""
+    """Generate publish artifacts (public_report.json, .html, manifest.json) and optionally upload.
+
+    Upload strategy (WP007):
+      Primary: WP REST API (HTTPS port 443) via UPRESS_WP_APP_USER/UPRESS_WP_APP_PASS.
+      Fallback: FTPS (port 21) when UPRESS_FALLBACK_FTPS=1 and WP REST is unavailable.
+    """
+    import os
+
     from organic_market_agent.db.session import SessionFactory
     from organic_market_agent.publisher.engine import PublishEngine
-    from organic_market_agent.publisher.ftps_upload import upload_artifacts
     from organic_market_agent.utils.exceptions import PublishAbortError
 
     try:
@@ -246,19 +312,7 @@ def run_publisher_cmd(output_dir: str, upload: bool) -> None:
         click.echo(f"PublishEngine: artifacts written to {output_dir}")
 
         if upload:
-            result = upload_artifacts(
-                Path(summary["output_dir"]),
-                summary["files"],
-            )
-            if result.success:
-                click.echo(f"FTPS upload OK: {len(result.files_uploaded)} files uploaded")
-            else:
-                click.echo(
-                    f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
-                    f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
-                    err=True,
-                )
-                raise SystemExit(2)
+            _do_upload(Path(summary["output_dir"]), summary["files"])
 
     except PublishAbortError as exc:
         click.echo(f"PublishEngine ABORTED: {exc}", err=True)
@@ -412,42 +466,58 @@ def run_admin_cmd(host: str, port: int) -> None:
     show_default=True,
     help="Directory containing publish artifacts",
 )
-@click.option("--dry-run", is_flag=True, default=False, help="Log what would be uploaded without connecting")
+@click.option("--dry-run", is_flag=True, default=False, help="Log what would be uploaded without connecting (FTPS path only)")
 def run_upload_cmd(output_dir: str, dry_run: bool) -> None:
-    """Upload existing local publish artifacts to uPress via FTPS."""
-    from organic_market_agent.publisher.ftps_upload import upload_artifacts
+    """Upload existing local publish artifacts to uPress.
 
+    Primary: WP REST API (HTTPS port 443) — set UPRESS_WP_APP_USER + UPRESS_WP_APP_PASS.
+    Fallback: FTPS (port 21) — set UPRESS_FALLBACK_FTPS=1 (also supports --dry-run).
+    """
     odir = Path(output_dir)
     manifest = odir / "manifest.json"
     if not manifest.exists():
         click.echo(f"No manifest.json in {output_dir} — run 'run_publisher' first.", err=True)
         raise SystemExit(1)
 
-    manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
-    files_to_upload: list[str] = []
+    if dry_run:
+        # dry-run is only meaningful for FTPS; for WP REST it's no-op
+        import os
+        from organic_market_agent.publisher.ftps_upload import upload_artifacts as ftps_upload_artifacts
 
+        manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
+        files_to_upload: list[str] = []
+        for key in ("json", "html", "body"):
+            versioned = manifest_data.get("artifacts", {}).get(key)
+            if versioned:
+                files_to_upload.append(versioned)
+        for key in ("json", "html", "body"):
+            fixed = manifest_data.get("fixed_names", {}).get(key)
+            if fixed:
+                files_to_upload.append(fixed)
+        if (odir / "manifest_last_good.json").exists():
+            files_to_upload.append("manifest_last_good.json")
+        files_to_upload.append("manifest.json")
+
+        result = ftps_upload_artifacts(odir, files_to_upload, dry_run=True)
+        click.echo(f"FTPS dry-run OK: would upload {len(result.files_uploaded)} files")
+        return
+
+    # Build FTPS file list for fallback path
+    manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
+    ftps_files: list[str] = []
     for key in ("json", "html", "body"):
         versioned = manifest_data.get("artifacts", {}).get(key)
         if versioned:
-            files_to_upload.append(versioned)
+            ftps_files.append(versioned)
     for key in ("json", "html", "body"):
         fixed = manifest_data.get("fixed_names", {}).get(key)
         if fixed:
-            files_to_upload.append(fixed)
+            ftps_files.append(fixed)
     if (odir / "manifest_last_good.json").exists():
-        files_to_upload.append("manifest_last_good.json")
-    files_to_upload.append("manifest.json")
+        ftps_files.append("manifest_last_good.json")
+    ftps_files.append("manifest.json")
 
-    result = upload_artifacts(odir, files_to_upload, dry_run=dry_run)
-    if result.success:
-        click.echo(f"FTPS upload {'(dry-run) ' if dry_run else ''}OK: {len(result.files_uploaded)} files")
-    else:
-        click.echo(
-            f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
-            f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
-            err=True,
-        )
-        raise SystemExit(2)
+    _do_upload(odir, ftps_files)
 
 
 def main() -> None:

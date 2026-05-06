@@ -24,14 +24,30 @@ SHORTCODE_MARKER = "sfagent_market_report_shortcode"
 ENQUEUE_MARKER = "sfagent_enqueue_styles"
 
 SHORTCODE_PHP = """
-// SmallFarmsAgent market report shortcode (M7 Go-Live)
+// SmallFarmsAgent market report shortcode (WP007 — WP REST media library via manifest-of-URLs)
+// AC-04 Option A: fetches sfagent-manifest-of-urls.json from the media library, then
+// dereferences the report_body URL to serve the current HTML fragment.
+// The manifest-of-urls URL is stored in wp_option 'sfagent_manifest_of_urls_url' and
+// updated by the Python publisher after each upload via wp_shortcode_install.py --set-mou-url.
 function sfagent_market_report_shortcode($atts) {
-    $upload_dir = wp_upload_dir();
-    $file = $upload_dir['basedir'] . '/market/public_report_body.html';
-    if (!file_exists($file)) {
-        return '<p style="color:red;">Market report not available.</p>';
+    $mou_url = get_option('sfagent_manifest_of_urls_url', '');
+    if (empty($mou_url)) {
+        return '<p style="color:red;">Market report configuration missing (sfagent_manifest_of_urls_url option not set).</p>';
     }
-    return file_get_contents($file);
+    $response = wp_remote_get($mou_url, array('timeout' => 10, 'sslverify' => true));
+    if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+        return '<p style="color:red;">Market report temporarily unavailable.</p>';
+    }
+    $manifest = json_decode(wp_remote_retrieve_body($response), true);
+    if (!isset($manifest['artifacts']['report_body'])) {
+        return '<p style="color:red;">Market report manifest format error.</p>';
+    }
+    $body_url = $manifest['artifacts']['report_body'];
+    $body_response = wp_remote_get($body_url, array('timeout' => 15, 'sslverify' => true));
+    if (is_wp_error($body_response) || wp_remote_retrieve_response_code($body_response) !== 200) {
+        return '<p style="color:red;">Market report content temporarily unavailable.</p>';
+    }
+    return wp_remote_retrieve_body($body_response);
 }
 add_shortcode('sfagent_market_report', 'sfagent_market_report_shortcode');
 """
@@ -190,13 +206,78 @@ def create_wp_page() -> bool:
         return False
 
 
+def set_manifest_of_urls_option(mou_url: str) -> bool:
+    """Store the manifest-of-URLs URL in WP option 'sfagent_manifest_of_urls_url' via REST API.
+
+    The shortcode reads this option to find the pointer file (AC-04 Option A).
+    Requires UPRESS_WP_APP_USER / UPRESS_WP_APP_PASS in .env.
+    """
+    import base64
+    import os
+
+    wp_user = os.getenv("UPRESS_WP_APP_USER", "").strip()
+    wp_pass = os.getenv("UPRESS_WP_APP_PASS", "").replace(" ", "")
+    if not (wp_user and wp_pass):
+        print("[SKIP] WP REST credentials not set — cannot set sfagent_manifest_of_urls_url option.", file=sys.stderr)
+        print(f"  Set it manually in WP admin Options or provide UPRESS_WP_APP_USER/PASS.")
+        return False
+
+    base = config.UPRESS_WP_REST_BASE.rstrip("/")
+    auth = base64.b64encode(f"{wp_user}:{wp_pass}".encode()).decode()
+    headers = {
+        "Authorization": f"Basic {auth}",
+        "Content-Type": "application/json",
+    }
+
+    # WP REST /wp/v2/settings maps to registered settings only.
+    # Use the custom endpoint pattern via httpx POST to /wp/v2/settings if registered,
+    # or fall back to informing the user about manual setup.
+    # The shortcode reads get_option('sfagent_manifest_of_urls_url') — set via REST settings.
+    try:
+        resp = httpx.post(
+            f"{base}/wp/v2/settings",
+            headers=headers,
+            json={"sfagent_manifest_of_urls_url": mou_url},
+            timeout=15,
+            follow_redirects=True,
+        )
+        if resp.status_code in (200, 201):
+            print(f"[OK] sfagent_manifest_of_urls_url set to: {mou_url}")
+            return True
+        else:
+            # /wp/v2/settings requires the option to be registered with register_setting()
+            # If not registered yet, provide the manual step
+            print(
+                f"[WARN] WP REST /settings returned {resp.status_code}. "
+                f"Set sfagent_manifest_of_urls_url manually in WP admin > Options or via functions.php.",
+                file=sys.stderr,
+            )
+            print(f"  Value to set: {mou_url}")
+            return False
+    except Exception as exc:
+        print(f"[FAIL] Could not set WP option: {exc}", file=sys.stderr)
+        return False
+
+
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description="WordPress Shortcode & Page Install (SFA)")
+    parser.add_argument(
+        "--set-mou-url",
+        metavar="URL",
+        default=None,
+        help="Set sfagent_manifest_of_urls_url WP option to URL (AC-04 Option A pointer)",
+    )
+    args = parser.parse_args()
+
+    if args.set_mou_url:
+        print("=== Setting manifest-of-URLs WP option ===")
+        ok = set_manifest_of_urls_option(args.set_mou_url)
+        sys.exit(0 if ok else 1)
+
     print("=== WordPress Shortcode & Page Install ===")
     print()
-
-    if not config.upress_configured():
-        print("[FAIL] FTPS credentials not configured. Set UPRESS_* in .env", file=sys.stderr)
-        sys.exit(1)
 
     ok1 = install_shortcode()
     ok2 = deploy_shared_css()
