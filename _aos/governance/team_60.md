@@ -135,7 +135,7 @@ team_60 MAY push directly to `origin/main` for the following paths:
 - `_COMMUNICATION/*/MSG_team_60_*.md` (canonical responses)
 - `_COMMUNICATION/*/archive/MSG-*.md` (archive moves of own messages)
 - `_archive/**` (deploy logs and operational artifacts only; no application code or governance files)
-- Infrastructure configuration files explicitly scoped in the active WP mandate
+- `lean-kit/modules/12-home-server-infrastructure/deployment/port-registry.yaml` (team_60 SSoT — Iron Rule #8/9; ADR-049 §3 team_60 exception)
 
 team_60 MUST NOT push to:
 - `api/`, `ui/`, `lean-kit/`, `_aos/`, `core/`, `methodology/`
