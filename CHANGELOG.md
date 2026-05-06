@@ -11,6 +11,10 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### Fixed — FTPS upload TLS session reuse (Team 10, SFA-S002-P001-WP006)
+
+- **2026-05-07 — Team 10 (WP006 / F-01):** Confirmed `ReusedSessionFTP_TLS` subclass (overriding `ntransfercmd` to wrap the data socket with the control connection's TLS session) is present in [`organic_market_agent/publisher/ftps_upload.py`](organic_market_agent/publisher/ftps_upload.py) and all upload entry points use it. Extended [`tests/test_ftps_upload.py`](tests/test_ftps_upload.py) with AC-03 coverage: `ntransfercmd` session-reuse behavior, retry/backoff constants, and full 4-file canonical artifact upload. Resolves F-01 HIGH: uPress `425 Unable to build data connection` caused by missing TLS session reuse — public price-index artifacts were stuck at `artifact_version=20260417_004822` (19 days stale). Production deploy and smoke verification deferred to team_99 (AC-05/AC-06).
+
 ### Documentation — project context (Team 10)
 
 - **2026-04-17 — Team 10:** Synced **`_aos/context/PROJECT_CONTEXT.md`** with current **`validate_aos.sh` expectations (0 FAIL; 26/9/0 as of 2026-04-22)**, **WordPress/uPress publish** references (`PUBLISH_CHECKLIST`, `WORDPRESS_PUBLIC_PUBLISH_RUNBOOK`, `AGENTS.md`, `docs/UPRESS_WORDPRESS_STANDARD_v2.md`, key code paths), and **2026-04 production parity** links (Team 10/50/190 reports, `CHANGELOG` [Unreleased]). Updated **`_aos/context/ACTIVATION_ARCH.md`**, **`AGENTS.md`**, **`CLAUDE.md`** (Domain rules), **`.cursor/rules/project-context.mdc`**, **`documentation/README.md`** (quick map + agent steps) to point to the same SSoT.
