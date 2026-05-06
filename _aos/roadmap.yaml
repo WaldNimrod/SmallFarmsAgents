@@ -195,11 +195,11 @@ work_packages:
 
 - id: SFA-S002-P001-WP007
   label: "HTTP Upload Migration via WP REST API (replaces FTPS, port 443 path)"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: NORMAL
   priority: P0
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   production_validator: team_99
@@ -211,13 +211,19 @@ work_packages:
   - gate: L-GATE_E
     result: PASS
     date: "2026-05-07"
-    notes: "Eligibility: WP006 + team_99 deploy diagnosed F-01 as network-level (Bezeq blocks port 21 outbound across home network — Mac AND server both confirmed blocked). uPress IP whitelist did NOT unblock (block is on Bezeq egress, not uPress). Workaround required."
+    notes: "Eligibility: WP006 + team_99 deploy diagnosed F-01 as network-level (Bezeq blocks port 21 outbound across home network — Mac AND server both confirmed blocked). uPress IP whitelist did NOT unblock (block is on Bezeq egress, not uPress)."
   - gate: L-GATE_S
     result: PASS
     date: "2026-05-07"
-    notes: "Fast-tracked. Reference implementation: /Users/nimrod/Documents/shaked-wg-agent/shaked_wg_agent/publisher/wp_upload.py — proven working pattern using WP REST API on port 443 (verified HTTP 200 from waldhomeserver). Two FTP accounts known: AgentsRoot@nimrod.bio (root), HomeServer@nimrod.bio (internal); WP application password also available."
+    notes: "Fast-tracked. Reference shaked-wg-agent wp_upload.py — proven working pattern using WP REST API on port 443 (verified HTTP 200 from waldhomeserver)."
     validator: team_100
-  notes: "Blocking launch. F-01 actual fix lives here. Replaces FTPS as primary upload method. May retain FTPS code as defensive fallback for non-Bezeq deploy environments."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commit 73eaf3e. wp_upload.py created modeled on shaked-wg pattern. AC-04 architectural choice: Option A (manifest URL pointer) — rejected B (pre-registered WP settings overhead) and C (URL slug pinning unsafe — WP REST date-based paths change monthly). 20/20 tests pass. validate_aos 0 FAIL. JSON MIME mu-plugin snippet included in DEPLOY_HANDOFF for team_99 pre-emptive install. FTPS retained as defensive fallback gated on UPRESS_FALLBACK_FTPS=1 (default off)."
+    validator: sfa_build
+    awaiting: "team_00 supplies WP App Password → team_99 deploy + smoke → external validate"
+  notes: "Code complete. Production deploy + smoke pending env update by team_99 (WP App Password from team_00)."
   profile: L0
 
 - id: SFA-S002-P001-WP004
