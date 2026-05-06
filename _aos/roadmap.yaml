@@ -143,17 +143,24 @@ work_packages:
   - gate: L-GATE_B
     result: PASS_WITH_FINDINGS
     date: "2026-05-07"
-    notes: "Pass-1 baseline complete. Self-attested by team_99 per ADR044 §1 (OPS track). 5/5 community collectors healthy May 6. F-01 HIGH FTPS upload broken (TLS session reuse) — public artifacts 19 days stale. F-02 MEDIUM May 3-5 outage resolved (clatd fix). Conditional close: requires WP006 (FTPS Remediation) → Pass-2 verification."
+    notes: "Pass-1 baseline complete. Self-attested by team_99 per ADR044 §1 (OPS track). 5/5 community collectors healthy May 6. F-01 HIGH FTPS upload broken — public artifacts 19 days stale. F-02 MEDIUM May 3-5 outage resolved (clatd fix). Conditional close: requires WP007 → Pass-2."
     validator: team_99
     pass: 1
     findings:
     - id: F-01
       severity: HIGH
-      remediation_wp: SFA-S002-P001-WP006
+      remediation_wp: SFA-S002-P001-WP007
     - id: F-02
       severity: MEDIUM
       status: RESOLVED
-  notes: "Pass-1 PASS_WITH_FINDINGS. Pass-2 pending after WP006 (F-01 fix) + WP001/WP002 land."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "Pass-2 verification COMPLETE. Self-attested by team_99 (ADR044 §1). After WP007 deploy: 5/5 artifacts uploaded via WP REST API; manifest.artifact_version=20260506_233451 (fresh, was 20260417 stale); product_count=32 (was 1); report_date=2026-05-06 (was placeholder 2099-08-12); community_sources=4. AC-04 lifted FAIL→PASS. F-01 CLOSED. All 7 ACs PASS. Reports: _COMMUNICATION/team_99/SFA-S002-P001-WP003/VERIFICATION_REPORT_PASS2_v1.0.0.md."
+    validator: team_99
+    pass: 2
+  status_after_pass2: COMPLETE
+  notes: "Pass-2 PASS — F-01 closed via WP007 (WP REST API upload). Site shows fresh data publicly. Awaiting external L-GATE_V via WP005 bundle."
   profile: L0
 
 - id: SFA-S002-P001-WP006
@@ -195,7 +202,7 @@ work_packages:
 
 - id: SFA-S002-P001-WP007
   label: "HTTP Upload Migration via WP REST API (replaces FTPS, port 443 path)"
-  status: BUILDING
+  status: COMPLETE
   track: A
   effort: NORMAL
   priority: P0
@@ -211,19 +218,24 @@ work_packages:
   - gate: L-GATE_E
     result: PASS
     date: "2026-05-07"
-    notes: "Eligibility: WP006 + team_99 deploy diagnosed F-01 as network-level (Bezeq blocks port 21 outbound across home network — Mac AND server both confirmed blocked). uPress IP whitelist did NOT unblock (block is on Bezeq egress, not uPress)."
+    notes: "Eligibility: F-01 root cause re-diagnosed as network-level (Bezeq blocks port 21 outbound; uPress IP whitelist did NOT unblock — block is Bezeq egress)."
   - gate: L-GATE_S
     result: PASS
     date: "2026-05-07"
-    notes: "Fast-tracked. Reference shaked-wg-agent wp_upload.py — proven working pattern using WP REST API on port 443 (verified HTTP 200 from waldhomeserver)."
+    notes: "Fast-tracked. Reference shaked-wg-agent wp_upload.py."
     validator: team_100
   - gate: L-GATE_B
     result: PASS
     date: "2026-05-07"
-    notes: "sfa_build (Sonnet) commit 73eaf3e. wp_upload.py created modeled on shaked-wg pattern. AC-04 architectural choice: Option A (manifest URL pointer) — rejected B (pre-registered WP settings overhead) and C (URL slug pinning unsafe — WP REST date-based paths change monthly). 20/20 tests pass. validate_aos 0 FAIL. JSON MIME mu-plugin snippet included in DEPLOY_HANDOFF for team_99 pre-emptive install. FTPS retained as defensive fallback gated on UPRESS_FALLBACK_FTPS=1 (default off)."
+    notes: "sfa_build (Sonnet) commit 73eaf3e. wp_upload.py + 20/20 unit tests + AC-04 Option A (manifest URL pointer)."
     validator: sfa_build
-    awaiting: "team_00 supplies WP App Password → team_99 deploy + smoke → external validate"
-  notes: "Code complete. Production deploy + smoke pending env update by team_99 (WP App Password from team_00)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "Production deploy by team_99 (commit c446f85 / 42026f3 on main). 5/5 artifacts via WP REST API: sfagent-manifest.json (id 91379), sfagent-public-report.json (91380), sfagent-public-report.html (91381), sfagent-public-report-body.html (91382), sfagent-manifest-of-urls.json (91383). mu-plugin sfagent-allow-json.php installed manually by team_00 via uPress panel file manager. WP option sfagent_manifest_of_urls_url wired. Smoke confirmed: artifact_version=20260506_233451, product_count=32, report_date=2026-05-06, community_sources=4. F-01 closed. Public site shows fresh data."
+    validator: team_99
+    pass: production
+  notes: "Complete. F-01 launch blocker resolved via WP REST API on port 443. Site live with fresh daily data. Awaiting external L-GATE_V via WP005 bundle."
   profile: L0
 
 - id: SFA-S002-P001-WP004
