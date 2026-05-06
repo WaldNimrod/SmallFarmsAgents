@@ -120,12 +120,12 @@ work_packages:
 
 - id: SFA-S002-P001-WP003
   label: "Server Scraping Verification (waldhomeserver)"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
-  assigned_builder: team_60
+  assigned_builder: team_99
   assigned_validator: external
   created_at: "2026-05-07"
   milestone_ref: "S002"
@@ -138,9 +138,49 @@ work_packages:
   - gate: L-GATE_S
     result: PASS
     date: "2026-05-07"
-    notes: "LOD400 spec authored. AC matrix covers 7 areas (scheduler, freshness, logs, FTPS round-trip, page render, index integrity, docs). Read-only verification WP — no code changes expected. Two-pass verification (baseline + post-WP001/WP002). Precision gate satisfied."
+    notes: "LOD400 spec authored. AC matrix covers 7 areas. Read-only verification — no code changes. Two-pass (baseline + post-WP001/WP002)."
     validator: team_100
-  notes: "Production scraping freshness + log integrity verification before launch."
+  - gate: L-GATE_B
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-07"
+    notes: "Pass-1 baseline complete. Self-attested by team_99 per ADR044 §1 (OPS track). 5/5 community collectors healthy May 6. F-01 HIGH FTPS upload broken (TLS session reuse) — public artifacts 19 days stale. F-02 MEDIUM May 3-5 outage resolved (clatd fix). Conditional close: requires WP006 (FTPS Remediation) → Pass-2 verification."
+    validator: team_99
+    pass: 1
+    findings:
+    - id: F-01
+      severity: HIGH
+      remediation_wp: SFA-S002-P001-WP006
+    - id: F-02
+      severity: MEDIUM
+      status: RESOLVED
+  notes: "Pass-1 PASS_WITH_FINDINGS. Pass-2 pending after WP006 (F-01 fix) + WP001/WP002 land."
+  profile: L0
+
+- id: SFA-S002-P001-WP006
+  label: "FTPS Upload Remediation (TLS session reuse — F-01 fix)"
+  status: ELIGIBLE
+  track: A
+  effort: NORMAL
+  priority: P0
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
+  assigned_builder: sfa_build
+  production_validator: team_99
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP006/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "Eligibility evidence: WP003 Pass-1 finding F-01 HIGH (active public regression — site 19 days stale). team_00 in-session approval to open."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "Fast-tracked LOD400 — root cause known (Python ftplib.FTP_TLS lacks TLS session reuse for uPress data connections). Reference implementation exists at /Users/nimrod/Documents/shaked-wg-agent/shaked_wg_agent/publisher/ftps_upload.py (ReusedSessionFTP_TLS subclass — pattern originally copied FROM SFA, now needs to be restored)."
+    validator: team_100
+  notes: "Blocking launch (AC-04 of WP003). P0 priority. Code WP — not OPS — sfa_build (Sonnet) is builder; team_99 deploys + smoke-tests in production."
   profile: L0
 
 - id: SFA-S002-P001-WP004

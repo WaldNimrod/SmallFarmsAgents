@@ -120,6 +120,26 @@ pending_mutations:
     timestamp: 2026-05-07T00:00:00Z
     committed_by: team_100
 
+  - entity: work_package
+    id: SFA-S002-P001-WP006
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "FTPS Upload Remediation (TLS session reuse — F-01 fix)"
+      track: A
+      effort: NORMAL
+      priority: P0
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_S
+      lod_status: LOD400_LOCKED
+      assigned_builder: sfa_build
+      production_validator: team_99
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP006/LOD400_spec.md
+      eligibility: "Discovered via WP003 Pass-1 verdict 2026-05-07 — F-01 HIGH (FTPS upload broken, public artifacts 19 days stale)"
+    timestamp: 2026-05-07T22:30:00Z
+    committed_by: team_100
+
 sync_instructions: |
   When DB is back online (probe shows `status: online`):
   1. Verify connectivity from hub: cat /Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json
