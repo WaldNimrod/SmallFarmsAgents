@@ -1,0 +1,138 @@
+---
+# Offline DB Sync Changelog — SFA Release-Prep Session
+# Per ADR034 R8 (Offline Changelog Protocol)
+# These mutations were authored offline. When DB comes back online, sync via:
+#   bash /Users/nimrod/Documents/agents-os/scripts/sync_offline_to_db.sh --force
+
+offline_session:
+  session_id: offline-2026-05-07-smallfarmsagents-release-prep
+  date: 2026-05-07
+  actor: team_100
+  project: smallfarmsagents
+  db_unavailable_since: 2026-05-06T18:59:16Z
+  reason: "connection to server at 127.0.0.1, port 5434 failed: Connection refused"
+  probe_output: |
+    Source: /Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json
+    status: offline
+    db_configured: true
+
+note: |
+  All WPs in this session are spoke-native (SFA-SNNN-PNNN-WPNNN format).
+  Per ADR034 R9, spoke-native WPs use _aos/roadmap.yaml as file-based SSoT
+  with no hub DB row. PENDING_DB_SYNC.yaml is recorded here for transparency
+  and to satisfy validate_aos.sh Check 25 signaling.
+
+pending_mutations:
+  - entity: milestone
+    id: S002
+    operation: open
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      active_milestone: S002
+      previous: S001 (closed 2026-04-12 via L-GATE_V PASS by team_90)
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+  - entity: work_package
+    id: SFA-S002-P001-WP001
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "M10 Thaw + Completion"
+      track: A
+      effort: LARGE
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_E
+      lod_status: LOD200
+      assigned_builder: sfa_build (Sonnet)
+      assigned_validator: sfa_val (Haiku, cross-engine vs team_100 Opus)
+      milestone_ref: S002
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP001/LOD400_spec.md
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+  - entity: work_package
+    id: SFA-S002-P001-WP002
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "MyPIPS Source Integration + Branch Cleanup"
+      track: A
+      effort: LARGE
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_E
+      lod_status: LOD200
+      depends_on: SFA-S002-P001-WP001
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP002/LOD400_spec.md
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+  - entity: work_package
+    id: SFA-S002-P001-WP003
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "Server Scraping Verification (waldhomeserver)"
+      track: A
+      effort: NORMAL
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_E
+      lod_status: LOD200
+      assigned_builder: team_60
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP003/LOD400_spec.md
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+  - entity: work_package
+    id: SFA-S002-P001-WP004
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "Mobile UI Parity (responsive sfagent_market_report)"
+      track: A
+      effort: NORMAL
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_E
+      lod_status: LOD200
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP004/LOD400_spec.md
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+  - entity: work_package
+    id: SFA-S002-P001-WP005
+    operation: create
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "Public Launch Package (external QA bundle + rollback plan)"
+      track: A
+      effort: NORMAL
+      status: ELIGIBLE
+      current_lean_gate: L-GATE_E
+      lod_status: LOD200
+      depends_on: [SFA-S002-P001-WP001, SFA-S002-P001-WP002, SFA-S002-P001-WP003, SFA-S002-P001-WP004]
+      spec_ref: _aos/work_packages/S002/SFA-S002-P001-WP005/LOD400_spec.md
+    timestamp: 2026-05-07T00:00:00Z
+    committed_by: team_100
+
+sync_instructions: |
+  When DB is back online (probe shows `status: online`):
+  1. Verify connectivity from hub: cat /Users/nimrod/Documents/agents-os/_aos/db_connectivity_status.json
+  2. Load this file from spoke and dry-run: bash /Users/nimrod/Documents/agents-os/scripts/sync_offline_to_db.sh --dry-run
+  3. NOTE — these are spoke-native WPs (R9). Hub may elect to either:
+     (a) skip DB sync entirely (file-based remains SSoT), or
+     (b) mirror as informational rows for cross-domain visibility.
+  4. Apply: bash scripts/sync_offline_to_db.sh --force
+  5. Verify: bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
+  6. Apply label [offline-sync-complete] and remove this file (or mark resolved).
+
+gate_history_note: |
+  Gate history for this offline session is file-authored.
+  L-GATE_E PASS recorded against each WP based on team_00 directive 2026-05-07
+  (in-session approval of SFA-S002-P001 program structure).
+  Per ADR034 R8.3: gate_history is file-authored when DB is unavailable.

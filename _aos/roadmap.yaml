@@ -11,13 +11,16 @@ project:
   lean_kit_version: "3.1.7+c546ed4"
   created: "2026-03-01"
   owner: sfa_sd
-  active_milestone: "S001"
+  active_milestone: "S002"
   notes: >
     Community AI agent platform for Israel's organic farming market.
     OrganicMarketAgent: community price index for organic vegetables.
-    Pre-AOS milestones M1-M9 complete. M10 (UX + publish) and M11 (community features)
-    are backlog.
+    Pre-AOS milestones M1-M9 complete. M10 (UX + publish) THAWED 2026-05-07
+    and folded into S002 release-prep program (SFA-S002-P001-WP001).
+    M11 (community features) and Post-M9 LOD200 (WP-A1/WP-A2) deferred to S003+.
     S001 AOS canonization COMPLETE — 2026-04-12. L-GATE_V PASS (Team 90).
+    S002 OPENED — 2026-05-07. L-GATE_E PASS by team_00 in-session approval.
+    Active program: SFA-S002-P001 — Public Index Launch Readiness (5 WPs).
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -55,4 +58,113 @@ work_packages:
       all verified. Cross-engine confirmed."
   notes: "COMPLETE 2026-04-12. AOS canonization. S001 milestone closed. validate_aos.sh
     12/12 PASS."
+  profile: L0
+
+# ============================================================================
+# S002 — Public Index Launch Readiness Program (SFA-S002-P001)
+# Opened 2026-05-07. team_00 in-session approval. Offline-DB session per ADR034 R8.
+# Spoke-native WPs (R9 exception) — file-based SSoT; PENDING_DB_SYNC.yaml records
+# pending mutations for hub-side awareness.
+# ============================================================================
+
+- id: SFA-S002-P001-WP001
+  label: "M10 Thaw + Completion"
+  status: ELIGIBLE
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP001/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_00 in-session approval of SFA-S002-P001 program structure (release-prep)."
+  notes: "Source: cursor/m10-doc-mandates-spike@bb981ed. Migrations 072/073, basket_tier_resolver, PRD025/026/027."
+  profile: L0
+
+- id: SFA-S002-P001-WP002
+  label: "MyPIPS Source Integration + Branch Cleanup"
+  status: ELIGIBLE
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  depends_on: ["SFA-S002-P001-WP001"]
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP002/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_00 in-session approval. Raw material (Tend exports + MasterClass) DO NOT TOUCH."
+  notes: "Source: cursor/mypips-communication-and-handoffs@732121e (MyPIPS portion only)."
+  profile: L0
+
+- id: SFA-S002-P001-WP003
+  label: "Server Scraping Verification (waldhomeserver)"
+  status: ELIGIBLE
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200
+  assigned_builder: team_60
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP003/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_00 in-session approval. Server-side authority per ADR-049."
+  notes: "Production scraping freshness + log integrity verification before launch."
+  profile: L0
+
+- id: SFA-S002-P001-WP004
+  label: "Mobile UI Parity (responsive sfagent_market_report)"
+  status: ELIGIBLE
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP004/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_00 in-session approval."
+  notes: "Lighthouse mobile ≥85, RTL Hebrew, viewports 375/414/768."
+  profile: L0
+
+- id: SFA-S002-P001-WP005
+  label: "Public Launch Package"
+  status: ELIGIBLE
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200
+  assigned_builder: team_100
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  depends_on: ["SFA-S002-P001-WP001", "SFA-S002-P001-WP002", "SFA-S002-P001-WP003", "SFA-S002-P001-WP004"]
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP005/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_00 in-session approval."
+  notes: "Final gate: PUBLISH_CHECKLIST + external QA bundle + rollback plan + aos_mail dispatch."
   profile: L0
