@@ -20,7 +20,12 @@ project:
     M11 (community features) and Post-M9 LOD200 (WP-A1/WP-A2) deferred to S003+.
     S001 AOS canonization COMPLETE — 2026-04-12. L-GATE_V PASS (Team 90).
     S002 OPENED — 2026-05-07. L-GATE_E PASS by team_00 in-session approval.
-    Active program: SFA-S002-P001 — Public Index Launch Readiness (5 WPs).
+    Active program: SFA-S002-P001 — Public Index Launch Readiness.
+    Phase 1 (2026-05-07): WP003+WP004+WP006+WP007 COMPLETE. F-01 RESOLVED.
+    Site live with fresh data via WP REST API on port 443. Phase 1 awaiting
+    external L-GATE_V via WP005 bundle.
+    Phase 2: WP001 (M10 thaw) + WP002 (MyPIPS sources) DEFERRED to next session.
+    Mandates already published in git (commit 6e1dfcd) — ready for builder dispatch.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -69,7 +74,10 @@ work_packages:
 
 - id: SFA-S002-P001-WP001
   label: "M10 Thaw + Completion"
-  status: ELIGIBLE
+  status: DEFERRED_PHASE2
+  phase: 2
+  deferred_at: "2026-05-07"
+  deferred_reason: "team_00 directive — Phase 1 launch via WP004+WP007 prioritized; WP001 LARGE effort deferred to next session. Mandate already published in git (commit 6e1dfcd)."
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_S
@@ -94,7 +102,10 @@ work_packages:
 
 - id: SFA-S002-P001-WP002
   label: "MyPIPS Source Integration + Branch Cleanup"
-  status: ELIGIBLE
+  status: DEFERRED_PHASE2
+  phase: 2
+  deferred_at: "2026-05-07"
+  deferred_reason: "team_00 directive — Phase 1 launch prioritized; WP002 LARGE deferred to next session. Mandate already published in git (commit 6e1dfcd). Raw material guardrail (Tend + MasterClass) carries forward intact."
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_S
@@ -264,17 +275,19 @@ work_packages:
   profile: L0
 
 - id: SFA-S002-P001-WP005
-  label: "Public Launch Package"
-  status: ELIGIBLE
+  label: "Public Launch Package (Phase 1 External Validation Bundle)"
+  status: AWAITING_EXTERNAL_VALIDATION
+  phase: 1
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: team_100
   assigned_validator: external
   created_at: "2026-05-07"
   milestone_ref: "S002"
-  depends_on: ["SFA-S002-P001-WP001", "SFA-S002-P001-WP002", "SFA-S002-P001-WP003", "SFA-S002-P001-WP004"]
+  depends_on: ["SFA-S002-P001-WP003", "SFA-S002-P001-WP004", "SFA-S002-P001-WP006", "SFA-S002-P001-WP007"]
+  rescope_note: "Original deps included WP001+WP002. Phase 1 scope reduced — WP001+WP002 deferred to Phase 2. Acceptable per team_00 directive 2026-05-07 (site live now > waiting weeks for full M10+MyPIPS)."
   spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP005/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_E
@@ -284,7 +297,13 @@ work_packages:
   - gate: L-GATE_S
     result: PASS
     date: "2026-05-07"
-    notes: "LOD400 spec authored. Meta-WP — produces external validation bundle (no code). 7 AC covering bundle composition, rollback plan, aos_mail prompt, sign-off matrix. Cross-engine constraint enforced. Precision gate satisfied."
+    notes: "LOD400 spec authored. Meta-WP — bundles existing artifacts (no code)."
     validator: team_100
-  notes: "Final gate: PUBLISH_CHECKLIST + external QA bundle + rollback plan + aos_mail dispatch."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "Bundle composed at _COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/. 6 root files (MANIFEST, PROGRAM_SUMMARY, RISK_REGISTER, ROLLBACK_PLAN, VALIDATE_AOS_OUTPUT, AOS_MAIL_PROMPT) + 4 per-WP folders (WP003/WP004/WP006/WP007). Phase 1 scope: 4 WPs (deferred WP001+WP002 to Phase 2). Sign-off matrix + AC matrix + rollback plan + cross-engine activation prompt all included."
+    validator: team_100
+  awaiting: "team_00 dispatches AOS_MAIL_PROMPT.md to non-Opus engine (Cursor/Sonnet/Haiku) for L-GATE_V external verdict"
+  notes: "Phase 1 Public Launch Package complete. F-01 closed. Site live with fresh data. External constitutional validation pending."
   profile: L0
