@@ -322,11 +322,11 @@ work_packages:
 
 - id: SFA-S002-P001-WP005
   label: "Public Launch Package (Phase 1 External Validation Bundle)"
-  status: AWAITING_EXTERNAL_VALIDATION
+  status: COMPLETE
   phase: 1
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   assigned_builder: team_100
   assigned_validator: external
@@ -348,19 +348,17 @@ work_packages:
   - gate: L-GATE_B
     result: PASS
     date: "2026-05-07"
-    notes: "Bundle composed at _COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/. 6 root files (MANIFEST, PROGRAM_SUMMARY, RISK_REGISTER, ROLLBACK_PLAN, VALIDATE_AOS_OUTPUT, AOS_MAIL_PROMPT) + 4 per-WP folders (WP003/WP004/WP006/WP007). Phase 1 scope: 4 WPs (deferred WP001+WP002 to Phase 2). Sign-off matrix + AC matrix + rollback plan + cross-engine activation prompt all included."
+    notes: "Bundle composed at _COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/. 6 root files + 4 per-WP folders. Phase 1 scope: 4 WPs (deferred WP001+WP002 to Phase 2)."
     validator: team_100
-  awaiting: "team_00 dispatches AOS_MAIL_PROMPT.md to non-Opus engine (Cursor/Sonnet/Haiku) for L-GATE_V external verdict"
   - gate: L-GATE_V
     result: PASS_WITH_FINDINGS
     date: "2026-05-07"
-    notes: "External constitutional verdict by team_190 (Cursor Composer, non-Opus per Iron Rule #1). Verdict commit ccb5939. Findings: F-190-01 MEDIUM (scheduler+admin still FTPS-only — REMEDIATED SAME DAY via WP008 commit 06eca4b + production deploy 5b80c60); F-190-02 LOW (roadmap drift — fixed); F-190-03 LOW (no formal LOD500 — accepted L0); F-190-04 INFO."
+    notes: "External constitutional verdict by team_190 (Cursor Composer, non-Opus per Iron Rule #1). Verdict commit ccb5939. Findings: F-190-01 MEDIUM (scheduler+admin still FTPS-only — REMEDIATED SAME DAY via WP008 commit 06eca4b + production deploy 5b80c60); F-190-02 LOW (drift fixed); F-190-03 LOW (no formal LOD500 — accepted L0); F-190-04 INFO."
     validator: team_190
   - gate: L-GATE_V
     result: PASS
     date: "2026-05-07"
     notes: "F-190-01 closed via WP008 production deploy. All Phase 1 findings resolved. Phase 1 effective verdict: PASS."
     validator: team_100
-  status: COMPLETE
   notes: "Phase 1 Public Launch Package COMPLETE. F-01 closed (WP007). F-190-01 closed (WP008). Site live with fresh daily data via WP REST API on all 3 entrypoints (CLI + scheduler + admin)."
   profile: L0
