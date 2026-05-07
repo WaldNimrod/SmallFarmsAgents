@@ -222,61 +222,47 @@ def run_aggregator_cmd(agg_date: str | None) -> None:
 def _do_upload(output_dir: Path, ftps_file_list: list[str]) -> None:
     """Upload artifacts via WP REST API (primary) or FTPS fallback (if UPRESS_FALLBACK_FTPS=1).
 
+    Thin wrapper around dispatch_upload — all policy lives in upload_dispatch.py (WP008).
     Exits with code 2 on failure.
     """
-    import os
-
+    from organic_market_agent.publisher.upload_dispatch import (
+        NoUploadConfigured,
+        UploadResult,
+        dispatch_upload,
+    )
     from organic_market_agent.publisher.wp_upload import (
         MissingCredentialsError as WpMissingCredentialsError,
-        upload_all_artifacts,
     )
 
-    fallback_ftps = os.getenv("UPRESS_FALLBACK_FTPS", "").lower() in ("1", "true", "yes")
-    wp_user = os.getenv("UPRESS_WP_APP_USER", "").strip()
-    wp_pass = os.getenv("UPRESS_WP_APP_PASS", "").strip()
+    try:
+        result: UploadResult = dispatch_upload(output_dir)
+    except NoUploadConfigured as exc:
+        click.echo(str(exc), err=True)
+        raise SystemExit(2)
+    except WpMissingCredentialsError as exc:
+        click.echo(f"WP REST upload: credentials error — {exc}", err=True)
+        raise SystemExit(2)
+    except Exception as exc:
+        click.echo(f"Upload FAILED: {exc}", err=True)
+        raise SystemExit(2)
 
-    if wp_user and wp_pass and not fallback_ftps:
-        # Primary path: WP REST API
-        try:
-            results = upload_all_artifacts(output_dir)
-            click.echo(f"WP REST upload OK: {len(results)} artifacts uploaded")
-            for canonical, (mid, url) in results.items():
-                click.echo(f"  {canonical} → media_id={mid} url={url}")
-            return
-        except WpMissingCredentialsError as exc:
-            click.echo(f"WP REST upload: credentials error — {exc}", err=True)
-            raise SystemExit(2)
-        except Exception as exc:
-            click.echo(f"WP REST upload FAILED: {exc}", err=True)
-            if not fallback_ftps:
-                raise SystemExit(2)
-            click.echo("Attempting FTPS fallback (UPRESS_FALLBACK_FTPS not set — skipped)", err=True)
-            raise SystemExit(2)
-
-    if fallback_ftps:
-        # Fallback path: FTPS (legacy, gated on UPRESS_FALLBACK_FTPS=1)
-        from organic_market_agent.publisher.ftps_upload import upload_artifacts as ftps_upload_artifacts
-
-        click.echo("WP REST skipped: UPRESS_FALLBACK_FTPS=1 — using FTPS fallback")
-        result = ftps_upload_artifacts(output_dir, ftps_file_list)
+    if result.protocol_used == "wp_rest":
+        click.echo(f"WP REST upload OK: {result.success_count} artifacts uploaded")
+        for canonical, (mid, url) in result.wp_artifacts.items():
+            click.echo(f"  {canonical} → media_id={mid} url={url}")
+    elif result.protocol_used == "ftps":
         if result.success:
-            click.echo(f"FTPS upload OK: {len(result.files_uploaded)} files uploaded")
+            click.echo(f"FTPS upload OK: {result.success_count} files uploaded")
         else:
             click.echo(
-                f"FTPS upload FAILED: {len(result.files_uploaded)} ok, "
-                f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+                f"FTPS upload FAILED: {result.success_count} ok, "
+                f"{len(result.files_failed)} failed — {'; '.join(result.errors) or 'see logs'}",
                 err=True,
             )
             raise SystemExit(2)
-        return
 
-    # Neither WP REST creds nor FTPS fallback flag
-    click.echo(
-        "Upload skipped: set UPRESS_WP_APP_USER + UPRESS_WP_APP_PASS for WP REST upload, "
-        "or UPRESS_FALLBACK_FTPS=1 for FTPS fallback.",
-        err=True,
-    )
-    raise SystemExit(2)
+    if not result.success:
+        raise SystemExit(2)
 
 
 @cli.command("run_publisher")

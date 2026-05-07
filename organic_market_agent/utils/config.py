@@ -39,8 +39,18 @@ class Config:
     UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
 
     @classmethod
-    def upress_configured(cls) -> bool:
+    def ftps_configured(cls) -> bool:
+        """True when FTPS credentials are set (legacy fallback path)."""
         return bool(cls.UPRESS_SFTP_HOST and cls.UPRESS_SFTP_USER and cls.UPRESS_SFTP_PASS)
+
+    @classmethod
+    def upress_configured(cls) -> bool:
+        """True when any upload method is configured (WP REST primary OR FTPS fallback).
+
+        WP008: updated from FTPS-only check to OR of both methods so the scheduler
+        upload gate correctly fires when WP REST keys are present (F-190-01 fix).
+        """
+        return cls.wp_rest_configured() or cls.ftps_configured()
 
     @classmethod
     def wp_rest_configured(cls) -> bool:

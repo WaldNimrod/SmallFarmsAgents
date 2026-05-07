@@ -9,9 +9,10 @@ from organic_market_agent.db.session import SessionFactory
 from organic_market_agent.models import IngestionRun, PipelineAlert, SchedulerConfig
 from organic_market_agent.normalizer.engine import NormalizerEngine
 from organic_market_agent.publisher.engine import PublishEngine
-from organic_market_agent.publisher.ftps_upload import (
-    MissingCredentialsError,
-    upload_artifacts,
+from organic_market_agent.publisher.upload_dispatch import (
+    NoUploadConfigured,
+    UploadResult,
+    dispatch_upload,
 )
 from organic_market_agent.scheduler.pipeline_cancel import (
     PipelineRunCancelled,
@@ -40,6 +41,11 @@ from organic_market_agent.utils.pipeline_alert_tags import (
     TAG_SIMULATION_TEST,
     tagged_message,
 )
+
+# Upload protocol tags (WP REST primary via WP008)
+_TAG_UPLOAD_SUCCESS = "[UPLOAD:ok]"
+_TAG_UPLOAD_FAILURE = "[UPLOAD:fail]"
+_TAG_UPLOAD_PARTIAL = "[UPLOAD:partial]"
 
 logger = get_logger(__name__)
 
@@ -282,7 +288,7 @@ def run_pipeline(
                         )
                         s3.commit()
 
-        # --- FTPS upload phase (M7) ---
+        # --- Upload phase (WP REST primary, FTPS fallback — WP008 / F-190-01 fix) ---
         upload_result_summary: dict[str, object] | None = None
         if not skip_upload and publish_summary is not None:
             upload_enabled = False
@@ -294,59 +300,68 @@ def run_pipeline(
 
             if upload_enabled and config.upress_configured():
                 with SessionFactory() as session:
-                    merge_run_progress(session, ingestion_run_id, phase="ftps_upload")
+                    merge_run_progress(session, ingestion_run_id, phase="upload")
                     session.commit()
                 try:
                     output_dir = Path(publish_summary.get("output_dir", "output/public"))
-                    file_list = publish_summary.get("files", [])
-                    result = upload_artifacts(output_dir, file_list)
+                    result: UploadResult = dispatch_upload(output_dir)
                     upload_result_summary = {
+                        "protocol": result.protocol_used,
                         "success": result.success,
-                        "uploaded": result.files_uploaded,
-                        "failed": result.files_failed,
-                        "error": result.error,
+                        "success_count": result.success_count,
+                        "total_count": result.total_count,
+                        "errors": result.errors,
                     }
                     with SessionFactory() as session:
                         if result.success:
+                            # Protocol-aware success message
+                            if result.protocol_used == "wp_rest":
+                                msg = (
+                                    f"WP REST upload OK: {result.success_count} artifacts uploaded"
+                                )
+                            else:
+                                msg = (
+                                    f"FTPS upload OK: {result.success_count} files to {result.remote_base}"
+                                )
                             session.add(PipelineAlert(
                                 level="info",
-                                message=tagged_message(
-                                    TAG_FTPS_UPLOAD_SUCCESS,
-                                    f"FTPS upload OK: {len(result.files_uploaded)} files to {result.remote_base}",
-                                ),
+                                message=tagged_message(_TAG_UPLOAD_SUCCESS, msg),
                                 ingestion_run_id=ingestion_run_id,
                             ))
-                        elif result.files_uploaded:
+                        elif result.success_count > 0:
+                            err_detail = "; ".join(result.errors) if result.errors else "see logs"
                             session.add(PipelineAlert(
                                 level="warning",
                                 message=tagged_message(
-                                    TAG_FTPS_UPLOAD_PARTIAL,
-                                    f"FTPS partial: {len(result.files_uploaded)} ok, "
-                                    f"{len(result.files_failed)} failed — {result.error or 'see logs'}",
+                                    _TAG_UPLOAD_PARTIAL,
+                                    f"{result.protocol_used.upper()} partial: "
+                                    f"{result.success_count} ok, "
+                                    f"{result.total_count - result.success_count} failed — {err_detail}",
                                 ),
                                 ingestion_run_id=ingestion_run_id,
                             ))
                         else:
+                            err_detail = "; ".join(result.errors) if result.errors else "all files failed"
                             session.add(PipelineAlert(
                                 level="error",
                                 message=tagged_message(
-                                    TAG_FTPS_UPLOAD_FAILURE,
-                                    f"FTPS upload FAILED: {result.error or 'all files failed'}",
+                                    _TAG_UPLOAD_FAILURE,
+                                    f"{result.protocol_used.upper()} upload FAILED: {err_detail}",
                                 ),
                                 ingestion_run_id=ingestion_run_id,
                             ))
-                        merge_run_progress(session, ingestion_run_id, phase="ftps_upload_done")
+                        merge_run_progress(session, ingestion_run_id, phase="upload_done")
                         session.commit()
-                except MissingCredentialsError as exc:
-                    logger.warning("run_pipeline: FTPS credentials missing, skipping upload: %s", exc)
+                except NoUploadConfigured as exc:
+                    logger.warning("run_pipeline: no upload method configured, skipping upload: %s", exc)
                 except Exception as exc:
-                    logger.error("run_pipeline: FTPS upload unexpected error: %s", exc)
+                    logger.error("run_pipeline: upload unexpected error: %s", exc)
                     with SessionFactory() as session:
                         session.add(PipelineAlert(
                             level="error",
                             message=tagged_message(
-                                TAG_FTPS_UPLOAD_FAILURE,
-                                f"FTPS upload error: {exc}",
+                                _TAG_UPLOAD_FAILURE,
+                                f"Upload error: {exc}",
                             ),
                             ingestion_run_id=ingestion_run_id,
                         ))

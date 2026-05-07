@@ -13,7 +13,17 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 
 ### Governance — external L-GATE_VALIDATE (Team 190)
 
-- **2026-05-07 — Team 190:** Constitutional verdict **PASS_WITH_FINDINGS** for **SFA-S002-P001 Phase 1** (assignment **SFA-S002-P001-WP005** — bundle WP003+WP004+WP006+WP007). Artifact: [`_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md`](_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md). Mechanical: `validate_aos.sh` **29 PASS / 17 SKIP / 0 FAIL**; pytest spot **81 passed** (`test_wp_upload`, `test_responsive_html`, `test_ftps_upload`). Key finding **F-190-01:** scheduler `pipeline.py` and admin `runs_upload_now` still FTPS-only; WP REST primary path matches `run_publisher --upload` / `_do_upload` only.
+- **2026-05-07 — Team 190:** Constitutional verdict **PASS_WITH_FINDINGS** for **SFA-S002-P001 Phase 1** (assignment **SFA-S002-P001-WP005** — bundle WP003+WP004+WP006+WP007). Artifact: [`_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md`](_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md). Mechanical: `validate_aos.sh` **29 PASS / 17 SKIP / 0 FAIL**; pytest spot **81 passed** (`test_wp_upload`, `test_responsive_html`, `test_ftps_upload`). Key finding **F-190-01:** scheduler `pipeline.py` and admin `runs_upload_now` still FTPS-only; WP REST primary path matches `run_publisher --upload` / `_do_upload` only. **F-190-01 fix landed same day** in WP008 (entry below).
+
+### Fixed — WP REST upload wired into scheduler + admin entrypoints (Team 10, SFA-S002-P001-WP008)
+
+- **2026-05-07 — Team 10 (WP008 / F-190-01 fix):** Prior to this change, WP REST upload was only active in the CLI path (`__main__.py::_do_upload`). The daily cron scheduler (`scheduler/pipeline.py`) and Admin UI manual-upload button (`admin/routes/runs.py::runs_upload_now`) both still called `ftps_upload.upload_artifacts` directly, causing silent failure due to Bezeq port-21 block. Remediation of team_190 finding F-190-01 MEDIUM (verdict commit `ccb5939`).
+  - **New:** [`organic_market_agent/publisher/upload_dispatch.py`](organic_market_agent/publisher/upload_dispatch.py) — `dispatch_upload(output_dir, *, allow_fallback_ftps_env)` shared helper with `UploadResult` dataclass and `NoUploadConfigured` exception. WP REST primary; FTPS fallback gated on `UPRESS_FALLBACK_FTPS=1`.
+  - **Updated:** `scheduler/pipeline.py` upload phase — now calls `dispatch_upload()` (was: `ftps_upload.upload_artifacts`). Scheduler-specific `pipeline_alerts` insertion and error handling preserved. Phase labels updated from `ftps_upload` / `ftps_upload_done` to `upload` / `upload_done`.
+  - **Updated:** `admin/routes/runs.py::runs_upload_now` — now calls `dispatch_upload()` (was: `ftps_upload.upload_artifacts`). JSON/flash response shape preserved for Admin UI.
+  - **Updated:** `utils/config.py::upress_configured()` — now returns `wp_rest_configured() or ftps_configured()` so scheduler upload gate fires when WP REST keys are set (was: FTPS-only check). Added `ftps_configured()` companion classmethod.
+  - **Tests:** [`tests/test_upload_dispatch.py`](tests/test_upload_dispatch.py) (11 unit tests), [`tests/test_scheduler_upload_path.py`](tests/test_scheduler_upload_path.py) (7 tests including F-190-01 regression guard), [`tests/test_pipeline_upload.py`](tests/test_pipeline_upload.py) updated (patched `dispatch_upload` instead of `upload_artifacts`). All 20 upload tests pass.
+  - **Docs:** Runbook §1 updated with shared-helper row and WP008 note.
 
 ### Changed — WP REST API upload — F-01 fix (Team 10, SFA-S002-P001-WP007)
 
