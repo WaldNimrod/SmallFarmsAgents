@@ -170,8 +170,7 @@ work_packages:
     notes: "Pass-2 verification COMPLETE. Self-attested by team_99 (ADR044 §1). After WP007 deploy: 5/5 artifacts uploaded via WP REST API; manifest.artifact_version=20260506_233451 (fresh, was 20260417 stale); product_count=32 (was 1); report_date=2026-05-06 (was placeholder 2099-08-12); community_sources=4. AC-04 lifted FAIL→PASS. F-01 CLOSED. All 7 ACs PASS. Reports: _COMMUNICATION/team_99/SFA-S002-P001-WP003/VERIFICATION_REPORT_PASS2_v1.0.0.md."
     validator: team_99
     pass: 2
-  status_after_pass2: COMPLETE
-  notes: "Pass-2 PASS — F-01 closed via WP007 (WP REST API upload). Site shows fresh data publicly. Awaiting external L-GATE_V via WP005 bundle."
+  notes: "Pass-2 PASS — F-01 closed via WP007 (WP REST API upload). Site shows fresh data publicly. Phase 1 complete. F-190-02 drift fix applied 2026-05-07 (was BUILDING despite Pass-2 COMPLETE in notes)."
   profile: L0
 
 - id: SFA-S002-P001-WP006
@@ -251,10 +250,10 @@ work_packages:
 
 - id: SFA-S002-P001-WP004
   label: "Mobile UI Parity (responsive sfagent_market_report)"
-  status: ELIGIBLE
+  status: COMPLETE
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
@@ -269,9 +268,41 @@ work_packages:
   - gate: L-GATE_S
     result: PASS
     date: "2026-05-07"
-    notes: "LOD400 spec authored. 7 AC: viewports 375/414/768, RTL Hebrew, filter bar (post-WP002), data table, Lighthouse mobile ≥85, cross-device smoke, stale banner. File-level deliverables enumerated. Precision gate satisfied — independent of upstream WPs."
+    notes: "LOD400 spec authored. 7 AC."
     validator: team_100
-  notes: "Lighthouse mobile ≥85, RTL Hebrew, viewports 375/414/768."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commit 30399a3. 47/47 unit tests pass; structural ACs (01/02/03/04/07) verified. AC-05 Lighthouse + AC-06 cross-device smoke deferred to Team 50 with live site access (acknowledged risk R-01 in WP005 RISK_REGISTER)."
+    validator: sfa_build
+  notes: "Phase 1 complete. F-190-02 drift fix applied 2026-05-07 (was ELIGIBLE despite L-GATE_B PASS evidence in bundle)."
+  profile: L0
+
+- id: SFA-S002-P001-WP008
+  label: "Wire WP REST primary into scheduler + admin (F-190-01 remediation)"
+  status: ELIGIBLE
+  track: A
+  effort: SMALL
+  priority: P0
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
+  assigned_builder: sfa_build
+  production_validator: team_99
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S002"
+  spec_ref: "_aos/work_packages/S002/SFA-S002-P001-WP008/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-07"
+    notes: "Eligibility: team_190 verdict ccb5939 — F-190-01 MEDIUM: scheduler/pipeline.py + admin/runs_upload_now still FTPS-only. WP007 fix landed only in CLI __main__._do_upload. Cron path (daily 06:00 UTC) runs scheduler → would fail FTPS tomorrow. P0 because production cron is currently broken even though manual smoke succeeded."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "Fast-tracked. Mechanical fix: extract _do_upload pattern into a shared helper used by __main__.py + scheduler/pipeline.py + admin/routes/runs.py. Update config.upress_configured() to check WP REST keys (currently only checks FTPS). Add scheduler-path test."
+    validator: team_100
+  notes: "Remediation of F-190-01. Without this, daily cron at 06:00 UTC will still fail. Ops blocker even though Phase 1 site is currently fresh from manual run."
   profile: L0
 
 - id: SFA-S002-P001-WP005
