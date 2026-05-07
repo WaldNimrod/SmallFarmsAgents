@@ -1,4 +1,8 @@
-"""Integration test: pipeline FTPS upload phase (mocked FTP, real pipeline logic)."""
+"""Integration test: pipeline upload phase (mocked dispatch_upload, real pipeline logic).
+
+Updated in WP008: pipeline now calls dispatch_upload (shared helper), not ftps_upload
+directly. Tests updated to patch dispatch_upload accordingly.
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -6,21 +10,27 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from organic_market_agent.publisher.ftps_upload import FtpsUploadResult
+from organic_market_agent.publisher.upload_dispatch import UploadResult
+
+
+def _wp_rest_ok_result(n: int = 2) -> UploadResult:
+    artifacts = {f"artifact-{i}.json": (i, f"https://example.com/{i}") for i in range(n)}
+    return UploadResult(
+        protocol_used="wp_rest",
+        success=True,
+        success_count=n,
+        total_count=n,
+        wp_artifacts=artifacts,
+    )
 
 
 class TestPipelineUploadIntegration:
-    """Verify the pipeline correctly calls upload_artifacts when upload is enabled."""
+    """Verify the pipeline correctly calls dispatch_upload when upload is enabled."""
 
-    @patch("organic_market_agent.scheduler.pipeline.upload_artifacts")
-    def test_upload_called_when_enabled(self, mock_upload):
-        """When publish succeeds and upload_enabled=True, upload_artifacts is invoked."""
-        mock_upload.return_value = FtpsUploadResult(
-            success=True,
-            files_uploaded=["public_report.json", "manifest.json"],
-            files_failed=[],
-            remote_base="wp-content/uploads/market",
-        )
+    @patch("organic_market_agent.scheduler.pipeline.dispatch_upload")
+    def test_upload_called_when_enabled(self, mock_dispatch):
+        """When publish succeeds and upload_enabled=True, dispatch_upload is invoked."""
+        mock_dispatch.return_value = _wp_rest_ok_result(2)
 
         from organic_market_agent.scheduler.pipeline import run_pipeline
 
@@ -73,13 +83,14 @@ class TestPipelineUploadIntegration:
 
             run_pipeline(1, skip_upload=False)
 
-            mock_upload.assert_called_once()
-            call_args = mock_upload.call_args
-            assert call_args[0][1] == ["public_report.json", "manifest.json"]
+            mock_dispatch.assert_called_once()
+            call_args = mock_dispatch.call_args
+            # dispatch_upload receives output_dir as first positional arg
+            assert call_args[0][0] == Path("/tmp/test_output")
 
-    @patch("organic_market_agent.scheduler.pipeline.upload_artifacts")
-    def test_upload_skipped_when_disabled(self, mock_upload):
-        """When skip_upload=True, upload_artifacts is never called."""
+    @patch("organic_market_agent.scheduler.pipeline.dispatch_upload")
+    def test_upload_skipped_when_disabled(self, mock_dispatch):
+        """When skip_upload=True, dispatch_upload is never called."""
         from organic_market_agent.scheduler.pipeline import run_pipeline
 
         with (
@@ -124,4 +135,4 @@ class TestPipelineUploadIntegration:
 
             run_pipeline(1, skip_upload=True)
 
-            mock_upload.assert_not_called()
+            mock_dispatch.assert_not_called()

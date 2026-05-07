@@ -12,11 +12,14 @@ This runbook is the canonical reference for the SmallFarmsAgents publish pipelin
 
 | Layer | Component | Path |
 |------|-----------|------|
+| **Shared upload policy** | `dispatch_upload()` — WP REST primary, FTPS opt-in fallback; called by ALL entrypoints (WP008 / F-190-01) | [`organic_market_agent/publisher/upload_dispatch.py`](../../organic_market_agent/publisher/upload_dispatch.py) |
 | **Primary upload** | WP REST API (`/wp/v2/media`) over **HTTPS port 443** | [`organic_market_agent/publisher/wp_upload.py`](../../organic_market_agent/publisher/wp_upload.py) |
 | **Fallback (opt-in)** | FTPS (`ftplib.FTP_TLS` + `ReusedSessionFTP_TLS`) over port 21 | [`organic_market_agent/publisher/ftps_upload.py`](../../organic_market_agent/publisher/ftps_upload.py) — gated by `UPRESS_FALLBACK_FTPS=1` |
 | **WordPress shortcode** | `[sfagent_market_report]` reads URLs from `sfagent_manifest_of_urls_url` WP option, dereferences via `wp_remote_get` | [`scripts/wp_shortcode_install.py`](../../scripts/wp_shortcode_install.py) |
 | **uPress mu-plugin** | `sfagent-allow-json.php` — overrides MIME restrictions on JSON+HTML uploads | `wp-content/mu-plugins/sfagent-allow-json.php` (server-side WP filesystem) |
 | **Pipeline trigger** | Daily cron 06:00 UTC on `waldhomeserver` | `crontab -l` for user `nimrodw` |
+
+**WP008 note:** Prior to WP008 (2026-05-07), only the CLI path (`__main__.py::_do_upload`) used WP REST. The scheduler cron (`scheduler/pipeline.py`) and Admin UI button (`admin/routes/runs.py::runs_upload_now`) were still FTPS-only and would fail due to Bezeq port-21 block (finding F-190-01). WP008 extracted the upload policy into `dispatch_upload()` so all three entrypoints share the same WP-REST-primary behaviour.
 
 ### Data flow
 ```

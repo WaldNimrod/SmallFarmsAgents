@@ -772,13 +772,12 @@ def runs_reconcile_stale():
 @bp.route("/runs/upload-now", methods=["POST"])
 @login_required
 def runs_upload_now():
-    """Manually push existing publish artifacts to uPress via FTPS."""
-    import json as _json
+    """Manually push existing publish artifacts to uPress via WP REST (primary) or FTPS fallback."""
     from pathlib import Path as _Path
 
-    from organic_market_agent.publisher.ftps_upload import (
-        MissingCredentialsError,
-        upload_artifacts,
+    from organic_market_agent.publisher.upload_dispatch import (
+        NoUploadConfigured,
+        dispatch_upload,
     )
 
     output_dir = _Path("output/public")
@@ -787,24 +786,17 @@ def runs_upload_now():
         flash("לא נמצא manifest.json — יש להפעיל ריצת צינור מלאה לפני דחיפה לשרת.", "danger")
         return redirect(url_for("runs.runs_list"))
 
-    manifest_data = _json.loads(manifest_path.read_text(encoding="utf-8"))
-    files_to_upload: list[str] = []
-    for key in ("json", "html", "body"):
-        versioned = manifest_data.get("artifacts", {}).get(key)
-        if versioned:
-            files_to_upload.append(versioned)
-    for key in ("json", "html", "body"):
-        fixed = manifest_data.get("fixed_names", {}).get(key)
-        if fixed:
-            files_to_upload.append(fixed)
-    if (output_dir / "manifest_last_good.json").exists():
-        files_to_upload.append("manifest_last_good.json")
-    files_to_upload.append("manifest.json")
-
     try:
-        result = upload_artifacts(output_dir, files_to_upload)
-    except MissingCredentialsError:
-        flash("חסרים פרטי FTPS — הגדר UPRESS_SFTP_HOST/USER/PASS ב-env.", "danger")
+        result = dispatch_upload(output_dir)
+    except NoUploadConfigured:
+        flash(
+            "לא הוגדרה שיטת העלאה — הגדר UPRESS_WP_APP_USER/PASS לממשק WP REST, "
+            "או UPRESS_FALLBACK_FTPS=1 + פרטי FTPS.",
+            "danger",
+        )
+        return redirect(url_for("runs.runs_list"))
+    except Exception as exc:
+        flash(f"שגיאת העלאה: {exc}", "danger")
         return redirect(url_for("runs.runs_list"))
 
     session = g.db_session
@@ -814,19 +806,22 @@ def runs_upload_now():
         "publish",
         entity_id=None,
         after={
-            "files_uploaded": result.files_uploaded,
-            "files_failed": result.files_failed,
+            "protocol": result.protocol_used,
+            "success_count": result.success_count,
+            "total_count": result.total_count,
+            "errors": result.errors,
             "success": result.success,
         },
     )
     session.commit()
 
     if result.success:
-        flash(f"הועלו {len(result.files_uploaded)} קבצים לשרת בהצלחה.", "success")
+        flash(f"הועלו {result.success_count} קבצים/נכסים לשרת בהצלחה ({result.protocol_used}).", "success")
     else:
+        err_detail = "; ".join(result.errors) if result.errors else "ראו לוגים"
         flash(
-            f"העלאה חלקית: {len(result.files_uploaded)} הצליחו, "
-            f"{len(result.files_failed)} נכשלו — {result.error or 'ראו לוגים'}",
+            f"העלאה חלקית: {result.success_count} הצליחו, "
+            f"{result.total_count - result.success_count} נכשלו — {err_detail}",
             "danger",
         )
     return redirect(url_for("runs.runs_list"))
