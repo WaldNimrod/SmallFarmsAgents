@@ -36,7 +36,7 @@ def upgrade() -> None:
             """
             INSERT INTO sources (
                 code, name, base_url, source_group, market_scope, sales_channel,
-                status, priority, is_active
+                status, priority, is_active, source_tier
             ) VALUES (
                 'SRC_WA',
                 'WhatsApp Community Submissions',
@@ -46,7 +46,8 @@ def upgrade() -> None:
                 'community_direct',
                 'active',
                 3,
-                true
+                true,
+                'price_grid'
             )
             ON CONFLICT (code) DO NOTHING
             """
