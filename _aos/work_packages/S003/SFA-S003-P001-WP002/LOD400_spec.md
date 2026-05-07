@@ -4,7 +4,8 @@
 **Author:** team_100 (Claude Sonnet 4.6)
 **WP:** SFA-S003-P001-WP002 — seed נתונים ראשוני
 **Type:** LOD400_SPEC
-**Status:** READY for L-GATE_S (external — team_190)
+**Status:** L-GATE_S PASS_WITH_FINDINGS (team_190, 2026-05-07) — builder may proceed
+**L-GATE_S findings carried:** F1 BigInteger PK (schema refinement recorded §2.5); F2 field_name convention (§2.5); see verdict `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Sonnet, Team 10)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE)
 **Depends on:** SFA-S003-P001-WP001 (LOD200 schema v1.4.0 APPROVED)
@@ -71,6 +72,10 @@ Builder must use these exact paths as defaults. Each path is wrapped in a `--sou
 ```
 
 Year folders for other years (2018–2021): builder must probe for them at the same parent path and import if present. If a year folder is missing → log `WARN: year {Y} not found, skipping`.
+
+### 2.4 Schema refinement — PK type (F1, approved)
+
+LOD200 specified UUID PKs. **LOD400 overrides to `BigInteger` (autoincrement)** — consistent with existing project-wide pattern (all S002 tables use BigInteger). This is an approved departure from LOD200. Builder uses BigInteger. Recorded for L-GATE_VALIDATE closure.
 
 ### 2.4 Table → Python class mapping
 
@@ -144,10 +149,13 @@ id                          → id (BigInteger PK)
 ```
 
 **`crop_variety_source_values`**
+
+> **F2 convention (team_190 finding, resolved):** `field_name` stores **English DB column names** only — e.g. `documented_price`, `days_to_maturity`, `avg_yield_per_bed_m`. Never Hebrew logical names. This ensures WP003 queries are testable and consistent.
+
 ```
 id             → id (BigInteger PK)
 זן_id          → variety_id (FK → crop_varieties.id, NOT NULL)
-שם_שדה         → field_name (VARCHAR 100, NOT NULL)
+שם_שדה         → field_name (VARCHAR 100, NOT NULL)  ← English DB col name only
 מקור           → source (VARCHAR 100, NOT NULL)
 ערך_טקסט      → value_text (Text, nullable)
 ערך_מספרי     → value_numeric (Numeric 14,6, nullable)

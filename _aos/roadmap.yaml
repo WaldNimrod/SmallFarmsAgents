@@ -420,10 +420,10 @@ work_packages:
 
 - id: SFA-S003-P001-WP002
   label: "ספר גידולים: DB Migrations + Seed Importer (66 crops)"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_READY
   assigned_builder: sfa_build
   assigned_validator: external
@@ -433,11 +433,11 @@ work_packages:
   spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP002/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_S
-    result: PENDING_EXTERNAL
+    result: PASS_WITH_FINDINGS
     date: "2026-05-07"
-    notes: "LOD400 v1.0.0 authored by team_100. LOD300 v1.4.0 approved by team_00. Submitted to team_190 for L-GATE_SPEC constitutional review. Bundle: _COMMUNICATION/TEAM_100/SFA-S003-P001/EXTERNAL_VALIDATION_BUNDLE/"
+    notes: "team_190 L-GATE_SPEC constitutional review. PASS_WITH_FINDINGS. Non-blocking findings: F1 UUID→BigInteger PK schema refinement (approved); F2 field_name convention → English DB names; F3 tab visibility AC-04 authoritative; F4 market-price §6 authoritative; F5 ENTITY_REGISTRY → repo-owned static. All 4 findings patched into LOD400 v1.1.0. Builder (sfa_build/team_10) dispatched. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md"
     validator: team_190
-  notes: "Awaiting team_190 L-GATE_SPEC verdict. 6 Alembic migrations (035-040), SQLAlchemy models, Python importer (Tend 5yr + JMF XLSX), 66 crops, 9 ACs."
+  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-05-07. Builder dispatched. 6 Alembic migrations (035-040), SQLAlchemy models, Python importer (Tend 5yr + JMF XLSX), 66 crops, 9 ACs. Findings F1–F5 non-blocking, close at L-GATE_VALIDATE."
   profile: L0
 
 - id: SFA-S003-P001-WP003
@@ -445,7 +445,7 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_READY
   assigned_builder: sfa_build
   assigned_validator: external
@@ -455,9 +455,9 @@ work_packages:
   spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP003/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_S
-    result: PENDING_EXTERNAL
+    result: PASS_WITH_FINDINGS
     date: "2026-05-07"
-    notes: "LOD400 v1.0.0 authored by team_100. LOD300 v1.0.0 approved by team_00. Submitted to team_190 for L-GATE_SPEC constitutional review (same bundle as WP002)."
+    notes: "team_190 L-GATE_SPEC (same bundle as WP002). PASS_WITH_FINDINGS. Findings patched into LOD400 v1.1.0. Blocked on WP002 completion (depends_on). Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md"
     validator: team_190
-  notes: "Awaiting team_190 L-GATE_SPEC verdict. Flask Blueprint /crop-book/, 3 routes, 3 Jinja2 templates, 8 UI tabs, entity tag system, timeline visualization. 11 ACs."
+  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-05-07. Blocked on WP002 (DB tables must exist first). Flask Blueprint /crop-book/, 3 routes, 3 Jinja2 templates, 8 tabs, entity tags, timeline. 11 ACs. Findings F3–F5 patched."
   profile: L0

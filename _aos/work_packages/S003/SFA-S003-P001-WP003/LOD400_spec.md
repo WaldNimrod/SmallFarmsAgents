@@ -4,7 +4,8 @@
 **Author:** team_100 (Claude Sonnet 4.6)
 **WP:** SFA-S003-P001-WP003 — ממשק ספר גידולים (view-only)
 **Type:** LOD400_SPEC
-**Status:** READY for L-GATE_S (external — team_190)
+**Status:** L-GATE_S PASS_WITH_FINDINGS (team_190, 2026-05-07) — builder may proceed
+**L-GATE_S findings carried:** F3 tab visibility (AC-04 authoritative); F4 market-price placeholder (§6 authoritative); F5 ENTITY_REGISTRY to repo; see verdict `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Sonnet, Team 10)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE)
 **Depends on:** SFA-S003-P001-WP002 (DB tables + seed data must exist)
@@ -151,7 +152,7 @@ Returns:
 - Crop title: שם_עברי + שם_אנגלי + שם_מדעי (italic)
 - Metadata row: משפחה · מחזור גידול · יחידת קציר ברירת מחדל
 
-**8 tabs** (show only tabs where data exists; always show tabs 1–3):
+**8 tabs** — **AC-04 is authoritative for rendering (F3, team_190):** all 8 tabs render; tabs with no data show `—` placeholders, NOT hidden (except equipment tab which may be hidden/greyed when ALL seeder fields are NULL on ALL varieties).
 
 | # | Tab label | Content | Always shown? |
 |---|----------|---------|--------------|
@@ -368,8 +369,8 @@ tests/crop_book/test_views.py
 - If the admin panel uses Jinja2 + Flask, follow existing template inheritance from `admin/templates/base.html` (or equivalent). Crop book templates extend the same base.
 - RTL: the base template likely already sets `dir="rtl"`. If not, add it only to crop book templates.
 - Season detection from `planting_season` text: map tokens `קיץ`/`summer` → `☀️`, `אביב`/`spring` → `🌸`, `חורף`/`winter` → `🌧`, `סתיו`/`fall`/`autumn` → `💨`. Implement in `_macros.html`.
-- `ENTITY_REGISTRY` JS object: copy from `/tmp/crop_book_v3.html` script section. Expand with any new entities discovered during data seed (WP002).
-- Market price delta in כלכלה tab: since `pricebook_product_id` is a logical reference and the מחירון module is a sibling (not yet integrated for live reads), delta display is deferred — render the placeholder card "מחיר שוק: בהמשך" when `pricebook_product_id` is set but live price is unavailable.
+- **`ENTITY_REGISTRY` (F5, team_190):** Copy registry from `/tmp/crop_book_v3.html` during initial build, then commit it as `organic_market_agent/admin/static/crop_book/entity_registry.js` (repo-owned). The template must load it from the static path — NO runtime dependency on `/tmp`. Expand with entities found during WP002 seed. Document the source version in LOD500.
+- **Market price (F3/F4, team_190 — §6 authoritative):** Do NOT implement live pricebook reads in S003. When `pricebook_product_id IS NOT NULL`, render: "מחיר שוק: [מחירון_מוצר_id] — יוצג עם הפעלת מחירון". When NULL: "לא מקושר למחירון". No delta % calculation in S003 — deferred to מחירון integration phase.
 
 ---
 
