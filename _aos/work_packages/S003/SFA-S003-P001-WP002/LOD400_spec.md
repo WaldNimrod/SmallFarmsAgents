@@ -4,8 +4,8 @@
 **Author:** team_100 (Claude Sonnet 4.6)
 **WP:** SFA-S003-P001-WP002 — seed נתונים ראשוני
 **Type:** LOD400_SPEC
-**Status:** L-GATE_S PASS_WITH_FINDINGS (team_190, 2026-05-07) — builder may proceed
-**L-GATE_S findings carried:** F1 BigInteger PK (schema refinement recorded §2.5); F2 field_name convention (§2.5); see verdict `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
+**Status:** L-GATE_S ROUND_2 — all Round 1 findings resolved in v2.0.0; awaiting re-submission to team_190
+**L-GATE_S Round 1 verdict:** PASS_WITH_FINDINGS (team_190, 2026-05-07); F1 BigInteger PK + F2 field_name convention resolved. Verdict: `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Sonnet, Team 10)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE)
 **Depends on:** SFA-S003-P001-WP001 (LOD200 schema v1.4.0 APPROVED)
@@ -73,10 +73,6 @@ Builder must use these exact paths as defaults. Each path is wrapped in a `--sou
 
 Year folders for other years (2018–2021): builder must probe for them at the same parent path and import if present. If a year folder is missing → log `WARN: year {Y} not found, skipping`.
 
-### 2.4 Schema refinement — PK type (F1, approved)
-
-LOD200 specified UUID PKs. **LOD400 overrides to `BigInteger` (autoincrement)** — consistent with existing project-wide pattern (all S002 tables use BigInteger). This is an approved departure from LOD200. Builder uses BigInteger. Recorded for L-GATE_VALIDATE closure.
-
 ### 2.4 Table → Python class mapping
 
 | DB table | SQLAlchemy class | LOD200 Hebrew name |
@@ -89,6 +85,10 @@ LOD200 specified UUID PKs. **LOD400 overrides to `BigInteger` (autoincrement)** 
 | `crop_unit_conversions` | `CropUnitConversion` | `המרות_יחידות` |
 
 ### 2.5 Field name mapping (LOD200 Hebrew → DB English)
+
+All 6 tables use **`BigInteger` (autoincrement)** PKs, consistent with the S002 project-wide pattern (migrations 001–034). This overrides the UUID notation in LOD200 v1.4.0. Rationale: autoincrement integers are simpler and align with all existing tables. Formally recorded in LOD200 v1.5.0 §4.9.
+
+`crop_variety_source_values.field_name` stores **English DB column names** only — e.g. `documented_price`, `days_to_maturity`, `avg_yield_per_bed_m`. Never Hebrew logical names. This is the canonical convention for all source_values entries.
 
 **`crop_families`**
 ```
@@ -149,8 +149,6 @@ id                          → id (BigInteger PK)
 ```
 
 **`crop_variety_source_values`**
-
-> **F2 convention (team_190 finding, resolved):** `field_name` stores **English DB column names** only — e.g. `documented_price`, `days_to_maturity`, `avg_yield_per_bed_m`. Never Hebrew logical names. This ensures WP003 queries are testable and consistent.
 
 ```
 id             → id (BigInteger PK)
@@ -404,4 +402,4 @@ tests/crop_book/test_seed_idempotency.py
 
 ---
 
-*LOD400 v1.0.0 — authored 2026-05-07 by team_100. Status: READY for L-GATE_S (team_190 external).*
+*LOD400 v2.0.0 — revised 2026-05-07 by team_100. Changes: F1 BigInteger PK canonical (§2.5 preamble); F2 field_name English convention (§2.5 preamble + blockquote removed); status ROUND_2 pending team_190 re-submission.*

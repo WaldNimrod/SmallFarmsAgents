@@ -5,8 +5,8 @@ gate: L-GATE_S (LOD200 — requirements)
 status: APPROVED — team_00, 2026-05-07
 author: team_100 (Claude Sonnet 4.6)
 date: 2026-05-07
-version: v1.4.0
-changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (Tend) vs מחיר_שוק (מחירון FK); שדה מחירון_מוצר_id ל-זנים; §9 מחירון connection; Q12–Q13; מחויבות מלאות מקורות קיימים בseed | v1.3.0 — קבוצות_המרה + המרות_יחידות; DTM source policy | v1.2.0 — זן_ערכי_מקור, מורכב+זן_כנה | v1.1.0 — team_00 decisions"
+version: v1.5.0
+changelog: "v1.5.0 — F1: כל 6 PKs BigInteger (autoincrement) — §4.9 errata; F2: field_name = English DB column name — §4.5 description + example updated | v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (Tend) vs מחיר_שוק (מחירון FK); שדה מחירון_מוצר_id ל-זנים; §9 מחירון connection; Q12–Q13; מחויבות מלאות מקורות קיימים בseed | v1.3.0 — קבוצות_המרה + המרות_יחידות; DTM source policy | v1.2.0 — זן_ערכי_מקור, מורכב+זן_כנה | v1.1.0 — team_00 decisions"
 ---
 
 # LOD200 — ספר גידולים: מיפוי שדות ומודל נתונים
@@ -31,7 +31,7 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | הערה |
 |-----|-------|----------|------|
-| `id` | uuid PK | לא | |
+| `id` | BigInteger PK, autoincrement | לא | |
 | `שם_מדעי` | text UNIQUE | לא | שם לטיני (Brassicaceae) |
 | `שם_עברי` | text | כן | מצליבים, מורכבים... |
 
@@ -71,7 +71,7 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | מקור | דוגמה |
 |-----|-------|----------|------|-------|
-| `id` | uuid PK | לא | — | — |
+| `id` | BigInteger PK, autoincrement | לא | — | — |
 | `שם_עברי` | text UNIQUE | לא | ידני | ברוקולי |
 | `שם_אנגלי` | text | כן | Tend/JMF | Broccoli |
 | `שם_מדעי` | text | כן | JMF | *Brassica oleracea* |
@@ -111,7 +111,7 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | מקור | דוגמה |
 |-----|-------|----------|------|-------|
-| `id` | uuid PK | לא | | |
+| `id` | BigInteger PK, autoincrement | לא | | |
 | `גידול_id` | fk → גידולים | לא | | ברוקולי |
 | `שם_זן_אנגלי` | text | כן | JMF/Tend | Cavolo Broccolo |
 | `שם_זן_עברי` | text | כן | ידני | קלבזה ברוקולו |
@@ -164,9 +164,9 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | הערה |
 |-----|-------|----------|------|
-| `id` | uuid PK | לא | |
+| `id` | BigInteger PK, autoincrement | לא | |
 | `זן_id` | fk → זנים | לא | |
-| `שם_שדה` | text | לא | שם השדה ב-`זנים` (למשל: `תשואה_ממוצעת_למ_ערוגה`) |
+| `שם_שדה` | text | לא | **English DB column name** בטבלת `crop_varieties` (למשל: `avg_yield_per_bed_m`, `documented_price`, `days_to_maturity`) |
 | `מקור` | text | לא | `JMF` / `Tend_2022` / `Tend_2021` / `ידני` |
 | `ערך_טקסט` | text | כן | ערך גולמי כמחרוזת (מספרים + טקסט) |
 | `ערך_מספרי` | numeric | כן | ערך מספרי אם parseable |
@@ -179,10 +179,10 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | זן_id | שם_שדה | מקור | ערך_טקסט | ערך_מספרי | יחידה |
 |-------|--------|------|----------|----------|-------|
-| uuid-arug | `תשואה_ממוצעת_למ_ערוגה` | Tend_2022 | 20.000 bn/row m | 20.000 | bn/m' |
-| uuid-arug | `תשואה_ממוצעת_למ_ערוגה` | JMF | 0.150–0.200 kg/row m | 0.175 | ק"ג/מ' |
-| uuid-arug | `מחיר_מתועד_שח` | Tend_2022 | ₪8.00/מארז | 8.00 | ₪/מארז |
-| uuid-arug | `ימים_לבשלות` | JMF | 30–40 | 35 | ימים |
+| 1 | `avg_yield_per_bed_m` | Tend_2022 | 20.000 bn/row m | 20.000 | bn/m' |
+| 1 | `avg_yield_per_bed_m` | JMF | 0.150–0.200 kg/row m | 0.175 | ק"ג/מ' |
+| 1 | `documented_price` | Tend_2022 | ₪8.00/מארז | 8.00 | ₪/מארז |
+| 1 | `days_to_maturity` | JMF | 30–40 | 35 | ימים |
 
 ---
 
@@ -192,7 +192,7 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | הערה |
 |-----|-------|----------|------|
-| `id` | uuid PK | לא | |
+| `id` | BigInteger PK, autoincrement | לא | |
 | `שם` | text UNIQUE | לא | `עלים_בייבי` / `שורש_קטן` וכו' |
 | `תיאור` | text | כן | |
 
@@ -218,7 +218,7 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 
 | שדה | טיפוס | nullable | הערה |
 |-----|-------|----------|------|
-| `id` | uuid PK | לא | |
+| `id` | BigInteger PK, autoincrement | לא | |
 | `קבוצת_המרה_id` | fk → קבוצות_המרה | כן | null אם שורה ספציפית לגידול |
 | `גידול_id` | fk → גידולים | כן | null אם שורה ל-קבוצה |
 | `יחידת_מקור` | text | לא | `צרור` / `מארז` / `ראש` / `ק"ג` |
@@ -270,6 +270,21 @@ changelog: "v1.4.0 — ארכיטקטורת מחירים: מחיר_מתועד (T
 | team_00 (ישראל קיץ) | 21 ימים | 1 — **מאוחד** | `זנים.ימים_לבשלות` + `זן_ערכי_מקור` |
 | JMF (בסיס אוניברסלי) | 30–40 ימים | 2 — **בסיס** | `זן_ערכי_מקור` בלבד |
 | Tend_2022 | 8 ימים (outlier) | 3 — נדחה | `זן_ערכי_מקור` עם flag |
+
+---
+
+## §4.9 — ערות (Errata): Primary Keys — BigInteger
+
+**החלטה (2026-05-07):** כל 6 הטבלאות בספר גידולים משתמשות ב-`BigInteger` (autoincrement) כ-PK, בהתאם לתבנית הפרויקט הכוללת (כל טבלאות S002, migrations 001–034). ה-notation `BigInteger PK, autoincrement` בסעיפים §2–§4.7 נכון. LOD400 v2.0.0 הוא הספציפיקציה האוטוריטטיבית.
+
+| טבלה (עברית) | DB table | PK type |
+|-------------|---------|---------|
+| `משפחות_בוטניות` | `crop_families` | BigInteger, autoincrement |
+| `גידולים` | `crops` | BigInteger, autoincrement |
+| `זנים` | `crop_varieties` | BigInteger, autoincrement |
+| `זן_ערכי_מקור` | `crop_variety_source_values` | BigInteger, autoincrement |
+| `קבוצות_המרה` | `crop_conversion_groups` | BigInteger, autoincrement |
+| `המרות_יחידות` | `crop_unit_conversions` | BigInteger, autoincrement |
 
 ---
 
@@ -479,4 +494,4 @@ LOD300 v1.4.0 עודכן (2026-05-07) עם כל שינויי LOD200 v1.4.0:
 
 **LOD300 ממתין לאישור team_00 → אחרי אישור: importer מלא 66 גידולים.**
 
-*v1.4.0 — ארכיטקטורת מחירים + מחירון FK, 2026-05-07*
+*v1.5.0 — F1 BigInteger PK errata (§4.9); F2 field_name English DB convention (§4.5), 2026-05-07*

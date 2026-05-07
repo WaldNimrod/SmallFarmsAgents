@@ -4,8 +4,8 @@
 **Author:** team_100 (Claude Sonnet 4.6)
 **WP:** SFA-S003-P001-WP003 — ממשק ספר גידולים (view-only)
 **Type:** LOD400_SPEC
-**Status:** L-GATE_S PASS_WITH_FINDINGS (team_190, 2026-05-07) — builder may proceed
-**L-GATE_S findings carried:** F3 tab visibility (AC-04 authoritative); F4 market-price placeholder (§6 authoritative); F5 ENTITY_REGISTRY to repo; see verdict `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
+**Status:** L-GATE_S ROUND_2 — all Round 1 findings resolved in v2.0.0; awaiting re-submission to team_190
+**L-GATE_S Round 1 verdict:** PASS_WITH_FINDINGS (team_190, 2026-05-07); F3 tab visibility + F4 market-price + F5 ENTITY_REGISTRY resolved. Verdict: `_COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Sonnet, Team 10)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE)
 **Depends on:** SFA-S003-P001-WP002 (DB tables + seed data must exist)
@@ -13,8 +13,7 @@
 **Reference documents (read before writing a single line of code):**
 1. `_COMMUNICATION/TEAM_100/SFA-S003-P001-WP003/LOD300_UI_MOCKUP_2026-05-07_v1.0.0.md` — screen wireframes
 2. `_COMMUNICATION/TEAM_100/SFA-S003-P001-WP001/LOD200_CROP_SCHEMA_2026-05-07_v1.0.0.md` — schema SSoT
-3. `/tmp/crop_book_v3.html` — full interactive HTML prototype (reference only; extract CSS/layout patterns)
-4. This LOD400 spec
+3. This LOD400 spec
 
 ---
 
@@ -152,18 +151,18 @@ Returns:
 - Crop title: שם_עברי + שם_אנגלי + שם_מדעי (italic)
 - Metadata row: משפחה · מחזור גידול · יחידת קציר ברירת מחדל
 
-**8 tabs** — **AC-04 is authoritative for rendering (F3, team_190):** all 8 tabs render; tabs with no data show `—` placeholders, NOT hidden (except equipment tab which may be hidden/greyed when ALL seeder fields are NULL on ALL varieties).
+**8 tabs** — all 8 tabs render on every crop page. Tabs with no data show `—` placeholders; none are hidden. Exception: tab 5 (ציוד) may be hidden/greyed when ALL seeder fields are NULL across ALL varieties of this crop.
 
-| # | Tab label | Content | Always shown? |
-|---|----------|---------|--------------|
-| 1 | זנים | Variety cards — see §3.3 | Yes |
-| 2 | תיאור | JMF description text with entity tags — see §3.4 | Yes |
-| 3 | כלכלה | Two-price cards + yield table — see §3.5 | Yes |
-| 4 | טיפולים | Care schedule matrix — see §3.6 | If data exists |
-| 5 | ציוד | Seeder settings — see §3.7 | If seeder data exists |
-| 6 | מקורות | Side-by-side source comparison — see §3.8 | Yes |
-| 7 | ציר זמן | Visual timeline — see §3.9 | If DTM data exists |
-| 8 | נתוני שדה | DTM multi-season + unit conversions | Always |
+| # | Tab label | Content |
+|---|----------|---------|
+| 1 | זנים | Variety cards — see §3.3 |
+| 2 | תיאור | JMF description text with entity tags — see §3.4 |
+| 3 | כלכלה | Two-price cards + yield table — see §3.5 |
+| 4 | טיפולים | Care schedule matrix — see §3.6 |
+| 5 | ציוד | Seeder settings — see §3.7 |
+| 6 | מקורות | Side-by-side source comparison — see §3.8 |
+| 7 | ציר זמן | Visual timeline — see §3.9 |
+| 8 | נתוני שדה | DTM multi-season + unit conversions |
 
 ### 3.3 Tab: זנים
 
@@ -211,8 +210,8 @@ Two-price card layout (grid 1fr 1fr):
 **Card 2 — מחיר שוק** (blue top border `#1565c0`):
 - Show only if `pricebook_product_id IS NOT NULL`
 - Otherwise: "לא מקושר למחירון" (grey card)
-- When linked: display `pricebook_product_id` reference, link text → "מחירון ↗"
-- Delta %: `(market_price - documented_price) / documented_price * 100` — green if positive, red if negative
+- When linked: display placeholder text: "מחיר שוק: [pricebook_product_id] — יוצג עם הפעלת מחירון"
+- No live price read or delta % in S003 — deferred to מחירון integration phase (per §6)
 
 Yield table below cards:
 | שדה | ערך | מקור |
@@ -369,9 +368,9 @@ tests/crop_book/test_views.py
 - If the admin panel uses Jinja2 + Flask, follow existing template inheritance from `admin/templates/base.html` (or equivalent). Crop book templates extend the same base.
 - RTL: the base template likely already sets `dir="rtl"`. If not, add it only to crop book templates.
 - Season detection from `planting_season` text: map tokens `קיץ`/`summer` → `☀️`, `אביב`/`spring` → `🌸`, `חורף`/`winter` → `🌧`, `סתיו`/`fall`/`autumn` → `💨`. Implement in `_macros.html`.
-- **`ENTITY_REGISTRY` (F5, team_190):** Copy registry from `/tmp/crop_book_v3.html` during initial build, then commit it as `organic_market_agent/admin/static/crop_book/entity_registry.js` (repo-owned). The template must load it from the static path — NO runtime dependency on `/tmp`. Expand with entities found during WP002 seed. Document the source version in LOD500.
-- **Market price (F3/F4, team_190 — §6 authoritative):** Do NOT implement live pricebook reads in S003. When `pricebook_product_id IS NOT NULL`, render: "מחיר שוק: [מחירון_מוצר_id] — יוצג עם הפעלת מחירון". When NULL: "לא מקושר למחירון". No delta % calculation in S003 — deferred to מחירון integration phase.
+- **`ENTITY_REGISTRY`:** Repo-owned static asset at `organic_market_agent/admin/static/crop_book/entity_registry.js`. The template loads it via Flask `url_for('static', filename='crop_book/entity_registry.js')` — no `/tmp` or other ephemeral path dependency. Initial content: entity definitions extracted from the HTML prototype during initial build. Expand with entities found during WP002 seed. Document the version in LOD500.
+- **Market price (§6 authoritative):** Do NOT implement live pricebook reads in S003. When `pricebook_product_id IS NOT NULL`, render: "מחיר שוק: [מחירון_מוצר_id] — יוצג עם הפעלת מחירון". When NULL: "לא מקושר למחירון". No delta % calculation in S003 — deferred to מחירון integration phase.
 
 ---
 
-*LOD400 v1.0.0 — authored 2026-05-07 by team_100. Status: READY for L-GATE_S (team_190 external).*
+*LOD400 v2.0.0 — revised 2026-05-07 by team_100. Changes: F3 tab visibility unified — 8 tabs always render (§3.2); F4 delta% removed from §3.5; F5 ENTITY_REGISTRY repo path canonical (§6); /tmp reference removed from ref docs. Status: ROUND_2 pending team_190 re-submission.*
