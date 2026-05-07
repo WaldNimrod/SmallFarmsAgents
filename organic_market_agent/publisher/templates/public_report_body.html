@@ -175,10 +175,39 @@
   'סל ירקות בינוני':'🧺',
 } %}
 
+{# ── WP004: Source-type filter bar (post-WP002 stash UI) ── #}
+{# Built for both with-filter and without-filter states (LOD400 §8 risk row 3) #}
+<nav class="sfa-filter-bar" role="tablist" aria-label="סינון לפי סוג מקור">
+  <button class="sfa-filter-btn is-active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="sfa-product-list"
+          aria-label="הכל — הצג את כל המוצרים"
+          data-filter="all">הכל</button>
+  <button class="sfa-filter-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="sfa-product-list"
+          aria-label="מגדלים — הצג מוצרים ממגדלים בלבד"
+          data-filter="growers">🌱 מגדלים</button>
+  <button class="sfa-filter-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="sfa-product-list"
+          aria-label="חנויות — הצג מוצרים מחנויות בלבד"
+          data-filter="stores">🏪 חנויות</button>
+  <button class="sfa-filter-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="sfa-product-list"
+          aria-label="רשתות — הצג מוצרים מרשתות בלבד"
+          data-filter="chains">🏬 רשתות</button>
+</nav>
+
 {# ── M8 Item 6: Table perception framing ── #}
 <h2 class="table-framing">מדד מחירים מבוסס נתונים אמיתיים מהשטח</h2>
 
-<div class="sfa-card">
+<div class="sfa-card" id="sfa-product-list">
   <div class="sfa-report-desktop">
   <table>
     <thead>
@@ -205,12 +234,12 @@
         {# M8 Item 3: Green border on average price column #}
         <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
           {% if p.avg_price is not none %}
-            <span class="price-main">{{ "%.2f"|format(p.avg_price) }}</span>
+            <span class="price-main"><bdi>{{ "%.2f"|format(p.avg_price) }}</bdi></span>
           {% else %}—{% endif %}
         </td>
         <td class="num">
           {% if p.median_price is not none %}
-            <span class="price-secondary">{{ "%.2f"|format(p.median_price) }}</span>
+            <span class="price-secondary"><bdi>{{ "%.2f"|format(p.median_price) }}</bdi></span>
           {% else %}—{% endif %}
         </td>
         <td>
@@ -221,7 +250,7 @@
               <div class="range-bar-fill"
                    style="inset-inline-end: {{ bar_start_pct }}%; inline-size: {{ [bar_width_pct, 4] | max }}%;"></div>
             </div>
-            <div class="range-text">{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</div>
+            <div class="range-text"><bdi>{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</bdi></div>
           {% else %}—{% endif %}
         </td>
         <td class="num">
@@ -255,11 +284,11 @@
       <dl class="sfa-product-card__stats">
         <div class="sfa-product-card__row">
           <dt>ממוצע ₪</dt>
-          <dd>{% if p.avg_price is not none %}<span class="price-main">{{ "%.2f"|format(p.avg_price) }}</span>{% else %}—{% endif %}</dd>
+          <dd>{% if p.avg_price is not none %}<span class="price-main"><bdi>{{ "%.2f"|format(p.avg_price) }}</bdi></span>{% else %}—{% endif %}</dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>חציון ₪</dt>
-          <dd>{% if p.median_price is not none %}<span class="price-secondary">{{ "%.2f"|format(p.median_price) }}</span>{% else %}—{% endif %}</dd>
+          <dd>{% if p.median_price is not none %}<span class="price-secondary"><bdi>{{ "%.2f"|format(p.median_price) }}</bdi></span>{% else %}—{% endif %}</dd>
         </div>
         <div class="sfa-product-card__row">
           <dt>טווח מחירים</dt>
@@ -271,7 +300,7 @@
                 <div class="range-bar-fill"
                      style="inset-inline-end: {{ bar_start_pct }}%; inline-size: {{ [bar_width_pct, 4] | max }}%;"></div>
               </div>
-              <div class="range-text">{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</div>
+              <div class="range-text"><bdi>{{ "%.2f"|format(p.min_price) }} – {{ "%.2f"|format(p.max_price) }}</bdi></div>
             {% else %}—{% endif %}
           </dd>
         </div>

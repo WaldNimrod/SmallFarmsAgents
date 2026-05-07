@@ -650,3 +650,106 @@ All authenticated endpoints require: `-u "$UPRESS_WP_APP_USER:$UPRESS_WP_APP_PAS
 ---
 
 *This standard is based on production experience with SmallFarmsAgents (nimrod.bio) and Eyal Amit 2026 (eyalamit.co.il) on uPress hosting. It supersedes project-specific playbooks and should be adopted as the canonical reference for all uPress + WordPress projects.*
+
+---
+
+## 15. Network-Blocked Port 21 — WP REST API as Canonical Alternative (WP007, 2026-05-07)
+
+### Symptom
+
+Outbound port 21 (FTP/FTPS) is blocked at the Bezeq home-network egress layer for both Mac and waldhomeserver. uPress IP-whitelist did NOT unblock it (the block is Bezeq-side, not uPress-side). The FTP connection fails silently or with timeout — no `425` error is reached.
+
+**Confirmed (2026-05-07, team_100 network probe):**
+- `nc -zvw3 185.201.148.144 21` → timeout (both Mac and waldhomeserver)
+- `nc -zvw3 185.201.148.144 443` → success
+
+### Solution
+
+For any spoke whose host network blocks port 21 outbound, **WP REST API via HTTPS (port 443) is the canonical primary upload path.** FTP/FTPS remains as a defensive fallback for environments where port 21 is available.
+
+### Pattern (copied from shaked-wg-agent — proven on same waldhomeserver)
+
+```python
+import base64, os, requests
+from pathlib import Path
+
+def _token() -> str:
+    user = os.environ["UPRESS_WP_APP_USER"]
+    pw   = os.environ["UPRESS_WP_APP_PASS"].replace(" ", "")  # strip spaces defensive
+    return base64.b64encode(f"{user}:{pw}".encode()).decode()
+
+def upload_file(local_path: Path, canonical_filename: str, content_type: str) -> tuple[int, str]:
+    base = os.environ.get("UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json")
+    headers_auth = {"Authorization": f"Basic {_token()}"}
+
+    # Delete previous version (keep URL slug clean — no -1/-2 suffix)
+    requests.delete(f"{base}/wp/v2/media/{old_id}?force=1", headers=headers_auth, timeout=15)
+
+    resp = requests.post(
+        f"{base}/wp/v2/media",
+        headers={
+            **headers_auth,
+            "Content-Disposition": f'attachment; filename="{canonical_filename}"',
+            "Content-Type": content_type,
+        },
+        data=local_path.read_bytes(),
+        timeout=30,
+    )
+    resp.raise_for_status()
+    j = resp.json()
+    return j["id"], j["source_url"]
+```
+
+### Required Environment Variables
+
+```env
+UPRESS_WP_REST_BASE=https://www.nimrod.bio/wp-json
+UPRESS_WP_APP_USER=<wp_user_login>
+UPRESS_WP_APP_PASS=<application_password>   # 24-char with spaces — stripped before base64
+```
+
+### JSON MIME Type (uPress media library restriction)
+
+uPress may reject `.json` extension uploads. Fix with a mu-plugin:
+
+```php
+<?php
+// wp-content/mu-plugins/sfagent-allow-json.php
+function sfagent_allow_json_mime($mime_types) {
+    $mime_types['json'] = 'application/json';
+    return $mime_types;
+}
+add_filter('upload_mimes', 'sfagent_allow_json_mime');
+
+function sfagent_fix_json_check($data, $file, $filename, $mimes) {
+    if (pathinfo($filename, PATHINFO_EXTENSION) === 'json') {
+        $data['ext'] = 'json'; $data['type'] = 'application/json';
+    }
+    return $data;
+}
+add_filter('wp_check_filetype_and_ext', 'sfagent_fix_json_check', 10, 4);
+```
+
+### Shortcode Integration (date-based URL paths)
+
+WP `/wp/v2/media` stores files at `wp-content/uploads/YYYY/MM/` (date-based). Shortcodes that previously read from a fixed path (e.g., `wp-content/uploads/market/`) must adapt.
+
+**Recommended pattern (AC-04 Option A — manifest URL pointer):**
+1. Pipeline uploads a `sfagent-manifest-of-urls.json` pointer file listing all artifact URLs.
+2. Its URL is stored in WP option `sfagent_manifest_of_urls_url`.
+3. Shortcode reads the option, fetches the pointer, dereferences the needed artifact URL.
+4. The delete-before-overwrite pattern keeps the pointer URL stable (same canonical filename → same slug across runs in the same calendar month).
+
+### Fallback Gating
+
+```env
+UPRESS_FALLBACK_FTPS=1   # Set only on non-blocked networks when WP REST is unavailable
+```
+
+Default is unset (WP REST primary). FTPS code is preserved in `organic_market_agent/publisher/ftps_upload.py` and is not removed.
+
+### Reference Implementation
+
+- `organic_market_agent/publisher/wp_upload.py` — SFA canonical implementation
+- `/Users/nimrod/Documents/shaked-wg-agent/shaked_wg_agent/publisher/wp_upload.py` — original proven pattern
+- `_COMMUNICATION/team_10/SFA-S002-P001-WP007/DEPLOY_HANDOFF.md` — team_99 deploy steps

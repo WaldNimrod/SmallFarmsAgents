@@ -1,0 +1,55 @@
+validate_aos.sh — running up to 45 checks on ./_aos (active_modules: filter, context: spoke)
+=================================================
+[PASS] Check 1: YAML files parse correctly
+[PASS] Check 2: Cross-engine Iron Rule satisfied
+[SKIP] Check 3: skipped — required module 09 not in active_modules
+[PASS] Check 4: All spec_refs resolve to existing files
+[PASS] Check 5: All required fields present
+[PASS] Check 6: metadata.yaml complete
+[PASS] Check 7: All team IDs match slug regex
+[PASS] Check 8: All team suffixes are reserved
+[PASS] Check 9: Profile enum valid and consistent
+[SKIP] Check 10: skipped — required module 05 not in active_modules
+[PASS] Check 11: Governance directory complete (definition.yaml + 19 team files)
+[PASS] Check 12: Cross-project boundary OK (project=smallfarmsagents, 0 forbidden patterns found)
+[PASS] Check 13: All definition.yaml teams have governance files
+[PASS] Check 14: Not a hub project — additionalDirectories check skipped
+[PASS] Check 15: No stale artifacts for completed WPs in _COMMUNICATION/
+[SKIP] Check 16: not hub — validate_aos_commands.sh skipped (spoke/minimal)
+[SKIP] Check 17: not hub — PROJECT_CONTEXT schema check skipped (roll out per spoke)
+[PASS] Check 18: _aos/ write authority: all non-governance team contracts correctly restrict _aos/ writes
+[PASS] Check 19: API-only mutations: all team contracts include Iron Rule #7 API-only clause
+[SKIP] Check 19: Unified DB checker not found at scripts/db/check_db_connectivity.py (hub-only component; skip on spokes)
+[PASS] Check 20: mcp_profile='none' — no .cursor/mcp.json required
+[SKIP] Check 21: validate_gates.sh: gate structure advisories found (pre-V318 data debt; run validate_gates.sh manually)
+[SKIP] Check 22: validate_lod.sh: LOD400+ advisories found (pre-V318 schema debt; run validate_lod.sh --all --min-lod 400 manually)
+[PASS] Check 23: validate_verdicts.sh: verdict schema PASS
+[SKIP] Check 24: port-registry.yaml not found (spoke project — hub canon does not apply)
+[SKIP] Check 25: PENDING_DB_SYNC.yaml found (session: offline-2026-05-07-smallfarmsagents-release-prep) — offline mutations await DB sync via sync_offline_to_db.sh
+[PASS] Check 26: LOD400 CS citations — no suspected bare [CS-N] lines (ADR037)
+[PASS] Check 27: CLAUDE.md canonical invariants present (DB-probe + AOS authority/identity — ADR040)
+[PASS] Check 28: .cursorrules canonical invariants present (DB-probe + AOS startup section)
+[PASS] Check 29: spoke lean-kit version matches hub
+[SKIP] Check 30: .claude/commands/ dir not present (non-Claude-Code repo or spoke without local commands)
+[SKIP] Check 31: .claude/commands/ dir not present (skip)
+[PASS] Check 32: _aos/ tree committed (no propagation drift) — IR#11
+  [WARN] Check 33: 1 unexpected MSG-*.md filename(s) (advisory — ADR043 vs Module 12 naming)
+    TEAM_100/outbox_templates/MSG-20260411_013_SFA_OPS_RFI_RESEND.md
+[PASS] Check 33: MSG naming advisory complete (non-blocking)
+[SKIP] Check 34: .claude/commands/AOS_handoff.md not present — skip
+[PASS] Check 35: QA_REQUEST enum lint — all values valid (or no QA_REQUEST files found)
+[PASS] Check 36: MSG branch independence — all send/read commands wired to msg_preflight.sh + msg_deliver_file (ADR043 v1.1.0 §4/§5)
+[PASS] Check 37: Multi-domain routing wired — server threads project_id, routes accept X-Project-Id, helper auto-detects spoke (ADR043 v1.1.0 §6)
+[PASS] Check 38: ADR043 v1.2.0 §6+§7 published, archive endpoint wired end-to-end (AOS-MSG-FOLLOWUPS-WP001)
+[SKIP] Check 39: MSG-LOG not yet created (_COMMUNICATION/_log/messages.log absent — acceptable pre-W4)
+[SKIP] Check 40: MSG-HARDENING: spoke msg_precommit_hook.sh snapshot present but pre-commit hook not installed — acceptable (operator choice)
+[SKIP] Check 41: auto-activation/ directory absent — acceptable pre-W6
+[PASS] Check 42: Sprint discipline: all active WPs within ≤3 sprint cap
+[SKIP] Check 43: Milestone completeness gate: _aos/milestones/ absent — no milestone definitions to check against (acceptable pre-MS001)
+[PASS] Check 44: Track+Effort metadata: all WP metadata.yaml files have valid track: and effort: fields
+[SKIP] Check 45: WAN dual-stack status file absent (acceptable pre-W11-propagation; run wan_dual_stack_probe.sh on spoke server to populate)
+
+=================================================
+RESULT: 29 PASS / 17 SKIP / 0 FAIL
+=================================================
+L-GATE_BUILD EXIT CRITERION: SATISFIED
