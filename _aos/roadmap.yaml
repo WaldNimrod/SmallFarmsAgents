@@ -31,7 +31,14 @@ project:
     Phase 2 (2026-05-07) COMPLETE: WP001 (M10 thaw) + WP002 (MyPIPS sources) both LOD500_LOCKED.
     WP001: migrations 032/033, basket_tier_resolver, db/check.py. L-GATE_V PASS (team_190 Opus).
     WP002: migration 034 display_bucket, MypipsCollector Playwright, 4 priority sources.
-    L-GATE_V PASS (team_190 Opus). Branch rename pending team_00 push.
+    L-GATE_V PASS (team_190 Opus).
+    Archive: team_191 moved all Phase 1+2 WP artifacts to _archive/SFA-S002-P001/ (fcf837d).
+    Pending (ADR034 R8): team_99 DB seed + alembic upgrade head when hub DB comes online.
+    S002 PROGRAM: COMPLETE (pending DB-online activation by team_99).
+    S003 REDEFINED (2026-05-07, team_00 directive): Tend + MasterClass raw material processing.
+    Former S003 content (WP-A1 moderated submissions, WP-A2 farmer calculator, M9C content,
+    M11 backlog) deferred to S004. S003 definition session scheduled after S002 deployment
+    confirmation and team_99 DB-seed verification.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
