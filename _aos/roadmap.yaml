@@ -423,7 +423,7 @@ work_packages:
   status: BUILDING
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_READY
   assigned_builder: sfa_build
   assigned_validator: external
@@ -442,9 +442,16 @@ work_packages:
     result: PASS
     date: "2026-05-08"
     round: 2
-    notes: "team_190 L-GATE_SPEC Round 2. PASS. All 5 findings resolved (F1–F5). Constitutional checks C1–C7 all PASS. Builder sfa_build/team_10 authorized to proceed. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_R2_v1.0.0.md"
+    notes: "team_190 L-GATE_SPEC Round 2. PASS. All 5 findings resolved (F1–F5). Constitutional checks C1–C7 all PASS. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_R2_v1.0.0.md"
     validator: team_190
-  notes: "L-GATE_S PASS Round 2 (2026-05-08). Builder dispatched. 6 Alembic migrations (035-040), SQLAlchemy models, Python importer (Tend 5yr + JMF XLSX), 66 crops, 9 ACs. LOD400 v2.0.0 (F1–F5 all resolved)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-08"
+    commit: "9b26666"
+    branch: "claude/strange-mcnulty-651551"
+    notes: "sfa_build (Sonnet, team_10). 9/9 ACs PASS. 6 migrations (035-040), 6 ORM models, full importer CLI, 29 tests (0 fail). BigInteger().with_variant(Integer(),'sqlite') for SQLite compat. Deferred FK crops→conversion_groups (circular). validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Report: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP002/BUILD_REPORT_v1.0.0.md"
+    validator: sfa_build
+  notes: "L-GATE_B PASS (2026-05-08, commit 9b26666). Pending team_190 L-GATE_V. 6 Alembic migrations (035-040), SQLAlchemy models, Python importer (Tend 5yr + JMF XLSX), 66 crops, 9 ACs."
   profile: L0
 
 - id: SFA-S003-P001-WP003
