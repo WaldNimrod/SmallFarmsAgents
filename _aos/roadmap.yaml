@@ -78,13 +78,11 @@ work_packages:
 
 - id: SFA-S002-P001-WP001
   label: "M10 Thaw + Completion"
-  status: DEFERRED_PHASE2
+  status: BUILDING
   phase: 2
-  deferred_at: "2026-05-07"
-  deferred_reason: "team_00 directive — Phase 1 launch via WP004+WP007 prioritized; WP001 LARGE effort deferred to next session. Mandate already published in git (commit 6e1dfcd)."
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
@@ -101,7 +99,11 @@ work_packages:
     date: "2026-05-07"
     notes: "LOD400 spec authored with audit input (AUDIT_WP001_M10_SPIKE.md). Strategy C extract+reapply. Migration renumbering 031 collision resolved. Precision gate satisfied — junior dev can execute."
     validator: team_100
-  notes: "Source: cursor/m10-doc-mandates-spike@bb981ed. Migrations 072/073, basket_tier_resolver, PRD025/026/027."
+  - gate: L-GATE_B
+    result: IN_PROGRESS
+    date: "2026-05-07"
+    notes: "Builder dispatch issued by team_100 (Phase 2 session). sfa_build operating on offline/2026-05-07-smallfarmsagents-release-prep in worktree beautiful-antonelli-be5888. Strategy C extract+reapply. WP007+WP008 COMPLETE in production — do not regress."
+  notes: "Source: cursor/m10-doc-mandates-spike@bb981ed. Migrations 072/073, basket_tier_resolver, PRD025/026/027. Dispatched 2026-05-07."
   profile: L0
 
 - id: SFA-S002-P001-WP002
