@@ -116,7 +116,8 @@ class RawExtractedItem(Base):
     __tablename__ = "raw_extracted_items"
     __table_args__ = (
         CheckConstraint(
-            "extraction_status IN ('extracted','normalized','unresolvable','ignored')",
+            "extraction_status IN ("
+            "'extracted','normalized','unresolvable','ignored','pending_manual')",
             name="chk_rei_extraction_status",
         ),
     )

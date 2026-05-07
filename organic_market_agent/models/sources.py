@@ -58,6 +58,15 @@ class Source(Base):
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     source_tier: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
+    display_bucket: Mapped[str] = mapped_column(
+        VARCHAR(20),
+        CheckConstraint(
+            "display_bucket IN ('grower','store','chain','discovery','benchmark','verification')",
+            name="chk_src_display_bucket",
+        ),
+        nullable=False,
+        server_default="store",
+    )
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
     )

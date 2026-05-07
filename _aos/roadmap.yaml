@@ -28,8 +28,19 @@ project:
     Effective Phase 1 verdict: PASS.
     Site live with fresh daily data via WP REST API on all 3 upload
     entrypoints (CLI + scheduler + admin).
-    Phase 2: WP001 (M10 thaw) + WP002 (MyPIPS sources) DEFERRED to next session.
-    Mandates already published in git (commit 6e1dfcd) — ready for builder dispatch.
+    Phase 2 (2026-05-07) COMPLETE: WP001 (M10 thaw) + WP002 (MyPIPS sources) both LOD500_LOCKED.
+    WP001: migrations 032/033, basket_tier_resolver, db/check.py. L-GATE_V PASS (team_190 Opus).
+    WP002: migration 034 display_bucket, MypipsCollector Playwright, 4 priority sources.
+    L-GATE_V PASS (team_190 Opus).
+    Archive: team_191 moved all Phase 1+2 WP artifacts to _archive/SFA-S002-P001/ (fcf837d).
+    DB activation COMPLETE 2026-05-07 (team_99, commit 94bff37): alembic head=034,
+    display_bucket column present, 4 MyPIPS sources seeded (SRC_MP01-MP04),
+    33 products smoke, 25 total sources. WP001 AC-01 conditional lifted.
+    S002 PROGRAM: COMPLETE — no open items.
+    S003 REDEFINED (2026-05-07, team_00 directive): Tend + MasterClass raw material processing.
+    Former S003 content (WP-A1 moderated submissions, WP-A2 farmer calculator, M9C content,
+    M11 backlog) deferred to S004. S003 definition session scheduled after S002 deployment
+    confirmation and team_99 DB-seed verification.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -78,14 +89,12 @@ work_packages:
 
 - id: SFA-S002-P001-WP001
   label: "M10 Thaw + Completion"
-  status: DEFERRED_PHASE2
+  status: COMPLETE
   phase: 2
-  deferred_at: "2026-05-07"
-  deferred_reason: "team_00 directive — Phase 1 launch via WP004+WP007 prioritized; WP001 LARGE effort deferred to next session. Mandate already published in git (commit 6e1dfcd)."
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -101,19 +110,27 @@ work_packages:
     date: "2026-05-07"
     notes: "LOD400 spec authored with audit input (AUDIT_WP001_M10_SPIKE.md). Strategy C extract+reapply. Migration renumbering 031 collision resolved. Precision gate satisfied — junior dev can execute."
     validator: team_100
-  notes: "Source: cursor/m10-doc-mandates-spike@bb981ed. Migrations 072/073, basket_tier_resolver, PRD025/026/027."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commit 6ce2376. 9/9 ACs PASS. Migrations 032+033 renumbered from 072/073; basket_tier_resolver.py; db/check.py; 16 new tests (179 pass / 78 skip / 1 pre-existing fail test_t14). validate_aos.sh 28P/17S/1F (Check 15 pre-existing). Alembic upgrade deferred (DB offline). report_details.py dependency carry acknowledged."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_190 (Opus, cross-engine Iron Rule #1) constitutional + functional validation. 9/9 ACs verified independently. All 4 constitutional checks PASS (directory authority, raw material guard, WP007/WP008 regression, Iron Rule #4 single writer). 3 NOTEs (non-blocking): report_details.py dependency, alembic runtime deferred, test_t14 pre-existing. Verdict: PASS. LOD500_LOCKED."
+    validator: team_190
+  notes: "COMPLETE 2026-05-07. Strategy C extract+reapply from cursor/m10-doc-mandates-spike@bb981ed. Migrations 032/033, basket_tier_resolver, PRD025/026/027. L-GATE_V PASS (team_190 Opus). LOD500_LOCKED."
   profile: L0
 
 - id: SFA-S002-P001-WP002
   label: "MyPIPS Source Integration + Branch Cleanup"
-  status: DEFERRED_PHASE2
+  status: COMPLETE
   phase: 2
-  deferred_at: "2026-05-07"
-  deferred_reason: "team_00 directive — Phase 1 launch prioritized; WP002 LARGE deferred to next session. Mandate already published in git (commit 6e1dfcd). Raw material guardrail (Tend + MasterClass) carries forward intact."
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -130,7 +147,17 @@ work_packages:
     date: "2026-05-07"
     notes: "LOD400 spec authored with audit input (AUDIT_WP002_MYPIPS.md). 4 priority sources (mashtelatharoe, anatiyot, fruit4soul, finerotem). Phase 2C Playwright architecture. Raw-material guardrails explicit in AC. Precision gate satisfied."
     validator: team_100
-  notes: "Source: cursor/mypips-communication-and-handoffs@732121e (MyPIPS portion only)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commits 6510730+6b8a35f. 10/10 ACs PASS. Migration 034 (display_bucket), MypipsCollector Playwright, 4 sources smoked (mashtelatharoe=32, anatiyot=32, fruit4soul=32, finerotem=6 items). URL corrected to mypips.app/{handle}/products. stash@{0} dropped. Tag archive/mypips-handoffs-732121e created. validate_aos.sh 28P/17S/1F (Check 15 pre-existing)."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_190 (Opus, cross-engine Iron Rule #1). 10/10 ACs + 10 constitutional checks PASS. Raw material guard CLEAN. _aos/ untouched. upload_dispatch.py untouched. roadmap.yaml untouched (Iron Rule #4). config.py WP008 methods intact. includeOrganic scoped to anatiyot only. 0 BLOCKER / 0 MAJOR / 3 NOTEs (informational). LOD500_LOCKED."
+    validator: team_190
+  notes: "COMPLETE 2026-05-07. MyPIPS Playwright collector, 4 priority sources (mashtelatharoe/anatiyot/fruit4soul/finerotem), display_bucket migration 034, filter UI. Branch rename archive/raw-material-tend-masterclass-2026-04 pending team_00 push."
   profile: L0
 
 - id: SFA-S002-P001-WP003
@@ -361,4 +388,90 @@ work_packages:
     notes: "F-190-01 closed via WP008 production deploy. All Phase 1 findings resolved. Phase 1 effective verdict: PASS."
     validator: team_100
   notes: "Phase 1 Public Launch Package COMPLETE. F-01 closed (WP007). F-190-01 closed (WP008). Site live with fresh daily data via WP REST API on all 3 entrypoints (CLI + scheduler + admin)."
+  profile: L0
+
+# ============================================================================
+# S003 — ספר גידולים (Crop Book) Program (SFA-S003-P001)
+# Opened 2026-05-07. team_00 approved scope after S002 completion.
+# Module: agronomic data store for 66 farm crops — schema, importer, UI.
+# Offline-DB session per ADR034 R9. File-based SSoT.
+# ============================================================================
+
+- id: SFA-S003-P001-WP001
+  label: "ספר גידולים: Schema Design (LOD200)"
+  status: COMPLETE
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_S
+  lod_status: LOD200_APPROVED
+  assigned_builder: team_100
+  assigned_validator: team_00
+  created_at: "2026-05-07"
+  milestone_ref: "S003"
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P001-WP001/LOD200_CROP_SCHEMA_2026-05-07_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-07"
+    notes: "LOD200 v1.4.0 authored and approved by team_00. 6-table schema (משפחות_בוטניות, גידולים, זנים, זן_ערכי_מקור, קבוצות_המרה, המרות_יחידות). Q1–Q13 decisions recorded. מחירון FK + two-price architecture (מחיר_מתועד vs מחיר_שוק). Source completeness commitment (Q13)."
+    validator: team_00
+  notes: "LOD200 v1.4.0 APPROVED 2026-05-07. Schema SSoT. LOD300 WP002+WP003 also approved same session."
+  profile: L0
+
+- id: SFA-S003-P001-WP002
+  label: "ספר גידולים: DB Migrations + Seed Importer (66 crops)"
+  status: BUILDING
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_READY
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P001-WP001"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP002/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-07"
+    round: 1
+    notes: "team_190 L-GATE_SPEC Round 1. PASS_WITH_FINDINGS. Findings F1 UUID→BigInteger PK + F2 field_name → English DB names. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-08"
+    round: 2
+    notes: "team_190 L-GATE_SPEC Round 2. PASS. All 5 findings resolved (F1–F5). Constitutional checks C1–C7 all PASS. Builder sfa_build/team_10 authorized to proceed. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_R2_v1.0.0.md"
+    validator: team_190
+  notes: "L-GATE_S PASS Round 2 (2026-05-08). Builder dispatched. 6 Alembic migrations (035-040), SQLAlchemy models, Python importer (Tend 5yr + JMF XLSX), 66 crops, 9 ACs. LOD400 v2.0.0 (F1–F5 all resolved)."
+  profile: L0
+
+- id: SFA-S003-P001-WP003
+  label: "ספר גידולים: UI Views (Flask Blueprint, read-only)"
+  status: ELIGIBLE
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_READY
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-07"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P001-WP002"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP003/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-07"
+    round: 1
+    notes: "team_190 L-GATE_SPEC Round 1 (same bundle as WP002). PASS_WITH_FINDINGS. Findings F3 tab visibility + F4 market-price + F5 ENTITY_REGISTRY. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-08"
+    round: 2
+    notes: "team_190 L-GATE_SPEC Round 2. PASS. Findings F3/F4/F5 resolved. Builder authorized when WP002 unblocks. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-LOD400-VERDICT_R2_v1.0.0.md"
+    validator: team_190
+  notes: "L-GATE_S PASS Round 2 (2026-05-08). Blocked on WP002 completion (DB tables must exist first). Flask Blueprint /crop-book/, 3 routes, 3 Jinja2 templates, 8 tabs, entity tags, timeline. 11 ACs. LOD400 v2.0.0 (F3–F5 resolved)."
   profile: L0

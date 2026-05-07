@@ -14,9 +14,34 @@ Repository [`../../scripts/`](../../scripts/):
 | `generate_snapshot_manifest.py` | Generate data snapshot manifest |
 | `mirror_raw_assets_to_folder.py` | Copy raw assets to a folder structure |
 | `run_g3_phase_a_diagnosis.py` | G3 diagnostic helper (historical) |
+| `mypips_discover.py` | Discover active public store pages on `mypips.app` (slug scan; outputs under `output/discovery/` by default) |
+| `mypips_verify_suspected_csv.py` | Merge Team 80 + Team 10 suspected `mypips.app` URLs and probe each row (writes checked CSV; see `_COMMUNICATION/TEAM_80/mypips_suspected_links_60.csv`) |
+| `mypips_build_onboarding_workbook.py` | Build `data/mypips_source_onboarding_workbook.csv` from the verified suspected-links CSV (one row per store slug) |
 | `g3_alias_backfill_template.sql` | SQL template for alias backfill (historical) |
 
 Server scripts use PID files in `/tmp/` and `nohup` for background operation.
+
+### MyPIPS discovery (Team 80 handoff, Team 10 implementation)
+
+Library: [`organic_market_agent/discovery/mypips_scan.py`](../../organic_market_agent/discovery/mypips_scan.py) (httpx, verified TLS). Seeds: [`data/mypips_seeds.txt`](../../data/mypips_seeds.txt). **Active slug rule:** responses whose `<title>` contains the fixed Hebrew shell phrase `מערכת ההזמנות של העסקים העצמאיים והקהילתיים בישראל` are treated as **not** a real tenant (see [`data/mypips_reference_slugs.txt`](../../data/mypips_reference_slugs.txt) for known-good slugs).
+
+```bash
+# From repo root; writes output/discovery/mypips_scan.csv and mypips_active.txt (gitignored)
+python3 scripts/mypips_discover.py \
+  --seeds data/mypips_seeds.txt --hebrew --english \
+  --workers 4 --delay 1.0 --years --max 3000
+
+# Known-good calibration slugs only (no variant expansion)
+python3 scripts/mypips_discover.py --reference --workers 2 --delay 1.0
+
+# Custom slug list only — no Hebrew/English/year/numeric expansion (experiments, validation batches)
+python3 scripts/mypips_discover.py --seeds path/to/slugs.txt --seeds-only --workers 3 --delay 1.0
+
+# Onboarding workbook (committed CSV under data/)
+python3 scripts/mypips_build_onboarding_workbook.py
+```
+
+Use `--no-ethics-reminder` only in automated contexts where the operator has already confirmed robots.txt / ToS. Promoting URLs to pipeline `Source` rows follows Team 100 onboarding phases ([source onboarding report](_COMMUNICATION/TEAM_100/reports/2026-04-04_SOURCE_ONBOARDING_STATUS_AND_PHASE2_PLAN.md)).
 
 ## Python CLI (`python -m organic_market_agent`)
 

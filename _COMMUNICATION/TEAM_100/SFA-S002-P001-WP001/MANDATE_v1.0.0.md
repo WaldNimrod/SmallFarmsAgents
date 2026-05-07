@@ -6,7 +6,7 @@
 **WP:** SFA-S002-P001-WP001 — M10 Thaw + Completion
 **Type:** GATE_MANDATE
 **Gate:** L-GATE_BUILD (entering)
-**Status:** QUEUED — mandate published to git this session; builder dispatch deferred to a subsequent session per team_00 directive 2026-05-07 ("לדחוף עכשיו - ליישם אחרי").
+**Status:** DISPATCHED — 2026-05-07 Phase 2 session. Mandate queued at commit 6e1dfcd; dispatch issued after Phase 1 COMPLETE (all findings resolved, site live).
 
 ---
 
@@ -57,7 +57,7 @@ Full file map in audit report §3.
 
 ## 5. Hard constraints
 
-1. **Coordinate with WP006 (FTPS Remediation):** WP006 modifies `organic_market_agent/publisher/ftps_upload.py` to restore `ReusedSessionFTP_TLS`. If WP006 has landed by the time you start, DO NOT regress that fix. The M10 spike's `ftps_upload.py` changes are CONFLICT-LIKELY against WP006 — preserve WP006's TLS subclass when reconciling.
+1. **WP007 + WP008 are COMPLETE in production — do NOT regress:** WP007 (HTTP Upload via WP REST API) replaced FTPS entirely; WP008 extracted `dispatch_upload()` into `publisher/upload_dispatch.py` and wired it into all 3 entrypoints (`__main__.py`, `scheduler/pipeline.py`, `admin/routes/runs.py`). When reconciling the M10 spike's publisher changes, preserve `publisher/upload_dispatch.py` and the dispatch routing intact. WP006 (FTPS TLS) is SUPERSEDED and closed — ignore WP006 references. The spike's `ftps_upload.py` changes are low-risk (FTPS path is now secondary); `ReusedSessionFTP_TLS` subclass is already correct and tested.
 2. Raw material walled off: do NOT touch `_COMMUNICATION/TEAM_80/{TEND_2018–2022,Team 80 MasterClass,mypips_discovery_package.zip}`.
 3. No edits to `_aos/governance/`, `_aos/roadmap.yaml`, or `_aos/PENDING_DB_SYNC.yaml`.
 4. **No git push** — commits only. team_100 reviews + pushes.
@@ -113,4 +113,4 @@ Final report per LOD400 §3 AC table format. Include per-migration disposition t
 
 ---
 
-*Mandate published 2026-05-07. Builder dispatch deferred per team_00 — to be triggered in a subsequent session after WP006 lands.*
+*Mandate published 2026-05-07 (commit 6e1dfcd). Dispatched 2026-05-07 Phase 2 session by team_100.*
