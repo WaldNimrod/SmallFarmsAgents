@@ -2,10 +2,21 @@
 DB health tests — Gate G1 acceptance criteria.
 Requires a running PostgreSQL DB with applied Alembic migrations.
 """
+import pytest
 from sqlalchemy import inspect, text
+from sqlalchemy.exc import OperationalError
 
 from organic_market_agent.db.check import REQUIRED_COUNTS, REQUIRED_TABLES, check
 from organic_market_agent.db.session import engine
+
+try:
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+except OperationalError:
+    pytest.skip(
+        "PostgreSQL not reachable — G1/G-V1.1 certified runs require a live database",
+        allow_module_level=True,
+    )
 
 
 def test_all_required_tables_exist():

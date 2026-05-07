@@ -32,7 +32,7 @@
 | **WP-A1** | Moderated user submissions | Any **registered user** submits structured content → **moderation** before public/index use (replaces prior “farmer layer” **phase 1** ladder). |
 | **WP-A2** | Farmer economics calculator | **Simple deterministic** calculator or UI (unit price, margin, costs) — **no AI agent** in phase 1. |
 
-**Frozen:** Legacy **M10** spec bundle (former Items 8–10) — see package §2 **D4**. **Not** scheduled for implementation until thawed by Team 100.
+**M10 THAWED 2026-05-07 → SFA-S002-P001-WP001:** M10 spike (`cursor/m10-doc-mandates-spike@bb981ed`) extracted and integrated via Strategy C. Migrations 032/033 landed; basket_tier_resolver, db/check.py, and test suite added. Branch tagged `archive/m10-spike-bb981ed`. WP001 build complete — pending QA (Team 50) and external validation (Team 190).
 
 **Out of scope (dev team):** **M9C** content/blog — Team 80 + Nimrod (**D2**). **Roadmap YAML** procedure in **Agents OS** — not this repo (**D1**).
 

@@ -11,6 +11,21 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### M10 Thaw — SFA-S002-P001-WP001 (Team 10, 2026-05-07)
+
+- **2026-05-07 — Team 10 (WP001):** M10 thaw via Strategy C (extract+reapply from `cursor/m10-doc-mandates-spike@bb981ed`). Integration branch: `offline/2026-05-07-smallfarmsagents-release-prep`. Source branch tagged `archive/m10-spike-bb981ed`.
+  - **New:** `organic_market_agent/db/versions/032_cq_p01_alias_batch.py` — CQ-P01 SCOPE_SKIP_RULES + GLOBAL_ALIASES + SCOPED_ALIASES template (renumbered from branch 072; no-op upgrade, chain only; data filled in H1 handoff).
+  - **New:** `organic_market_agent/db/versions/033_src_wa_pending_manual.py` — extend `raw_extracted_items.extraction_status` CHECK to include `'pending_manual'`; seed SRC_WA source with canonical fetch/normalizer profiles (renumbered from branch 073).
+  - **New:** `organic_market_agent/normalizer/basket_tier_resolver.py` — CSA basket → PRD025/PRD026/PRD027 (small/medium/large) tier resolver. Item-count priority over price; fallback PRD026 when count < 5 (ARCH-20260406-CQ-MASTER §3.7.2).
+  - **New:** `organic_market_agent/publisher/report_details.py` — product `details` for publish JSON v3 (variants, price_series, CSA merge).
+  - **Updated:** `organic_market_agent/db/check.py` — health probe updated to expect sources >= 21 (post-SRC_WA seed).
+  - **Updated:** `organic_market_agent/publisher/rolling_aggregate.py` — full per-filter-key stats (`all`/`grower`/`store`/`chain`/`baskets`), `stats_by_filter` shape, `details` object, `display_bucket` JOIN.
+  - **Updated:** `organic_market_agent/models/runs.py` — `RawExtractedItem` CHECK constraint extended to include `pending_manual` status (matches migration 033).
+  - **Updated:** `organic_market_agent/utils/config.py` — added `PLAYWRIGHT_HEADLESS` + `PLAYWRIGHT_TIMEOUT_MS` fields (M10.4 mypips SPA support). All WP008 methods (`wp_rest_configured`, `ftps_configured`, `upress_configured`) preserved intact.
+  - **Tests:** `tests/test_basket_tier_resolver.py` (11 tests), `tests/test_extraction_status_pending_manual.py` (2 DB tests), `tests/test_db_health.py` (updated with require_postgres module-level skip).
+  - **Config:** `.python-version` set to `3.11`; `.env.example` extended with Playwright vars.
+  - **Migration disposition:** Branch 031 (mypips workbook) SKIPPED (conflicts with main's 031); branch 032–071 (41 migrations) SKIPPED (M10.2-5/M13-PRE content deferred to future WPs; no schema deps required for 032/033 carry).
+
 ### Governance — external L-GATE_VALIDATE (Team 190)
 
 - **2026-05-07 — Team 190:** Constitutional verdict **PASS_WITH_FINDINGS** for **SFA-S002-P001 Phase 1** (assignment **SFA-S002-P001-WP005** — bundle WP003+WP004+WP006+WP007). Artifact: [`_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md`](_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md). Mechanical: `validate_aos.sh` **29 PASS / 17 SKIP / 0 FAIL**; pytest spot **81 passed** (`test_wp_upload`, `test_responsive_html`, `test_ftps_upload`). Key finding **F-190-01:** scheduler `pipeline.py` and admin `runs_upload_now` still FTPS-only; WP REST primary path matches `run_publisher --upload` / `_do_upload` only. **F-190-01 fix landed same day** in WP008 (entry below).
