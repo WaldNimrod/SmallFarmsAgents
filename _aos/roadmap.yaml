@@ -33,8 +33,10 @@ project:
     WP002: migration 034 display_bucket, MypipsCollector Playwright, 4 priority sources.
     L-GATE_V PASS (team_190 Opus).
     Archive: team_191 moved all Phase 1+2 WP artifacts to _archive/SFA-S002-P001/ (fcf837d).
-    Pending (ADR034 R8): team_99 DB seed + alembic upgrade head when hub DB comes online.
-    S002 PROGRAM: COMPLETE (pending DB-online activation by team_99).
+    DB activation COMPLETE 2026-05-07 (team_99, commit 94bff37): alembic head=034,
+    display_bucket column present, 4 MyPIPS sources seeded (SRC_MP01-MP04),
+    33 products smoke, 25 total sources. WP001 AC-01 conditional lifted.
+    S002 PROGRAM: COMPLETE — no open items.
     S003 REDEFINED (2026-05-07, team_00 directive): Tend + MasterClass raw material processing.
     Former S003 content (WP-A1 moderated submissions, WP-A2 farmer calculator, M9C content,
     M11 backlog) deferred to S004. S003 definition session scheduled after S002 deployment
