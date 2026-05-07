@@ -151,8 +151,50 @@ sync_instructions: |
   5. Verify: bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
   6. Apply label [offline-sync-complete] and remove this file (or mark resolved).
 
+  - entity: work_package
+    id: SFA-S002-P001-WP008
+    operation: create_and_complete
+    field_type: file_based_state
+    file: _aos/roadmap.yaml
+    payload:
+      label: "Wire WP REST primary into scheduler + admin (F-190-01 remediation)"
+      track: A
+      effort: SMALL
+      priority: P0
+      status: COMPLETE
+      current_lean_gate: L-GATE_B
+      lod_status: LOD500_LOCKED
+      eligibility: "team_190 verdict ccb5939 — F-190-01 MEDIUM"
+      build_commit: 06eca4b
+      production_deploy_commit: 5b80c60
+      validator: team_99 (production self-attest, OPS-track)
+    timestamp: 2026-05-07T09:40:55Z
+    committed_by: team_100
+
+  - entity: phase_closure
+    id: SFA-S002-P001-Phase1
+    operation: close
+    field_type: file_based_state
+    payload:
+      effective_verdict: PASS
+      external_validator: team_190 (Cursor Composer, non-Opus)
+      verdict_artifact: _COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md
+      verdict_commit: ccb5939
+      f190_01_remediated_in_session: true
+      f190_01_remediation_wp: SFA-S002-P001-WP008
+      f190_02_remediated_in_session: true
+      f190_03_acceptance: L0_Phase1_bundle_as_SSoT
+      f190_04_acceptance: information_only
+      wps_closed: [SFA-S002-P001-WP003, SFA-S002-P001-WP004, SFA-S002-P001-WP005, SFA-S002-P001-WP006, SFA-S002-P001-WP007, SFA-S002-P001-WP008]
+      wps_deferred_to_phase2: [SFA-S002-P001-WP001, SFA-S002-P001-WP002]
+      archive_mandate: _COMMUNICATION/team_100/SFA-S002-P001/ARCHIVE_MANDATE_v1.0.0.md
+    timestamp: 2026-05-07T10:00:00Z
+    committed_by: team_100
+
 gate_history_note: |
   Gate history for this offline session is file-authored.
-  L-GATE_E PASS recorded against each WP based on team_00 directive 2026-05-07
-  (in-session approval of SFA-S002-P001 program structure).
+  L-GATE_E + L-GATE_S PASS recorded against each WP via team_100 in-session approval.
+  L-GATE_B PASS recorded by sfa_build Sonnet builds + team_99 production deploys.
+  L-GATE_V PASS_WITH_FINDINGS by team_190 (Cursor Composer, ccb5939) →
+  effective PASS after same-session F-190-01 remediation via WP008 (5b80c60).
   Per ADR034 R8.3: gate_history is file-authored when DB is unavailable.

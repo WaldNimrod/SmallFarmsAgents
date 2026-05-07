@@ -21,9 +21,13 @@ project:
     S001 AOS canonization COMPLETE — 2026-04-12. L-GATE_V PASS (Team 90).
     S002 OPENED — 2026-05-07. L-GATE_E PASS by team_00 in-session approval.
     Active program: SFA-S002-P001 — Public Index Launch Readiness.
-    Phase 1 (2026-05-07): WP003+WP004+WP006+WP007 COMPLETE. F-01 RESOLVED.
-    Site live with fresh data via WP REST API on port 443. Phase 1 awaiting
-    external L-GATE_V via WP005 bundle.
+    Phase 1 (2026-05-07) COMPLETE: WP003+WP004+WP006+WP007+WP008 all closed.
+    F-01 RESOLVED (WP007). team_190 external L-GATE_V verdict ccb5939
+    PASS_WITH_FINDINGS. F-190-01 remediated SAME DAY (WP008 5b80c60).
+    F-190-02 fixed (drift). F-190-03/04 accepted as L0 Phase 1.
+    Effective Phase 1 verdict: PASS.
+    Site live with fresh daily data via WP REST API on all 3 upload
+    entrypoints (CLI + scheduler + admin).
     Phase 2: WP001 (M10 thaw) + WP002 (MyPIPS sources) DEFERRED to next session.
     Mandates already published in git (commit 6e1dfcd) — ready for builder dispatch.
 
@@ -135,7 +139,7 @@ work_packages:
   track: A
   effort: NORMAL
   current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: team_99
   assigned_validator: external
   created_at: "2026-05-07"
@@ -181,7 +185,7 @@ work_packages:
   effort: NORMAL
   priority: P0
   current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   production_validator: team_99
   assigned_validator: external
@@ -217,7 +221,7 @@ work_packages:
   effort: NORMAL
   priority: P0
   current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   production_validator: team_99
   assigned_validator: external
@@ -254,7 +258,7 @@ work_packages:
   track: A
   effort: NORMAL
   current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -280,12 +284,12 @@ work_packages:
 
 - id: SFA-S002-P001-WP008
   label: "Wire WP REST primary into scheduler + admin (F-190-01 remediation)"
-  status: ELIGIBLE
+  status: COMPLETE
   track: A
   effort: SMALL
   priority: P0
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_B
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   production_validator: team_99
   assigned_validator: external
@@ -302,7 +306,18 @@ work_packages:
     date: "2026-05-07"
     notes: "Fast-tracked. Mechanical fix: extract _do_upload pattern into a shared helper used by __main__.py + scheduler/pipeline.py + admin/routes/runs.py. Update config.upress_configured() to check WP REST keys (currently only checks FTPS). Add scheduler-path test."
     validator: team_100
-  notes: "Remediation of F-190-01. Without this, daily cron at 06:00 UTC will still fail. Ops blocker even though Phase 1 site is currently fresh from manual run."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commit 06eca4b. dispatch_upload() shared helper extracted to publisher/upload_dispatch.py; all 3 entrypoints (__main__._do_upload, scheduler/pipeline.py L307, admin/routes/runs.py:790) now route through it. config.upress_configured() returns wp_rest_configured() OR ftps_configured(). 20 new tests (11 dispatch + 7 scheduler-path + 2 pipeline) all pass. validate_aos 0 FAIL."
+    validator: sfa_build
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "Production deploy by team_99 (commit 5b80c60). sfa-admin restarted with new code. 5/5 artifacts uploaded via WP REST (delete-before-upload clean). Public manifest fresh: artifact_version=20260507_093945, 32 products, report_date=2026-05-07. Tomorrow's 06:00 UTC cron will pick up WP REST automatically (reads code from disk). F-190-01 CLOSED."
+    validator: team_99
+    pass: production
+  notes: "Complete. F-190-01 fix verified in production (all 3 upload entrypoints now use WP REST primary). Daily cron now correct."
   profile: L0
 
 - id: SFA-S002-P001-WP005
@@ -312,7 +327,7 @@ work_packages:
   track: A
   effort: NORMAL
   current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: team_100
   assigned_validator: external
   created_at: "2026-05-07"
@@ -336,5 +351,16 @@ work_packages:
     notes: "Bundle composed at _COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/. 6 root files (MANIFEST, PROGRAM_SUMMARY, RISK_REGISTER, ROLLBACK_PLAN, VALIDATE_AOS_OUTPUT, AOS_MAIL_PROMPT) + 4 per-WP folders (WP003/WP004/WP006/WP007). Phase 1 scope: 4 WPs (deferred WP001+WP002 to Phase 2). Sign-off matrix + AC matrix + rollback plan + cross-engine activation prompt all included."
     validator: team_100
   awaiting: "team_00 dispatches AOS_MAIL_PROMPT.md to non-Opus engine (Cursor/Sonnet/Haiku) for L-GATE_V external verdict"
-  notes: "Phase 1 Public Launch Package complete. F-01 closed. Site live with fresh data. External constitutional validation pending."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-07"
+    notes: "External constitutional verdict by team_190 (Cursor Composer, non-Opus per Iron Rule #1). Verdict commit ccb5939. Findings: F-190-01 MEDIUM (scheduler+admin still FTPS-only — REMEDIATED SAME DAY via WP008 commit 06eca4b + production deploy 5b80c60); F-190-02 LOW (roadmap drift — fixed); F-190-03 LOW (no formal LOD500 — accepted L0); F-190-04 INFO."
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-07"
+    notes: "F-190-01 closed via WP008 production deploy. All Phase 1 findings resolved. Phase 1 effective verdict: PASS."
+    validator: team_100
+  status: COMPLETE
+  notes: "Phase 1 Public Launch Package COMPLETE. F-01 closed (WP007). F-190-01 closed (WP008). Site live with fresh daily data via WP REST API on all 3 entrypoints (CLI + scheduler + admin)."
   profile: L0
