@@ -28,8 +28,10 @@ project:
     Effective Phase 1 verdict: PASS.
     Site live with fresh daily data via WP REST API on all 3 upload
     entrypoints (CLI + scheduler + admin).
-    Phase 2: WP001 (M10 thaw) + WP002 (MyPIPS sources) DEFERRED to next session.
-    Mandates already published in git (commit 6e1dfcd) — ready for builder dispatch.
+    Phase 2 (2026-05-07) COMPLETE: WP001 (M10 thaw) + WP002 (MyPIPS sources) both LOD500_LOCKED.
+    WP001: migrations 032/033, basket_tier_resolver, db/check.py. L-GATE_V PASS (team_190 Opus).
+    WP002: migration 034 display_bucket, MypipsCollector Playwright, 4 priority sources.
+    L-GATE_V PASS (team_190 Opus). Branch rename pending team_00 push.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -114,14 +116,12 @@ work_packages:
 
 - id: SFA-S002-P001-WP002
   label: "MyPIPS Source Integration + Branch Cleanup"
-  status: DEFERRED_PHASE2
+  status: COMPLETE
   phase: 2
-  deferred_at: "2026-05-07"
-  deferred_reason: "team_00 directive — Phase 1 launch prioritized; WP002 LARGE deferred to next session. Mandate already published in git (commit 6e1dfcd). Raw material guardrail (Tend + MasterClass) carries forward intact."
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -138,7 +138,17 @@ work_packages:
     date: "2026-05-07"
     notes: "LOD400 spec authored with audit input (AUDIT_WP002_MYPIPS.md). 4 priority sources (mashtelatharoe, anatiyot, fruit4soul, finerotem). Phase 2C Playwright architecture. Raw-material guardrails explicit in AC. Precision gate satisfied."
     validator: team_100
-  notes: "Source: cursor/mypips-communication-and-handoffs@732121e (MyPIPS portion only)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-07"
+    notes: "sfa_build (Sonnet) commits 6510730+6b8a35f. 10/10 ACs PASS. Migration 034 (display_bucket), MypipsCollector Playwright, 4 sources smoked (mashtelatharoe=32, anatiyot=32, fruit4soul=32, finerotem=6 items). URL corrected to mypips.app/{handle}/products. stash@{0} dropped. Tag archive/mypips-handoffs-732121e created. validate_aos.sh 28P/17S/1F (Check 15 pre-existing)."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-07"
+    notes: "team_190 (Opus, cross-engine Iron Rule #1). 10/10 ACs + 10 constitutional checks PASS. Raw material guard CLEAN. _aos/ untouched. upload_dispatch.py untouched. roadmap.yaml untouched (Iron Rule #4). config.py WP008 methods intact. includeOrganic scoped to anatiyot only. 0 BLOCKER / 0 MAJOR / 3 NOTEs (informational). LOD500_LOCKED."
+    validator: team_190
+  notes: "COMPLETE 2026-05-07. MyPIPS Playwright collector, 4 priority sources (mashtelatharoe/anatiyot/fruit4soul/finerotem), display_bucket migration 034, filter UI. Branch rename archive/raw-material-tend-masterclass-2026-04 pending team_00 push."
   profile: L0
 
 - id: SFA-S002-P001-WP003
