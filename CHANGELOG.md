@@ -11,6 +11,19 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — DB Migrations + Seed Importer (Team 10, SFA-S003-P001-WP002, 2026-05-08)
+
+- **2026-05-08 — Team 10 (WP002):** Added ספר גידולים (Crop Book) data layer. Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-08). DB offline throughout (ADR034 R9 protocol).
+  - **New:** Alembic migrations 035–040 — `crop_families`, `crops`, `crop_varieties`, `crop_variety_source_values`, `crop_conversion_groups`, `crop_unit_conversions`. Deferred FK `crops.conversion_group_id → crop_conversion_groups.id` added in migration 039 to resolve circular dependency.
+  - **New:** `organic_market_agent/crop_book/models.py` — 6 SQLAlchemy ORM classes with full relationship wiring, CHECK constraints (English enum values per LOD400 v2.0.0 AC-01), and `chk_cuc_exclusion` mutual-exclusion constraint on `crop_unit_conversions`.
+  - **New:** `organic_market_agent/crop_book/constants.py` — `TEND_CROP_MAP` (52 entries), `TEND_FAMILY_MAP`, `CATEGORY_MAP`, `HARVEST_UNIT_MAP`, `GROWTH_CYCLE_MAP`, `PLANTING_METHOD_MAP`, `HARVEST_STAGE_MAP`, `TEAM00_DTM_OVERRIDES`, `OUTLIER_CROPS`.
+  - **New:** `organic_market_agent/crop_book/importer/tend.py` — `parse_crop_plan()` (Tend CSV → DB field dicts), `parse_product_sold()` (price computation), `discover_tend_years()`.
+  - **New:** `organic_market_agent/crop_book/importer/jmf.py` — JMF XLSX parser; gracefully handles empty directory (INFO log, returns []).
+  - **New:** `organic_market_agent/crop_book/importer/reconciler.py` — `reconcile_dtm()` (team_00 > JMF > Tend; OUTLIER_REJECTED for leaf crops DTM < 20), `reconcile_variety()` (per-field merge: JMF > Tend for spacing, Tend multi-year mean for yield).
+  - **New:** `organic_market_agent/crop_book/importer/seed.py` — CLI seed orchestrator (`--all`, `--crops`, `--dry-run`, `--year`, `--source-dir`, `--jmf-dir`). ORM-based upsert pattern (SQLite + PostgreSQL compatible). Seeds 23 families, 7 conversion groups, carrot crop-specific overrides.
+  - **Tests:** `tests/crop_book/test_models.py` (8 tests, no DB), `tests/crop_book/test_tend_importer.py` (8 tests, in-memory CSV), `tests/crop_book/test_reconciler.py` (8 tests, pure Python), `tests/crop_book/test_seed_idempotency.py` (4 tests, SQLite in-memory).
+  - **Updated:** `organic_market_agent/models/__init__.py` — added 6 crop_book model imports for Alembic autogenerate detection.
+
 ### M10 Thaw — SFA-S002-P001-WP001 (Team 10, 2026-05-07)
 
 - **2026-05-07 — Team 10 (WP001):** M10 thaw via Strategy C (extract+reapply from `cursor/m10-doc-mandates-spike@bb981ed`). Integration branch: `offline/2026-05-07-smallfarmsagents-release-prep`. Source branch tagged `archive/m10-spike-bb981ed`.

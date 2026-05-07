@@ -11,6 +11,14 @@ from organic_market_agent.models.catalog_scope_skip import CatalogScopeSkipRule
 from organic_market_agent.models.catalog_inbox import PendingProductAlias, ProductCatalogSuggestion
 from organic_market_agent.models.scheduler import PipelineAlert, SchedulerConfig
 from organic_market_agent.models.users import AuditLog, LogEntry, User
+from organic_market_agent.crop_book.models import (
+    CropFamily,
+    Crop,
+    CropVariety,
+    CropVarietySourceValue,
+    CropConversionGroup,
+    CropUnitConversion,
+)
 
 __all__ = [
     "MeasurementUnit",
@@ -41,4 +49,10 @@ __all__ = [
     "CatalogScopeSkipRule",
     "ProductCatalogSuggestion",
     "PendingProductAlias",
+    "CropFamily",
+    "Crop",
+    "CropVariety",
+    "CropVarietySourceValue",
+    "CropConversionGroup",
+    "CropUnitConversion",
 ]
