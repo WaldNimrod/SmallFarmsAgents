@@ -1,64 +1,75 @@
-# DB Activation Report — SFA-S002-P001 — 2026-05-07
+# DB Activation Report — SFA-S002-P001 — 2026-05-07 (v2 — re-run)
 
 **Date:** 2026-05-07
 **Author:** team_99 (waldhomeserver)
 **Type:** DB_ACTIVATION_REPORT
-**Verdict:** FAIL — migration 033 blocked by NOT NULL constraint
+**Verdict:** PASS
 
 ---
 
 ## Pre-flight
 
 - `db_connectivity_status.json`: `status: online` ✓
-- Branch: `offline/2026-05-07-smallfarmsagents-release-prep` (pulled latest)
-- Alembic current: `031`
+- Branch: `offline/2026-05-07-smallfarmsagents-release-prep`
+- Hotfix commit: `49c197d` (source_tier added to 033 + seed script)
 
-## Task A — Alembic upgrade head: FAIL
-
-Migration 032 applied successfully (catalog_scope_skip_rules + product_aliases).
-
-**Migration 033 FAILED:**
+## Task A — Alembic upgrade head: PASS
 
 ```
-psycopg2.errors.NotNullViolation: null value in column "source_tier" 
-of relation "sources" violates not-null constraint
+Running upgrade 031 -> 032, 032: CQ-P01 — catalog_scope_skip_rules + product_aliases
+Running upgrade 032 -> 033, 033: Extend raw_extracted_items extraction_status for pending_manual; seed SRC_WA + profiles
+Running upgrade 033 -> 034, 034: Add display_bucket column to sources table
 ```
-
-Root cause: Migration `033_src_wa_pending_manual.py` INSERT into `sources` does not include the `source_tier` column, which is NOT NULL without a default value.
-
-Existing `source_tier` values: `discovery`, `price_grid`, `benchmark`, `basket`.
-
-Transaction rolled back — alembic remains at `031`. Migration 032's changes were also rolled back (transactional DDL).
 
 | Check | Result |
 |-------|--------|
-| Alembic current version | `031` (unchanged) |
-| `display_bucket` column | **NO** — migration 034 not reached |
-| Migrations 032-034 applied | **NO** — 033 blocks all |
+| Alembic current version | **034** (head) |
+| `display_bucket` column | **YES** — `character varying`, NOT NULL |
+| Migrations 032-034 | All applied |
 
-## Task B — Seed MyPIPS sources: NOT ATTEMPTED
+## Task B — Seed MyPIPS sources: PASS
 
-Blocked by Task A. Additionally, `scripts/seed_mypips_sources.py` also lacks `source_tier` in its INSERT data — it would fail with the same NOT NULL violation.
+```
+INSERT SRC_MP01 (משתלת הראה) — id=23
+INSERT SRC_MP02 (הננתיות) — id=24
+INSERT SRC_MP03 (השחקן שהפך לירקן) — id=25
+INSERT SRC_MP04 (משק רתם פיין) — id=26
+Done: inserted=4, skipped=0
+```
 
-## Task C — Pipeline smoke: NOT ATTEMPTED
+| source_code | name | display_bucket | source_tier |
+|-------------|------|----------------|-------------|
+| SRC_MP01 | משתלת הראה | grower | price_grid |
+| SRC_MP02 | הננתיות | store | price_grid |
+| SRC_MP03 | השחקן שהפך לירקן | store | price_grid |
+| SRC_MP04 | משק רתם פיין | grower | price_grid |
 
-Blocked by Task A + B.
+## Task C — Pipeline smoke: PASS
 
-## Defect details
+```
+PublishEngine: wrote 33 products to output/public (rolling 7d window, version=20260507_124151)
+```
 
-| File | Issue |
-|------|-------|
-| `organic_market_agent/db/versions/033_src_wa_pending_manual.py` | INSERT into `sources` missing `source_tier` column (NOT NULL, no default) |
-| `scripts/seed_mypips_sources.py` | Same — 4 MyPIPS source dicts lack `source_tier` key |
+## DB health check
 
-## Recommendation for team_100
+| Check | Result |
+|-------|--------|
+| Total sources (all) | 25 |
+| Active sources | 11 |
+| Includes 4 MyPIPS | YES (SRC_MP01–SRC_MP04) |
+| Publisher products | 33 |
 
-Both files need `source_tier` added to the INSERT/seed data. Likely values:
-- SRC_WA (WhatsApp Community): `source_tier = 'discovery'` or `'price_grid'`
-- MyPIPS sources (mashtelatharoe, anatiyot, fruit4soul, finerotem): `source_tier = 'price_grid'` or `'basket'`
+## Summary
 
-This is an application code fix — out of scope for team_99 (IR §63). Route to sfa_build (team_10) for a 1-line fix per file.
+| Task | v1 (first attempt) | v2 (after hotfix) |
+|------|-------------------|-------------------|
+| A — Alembic upgrade | FAIL (source_tier) | **PASS** |
+| B — Seed MyPIPS | NOT ATTEMPTED | **PASS** |
+| C — Pipeline smoke | NOT ATTEMPTED | **PASS** |
+| DB check | — | **PASS** (25 sources) |
+
+**L-GATE_BUILD self-attestation: PASS**
 
 ---
 
-*team_99 | waldhomeserver | 2026-05-07 | FAIL — awaiting code fix from team_10*
+*team_99 | waldhomeserver | 2026-05-07*
