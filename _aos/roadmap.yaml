@@ -45,6 +45,10 @@ project:
     WP002: DB Migrations + Seed Importer (6 tables, 66 crops, 29 tests). Commit 9b26666.
     WP003: Flask Blueprint UI read-only (3 routes, 8 tabs, RTL, 51 tests). Commit d972b15.
     Both: team_190 L-GATE_V PASS. Branch: claude/strange-mcnulty-651551.
+    S003 Phase 2 OPENED (2026-05-09): WP004 ELIGIBLE — WordPress integration.
+    Architecture (team_00 directive): SPA HTML + separate JSON data file +
+    mu-plugin shortcode + dispatch_upload reuse with profile=crop_book.
+    CLI-only publish (no scheduler wiring). Effort: LARGE. Awaiting team_190 L-GATE_S.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -511,4 +515,26 @@ work_packages:
     notes: "team_190 PATCH01 re-check. PASS. F-190-WP003-01 RESOLVED (getlist OR logic). F-190-WP003-02 RESOLVED (ruler=ceil(hw/7)). 51/51 view tests, 80/80 total, 0 FAIL. LOD500_LOCKED. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP003-PATCH01-VERDICT_v1.0.0.md"
     validator: team_190
   notes: "LOD500_LOCKED 2026-05-08. L-GATE_V PASS (PATCH01, commit d972b15). S003 Phase 1 COMPLETE — WP002 + WP003 both LOD500_LOCKED."
+  profile: L0
+
+- id: SFA-S003-P001-WP004
+  label: "ספר גידולים: WordPress Integration (CropBookPublisher + shortcode)"
+  status: ELIGIBLE
+  phase: 2
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD400_DRAFT
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-09"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P001-WP002", "SFA-S003-P001-WP003"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP004/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-09"
+    notes: "team_00 in-session approval (S003-P002 handoff eb0c1c9 + plan-mode confirmation 2026-05-09). Architecture: SPA HTML + separate JSON data file + mu-plugin shortcode + dispatch_upload(profile=crop_book) reuse + CLI-only publish."
+  notes: "S003 Phase 2 OPENED 2026-05-09. LOD400 spec authored. Awaiting team_190 L-GATE_S Round 1. Bundle: _COMMUNICATION/team_190/SFA-S003-P001-WP004/."
   profile: L0
