@@ -11,6 +11,19 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — UI Views / Flask Blueprint (Team 10, SFA-S003-P001-WP003, 2026-05-08)
+
+- **2026-05-08 — Team 10 (WP003):** Added ספר גידולים UI views layer (read-only Flask Blueprint). Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-07). DB offline throughout (ADR034 R9 protocol).
+  - **New:** `organic_market_agent/crop_book/views.py` — `crop_book_bp` Blueprint with 3 routes: `GET /crop-book/` (index), `GET /crop-book/<int:crop_id>/` (detail), `GET /crop-book/api/crops` (JSON). Zero POST routes.
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/index.html` — Crop grid with 8 category tabs, free-text search, advanced filter (DTM max, seasons).
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/crop.html` — Crop detail page with 8 tabs (זנים, תיאור, כלכלה, טיפולים, ציוד, מקורות, ציר זמן, נתוני שדה). RTL Hebrew throughout.
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/_macros.html` — Shared Jinja2 macros: season_icons, category_badge, entity_tag, variety_card, timeline_bar, empty_tab.
+  - **New:** `organic_market_agent/admin/static/crop_book/crop_book.css` — RTL layout, entity tag spans with color-coded types, timeline proportional bars, variety cards, price cards.
+  - **New:** `organic_market_agent/admin/static/crop_book/crop_book.js` — Tab switching, category filter, search (debounced fetch to /api/crops), entity tag hover tooltips, entity summary panel.
+  - **New:** `organic_market_agent/admin/static/crop_book/entity_registry.js` — Repo-owned ENTITY_REGISTRY v1.0.0 with pest/disease/equip/input/technique/crop entities.
+  - **New:** `tests/crop_book/test_views.py` — Flask test client tests (mocked DB session, no real DB). Covers AC-01 through AC-11.
+  - **Updated:** `organic_market_agent/admin/__init__.py` — registered `crop_book_bp` at `/crop-book`.
+
 ### S003 ספר גידולים — DB Migrations + Seed Importer (Team 10, SFA-S003-P001-WP002, 2026-05-08)
 
 - **2026-05-08 — Team 10 (WP002):** Added ספר גידולים (Crop Book) data layer. Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-08). DB offline throughout (ADR034 R9 protocol).

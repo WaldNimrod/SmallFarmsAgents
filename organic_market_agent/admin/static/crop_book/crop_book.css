@@ -1,0 +1,379 @@
+/* =====================================================================
+   crop_book.css — ספר גידולים styles
+   RTL layout, Hebrew UI, Bootstrap 5 RTL base
+   ===================================================================== */
+
+/* ── RTL Base ─────────────────────────────────────────────────────── */
+.cb-index,
+.cb-crop-detail {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ── Category tabs ────────────────────────────────────────────────── */
+.cb-cat-tabs {
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.cb-cat-tab {
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px 6px 0 0;
+  color: #1b4332;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cb-cat-tab:hover {
+  background: rgba(27, 67, 50, 0.06);
+}
+
+.cb-cat-tab.active {
+  background: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  color: #1b4332;
+  font-weight: 600;
+}
+
+/* ── Advanced search panel ────────────────────────────────────────── */
+.cb-adv-search-panel {
+  background: #faf8f4;
+  border: 1px solid #d8e0d9;
+  border-radius: 8px;
+}
+
+/* ── Crop grid cards ──────────────────────────────────────────────── */
+.cb-crop-card {
+  border: 1px solid #d8e0d9;
+  border-radius: 10px;
+  transition: box-shadow 0.18s, transform 0.18s;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.cb-crop-card:hover {
+  box-shadow: 0 4px 16px rgba(27, 67, 50, 0.12);
+  transform: translateY(-2px);
+}
+
+.cb-crop-name-he {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1b4332;
+}
+
+.cb-crop-name-en {
+  font-size: 0.8rem;
+}
+
+.cb-crop-scientific {
+  font-size: 0.78rem;
+}
+
+.cb-crop-meta {
+  color: #5c6560;
+}
+
+/* ── Category badges ──────────────────────────────────────────────── */
+.cb-cat-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.cb-cat-vegetables  { background: #2d6a4f; }
+.cb-cat-herbs       { background: #40916c; }
+.cb-cat-baby        { background: #52b788; }
+.cb-cat-legumes     { background: #74c69d; color: #1a1a1a; }
+.cb-cat-fruits      { background: #e76f51; }
+.cb-cat-fruit_trees { background: #c9a84c; color: #1a1a1a; }
+.cb-cat-grains      { background: #a4ac86; color: #1a1a1a; }
+.cb-cat-cover_crops { background: #6c757d; }
+
+/* ── Season icons ─────────────────────────────────────────────────── */
+.cb-seasons {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.cb-season-icon {
+  font-size: 1rem;
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+
+.cb-season-icon.inactive {
+  opacity: 0.25;
+  filter: grayscale(80%);
+}
+
+/* ── Search bar ───────────────────────────────────────────────────── */
+.cb-search-bar {
+  min-width: 200px;
+}
+
+/* ── Breadcrumb (RTL) ─────────────────────────────────────────────── */
+.cb-breadcrumb {
+  direction: rtl;
+  text-align: right;
+}
+
+.cb-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+  float: right;
+  padding-right: 0;
+  padding-left: 0.5rem;
+  content: "/";
+}
+
+/* ── Detail tabs ──────────────────────────────────────────────────── */
+.cb-detail-tabs {
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.cb-tab-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ── Variety cards ────────────────────────────────────────────────── */
+.cb-variety-card {
+  border: 1px solid #d8e0d9;
+  border-radius: 8px;
+}
+
+.cb-variety-title {
+  font-size: 1rem;
+  color: #1b4332;
+}
+
+.cb-default-star {
+  color: #f4a261;
+  font-size: 1.1rem;
+  margin-left: 0.25rem;
+}
+
+.cb-grafted-badge {
+  background: #1565c0;
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.cb-default-badge {
+  font-size: 0.72rem;
+}
+
+/* ── Price cards ──────────────────────────────────────────────────── */
+.cb-price-card {
+  border-radius: 10px;
+}
+
+.cb-price-card-header {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cb-price-documented {
+  border-top: 4px solid #2d5a27;
+}
+
+.cb-price-market {
+  border-top: 4px solid #1565c0;
+}
+
+.cb-price-market-header {
+  background: rgba(21, 101, 192, 0.06);
+}
+
+.cb-price-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d5a27;
+}
+
+.cb-price-source {
+  color: #5c6560;
+}
+
+.cb-price-placeholder {
+  font-size: 0.9rem;
+  color: #5c6560;
+}
+
+.cb-price-unlinked {
+  color: #5c6560;
+  font-size: 0.9rem;
+}
+
+/* ── Yield table ──────────────────────────────────────────────────── */
+.cb-yield-table {
+  max-width: 600px;
+}
+
+/* ── Care table ───────────────────────────────────────────────────── */
+.cb-care-table th {
+  background: #f5f0e8;
+}
+
+/* ── Equipment card ───────────────────────────────────────────────── */
+.cb-equipment-card .card-header {
+  background: #e3f2fd;
+  font-weight: 600;
+}
+
+/* ── Sources table ────────────────────────────────────────────────── */
+.cb-sources-table {
+  font-size: 0.82rem;
+}
+
+.cb-sources-table code {
+  font-size: 0.8rem;
+  background: #f5f0e8;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ── Timeline ─────────────────────────────────────────────────────── */
+.cb-timeline-container {
+  padding: 1rem 0;
+}
+
+.cb-timeline-ruler {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 4px;
+}
+
+.cb-timeline-week {
+  font-size: 0.7rem;
+  color: #888;
+  flex: 1;
+  text-align: center;
+  min-width: 24px;
+}
+
+.cb-timeline-track {
+  display: flex;
+  height: 36px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+  background: #eee;
+}
+
+.cb-timeline-phase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 24px;
+}
+
+.cb-timeline-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+
+.cb-timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+}
+
+.cb-timeline-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cb-timeline-legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* ── Entity tags ──────────────────────────────────────────────────── */
+.etag {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: default;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+}
+
+.et-pest      { background: #fdecea; color: #b71c1c; border-color: #b71c1c40; }
+.et-disease   { background: #fff3e0; color: #bf360c; border-color: #bf360c40; }
+.et-equip     { background: #e3f2fd; color: #0d47a1; border-color: #0d47a140; }
+.et-input     { background: #e8f5e9; color: #1b5e20; border-color: #1b5e2040; }
+.et-technique { background: #f3e5f5; color: #4a148c; border-color: #4a148c40; }
+.et-crop      { background: #e0f2f1; color: #004d40; border-color: #004d4040; }
+
+.etag:hover {
+  opacity: 0.85;
+}
+
+/* Tooltip */
+.cb-etag-tooltip {
+  position: absolute;
+  z-index: 999;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  white-space: nowrap;
+  direction: rtl;
+}
+
+/* ── Empty tab placeholder ────────────────────────────────────────── */
+.cb-empty-tab {
+  min-height: 100px;
+}
+
+/* ── Price breakdown table ────────────────────────────────────────── */
+.cb-price-breakdown-table {
+  font-size: 0.82rem;
+}
+
+/* ── Field section ────────────────────────────────────────────────── */
+.cb-field-section {
+  border-right: 3px solid #2d6a4f;
+  padding-right: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.cb-field-section h6 {
+  color: #1b4332;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Tab content spacing ──────────────────────────────────────────── */
+.cb-tab-content {
+  padding-top: 1rem;
+  min-height: 200px;
+}
+
+/* ── Responsive: stack price cards on mobile ──────────────────────── */
+@media (max-width: 767px) {
+  .cb-price-card {
+    margin-bottom: 1rem;
+  }
+}
