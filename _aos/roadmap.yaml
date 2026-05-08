@@ -11,7 +11,7 @@ project:
   lean_kit_version: "3.1.7+c546ed4"
   created: "2026-03-01"
   owner: sfa_sd
-  active_milestone: "S002"
+  active_milestone: "S003"
   notes: >
     Community AI agent platform for Israel's organic farming market.
     OrganicMarketAgent: community price index for organic vegetables.
@@ -41,6 +41,10 @@ project:
     Former S003 content (WP-A1 moderated submissions, WP-A2 farmer calculator, M9C content,
     M11 backlog) deferred to S004. S003 definition session scheduled after S002 deployment
     confirmation and team_99 DB-seed verification.
+    S003 Phase 1 COMPLETE (2026-05-08): WP002 + WP003 both LOD500_LOCKED.
+    WP002: DB Migrations + Seed Importer (6 tables, 66 crops, 29 tests). Commit 9b26666.
+    WP003: Flask Blueprint UI read-only (3 routes, 8 tabs, RTL, 51 tests). Commit d972b15.
+    Both: team_190 L-GATE_V PASS. Branch: claude/strange-mcnulty-651551.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -462,11 +466,11 @@ work_packages:
 
 - id: SFA-S003-P001-WP003
   label: "ספר גידולים: UI Views (Flask Blueprint, read-only)"
-  status: BUILDING
+  status: COMPLETE
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_READY
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-07"
@@ -493,5 +497,18 @@ work_packages:
     branch: "claude/strange-mcnulty-651551"
     notes: "sfa_build (Sonnet, team_10). 11/11 ACs PASS. Flask Blueprint crop_book_bp (/crop-book/), 3 routes, 3 Jinja2 templates (_macros.html), CSS (RTL), JS (tabs/search/entity tooltips), entity_registry.js (repo-owned). 49 tests (test_views.py) + 78 total crop_book tests all PASS. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. 2 minor deviations (D1: getattr in Jinja2 sandbox; D2: variety sort order). Report: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP003/BUILD_REPORT_v1.0.0.md"
     validator: sfa_build
-  notes: "L-GATE_B PASS 2026-05-08 (commit d90dbc5). Advancing to L-GATE_V. Pending team_190 constitutional + functional validation."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-08"
+    commit: "d90dbc5"
+    notes: "team_190 L-GATE_V. PASS_WITH_FINDINGS. 11/11 AC, 6/6 constitutional. 2 MINOR: F-190-WP003-01 multi-season filter, F-190-WP003-02 timeline ruler weeks. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP003-LGATEV-VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-08"
+    commit: "d972b15"
+    patch: "PATCH01"
+    notes: "team_190 PATCH01 re-check. PASS. F-190-WP003-01 RESOLVED (getlist OR logic). F-190-WP003-02 RESOLVED (ruler=ceil(hw/7)). 51/51 view tests, 80/80 total, 0 FAIL. LOD500_LOCKED. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP003-PATCH01-VERDICT_v1.0.0.md"
+    validator: team_190
+  notes: "LOD500_LOCKED 2026-05-08. L-GATE_V PASS (PATCH01, commit d972b15). S003 Phase 1 COMPLETE — WP002 + WP003 both LOD500_LOCKED."
   profile: L0
