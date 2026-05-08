@@ -35,7 +35,7 @@ gate: L-GATE_B (pending team_190 validation)
 
 Pre-commit (HEAD before WP003): `d0c15bcdb6fc50558833572029f47db1301097f0`
 
-Post-commit: pending (BUILD_REPORT written before commit per instructions; update after commit)
+Post-commit: `d90dbc5` (branch `claude/strange-mcnulty-651551`)
 
 ---
 
