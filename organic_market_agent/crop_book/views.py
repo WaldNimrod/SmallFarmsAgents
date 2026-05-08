@@ -194,7 +194,7 @@ def crop_detail(crop_id: int):
         hw_max = default_var.harvest_window_max_days or 0
         gh_total = default_var.days_in_gh_total or 0
         total_days = dtm + hw_max
-        total_weeks = max(1, -(-total_days // 7))  # ceiling division
+        total_weeks = max(1, -(-hw_max // 7))  # ruler: harvest_window only (LOD400 §3.9)
 
         def pct(days: int) -> float:
             return round(100.0 * days / max(total_days, 1), 1)
@@ -238,7 +238,7 @@ def api_crops():
 
     q = request.args.get("q", "").strip()
     category = request.args.get("category", "").strip()
-    season = request.args.get("season", "").strip()
+    seasons = request.args.getlist("season")
     dtm_max_str = request.args.get("dtm_max", "").strip()
 
     query = (
@@ -279,13 +279,24 @@ def api_crops():
             except ValueError:
                 pass
 
-        # Season filter — substring match on planting_season
-        if season:
-            season_map = {"summer": ["קיץ", "summer"], "spring": ["אביב", "spring"],
-                          "winter": ["חורף", "winter"], "fall": ["סתיו", "fall", "autumn"]}
-            tokens = season_map.get(season, [season])
+        # Season filter — OR logic: crop must match at least one selected season
+        if seasons:
+            season_map = {
+                "summer": ["קיץ", "summer"],
+                "spring": ["אביב", "spring"],
+                "winter": ["חורף", "winter"],
+                "fall": ["סתיו", "fall", "autumn"],
+            }
             planting = (default_var.planting_season or "") if default_var else ""
-            if not any(t.lower() in planting.lower() for t in tokens):
+
+            def _matches_any_season(sel_seasons: list[str]) -> bool:
+                for s in sel_seasons:
+                    tokens = season_map.get(s, [s])
+                    if any(t.lower() in planting.lower() for t in tokens):
+                        return True
+                return False
+
+            if not _matches_any_season(seasons):
                 continue
 
         results.append(_crop_to_dict(crop))

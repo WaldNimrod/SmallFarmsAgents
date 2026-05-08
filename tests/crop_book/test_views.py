@@ -411,6 +411,27 @@ class TestSearch:
         resp = _get_with_mock_session(client, "/crop-book/api/crops?season=summer", mock_session)
         assert resp.status_code == 200
 
+    def test_api_multi_season_or_logic(self, client):
+        """F-190-WP003-01: ?season=summer&season=winter returns crops matching EITHER season (OR logic)."""
+        summer_var = _make_variety(planting_season="קיץ בלבד")
+        winter_var = _make_variety(planting_season="חורף בלבד")
+        spring_var = _make_variety(planting_season="אביב בלבד")
+        crops = [
+            _make_crop(id_=1, name_he="קיץ", varieties=[summer_var]),
+            _make_crop(id_=2, name_he="חורף", varieties=[winter_var]),
+            _make_crop(id_=3, name_he="אביב", varieties=[spring_var]),
+        ]
+        mock_session = _mock_session_for_api(crops)
+        resp = _get_with_mock_session(
+            client, "/crop-book/api/crops?season=summer&season=winter", mock_session
+        )
+        assert resp.status_code == 200
+        data = json.loads(resp.data)
+        names = {c["name_he"] for c in data}
+        assert "קיץ" in names       # summer matched
+        assert "חורף" in names      # winter matched
+        assert "אביב" not in names  # spring excluded (not in selected seasons)
+
 
 # ---------------------------------------------------------------------------
 # AC-04 — All 8 tabs render on crop detail page
@@ -574,6 +595,37 @@ class TestTimeline:
         resp = _get_with_mock_session(client, "/crop-book/1/", mock_session)
         data = resp.data.decode("utf-8")
         assert "אין נתוני" in data or "—" in data
+
+    def test_timeline_weeks_based_on_harvest_window_only(self, client):
+        """F-190-WP003-02: total_weeks = ceil(hw/7), not ceil((dtm+hw)/7).
+        ארוגולה: DTM=21, harvest_window=80 → 12 weeks (not 15).
+        """
+        import math
+        from unittest.mock import patch as _patch
+
+        variety = _make_variety(days_to_maturity=21, harvest_window_max_days=80)
+        crop = _make_crop(id_=1, varieties=[variety])
+        mock_session = _mock_session_for_detail(crop)
+
+        captured: dict = {}
+        original_render = __import__("flask", fromlist=["render_template"]).render_template
+
+        def capturing_render(template_name, **ctx):
+            if "timeline_data" in ctx:
+                captured["timeline_data"] = ctx["timeline_data"]
+            return original_render(template_name, **ctx)
+
+        with _patch("organic_market_agent.crop_book.views.render_template", side_effect=capturing_render):
+            _get_with_mock_session(client, "/crop-book/1/", mock_session)
+
+        td = captured.get("timeline_data")
+        assert td is not None, "timeline_data was not passed to render_template"
+        expected = math.ceil(80 / 7)   # 12  (harvest_window only)
+        wrong = math.ceil((21 + 80) / 7)  # 15 (dtm + hw — old broken formula)
+        assert td["total_weeks"] == expected, (
+            f"total_weeks should be {expected} (ceil(hw/7)), "
+            f"got {td['total_weeks']} (would be {wrong} with broken dtm+hw formula)"
+        )
 
 
 # ---------------------------------------------------------------------------
