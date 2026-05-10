@@ -30,7 +30,7 @@ class Config:
     UPRESS_SFTP_USER: str = os.getenv("UPRESS_SFTP_USER", "")
     UPRESS_SFTP_PASS: str = os.getenv("UPRESS_SFTP_PASS", "")
     # Canonical public base — includes WordPress subdirectory (/Agents on uPress server)
-    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio/Agents")
+    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
     # Canonical static root for all SFA artifacts (relative to WordPress root / ABSPATH)
     # Structure: {UPRESS_PUBLIC_BASE}/{UPRESS_SFA_STATIC_ROOT}/{subdir}/filename
     UPRESS_SFA_STATIC_ROOT: str = os.getenv("UPRESS_SFA_STATIC_ROOT", "smallfarmsagents")

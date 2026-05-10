@@ -6,9 +6,15 @@ Usage:
 
 Reads credentials from .env.upress.
 Uploads wp-content/mu-plugins/sfagent-*.php to the remote mu-plugins directory.
-Run from local Mac (port 21 accessible); NOT from waldhomeserver (Bezeq blocks port 21).
+
+Connection pattern (uPress-specific — see memory reference_upress_ftps.md):
+  connect() → login() → prot_c()   ← order matters; prot_p causes 425.
+  SSL without cert validation (uPress data channel uses self-signed cert).
+  IP must be whitelisted in uPress panel before connecting.
 """
+import ftplib
 import os
+import ssl
 import sys
 from pathlib import Path
 
@@ -25,11 +31,8 @@ REMOTE_MU_DIR = "wp-content/mu-plugins"
 
 load_dotenv(ENV_FILE)
 
-sys.path.insert(0, str(REPO_ROOT))
-from organic_market_agent.publisher.ftps_upload import ReusedSessionFTP_TLS
 
-
-def connect_ftp() -> ReusedSessionFTP_TLS:
+def connect_ftp() -> ftplib.FTP_TLS:
     host = os.getenv("UPRESS_SFTP_HOST", "")
     port = int(os.getenv("UPRESS_SFTP_PORT", "21"))
     user = os.getenv("UPRESS_SFTP_USER", "")
@@ -37,11 +40,14 @@ def connect_ftp() -> ReusedSessionFTP_TLS:
     if not (host and user and passwd):
         print("[ERROR] UPRESS_SFTP_HOST / UPRESS_SFTP_USER / UPRESS_SFTP_PASS not set in .env.upress")
         sys.exit(1)
-    ftp = ReusedSessionFTP_TLS()
-    ftp.connect(host, port)
-    ftp.auth()
-    ftp.prot_p()
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    ftp = ftplib.FTP_TLS(context=ctx)
+    ftp.connect(host, port, timeout=15)
     ftp.login(user, passwd)
+    ftp.prot_c()   # clear data channel — prot_p causes 425 on uPress
+    ftp.set_pasv(True)
     return ftp
 
 
