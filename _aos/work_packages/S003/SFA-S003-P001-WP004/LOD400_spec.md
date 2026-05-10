@@ -686,7 +686,7 @@ A `<!DOCTYPE html>` + `<head>` + `<body>` shell that includes the body fragment 
 7. **wp_upload + dispatch_upload extensions** — new constants + `upload_all_crop_book_artifacts` + `profile` kwarg. AC-10/15 PASSING. Commit. (~1 h)
 8. **CLI subcommand** — `crop_book_publish` in `__main__.py`. AC-12 PASSING. Commit. (~1 h)
 9. **mu-plugin PHP + runbook** — author `sfagent-crop-book-shortcode.php`, append runbook section. AC-11 PASSING. Commit. (~1.5 h)
-10. **Final test sweep + validate_aos.sh** — full pytest run, all 16 ACs verified, validate_aos.sh 0 FAIL. AC-14 PASSING. Commit BUILD_REPORT. (~30 min)
+10. **Final test sweep + validate_aos.sh** — full pytest run, all 19 ACs verified (16 R1 + AC-17/18/19 added in R2), validate_aos.sh 0 FAIL. AC-14 PASSING. Commit BUILD_REPORT. (~30 min)
 
 Total budget: **~14 h** of focused builder time. Recommend the builder break the JS work (steps 4–5) over two sessions if needed; it's the highest-defect-density block.
 
