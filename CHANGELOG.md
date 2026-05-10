@@ -11,6 +11,47 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — UI Views / Flask Blueprint (Team 10, SFA-S003-P001-WP003, 2026-05-08)
+
+- **2026-05-08 — Team 10 (WP003):** Added ספר גידולים UI views layer (read-only Flask Blueprint). Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-07). DB offline throughout (ADR034 R9 protocol).
+  - **New:** `organic_market_agent/crop_book/views.py` — `crop_book_bp` Blueprint with 3 routes: `GET /crop-book/` (index), `GET /crop-book/<int:crop_id>/` (detail), `GET /crop-book/api/crops` (JSON). Zero POST routes.
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/index.html` — Crop grid with 8 category tabs, free-text search, advanced filter (DTM max, seasons).
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/crop.html` — Crop detail page with 8 tabs (זנים, תיאור, כלכלה, טיפולים, ציוד, מקורות, ציר זמן, נתוני שדה). RTL Hebrew throughout.
+  - **New:** `organic_market_agent/crop_book/templates/crop_book/_macros.html` — Shared Jinja2 macros: season_icons, category_badge, entity_tag, variety_card, timeline_bar, empty_tab.
+  - **New:** `organic_market_agent/admin/static/crop_book/crop_book.css` — RTL layout, entity tag spans with color-coded types, timeline proportional bars, variety cards, price cards.
+  - **New:** `organic_market_agent/admin/static/crop_book/crop_book.js` — Tab switching, category filter, search (debounced fetch to /api/crops), entity tag hover tooltips, entity summary panel.
+  - **New:** `organic_market_agent/admin/static/crop_book/entity_registry.js` — Repo-owned ENTITY_REGISTRY v1.0.0 with pest/disease/equip/input/technique/crop entities.
+  - **New:** `tests/crop_book/test_views.py` — Flask test client tests (mocked DB session, no real DB). Covers AC-01 through AC-11.
+  - **Updated:** `organic_market_agent/admin/__init__.py` — registered `crop_book_bp` at `/crop-book`.
+
+### S003 ספר גידולים — DB Migrations + Seed Importer (Team 10, SFA-S003-P001-WP002, 2026-05-08)
+
+- **2026-05-08 — Team 10 (WP002):** Added ספר גידולים (Crop Book) data layer. Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-08). DB offline throughout (ADR034 R9 protocol).
+  - **New:** Alembic migrations 035–040 — `crop_families`, `crops`, `crop_varieties`, `crop_variety_source_values`, `crop_conversion_groups`, `crop_unit_conversions`. Deferred FK `crops.conversion_group_id → crop_conversion_groups.id` added in migration 039 to resolve circular dependency.
+  - **New:** `organic_market_agent/crop_book/models.py` — 6 SQLAlchemy ORM classes with full relationship wiring, CHECK constraints (English enum values per LOD400 v2.0.0 AC-01), and `chk_cuc_exclusion` mutual-exclusion constraint on `crop_unit_conversions`.
+  - **New:** `organic_market_agent/crop_book/constants.py` — `TEND_CROP_MAP` (52 entries), `TEND_FAMILY_MAP`, `CATEGORY_MAP`, `HARVEST_UNIT_MAP`, `GROWTH_CYCLE_MAP`, `PLANTING_METHOD_MAP`, `HARVEST_STAGE_MAP`, `TEAM00_DTM_OVERRIDES`, `OUTLIER_CROPS`.
+  - **New:** `organic_market_agent/crop_book/importer/tend.py` — `parse_crop_plan()` (Tend CSV → DB field dicts), `parse_product_sold()` (price computation), `discover_tend_years()`.
+  - **New:** `organic_market_agent/crop_book/importer/jmf.py` — JMF XLSX parser; gracefully handles empty directory (INFO log, returns []).
+  - **New:** `organic_market_agent/crop_book/importer/reconciler.py` — `reconcile_dtm()` (team_00 > JMF > Tend; OUTLIER_REJECTED for leaf crops DTM < 20), `reconcile_variety()` (per-field merge: JMF > Tend for spacing, Tend multi-year mean for yield).
+  - **New:** `organic_market_agent/crop_book/importer/seed.py` — CLI seed orchestrator (`--all`, `--crops`, `--dry-run`, `--year`, `--source-dir`, `--jmf-dir`). ORM-based upsert pattern (SQLite + PostgreSQL compatible). Seeds 23 families, 7 conversion groups, carrot crop-specific overrides.
+  - **Tests:** `tests/crop_book/test_models.py` (8 tests, no DB), `tests/crop_book/test_tend_importer.py` (8 tests, in-memory CSV), `tests/crop_book/test_reconciler.py` (8 tests, pure Python), `tests/crop_book/test_seed_idempotency.py` (4 tests, SQLite in-memory).
+  - **Updated:** `organic_market_agent/models/__init__.py` — added 6 crop_book model imports for Alembic autogenerate detection.
+
+### M10 Thaw — SFA-S002-P001-WP001 (Team 10, 2026-05-07)
+
+- **2026-05-07 — Team 10 (WP001):** M10 thaw via Strategy C (extract+reapply from `cursor/m10-doc-mandates-spike@bb981ed`). Integration branch: `offline/2026-05-07-smallfarmsagents-release-prep`. Source branch tagged `archive/m10-spike-bb981ed`.
+  - **New:** `organic_market_agent/db/versions/032_cq_p01_alias_batch.py` — CQ-P01 SCOPE_SKIP_RULES + GLOBAL_ALIASES + SCOPED_ALIASES template (renumbered from branch 072; no-op upgrade, chain only; data filled in H1 handoff).
+  - **New:** `organic_market_agent/db/versions/033_src_wa_pending_manual.py` — extend `raw_extracted_items.extraction_status` CHECK to include `'pending_manual'`; seed SRC_WA source with canonical fetch/normalizer profiles (renumbered from branch 073).
+  - **New:** `organic_market_agent/normalizer/basket_tier_resolver.py` — CSA basket → PRD025/PRD026/PRD027 (small/medium/large) tier resolver. Item-count priority over price; fallback PRD026 when count < 5 (ARCH-20260406-CQ-MASTER §3.7.2).
+  - **New:** `organic_market_agent/publisher/report_details.py` — product `details` for publish JSON v3 (variants, price_series, CSA merge).
+  - **Updated:** `organic_market_agent/db/check.py` — health probe updated to expect sources >= 21 (post-SRC_WA seed).
+  - **Updated:** `organic_market_agent/publisher/rolling_aggregate.py` — full per-filter-key stats (`all`/`grower`/`store`/`chain`/`baskets`), `stats_by_filter` shape, `details` object, `display_bucket` JOIN.
+  - **Updated:** `organic_market_agent/models/runs.py` — `RawExtractedItem` CHECK constraint extended to include `pending_manual` status (matches migration 033).
+  - **Updated:** `organic_market_agent/utils/config.py` — added `PLAYWRIGHT_HEADLESS` + `PLAYWRIGHT_TIMEOUT_MS` fields (M10.4 mypips SPA support). All WP008 methods (`wp_rest_configured`, `ftps_configured`, `upress_configured`) preserved intact.
+  - **Tests:** `tests/test_basket_tier_resolver.py` (11 tests), `tests/test_extraction_status_pending_manual.py` (2 DB tests), `tests/test_db_health.py` (updated with require_postgres module-level skip).
+  - **Config:** `.python-version` set to `3.11`; `.env.example` extended with Playwright vars.
+  - **Migration disposition:** Branch 031 (mypips workbook) SKIPPED (conflicts with main's 031); branch 032–071 (41 migrations) SKIPPED (M10.2-5/M13-PRE content deferred to future WPs; no schema deps required for 032/033 carry).
+
 ### Governance — external L-GATE_VALIDATE (Team 190)
 
 - **2026-05-07 — Team 190:** Constitutional verdict **PASS_WITH_FINDINGS** for **SFA-S002-P001 Phase 1** (assignment **SFA-S002-P001-WP005** — bundle WP003+WP004+WP006+WP007). Artifact: [`_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md`](_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md). Mechanical: `validate_aos.sh` **29 PASS / 17 SKIP / 0 FAIL**; pytest spot **81 passed** (`test_wp_upload`, `test_responsive_html`, `test_ftps_upload`). Key finding **F-190-01:** scheduler `pipeline.py` and admin `runs_upload_now` still FTPS-only; WP REST primary path matches `run_publisher --upload` / `_do_upload` only. **F-190-01 fix landed same day** in WP008 (entry below).

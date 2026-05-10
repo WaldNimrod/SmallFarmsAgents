@@ -1,0 +1,119 @@
+{# _macros.html — shared Jinja2 macros for ספר גידולים #}
+
+{# ─── Season icons ─────────────────────────────────────────────────────── #}
+{% macro season_icons(detect_seasons, planting_season) %}
+  {% set seasons = detect_seasons(planting_season) %}
+  {% set icons = [('summer','☀️'), ('spring','🌸'), ('winter','🌧'), ('fall','💨')] %}
+  <span class="cb-seasons">
+    {% for key, icon in icons %}
+      <span class="cb-season-icon{% if not seasons.get(key) %} inactive{% endif %}"
+            title="{{ key }}">{{ icon }}</span>
+    {% endfor %}
+  </span>
+{% endmacro %}
+
+{# ─── Category badge ───────────────────────────────────────────────────── #}
+{% macro category_badge(category, category_labels) %}
+  <span class="badge cb-cat-badge cb-cat-{{ category }}">
+    {{ category_labels.get(category, category) }}
+  </span>
+{% endmacro %}
+
+{# ─── Entity tag span ──────────────────────────────────────────────────── #}
+{% macro entity_tag(etype, eid, label) %}
+  <span class="etag et-{{ etype }}"
+        data-etype="{{ etype }}"
+        data-eid="{{ eid }}"
+        data-future-url="/entities/{{ etype }}s/{{ eid }}">{{ label }}</span>
+{% endmacro %}
+
+{# ─── Variety card ─────────────────────────────────────────────────────── #}
+{% macro variety_card(v, category_labels) %}
+<div class="card cb-variety-card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <div>
+        <h5 class="mb-0 cb-variety-title">
+          {% if v.is_default %}<span class="cb-default-star" title="זן ברירת מחדל">★</span>{% endif %}
+          {{ v.name_he or v.name_en or '—' }}
+          {% if v.name_en and v.name_he %}
+            <small class="text-muted fw-normal ms-2">{{ v.name_en }}</small>
+          {% endif %}
+        </h5>
+        {% if v.is_grafted %}
+          <span class="badge cb-grafted-badge mt-1">
+            🔗 מורכב
+            {% if v.rootstock_variety %} — כנה: {{ v.rootstock_variety }}{% endif %}
+          </span>
+        {% endif %}
+      </div>
+      {% if v.is_default %}
+        <span class="badge bg-success cb-default-badge">ברירת מחדל</span>
+      {% endif %}
+    </div>
+
+    <div class="row g-2 small text-muted cb-variety-meta">
+      {% if v.planting_method %}
+        <div class="col-auto"><strong>שתילה:</strong>
+          {% set pm_map = {'direct_sow': 'זריעה ישירה', 'transplant': 'שתיל', 'greenhouse_transplant': 'שתיל חממה', 'cutting': 'קנה', 'purchase': 'רכש'} %}
+          {{ pm_map.get(v.planting_method, v.planting_method) }}
+        </div>
+      {% endif %}
+      {% if v.harvest_stage %}
+        <div class="col-auto"><strong>שלב קציר:</strong>
+          {% set hs_map = {'full_size': 'גודל מלא', 'baby_leaf': 'בייבי', 'head': 'ראש', 'plant_sale': 'מכירת שתיל', 'seed': 'זרע'} %}
+          {{ hs_map.get(v.harvest_stage, v.harvest_stage) }}
+        </div>
+      {% endif %}
+      {% if v.days_to_maturity %}
+        <div class="col-auto"><strong>DTM:</strong> {{ v.days_to_maturity }} יום</div>
+      {% endif %}
+      {% if v.harvest_window_max_days %}
+        <div class="col-auto"><strong>חלון קציר:</strong> עד {{ v.harvest_window_max_days }} יום</div>
+      {% endif %}
+      {% if v.in_row_spacing_cm %}
+        <div class="col-auto"><strong>ריווח:</strong> {{ v.in_row_spacing_cm }} סמ
+          {% if v.rows_per_bed %} × {{ v.rows_per_bed }} שורות{% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if v.avg_yield_per_bed_m or v.documented_price or v.avg_revenue_per_bed_m %}
+      <hr class="my-2">
+      <div class="row g-2 small cb-variety-econ">
+        {% if v.avg_yield_per_bed_m %}
+          <div class="col-auto">
+            <strong>תשואה:</strong> {{ v.avg_yield_per_bed_m }} {{ v.harvest_unit or '' }}/מ'
+          </div>
+        {% endif %}
+        {% if v.documented_price %}
+          <div class="col-auto">
+            <strong>מחיר מתועד:</strong> ₪{{ v.documented_price }} {{ v.documented_price_unit or '' }}
+          </div>
+        {% endif %}
+        {% if v.avg_revenue_per_bed_m %}
+          <div class="col-auto">
+            <strong>הכנסה/מ':</strong> ₪{{ v.avg_revenue_per_bed_m }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{# ─── Timeline bar ─────────────────────────────────────────────────────── #}
+{% macro timeline_bar(phase) %}
+  <div class="cb-timeline-phase" style="width: {{ phase.pct }}%; background-color: {{ phase.color }};"
+       title="{{ phase.label }}">
+    <span class="cb-timeline-label">{{ phase.label }}</span>
+  </div>
+{% endmacro %}
+
+{# ─── Empty tab placeholder ────────────────────────────────────────────── #}
+{% macro empty_tab(msg='אין נתונים') %}
+  <div class="cb-empty-tab text-muted py-4 text-center">
+    <span class="fs-4">—</span><br>
+    <small>{{ msg }}</small>
+  </div>
+{% endmacro %}

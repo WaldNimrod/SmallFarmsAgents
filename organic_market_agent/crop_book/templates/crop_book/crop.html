@@ -1,0 +1,471 @@
+{% extends "admin/base.html" %}
+{% from "crop_book/_macros.html" import season_icons, category_badge, variety_card, timeline_bar, empty_tab, entity_tag %}
+
+{% block title %}{{ crop.name_he }} — ספר גידולים{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='crop_book/crop_book.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="cb-crop-detail">
+
+  {# ─── Breadcrumb ─── #}
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb cb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('crop_book.index') }}">ספר גידולים</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('crop_book.index', category=crop.category) }}">
+          {{ category_labels.get(crop.category, crop.category) }}
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">{{ crop.name_he }}</li>
+    </ol>
+  </nav>
+
+  {# ─── Crop header ─── #}
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h1 class="h2 mb-1 cb-crop-title">
+        {{ crop.name_he }}
+        {{ category_badge(crop.category, category_labels) }}
+      </h1>
+      {% if crop.name_en %}
+        <div class="cb-crop-name-en text-muted">{{ crop.name_en }}
+          {% if crop.scientific_name %}
+            · <em>{{ crop.scientific_name }}</em>
+          {% endif %}
+        </div>
+      {% elif crop.scientific_name %}
+        <div class="text-muted fst-italic">{{ crop.scientific_name }}</div>
+      {% endif %}
+      <div class="cb-crop-meta small text-muted mt-1">
+        {% if crop.family %}
+          <span>משפחה: {{ crop.family.scientific_name }}{% if crop.family.name_he %} — {{ crop.family.name_he }}{% endif %}</span>
+        {% endif %}
+        {% if crop.growth_cycle %}
+          {% set gc_map = {'annual': 'חד שנתי', 'biennial': 'דו שנתי', 'perennial': 'רב שנתי'} %}
+          · <span>מחזור: {{ gc_map.get(crop.growth_cycle, crop.growth_cycle) }}</span>
+        {% endif %}
+        {% if crop.harvest_unit_default %}
+          · <span>יחידת קציר: {{ crop.harvest_unit_default }}</span>
+        {% endif %}
+      </div>
+    </div>
+    <div>
+      {{ season_icons(detect_seasons, default_var.planting_season if default_var else None) }}
+    </div>
+  </div>
+
+  {# ─── 8-tab layout ─── #}
+  <ul class="nav nav-tabs cb-detail-tabs mb-3" id="cb-detail-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab-varieties-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-varieties" type="button" role="tab"
+              aria-controls="tab-varieties" aria-selected="true">
+        זנים {% if crop.varieties %}({{ crop.varieties | length }}){% endif %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-description-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-description" type="button" role="tab">תיאור</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-economics-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-economics" type="button" role="tab">כלכלה</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-care-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-care" type="button" role="tab">טיפולים</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link{% if not has_seeder %} cb-tab-disabled{% endif %}"
+              id="tab-equipment-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-equipment" type="button" role="tab"
+              {% if not has_seeder %}aria-disabled="true"{% endif %}>
+        ציוד{% if not has_seeder %} <span class="text-muted small">(אין נתונים)</span>{% endif %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-sources-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-sources" type="button" role="tab">מקורות</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-timeline-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-timeline" type="button" role="tab">ציר זמן</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-field-btn" data-bs-toggle="tab"
+              data-bs-target="#tab-field" type="button" role="tab">נתוני שדה</button>
+    </li>
+  </ul>
+
+  <div class="tab-content cb-tab-content" id="cb-detail-tab-content">
+
+    {# ────────────────────────────────────────────────── Tab 1: זנים ─── #}
+    <div class="tab-pane fade show active" id="tab-varieties" role="tabpanel">
+      {% if crop.varieties %}
+        {% for v in crop.varieties %}
+          {{ variety_card(v, category_labels) }}
+        {% endfor %}
+      {% else %}
+        {{ empty_tab('אין זנים מוגדרים לגידול זה') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 2: תיאור ─── #}
+    <div class="tab-pane fade" id="tab-description" role="tabpanel">
+      {% if crop.description %}
+        <div class="cb-description-text">{{ crop.description | safe }}</div>
+        <div id="cb-entity-summary" class="mt-4"></div>
+      {% else %}
+        {{ empty_tab('אין תיאור זמין לגידול זה') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 3: כלכלה ─── #}
+    <div class="tab-pane fade" id="tab-economics" role="tabpanel">
+      {% if default_var %}
+        <div class="row g-3 mb-4">
+          {# Card 1 — מחיר מתועד #}
+          <div class="col-12 col-md-6">
+            <div class="card cb-price-card cb-price-documented h-100">
+              <div class="card-header cb-price-card-header">מחיר מתועד</div>
+              <div class="card-body">
+                {% if default_var.documented_price %}
+                  <div class="cb-price-value">
+                    ₪{{ default_var.documented_price }}
+                    {% if default_var.documented_price_unit %}/ {{ default_var.documented_price_unit }}{% endif %}
+                  </div>
+                  {% if default_var.documented_price_source %}
+                    <div class="cb-price-source small text-muted">מקור: {{ default_var.documented_price_source }}</div>
+                  {% endif %}
+
+                  {# Expandable yearly breakdown #}
+                  {% if price_source_values %}
+                    <div class="mt-2">
+                      <button class="btn btn-sm btn-outline-secondary" type="button"
+                              data-bs-toggle="collapse" data-bs-target="#cb-price-breakdown">
+                        פירוט לפי שנה ▾
+                      </button>
+                      <div class="collapse mt-2" id="cb-price-breakdown">
+                        <table class="table table-sm cb-price-breakdown-table">
+                          <thead>
+                            <tr>
+                              <th>מקור</th>
+                              <th>ערך</th>
+                              <th>יחידה</th>
+                              <th>הערה</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for sv in price_source_values %}
+                              <tr>
+                                <td>{{ sv.source }}</td>
+                                <td>{{ sv.value_text or sv.value_numeric or '—' }}</td>
+                                <td>{{ sv.unit or '—' }}</td>
+                                <td>{{ sv.note or '—' }}</td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% else %}
+                  {{ empty_tab('אין מחיר מתועד') }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          {# Card 2 — מחיר שוק #}
+          <div class="col-12 col-md-6">
+            <div class="card cb-price-card cb-price-market h-100">
+              <div class="card-header cb-price-card-header cb-price-market-header">מחיר שוק</div>
+              <div class="card-body">
+                {% if default_var.pricebook_product_id %}
+                  <div class="cb-price-placeholder text-muted">
+                    מחיר שוק: {{ default_var.pricebook_product_id }} — יוצג עם הפעלת מחירון
+                  </div>
+                {% else %}
+                  <div class="cb-price-unlinked text-muted fst-italic">לא מקושר למחירון</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# Yield table #}
+        <h6 class="mb-2">נתוני תשואה</h6>
+        <table class="table table-sm cb-yield-table">
+          <thead>
+            <tr><th>שדה</th><th>ערך</th><th>מקור</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>תשואה ממוצעת</td>
+              <td>{{ default_var.avg_yield_per_bed_m if default_var.avg_yield_per_bed_m else '—' }}
+                  {{ ' ' ~ default_var.harvest_unit if default_var.avg_yield_per_bed_m and default_var.harvest_unit else '' }}/מ' ערוגה</td>
+              <td>{{ default_var.yield_source or '—' }}</td>
+            </tr>
+            <tr>
+              <td>הכנסה ממוצעת</td>
+              <td>{% if default_var.avg_revenue_per_bed_m %}₪{{ default_var.avg_revenue_per_bed_m }}/מ' ערוגה{% else %}—{% endif %}</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>יחידת קציר</td>
+              <td>{{ default_var.harvest_unit or '—' }}</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      {% else %}
+        {{ empty_tab('אין נתונים כלכליים זמינים') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 4: טיפולים ─── #}
+    <div class="tab-pane fade" id="tab-care" role="tabpanel">
+      <div class="cb-care-note text-muted small mb-3">נתונים בהכנה</div>
+      <table class="table table-sm table-bordered cb-care-table">
+        <thead>
+          <tr>
+            <th>שלב</th>
+            <th>ריסוס</th>
+            <th>השקייה</th>
+            <th>דישון</th>
+            <th>עידור</th>
+            <th>קציר</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for phase in ['הכנה', 'נביטה', 'גידול', 'קציר'] %}
+            <tr>
+              <td>{{ phase }}</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 5: ציוד ─── #}
+    <div class="tab-pane fade" id="tab-equipment" role="tabpanel">
+      {% if has_seeder %}
+        {% for v in crop.varieties if v.seeder %}
+          <div class="card cb-equipment-card mb-3">
+            <div class="card-header">
+              מזרע {{ v.seeder }}
+              {% if v.is_default %}<span class="badge bg-success ms-2">ברירת מחדל</span>{% endif %}
+            </div>
+            <div class="card-body">
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr><td>הגדר קדמי</td><td>{{ v.seeder_front_gear or '—' }}</td></tr>
+                  <tr><td>הגדר אחורי</td><td>{{ v.seeder_rear_gear or '—' }}</td></tr>
+                  <tr><td>לוח גלגל</td><td>{{ v.seeder_roller_plate or '—' }}</td></tr>
+                </tbody>
+              </table>
+              <div class="small text-muted mt-2">מקור: JMF MasterClass</div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {{ empty_tab('אין נתוני ציוד לגידול זה') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 6: מקורות ─── #}
+    <div class="tab-pane fade" id="tab-sources" role="tabpanel">
+      {% if sorted_sources and sources_by_field %}
+        <div class="cb-sources-toggle mb-3">
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-outline-secondary active" id="cb-src-unified">מאוחד</button>
+            <button type="button" class="btn btn-outline-secondary" id="cb-src-by-source">לפי מקור</button>
+          </div>
+        </div>
+
+        {# Unified view — default variety fields #}
+        <div id="cb-sources-unified-view">
+          {% if default_var %}
+            <table class="table table-sm table-bordered cb-sources-table">
+              <thead>
+                <tr>
+                  <th>שדה</th>
+                  <th>ערך מאוחד</th>
+                  {% for src in sorted_sources %}<th>{{ src }}</th>{% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for field, src_vals in sources_by_field.items() %}
+                  <tr>
+                    <td><code>{{ field }}</code></td>
+                    <td>—</td>
+                    {% for src in sorted_sources %}
+                      <td>{{ src_vals.get(src, '—') }}</td>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        </div>
+      {% else %}
+        {{ empty_tab('אין נתוני מקורות זמינים לגידול זה') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 7: ציר זמן ─── #}
+    <div class="tab-pane fade" id="tab-timeline" role="tabpanel">
+      {% if timeline_data %}
+        <div class="cb-timeline-container">
+          <div class="cb-timeline-ruler mb-2">
+            {% for w in range(1, timeline_data.total_weeks + 1) %}
+              <span class="cb-timeline-week">{{ w }}</span>
+            {% endfor %}
+          </div>
+          <div class="cb-timeline-track">
+            {% for phase in timeline_data.phases %}
+              {{ timeline_bar(phase) }}
+            {% endfor %}
+          </div>
+          <div class="cb-timeline-legend mt-3">
+            {% for phase in timeline_data.phases %}
+              <span class="cb-timeline-legend-item">
+                <span class="cb-timeline-legend-dot" style="background:{{ phase.color }};"></span>
+                {{ phase.label }}
+              </span>
+            {% endfor %}
+          </div>
+          <div class="small text-muted mt-2">
+            {% if timeline_data.dtm %}DTM: {{ timeline_data.dtm }} יום{% endif %}
+            {% if timeline_data.hw_max %} · חלון קציר: {{ timeline_data.hw_max }} יום{% endif %}
+            · סה"כ: {{ timeline_data.total_weeks }} שבועות
+          </div>
+        </div>
+      {% else %}
+        {{ empty_tab('אין נתוני ציר זמן — DTM ו/או חלון קציר חסרים') }}
+      {% endif %}
+    </div>
+
+    {# ────────────────────────────────────────────────── Tab 8: נתוני שדה ─── #}
+    <div class="tab-pane fade" id="tab-field" role="tabpanel">
+      {% if default_var %}
+        {# DTM section #}
+        <div class="cb-field-section mb-4">
+          <h6>ימים לבשלות (DTM)</h6>
+          {% set dtm_svs = [] %}
+          {% if default_var.source_values %}
+            {% for sv in default_var.source_values if sv.field_name == 'days_to_maturity' %}
+              {% set _ = dtm_svs.append(sv) %}
+            {% endfor %}
+          {% endif %}
+          {% if default_var.days_to_maturity or dtm_svs %}
+            <table class="table table-sm">
+              <thead><tr><th>מקור</th><th>ערך</th><th>הערה</th></tr></thead>
+              <tbody>
+                {% if default_var.days_to_maturity %}
+                  <tr class="table-success">
+                    <td><strong>מאוחד</strong></td>
+                    <td><strong>{{ default_var.days_to_maturity }} יום</strong></td>
+                    <td>ערך פעיל</td>
+                  </tr>
+                {% endif %}
+                {% for sv in dtm_svs %}
+                  <tr>
+                    <td>{{ sv.source }}</td>
+                    <td>{{ sv.value_text or sv.value_numeric or '—' }} {{ sv.unit or '' }}</td>
+                    <td>{{ sv.note or '—' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p class="small text-muted">
+              DTM משתנה לפי עונה ואזור. בישראל בקיץ DTM עשוי להיות קצר משמעותית מהבסיס הקנדי (JMF).
+            </p>
+          {% else %}
+            {{ empty_tab('אין נתוני DTM') }}
+          {% endif %}
+        </div>
+
+        {# Unit conversions section #}
+        {% set conversions = [] %}
+        {% if crop.unit_conversions %}
+          {% for uc in crop.unit_conversions %}{% set _ = conversions.append(uc) %}{% endfor %}
+        {% elif crop.conversion_group and crop.conversion_group.conversions %}
+          {% for uc in crop.conversion_group.conversions %}{% set _ = conversions.append(uc) %}{% endfor %}
+        {% endif %}
+        {% if conversions %}
+          <div class="cb-field-section mb-4">
+            <h6>יחידות ומשקל</h6>
+            {% if crop.conversion_group %}
+              <p class="small text-muted">קבוצת המרה: {{ crop.conversion_group.name }}</p>
+            {% endif %}
+            <table class="table table-sm">
+              <thead><tr><th>יחידת מקור</th><th>יחידת יעד</th><th>ערך המרה</th><th>הקשר</th><th>מקור</th></tr></thead>
+              <tbody>
+                {% for uc in conversions %}
+                  <tr>
+                    <td>{{ uc.source_unit }}</td>
+                    <td>{{ uc.target_unit }}</td>
+                    <td>{{ uc.conversion_factor }}</td>
+                    <td>{{ uc.context or '—' }}</td>
+                    <td>{{ uc.source }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+
+        {# Yield / price by source #}
+        {% set yield_svs = [] %}
+        {% if default_var.source_values %}
+          {% for sv in default_var.source_values if sv.field_name == 'avg_yield_per_bed_m' %}
+            {% set _ = yield_svs.append(sv) %}
+          {% endfor %}
+        {% endif %}
+        {% if yield_svs %}
+          <div class="cb-field-section">
+            <h6>תשואה לפי מקור</h6>
+            <table class="table table-sm">
+              <thead><tr><th>מקור</th><th>ערך</th><th>יחידה</th><th>הערה</th></tr></thead>
+              <tbody>
+                {% for sv in yield_svs %}
+                  <tr>
+                    <td>{{ sv.source }}</td>
+                    <td>{{ sv.value_text or sv.value_numeric or '—' }}</td>
+                    <td>{{ sv.unit or '—' }}</td>
+                    <td>{{ sv.note or '—' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      {% else %}
+        {{ empty_tab('אין נתוני שדה זמינים') }}
+      {% endif %}
+    </div>
+
+  </div>{# end tab-content #}
+</div>{# end cb-crop-detail #}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='crop_book/entity_registry.js') }}"></script>
+<script src="{{ url_for('static', filename='crop_book/crop_book.js') }}"></script>
+<script>
+  CropBook.initDetail({
+    hasDescription: {{ (crop.description | length > 0) | tojson if crop.description else 'false' }},
+  });
+</script>
+{% endblock %}

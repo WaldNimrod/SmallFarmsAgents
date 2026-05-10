@@ -68,6 +68,10 @@ You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0
 ## Domain rules
 
 - **SFA product + ops context:** `_aos/context/PROJECT_CONTEXT.md` — `validate_aos.sh` result expectations (0 FAIL; PASS/SKIP drift), WordPress/FTPS publish tree and runbook links, 2026-04 production parity sign-offs. Complements `AGENTS.md` and `documentation/README.md`.
+- **Stack:** Python 3.11, Flask, PostgreSQL 15, Docker, SQLAlchemy 2.x + Alembic, httpx; WordPress presentation layer (uPress hosting, nimrod.bio). Playwright used for M10.4+ mypips SPA collectors (headless Chromium).
+- **Docker port canon:** PG=5433 (`oma-postgres`), Admin=5001, Viewer=8081. Never use 8080 (TikTrack frontend) or 5432 (other projects). See `documentation/08-troubleshooting/DOCKER_SHARED_WORKSTATION.md`.
+- **Upload path (WP008):** Primary upload via WP REST API (HTTPS port 443). FTPS (port 21) is fallback gated on `UPRESS_FALLBACK_FTPS=1`. `publisher/upload_dispatch.py` is LIVE PRODUCTION — do not touch without team_100 mandate.
+- **Language policy:** English in all source code, documentation, and inter-team communication. Hebrew only in direct conversation with Nimrod (and in DB seed data for product names).
 
 <!-- Project-specific rules, commands, paths, and conventions go here.
      This section is PRESERVED across aos_sync_all.sh runs. -->

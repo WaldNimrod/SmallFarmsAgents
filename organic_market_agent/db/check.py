@@ -40,7 +40,7 @@ REQUIRED_TABLES = [
 REQUIRED_COUNTS = {
     "measurement_units": 11,
     "products": 67,
-    "sources": 20,
+    "sources": 21,
 }
 
 

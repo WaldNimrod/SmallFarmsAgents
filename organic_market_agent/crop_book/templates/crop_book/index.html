@@ -1,0 +1,151 @@
+{% extends "admin/base.html" %}
+{% from "crop_book/_macros.html" import season_icons, category_badge %}
+
+{% block title %}ספר גידולים{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='crop_book/crop_book.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="cb-index">
+  {# ─── Page header ─── #}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">🌱 ספר גידולים</h1>
+    <div class="cb-search-bar">
+      <input type="text" id="cb-search-input" class="form-control form-control-sm"
+             placeholder="חיפוש גידול..." value="{{ search_query }}"
+             aria-label="חיפוש גידול">
+    </div>
+  </div>
+
+  {# ─── Category tabs ─── #}
+  <ul class="nav nav-tabs cb-cat-tabs mb-3" id="cb-category-tabs" role="tablist">
+    {% for val, label in category_tabs %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link cb-cat-tab {% if active_category == val %}active{% endif %}"
+                type="button"
+                data-category="{{ val }}"
+                role="tab">{{ label }}</button>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {# ─── Advanced search panel (collapsible) ─── #}
+  <div class="mb-3">
+    <button class="btn btn-sm btn-outline-secondary" type="button"
+            data-bs-toggle="collapse" data-bs-target="#cb-adv-search"
+            aria-expanded="false">
+      חיפוש מתקדם ▾
+    </button>
+    <div class="collapse mt-2" id="cb-adv-search">
+      <div class="card card-body cb-adv-search-panel">
+        <div class="row g-3 align-items-end">
+          <div class="col-auto">
+            <label for="cb-dtm-max" class="form-label small mb-1">DTM מקסימלי (ימים)</label>
+            <input type="number" id="cb-dtm-max" class="form-control form-control-sm"
+                   min="1" max="365" placeholder="למשל: 50">
+          </div>
+          <div class="col-auto">
+            <label class="form-label small mb-1 d-block">עונות</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input cb-season-check" type="checkbox"
+                       id="cb-season-summer" value="summer">
+                <label class="form-check-label small" for="cb-season-summer">☀️ קיץ</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input cb-season-check" type="checkbox"
+                       id="cb-season-spring" value="spring">
+                <label class="form-check-label small" for="cb-season-spring">🌸 אביב</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input cb-season-check" type="checkbox"
+                       id="cb-season-winter" value="winter">
+                <label class="form-check-label small" for="cb-season-winter">🌧 חורף</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input cb-season-check" type="checkbox"
+                       id="cb-season-fall" value="fall">
+                <label class="form-check-label small" for="cb-season-fall">💨 סתיו</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button id="cb-adv-apply" class="btn btn-sm btn-primary">סנן</button>
+            <button id="cb-adv-reset" class="btn btn-sm btn-outline-secondary ms-1">נקה</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ─── Crop grid ─── #}
+  <div id="cb-crop-grid" class="row g-3">
+    {% for crop in crops %}
+      {% set default_var = crop.varieties | selectattr('is_default') | first | default(None) %}
+      {% if not default_var and crop.varieties %}{% set default_var = crop.varieties[0] %}{% endif %}
+      {% set seasons = detect_seasons(default_var.planting_season if default_var else None) %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 cb-crop-card-wrap"
+           data-name-he="{{ crop.name_he | lower }}"
+           data-name-en="{{ (crop.name_en or '') | lower }}"
+           data-scientific="{{ (crop.scientific_name or '') | lower }}"
+           data-category="{{ crop.category }}"
+           data-dtm="{{ default_var.days_to_maturity if default_var and default_var.days_to_maturity else '' }}"
+           data-seasons="{{ ','.join(['summer','spring','winter','fall'] | select('in', seasons.keys()) | list) if seasons else '' }}">
+        <a href="{{ url_for('crop_book.crop_detail', crop_id=crop.id) }}"
+           class="text-decoration-none">
+          <div class="card h-100 cb-crop-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <h5 class="cb-crop-name-he mb-0">{{ crop.name_he }}</h5>
+                {{ category_badge(crop.category, category_labels) }}
+              </div>
+              {% if crop.name_en %}
+                <div class="cb-crop-name-en text-muted small">{{ crop.name_en }}</div>
+              {% endif %}
+              {% if crop.scientific_name %}
+                <div class="cb-crop-scientific fst-italic text-muted small">{{ crop.scientific_name }}</div>
+              {% endif %}
+              <hr class="my-2">
+              {% if crop.family %}
+                <div class="small text-muted">{{ crop.family.name_he or crop.family.scientific_name }}</div>
+              {% endif %}
+              <div class="cb-crop-meta small mt-1">
+                {% if crop.harvest_unit_default %}
+                  <span>יח': {{ crop.harvest_unit_default }}</span> ·
+                {% endif %}
+                <span>{{ crop.varieties | length }} זנים</span>
+              </div>
+              <div class="mt-2">
+                {{ season_icons(detect_seasons, default_var.planting_season if default_var else None) }}
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center">לא נמצאו גידולים</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {# ─── Result count ─── #}
+  <div id="cb-result-count" class="text-muted small mt-3">
+    מציג <span id="cb-visible-count">{{ crops | length }}</span> גידולים
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='crop_book/entity_registry.js') }}"></script>
+<script src="{{ url_for('static', filename='crop_book/crop_book.js') }}"></script>
+<script>
+  CropBook.initIndex({
+    apiUrl: "{{ url_for('crop_book.api_crops') }}",
+    initialCategory: {{ active_category | tojson }},
+    initialQ: {{ search_query | tojson }},
+  });
+</script>
+{% endblock %}

@@ -38,6 +38,14 @@ class Config:
     UPRESS_WP_APP_USER: str = os.getenv("UPRESS_WP_APP_USER", "")
     UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
 
+    # Playwright (M10.4 — mypips SPA)
+    PLAYWRIGHT_HEADLESS: bool = os.getenv("PLAYWRIGHT_HEADLESS", "true").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+    PLAYWRIGHT_TIMEOUT_MS: int = int(os.getenv("PLAYWRIGHT_TIMEOUT_MS", "30000"))
+
     @classmethod
     def ftps_configured(cls) -> bool:
         """True when FTPS credentials are set (legacy fallback path)."""

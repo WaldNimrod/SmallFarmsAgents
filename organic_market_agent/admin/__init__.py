@@ -25,6 +25,7 @@ from organic_market_agent.admin.routes import (
     sources,
     unresolved,
 )
+from organic_market_agent.crop_book.views import crop_book_bp
 from sqlalchemy import text
 
 from organic_market_agent.db.session import SessionFactory
@@ -90,5 +91,6 @@ def create_app() -> Flask:
     app.register_blueprint(maintenance.bp)
     app.register_blueprint(scope_skip_catalog.bp)
     app.register_blueprint(catalog_inbox.bp)
+    app.register_blueprint(crop_book_bp, url_prefix="/crop-book")
 
     return app
