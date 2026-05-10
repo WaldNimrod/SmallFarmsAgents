@@ -1,10 +1,11 @@
 # LOD400 — SFA-S003-P001-WP004 — ספר גידולים: WordPress Integration
 
-**Date:** 2026-05-09
-**Author:** team_100 (Claude Sonnet 4.6)
+**Date:** 2026-05-10 (Round 2 revision)
+**Author:** team_100 (Claude Sonnet 4.6 declared / Opus 4.7 actual)
 **WP:** SFA-S003-P001-WP004 — CropBookPublisher + `[sfagent_crop_book]` shortcode + first publish
 **Type:** LOD400_SPEC
-**Status:** L-GATE_S ROUND_1 — awaiting team_190 review
+**Status:** L-GATE_S ROUND_2 — Round 1 BLOCKED, all 4 findings remediated; awaiting team_190 re-review
+**Round 1 verdict:** BLOCKED (team_190, 2026-05-10, commit `feee36c`); F-190-WP004-01 (entity registry source path) + F-190-WP004-02 (timeline rule) BLOCKERs, F-190-WP004-03 (substitution-miss AC) MAJOR, F-190-WP004-04 (roadmap drift) MINOR. Verdict: `_COMMUNICATION/team_190/SFA-S003-P001-WP004/LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Sonnet, Team 10)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE)
 **Depends on:** SFA-S003-P001-WP002 (DB tables + seed), SFA-S003-P001-WP003 (Flask views — semantic SSoT for filter parity)
@@ -71,6 +72,7 @@ organic_market_agent/
     └── publisher/
         ├── __init__.py
         ├── engine.py                                ← CropBookPublisher
+        ├── entity_registry_data.py                  ← Python-owned canonical entity registry (NEW R2)
         ├── templates/
         │   ├── crop_book.html                       ← full standalone (preview)
         │   └── crop_book_body.html                  ← WordPress fragment (the SPA shell)
@@ -105,6 +107,20 @@ tests/crop_book/
 | `sfagent-base.css` | **Do NOT modify** | Crop book ships its own inline CSS in the body fragment for v1. |
 | Existing market shortcode (`sfagent_market_report`) | **Do NOT modify** | Crop book gets its own mu-plugin file, its own option, its own shortcode tag. |
 | `sfagent-allow-json.php` mu-plugin | **Do NOT modify** | Already permits `.json` and `.html` MIME upload — crop book artifacts are these types, no additional MIME registration needed. |
+
+### 2.4 Entity registry — Round 2 source-of-truth resolution (F-190-WP004-01)
+
+The WP003 admin templates `crop_book/templates/crop_book/index.html:142` and `crop_book/templates/crop_book/crop.html:464` reference `crop_book/static/entity_registry.js` via `url_for('static', ...)`. **That file is NOT tracked in `HEAD`** at the reviewed commit `b9baf75` — a known WP003 deliverables gap that survived L-GATE_V (the admin UI works in the local dev environment because the file exists as untracked working-tree state, but the canonical repo does not have it).
+
+WP004 does not attempt to fix the WP003 gap. Instead, **WP004 owns its own canonical entity-registry data** as a Python module:
+
+- **Path:** `organic_market_agent/crop_book/publisher/entity_registry_data.py`
+- **Type:** plain Python data module — top-level `ENTITY_REGISTRY: dict` literal
+- **Structure:** mirrors the JS-side schema declared in §4 — `{"version": "1.0.0", "type_labels": {...}, "entities": {pest: {...}, disease: {...}, equip: {...}, input: {...}, technique: {...}, crop: {...}}}`
+- **Seed content:** the same 7 pests, 5 diseases, 3 equipment, 5 inputs, 6 techniques, 4 crops the WP003 working-tree JS contains (transcribed by the builder; see §13 step 3)
+- **SSoT for both surfaces:** the publisher imports `ENTITY_REGISTRY` directly into the SPA JSON blob. **No JS file parsing, no regex, no eval.**
+
+This eliminates the AC-16 contradiction (the spec is no longer asking the builder to read a file that does not exist while also locking it as immutable) and gives the publisher a deterministic, type-checked source. The WP003 admin gap (templates reference a missing file) is **out-of-scope for WP004** and will be addressed by a separate follow-up WP if/when the admin tooltips need to render in production-like environments.
 
 ---
 
@@ -237,7 +253,7 @@ Schema id: `crop_book.v1`. **All field names lowercase_with_underscores. All Heb
   "entity_registry": {
     "version":      "1.0.0",
     "type_labels":  { "pest": "מזיק", "disease": "מחלה", "equip": "ציוד", "input": "תשומה", "technique": "טכניקה", "crop": "גידול" },
-    "entities":     { /* mirrors crop_book/static/entity_registry.js — built into JSON at publish time */ }
+    "entities":     { /* imported from crop_book/publisher/entity_registry_data.py at publish time */ }
   },
 
   "crops": [
@@ -277,7 +293,7 @@ Schema id: `crop_book.v1`. **All field names lowercase_with_underscores. All Heb
 
 **Numeric encoding:** SQLAlchemy `Numeric` columns serialize as **JSON numbers** (not strings). Use `float()` cast in `_to_dict` helpers. `null` for nullable empty values.
 
-**Entity registry source:** at build time, the publisher reads `organic_market_agent/crop_book/static/entity_registry.js`, extracts the `ENTITY_REGISTRY` object via a regex against the `(?s)ENTITY_REGISTRY\s*=\s*(\{.*?\});` pattern + `json.loads`-friendly trim, and embeds it. **No JS evaluation.** If the parse fails, the publisher fails loudly (raises `CropBookPublishAbortError`) — better to fail than to ship a broken registry.
+**Entity registry source (R2 — F-190-WP004-01):** at build time, the publisher imports the canonical Python registry from `organic_market_agent.crop_book.publisher.entity_registry_data` (`ENTITY_REGISTRY: dict`), validates required top-level keys (`version`, `type_labels`, `entities`) and required entity-type subkeys (`pest`, `disease`, `equip`, `input`, `technique`, `crop`), and embeds it. **No JS file parsing. No regex. No eval.** If validation fails (missing key or wrong type), the publisher fails loudly (raises `CropBookPublishAbortError`) — better to fail than ship a broken registry.
 
 ---
 
@@ -317,20 +333,36 @@ Mirrors `upload_all_artifacts` exactly:
 }
 ```
 
-### 5.3 SPA data-URL resolution at WP runtime
+### 5.3 SPA data-URL resolution at WP runtime (R2 — F-190-WP004-03)
 
-The body fragment ships with `window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"` (relative, for local preview). When the shortcode renders the body inside a WordPress page, **the shortcode rewrites this** before emitting HTML:
+The body fragment ships with the **literal sentinel** `window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"` (relative, for local preview). When the shortcode renders the body inside a WordPress page, **the shortcode rewrites this** before emitting HTML.
 
-```php
-$body_html = wp_remote_retrieve_body( wp_remote_get( $body_url ) );
-$body_html = str_replace(
-    'window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"',
-    'window.CROP_BOOK_DATA_URL = "' . esc_url_raw( $artifacts->data ) . '"',
-    $body_html
-);
+**Sentinel constant (used by both publisher and PHP):**
+```
+SFAGENT_CROP_BOOK_DATA_URL_SENTINEL = 'window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"'
 ```
 
-This keeps the body fragment self-contained for local preview while making the WP-deployed copy fetch the absolute media-library URL.
+**Two-sided invariants:**
+
+1. **Publisher side (Python — `engine.py`):** after rendering `crop_book_body.html`, before writing the file, assert the rendered body contains the exact sentinel string. If absent, raise `CropBookPublishAbortError("body fragment missing CROP_BOOK_DATA_URL sentinel — template drift")`. Loud failure prevents the publisher from ever shipping a body fragment that the WP shortcode cannot rewrite.
+
+2. **WordPress side (PHP shortcode):** use `str_replace` with the **4-argument form** to capture the replacement count, then check it explicitly:
+
+```php
+$sentinel    = 'window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"';
+$replacement = 'window.CROP_BOOK_DATA_URL = "' . esc_url_raw( $artifacts->data ) . '"';
+$body_html   = wp_remote_retrieve_body( wp_remote_get( $body_url ) );
+$count       = 0;
+$body_html   = str_replace( $sentinel, $replacement, $body_html, $count );
+
+if ( $count === 0 ) {
+    error_log( '[sfagent_crop_book] sentinel substitution miss — body fragment may have drifted; '
+             . 'expected: ' . $sentinel . ' — falling back to placeholder' );
+    return '<div class="sfa-crop-book-pending">ספר גידולים — בטעינה</div>';
+}
+```
+
+This keeps the body fragment self-contained for local preview while making the WP-deployed copy fetch the absolute media-library URL — and refuses to emit a half-broken page silently if the sentinel ever drifts. Both invariants are tested (AC-17 publisher sentinel, AC-18 PHP miss path).
 
 ### 5.4 `dispatch_upload` extension
 
@@ -399,11 +431,11 @@ def crop_book_publish_cmd(output_dir: str, upload: bool, set_mou_url: bool) -> N
   3. `add_action('wp_enqueue_scripts', 'sfagent_crop_book_enqueue_styles')` — *empty for v1* (CSS is inlined in the body fragment); registered as a no-op hook so adding deployed CSS later is a one-line change.
 
 - Shortcode body logic:
-  1. Read WP option `sfagent_crop_book_manifest_of_urls_url`. If empty → return a small placeholder div (`<div class="sfa-crop-book-pending">ספר גידולים — בטעינה</div>`).
-  2. `wp_remote_get` the MoU URL. On non-200 → return placeholder + `error_log` the failure.
-  3. Decode JSON, extract `artifacts.body` and `artifacts.data` URLs.
-  4. `wp_remote_get` the body URL. On non-200 → return placeholder.
-  5. Apply the data-URL substitution from §5.3.
+  1. Read WP option `sfagent_crop_book_manifest_of_urls_url`. If empty → return placeholder div (`<div class="sfa-crop-book-pending">ספר גידולים — בטעינה</div>`).
+  2. `wp_remote_get` the MoU URL. On non-200 (`is_wp_error` or `wp_remote_retrieve_response_code !== 200`) → `error_log` the failure with the URL + status + response body and return placeholder.
+  3. Decode JSON. If `json_decode` returns `null` or required keys (`artifacts.body`, `artifacts.data`) are missing → `error_log` and return placeholder.
+  4. `wp_remote_get` the body URL. On non-200 → `error_log` and return placeholder.
+  5. **Apply the data-URL substitution per §5.3 — using the 4-argument `str_replace` form to capture `$count`. If `$count === 0`, `error_log` a sentinel-drift message and return placeholder.** This is the F-190-WP004-03 remediation.
   6. Return the modified body HTML (raw — `<div class="sfa-crop-book" dir="rtl" lang="he">…</div>`).
 
 - Caching: use **`set_transient` with a 5-minute TTL** keyed on the MoU URL. After publish, the cache is irrelevant for ≤5 minutes; this matches market-report behavior.
@@ -468,7 +500,24 @@ Each tab is a `<section class="sfa-cb-tab" data-tab="{key}">` already in the bod
 
 **Equipment tab visibility (AC-07):** if `crop.varieties.every(v => !v.seeder && !v.seeder_front_gear && !v.seeder_rear_gear && !v.seeder_roller_plate)` → set `display:none` on the equipment tab + its tab button.
 
-**Timeline ruler (AC-08):** weeks = `Math.ceil(hwMax / 7)` where `hwMax = max(v.harvest_window_max_days for v in crop.varieties if v.harvest_window_max_days != null) || 0`. Render N+1 tick marks. Match `views.py:197` exactly.
+**Timeline ruler (AC-08, R2 — F-190-WP004-02):** the public timeline parity SSoT is the locked Flask view at `crop_book/views.py:197`:
+
+```python
+# views.py:195–197
+hw_max = default_var.harvest_window_max_days or 0
+total_weeks = max(1, -(-hw_max // 7))  # ruler: harvest_window only
+```
+
+The SPA must mirror exactly — **default variety only** (NOT max across all varieties), `null` coerced to `0`, floor-of-1 on the result:
+
+```js
+const dv = crop.varieties.find(v => v.is_default) || crop.varieties[0];
+const hwMax = (dv && dv.harvest_window_max_days) || 0;
+const totalWeeks = Math.max(1, Math.ceil(hwMax / 7));
+// Render totalWeeks ticks (NOT totalWeeks + 1 — see AC-08).
+```
+
+Render exactly `totalWeeks` tick marks (the ruler width represents `totalWeeks` whole weeks). The `max(1, ...)` ensures a degenerate variety with `hw_max=0` still produces a single-week ruler instead of an empty axis — matches the locked Flask behavior precisely.
 
 **Description entity tags:** parse the description HTML for `<span class="etag" data-etype="..." data-eid="...">`; on hover, look up `DATA.entity_registry.entities[etype][eid]` → show tooltip with `nameHe + (typeLabel)`. Mirror `crop_book.js:49-67`.
 
@@ -567,15 +616,18 @@ A `<!DOCTYPE html>` + `<head>` + `<body>` shell that includes the body fragment 
 | AC-05 | Loading the body in jsdom + setting `location.hash = "#crop-{ID}"` shows the detail panel for that crop with the correct `name_he` rendered. | `test_publisher.py::test_hash_routing` |
 | AC-06 | All 8 tabs render with the same primary fields the Flask `crop_detail` view passes (sample 3 representative crops: one with seeder data, one without, one with rich source values). Snapshot diff is byte-stable across runs. | `test_publisher.py::test_tab_snapshots` |
 | AC-07 | For a crop where no variety has any `seeder*` field, the equipment tab's nav button has `style="display: none"` (or equivalent visibility-off) after detail panel population. | `test_publisher.py::test_equipment_tab_hidden_when_no_seeder` |
-| AC-08 | Timeline ruler tick count = `ceil(harvest_window_max_days / 7) + 1` for the default variety. Asserted on a fixture variety with hw_max=21 → 4 ticks (3 weeks + 1 zero). | `test_publisher.py::test_timeline_ruler_weeks` |
+| AC-08 | Timeline ruler tick count = `max(1, ceil(default_variety.harvest_window_max_days / 7))` (default-variety only; null coerced to 0; floor-of-1). Mirrors `views.py:197` exactly. Fixtures: hw_max=21 → 3 ticks; hw_max=22 → 4 ticks; hw_max=0 → 1 tick; hw_max=null → 1 tick. | `test_publisher.py::test_timeline_ruler_weeks` (all 4 fixtures) |
 | AC-09 | Multi-season filter selecting `[summer, fall]` returns crops whose default-variety `planting_season` contains either summer or fall tokens (not AND). | `test_filter_parity.py::test_multi_season_or` |
 | AC-10 | `dispatch_upload(Path("/tmp/cb"), profile="crop_book")` against a mocked `requests.Session` posts 4 artifacts to `/wp/v2/media` with the canonical names from §5.1; returns `UploadResult(success=True, protocol_used="wp_rest", success_count=4)`. | `tests/crop_book/test_wp_upload_crop_book.py::test_dispatch_upload_crop_book_profile` |
-| AC-11 | `php -l wordpress/mu-plugins/sfagent-crop-book-shortcode.php` exits 0; static grep confirms `add_shortcode('sfagent_crop_book',`, `register_setting(.*sfagent_crop_book_manifest_of_urls_url`, and `wp_remote_get` are all present. | `test_wp_upload_crop_book.py::test_mu_plugin_static_lint` (uses `subprocess.run(['php', '-l', ...])`; skip with `pytest.skip` if PHP not installed) |
+| AC-11 | `php -l wordpress/mu-plugins/sfagent-crop-book-shortcode.php` exits 0; static grep confirms `add_shortcode('sfagent_crop_book',`, `register_setting(.*sfagent_crop_book_manifest_of_urls_url`, `wp_remote_get`, the **literal sentinel** `window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"`, and the **4-arg `str_replace` form with `$count` check** (`if ( $count === 0 )`) are all present. | `test_wp_upload_crop_book.py::test_mu_plugin_static_lint` (uses `subprocess.run(['php', '-l', ...])`; skip with `pytest.skip` if PHP not installed) |
 | AC-12 | CLI `python -m organic_market_agent crop_book_publish --output-dir /tmp/cb` exits 0 in CI with the seed DB; produces 3 files. | `test_publisher.py::test_cli_smoke` (using `click.testing.CliRunner`) |
 | AC-13 | Body fragment root element has `dir="rtl"` and `lang="he"` attributes. | `test_publisher.py::test_rtl_lang_attrs` |
 | AC-14 | `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns 0 FAIL. | CI step (post-build, before commit) |
 | AC-15 | The `profile="market"` branch of `dispatch_upload` is unchanged behaviorally — running the existing market-report test suite (untouched) still passes. | Existing `tests/test_publisher.py` + `tests/test_upload_dispatch.py` continue to pass. |
-| AC-16 | No edits to LOD500_LOCKED files: `crop_book/models.py`, `crop_book/views.py`, all migrations 035–040, `crop_book/templates/{index,crop,_macros}.html`, `crop_book/static/{crop_book.css,crop_book.js,entity_registry.js}`. | `git diff` review at L-GATE_B; constitutional check by team_190. |
+| AC-16 | No edits to LOD500_LOCKED files: `crop_book/models.py`, `crop_book/views.py`, all migrations 035–040, `crop_book/templates/{index,crop,_macros}.html`, `crop_book/static/{crop_book.css,crop_book.js}`. *(R2: `entity_registry.js` removed from this list — it is not tracked in `HEAD`; WP004 owns its own canonical registry per §2.4.)* | `git diff` review at L-GATE_B; constitutional check by team_190. |
+| AC-17 | **Publisher sentinel invariant (R2 — F-190-WP004-03):** `CropBookPublisher.run` raises `CropBookPublishAbortError` if the rendered `crop_book_body.html` does not contain the literal string `window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"`. Tested by deliberately mutating the template to remove the sentinel and asserting the exception. | `test_publisher.py::test_body_sentinel_invariant_raises_when_missing` + `::test_body_sentinel_present_on_normal_render` |
+| AC-18 | **Shortcode substitution-miss path (R2 — F-190-WP004-03):** when the body fragment served from WP media has no sentinel, the PHP shortcode logs an error and returns the placeholder div — does NOT emit body HTML with the relative `./sfagent-crop-book-data.json` URL still present. Tested via static-lint pattern check on the mu-plugin source (see AC-11) plus a runtime PHP-CLI fixture test that runs the shortcode function against a sentinel-stripped fixture body. | `test_wp_upload_crop_book.py::test_shortcode_substitution_miss_returns_placeholder` (skip if PHP-CLI unavailable) |
+| AC-19 | **Entity registry source-of-truth (R2 — F-190-WP004-01):** `entity_registry_data.ENTITY_REGISTRY` validates against the schema declared in §2.4 (top-level keys `version`, `type_labels`, `entities`; entity-type subkeys `pest`, `disease`, `equip`, `input`, `technique`, `crop`); the publisher import path is `from organic_market_agent.crop_book.publisher.entity_registry_data import ENTITY_REGISTRY` (no file I/O, no regex); a known entity (`pest:diamondback-moth`) parses through to the SPA JSON blob. | `test_publisher.py::test_entity_registry_schema` + `::test_entity_registry_known_entity_present` |
 
 ### 11.1 Filter parity matrix (AC-04)
 
@@ -627,7 +679,7 @@ A `<!DOCTYPE html>` + `<head>` + `<body>` shell that includes the body fragment 
 
 1. **Scaffold** — create `crop_book/publisher/` package with empty `engine.py` skeleton and 3 empty templates. Commit "feat(S003-WP004): scaffold publisher package". (~30 min)
 2. **Data builder** — `_*_to_dict` helpers + queries + JSON assembly + manifest writer. `test_publisher.py::test_data_schema_keys`, `test_full_seed_present` PASS. Commit. (~2 h)
-3. **Entity registry parser** — read `entity_registry.js`, regex-extract, JSON-parse, embed. Test on the live file. Commit. (~30 min)
+3. **Entity registry data module (R2 — F-190-WP004-01)** — author `organic_market_agent/crop_book/publisher/entity_registry_data.py` with the canonical `ENTITY_REGISTRY: dict` (transcribed from the working-tree WP003 JS: 7 pests, 5 diseases, 3 equipment, 5 inputs, 6 techniques, 4 crops). Add schema validator. Tests AC-19 PASS. Commit. (~45 min)
 4. **SPA JS — index/grid + search + filters** — port logic from `views.py:234-304`. Get parity matrix cases #1–#5 PASSING. Commit. (~3 h)
 5. **SPA JS — detail panel + tabs + hash routing** — port from `crop.html` + `crop_book.js`. AC-05/06/07/08 PASSING. Commit. (~3 h)
 6. **Templates + Jinja inlining** — `crop_book_body.html` with inlined CSS + JS, `crop_book.html` for preview. AC-13 PASSING. Commit. (~1 h)
@@ -647,9 +699,9 @@ Total budget: **~14 h** of focused builder time. Recommend the builder break the
 | R-WP004-01 | SPA filter parity drift — JS logic diverges from Flask under edge cases not covered by the 12-case matrix. | HIGH | AC-04 matrix; team_190 may add cases at L-GATE_V. Property-based parity test (Hypothesis) is a stretch goal. |
 | R-WP004-02 | Bundle size — 5 MB raw JSON is borderline for some browsers/connections. | MEDIUM | Server gzip is automatic on uPress. Measure raw + gzipped at L-GATE_B; if gzipped > 1 MB, defer optimization (chunking, paging) to a follow-up WP. |
 | R-WP004-03 | mu-plugin install requires manual uPress panel step. | LOW | Documented in runbook; precedent set by `sfagent-allow-json.php`. team_00 owns this step. |
-| R-WP004-04 | `entity_registry.js` regex extraction breaks if the file format changes. | LOW | Loud failure (raises). Add a regression test that explicitly parses the current file and asserts a known entity exists (`assert "diamondback-moth" in result["entities"]["pest"]`). |
+| R-WP004-04 | ~~`entity_registry.js` regex extraction breaks if the file format changes.~~ **OBSOLETE in R2** — replaced by Python-owned `entity_registry_data.py` (F-190-WP004-01 remediation). Type-checked at import time; AC-19 asserts schema + a known entity. No regex, no file parsing. | RESOLVED |
 | R-WP004-05 | WP `wp_remote_get` timeout under slow uPress edges → shortcode renders placeholder. | LOW | Transient; user reload fixes. 5-minute transient cache absorbs most variance. |
-| R-WP004-06 | Body-HTML `str_replace` substitution for `CROP_BOOK_DATA_URL` is fragile if the body fragment changes the literal string. | MEDIUM | Add a builder-side assertion: `crop_book_body.html` MUST contain the literal sentinel `window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json"`. PHP-side: log + placeholder if substitution fails (scan `strpos`). |
+| R-WP004-06 | Body-HTML `str_replace` substitution for `CROP_BOOK_DATA_URL` is fragile if the body fragment drifts. | LOW (mitigated, R2) | Two-sided invariants now ACs (R2 — F-190-WP004-03): publisher AC-17 raises `CropBookPublishAbortError` if the literal sentinel is missing from the rendered body; PHP shortcode AC-18 uses 4-arg `str_replace` with `$count` check, logs + returns placeholder on miss. AC-11 grep enforces the sentinel string + count check are present in the mu-plugin. |
 
 ---
 
@@ -663,13 +715,14 @@ Total budget: **~14 h** of focused builder time. Recommend the builder break the
 - Mobile-specific responsive tuning beyond inheriting RTL + sane defaults.
 - Combining market-report + crop-book into a unified shortcode.
 - Internationalization beyond Hebrew (English UI strings welcome but not required).
+- **WP003 admin entity-registry asset gap** — the locked admin templates reference `crop_book/static/entity_registry.js` which is not tracked in `HEAD`. WP004 routes around this by owning its own canonical Python registry (§2.4). Restoring/committing the JS file for the admin tooltip surface is a separate follow-up WP, not in WP004 scope.
 
 ---
 
 ## 16. Definition of Done (LOD500)
 
 LOD400 → LOD500_LOCKED requires:
-1. All 16 ACs PASS (sfa_build self-attestation).
+1. All 19 ACs PASS (sfa_build self-attestation; R2 added AC-17/18/19).
 2. team_190 L-GATE_V verdict = PASS (no MAJOR or BLOCKER findings).
 3. Production smoke test by team_99: mu-plugin uploaded; first publish executed; WP page renders SPA; filter parity verified on live data.
 4. validate_aos.sh = 0 FAIL.
@@ -686,3 +739,16 @@ LOD400 → LOD500_LOCKED requires:
 | B | Shortcode install path | **mu-plugin via uPress panel** — ship `wordpress/mu-plugins/sfagent-crop-book-shortcode.php` in repo, team_00 installs once. Single-purpose file (separate from `sfagent-allow-json.php`). |
 | C | Effort tier | **LARGE** — JS parity work is substantial (~6 h of ~14 h total). |
 | D | Cron wiring | **CLI-only for v1.** No `scheduler/pipeline.py` changes; re-publish on demand only. |
+
+---
+
+## 18. Round 2 changelog (response to team_190 verdict 2026-05-10, commit `feee36c`)
+
+| Finding | Severity | Remediation in this revision |
+|---------|----------|------------------------------|
+| F-190-WP004-01 | BLOCKER | §2.4 added — Python-owned `crop_book/publisher/entity_registry_data.py` is the canonical SSoT for the SPA's entity registry. §4 updated (no JS parsing, no regex). AC-16 updated (`entity_registry.js` removed from lock list — file is not tracked anyway). AC-19 added (schema + known-entity assertions). §13 step 3 rewritten (transcribe registry, validate, no file I/O). R-WP004-04 marked OBSOLETE. §15 explicitly defers the WP003 admin-tooltip gap to a follow-up WP. |
+| F-190-WP004-02 | BLOCKER | §8.3 rewritten to mirror `views.py:195–197` exactly: **default variety only**, `null → 0`, `max(1, ceil(hw_max/7))`. AC-08 updated with 4 fixtures (hw_max=21/22/0/null). Removed the contradictory "max across varieties" wording. |
+| F-190-WP004-03 | MAJOR | §5.3 rewritten with named sentinel constant + 4-arg `str_replace` `$count` check + explicit error_log + placeholder return. §7 step 5 updated. AC-11 grep extended to require sentinel + `$count` check in PHP. AC-17 added (publisher sentinel invariant raises). AC-18 added (PHP miss-path returns placeholder). R-WP004-06 mitigation updated. |
+| F-190-WP004-04 | MINOR | Roadmap WP004 entry updated by team_100 in this revision: `current_lean_gate: L-GATE_S`, `lod_status: LOD400_REVIEW_R2`, gate_history extended with R1 BLOCKED entry + R2 awaiting. (Roadmap update is separate from this spec file but lands in the same R2 commit.) |
+
+AC count grew 16 → 19. R-WP004-04 RESOLVED. R-WP004-06 downgraded MEDIUM → LOW (mitigated). All Round 1 BLOCKER findings remediated; MAJOR remediated; MINOR addressed in roadmap.

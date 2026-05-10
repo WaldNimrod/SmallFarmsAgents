@@ -48,7 +48,12 @@ project:
     S003 Phase 2 OPENED (2026-05-09): WP004 ELIGIBLE — WordPress integration.
     Architecture (team_00 directive): SPA HTML + separate JSON data file +
     mu-plugin shortcode + dispatch_upload reuse with profile=crop_book.
-    CLI-only publish (no scheduler wiring). Effort: LARGE. Awaiting team_190 L-GATE_S.
+    CLI-only publish (no scheduler wiring). Effort: LARGE.
+    L-GATE_S Round 1 (2026-05-10): BLOCKED by team_190 (commit feee36c).
+    F-190-WP004-01/02 BLOCKERs + 03 MAJOR + 04 MINOR. R2 spec revision
+    same day: Python-owned entity registry, timeline rule fixed to
+    views.py:197 SSoT, sentinel substitution AC pair added. ACs 16→19.
+    Awaiting team_190 L-GATE_S Round 2.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -519,12 +524,12 @@ work_packages:
 
 - id: SFA-S003-P001-WP004
   label: "ספר גידולים: WordPress Integration (CropBookPublisher + shortcode)"
-  status: ELIGIBLE
+  status: BLOCKED_PENDING_REVISION
   phase: 2
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_REVIEW_R2
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-09"
@@ -536,5 +541,17 @@ work_packages:
     result: PASS
     date: "2026-05-09"
     notes: "team_00 in-session approval (S003-P002 handoff eb0c1c9 + plan-mode confirmation 2026-05-09). Architecture: SPA HTML + separate JSON data file + mu-plugin shortcode + dispatch_upload(profile=crop_book) reuse + CLI-only publish."
-  notes: "S003 Phase 2 OPENED 2026-05-09. LOD400 spec authored. Awaiting team_190 L-GATE_S Round 1. Bundle: _COMMUNICATION/team_190/SFA-S003-P001-WP004/."
+  - gate: L-GATE_S
+    result: BLOCKED
+    date: "2026-05-10"
+    round: 1
+    commit: "feee36c"
+    notes: "team_190 L-GATE_SPEC Round 1. BLOCKED. F-190-WP004-01 (entity registry source path absent + locked) BLOCKER + F-190-WP004-02 (timeline rule contradicts views.py:197 SSoT) BLOCKER + F-190-WP004-03 (substitution-miss has no AC) MAJOR + F-190-WP004-04 (roadmap drift) MINOR. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP004/LOD400-VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_S
+    result: PENDING
+    date: "2026-05-10"
+    round: 2
+    notes: "Round 2 spec revision authored by team_100 (R2 commit). All 4 findings remediated: §2.4 Python-owned entity registry; §8.3 timeline mirrors views.py:197 default-variety; §5.3 sentinel + count-check pattern; AC-17/18/19 added. Awaiting team_190 re-review."
+  notes: "R1 BLOCKED 2026-05-10; R2 spec revised same day. Bundle: _COMMUNICATION/TEAM_100/SFA-S003-P001-WP004/EXTERNAL_VALIDATION_BUNDLE/ (MANIFEST_R2.md + TEAM_190_ACTIVATION_PROMPT_R2.md added)."
   profile: L0
