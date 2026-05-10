@@ -63,16 +63,16 @@ def test_dispatch_upload_crop_book_profile(tmp_path):
         resp.status_code = 200
         return resp
 
-    with patch.dict("os.environ", {
-        "UPRESS_WP_APP_USER": "testuser",
-        "UPRESS_WP_APP_PASS": "testpassword",
-        "UPRESS_WP_REST_BASE": "https://www.nimrod.bio/wp-json",
-    }):
-        with patch("requests.post", side_effect=_fake_post):
-            with patch("requests.delete", side_effect=_fake_delete):
-                from organic_market_agent.publisher.upload_dispatch import dispatch_upload, UploadResult
+    with patch("organic_market_agent.utils.config.Config.wp_rest_configured", return_value=True):
+        with patch.dict("os.environ", {
+            "UPRESS_WP_APP_USER": "testuser",
+            "UPRESS_WP_APP_PASS": "testpassword",
+        }):
+            with patch("requests.post", side_effect=_fake_post):
+                with patch("requests.delete", side_effect=_fake_delete):
+                    from organic_market_agent.publisher.upload_dispatch import dispatch_upload, UploadResult
 
-                result = dispatch_upload(tmp_path, profile="crop_book")
+                    result = dispatch_upload(tmp_path, profile="crop_book")
 
     assert result.protocol_used == "wp_rest"
     assert result.success is True
