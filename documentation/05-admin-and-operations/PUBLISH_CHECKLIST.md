@@ -46,7 +46,7 @@ Run this after **material** changes: new or changed `product_aliases`, parser / 
 
 - [ ] Set `UPRESS_FALLBACK_FTPS=1` in `.env` to force FTPS path.
 - [ ] Verify `.env` has `UPRESS_SFTP_HOST`, `UPRESS_SFTP_USER`, `UPRESS_SFTP_PASS` set.
-- [ ] **FTPS path parity:** `UPRESS_UPLOAD_PATH` must be `wp-content/uploads/market`. `UPRESS_PUBLIC_BASE` must be site origin only (e.g. `https://www.nimrod.bio`).
+- [ ] **FTPS path parity:** `UPRESS_UPLOAD_PATH` must be `wp-content/uploads/market`. `UPRESS_PUBLIC_BASE` must include the WordPress subdirectory: `https://www.nimrod.bio/Agents` (uPress installs WP under `/Agents/` on the server — capital A, case-sensitive).
 - [ ] Optional: set `UPRESS_VERIFY_PUBLIC_MANIFEST=1` to log a warning when public JSON lags behind local manifest.
 - [ ] FTPS is only usable from networks where port 21 is NOT blocked. waldhomeserver on Bezeq network CANNOT use FTPS.
 

@@ -116,7 +116,7 @@ def publish(dry_run: bool = False) -> None:
             ftp_upload_file(ftp, f, rel.name)
             print(f"  [UP] /{hub_path}/{rel}")
 
-        public_base = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
+        public_base = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio/Agents")
         print(f"\n[OK] Published {len(files)} files to {public_base}/{hub_path}/")
     finally:
         ftp.quit()

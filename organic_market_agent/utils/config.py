@@ -29,7 +29,7 @@ class Config:
     UPRESS_SFTP_PORT: int = int(os.getenv("UPRESS_SFTP_PORT", "21"))
     UPRESS_SFTP_USER: str = os.getenv("UPRESS_SFTP_USER", "")
     UPRESS_SFTP_PASS: str = os.getenv("UPRESS_SFTP_PASS", "")
-    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
+    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio/Agents")
     UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "wp-content/uploads/market")
     UPRESS_PAGE_SLUG: str = os.getenv("UPRESS_PAGE_SLUG", "/SmallFarmsAgent")
     # WordPress REST API (WP007 — primary upload via HTTPS port 443; replaces FTPS port 21 as default)

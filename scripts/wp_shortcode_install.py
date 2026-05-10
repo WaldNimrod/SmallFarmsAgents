@@ -161,7 +161,11 @@ def create_wp_page() -> bool:
 
     wp_user = os.getenv("UPRESS_WP_ADMIN_USER", "")
     wp_pass = os.getenv("UPRESS_WP_ADMIN_PASS", "")
-    base = config.UPRESS_PUBLIC_BASE.rstrip("/")
+    # WP REST base is canonical (UPRESS_WP_REST_BASE); site URL is its root without /wp-json.
+    # PUBLIC_BASE now includes the WordPress subdirectory (/Agents) and must NOT be used to
+    # construct REST API URLs — WordPress serves pages from the domain root, not from /Agents.
+    rest_root = config.UPRESS_WP_REST_BASE.rstrip("/")
+    site_url = rest_root.removesuffix("/wp-json")
     slug = config.UPRESS_PAGE_SLUG.strip("/")
 
     if not (wp_user and wp_pass):
@@ -170,19 +174,12 @@ def create_wp_page() -> bool:
         print(f"  Content: [sfagent_market_report]")
         return False
 
-    api = f"{base}/wp-json/wp/v2/pages"
-
-    # Discover final API URL (handle 301 redirects like nimrod.bio → www.nimrod.bio)
-    discovery = httpx.get(f"{api}?per_page=1", timeout=15, follow_redirects=True)
-    final_api = str(discovery.url).split("?")[0]
-    if final_api != api:
-        print(f"  [info] WP REST API redirected to: {final_api}")
-        api = final_api
+    api = f"{rest_root}/wp/v2/pages"
 
     existing = httpx.get(f"{api}?slug={slug}", timeout=15, follow_redirects=True)
     if existing.status_code == 200 and existing.json():
         page = existing.json()[0]
-        print(f"[OK] Page already exists: {base}/{slug} (id={page['id']})")
+        print(f"[OK] Page already exists: {site_url}/{slug} (id={page['id']})")
         return True
 
     resp = httpx.post(
@@ -199,7 +196,7 @@ def create_wp_page() -> bool:
     if resp.status_code in (200, 201):
         resp_data = resp.json()
         page_id = resp_data["id"] if isinstance(resp_data, dict) else resp_data[0].get("id") if resp_data else None
-        print(f"[OK] Page created: {base}/{slug} (id={page_id})")
+        print(f"[OK] Page created: {site_url}/{slug} (id={page_id})")
         return True
     else:
         print(f"[FAIL] WP REST API returned {resp.status_code}: {resp.text[:500]}", file=sys.stderr)
@@ -285,7 +282,8 @@ def main():
 
     if ok1 and ok2 and ok3:
         print()
-        print("All done. Visit:", config.UPRESS_PUBLIC_BASE.rstrip("/") + "/" + config.UPRESS_PAGE_SLUG.strip("/"))
+        site_url = config.UPRESS_WP_REST_BASE.rstrip("/").removesuffix("/wp-json")
+        print("All done. Visit:", site_url + "/" + config.UPRESS_PAGE_SLUG.strip("/"))
     else:
         print()
         print("Some steps failed or were skipped — see output above.", file=sys.stderr)
