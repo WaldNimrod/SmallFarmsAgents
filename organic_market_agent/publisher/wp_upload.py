@@ -53,6 +53,12 @@ CANONICAL_REPORT_BODY = "sfagent-public-report-body.html"
 # Manifest-of-URLs pointer file (AC-04 Option A)
 CANONICAL_MANIFEST_OF_URLS = "sfagent-manifest-of-urls.json"
 
+# Crop book canonical filenames (WP004)
+CANONICAL_CROP_BOOK_BODY     = "sfagent-crop-book-body.html"
+CANONICAL_CROP_BOOK_DATA     = "sfagent-crop-book-data.json"
+CANONICAL_CROP_BOOK_MANIFEST = "sfagent-crop-book-manifest.json"
+CANONICAL_CROP_BOOK_MOU      = "sfagent-crop-book-manifest-of-urls.json"
+
 
 class MissingCredentialsError(EnvironmentError):
     """Raised when WP REST API credentials are not configured."""
@@ -256,5 +262,62 @@ def upload_all_artifacts(
 
     logger.info(
         "WP REST: all 5 SFA artifacts uploaded. Manifest-of-URLs: %s", mou_url
+    )
+    return results
+
+
+def upload_all_crop_book_artifacts(
+    output_dir: Path,
+) -> dict[str, tuple[int, str]]:
+    """Upload 3 crop book artifacts + manifest-of-URLs pointer (WP004).
+
+    Mirrors upload_all_artifacts for the crop book profile.
+    FTPS fallback intentionally absent — Bezeq blocks port 21 outbound.
+
+    Args:
+        output_dir: Directory containing sfagent-crop-book-*.{html,json} files.
+
+    Returns:
+        Dict: "body" | "data" | "manifest" | "mou" → (media_id, public_url).
+    """
+    import json as _json
+    from datetime import datetime, timezone
+
+    output_dir = Path(output_dir)
+
+    artifacts = [
+        (output_dir / "sfagent-crop-book-body.html",     CANONICAL_CROP_BOOK_BODY,     "text/html; charset=utf-8"),
+        (output_dir / "sfagent-crop-book-data.json",     CANONICAL_CROP_BOOK_DATA,     "application/json"),
+        (output_dir / "sfagent-crop-book-manifest.json", CANONICAL_CROP_BOOK_MANIFEST, "application/json"),
+    ]
+
+    results: dict[str, tuple[int, str]] = {}
+    key_map = {
+        CANONICAL_CROP_BOOK_BODY:     "body",
+        CANONICAL_CROP_BOOK_DATA:     "data",
+        CANONICAL_CROP_BOOK_MANIFEST: "manifest",
+    }
+    for local_path, canonical_filename, content_type in artifacts:
+        media_id, url = upload_artifact(local_path, canonical_filename, content_type)
+        results[key_map[canonical_filename]] = (media_id, url)
+
+    # Build and upload the manifest-of-URLs pointer
+    mou_payload = {
+        "schema":       "crop_book.mou.v1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "artifacts": {
+            "body":     results["body"][1],
+            "data":     results["data"][1],
+            "manifest": results["manifest"][1],
+        },
+    }
+    mou_path = output_dir / "sfagent-crop-book-manifest-of-urls.json"
+    mou_path.write_text(_json.dumps(mou_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    mou_id, mou_url = upload_artifact(mou_path, CANONICAL_CROP_BOOK_MOU, "application/json")
+    results["mou"] = (mou_id, mou_url)
+
+    logger.info(
+        "WP REST: all 4 crop book artifacts uploaded. MoU: %s", mou_url
     )
     return results
