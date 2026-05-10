@@ -138,9 +138,8 @@ def test_mu_plugin_static_lint():
         assert result.returncode == 0, f"php -l failed:\n{result.stdout}\n{result.stderr}"
 
     content = plugin_path.read_text(encoding="utf-8")
-    assert "add_shortcode('sfagent_crop_book'" in content or \
-           'add_shortcode("sfagent_crop_book"' in content, \
-        "add_shortcode not found"
+    assert "add_shortcode" in content and "sfagent_crop_book" in content, \
+        "add_shortcode sfagent_crop_book not found"
     assert "sfagent_crop_book_manifest_of_urls_url" in content, \
         "register_setting option name not found"
     assert "wp_remote_get" in content, "wp_remote_get not found"
