@@ -506,6 +506,99 @@ def run_upload_cmd(output_dir: str, dry_run: bool) -> None:
     _do_upload(odir, ftps_files)
 
 
+@cli.command("crop_book_publish")
+@click.option(
+    "--output-dir",
+    "output_dir",
+    default="output/crop_book",
+    show_default=True,
+    help="Directory to write crop book artifacts.",
+)
+@click.option(
+    "--upload",
+    is_flag=True,
+    default=False,
+    help='After rendering, upload artifacts via dispatch_upload(profile="crop_book").',
+)
+@click.option(
+    "--set-mou-url",
+    "set_mou_url",
+    is_flag=True,
+    default=False,
+    help="After upload, write WP option sfagent_crop_book_manifest_of_urls_url via REST.",
+)
+def crop_book_publish_cmd(output_dir: str, upload: bool, set_mou_url: bool) -> None:
+    """Render and optionally publish the ספר גידולים SPA to WordPress."""
+    import base64
+    import os
+
+    import requests as _requests
+
+    from organic_market_agent.crop_book.publisher.engine import (
+        CropBookPublisher,
+        CropBookPublishAbortError,
+    )
+    from organic_market_agent.db.session import SessionFactory
+    from organic_market_agent.publisher.upload_dispatch import (
+        NoUploadConfigured,
+        dispatch_upload,
+    )
+
+    try:
+        with SessionFactory() as session:
+            summary = CropBookPublisher().run(session, Path(output_dir))
+        click.echo(
+            f"CropBookPublisher: {summary['crop_count']} crops, "
+            f"{summary['variety_count']} varieties → {output_dir}"
+        )
+
+        if upload:
+            result = dispatch_upload(Path(summary["output_dir"]), profile="crop_book")
+            if not result.success:
+                click.echo("Upload failed", err=True)
+                raise SystemExit(1)
+            click.echo(
+                f"Uploaded {result.success_count} artifacts via {result.protocol_used}"
+            )
+
+            if set_mou_url:
+                mou_entry = result.wp_artifacts.get("mou")
+                if not mou_entry:
+                    click.echo("No MoU URL returned from upload", err=True)
+                    raise SystemExit(1)
+                mou_url = mou_entry[1]
+
+                wp_user = os.environ.get("UPRESS_WP_APP_USER", "").strip()
+                wp_pass = os.environ.get("UPRESS_WP_APP_PASS", "").replace(" ", "")
+                rest_base = os.environ.get(
+                    "UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json"
+                ).rstrip("/")
+
+                if not (wp_user and wp_pass):
+                    click.echo(
+                        "UPRESS_WP_APP_USER / UPRESS_WP_APP_PASS not set — skipping --set-mou-url",
+                        err=True,
+                    )
+                    raise SystemExit(1)
+
+                token = base64.b64encode(f"{wp_user}:{wp_pass}".encode()).decode()
+                resp = _requests.put(
+                    f"{rest_base}/wp/v2/settings",
+                    headers={"Authorization": f"Basic {token}"},
+                    json={"sfagent_crop_book_manifest_of_urls_url": mou_url},
+                    timeout=15,
+                )
+                resp.raise_for_status()
+                click.echo(f"WP option sfagent_crop_book_manifest_of_urls_url set → {mou_url}")
+
+    except CropBookPublishAbortError as exc:
+        click.echo(f"CropBookPublisher ABORTED: {exc}", err=True)
+        raise SystemExit(1)
+    except NoUploadConfigured as exc:
+        click.echo(f"Upload not configured: {exc}", err=True)
+        raise SystemExit(1)
+
+
 def main() -> None:
     cli()
 

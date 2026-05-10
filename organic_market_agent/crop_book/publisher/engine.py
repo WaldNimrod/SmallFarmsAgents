@@ -207,7 +207,7 @@ class CropBookPublisher:
             .options(
                 joinedload(Crop.family),
                 joinedload(Crop.varieties).joinedload(CropVariety.source_values),
-                joinedload(Crop.conversion_group).joinedload(CropConversionGroup.unit_conversions),
+                joinedload(Crop.conversion_group).joinedload(CropConversionGroup.conversions),
             )
             .order_by(Crop.name_he)
             .all()

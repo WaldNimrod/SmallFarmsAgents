@@ -1,0 +1,120 @@
+<div class="sfa-crop-book" dir="rtl" lang="he">
+<style>
+/* ספר גידולים — inline RTL styles */
+.sfa-crop-book { font-family: Arial, sans-serif; direction: rtl; max-width: 1200px; margin: 0 auto; padding: 12px; }
+.sfa-cb-search-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.sfa-cb-search { flex: 1 1 200px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; }
+.sfa-cb-category-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.sfa-cb-category-tabs button { padding: 5px 12px; border: 1px solid #ccc; border-radius: 20px; background: #f5f5f5; cursor: pointer; font-size: .9em; }
+.sfa-cb-category-tabs button.active { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+.sfa-cb-filter-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px; padding: 8px; background: #f9f9f9; border-radius: 6px; }
+.sfa-cb-seasons { border: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sfa-cb-seasons legend { font-weight: bold; margin-left: 8px; }
+.sfa-cb-seasons label { cursor: pointer; font-size: .9em; }
+.sfa-cb-dtm-wrap { display: flex; align-items: center; gap: 8px; font-size: .9em; }
+.sfa-cb-dtm { width: 150px; }
+.sfa-cb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.sfa-cb-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; cursor: pointer; transition: box-shadow .15s; background: #fff; }
+.sfa-cb-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.sfa-cb-card h3 { margin: 0 0 4px; font-size: 1em; }
+.sfa-cb-card-en { margin: 0 0 6px; color: #666; font-size: .85em; font-style: italic; }
+.sfa-cb-cat-badge { display: inline-block; font-size: .75em; padding: 2px 7px; border-radius: 12px; background: #e8f5e9; color: #2e7d32; }
+.sfa-cat-vegetables { background: #e8f5e9; color: #2e7d32; }
+.sfa-cat-herbs      { background: #f3e5f5; color: #6a1b9a; }
+.sfa-cat-baby       { background: #e0f7fa; color: #00695c; }
+.sfa-cat-legumes    { background: #fff3e0; color: #e65100; }
+.sfa-cat-fruits     { background: #fce4ec; color: #880e4f; }
+.sfa-cat-fruit_trees { background: #fff8e1; color: #f57f17; }
+.sfa-cat-grains     { background: #f1f8e9; color: #558b2f; }
+.sfa-cat-cover_crops { background: #e8eaf6; color: #283593; }
+.sfa-cb-dtm-badge   { display: inline-block; font-size: .75em; padding: 2px 7px; border-radius: 12px; background: #e3f2fd; color: #1565c0; margin-right: 4px; }
+.sfa-cb-empty       { color: #888; text-align: center; padding: 24px; }
+.sfa-cb-error       { color: #c62828; text-align: center; padding: 24px; }
+.sfa-cb-detail      { border: 1px solid #ddd; border-radius: 8px; padding: 16px; background: #fff; }
+.sfa-cb-detail h2   { margin: 0 0 12px; }
+.sfa-cb-tabs        { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
+.sfa-cb-tabs button { padding: 6px 14px; border: 1px solid #ccc; border-radius: 6px 6px 0 0; background: #f5f5f5; cursor: pointer; font-size: .9em; }
+.sfa-cb-tabs button.active { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+.sfa-cb-tab         { padding: 12px 0; }
+.sfa-cb-variety     { border: 1px solid #eee; border-radius: 6px; padding: 10px; margin-bottom: 8px; }
+.sfa-cb-variety h4  { margin: 0 0 6px; }
+.sfa-cb-star        { color: #f9a825; margin-left: 4px; }
+.sfa-cb-badge       { font-size: .75em; background: #e3f2fd; color: #1565c0; padding: 1px 6px; border-radius: 10px; margin-right: 4px; }
+.sfa-cb-placeholder { color: #aaa; font-style: italic; }
+.sfa-cb-source      { font-size: .8em; color: #777; }
+.sfa-cb-economics p, .sfa-cb-care p, .sfa-cb-field-data p { margin: 4px 0; }
+.sfa-cb-src-table, .sfa-cb-conv-table { width: 100%; border-collapse: collapse; font-size: .9em; }
+.sfa-cb-src-table th, .sfa-cb-src-table td,
+.sfa-cb-conv-table th, .sfa-cb-conv-table td { border: 1px solid #eee; padding: 5px 8px; text-align: right; }
+.sfa-cb-src-table th, .sfa-cb-conv-table th  { background: #f5f5f5; }
+.sfa-cb-timeline    { padding: 8px 0; }
+.sfa-cb-ruler       { display: flex; gap: 0; margin-bottom: 8px; }
+.sfa-cb-ruler-tick  { flex: 1; text-align: center; border-right: 1px solid #bbb; font-size: .75em; color: #888; padding: 2px 0; }
+.sfa-cb-ruler-tick:last-child { border-right: none; }
+.sfa-cb-phases      { display: flex; height: 24px; border-radius: 4px; overflow: hidden; }
+.sfa-cb-phase       { color: #fff; font-size: .75em; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.sfa-cb-seeder-row  { border: 1px solid #eee; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+.sfa-cb-seeder-row h4 { margin: 0 0 4px; }
+.sfa-crop-book-pending { text-align: center; padding: 24px; color: #888; }
+</style>
+
+  <div class="sfa-cb-search-row">
+    <input type="text" class="sfa-cb-search" placeholder="חיפוש גידול..." aria-label="חיפוש גידול">
+    <div class="sfa-cb-category-tabs" role="tablist" aria-label="קטגוריות">
+      <button data-cat="all" class="active">הכל</button>
+      <button data-cat="vegetables">ירקות</button>
+      <button data-cat="herbs">עשבי תיבול</button>
+      <button data-cat="baby">עלים בייבי</button>
+      <button data-cat="legumes">קטניות</button>
+      <button data-cat="fruits">פירות</button>
+      <button data-cat="fruit_trees">עצי פרי</button>
+      <button data-cat="grains">דגנים</button>
+      <button data-cat="cover_crops">גידולי כיסוי</button>
+    </div>
+  </div>
+
+  <div class="sfa-cb-filter-row">
+    <fieldset class="sfa-cb-seasons">
+      <legend>עונה</legend>
+      <label><input type="checkbox" data-season="summer"> ☀️ קיץ</label>
+      <label><input type="checkbox" data-season="spring"> 🌸 אביב</label>
+      <label><input type="checkbox" data-season="winter"> 🌧 חורף</label>
+      <label><input type="checkbox" data-season="fall">   💨 סתיו</label>
+    </fieldset>
+    <div class="sfa-cb-dtm-wrap">
+      <label for="sfa-dtm-slider">ימים לבגרות (מקסימום):</label>
+      <input type="range" id="sfa-dtm-slider" class="sfa-cb-dtm" min="0" max="365" step="5" value="365" aria-label="מסנן ימים לבגרות">
+      <span class="sfa-cb-dtm-label">הכל</span>
+    </div>
+  </div>
+
+  <main class="sfa-cb-grid" aria-label="רשימת גידולים"></main>
+
+  <section class="sfa-cb-detail" hidden aria-label="פרטי גידול">
+    <header>
+      <button class="sfa-cb-back" onclick="window.location.hash=''" aria-label="חזרה לרשימה">← חזרה</button>
+      <h2 class="sfa-cb-crop-name"></h2>
+    </header>
+    <nav class="sfa-cb-tabs" aria-label="לשוניות">
+      <button data-tab="varieties"   class="active">זנים</button>
+      <button data-tab="description">תיאור</button>
+      <button data-tab="economics">כלכלה</button>
+      <button data-tab="care">טיפולים</button>
+      <button data-tab="equipment">ציוד</button>
+      <button data-tab="sources">מקורות</button>
+      <button data-tab="timeline">ציר זמן</button>
+      <button data-tab="field-data">נתוני שדה</button>
+    </nav>
+    <section class="sfa-cb-tab" data-tab="varieties"></section>
+    <section class="sfa-cb-tab" data-tab="description" hidden></section>
+    <section class="sfa-cb-tab" data-tab="economics"   hidden></section>
+    <section class="sfa-cb-tab" data-tab="care"        hidden></section>
+    <section class="sfa-cb-tab" data-tab="equipment"   hidden></section>
+    <section class="sfa-cb-tab" data-tab="sources"     hidden></section>
+    <section class="sfa-cb-tab" data-tab="timeline"    hidden></section>
+    <section class="sfa-cb-tab" data-tab="field-data"  hidden></section>
+  </section>
+
+  <script>window.CROP_BOOK_DATA_URL = "./sfagent-crop-book-data.json";</script>
+  <script>{{ spa_js | safe }}</script>
+</div>
