@@ -17,13 +17,13 @@ from organic_market_agent.publisher.upload_dispatch import UploadResult
 
 
 def _make_wp_rest_result(n: int = 3) -> UploadResult:
-    artifacts = {f"artifact-{i}.json": (i, f"https://example.com/{i}") for i in range(n)}
+    artifacts = {f"artifact-{i}.json": f"https://example.com/{i}" for i in range(n)}
     return UploadResult(
-        protocol_used="wp_rest",
+        protocol_used="static",
         success=True,
         success_count=n,
         total_count=n,
-        wp_artifacts=artifacts,
+        static_artifacts=artifacts,
     )
 
 

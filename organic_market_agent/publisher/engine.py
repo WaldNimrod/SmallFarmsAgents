@@ -164,7 +164,11 @@ class PublishEngine:
         # --- Manifest v2 ---
         stale_lvl = _staleness_level(gen, ref)
         stale_d = _staleness_days(gen, ref)
-        upload_base = config.UPRESS_PUBLIC_BASE.rstrip("/") + "/" + config.UPRESS_UPLOAD_PATH
+        upload_base = (
+            config.UPRESS_PUBLIC_BASE.rstrip("/")
+            + "/" + config.UPRESS_SFA_STATIC_ROOT.strip("/")
+            + "/market"
+        )
 
         manifest = {
             "schema_version": MANIFEST_SCHEMA_VERSION,

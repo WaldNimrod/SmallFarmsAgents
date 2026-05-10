@@ -1,9 +1,9 @@
-"""Unit tests for organic_market_agent.publisher.upload_dispatch (AC-06 / WP008).
+"""Unit tests for organic_market_agent.publisher.upload_dispatch (AC-06 / WP009).
 
 Covers:
-- WP REST configured → calls wp_upload.upload_all_artifacts, returns success UploadResult
-- WP REST configured but raises → if UPRESS_FALLBACK_FTPS=1 falls back to FTPS
-- WP REST configured but raises → if no fallback flag, exception propagates
+- Static upload configured → calls static_upload.upload_all_artifacts, returns success UploadResult
+- Static upload configured but raises → if UPRESS_FALLBACK_FTPS=1 falls back to FTPS
+- Static upload configured but raises → if no fallback flag, exception propagates
 - Neither configured → raises NoUploadConfigured
 - FTPS-only path (wp_rest not configured, fallback flag set, FTPS creds present)
 """
@@ -22,7 +22,7 @@ from organic_market_agent.publisher.upload_dispatch import (
 )
 
 # Patch targets: lazy imports inside dispatch_upload resolve through the source module
-_WP_UPLOAD_ALL = "organic_market_agent.publisher.wp_upload.upload_all_artifacts"
+_WP_UPLOAD_ALL = "organic_market_agent.publisher.static_upload.upload_all_artifacts"
 _FTPS_UPLOAD_ARTS = "organic_market_agent.publisher.ftps_upload.upload_artifacts"
 _CONFIG_WP_REST = "organic_market_agent.publisher.upload_dispatch.Config.wp_rest_configured"
 _CONFIG_FTPS = "organic_market_agent.publisher.upload_dispatch.Config.ftps_configured"
@@ -48,8 +48,8 @@ def tmp_output(tmp_path: Path) -> Path:
 
 def _wp_ok_results() -> dict:
     return {
-        "sfagent-manifest.json": (10, "https://example.com/sfagent-manifest.json"),
-        "sfagent-public-report.json": (11, "https://example.com/sfagent-public-report.json"),
+        "sfagent-manifest.json": "https://example.com/sfagent-manifest.json",
+        "sfagent-public-report.json": "https://example.com/sfagent-public-report.json",
     }
 
 
@@ -87,7 +87,7 @@ class TestWpRestHappyPath:
         ):
             result = dispatch_upload(tmp_output)
 
-        assert result.protocol_used == "wp_rest"
+        assert result.protocol_used == "static"
         assert result.success is True
         assert result.success_count == 2
         assert result.total_count == 2
@@ -102,10 +102,9 @@ class TestWpRestHappyPath:
         ):
             result = dispatch_upload(tmp_output)
 
-        assert "sfagent-manifest.json" in result.wp_artifacts
-        assert result.wp_artifacts["sfagent-manifest.json"] == (
-            10,
-            "https://example.com/sfagent-manifest.json",
+        assert "sfagent-manifest.json" in result.static_artifacts
+        assert result.static_artifacts["sfagent-manifest.json"] == (
+            "https://example.com/sfagent-manifest.json"
         )
 
     def test_ftps_not_called_when_wp_rest_succeeds(self, tmp_output):
@@ -118,7 +117,7 @@ class TestWpRestHappyPath:
             result = dispatch_upload(tmp_output)
 
         mock_ftps.assert_not_called()
-        assert result.protocol_used == "wp_rest"
+        assert result.protocol_used == "static"
 
 
 # ---------------------------------------------------------------------------

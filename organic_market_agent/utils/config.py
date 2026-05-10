@@ -24,16 +24,20 @@ class Config:
     EMAIL_TO: str = os.getenv("EMAIL_TO", "")
     EMAIL_PASSWORD: str = os.getenv("EMAIL_PASSWORD", "")
 
-    # uPress FTPS (M7 — Go-Live)
+    # uPress FTPS (fallback only — port 21 blocked on waldhomeserver/Bezeq)
     UPRESS_SFTP_HOST: str = os.getenv("UPRESS_SFTP_HOST", "")
     UPRESS_SFTP_PORT: int = int(os.getenv("UPRESS_SFTP_PORT", "21"))
     UPRESS_SFTP_USER: str = os.getenv("UPRESS_SFTP_USER", "")
     UPRESS_SFTP_PASS: str = os.getenv("UPRESS_SFTP_PASS", "")
+    # Canonical public base — includes WordPress subdirectory (/Agents on uPress server)
     UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio/Agents")
-    UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "wp-content/uploads/market")
+    # Canonical static root for all SFA artifacts (relative to WordPress root / ABSPATH)
+    # Structure: {UPRESS_PUBLIC_BASE}/{UPRESS_SFA_STATIC_ROOT}/{subdir}/filename
+    UPRESS_SFA_STATIC_ROOT: str = os.getenv("UPRESS_SFA_STATIC_ROOT", "smallfarmsagents")
+    # FTPS fallback upload path (kept in sync with static root; port 21 fallback only)
+    UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "smallfarmsagents/market")
     UPRESS_PAGE_SLUG: str = os.getenv("UPRESS_PAGE_SLUG", "/SmallFarmsAgent")
-    # WordPress REST API (WP007 — primary upload via HTTPS port 443; replaces FTPS port 21 as default)
-    # Also used by ftps_upload.py for optional ezCache purge — see docs/UPRESS_WORDPRESS_STANDARD_v2.md
+    # WordPress REST API — auth for static upload endpoint + page/shortcode management
     UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json")
     UPRESS_WP_APP_USER: str = os.getenv("UPRESS_WP_APP_USER", "")
     UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
