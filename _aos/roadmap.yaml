@@ -616,11 +616,11 @@ work_packages:
 
 - id: SFA-S003-P001-WP003-patch02
   label: "ספר גידולים: Test-harness cleanup (post-S003 closure follow-up)"
-  status: BUILDING
+  status: PENDING_VALIDATION
   phase: 2_followup
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
@@ -662,5 +662,13 @@ work_packages:
     - id: F-190-patch02-03
       severity: INFO
       summary: "entity_registry.js exists; F-LV-02 narrative was stale-path only"
-  notes: "L-GATE_S R1 PASS_WITH_FINDINGS 2026-05-23 (team_190 commit 5234ec0). F-190-patch02-01 addressed inline by team_100 (no R2 needed per team_190 §4). LOD400_LOCKED. sfa_build dispatched 2026-05-23 via DISPATCH_sfa_build_2026-05-23_v1.0.0.md. prod_deploy_authority: builder (per F-LV-01 Hybrid policy — SMALL WP, test-only)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-23"
+    commit: "7fe7915"
+    builder_commits: ["248f85b", "0c4f777", "c1fc66d"]
+    branch: "claude/gallant-elbakyan-727a60"
+    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 10/10 ACs. Pre-patch baseline 5 failed/106 passed/2 warnings/4 errors confirmed; post-patch 115 passed/0 warnings/0 errors. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-07 CLEAN (LOD500_LOCKED files untouched). AC-10 skip-class scan CLEAN (grep matches in BUILD_REPORT prose are documentation, not violations). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP003-patch02/BUILD_REPORT_v1.0.0.md. One scope expansion worth team_190 attention: Cluster B fix touched 4 model files (runs.py + sources.py + users.py + normalizer.py) instead of just runs.py, plus removed PostgreSQL-specific `::jsonb` cast in sources.py — required for AC-01 to PASS due to shared Base.metadata pattern. Pre-existing failure outside crop_book/ (test_t09_runs_trigger_creates_ingestion_run) unchanged from baseline (NOT WP003-patch02-induced)."
+    validator: sfa_build
+  notes: "L-GATE_B PASS 2026-05-23 (commit 7fe7915, 3 builder commits 248f85b/0c4f777/c1fc66d). Branch: claude/gallant-elbakyan-727a60. Awaiting team_190 L-GATE_V (cross-engine, IR#1)."
   profile: L0
