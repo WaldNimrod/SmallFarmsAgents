@@ -4,7 +4,8 @@
 **Author:** team_100 (Claude Sonnet 4.6 declared / Opus 4.7 actual)
 **WP:** SFA-S003-P001-WP003-patch02 — Test-Harness Cleanup (post-S003 closure follow-up)
 **Type:** LOD400_SPEC
-**Status:** L-GATE_S ROUND_1 — awaiting team_190 review
+**Status:** L-GATE_S ROUND_1 PASS_WITH_FINDINGS — addressed inline (no R2)
+**R1 verdict:** team_190 PASS_WITH_FINDINGS 2026-05-23 (commit `5234ec0`, reviewed `394cf91`). Findings: F-190-patch02-01 LOW (AC-10 grep narrower than prose) ADDRESSED INLINE by widening AC-10 + AC-05 patterns + adding BUILD_REPORT attestation requirement (team_190 §4 explicit authorization: "Re-submit L-GATE_SPEC Round 2 only if team_100 amends AC-10; otherwise proceed directly to build"). F-190-patch02-02/03 INFO (Cluster B root cause + entity_registry.js stale-path clarification) — informational only, no spec change needed. Verdict: `_COMMUNICATION/team_190/SFA-S003-P001-WP003-patch02/LOD400-VERDICT_v1.0.0.md`
 **Builder:** sfa_build (Team 10, Sonnet)
 **Validator:** team_190 (external — L-GATE_SPEC + L-GATE_VALIDATE, non-Claude per IR#1)
 **Depends on:** SFA-S003-P001-WP003 (LOD500_LOCKED) + SFA-S003-P001-WP004 (LOD500_LOCKED)
@@ -140,12 +141,12 @@ If `pyproject.toml` does not have a pytest config section AND `pytest.ini` exist
 | AC-02 | Same run reports 0 warnings of class `PytestUnknownMarkWarning`. | CI run |
 | AC-03 | `tests/crop_book/test_views.py` contains **zero** occurrences of the literal string `strange-mcnulty-651551` (verified via `grep -c`). | `grep -c "strange-mcnulty-651551" tests/crop_book/test_views.py` → `0` |
 | AC-04 | `tests/crop_book/test_views.py` contains **zero** absolute paths starting with `/Users/`. | `grep -E "['\"]\/Users\/" tests/crop_book/test_views.py` → no matches |
-| AC-05 | `tests/crop_book/test_seed_idempotency.py` tests pass under broad execution (full crop_book suite); no `pytest.skip` / `@pytest.mark.skipif` / `conftest.py` skip patterns added in or around this test file. | `grep -RE "pytest\.skip\|skipif" tests/crop_book/test_seed_idempotency.py tests/crop_book/conftest.py` → no skip patterns introduced |
+| AC-05 | `tests/crop_book/test_seed_idempotency.py` tests pass under broad execution (full crop_book suite); no skip-class pattern (`pytest.skip(...)`, `@pytest.mark.skip`, `@pytest.mark.skipif`, `pytest.importorskip`, `@pytest.mark.xfail`, conftest auto-skip) added in or around this test file. **NOTE:** the pre-existing `pytest.skip("Tend source data not available…")` at the top of `_run_seed` is permitted to remain (it predates this patch — see team_190 R1 verdict §3 AC-05 row). Any NEW skip-class line in the patch diff is forbidden. | `git diff <base> HEAD -- tests/crop_book/test_seed_idempotency.py tests/crop_book/conftest.py \| grep -E "^\\+.*(pytest\.skip\|@pytest\.mark\.skip\|skipif\|importorskip\|xfail)"` → no `+` lines |
 | AC-06 | The `integration` marker is registered in the canonical pytest config (`pyproject.toml` `[tool.pytest.ini_options].markers` OR `pytest.ini` `[pytest].markers`). | `python3 -c "import tomllib; ..."` OR `grep` on `pytest.ini` |
 | AC-07 | LOD500_LOCKED files are untouched: `crop_book/models.py`, `crop_book/views.py`, `crop_book/templates/crop_book/{index,crop,_macros}.html`, migrations 035–040, `crop_book/publisher/` (all WP004 deliverables), `wordpress/mu-plugins/sfagent-crop-book-shortcode.php`. | `git diff <main-merge-base> HEAD -- <locked-file-list>` returns empty |
 | AC-08 | `validate_aos.sh` returns 0 FAIL. | builder runs |
 | AC-09 | Existing market-domain tests (`tests/test_upload_dispatch.py`, `tests/test_publisher.py`, anything outside `tests/crop_book/`) still pass. | `python3 -m pytest tests/ -q --ignore=tests/crop_book/` returns the same pre-patch result |
-| AC-10 | No `pytest.skip` / `@pytest.mark.skipif` was added anywhere in the patch's diff. | `git diff <base> HEAD | grep -E "pytest\.skip\|skipif"` → no `+` lines |
+| AC-10 | No skip-class pattern was added anywhere in the patch's diff. Coverage MUST include: `pytest.skip(...)`, `@pytest.mark.skip`, `@pytest.mark.skipif`, `pytest.importorskip`, `@pytest.mark.xfail`, `pytest --ignore` directives in config, and conftest auto-skip hooks (`pytest_collection_modifyitems` with skip injection). Builder BUILD_REPORT MUST include a self-attest line: "skip-class scan: no skip patterns added in patch diff (covered: skip/skipif/skip-marker/skipif-marker/importorskip/xfail-marker/--ignore/conftest auto-skip)". | `git diff <base> HEAD \| grep -E "pytest\.skip\\(\|@pytest\.mark\.skip\b\|@pytest\.mark\.skipif\|pytest\.importorskip\|@pytest\.mark\.xfail\|--ignore"` → no `+` lines. Plus BUILD_REPORT attestation line present and signed. |
 
 ---
 
