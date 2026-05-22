@@ -4,6 +4,7 @@ from typing import Optional
 
 import sqlalchemy as sa
 from sqlalchemy import (
+    JSON,
     TIMESTAMP,
     BigInteger,
     Boolean,
@@ -101,17 +102,17 @@ class SourceFetchProfile(Base):
     fetch_mode: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     entry_url: Mapped[str] = mapped_column(VARCHAR(500), nullable=False)
     http_method: Mapped[str] = mapped_column(VARCHAR(10), nullable=False, server_default="GET")
-    request_headers_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    request_headers_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     schedule_kind: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, server_default="daily")
     timeout_seconds: Mapped[int] = mapped_column(Integer, nullable=False, server_default="30")
     retry_policy_json: Mapped[dict] = mapped_column(
-        JSONB,
+        JSONB().with_variant(JSON(), "sqlite"),
         nullable=False,
-        server_default=sa.text("'{\"max_retries\": 2, \"backoff_seconds\": 60}'::jsonb"),
+        server_default=sa.text("'{\"max_retries\": 2, \"backoff_seconds\": 60}'"),
     )
     is_public_access: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     charset_hint: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
-    selector_profile: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    selector_profile: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False

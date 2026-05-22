@@ -19,9 +19,12 @@ from __future__ import annotations
 
 import json
 from decimal import Decimal
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 # ---------------------------------------------------------------------------
@@ -539,10 +542,7 @@ class TestEconomicsTab:
 class TestEntityTags:
     def test_entity_tag_css_classes_in_css(self):
         """CSS must define .etag and .et-* classes."""
-        css_path = (
-            "/Users/nimrod/Documents/SmallFarmsAgents/.claude/worktrees/strange-mcnulty-651551"
-            "/organic_market_agent/admin/static/crop_book/crop_book.css"
-        )
+        css_path = REPO_ROOT / "organic_market_agent" / "admin" / "static" / "crop_book" / "crop_book.css"
         with open(css_path) as f:
             css = f.read()
         assert ".etag" in css
@@ -557,10 +557,7 @@ class TestEntityTags:
         """entity_tag macro should produce data-etype and data-eid attributes."""
         from jinja2 import Environment, FileSystemLoader, select_autoescape
         import os
-        templates_dir = (
-            "/Users/nimrod/Documents/SmallFarmsAgents/.claude/worktrees/strange-mcnulty-651551"
-            "/organic_market_agent/crop_book/templates"
-        )
+        templates_dir = REPO_ROOT / "organic_market_agent" / "crop_book" / "templates"
         env = Environment(
             loader=FileSystemLoader(templates_dir),
             autoescape=select_autoescape(["html"]),
@@ -653,10 +650,7 @@ class TestRTLLayout:
         assert "breadcrumb" in data
 
     def test_rtl_css_applied(self):
-        css_path = (
-            "/Users/nimrod/Documents/SmallFarmsAgents/.claude/worktrees/strange-mcnulty-651551"
-            "/organic_market_agent/admin/static/crop_book/crop_book.css"
-        )
+        css_path = REPO_ROOT / "organic_market_agent" / "admin" / "static" / "crop_book" / "crop_book.css"
         with open(css_path) as f:
             css = f.read()
         assert "direction: rtl" in css
@@ -689,10 +683,7 @@ class TestNoEditDelete:
     def test_no_post_routes_in_blueprint(self):
         """Verify views.py has no @crop_book_bp.route(..., methods=['POST'])."""
         import os
-        views_path = (
-            "/Users/nimrod/Documents/SmallFarmsAgents/.claude/worktrees/strange-mcnulty-651551"
-            "/organic_market_agent/crop_book/views.py"
-        )
+        views_path = REPO_ROOT / "organic_market_agent" / "crop_book" / "views.py"
         with open(views_path) as f:
             content = f.read()
         import re
@@ -754,10 +745,7 @@ class TestViewHelpers:
     def test_entity_registry_lookup(self):
         """entity_registry.js defines ENTITY_REGISTRY with lookup; test Python-side structure."""
         import os, json as _json
-        js_path = (
-            "/Users/nimrod/Documents/SmallFarmsAgents/.claude/worktrees/strange-mcnulty-651551"
-            "/organic_market_agent/admin/static/crop_book/entity_registry.js"
-        )
+        js_path = REPO_ROOT / "organic_market_agent" / "admin" / "static" / "crop_book" / "entity_registry.js"
         assert os.path.exists(js_path), "entity_registry.js missing"
         with open(js_path) as f:
             content = f.read()

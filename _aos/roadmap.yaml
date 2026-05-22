@@ -56,6 +56,35 @@ project:
     L-GATE_S Round 2 (2026-05-10): PASS by team_190 (commit 3e30c8c).
     All 4 findings RESOLVED. LOD400_LOCKED. WP004 BUILDING — sfa_build
     dispatched 2026-05-10 via DISPATCH_sfa_build_2026-05-10_v1.0.0.md.
+    L-GATE_B PASS 2026-05-10: sfa_build self-attest 19/19 ACs (commit 9647ab3,
+    final build 8327abb on branch claude/gallant-elbakyan-727a60).
+    L-GATE_V PASS_WITH_FINDINGS 2026-05-13: team_190 (commit 90675a7). 19/19
+    ACs independently verified; 7/7 constitutional checks PASS. 2 LOW findings
+    (F-LV-01 PROCESS out-of-mandate prod deploy; F-LV-02 PRE-EXISTING WP003
+    test-harness debt). LOD500_LOCKED.
+    S003 Phase 2 COMPLETE 2026-05-13 — ספר גידולים LIVE at
+    https://www.nimrod.bio/crop-book/. S003 Phase 1 + Phase 2 ALL CLOSED.
+    Archive mandate issued to team_191: MANDATE_SFA-S003-P001-PHASE2-ARCHIVE.
+    team_191 archive COMPLETE 2026-05-22 (commit 8ca64e6 on
+    claude/gallant-elbakyan-727a60; completion MSG to origin/main 9c8f5f0).
+    team_00 decisions 2026-05-22 (per /AOS_decide briefs): F-LV-01 Hybrid policy
+    APPROVED with end-state-unified emphasis (recorded in DECISION_F-LV-01_*.md);
+    F-LV-02 Option A APPROVED → patch02 OPENED 2026-05-22 (no skip-patches per
+    team_00 directive).
+    WP003-patch02 (Test-Harness Cleanup) full L-GATE traversal 2026-05-23:
+    L-GATE_S R1 PASS_WITH_FINDINGS (team_190 Cursor, F-190-patch02-01 addressed
+    inline by team_100 — AC-10+05 widened; no R2). L-GATE_B PASS sfa_build
+    10/10 ACs (commit 7fe7915, 3 builder commits). L-GATE_V PASS clean
+    (team_190 Codex, commit 25c4a22). Cluster B production-model scope
+    expansion explicitly accepted as root-cause fix. patch02 LOD500_LOCKED.
+    S003 PROGRAM TRULY CLOSED 2026-05-23 — all 5 WPs (WP001 LOD200,
+    WP002 DB+Seed, WP003 Flask UI, WP004 WP integration, WP003-patch02
+    test-harness cleanup) LOD500_LOCKED. F-LV-01 §2 unified-end-state
+    invariants validated: (a) unified deployment ✓ ספר גידולים live at
+    https://www.nimrod.bio/crop-book/; (b) single canonical branch pending
+    → canonical merge claude/gallant-elbakyan-727a60 → main on this session;
+    (c) no version drift ✓ same code base for staging+prod. Supplemental
+    archive mandate to team_191 for patch02 artifacts.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -423,7 +452,7 @@ work_packages:
   assigned_validator: team_00
   created_at: "2026-05-07"
   milestone_ref: "S003"
-  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P001-WP001/LOD200_CROP_SCHEMA_2026-05-07_v1.0.0.md"
+  spec_ref: "_archive/SFA-S003-P001/TEAM_100/SFA-S003-P001-WP001/LOD200_CROP_SCHEMA_2026-05-07_v1.0.0.md"
   gate_history:
   - gate: L-GATE_S
     result: PASS
@@ -526,14 +555,16 @@ work_packages:
 
 - id: SFA-S003-P001-WP004
   label: "ספר גידולים: WordPress Integration (CropBookPublisher + shortcode)"
-  status: BUILDING
+  status: COMPLETE
   phase: 2
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
+  production_validator: team_99
+  production_url: "https://www.nimrod.bio/crop-book/"
   created_at: "2026-05-09"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P001-WP002", "SFA-S003-P001-WP003"]
@@ -558,5 +589,106 @@ work_packages:
     reviewed_commit: "e81c378"
     notes: "team_190 L-GATE_SPEC Round 2. PASS. All 4 R1 findings RESOLVED (F-190-WP004-01 entity registry → Python module; F-190-WP004-02 timeline → default-variety mirror of views.py:197; F-190-WP004-03 → AC-17/18/19; F-190-WP004-04 → roadmap drift fixed). 12/12 constitutional checks PASS. 2 non-blocking notes (N-190-WP004-R2-01 stale '16 ACs' wording in §13 step 10 — fixed by team_100 post-verdict; N-190-WP004-R2-02 informational guidance for L-GATE_V). Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP004/LOD400-VERDICT_R2_v1.0.0.md"
     validator: team_190
-  notes: "L-GATE_S R2 PASS 2026-05-10 (commit 3e30c8c). LOD400_LOCKED. sfa_build (team_10) authorized to begin L-GATE_B build per DISPATCH_sfa_build_2026-05-10_v1.0.0.md."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-10"
+    commit: "9647ab3"
+    final_build_commit: "8327abb"
+    branch: "claude/gallant-elbakyan-727a60"
+    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 19/19 ACs verified. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-15 confirmed (11 market dispatch tests pass; profile defaults to 'market'). AC-16 confirmed (git diff: zero LOD500_LOCKED files touched). Bundle size: data.json 388KB raw / 15KB gzipped (well under R-WP004-02 1MB threshold). Two deviations noted: D-01 step consolidation in single commits (non-blocking, tests pass); D-02 pre-existing JSONB/SQLite test_seed_idempotency collision (NOT introduced by WP004, predates 52f8409). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP004/BUILD_REPORT_v1.0.0.md. ⚠ Out-of-mandate scope: builder also performed production deploy (mu-plugin upload, WP page creation, option set, cache clear) that DISPATCH routed to team_99/team_00 — site live at https://www.nimrod.bio/crop-book/. Production correctness verified but team_190 should evaluate the scope deviation at L-GATE_V."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-13"
+    commit: "90675a7"
+    reviewed_commit: "9647ab3"
+    final_build_commit: "8327abb"
+    branch: "claude/gallant-elbakyan-727a60"
+    notes: "team_190 (external, non-Claude per IR#1) L-GATE_V. PASS_WITH_FINDINGS. 19/19 ACs verified independently (focused pytest 46 passed; live CLI render against PostgreSQL produced 52 crops / 242 varieties; php -l clean; validate_aos 0 FAIL; locked WP002/WP003 files untouched). 7/7 constitutional checks PASS. No blocker or major defect in WP004. 2 LOW findings + 1 INFO logged: F-190-WP004-LV-01 LOW PROCESS — builder exceeded dispatched scope (mu-plugin upload + WP page + option set + cache clear); team_00/team_100 to clarify future production-deploy authority. F-190-WP004-LV-02 LOW PRE-EXISTING — broader crop-book test execution exposes stale strange-mcnulty-651551 paths + missing entity_registry.js in WP003 test harness (NOT WP004-induced); track as WP003 patch02. N-190-WP004-LV-01 INFO — pytest 'integration' marker registration cleanup (optional). Recommendation: advance to LOD500_LOCKED with findings logged. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP004/LGATEV-VERDICT_v1.0.0.md"
+    validator: team_190
+    findings:
+    - id: F-190-WP004-LV-01
+      severity: LOW
+      category: PROCESS
+      summary: "Builder exceeded dispatched production-deploy scope"
+      follow_up_owner: team_00
+      follow_up_action: "Clarify future L-GATE_B builder authority for production deploys; amend dispatch template if needed"
+    - id: F-190-WP004-LV-02
+      severity: LOW
+      category: PRE-EXISTING
+      summary: "WP003 test harness debt — stale strange-mcnulty-651551 paths + missing entity_registry.js"
+      follow_up_owner: team_100
+      follow_up_action: "Open SFA-S003-P001-WP003-patch02 for test-harness cleanup"
+    notes_info:
+    - id: N-190-WP004-LV-01
+      severity: INFO
+      summary: "pytest 'integration' marker registration cleanup (optional)"
+  notes: "S003 Phase 2 COMPLETE 2026-05-13. LOD500_LOCKED. L-GATE_V PASS_WITH_FINDINGS (commit 90675a7, team_190). 19/19 ACs verified. ספר גידולים LIVE at https://www.nimrod.bio/crop-book/. 2 LOW findings logged for follow-up (F-LV-01 PROCESS → team_00; F-LV-02 PRE-EXISTING → patch02 candidate). Archive routed to team_191 via MANDATE_SFA-S003-P001-PHASE2-ARCHIVE_v1.0.0.md."
+  profile: L0
+
+- id: SFA-S003-P001-WP003-patch02
+  label: "ספר גידולים: Test-harness cleanup (post-S003 closure follow-up)"
+  status: COMPLETE
+  phase: 2_followup
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  assigned_builder: sfa_build
+  assigned_validator: external
+  prod_deploy_authority: builder
+  created_at: "2026-05-22"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P001-WP003", "SFA-S003-P001-WP004"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P001-WP003-patch02/LOD400_spec.md"
+  triggered_by:
+    finding_id: F-190-WP004-LV-02
+    note_id: N-190-WP004-LV-01
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P001-WP004/LGATEV-VERDICT_v1.0.0.md"
+    team_00_directive: "2026-05-22 — no shortcuts, no skips, no patches; resolve at root cause"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-22"
+    notes: "team_00 directive 2026-05-22 — Option A (open patch02 now) accepted per /AOS_decide brief. Eligibility: 5 failed + 4 errors + 2 warnings in pytest tests/crop_book/ reproducible on commit 8ca64e6. Pre-existing debt from WP003 (LOD500_LOCKED). Effort: SMALL. Cluster A (5 hard-coded paths) + Cluster B (test_seed_idempotency cross-suite collision) + Cluster C (integration marker registration)."
+    validator: team_00
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-23"
+    round: 1
+    commit: "5234ec0"
+    reviewed_commit: "394cf91"
+    notes: "team_190 (Cursor — non-Claude per IR#1) L-GATE_SPEC Round 1. PASS_WITH_FINDINGS. 10/10 C-checks PASS except C8 PASS_WITH_FINDING (AC-10 grep narrower than prose). 3 findings: F-190-patch02-01 LOW (AC-10 grep coverage gap) ADDRESSED INLINE by team_100 — widened AC-10 + AC-05 to cover skip/skipif/skip-marker/skipif-marker/importorskip/xfail-marker/--ignore/conftest-auto-skip + added BUILD_REPORT self-attest line; team_190 §4 pre-authorized this without R2. F-190-patch02-02 INFO (Cluster B root cause: JSONB metadata pollution on ingestion_runs.progress_json — narrows builder's investigation). F-190-patch02-03 INFO (entity_registry.js exists at repo-relative path; F-LV-02 narrative was stale-path artifact only). Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP003-patch02/LOD400-VERDICT_v1.0.0.md. Confirmation MSG: _COMMUNICATION/TEAM_100/MSG-team190-to-team100-S003-WP003-patch02-LOD400-VERDICT-2026-05-23.md (on origin/main commit 67f6905). team_190 recommendation: 'Authorize sfa_build for L-GATE_BUILD. No Round 2 required.' Spec amended same-session: header notes R1 PASS_WITH_FINDINGS + addressed-inline status."
+    validator: team_190
+    findings:
+    - id: F-190-patch02-01
+      severity: LOW
+      summary: "AC-10 grep narrower than prose"
+      status: ADDRESSED_INLINE
+      resolved_by: team_100
+      resolution: "AC-10 + AC-05 widened to cover full skip-class taxonomy + BUILD_REPORT attestation line"
+    notes_info:
+    - id: F-190-patch02-02
+      severity: INFO
+      summary: "Cluster B root cause confirmed: JSONB metadata pollution on ingestion_runs.progress_json"
+    - id: F-190-patch02-03
+      severity: INFO
+      summary: "entity_registry.js exists; F-LV-02 narrative was stale-path only"
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-23"
+    commit: "7fe7915"
+    builder_commits: ["248f85b", "0c4f777", "c1fc66d"]
+    branch: "claude/gallant-elbakyan-727a60"
+    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 10/10 ACs. Pre-patch baseline 5 failed/106 passed/2 warnings/4 errors confirmed; post-patch 115 passed/0 warnings/0 errors. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-07 CLEAN (LOD500_LOCKED files untouched). AC-10 skip-class scan CLEAN (grep matches in BUILD_REPORT prose are documentation, not violations). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP003-patch02/BUILD_REPORT_v1.0.0.md. One scope expansion worth team_190 attention: Cluster B fix touched 4 model files (runs.py + sources.py + users.py + normalizer.py) instead of just runs.py, plus removed PostgreSQL-specific `::jsonb` cast in sources.py — required for AC-01 to PASS due to shared Base.metadata pattern. Pre-existing failure outside crop_book/ (test_t09_runs_trigger_creates_ingestion_run) unchanged from baseline (NOT WP003-patch02-induced)."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-23"
+    commit: "25c4a22"
+    reviewed_head: "68ec917"
+    gate_commit: "7fe7915"
+    notes: "team_190 (Codex — non-Claude per IR#1) L-GATE_V. PASS (clean — not even PASS_WITH_FINDINGS). 10/10 ACs independently verified (102 passed + 13 skipped — skips are env-gated PostgreSQL integration, not patch-added; validator env vs builder env). 7/7 constitutional checks PASS. team_100 escalation note (Cluster B production-model scope expansion) EXPLICITLY ACCEPTED by team_190 §4 as 'root-cause shared metadata compatibility fix' — JSONB().with_variant(JSON, sqlite) at model declaration is the correct fix for shared Base.metadata; PostgreSQL behavior unchanged. No process finding issued. Pre-existing test_t09 failure outside crop_book/ matches baseline (NOT WP003-patch02-induced). Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP003-patch02/LGATEV-VERDICT_v1.0.0.md. Notification MSG: _COMMUNICATION/TEAM_100/MSG-team190-to-team100-S003-WP003-patch02-LGATEV-VERDICT-2026-05-23.md (on origin/main commit 59c4dcc). team_190 final: 'team_100 may proceed with patch02 LOD500_LOCKED handling and the subsequent unified-end-state / merge-prep checks.'"
+    validator: team_190
+  notes: "S003 follow-up COMPLETE 2026-05-23. LOD500_LOCKED. L-GATE_V PASS clean (commit 25c4a22, team_190 Codex). All 10 ACs + 7 constitutional checks PASS. Cluster B scope expansion explicitly accepted by team_190 as root-cause fix. All 5 S003 WPs (WP001/WP002/WP003/WP004/WP003-patch02) now LOD500_LOCKED. F-LV-01 §2 unified-end-state checks + canonical-branch merge to main authorized as next step."
   profile: L0

@@ -17,6 +17,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
 from organic_market_agent.utils.config import Config
 
@@ -52,14 +53,28 @@ class UploadResult:
 def dispatch_upload(
     output_dir: Path,
     *,
+    profile: Literal["market", "crop_book"] = "market",
     allow_fallback_ftps_env: str = "UPRESS_FALLBACK_FTPS",
 ) -> UploadResult:
     """Static endpoint primary, optional FTPS fallback.
 
-    Steps:
-    1. If WP REST credentials configured → call static_upload.upload_all_artifacts().
-    2. If that fails AND os.environ.get(allow_fallback_ftps_env) == "1" → FTPS fallback.
-    3. Neither configured → raise NoUploadConfigured.
+    Two profiles, each with its own upload path:
+
+    profile="market" (default — WP009 behavior):
+      1. If WP REST credentials configured → call static_upload.upload_all_artifacts().
+      2. If that fails AND os.environ.get(allow_fallback_ftps_env) == "1" → FTPS fallback.
+      3. Neither configured → raise NoUploadConfigured.
+
+    profile="crop_book" (WP004):
+      WP REST only via wp_upload.upload_all_crop_book_artifacts(). FTPS fallback
+      intentionally disabled (Bezeq blocks port 21 outbound from waldhomeserver).
+      Raises NoUploadConfigured if WP REST not configured.
+
+    Args:
+        output_dir: Directory containing publish artifacts.
+        profile: "market" (default, WP009 static_upload + FTPS fallback) or
+                 "crop_book" (WP REST only, no fallback).
+        allow_fallback_ftps_env: Env var that gates FTPS fallback (market profile only).
 
     Returns:
         UploadResult with protocol_used, success, counts, artifacts.
@@ -67,6 +82,29 @@ def dispatch_upload(
     Raises:
         NoUploadConfigured: When no upload method is configured.
     """
+    # --- Crop book profile: WP REST only, no FTPS fallback ---
+    if profile == "crop_book":
+        if not Config.wp_rest_configured():
+            raise NoUploadConfigured(
+                "WP REST not configured; FTPS disabled for crop_book profile. "
+                "Set UPRESS_WP_APP_USER + UPRESS_WP_APP_PASS."
+            )
+        from organic_market_agent.publisher.wp_upload import upload_all_crop_book_artifacts
+
+        artifacts = upload_all_crop_book_artifacts(output_dir)
+        logger.info(
+            "dispatch_upload(crop_book): WP REST upload OK — %d artifacts uploaded",
+            len(artifacts),
+        )
+        return UploadResult(
+            protocol_used="wp_rest",
+            success=True,
+            success_count=len(artifacts),
+            total_count=len(artifacts),
+            wp_artifacts=artifacts,
+        )
+
+    # --- Market profile (default): existing behavior unchanged (AC-15) ---
     fallback_allowed = os.environ.get(allow_fallback_ftps_env, "").strip() == "1"
     wp_rest_ok = Config.wp_rest_configured()
     ftps_ok = Config.ftps_configured()

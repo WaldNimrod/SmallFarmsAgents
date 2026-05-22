@@ -318,3 +318,122 @@ If any of (3)/(4)/(5) fail — STOP and surface to team_00 before changing code.
 ---
 
 *Authored 2026-05-07 by team_100 in session SFA-S002-P001 (Public Index Launch Readiness).*
+
+---
+
+## Crop Book publish (S003 / WP004)
+
+**WP:** SFA-S003-P001-WP004 — ספר גידולים WordPress Integration
+**Shortcode:** `[sfagent_crop_book]`
+**mu-plugin:** `wordpress/mu-plugins/sfagent-crop-book-shortcode.php`
+**WP option:** `sfagent_crop_book_manifest_of_urls_url`
+**Profile:** `crop_book` (WP REST only — no FTPS fallback; Bezeq blocks port 21)
+
+---
+
+### Prerequisites
+
+1. Alembic head ≥ 040 (`alembic current` confirms).
+2. Seed importer has run at least once (`python -m organic_market_agent import_crops`).
+3. `UPRESS_WP_*` env vars set (same credentials as market report — no new credentials required):
+   ```
+   UPRESS_WP_APP_USER=<wordpress_username>
+   UPRESS_WP_APP_PASS=<application_password>   # spaces stripped automatically
+   UPRESS_WP_REST_BASE=https://www.nimrod.bio/wp-json
+   ```
+4. `sfagent-allow-json.php` mu-plugin already installed (permits `.json` + `.html` MIME upload — installed during S002-WP007).
+
+---
+
+### One-time: mu-plugin install
+
+Upload `wordpress/mu-plugins/sfagent-crop-book-shortcode.php` to the server:
+
+1. Log into **uPress panel** → **File Manager**.
+2. Navigate to `wp-content/mu-plugins/`.
+3. Upload `sfagent-crop-book-shortcode.php` (mode 0644, owner `web`).
+4. Verify the file appears in the directory listing — mu-plugins load automatically, no activation needed.
+
+Alternative (if SSH available):
+```bash
+scp wordpress/mu-plugins/sfagent-crop-book-shortcode.php \
+    <user>@<server>:/path/to/wp-content/mu-plugins/
+```
+
+---
+
+### First publish (CLI — team_99 on waldhomeserver)
+
+```bash
+# Render + upload + wire WP option in one command:
+python -m organic_market_agent crop_book_publish \
+    --output-dir output/crop_book \
+    --upload \
+    --set-mou-url
+```
+
+Expected output:
+```
+CropBookPublisher: 52 crops, 242 varieties → output/crop_book
+Uploaded 4 artifacts via wp_rest
+WP option sfagent_crop_book_manifest_of_urls_url set → https://www.nimrod.bio/wp-content/uploads/.../sfagent-crop-book-manifest-of-urls.json
+```
+
+---
+
+### Create the WordPress page
+
+1. In WP Admin → **Pages** → **Add New**.
+2. Title: `ספר גידולים` (or any Hebrew title).
+3. Body: add a Shortcode block with `[sfagent_crop_book]`.
+4. Publish.
+5. Open the page in a browser — the SPA should load.
+
+---
+
+### Smoke test
+
+```bash
+# 1. Manifest-of-URLs accessible
+curl -sSI "$(wp option get sfagent_crop_book_manifest_of_urls_url)" | head -1
+# Expected: HTTP/2 200
+
+# 2. Data JSON schema correct
+curl -sS "$(curl -sS $(wp option get sfagent_crop_book_manifest_of_urls_url) | jq -r '.artifacts.data')" \
+  | jq '.schema'
+# Expected: "crop_book.v1"
+
+# 3. Crop count
+curl -sS "..." | jq '.crops | length'
+# Expected: >= 52
+```
+
+---
+
+### Subsequent publishes (re-publish on demand)
+
+```bash
+python -m organic_market_agent crop_book_publish \
+    --output-dir output/crop_book \
+    --upload \
+    --set-mou-url
+```
+
+The `--set-mou-url` flag is idempotent — it overwrites the WP option with the new MoU URL after each upload.
+
+---
+
+### Failure modes
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| "ספר גידולים — בטעינה" placeholder on WP page | Option not set or MoU URL 404 | Re-run `--upload --set-mou-url`; check WP error log |
+| SPA loads but no crops appear | `data.json` fetch failed (Mixed Content / 404) | Check browser console; confirm artifacts are public in WP media |
+| Filter returns wrong crop set | Filter parity regression | Run `pytest tests/crop_book/test_filter_parity.py` |
+| Publisher raises `CropBookPublishAbortError` | Sentinel missing from template OR empty DB | Check template `crop_book_body.html` for sentinel line; run seed importer |
+| WP shortcode logs "sentinel substitution miss" | Body fragment drifted (sentinel removed) | Re-publish: `crop_book_publish --upload --set-mou-url` |
+| Upload raises `NoUploadConfigured` | `UPRESS_WP_APP_*` env vars missing | Set env vars in `.env` |
+
+---
+
+*Section added 2026-05-10 by team_10 (sfa_build) in session SFA-S003-P001-WP004 (L-GATE_B).*

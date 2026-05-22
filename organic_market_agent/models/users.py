@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import (
+    JSON,
     TIMESTAMP,
     BigInteger,
     Boolean,
@@ -46,8 +47,8 @@ class AuditLog(Base):
     action: Mapped[str] = mapped_column(VARCHAR(100), nullable=False)
     entity_type: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     entity_id: Mapped[Optional[int]] = mapped_column(BigInteger(), nullable=True)
-    before_state: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
-    after_state: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    before_state: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
+    after_state: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     ip_address: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -70,7 +71,7 @@ class LogEntry(Base):
     message: Mapped[str] = mapped_column(Text, nullable=False)
     entity_type: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     entity_id: Mapped[Optional[int]] = mapped_column(BigInteger(), nullable=True)
-    extra_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    extra_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     ingestion_run_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("ingestion_runs.id"), nullable=True
     )
