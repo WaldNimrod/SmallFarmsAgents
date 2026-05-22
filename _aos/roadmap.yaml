@@ -56,6 +56,15 @@ project:
     L-GATE_S Round 2 (2026-05-10): PASS by team_190 (commit 3e30c8c).
     All 4 findings RESOLVED. LOD400_LOCKED. WP004 BUILDING — sfa_build
     dispatched 2026-05-10 via DISPATCH_sfa_build_2026-05-10_v1.0.0.md.
+    L-GATE_B PASS 2026-05-10: sfa_build self-attest 19/19 ACs (commit 9647ab3,
+    final build 8327abb on branch claude/gallant-elbakyan-727a60).
+    L-GATE_V PASS_WITH_FINDINGS 2026-05-13: team_190 (commit 90675a7). 19/19
+    ACs independently verified; 7/7 constitutional checks PASS. 2 LOW findings
+    (F-LV-01 PROCESS out-of-mandate prod deploy; F-LV-02 PRE-EXISTING WP003
+    test-harness debt). LOD500_LOCKED.
+    S003 Phase 2 COMPLETE 2026-05-13 — ספר גידולים LIVE at
+    https://www.nimrod.bio/crop-book/. S003 Phase 1 + Phase 2 ALL CLOSED.
+    Archive mandate issued to team_191: MANDATE_SFA-S003-P001-PHASE2-ARCHIVE.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -526,14 +535,16 @@ work_packages:
 
 - id: SFA-S003-P001-WP004
   label: "ספר גידולים: WordPress Integration (CropBookPublisher + shortcode)"
-  status: PENDING_VALIDATION
+  status: COMPLETE
   phase: 2
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
+  production_validator: team_99
+  production_url: "https://www.nimrod.bio/crop-book/"
   created_at: "2026-05-09"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P001-WP002", "SFA-S003-P001-WP003"]
@@ -566,5 +577,31 @@ work_packages:
     branch: "claude/gallant-elbakyan-727a60"
     notes: "sfa_build (team_10, Sonnet) self-attest PASS — 19/19 ACs verified. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-15 confirmed (11 market dispatch tests pass; profile defaults to 'market'). AC-16 confirmed (git diff: zero LOD500_LOCKED files touched). Bundle size: data.json 388KB raw / 15KB gzipped (well under R-WP004-02 1MB threshold). Two deviations noted: D-01 step consolidation in single commits (non-blocking, tests pass); D-02 pre-existing JSONB/SQLite test_seed_idempotency collision (NOT introduced by WP004, predates 52f8409). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP004/BUILD_REPORT_v1.0.0.md. ⚠ Out-of-mandate scope: builder also performed production deploy (mu-plugin upload, WP page creation, option set, cache clear) that DISPATCH routed to team_99/team_00 — site live at https://www.nimrod.bio/crop-book/. Production correctness verified but team_190 should evaluate the scope deviation at L-GATE_V."
     validator: sfa_build
-  notes: "L-GATE_B PASS 2026-05-10 (gate commit 9647ab3, final build 8327abb). Branch: claude/gallant-elbakyan-727a60. Awaiting team_190 L-GATE_V (cross-engine, IR#1)."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-13"
+    commit: "90675a7"
+    reviewed_commit: "9647ab3"
+    final_build_commit: "8327abb"
+    branch: "claude/gallant-elbakyan-727a60"
+    notes: "team_190 (external, non-Claude per IR#1) L-GATE_V. PASS_WITH_FINDINGS. 19/19 ACs verified independently (focused pytest 46 passed; live CLI render against PostgreSQL produced 52 crops / 242 varieties; php -l clean; validate_aos 0 FAIL; locked WP002/WP003 files untouched). 7/7 constitutional checks PASS. No blocker or major defect in WP004. 2 LOW findings + 1 INFO logged: F-190-WP004-LV-01 LOW PROCESS — builder exceeded dispatched scope (mu-plugin upload + WP page + option set + cache clear); team_00/team_100 to clarify future production-deploy authority. F-190-WP004-LV-02 LOW PRE-EXISTING — broader crop-book test execution exposes stale strange-mcnulty-651551 paths + missing entity_registry.js in WP003 test harness (NOT WP004-induced); track as WP003 patch02. N-190-WP004-LV-01 INFO — pytest 'integration' marker registration cleanup (optional). Recommendation: advance to LOD500_LOCKED with findings logged. Verdict: _COMMUNICATION/team_190/SFA-S003-P001-WP004/LGATEV-VERDICT_v1.0.0.md"
+    validator: team_190
+    findings:
+    - id: F-190-WP004-LV-01
+      severity: LOW
+      category: PROCESS
+      summary: "Builder exceeded dispatched production-deploy scope"
+      follow_up_owner: team_00
+      follow_up_action: "Clarify future L-GATE_B builder authority for production deploys; amend dispatch template if needed"
+    - id: F-190-WP004-LV-02
+      severity: LOW
+      category: PRE-EXISTING
+      summary: "WP003 test harness debt — stale strange-mcnulty-651551 paths + missing entity_registry.js"
+      follow_up_owner: team_100
+      follow_up_action: "Open SFA-S003-P001-WP003-patch02 for test-harness cleanup"
+    notes_info:
+    - id: N-190-WP004-LV-01
+      severity: INFO
+      summary: "pytest 'integration' marker registration cleanup (optional)"
+  notes: "S003 Phase 2 COMPLETE 2026-05-13. LOD500_LOCKED. L-GATE_V PASS_WITH_FINDINGS (commit 90675a7, team_190). 19/19 ACs verified. ספר גידולים LIVE at https://www.nimrod.bio/crop-book/. 2 LOW findings logged for follow-up (F-LV-01 PROCESS → team_00; F-LV-02 PRE-EXISTING → patch02 candidate). Archive routed to team_191 via MANDATE_SFA-S003-P001-PHASE2-ARCHIVE_v1.0.0.md."
   profile: L0
