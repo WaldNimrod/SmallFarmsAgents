@@ -16,6 +16,18 @@ add_action('rest_api_init', function () {
     ]);
 });
 
+// Register sfagent_manifest_of_urls_url on 'init' (same pattern as crop-book shortcode)
+// so PUT /wp-json/wp/v2/settings can read and update it.
+add_action('init', function () {
+    register_setting('options', 'sfagent_manifest_of_urls_url', [
+        'type'              => 'string',
+        'description'       => 'URL of the SFA market manifest-of-URLs JSON file (WP009 canonical static path)',
+        'show_in_rest'      => true,
+        'sanitize_callback' => 'esc_url_raw',
+        'default'           => '',
+    ]);
+});
+
 function sfagent_handle_upload(WP_REST_Request $request) {
     $filename = sanitize_file_name($request->get_param('filename'));
     $subdir   = $request->get_param('subdir');
