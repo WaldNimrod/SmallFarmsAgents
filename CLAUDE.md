@@ -20,7 +20,7 @@ You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0
 - **Path:** `/Users/nimrod/Documents/SmallFarmsAgents`
 - **Profile:** `L0`
 - **AOS hub:** `/Users/nimrod/Documents/agents-os`
-- **Domain:** `smallfarms`
+- **Domain:** `smallfarmsagents`
 
 ## Mandatory session startup (canonical — uniform across all AOS domains)
 
