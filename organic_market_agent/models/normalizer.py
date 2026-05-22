@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import (
+    JSON,
     TIMESTAMP,
     BigInteger,
     Boolean,
@@ -34,7 +35,7 @@ class NormalizerProfile(Base):
     source_id: Mapped[int] = mapped_column(ForeignKey("sources.id"), nullable=False)
     normalizer_type: Mapped[str] = mapped_column(VARCHAR(40), nullable=False)
     version: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, server_default="1.0")
-    config_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    config_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -72,7 +73,7 @@ class NormalizerRule(Base):
     match_pattern: Mapped[str] = mapped_column(VARCHAR(500), nullable=False)
     match_type: Mapped[str] = mapped_column(VARCHAR(10), nullable=False, server_default="exact")
     replacement_value: Mapped[Optional[str]] = mapped_column(VARCHAR(500), nullable=True)
-    extra_params_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    extra_params_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     priority: Mapped[int] = mapped_column(Integer, nullable=False, server_default="100")
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     created_by: Mapped[str] = mapped_column(VARCHAR(100), nullable=False, server_default="system")

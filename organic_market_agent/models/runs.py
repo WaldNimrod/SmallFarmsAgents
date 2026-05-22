@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import (
+    JSON,
     TIMESTAMP,
     BigInteger,
     Boolean,
@@ -42,7 +43,7 @@ class IngestionRun(Base):
     community_sources_succeeded: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0")
     triggered_by: Mapped[str] = mapped_column(VARCHAR(100), nullable=False, server_default="cron")
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    progress_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    progress_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
     )
@@ -134,7 +135,7 @@ class RawExtractedItem(Base):
     raw_price_text: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
     raw_unit_text: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
     raw_quantity_text: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
-    raw_payload_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    raw_payload_json: Mapped[Optional[dict]] = mapped_column(JSONB().with_variant(JSON(), "sqlite"), nullable=True)
     extraction_status: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, server_default="extracted")
     unresolvable_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     ignore_reason_code: Mapped[Optional[str]] = mapped_column(VARCHAR(80), nullable=True)
