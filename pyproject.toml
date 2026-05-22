@@ -27,4 +27,5 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 markers = [
     "upress: live uPress FTPS server tests (require credentials)",
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
 ]
