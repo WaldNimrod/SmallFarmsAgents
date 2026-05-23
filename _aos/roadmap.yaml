@@ -92,6 +92,12 @@ project:
     CONTENT track per ADR044); WP-C Deferred-Items Catalog (backlog hygiene
     before S004, → team_100 self-author). S004 (calculator + community
     features) DEFERRED until P002 complete.
+    SFA-S003-P002-WP-C COMPLETE 2026-05-23 (LOD500_LOCKED, doc-track no L-GATE_V):
+    documentation/KNOWN_DEBT.md is now the canonical SoT for spoke backlog
+    (8 pre-S004 + 3 operational + 3 Tend ingestion + 2 hub awareness + 11
+    resolved audit + 5 binding policies). READ KNOWN_DEBT.md §H before
+    opening S004 calculator (per F-LV-01 §1 closure obligation). WP-A and
+    WP-B remain active for team_110 + team_35 sessions.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -757,12 +763,12 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C
   label: "Deferred-items canonical catalog (backlog hygiene before S004)"
-  status: ELIGIBLE
+  status: COMPLETE
   phase: P002
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_DONE
+  lod_status: LOD500_LOCKED
   assigned_builder: team_100
   assigned_validator: team_00
   created_at: "2026-05-23"
@@ -775,5 +781,10 @@ work_packages:
     date: "2026-05-23"
     notes: "team_00 directive 2026-05-23 — catalog all deferred/dropped items into a canonical KNOWN_DEBT.md so nothing forgotten before S004 calculator. Documentation WP — team_100 self-author + team_00 advisory review. No code changes; pure backlog hygiene."
     validator: team_00
-  notes: "Opened 2026-05-23. Documentation-only WP (no L-GATE_V required). Output: documentation/KNOWN_DEBT.md (canonical) + per-item tracking tags in roadmap.yaml notes."
+  - gate: L-GATE_DONE
+    result: PASS
+    date: "2026-05-23"
+    notes: "team_100 sweep + author. documentation/KNOWN_DEBT.md created — 8 §A pre-S004 items, 3 §B operational, 3 §C Tend+MasterClass, 2 §D hub V4.3 awareness, 11 §E resolved (audit backfill), 5 §F binding policies, plus §G refresh meta + §H S004 opening checklist. Refresh policy stated. Cross-linked from project notes. Documentation WP — no L-GATE_V required; team_00 advisory accept = closure (acknowledged in handoff)."
+    validator: team_100
+  notes: "COMPLETE 2026-05-23. Canonical KNOWN_DEBT.md is the SoT for spoke backlog. Refresh obligation: every P-program closure (per F-LV-01 §2). LOD500_LOCKED — refreshes are additive, never destructive."
   profile: L0
