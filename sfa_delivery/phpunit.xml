@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         displayDetailsOnTestsThatTriggerWarnings="true">
+    <testsuites>
+        <testsuite name="sfa-delivery">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV_FILE" value=".env.test"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="DB_DSN" value="sqlite::memory:"/>
+        <env name="DB_NAME" value="test"/>
+        <env name="DB_USER" value="test"/>
+        <env name="INGEST_HMAC_SECRET" value="test-secret-do-not-use-in-prod"/>
+        <env name="LOG_LEVEL" value="error"/>
+    </php>
+</phpunit>

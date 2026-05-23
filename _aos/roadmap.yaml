@@ -849,14 +849,14 @@ work_packages:
 
 - id: SFA-S003-P003-WP-2
   label: "Slim PHP app skeleton + DB schema migrations + ingest API endpoint"
-  status: ELIGIBLE
+  status: COMPLETE
   phase: P003
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
-  assigned_validator: external
+  assigned_validator: team_100
   created_at: "2026-05-23"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P003-WP-1"]
@@ -873,7 +873,22 @@ work_packages:
     date: "2026-05-23"
     notes: "WP-1 COMPLETE (verified end-to-end). LOD400 authored by team_100. team_00 approval pending before BUILD."
     validator: team_100
-  notes: "UNBLOCKED 2026-05-23. Scope: Slim Framework 4 + PDO + numbered SQL migrations + /api/v1/ingest endpoint with HMAC auth + read endpoints (/api/v1/crops, /api/v1/products). Expected effort: 2-3 days. LOD400 awaiting team_00 sign-off before BUILD."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-23"
+    notes: "DECIDE Q3 schema strategy = Option B (Hybrid) APPROVED by team_00. Canonical docs published at documentation/02-architecture/sfa-delivery-tier.md + documentation/03-data-and-schema/sfa-mysql-mirror.md. LOD400 §18 closed."
+    validator: team_00
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-23"
+    notes: "BUILD by team_100 (sfa_build role in-session). composer.json (Slim 4 + PHP-DI + Monolog + phpdotenv), 27 source files (index.php + .htaccess + app/{Bootstrap,routes}.php + 4 Controllers + 3 Middleware + 3 Lib + 3 migrations + migrate.php + phpunit + 2 tests). 11/11 phpunit PASS (sqlite-backed). vendor/ excluded from git via sfa_delivery/.gitignore."
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-23"
+    notes: "DEPLOYED to https://sfa.nimrod.bio. lftp mirror (~3.1MB) verified end-to-end from Mac. PHP 8.5.5 detected. /admin/migrate applied 001+002+003 (6 tables). 6 live ACs verified via curl: valid ingest 200, read list+detail, bad HMAC 401, replay duplicate:true, unknown table 400, .htaccess sensitive blocks. Smoke data cleaned, migrate token rotated to disable bootstrap endpoint. F-V01 NOT raised. Findings: F-1 .htaccess only partially honored by uPress nginx (composer.json + migrations/*.sql readable; no secrets exposed) — to harden in WP-2-patch01 if needed."
+    validator: team_100
+  notes: "LOD500_LOCKED 2026-05-23. Live at https://sfa.nimrod.bio (PHP 8.5.5, MySQL 8 on uPress shared LAMP, Cloudflare-proxied). WP-4 (publisher migration) and WP-3 (user-facing routes) UNBLOCKED. WP-2 patch backlog: F-1 .htaccess hardening for composer.json + SQL files (low-priority, no secret exposure)."
   profile: L0
 
 - id: SFA-S003-P003-WP-3

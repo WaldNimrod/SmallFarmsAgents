@@ -1,0 +1,37 @@
+# sfa.nimrod.bio — Slim front-controller routing
+# SFA-S003-P003-WP-2
+
+RewriteEngine On
+
+# Force HTTPS (Cloudflare also enforces; defense-in-depth)
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+RewriteCond %{HTTPS} off
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Block direct access to sensitive paths
+RewriteRule ^\.env - [F,L]
+RewriteRule ^\.env\..*$ - [F,L]
+RewriteRule ^composer\.(json|lock)$ - [F,L]
+RewriteRule ^phpunit\.xml$ - [F,L]
+RewriteRule ^migrations/ - [F,L]
+RewriteRule ^app/ - [F,L]
+RewriteRule ^tests/ - [F,L]
+RewriteRule ^vendor/ - [F,L]
+RewriteRule ^logs/ - [F,L]
+RewriteRule ^README\.md$ - [F,L]
+
+# Serve real files in public_assets/ directly (no rewrite)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule .* - [L]
+
+# Everything else → Slim front controller
+RewriteRule .* index.php [L]
+
+# Default charset
+AddDefaultCharset UTF-8
+
+# Disable directory indexes
+Options -Indexes
+
+# Custom 500 handler returns JSON (set by app, not server)
