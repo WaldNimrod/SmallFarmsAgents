@@ -11,8 +11,8 @@ All files under `documentation/` are **English only** (project language policy).
 | Area | Path | Purpose |
 |------|------|---------|
 | Overview & scope | [`01-overview/`](01-overview/) | What the system is, milestones, boundaries |
-| Architecture | [`02-architecture/`](02-architecture/) | Modules, boundaries, key code locations |
-| Data & schema | [`03-data-and-schema/`](03-data-and-schema/) | PostgreSQL, Alembic, ORM models, important tables |
+| Architecture | [`02-architecture/`](02-architecture/) | Modules, boundaries, key code locations. **SFA delivery tier:** [`02-architecture/sfa-delivery-tier.md`](02-architecture/sfa-delivery-tier.md) |
+| Data & schema | [`03-data-and-schema/`](03-data-and-schema/) | PostgreSQL canonical + Alembic + ORM. **MySQL delivery mirror:** [`03-data-and-schema/sfa-mysql-mirror.md`](03-data-and-schema/sfa-mysql-mirror.md) |
 | Pipelines & runtime | [`04-pipelines-and-runtime/`](04-pipelines-and-runtime/) | Collect → parse → normalize → aggregate → publish |
 | Admin & operations | [`05-admin-and-operations/`](05-admin-and-operations/) | Local Flask admin, maintenance, alerts, env, **dev scheduler policy**, **waldhomeserver ↔ Team 61 inbox** |
 | Scripts & CLI | [`06-scripts-and-cli/`](06-scripts-and-cli/) | Shell scripts and `python -m organic_market_agent` |
@@ -51,4 +51,4 @@ All files under `documentation/` are **English only** (project language policy).
 
 ---
 
-*Last updated: 2026-04-17 — PROJECT_CONTEXT + hub map (`documentation/README.md`); AOS `validate_aos` and production parity cross-links.*
+*Last updated: 2026-05-23 — SFA-S003-P003 delivery tier canonical docs published (architecture + MySQL mirror schema).*

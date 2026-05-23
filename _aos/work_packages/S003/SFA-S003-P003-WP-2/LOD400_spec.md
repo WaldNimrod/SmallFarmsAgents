@@ -478,14 +478,13 @@ lftp -u "$SFA_FTP_USER","$SFA_FTP_PASS" \
 ### Q2. First-deploy migration method — ✅ DECIDED 2026-05-23
 **team_00 chose: Web endpoint token-gated.** `GET /admin/migrate?token=<one-time>` runs `migrate.php` server-side, returns JSON result. Token removed/rotated post-run as specified in §11 first-deploy bootstrap.
 
-### Q3. Schema strategy (mirror granularity) — ⏸ AWAITING TEAM_00 DECISION
-Per AOS pattern for material architectural choices, this is broken into a dedicated DECIDE artifact:
-**`_COMMUNICATION/team_00/DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_2026-05-23_v1.0.0.md`**
-- Option A: Full normalized mirror (~25 tables)
-- **Option B: Hybrid minimal cols + `payload_json` blob (team_100 recommendation, currently reflected in §7 migrations)**
-- Option C: Cache-only (no MySQL) — disrecommended (violates parent DECISION)
+### Q3. Schema strategy (mirror granularity) — ✅ DECIDED 2026-05-23
+**team_00 chose: Option B (Hybrid — minimal top-level columns + `payload_json` blob).** Decision record + canonical schema spec:
+- Decision: `_COMMUNICATION/team_00/DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_2026-05-23_v1.0.0.md`
+- Architecture SSoT: `documentation/02-architecture/sfa-delivery-tier.md`
+- Schema SSoT (binding DDL + JSON payload contracts + evolution rules): `documentation/03-data-and-schema/sfa-mysql-mirror.md`
 
-BUILD does not begin until Q3 is resolved. If Option A is chosen, this LOD400 §7 + §10 will be revised before BUILD (estimated +0.5d).
+The schema in §7 of this LOD400 is consistent with the canonical doc. **In case of conflict, the canonical docs in `documentation/` are authoritative.** All three open questions are now resolved; BUILD is UNBLOCKED.
 
 ---
 

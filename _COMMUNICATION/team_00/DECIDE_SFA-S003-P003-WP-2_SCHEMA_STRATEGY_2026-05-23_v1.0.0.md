@@ -1,15 +1,30 @@
 ---
 id: DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_v1.0.0
-type: DECISION_REQUEST
+type: DECISION_RECORD
 gate: WP-2 LOD400 pre-BUILD
 work_package: SFA-S003-P003-WP-2
 date: 2026-05-23
 recorded_by: team_100 (smallfarmsagents Chief Architect)
-status: AWAITING_TEAM_00_DECISION
-authority: team_00 (Principal — architectural authority)
+status: APPROVED — Option B (Hybrid)
+decided_by: team_00 (Principal) in-session 2026-05-23
+authority: team_00
 related_decision: DECISION_SFA-S003-P003_DEDICATED_SFA_SUBDOMAIN_2026-05-23_v1.0.0
-blocks: SFA-S003-P003-WP-2 BUILD (and by extension WP-3 + WP-4)
-team_100_recommendation: Option B (Hybrid — minimal mirror + payload_json)
+unblocks: SFA-S003-P003-WP-2 BUILD
+canonical_docs:
+  - documentation/02-architecture/sfa-delivery-tier.md
+  - documentation/03-data-and-schema/sfa-mysql-mirror.md
+---
+
+## §0 RESOLUTION — APPROVED 2026-05-23
+
+**team_00 approved Option B (Hybrid).** Architecture and schema canonicalized in:
+- `documentation/02-architecture/sfa-delivery-tier.md` — architecture SSoT
+- `documentation/03-data-and-schema/sfa-mysql-mirror.md` — schema SSoT (DDL + payload_json contracts + evolution rules)
+
+Both files are now binding for all subsequent SFA delivery-tier work. Any deviation requires a new DECISION artifact.
+
+WP-2 BUILD is hereby UNBLOCKED. team_100 proceeds to author build-mandate for sfa_build.
+
 ---
 
 # DECIDE — MySQL Schema Strategy on sfa.nimrod.bio Delivery Tier
