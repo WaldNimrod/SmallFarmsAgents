@@ -259,10 +259,11 @@ Policies established during S003 that constrain ALL future work. NOT debt — di
 ### F.6 SFA delivery layer = dedicated subdomain on uPress, NOT WP shortcode injection (P003)
 - **Source:** team_00 directive 2026-05-23 + `_COMMUNICATION/team_00/DECISION_SFA-S003-P003_DEDICATED_SFA_SUBDOMAIN_2026-05-23_v1.0.0.md`
 - **Binding for:** all SFA user-facing surface work going forward
-- **Rule:** SFA user-facing routes live at `sfa.nimrod.bio` (Slim PHP + MySQL on uPress, no WP). NEW user-facing features (calculator, community, etc.) build on this stack — NOT on WP shortcode injection into existing nimrod.bio WP pages.
-- **www.nimrod.bio remains** for marketing/landing/blog/auth (eventually); not for SFA delivery.
+- **Rule:** SFA user-facing routes live at `sfa.nimrod.bio` (Slim PHP + MySQL on uPress). NEW user-facing features (calculator, community, etc.) build on this stack — NOT on WP shortcode injection into existing nimrod.bio WP pages.
+- **Architectural reality (post-uPress docs research 2026-05-23):** uPress auto-installs WP on every site they provision. We co-exist with minimal WP shell (uPress's backup/security automation stays happy) but our Slim app under `/app/` handles all routes via `.htaccess` rewrites. WP admin remains accessible, unused except possibly for future WP-native user auth.
+- **www.nimrod.bio remains** for marketing/landing/blog; not for SFA delivery.
 - **waldhomeserver remains** backend-only (scrapers, Postgres canonical DB, agents, AOS infra). It pushes data to sfa.nimrod.bio MySQL via HTTPS ingest API (publisher migration).
-- **Portability invariant**: stack chosen for LAMP-standard portability (Slim PHP + MySQL + numbered SQL migrations + vanilla JS frontend). No exotic dependencies; mid-future migration to another host should be a tar + mysqldump + file copy operation.
+- **Portability invariant**: stack chosen for LAMP-standard portability (Slim PHP + MySQL + numbered SQL migrations + vanilla JS frontend). No exotic dependencies; mid-future migration to another host should be a tar of `/app/` + mysqldump + file copy operation. The WP shell is uPress-specific scaffolding and can be ignored at migration time.
 
 ### F.5 Single roadmap writer (Iron Rule #4)
 - **Source:** CLAUDE.md Iron Rules

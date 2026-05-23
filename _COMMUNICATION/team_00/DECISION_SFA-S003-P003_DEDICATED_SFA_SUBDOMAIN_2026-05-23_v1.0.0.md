@@ -17,7 +17,11 @@ handoff_context_pointer: _aos/work_packages/S003/SFA-S003-P003-WP-1/LOD400_spec.
 
 ## §1 The decision
 
-**APPROVED 2026-05-23**: migrate SFA delivery off WordPress shortcode injection on `www.nimrod.bio` and onto a **dedicated SFA subdomain `sfa.nimrod.bio`** hosted on uPress, running **custom lightweight PHP (Slim Framework) + MySQL**, with **no WordPress install** on the new site.
+**APPROVED 2026-05-23**: migrate SFA delivery off WordPress shortcode injection on `www.nimrod.bio` and onto a **dedicated SFA subdomain `sfa.nimrod.bio`** hosted on uPress, running **custom lightweight PHP (Slim Framework) + MySQL**.
+
+**Architectural clarification (post-uPress docs research):** uPress auto-installs WordPress on every "site" they provision (their entire business model is managed WP). We therefore co-exist with a minimal WP shell rather than fight to remove it. Our Slim app lives under `/app/` at site root, routed via `.htaccess` rewrites. WP admin remains accessible (unused except possibly for future user-auth via WP native). uPress's backup/security/auto-update automation sees a normal WP structure and stays happy.
+
+**Net functional outcome unchanged:** our app handles all user-facing routes; data flows via push from waldhomeserver to MySQL; portable LAMP stack.
 
 ## §2 Trigger (the converging signals)
 
