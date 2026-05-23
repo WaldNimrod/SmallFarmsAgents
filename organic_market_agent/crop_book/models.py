@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from sqlalchemy import (
     BigInteger,
@@ -21,6 +21,9 @@ _PK_TYPE = BigInteger().with_variant(Integer(), "sqlite")
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from organic_market_agent.db.base import Base
+
+if TYPE_CHECKING:
+    from organic_market_agent.crop_book.enrichment_models import CropFieldEnrichment
 
 
 class CropFamily(Base):
@@ -160,6 +163,10 @@ class CropVariety(Base):
     source_values: Mapped[list["CropVarietySourceValue"]] = relationship(
         "CropVarietySourceValue", back_populates="variety", cascade="all, delete-orphan"
     )
+    # GCR_1 — back-reference to enrichment consensus rows (migration 041)
+    enrichments: Mapped[list["CropFieldEnrichment"]] = relationship(
+        "CropFieldEnrichment", back_populates="variety", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<CropVariety crop_id={self.crop_id} name_en={self.name_en!r}>"
@@ -179,6 +186,12 @@ class CropVarietySourceValue(Base):
     value_numeric: Mapped[Optional[Decimal]] = mapped_column(Numeric(14, 6), nullable=True)
     unit: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    # GCR_1 — migration 042 additive columns
+    trust_tier: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
+    confidence_weight: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 4), nullable=True)
+    is_outlier_rejected: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default="false"
+    )
 
     variety: Mapped["CropVariety"] = relationship("CropVariety", back_populates="source_values")
 

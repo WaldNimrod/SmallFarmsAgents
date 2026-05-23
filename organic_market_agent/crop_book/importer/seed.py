@@ -407,6 +407,10 @@ def seed(
                     "value_numeric": sv.get("value_numeric"),
                     "unit": sv.get("unit"),
                     "note": sv.get("note"),
+                    # GCR_1 enrichment columns — populated by reconcile_dtm; None for other sources
+                    "trust_tier": sv.get("trust_tier"),
+                    "confidence_weight": sv.get("confidence_weight"),
+                    "is_outlier_rejected": sv.get("is_outlier_rejected", False),
                 }
                 _upsert_source_value(session, variety.id, sv_data)
 
@@ -467,6 +471,10 @@ def main() -> None:
         "--jmf-dir", type=Path, default=_DEFAULT_JMF_DIR,
         metavar="PATH", help="JMF XLSX directory (default: %(default)s)",
     )
+    parser.add_argument(
+        "--enrich", action="store_true",
+        help="Run enrichment_runner after seeding to populate crop_field_enrichment",
+    )
     parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
     args = parser.parse_args()
 
@@ -509,6 +517,12 @@ def main() -> None:
             source_dir=args.source_dir,
             jmf_dir=args.jmf_dir,
         )
+        if args.enrich:
+            from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+            logger.info("Running enrichment_runner after seed...")
+            summary = run_enrichment(session, dry_run=False)
+            logger.info("Enrichment: %s", summary)
+            session.commit()
 
 
 if __name__ == "__main__":

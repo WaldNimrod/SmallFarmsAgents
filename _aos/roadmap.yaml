@@ -705,15 +705,15 @@ work_packages:
   status: ELIGIBLE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD200_APPROVED
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-23"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P001-WP002", "SFA-S003-P001-WP003", "SFA-S003-P001-WP004",
                "SFA-S003-P001-WP003-patch02"]
-  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-A/LOD200_spec.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-A/LOD400_spec.md"
   decision_ref: "_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-A-LOD200_2026-05-23_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
@@ -753,6 +753,16 @@ work_packages:
       severity: MINOR
       summary: "SQLite guard missing from migration 042 code snippet"
       status: BUILDER_ACKNOWLEDGE
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-24"
+    notes: "sfa_build (team_10) 10-step build complete. 20 ACs verified. 56 new tests
+      (433 pass total / 14 skip / 0 new failures). validate_aos.sh 29/17/0.
+      F-190-WP-A-01 (no dispatch_upload): CONFIRMED clean (AST check in test).
+      F-190-WP-A-02 (MAD=0 branch): IMPLEMENTED + 3 dedicated tests.
+      F-190-WP-A-03/04 MINOR: acknowledged.
+      BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-A/BUILD_REPORT_v1.0.0.md"
   notes: "SFA-S003-P002 opened 2026-05-23. LOD200_LOCKED. L-GATE_S PASS_WITH_FINDINGS.
-    LOD400 v1.1.0 (F-01+F-02 fixed inline). sfa_build dispatched."
+    LOD400 v1.1.0 (F-01+F-02 fixed inline). L-GATE_B PASS 2026-05-24. LOD400_LOCKED.
+    Ready for L-GATE_V (team_190)."
   profile: L0

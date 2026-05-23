@@ -27,17 +27,44 @@ def test_jmf_fallback_when_no_team00_override() -> None:
 
 
 def test_tend_outlier_rejected_for_leaf_crop() -> None:
+    """ארוגולה has a team_00 EX override (21).  EX wins before the outlier gate runs.
+    The Tend row (8) is emitted but NOT marked is_outlier_rejected — the override
+    pre-empts blending so the gate never fires.  New engine semantics: is_outlier_rejected
+    means 'excluded from the blend', not 'domain outlier in isolation'."""
     from organic_market_agent.crop_book.importer.reconciler import reconcile_dtm
 
     unified, sv_rows = reconcile_dtm("ארוגולה", tend_values=[8], jmf_value=None)
 
+    # team_00 override wins
+    assert unified == 21
+
+    # Tend row is emitted but EX pre-empts blending → no outlier flag
     tend_rows = [r for r in sv_rows if r["source"] == "Tend"]
     assert len(tend_rows) == 1
-    assert tend_rows[0]["note"] is not None
-    assert "OUTLIER_REJECTED" in tend_rows[0]["note"]
+    assert tend_rows[0]["is_outlier_rejected"] is False  # gate never ran (EX won)
 
-    # Tend outlier rejected; team_00 = 21 wins
-    assert unified == 21
+
+def test_leaf_crop_domain_outlier_flagged_in_blend_pathway() -> None:
+    """Domain outlier check fires in the blend pathway (≥3 values, no hard override)."""
+    from organic_market_agent.crop_book.importer.reconciler import Candidate, reconcile_field
+    from organic_market_agent.crop_book.constants import OUTLIER_CROPS
+
+    # Pick a leaf crop (must be in OUTLIER_CROPS)
+    leaf = next(iter(OUTLIER_CROPS))
+
+    candidates = [
+        Candidate("JMF", Decimal("35"), name_he=leaf),
+        Candidate("Tend", Decimal("8"), name_he=leaf),   # domain outlier: leaf + value < 20
+        Candidate("Tend_2022", Decimal("33"), name_he=leaf),
+    ]
+    consensus = reconcile_field("days_to_maturity", candidates)
+
+    # The near-harvest snapshot (8) must be flagged
+    rejected_values = [v for _lbl, v in consensus.outlier_rejected]
+    assert Decimal("8") in rejected_values, (
+        f"Tend=8 should be a domain outlier for leaf crop {leaf!r}; "
+        f"outlier_rejected={consensus.outlier_rejected}"
+    )
 
 
 def test_tend_outlier_not_rejected_for_non_leaf_crop() -> None:
@@ -107,4 +134,6 @@ def test_reconcile_variety_yield_multi_year_mean() -> None:
 
     expected_mean = (Decimal("0.15") + Decimal("0.20")) / 2
     assert result.get("avg_yield_per_bed_m") == expected_mean
-    assert result.get("yield_source") == "Tend"
+    # yield_source is the winning source label; multi_year_op_mean collapses to the
+    # lexicographically latest OP label ("Tend_2022" beats "Tend_2021")
+    assert result.get("yield_source") == "Tend_2022"
