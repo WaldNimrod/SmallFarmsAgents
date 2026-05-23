@@ -19,6 +19,18 @@ handoff_context_pointer: _COMMUNICATION/team_35/SFA-S003-P002-WP-B/HANDOFF_PACKA
 
 # HANDOFF_PACKAGE — SFA-S003-P002-WP-B — UX/UI Overhaul
 
+## §0 IMPORTANT — implementation target updated 2026-05-23
+
+team_00 opened **SFA-S003-P003** (parallel program) to move SFA delivery from WordPress shortcodes on `www.nimrod.bio` to a **dedicated subdomain `sfa.nimrod.bio`** running **custom Slim PHP + MySQL** (no WordPress). This affects YOUR work as follows:
+
+- **Your design book remains canonical** — RTL Hebrew, mobile-first, system fonts, unified two-module language. Unchanged.
+- **The implementation surface changes**: the implementer (team_10) will deliver your design as plain HTML/CSS/JS + PHP page templates under `sfa.nimrod.bio/crop-book/` and `sfa.nimrod.bio/market/` — NOT as `[sfagent_*]` shortcodes in WP pages.
+- **Constraints simplify**: you no longer need to worry about WP theme conflicts, Flatsome child theme, Gutenberg block weirdness, mu-plugin caching, or uPress firewall quirks. The target is a clean static + dynamic-PHP app surface.
+- **The §3.1.1 warning about /smallfarmsagent/ being stale** is now superseded — that page will be 301-redirected to the new subdomain at P003 cutover. Don't design around the old page's behavior; design for the canonical data shape (34+ products, 52+ crops, multi-source per field).
+- **One bonus**: cross-linking between modules (crop_book ↔ market) becomes much easier on the unified subdomain — your design can assume they share a navigation/header/footer.
+
+See `_COMMUNICATION/team_00/DECISION_SFA-S003-P003_DEDICATED_SFA_SUBDOMAIN_2026-05-23_v1.0.0.md` for full architecture.
+
 ## §1 Greeting + your role
 
 Welcome, **team_35 (Design Studio / סטודיו עיצוב)**.

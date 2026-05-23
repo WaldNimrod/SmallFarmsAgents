@@ -17,6 +17,15 @@ handoff_context_pointer: _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-A/HANDOFF_CONT
 
 # Handoff Context — SFA-S003-P002-WP-A — Crop Book Data Enrichment Architecture
 
+## §0 IMPORTANT — architectural update 2026-05-23
+
+team_00 opened **SFA-S003-P003** (parallel program to P002) to migrate SFA delivery from WordPress shortcode injection on www.nimrod.bio to a **dedicated subdomain `sfa.nimrod.bio`** with **custom Slim PHP + MySQL** (no WordPress). Your WP-A architecture work must account for this new two-tier persistence model:
+
+- **Postgres on waldhomeserver** = canonical write tier (ALL writes from scrapers, reconciler, agents land here)
+- **MySQL on sfa.nimrod.bio (uPress)** = read tier (publisher pushes DB-equivalent state via HTTPS ingest API)
+
+Your reconciler architecture stays Postgres-side. Schema decisions you make for Postgres should be representable in MySQL with minor dialect translation (JSONB → JSON, etc.). See DECISION record at `_COMMUNICATION/team_00/DECISION_SFA-S003-P003_DEDICATED_SFA_SUBDOMAIN_2026-05-23_v1.0.0.md`.
+
 ## §1 Purpose of this handoff
 
 team_00 (Principal) opened a follow-up program SFA-S003-P002 to **enrich and refine** the crop book before advancing to the calculator milestone (S004). WP-A is the data-enrichment leg of that program.

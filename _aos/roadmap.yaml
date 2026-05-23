@@ -98,6 +98,23 @@ project:
     resolved audit + 5 binding policies). READ KNOWN_DEBT.md §H before
     opening S004 calculator (per F-LV-01 §1 closure obligation). WP-A and
     WP-B remain active for team_110 + team_35 sessions.
+    SFA-S003-P003 OPENED 2026-05-23 (team_00 directive — Delivery Infrastructure
+    Migration to dedicated SFA subdomain on uPress, with custom Slim PHP +
+    MySQL, NO WordPress). Triggered by: (i) discovery that the WP page
+    /smallfarmsagent/ shows stale 1-product data due to uPress UA firewall
+    blocking mu-plugin wp_remote_get from reading its own static endpoint;
+    (ii) recognition that WP shortcode injection model is structural dead-end
+    given uPress quirks + Gutenberg friction + cache layers. New architecture
+    decouples SFA from WP entirely. waldhomeserver = backend only (scrapers,
+    Postgres, agents, AOS). uPress sfa.nimrod.bio = end-user serving tier
+    (Slim PHP + MySQL synced from Postgres via HTTPS ingest API). 4 WPs:
+    WP-1 uPress provisioning + CF DNS (team_00 admin self-execute);
+    WP-2 Slim skeleton + DB schema + ingest endpoint; WP-3 user-facing
+    routes + templates; WP-4 publisher migration. ~1.5-2 weeks total.
+    DECISION recorded: _COMMUNICATION/team_00/DECISION_SFA-S003-P003_*.md
+    Old WP shortcode bug at /smallfarmsagent/ NOT being fixed —
+    will be SUPERSEDED by P003 cutover. S004 (calculator + community)
+    further deferred until P003 complete.
 
 work_packages:
   # Hub DB uses global-unique work_packages.id across all projects; HobbitHome already
@@ -787,4 +804,107 @@ work_packages:
     notes: "team_100 sweep + author. documentation/KNOWN_DEBT.md created — 8 §A pre-S004 items, 3 §B operational, 3 §C Tend+MasterClass, 2 §D hub V4.3 awareness, 11 §E resolved (audit backfill), 5 §F binding policies, plus §G refresh meta + §H S004 opening checklist. Refresh policy stated. Cross-linked from project notes. Documentation WP — no L-GATE_V required; team_00 advisory accept = closure (acknowledged in handoff)."
     validator: team_100
   notes: "COMPLETE 2026-05-23. Canonical KNOWN_DEBT.md is the SoT for spoke backlog. Refresh obligation: every P-program closure (per F-LV-01 §2). LOD500_LOCKED — refreshes are additive, never destructive."
+  profile: L0
+
+# ============================================================================
+# S003 — Phase 3: Delivery Infrastructure Migration Program (SFA-S003-P003)
+# Opened 2026-05-23. team_00 directive: migrate SFA delivery off WordPress
+# shortcode injection into dedicated SFA subdomain on uPress (Slim PHP + MySQL,
+# no WordPress). Resolves uPress firewall UA filter issue + Gutenberg friction +
+# mu-plugin acrobatics. Enables S004 (calculator + community) on a stable surface.
+# ============================================================================
+
+- id: SFA-S003-P003-WP-1
+  label: "uPress provisioning + Cloudflare DNS for sfa.nimrod.bio (no WP install)"
+  status: ELIGIBLE
+  phase: P003
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD400_LOCKED
+  assigned_builder: team_00
+  assigned_validator: team_00
+  created_at: "2026-05-23"
+  milestone_ref: "S003"
+  depends_on: []
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P003-WP-1/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-23"
+    notes: "team_00 directive 2026-05-23 — provision dedicated subdomain on uPress with PHP+MySQL access. Action items: (a) verify uPress allows subdomain on existing plan; (b) configure DNS via Cloudflare; (c) obtain DB credentials; (d) confirm FTP/PHP/MySQL specs. Detailed checklist in LOD400."
+    validator: team_00
+  notes: "Opened 2026-05-23. team_00 self-executes (admin tasks). Output: uPress responses captured in _COMMUNICATION/team_00/UPRESS_PROVISIONING_RESULTS_*.md. WP-2..4 BLOCKED until WP-1 done."
+  profile: L0
+
+- id: SFA-S003-P003-WP-2
+  label: "Slim PHP app skeleton + DB schema migrations + ingest API endpoint"
+  status: BLOCKED
+  phase: P003
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-23"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P003-WP-1"]
+  blocked_by: ["SFA-S003-P003-WP-1"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P003-WP-2/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-23"
+    notes: "Conditionally eligible per team_00 directive 2026-05-23. Detailed LOD400 awaits WP-1 results (PHP version, MySQL specs, DB credentials, path conventions on uPress)."
+    validator: team_00
+  notes: "BLOCKED on WP-1. Scope: Slim Framework 4 + PDO + numbered SQL migrations + /api/v1/ingest endpoint with HMAC auth + read endpoints (/api/v1/crops, /api/v1/products). Expected effort: 2-3 days post-unblock."
+  profile: L0
+
+- id: SFA-S003-P003-WP-3
+  label: "User-facing routes (crop-book + market) + template integration"
+  status: BLOCKED
+  phase: P003
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-23"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P003-WP-2", "SFA-S003-P002-WP-B"]
+  blocked_by: ["SFA-S003-P003-WP-2"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P003-WP-3/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-23"
+    notes: "Conditionally eligible. Detailed LOD400 awaits team_35 (WP-B) LOD300 design book + WP-2 ingestion working."
+    validator: team_00
+  notes: "BLOCKED on WP-2. Scope: routes /crop-book/, /crop-book/<id>, /market/, /market/<id>, plus PHP+HTML+JS implementing rendering. Inherits team_35 design from WP-B. Expected effort: 2-3 days."
+  profile: L0
+
+- id: SFA-S003-P003-WP-4
+  label: "Publisher migration: waldhomeserver → sfa.nimrod.bio ingest API"
+  status: BLOCKED
+  phase: P003
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-23"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P003-WP-2"]
+  blocked_by: ["SFA-S003-P003-WP-2"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P003-WP-4/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-23"
+    notes: "Conditionally eligible. Replaces existing wp_upload.py / static_upload.py codepaths with sfa_ingest_push.py — HTTPS POST to sfa.nimrod.bio/api/v1/ingest with HMAC auth and JSON delta payload."
+    validator: team_00
+  notes: "BLOCKED on WP-2 (ingest endpoint must exist first). Scope: Python push script, scheduler integration, retry logic, idempotency. Expected effort: 1-2 days."
   profile: L0

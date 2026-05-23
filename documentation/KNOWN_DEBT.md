@@ -1,6 +1,6 @@
 # Known Debt Catalog — SmallFarmsAgents
 
-**Last refresh:** 2026-05-23 by team_100 / SFA-S003-P002-WP-C
+**Last refresh:** 2026-05-23 by team_100 / SFA-S003-P002-WP-C + same-day amendment for P003 opening
 **Refresh policy:** at every program closure (P-program closing on this spoke), team_100 sweeps new deferred items into this file. Items are CARRIED (still deferred), RESOLVED (with resolution-ref), or PROMOTED (became an active WP). Refresh is part of the F-LV-01 §2 closure obligation.
 
 **SSoT scope:** all deferred / dropped / "later" items across spoke history (S001–current). Hub items are listed in §D only when they may impact our spoke; otherwise out of scope (hub maintains its own backlog).
@@ -120,7 +120,12 @@ Administrative / governance items, non-product.
 - **Decision needed:** either (a) formally canonicalize the JS in a WP003-patch03 LOD500 amendment, OR (b) refactor admin to import from publisher's `entity_registry_data.py`. Option (b) is cleaner (single source) but touches LOD500_LOCKED admin templates.
 - **Defer trigger:** revisit if WP-A enrichment changes the entity registry schema.
 
-### B.4 `/smallfarmsagent/` WP page has BAKED-IN STALE HTML (not using the shortcode)
+### B.4 `/smallfarmsagent/` WP page stale + uPress UA-filter mu-plugin bug → **SUPERSEDED_BY_P003**
+- **Status update 2026-05-23**: This finding is **SUPERSEDED**, not RESOLVED. team_00 directive: do NOT fix the mu-plugin / WP page. The entire WP shortcode delivery model is being deprecated via SFA-S003-P003 (Delivery Infrastructure Migration). At P003 cutover, `/smallfarmsagent/` will 301-redirect to `sfa.nimrod.bio/market/` (fresh data on new subdomain). Investing time in mu-plugin surgery would be throwaway work.
+- **Mitigation until P003 cutover**: accept the stale page. Inform any external user with the URL directly until the new subdomain is live (~1.5-2 weeks).
+- **Related**: extended diagnosis 2026-05-23 added a second finding: uPress nginx firewall returns HTTP 403 to any request with `WordPress/*` in the User-Agent header, blocking mu-plugin's `wp_remote_get` from reading the site's own static endpoints. The mu-plugin (likely installed pre-spec or hand-modified) returns stale baked HTML on fetch failure rather than the canonical red error. Both modules (market + crop_book) affected. This is a structural argument FOR P003 — even if we fixed the UA in this mu-plugin, the next uPress quirk would surface elsewhere.
+
+### B.4 (original) `/smallfarmsagent/` WP page has BAKED-IN STALE HTML (not using the shortcode)
 - **Source:** Discovered 2026-05-23 by team_100 during team_35 HANDOFF_PACKAGE URL verification
 - **Status:** CARRIED — **HIGH SEVERITY (production-visible bug, affects every visitor)**
 - **Severity:** HIGH (real users see stale "1 מוצרים · תאריך דוח: 2099-08-12" instead of 34 fresh products)
@@ -250,6 +255,14 @@ Policies established during S003 that constrain ALL future work. NOT debt — di
 - **Source:** CLAUDE.md Iron Rules
 - **Binding for:** every L-GATE_S + L-GATE_V validation
 - **Rule:** team_190 sessions MUST run on a non-Claude engine (Cursor Composer or Codex). Builder = Claude (Sonnet typically); validator ≠ Claude.
+
+### F.6 SFA delivery layer = dedicated subdomain on uPress, NOT WP shortcode injection (P003)
+- **Source:** team_00 directive 2026-05-23 + `_COMMUNICATION/team_00/DECISION_SFA-S003-P003_DEDICATED_SFA_SUBDOMAIN_2026-05-23_v1.0.0.md`
+- **Binding for:** all SFA user-facing surface work going forward
+- **Rule:** SFA user-facing routes live at `sfa.nimrod.bio` (Slim PHP + MySQL on uPress, no WP). NEW user-facing features (calculator, community, etc.) build on this stack — NOT on WP shortcode injection into existing nimrod.bio WP pages.
+- **www.nimrod.bio remains** for marketing/landing/blog/auth (eventually); not for SFA delivery.
+- **waldhomeserver remains** backend-only (scrapers, Postgres canonical DB, agents, AOS infra). It pushes data to sfa.nimrod.bio MySQL via HTTPS ingest API (publisher migration).
+- **Portability invariant**: stack chosen for LAMP-standard portability (Slim PHP + MySQL + numbered SQL migrations + vanilla JS frontend). No exotic dependencies; mid-future migration to another host should be a tar + mysqldump + file copy operation.
 
 ### F.5 Single roadmap writer (Iron Rule #4)
 - **Source:** CLAUDE.md Iron Rules
