@@ -1,5 +1,13 @@
 """Shared upload dispatch helper — WP REST primary, optional FTPS fallback.
 
+⚠️ DEPRECATED 2026-05-24 (SFA-S003-P003-WP-5 cutover) ⚠️
+Replaced by `sfa_ingest_push.py`. The dispatch chain
+upload_dispatch → wp_upload / ftps_upload → www.nimrod.bio/smallfarmsagent/
+is no longer the user-facing path. Keep only for archaeological
+reference; do NOT add new callers.
+
+
+
 Single source of truth for all upload entrypoints:
   - organic_market_agent/__main__.py::_do_upload (CLI)
   - organic_market_agent/scheduler/pipeline.py (daily cron)

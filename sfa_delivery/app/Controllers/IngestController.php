@@ -123,6 +123,16 @@ final class IngestController
             );
             $logStmt->execute([$idempotencyKey, $table, $accepted, $status]);
 
+            // Opportunistic retention pruning (>30d ingest_log rows).
+            // ~1% of requests, indexed by applied_at — cheap and self-healing.
+            if (random_int(1, 100) === 1) {
+                try {
+                    $this->pdo->exec("DELETE FROM ingest_log WHERE applied_at < NOW() - INTERVAL 30 DAY");
+                } catch (Throwable $e) {
+                    $this->log->warning('ingest_log prune failed', ['err' => $e->getMessage()]);
+                }
+            }
+
             $this->pdo->commit();
         } catch (Throwable $e) {
             $this->pdo->rollBack();

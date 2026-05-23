@@ -1,5 +1,12 @@
 """FTPS upload to uPress — push local publish artifacts to the remote server.
 
+⚠️ DEPRECATED 2026-05-24 (SFA-S003-P003-WP-5 cutover) ⚠️
+Replaced by `sfa_ingest_push.py`. FTPS uploads of static HTML/JSON
+artifacts to /smallfarmsagent/ are no longer the user-facing path.
+Kept for archaeological reference only.
+
+
+
 Transport: FTPS (FTP over TLS) on port 21.
 CRITICAL: uPress requires TLS session reuse on data connections — standard
 ftplib.FTP_TLS fails with 425 without the ReusedSessionFTP_TLS subclass below.

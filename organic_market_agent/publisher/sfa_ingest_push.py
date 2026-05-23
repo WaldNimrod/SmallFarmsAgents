@@ -314,7 +314,14 @@ def _push_table(
     }
     if table not in fetchers:
         raise SystemExit(f"Unknown table: {table}")
-    rows = fetchers[table](conn)
+    try:
+        rows = fetchers[table](conn)
+    except psycopg2.errors.UndefinedTable as e:
+        # Source schema not provisioned (e.g. crop_book migrations not applied
+        # on this Postgres instance). Skip cleanly — don't break the daily cron.
+        conn.rollback()
+        logger.warning("source schema missing for %s; skipping. (%s)", table, str(e)[:120])
+        return {"table": table, "skipped": "source_schema_missing"}
     if limit is not None:
         rows = rows[:limit]
     if not rows:
