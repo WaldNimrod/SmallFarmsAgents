@@ -50,8 +50,21 @@ Two existing modules on `https://www.nimrod.bio/`:
 These are the LIVE references. Visit them, read the markup, understand current behavior. THEN design what should change.
 
 ### §3.1 Live URLs (visit these first)
-- **Market index home + report:** `https://www.nimrod.bio/` and look for the market-report page (likely main landing or under a top nav item)
-- **Crop book:** `https://www.nimrod.bio/crop-book/` (WordPress page hosting `[sfagent_crop_book]` shortcode)
+- **Market index (price report):** `https://www.nimrod.bio/smallfarmsagent/` (WP page id 91325, slug `smallfarmsagent`)
+- **Crop book:** `https://www.nimrod.bio/crop-book/` (WP page hosting `[sfagent_crop_book]` shortcode + SPA)
+
+### §3.1.1 ⚠ IMPORTANT — `/smallfarmsagent/` is currently STALE (do not let this mislead your design)
+
+As of 2026-05-23, the market index page renders only 1 product (עגבנייה) with placeholder dates ("עודכן 2026-04-17 · 1 מוצרים · תאריך דוח: 2099-08-12"). This is **NOT the real product set**.
+
+**Why:** the WP page was hand-edited in 2026-04-02 with baked-in HTML body fragment from the early test phase (when the upload pipeline still failed and only 1 product had data). The dynamic shortcode `[sfagent_market_report]` is correctly defined and the data layer is healthy — the canonical body fragment file at the WP media library currently contains **34 real products** (אבוקדו, ארטישוק, בזיליקום, בטטה, ביצים, בננה, בצל יבש, בצל ירוק, ברוקולי, ...) refreshed nightly. The page just doesn't reference the shortcode.
+
+**For your design work, the REAL current data shape is at:**
+- Manifest (provenance + counts): `https://www.nimrod.bio/wp-content/uploads/2026/05/sfagent-manifest.json` (live, currently `product_count: 34, report_date: 2026-05-09`)
+- Full body fragment (the HTML the shortcode WOULD return): `https://www.nimrod.bio/wp-content/uploads/2026/05/sfagent-public-report-body.html` (~107KB, 34 product rows in dual layout)
+- Raw report data (for understanding what fields exist): `https://www.nimrod.bio/wp-content/uploads/2026/05/sfagent-public-report.json` (JSON; each product has product_id, canonical_name_he, category, sample_size, distinct_sources, min/max/avg/median price, etc.)
+
+team_00 is tracking the page fix as a separate operational item; once fixed, `/smallfarmsagent/` will show the 34-product list. **Design your wireframes against the rich data shape (34 products, multi-column metrics, community-source attribution), NOT against the misleading 1-product current render.**
 
 ### §3.2 Current HTML/CSS/JS source — repo references
 

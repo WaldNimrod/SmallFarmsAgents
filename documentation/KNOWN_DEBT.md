@@ -120,8 +120,25 @@ Administrative / governance items, non-product.
 - **Decision needed:** either (a) formally canonicalize the JS in a WP003-patch03 LOD500 amendment, OR (b) refactor admin to import from publisher's `entity_registry_data.py`. Option (b) is cleaner (single source) but touches LOD500_LOCKED admin templates.
 - **Defer trigger:** revisit if WP-A enrichment changes the entity registry schema.
 
-### B.4 (REMOVED — now CARRIED in §B.1) team_100 spoke key has not been provisioned yet
-*(Consolidated into B.1.)*
+### B.4 `/smallfarmsagent/` WP page has BAKED-IN STALE HTML (not using the shortcode)
+- **Source:** Discovered 2026-05-23 by team_100 during team_35 HANDOFF_PACKAGE URL verification
+- **Status:** CARRIED — **HIGH SEVERITY (production-visible bug, affects every visitor)**
+- **Severity:** HIGH (real users see stale "1 מוצרים · תאריך דוח: 2099-08-12" instead of 34 fresh products)
+- **Diagnosis confirmed by:**
+  - WP page modified date: `2026-04-02T13:21:18` (over 7 weeks stale)
+  - `[sfagent_market_report]` shortcode NOT present in page raw content (verified via `/wp/v2/pages/91325`)
+  - Page renders body fragment HTML directly (baked-in, not fetched)
+  - Manifest fresh (`product_count: 34, report_date: 2026-05-09, staleness_level: "current"`)
+  - Body fragment file fresh (107KB, 34 product rows verified)
+  - mu-plugin `sfagent_market_report` shortcode is REGISTERED but page doesn't invoke it
+- **Origin:** Someone (likely team_00 in pre-S002 era while testing) pasted the body fragment HTML directly into the WP page editor when the upload pipeline was failing (the body at the time only had 1 product + 2099-08-12 placeholder per pre-WP007 narrative). The page was never updated after WP007 fixed the pipeline (2026-05-07).
+- **Fix (trivial — ~2 min):**
+  1. team_00 opens `https://www.nimrod.bio/wp-admin/post.php?post=91325&action=edit` (uPress WP admin)
+  2. Delete all baked HTML inside the page content (the `<div class="sfagent">` ... `</div>` block)
+  3. Replace with the canonical shortcode: `[sfagent_market_report]`
+  4. Save → page will immediately render 34 current products from the live manifest
+- **Validation post-fix:** `curl https://www.nimrod.bio/smallfarmsagent/ | grep -c "class=\"product-name\""` should jump from `2` to `68` (34 products × 2 layouts)
+- **Likely future home:** trivial team_00 manual fix; no WP needed. Optionally absorbed into WP-B output (where team_35 may decide the page restructure).
 
 ---
 
