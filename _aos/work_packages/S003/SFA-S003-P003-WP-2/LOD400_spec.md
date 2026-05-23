@@ -470,11 +470,22 @@ lftp -u "$SFA_FTP_USER","$SFA_FTP_PASS" \
 - **WP-4** — once `/api/v1/ingest` is verified live; publisher refactor is straightforward HTTP replacement
 - **WP-5** — once WP-3 + WP-4 are in production, the 301 + mu-plugin cleanup becomes trivial
 
-## §18 Open questions for team_00 approval
+## §18 Open questions — STATUS
 
-1. **Separate repo for PHP app?** Recommended: create `smallfarms-sfa-delivery` repo. Reasoning: deploy cadence + tooling (composer, phpunit) is alien to this Python repo. Alternative: nested `sfa_delivery/` subdir of this repo (simpler audit, more cohesion). **team_100 recommendation: nested subdir** for unified branch hygiene + single source of `.env.example` reference. Decision needed before BUILD.
-2. **First-deploy migration via web endpoint** (token-gated, removed after run) **vs uPress cron**: web endpoint is faster + observable. team_100 recommends web. Confirm.
-3. **`payload_json` blob strategy**: keep deeply normalized fields in JSON rather than mirroring 6 tables. Confirm this matches WP-A (team_110) architectural direction or push back.
+### Q1. Repo layout — ✅ DECIDED 2026-05-23
+**team_00 chose: Nested in SmallFarmsAgents (`sfa_delivery/` subdir).** Rationale: branch hygiene + single `.env.example`. BUILD will create `sfa_delivery/` at repo root with composer.json, app/, migrations/, etc. as specified in §2 (layout paths remain relative to that subdir).
+
+### Q2. First-deploy migration method — ✅ DECIDED 2026-05-23
+**team_00 chose: Web endpoint token-gated.** `GET /admin/migrate?token=<one-time>` runs `migrate.php` server-side, returns JSON result. Token removed/rotated post-run as specified in §11 first-deploy bootstrap.
+
+### Q3. Schema strategy (mirror granularity) — ⏸ AWAITING TEAM_00 DECISION
+Per AOS pattern for material architectural choices, this is broken into a dedicated DECIDE artifact:
+**`_COMMUNICATION/team_00/DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_2026-05-23_v1.0.0.md`**
+- Option A: Full normalized mirror (~25 tables)
+- **Option B: Hybrid minimal cols + `payload_json` blob (team_100 recommendation, currently reflected in §7 migrations)**
+- Option C: Cache-only (no MySQL) — disrecommended (violates parent DECISION)
+
+BUILD does not begin until Q3 is resolved. If Option A is chosen, this LOD400 §7 + §10 will be revised before BUILD (estimated +0.5d).
 
 ---
 
