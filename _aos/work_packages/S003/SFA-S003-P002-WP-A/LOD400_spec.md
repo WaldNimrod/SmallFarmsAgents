@@ -2,10 +2,15 @@
 id: SFA-S003-P002-WP-A-LOD400
 wp: SFA-S003-P002-WP-A — Data Enrichment Architecture
 gate: L-GATE_S (LOD400 — implementation spec)
-status: DRAFT — pending team_190 L-GATE_S
+status: LOD400_LOCKED — L-GATE_S PASS_WITH_FINDINGS; F-01+F-02 addressed inline
 author: team_100 (Claude Sonnet 4.6, Chief Architect)
 date: 2026-05-23
-version: v1.0.0
+version: v1.1.0
+changelog: >
+  v1.1.0 — F-190-WP-A-01 fix: §14 no longer calls dispatch_upload; JSON file only.
+  F-190-WP-A-02 fix: §9.2 step 4 now specifies MAD=0 deterministic branch.
+  F-190-WP-A-03/04 noted for builder acknowledgment in BUILD_REPORT.
+  L-GATE_S verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-A/LOD400-VERDICT_v1.0.0.md
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-A/LOD200_spec.md
 decision_ref: _COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-A-LOD200_2026-05-23_v1.0.0.md
 builder: sfa_build (team_10)
@@ -429,10 +434,17 @@ def reconcile_field(
    c. Set row["confidence_weight"] = spec.weight (None for EX/NI)
    d. Apply domain outlier check (policy.outlier.domain_fn) if configured → set is_outlier_rejected
 3. Collect candidate_rows = rows where NOT is_outlier_rejected
-4. Apply statistical outlier gate (§7.6):
-   a. Extract numeric values from candidate_rows
-   b. If len >= 2: compute modified Z-scores (0.6745 × (x - median) / MAD)
-   c. Mark rows where |Z| > policy.outlier.z_threshold as is_outlier_rejected,
+4. Apply statistical outlier gate (§7.6) — F-190-WP-A-02 resolved:
+   a. Extract numeric values from candidate_rows (non-domain-rejected)
+   b. If len < 2: skip gate — cannot compute statistics on a single value
+   c. Compute median; compute MAD = median(|x_i - median|)
+   d. **MAD == 0 branch (deterministic):**
+      - If all values are identical: no statistical outliers (nothing to reject)
+      - If MAD == 0 but values differ (e.g. [45, 45, 45, 200]): use IQR fallback.
+        Mark values outside [Q1 - 1.5×IQR, Q3 + 1.5×IQR] as stat outliers.
+        If IQR also == 0: mark values != median as outliers.
+   e. MAD > 0: compute modified Z-scores (0.6745 × (x_i - median) / MAD)
+      Mark rows where |Z| > policy.outlier.z_threshold as is_outlier_rejected,
       append note "STAT_OUTLIER_REJECTED (Z=X.X)"
 5. Remaining non-outlier rows = blend_rows
 6. value_min = min(all candidate numeric values, including stat-rejected)
@@ -588,8 +600,11 @@ unless `--no-enrich` is passed. No other changes to seed.py.
 
 ## 14. Enrichment SPA artifact
 
-The enrichment JSON is a **new artifact** delivered to WordPress via the existing
-`dispatch_upload` mechanism with a new profile `crop_book_enrichment`.
+**WP-A scope: JSON file generation only. No WordPress upload in WP-A.**
+
+(F-190-WP-A-01 resolution: calling `dispatch_upload()` with an unsupported profile
+risks silently routing to the market profile — production-safety risk. WP-A delivers
+the JSON file; WP-B will wire the upload after a proper GCR for publisher/ if needed.)
 
 File generated: `output/sfagent-crop-book-enrichment.json`
 
@@ -610,16 +625,25 @@ Schema (top-level):
 }
 ```
 
-Generation: new CLI command `python -m organic_market_agent.crop_book.publisher.enrichment_publisher`
+Generation: new module `organic_market_agent/crop_book/publisher/enrichment_publisher.py`
 
-This artifact does NOT modify `publisher/upload_dispatch.py` (LOD500_LOCKED).
-Instead it uses a standalone script that calls `dispatch_upload` as an imported function
-with `profile="crop_book_enrichment"` — this is additive (the profile doesn't exist yet;
-if dispatch_upload raises UnknownProfile, the script catches and warns — not a failure).
+```python
+"""Enrichment JSON publisher — WP-A scope: local file only, no upload."""
+import json, pathlib
+from datetime import datetime, timezone
 
-**Note for builder**: If `dispatch_upload` cannot accept a new profile without code
-changes, fall back to generating the JSON file only (no WP upload in WP-A). The JSON
-file is the deliverable; upload is best-effort. Flag in BUILD_REPORT if upload skipped.
+OUTPUT_PATH = pathlib.Path("output/sfagent-crop-book-enrichment.json")
+
+def generate(session) -> pathlib.Path:
+    """Query crop_field_enrichment, write JSON file, return path."""
+    OUTPUT_PATH.parent.mkdir(exist_ok=True)
+    # ... query CropFieldEnrichment, build payload, write JSON
+    OUTPUT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2))
+    return OUTPUT_PATH
+```
+
+This file does NOT import or call `dispatch_upload` — fully isolated from publisher/.
+AC-17 verifies only that `output/sfagent-crop-book-enrichment.json` is created and parses.
 
 ---
 

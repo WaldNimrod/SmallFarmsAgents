@@ -724,5 +724,35 @@ work_packages:
       by team_00. 7 classes source taxonomy; weighted-mean reconciler; statistical outlier
       gate; NI + UC reserved; GCR_1 (models.py) pre-authorized. LOD200_LOCKED."
     validator: team_00
-  notes: "SFA-S003-P002 opened 2026-05-23. LOD200_LOCKED. LOD400 spec in progress (team_100)."
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-23"
+    commits: ["36fe296", "537a0c9"]
+    notes: "team_190 (non-Claude per IR#1) L-GATE_S Round 1. PASS_WITH_FINDINGS. 10/10
+      constitutional checks PASS (C9 PASS_WITH_FINDING). 2 MAJOR: F-190-WP-A-01 (dispatch_upload
+      unsupported profile — production-safety) + F-190-WP-A-02 (MAD=0 undefined branch).
+      2 MINOR: F-190-WP-A-03 (EX/NI weight vs NULL inconsistency) + F-190-WP-A-04 (SQLite
+      guard missing from 042 snippet). No BLOCKERs. team_190 §6: authorize sfa_build
+      dispatch; MAJORs must resolve before L-GATE_B closure. LOD400 amended inline (v1.1.0)
+      to address F-01+F-02 pre-dispatch. Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-A/LOD400-VERDICT_v1.0.0.md"
+    validator: team_190
+    findings:
+    - id: F-190-WP-A-01
+      severity: MAJOR
+      summary: "dispatch_upload unsupported profile crop_book_enrichment — production-safety risk"
+      status: ADDRESSED_INLINE_LOD400_V1.1.0
+    - id: F-190-WP-A-02
+      severity: MAJOR
+      summary: "MAD=0 division-by-zero undefined in statistical outlier gate"
+      status: ADDRESSED_INLINE_LOD400_V1.1.0
+    - id: F-190-WP-A-03
+      severity: MINOR
+      summary: "SourceSpec weight vs confidence_weight NULL inconsistency for EX/NI"
+      status: BUILDER_ACKNOWLEDGE
+    - id: F-190-WP-A-04
+      severity: MINOR
+      summary: "SQLite guard missing from migration 042 code snippet"
+      status: BUILDER_ACKNOWLEDGE
+  notes: "SFA-S003-P002 opened 2026-05-23. LOD200_LOCKED. L-GATE_S PASS_WITH_FINDINGS.
+    LOD400 v1.1.0 (F-01+F-02 fixed inline). sfa_build dispatched."
   profile: L0
