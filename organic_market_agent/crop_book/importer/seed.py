@@ -472,8 +472,8 @@ def main() -> None:
         metavar="PATH", help="JMF XLSX directory (default: %(default)s)",
     )
     parser.add_argument(
-        "--enrich", action="store_true",
-        help="Run enrichment_runner after seeding to populate crop_field_enrichment",
+        "--no-enrich", action="store_true",
+        help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
     args = parser.parse_args()
@@ -517,9 +517,10 @@ def main() -> None:
             source_dir=args.source_dir,
             jmf_dir=args.jmf_dir,
         )
-        if args.enrich:
+        # LOD400 §13: --all automatically enriches unless --no-enrich is passed.
+        if args.all and not args.no_enrich:
             from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
-            logger.info("Running enrichment_runner after seed...")
+            logger.info("Running enrichment_runner after --all seed (pass --no-enrich to skip)...")
             summary = run_enrichment(session, dry_run=False)
             logger.info("Enrichment: %s", summary)
             session.commit()

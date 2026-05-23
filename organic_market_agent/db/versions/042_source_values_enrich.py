@@ -7,6 +7,12 @@ Columns added:
   trust_tier         VARCHAR(20)   — source class code (EX/NI/PR/OP/MK/WB/UC) denormalized
   confidence_weight  NUMERIC(5,4)  — blending weight; NULL = hard-override or unmoderated UC
   is_outlier_rejected BOOLEAN      — True = excluded from weighted-mean by statistical outlier gate
+
+Backfill (LOD400 AC-15):
+  trust_tier backfilled from existing source labels.
+  confidence_weight backfilled from class defaults.
+  is_outlier_rejected backfilled from existing note field ('OUTLIER_REJECTED' marker).
+  Backfill is skipped on SQLite (test dialect — no LIKE operator needed).
 """
 
 from __future__ import annotations
@@ -34,10 +40,46 @@ def upgrade() -> None:
         sa.Column(
             "is_outlier_rejected",
             sa.Boolean(),
-            server_default="false",
+            server_default=sa.text("false"),
             nullable=False,
         ),
     )
+
+    # Backfill trust_tier + confidence_weight + is_outlier_rejected from existing data.
+    # Skipped on SQLite — backfill only needed on production PostgreSQL.
+    bind = op.get_bind()
+    if bind.dialect.name != "sqlite":
+        op.execute("""
+            UPDATE crop_variety_source_values SET trust_tier = CASE
+                WHEN source = 'team_00'    THEN 'EX'
+                WHEN source LIKE 'NI%'     THEN 'NI'
+                WHEN source = 'JMF'        THEN 'PR'
+                WHEN source LIKE 'Tend%'   THEN 'OP'
+                WHEN source LIKE 'OMA%'    THEN 'MK'
+                WHEN source LIKE 'WB%'     THEN 'WB'
+                WHEN source LIKE 'UC%'     THEN 'UC'
+                ELSE 'PR'
+            END
+        """)
+
+        op.execute("""
+            UPDATE crop_variety_source_values SET confidence_weight = CASE
+                WHEN trust_tier = 'EX' THEN NULL
+                WHEN trust_tier = 'NI' THEN NULL
+                WHEN trust_tier = 'PR' THEN 0.70
+                WHEN trust_tier = 'OP' THEN 0.55
+                WHEN trust_tier = 'MK' THEN 0.40
+                WHEN trust_tier = 'WB' THEN 0.30
+                WHEN trust_tier = 'UC' THEN NULL
+                ELSE 0.50
+            END
+        """)
+
+        op.execute("""
+            UPDATE crop_variety_source_values
+            SET is_outlier_rejected = TRUE
+            WHERE note LIKE '%OUTLIER_REJECTED%'
+        """)
 
 
 def downgrade() -> None:

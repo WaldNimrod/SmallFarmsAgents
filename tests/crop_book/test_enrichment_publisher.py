@@ -1,6 +1,9 @@
-"""Tests for enrichment_publisher.py — SFA-S003-P002-WP-A LOD400 §17 Step 10.
+"""Tests for enrichment_publisher.py — SFA-S003-P002-WP-A LOD400 §14 / AC-17.
 
-Validates JSON output structure and F-01 compliance (no dispatch_upload).
+Validates the locked JSON schema and F-01 compliance (no dispatch_upload).
+
+AC-17 locked top-level keys: generated_at, schema_version, enriched_fields, varieties
+AC-17 per-field keys inside varieties: best, min, max, confidence, source_count, winning_class
 """
 
 from __future__ import annotations
@@ -12,6 +15,10 @@ from pathlib import Path
 
 import pytest
 
+
+# ---------------------------------------------------------------------------
+# F-01 gate (AST — no DB required)
+# ---------------------------------------------------------------------------
 
 def test_dispatch_upload_not_called_in_publisher() -> None:
     """F-01 gate: publish_enrichment must never call dispatch_upload (AST check)."""
@@ -30,49 +37,85 @@ def test_dispatch_upload_not_called_in_publisher() -> None:
             )
 
 
-def test_publish_enrichment_produces_valid_json(db_session) -> None:
+# ---------------------------------------------------------------------------
+# AC-17 schema tests (require db_session fixture from conftest)
+# ---------------------------------------------------------------------------
+
+def test_publish_enrichment_ac17_top_level_keys(db_session) -> None:
+    """AC-17: JSON must contain schema_version, enriched_fields, varieties."""
     from organic_market_agent.crop_book.publisher.enrichment_publisher import publish_enrichment
 
     with tempfile.TemporaryDirectory() as tmpdir:
         out = Path(tmpdir) / "test_enrichment.json"
         result_path = publish_enrichment(db_session, output_path=out)
 
-        assert result_path.exists()
+        assert result_path.exists(), "publish_enrichment must return path to existing file"
         with result_path.open() as f:
             data = json.load(f)
 
-    assert "generated_at" in data
-    assert "variety_count" in data
-    assert "fields" in data
-    assert isinstance(data["fields"], list)
-    assert isinstance(data["variety_count"], int)
+    # AC-17 locked top-level keys
+    required_keys = {"generated_at", "schema_version", "enriched_fields", "varieties"}
+    assert required_keys <= set(data.keys()), (
+        f"Missing AC-17 top-level keys: {required_keys - set(data.keys())}"
+    )
+    # Stale keys from pre-AC-17 schema must NOT be present
+    assert "variety_count" not in data, "Old 'variety_count' key must not be in AC-17 schema"
+    assert "fields" not in data, "Old 'fields' flat-list key must not be in AC-17 schema"
 
 
-def test_publish_enrichment_field_schema(db_session) -> None:
+def test_publish_enrichment_ac17_schema_version(db_session) -> None:
+    """AC-17: schema_version must be '1.0'."""
     from organic_market_agent.crop_book.publisher.enrichment_publisher import publish_enrichment
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        out = Path(tmpdir) / "schema_test.json"
+        out = Path(tmpdir) / "sv_test.json"
         publish_enrichment(db_session, output_path=out)
         with out.open() as f:
             data = json.load(f)
 
-    required_top_keys = {"generated_at", "variety_count", "fields"}
-    assert required_top_keys <= set(data.keys())
+    assert data["schema_version"] == "1.0", (
+        f"schema_version must be '1.0', got {data['schema_version']!r}"
+    )
+    assert isinstance(data["enriched_fields"], list), "enriched_fields must be a list"
+    assert isinstance(data["varieties"], dict), "varieties must be a dict"
 
-    if data["fields"]:
-        required_field_keys = {
-            "variety_id", "crop_name_he", "crop_name_en", "variety_name_en",
-            "field_name", "value_best", "value_min", "value_max",
-            "confidence_score", "source_count", "winning_source_class", "computed_at",
-        }
-        field = data["fields"][0]
-        assert required_field_keys <= set(field.keys()), (
-            f"Missing keys in field entry: {required_field_keys - set(field.keys())}"
+
+def test_publish_enrichment_ac17_per_field_keys(db_session) -> None:
+    """AC-17: each per-field entry inside varieties must have locked keys."""
+    from organic_market_agent.crop_book.publisher.enrichment_publisher import publish_enrichment
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        out = Path(tmpdir) / "field_schema_test.json"
+        publish_enrichment(db_session, output_path=out)
+        with out.open() as f:
+            data = json.load(f)
+
+    varieties = data["varieties"]
+    if not varieties:
+        pytest.skip("No enrichment rows in test DB — schema test skipped")
+
+    # Pick any variety and any field to check per-field structure
+    sample_vid = next(iter(varieties))
+    sample_fields = varieties[sample_vid]
+    assert sample_fields, f"variety {sample_vid} has no field entries"
+
+    sample_field_name = next(iter(sample_fields))
+    field_entry = sample_fields[sample_field_name]
+
+    required_field_keys = {"best", "min", "max", "confidence", "source_count", "winning_class"}
+    assert required_field_keys <= set(field_entry.keys()), (
+        f"Missing AC-17 per-field keys: {required_field_keys - set(field_entry.keys())}"
+    )
+    # Old per-field keys must not be present
+    for stale_key in ("value_best", "value_min", "value_max", "confidence_score",
+                      "winning_source_class", "computed_at"):
+        assert stale_key not in field_entry, (
+            f"Stale key '{stale_key}' must not appear in AC-17 field entry"
         )
 
 
 def test_publish_enrichment_creates_output_dir(db_session) -> None:
+    """publish_enrichment must create nested output directories."""
     from organic_market_agent.crop_book.publisher.enrichment_publisher import publish_enrichment
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -81,18 +124,15 @@ def test_publish_enrichment_creates_output_dir(db_session) -> None:
         assert result_path.exists()
 
 
-def test_publish_enrichment_hebrew_crop_names_preserved(db_session) -> None:
-    """ensure_ascii=False must preserve Hebrew characters in output."""
+def test_publish_enrichment_valid_json_always(db_session) -> None:
+    """publish_enrichment must always produce parseable JSON."""
     from organic_market_agent.crop_book.publisher.enrichment_publisher import publish_enrichment
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        out = Path(tmpdir) / "he_test.json"
+        out = Path(tmpdir) / "valid_json.json"
         publish_enrichment(db_session, output_path=out)
         raw = out.read_text(encoding="utf-8")
 
-    # If ensure_ascii=True was accidentally used, Hebrew would be escaped as \uXXXX
-    # The JSON should contain actual Hebrew characters, not unicode escapes for those chars
-    if any(f["crop_name_he"] for f in json.loads(raw)["fields"]):
-        assert "\\u05" not in raw, (
-            "Hebrew characters are unicode-escaped — ensure_ascii should be False"
-        )
+    # Must parse without exception
+    data = json.loads(raw)
+    assert isinstance(data, dict), "Top-level JSON must be an object"
