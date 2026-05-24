@@ -2,11 +2,20 @@
 id: SFA-S003-P002-WP-B1-patch01-LOD400
 wp: SFA-S003-P002-WP-B1-patch01 — JMF_CROP_MAP alias extension + Rutabaga Hebrew correction
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict (R2)
+status: LOD400_LOCKED — L-GATE_S R3 PASS_WITH_FINDINGS at v1.0.2; v1.0.3 carries forward the single MINOR cleanup per verdict §5
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.2
+version: v1.0.3
 changelog: >
+  v1.0.3 — LOCK CLEANUP per L-GATE_S R3 PASS_WITH_FINDINGS verdict §5
+  carry-forward instruction. The R3 MINOR flagged stale non-operative
+  prose still mentioning older approximate counts. Fix: §1 item 2
+  updated "28 alias entries" → "34 alias entries" (matches §3.2
+  enumeration); §1 item 3 updated "(~6 pairs post-patch)" →
+  "(25 pairs/groups post-patch — exhaustive list in §4 AC-03)".
+  Frontmatter status: PRE_LOD400_LOCK → LOD400_LOCKED. No operative
+  content (ACs, alias literal, Counter assertion, build sequence)
+  changed.
   v1.0.2 — Remediation of single BLOCKER from team_190 L-GATE_S R2
   verdict: AC-01 title said "exactly 86 entries" but the assertion
   body still said `len(JMF_CROP_MAP) == 85` (caught by team_190 as a
@@ -59,12 +68,13 @@ Tight additive patch to `JMF_CROP_MAP` (the only file modified):
 1. **Single-cell correction:** `"Rutabaga"` value from `"ברוקקואר"`
    (team_110 hallucination — not a Hebrew word) to **`"רוטבגה"`**
    (phonetic transliteration per team_00 directive).
-2. **28 alias entries appended** so the farm-specific JMF MasterClass
+2. **34 alias entries appended** so the farm-specific JMF MasterClass
    workbook on Nimrod's disk maps cleanly via the existing WARN+skip
    miss-handling contract (most importer rows now hit a real mapping).
 3. **Test updates:** AC-03 Counter assertion in
    `test_jmf_crop_map.py` widened to enumerate every by-design
-   duplicate-target pair (~6 pairs post-patch).
+   duplicate-target pair (25 pairs/groups post-patch — exhaustive list
+   in §4 AC-03).
 4. **Documentation:** `CHANGELOG.md` `[Unreleased]` entry.
 
 On completion: `seed.py --all` against the live workbook covers ≥42/50
@@ -475,10 +485,10 @@ See §7 LOD500_LOCKED inventory.
 
 ---
 
-*LOD400 v1.0.2 — patched 2026-05-25 by team_110 under EXECUTION_MANDATE
+*LOD400 v1.0.3 — LOCKED 2026-05-25 by team_110 under EXECUTION_MANDATE
 SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.0.0 FAILed R1 (2 BLOCKERS) → v1.0.1 fixed §3.2 + AC-03 but the
-AC-01 assertion body retained `len == 85` while the title said 86
-→ v1.0.1 FAILed R2 (1 BLOCKER on the count mismatch) → v1.0.2 is a
-1-line fix: AC-01 assertion `len(JMF_CROP_MAP) == 86`. Pending:
-team_190 L-GATE_S R3 validation.*
+*Round chain: v1.0.0 → R1 FAIL (2 BLOCKERS) → v1.0.1 → R2 FAIL (1
+BLOCKER count mismatch) → v1.0.2 → R3 PASS_WITH_FINDINGS (1 MINOR
+stale prose) → v1.0.3 MINOR carry cleanup → LOCKED.*
+*L-GATE_S R3 verdict: `_COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1-patch01/LOD400-VERDICT_v1.0.2.md` (commit a0410b0).*
+*Next: L-GATE_B mandate to sfa_build sub-agent.*

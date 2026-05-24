@@ -899,11 +899,11 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch01
   label: "ספר גידולים: JMF_CROP_MAP alias extension + Rutabaga Hebrew correction"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_LOCKED
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-25"
@@ -932,6 +932,23 @@ work_packages:
       cleanup (team_190 accepted as by-design). Does NOT reopen WP-B1
       LOD500_LOCKED; this is a sibling patch WP."
     validator: team_00
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_S R3 PASS_WITH_FINDINGS
+      against LOD400 v1.0.2 at commit c135d3a. Round chain: R1 FAIL (B-01 count
+      conflict + B-02 incomplete AC-03 Counter); R2 FAIL (single BLOCKER on
+      AC-01 assertion body retaining `len == 85` while title said 86); R3
+      PASS_WITH_FINDINGS (1 MINOR on stale non-operative prose). v1.0.3
+      (this commit) applies the MINOR carry-forward cleanup per verdict §5.
+      Verdict file: LOD400-VERDICT_v1.0.2.md (commit a0410b0)."
+    validator: team_190
+    validator_engine: GPT-5.5
+    spec_commit: "c135d3a"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 1     # stale non-operative prose; addressed in v1.0.3 cleanup
   notes: "WP-B1-patch01: SMALL follow-up to WP-B1 (LOD500_LOCKED at 6a85561).
     MUST land before SFA-S003-P002-WP-B2 per team_00 sequencing directive
     2026-05-25. LOD200+LOD400 pending team_110 (same EXECUTION_MANDATE
