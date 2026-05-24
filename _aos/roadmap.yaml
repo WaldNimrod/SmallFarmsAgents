@@ -792,3 +792,101 @@ work_packages:
     JSON schema_version+enriched_fields+varieties). 76 enrichment tests.
     L-GATE_V R2 PASS (team_190 GPT-5.5). LOD500_LOCKED at commit 594cbc8."
   profile: L0
+
+- id: SFA-S003-P002-WP-B1
+  label: "ספר גידולים: JMF Excel Base Layer — Multi-Source Knowledge Foundation"
+  status: ELIGIBLE
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: PRE_LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-24"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-A"]
+  brief_ref: "_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B1/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-24"
+    notes: "team_00 authorized in-session 2026-05-24 (canonical registration grant).
+      Depends on WP-A LOD500_LOCKED (commit 594cbc8). Mission: load JMF MasterClass
+      Excel as PR-tier baseline (CROP CHART + CROP ASSOCIATED TASKS + DIRECT
+      SEEDING CHART + NURSERY CHART + CULTIVARS = 50+30+21+45+136 rows). New table
+      crop_task_templates (migration 044). Source path:
+      /Users/nimrod/Documents/old Mac BackUpp/Market Gardening/MasterClass/Crop
+      Planning/CROPPLANNINGTOOLMASTERCLASS-*.XLSX. spec_ref points to LOD200
+      placeholder — file will be authored by team_110 per ACTIVATION_PROMPT."
+    validator: team_00
+  notes: "WP-B1: JMF Excel ingestion. PR tier (0.70). Foundation for B2+B3.
+    Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
+    LOD200+LOD400 pending team_110 (handoff at
+    _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/ACTIVATION_PROMPT.md)."
+  profile: L0
+
+- id: SFA-S003-P002-WP-B2
+  label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
+  status: PROPOSED
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: PRE_LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-24"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-B1"]
+  brief_ref: "_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-24"
+    notes: "team_00 authorized in-session 2026-05-24 (canonical registration grant).
+      Depends on B1 crop_id mappings. Mission: extract per-crop narrative knowledge
+      from THE MARKET GARDENER ebook (240pp) + Fiche Technique PDFs (FT_FLAMEWEED,
+      FT_BIOPESTICIDE, FT_NURSERYSEEDING). First concrete NIImporter subclass from
+      WP-A skeleton. LLM-assisted extraction with JSON caching to
+      data/jmf/extracted/. May require GCR_2 (new crop_knowledge_notes table
+      relationship on Crop model — team_110 decides in LOD400). NI tier (hard
+      override). spec_ref points to LOD200 placeholder — team_110 to author."
+    validator: team_00
+  notes: "WP-B2: JMF PDF extraction via NI source. NI tier (hard override).
+    Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
+    Builds on NIImporter skeleton from WP-A. LOD200+LOD400 pending team_110."
+  profile: L0
+
+- id: SFA-S003-P002-WP-B3
+  label: "ספר גידולים: Tend Israel Adaptation Overlay — Local Layer"
+  status: PROPOSED
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: PRE_LOD200
+  assigned_builder: sfa_build
+  assigned_validator: external
+  created_at: "2026-05-24"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-B1"]
+  brief_ref: "_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B3/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-24"
+    notes: "team_00 authorized in-session 2026-05-24 (canonical registration grant).
+      Depends on B1 JMF baseline. Mission: Tend Israeli adaptation overlay (OP tier
+      on PR baseline). Tend_2022/TASKS.CSV pattern extraction (recurring template
+      whitelist enforced — NOT one-off records). Tend_2022/GREENHOUSE_PLAN.CSV
+      population. Tend_2022/HARVESTS.CSV → crop_harvest_stats aggregation (NO
+      per-record insertion per team_00 directive). New migration 046. OP tier
+      blends with JMF PR baseline via WP-A reconciler. spec_ref points to LOD200
+      placeholder — team_110 to author."
+    validator: team_00
+  notes: "WP-B3: Tend Israel adaptation overlay. OP tier (0.55) layers on PR
+    baseline. team_00 directive: templates only, no per-record harvest data.
+    Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
+    LOD200+LOD400 pending team_110."
+  profile: L0
