@@ -451,6 +451,11 @@ def _setup_logging(verbose: bool = False) -> None:
     logging.basicConfig(format="%(levelname)s %(name)s: %(message)s", level=level, stream=sys.stdout)
 
 
+_DEFAULT_JMF_MASTERCLASS_DIR = Path(
+    "/Users/nimrod/Documents/old Mac BackUpp/Market Gardening/MasterClass/Crop Planning"
+)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="ספר גידולים seed importer — populate crop-book tables from Tend CSV + JMF XLSX"
@@ -472,6 +477,22 @@ def main() -> None:
         metavar="PATH", help="JMF XLSX directory (default: %(default)s)",
     )
     parser.add_argument(
+        "--jmf-masterclass-dir", type=Path,
+        default=_DEFAULT_JMF_MASTERCLASS_DIR,
+        metavar="PATH",
+        help="JMF MasterClass XLSX directory (default: %(default)s)",
+    )
+    # --jmf-only and --no-jmf are mutually exclusive (LOD400 §8.1)
+    jmf_excl = parser.add_mutually_exclusive_group()
+    jmf_excl.add_argument(
+        "--jmf-only", action="store_true",
+        help="Run only JMF MasterClass ingestion (skip Tend).",
+    )
+    jmf_excl.add_argument(
+        "--no-jmf", action="store_true",
+        help="Skip JMF MasterClass ingestion (Tend only).",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -480,22 +501,51 @@ def main() -> None:
 
     _setup_logging(args.verbose)
 
+    # Additional mutual-exclusion validation (LOD400 §8.3)
+    if args.jmf_only and getattr(args, 'crops', None):
+        parser.error("--jmf-only cannot be combined with --crops")
+
     target_crops: list[str] | None = None
-    if args.crops:
+    if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all:
-        parser.error("Specify --all or --crops NAME [NAME ...]")
+    elif not args.all and not args.jmf_only:
+        parser.error("Specify --all, --jmf-only, or --crops NAME [NAME ...]")
 
     if args.dry_run:
         logger.info("DRY RUN — no DB writes")
         from sqlalchemy import create_engine
         from sqlalchemy.orm import sessionmaker
         from organic_market_agent.crop_book.models import Base
+        from organic_market_agent.crop_book.crop_task_templates import CropTaskTemplate  # noqa: F401
 
         engine = create_engine("sqlite:///:memory:")
         Base.metadata.create_all(engine)
+        # Also create crop_task_templates (not in Base.metadata via models.py)
+        from sqlalchemy import inspect as sa_inspect
+        if "crop_task_templates" not in sa_inspect(engine).get_table_names():
+            CropTaskTemplate.__table__.create(engine, checkfirst=True)
         SessionLocal = sessionmaker(engine)
         with SessionLocal() as session:
+            # JMF MasterClass ingestion (LOD400 §8.2)
+            if not args.no_jmf:
+                from organic_market_agent.crop_book.importer.jmf_masterclass import import_jmf_masterclass
+                jmf_summary = import_jmf_masterclass(
+                    session, args.jmf_masterclass_dir, dry_run=True,
+                )
+                logger.info("JMF MasterClass: %s", jmf_summary)
+                if jmf_summary.map_misses:
+                    logger.warning("JMF map misses (%d): %s",
+                                   len(jmf_summary.map_misses),
+                                   ", ".join(jmf_summary.map_misses[:10]))
+                if jmf_summary.standalone_divergences:
+                    logger.warning("JMF standalone divergences (%d) — master wins",
+                                   len(jmf_summary.standalone_divergences))
+            if args.jmf_only:
+                if args.all and not args.no_enrich:
+                    from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+                    enrich_summary = run_enrichment(session, dry_run=True)
+                    logger.info("Enrichment: %s", enrich_summary)
+                return
             seed(
                 session=session,
                 target_crops=target_crops,
@@ -509,6 +559,31 @@ def main() -> None:
     from organic_market_agent.db.session import SessionFactory
 
     with SessionFactory() as session:
+        # JMF MasterClass ingestion BEFORE Tend (LOD400 §8.2)
+        if not args.no_jmf:
+            from organic_market_agent.crop_book.importer.jmf_masterclass import import_jmf_masterclass
+            jmf_summary = import_jmf_masterclass(
+                session, args.jmf_masterclass_dir, dry_run=False,
+            )
+            logger.info("JMF MasterClass: %s", jmf_summary)
+            if jmf_summary.map_misses:
+                logger.warning("JMF map misses (%d): %s",
+                               len(jmf_summary.map_misses),
+                               ", ".join(jmf_summary.map_misses[:10]))
+            if jmf_summary.standalone_divergences:
+                logger.warning("JMF standalone divergences (%d) — master wins",
+                               len(jmf_summary.standalone_divergences))
+            session.flush()
+
+        if args.jmf_only:
+            if args.all and not args.no_enrich:
+                from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+                enrich_summary = run_enrichment(session, dry_run=False)
+                logger.info("Enrichment: %s", enrich_summary)
+            session.commit()
+            return
+
+        # Existing Tend seed call (unchanged logic)
         seed(
             session=session,
             target_crops=target_crops,
