@@ -176,6 +176,33 @@ PHASE 2 — LOD400 (build-precise spec per WP):
     - 14. Risk register
     - 15. Constitutional rule traceability (which IR each AC enforces)
 
+Advisory items inherited from team_190 PRE_HANDOFF verdict (commit d4a2d26):
+  team_190 (GPT-5.5, non-Claude) issued PASS verdict on 2026-05-24. The verdict
+  flagged 4 advisory items you MUST address explicitly in your LOD400 specs:
+
+  ADVISORY-1  JMF PDF licensing (WP-B2)
+              LOD400 for WP-B2 must state explicitly that extracted JMF PDF
+              content is for internal farm-use only. Do NOT publish copyrighted
+              prose or long excerpts. If team_110 believes any extraction may
+              cross fair-use, file inquiry MSG to team_00 BEFORE LOD400 lock.
+
+  ADVISORY-2  LLM extraction cache strategy (WP-B2)
+              LOD400 for WP-B2 must decide and document: is `data/jmf/extracted/`
+              committed (reproducibility), gitignored (privacy), or stored as
+              reviewable redacted fixtures? Include reproducibility + privacy +
+              review-workflow constraints.
+
+  ADVISORY-3  Tend task whitelist confirmation (WP-B3)
+              The Tend task_type whitelist in PROGRAM_BRIEF §4 is a proposal.
+              LOD400 for WP-B3 must include explicit team_00 confirmation of
+              the final whitelist (including borderline types and Hebrew labels)
+              before lock. File inquiry MSG to team_00 if any ambiguity.
+
+  ADVISORY-4  Transitive dependency wording
+              The roadmap shows B2 depends_on B1 and B3 depends_on B1 — both
+              transitively depend on WP-A. Make this transitive WP-A dependency
+              EXPLICIT in each LOD400 spec's dependency section, not implicit.
+
 Sequencing constraints:
   - WP-B1 LOD200 + LOD400 must complete and be self-consistent BEFORE B2/B3
     (B2 + B3 both depend on B1's data model).
