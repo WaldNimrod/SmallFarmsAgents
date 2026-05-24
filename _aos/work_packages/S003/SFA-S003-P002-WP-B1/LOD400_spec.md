@@ -5,15 +5,21 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict (R2)
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-24
-version: v1.1.0
+version: v1.1.1
 changelog: >
+  v1.1.1 — F-S-001 R2 follow-up fix: disambiguated `Zucchini → "זוקיני"`
+  to remove the unintended duplicate Hebrew target with `Summer Squash →
+  "קישוא"`. AC-03's duplicate-target allow-list now legitimately
+  contains only the by-design `Mesclun`/`Salad Mix → "תערובת סלט"` pair.
+  No other content change.
   v1.1.0 — F-S-001 fix: §5 now lists the complete 52-entry JMF_CROP_MAP
   contract (no builder-side inference). F-S-002 fix: §3 / §4 / §6.4
   redefine `days_offset` as INTEGER NOT NULL with sentinel constant
   DAYS_OFFSET_PRESENCE_ONLY = -32768 for presence-only `X` cells; UNIQUE
   constraint is now null-safe on both Postgres and SQLite. AC-15 + AC-16
   + §13 R-04 updated accordingly.
-  L-GATE_S R1 verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.0.md (FAIL — 2 BLOCKERS, both addressed here).
+  L-GATE_S R1 verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.0.md (FAIL — 2 BLOCKERS).
+  L-GATE_S R2 verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.1.md (FAIL — F-S-002 RESOLVED; F-S-001 not fully resolved due to Summer Squash/Zucchini duplicate, fixed in v1.1.1).
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1/LOD200_spec.md
 program_brief_ref: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md
 execution_mandate_ref: _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/EXECUTION_MANDATE_v1.0.0.md
@@ -393,7 +399,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Summer Squash":      "קישוא",
     "Watermelons":        "אבטיח",
     "Winter Squash":      "דלעת",
-    "Zucchini":           "קישוא",
+    "Zucchini":           "זוקיני",
     # ---- Legumes ----
     "Beans (Bush)":       "שעועית",
     "Beans (Pole)":       "שעועית מטפסת",
@@ -425,7 +431,11 @@ OP (Tend) values for the same crop. JMF-only crops (no Tend counterpart —
 e.g., Cauliflower, Endive, Fava Beans, Parsnips, Potatoes, Rutabaga,
 Shallots, Snow Peas, Sweet Potatoes, Tomatillos, Watermelons, Zucchini)
 use Hebrew names spelled per standard Israeli horticultural usage and will
-seed brand-new `crops.name_he` rows on first JMF import. AC-03 verifies
+seed brand-new `crops.name_he` rows on first JMF import. (Note: in this
+spec `Zucchini → "זוקיני"` (Israeli loanword) and `Summer Squash →
+"קישוא"` (the broader category) — they map to distinct DB rows by
+design; the v1.1.0 → v1.1.1 patch fixed an accidental duplicate where
+both pointed at "קישוא".) AC-03 verifies
 the count; the builder must NOT add or remove entries during Step 4 of §11
 — if a JMF MasterClass edition encountered at build time has fewer/more
 crop rows than this contract specifies, the builder files an inquiry MSG
@@ -837,14 +847,27 @@ succeeds; all 13 columns map to the correct types; `TASK_TYPE_VALUES` and
 `TIMING_ANCHOR_VALUES` tuples are exported and match the migration enums.
 
 **AC-03 — `JMF_CROP_MAP` is exactly 52 entries.**
-*(F-S-001 R1 fix — count tightened.)*
+*(F-S-001 R1 fix; allow-list tightened in R2 v1.1.1.)*
 `from organic_market_agent.crop_book.constants import JMF_CROP_MAP`
 succeeds; `len(JMF_CROP_MAP) == 52`; every key is a unique non-empty
-ASCII English string; every value is a unique non-empty Hebrew string.
-(The Hebrew-value uniqueness assertion catches accidental duplicates like
-two crops both mapping to "תערובת סלט"; Note: by design `Salad Mix` and
-`Mesclun` deliberately share that value — the test allows duplicate-target
-mappings ONLY for this pair, hard-coded.)
+ASCII English string; every value is a non-empty Hebrew string.
+
+**Duplicate-target allow-list (exhaustive):** exactly **one** Hebrew
+value may appear under two distinct English keys —
+`{"Mesclun", "Salad Mix"} → "תערובת סלט"` (both denote the same Israeli
+salad-greens mix in Israeli horticultural usage). The assertion is:
+
+```python
+from collections import Counter
+counts = Counter(JMF_CROP_MAP.values())
+duplicates = {v: [k for k, mv in JMF_CROP_MAP.items() if mv == v]
+              for v, c in counts.items() if c > 1}
+assert duplicates == {"תערובת סלט": ["Mesclun", "Salad Mix"]}, \
+    f"unexpected Hebrew-value duplicates: {duplicates}"
+```
+
+Any future addition of a duplicate target requires a LOD400 patch +
+L-GATE_S re-run; this is NOT a builder-side judgement.
 
 **AC-04 — Map coverage vs. live JMF CROP CHART.**
 After `parse_crop_chart(<master XLSX>)`, the set of distinct
@@ -1125,9 +1148,11 @@ See §14 LOD500_LOCKED inventory.
 
 ---
 
-*LOD400 v1.1.0 — patched 2026-05-24 by team_110 under EXECUTION_MANDATE
+*LOD400 v1.1.1 — patched 2026-05-24 by team_110 under EXECUTION_MANDATE
 SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
 *v1.0.0 authored 2026-05-24; FAIL by team_190 L-GATE_S R1 (2 BLOCKERS).
-v1.1.0 addresses F-S-001 (§5 complete 52-entry map) and F-S-002
-(§3/§4/§6.2/§6.4 + AC-15a/b/c + AC-16a/b + §13 R-08/R-09 + §11 Step 4).*
-*Pending: team_190 L-GATE_S R2 validation.*
+v1.1.0: F-S-001 + F-S-002 fixes. FAIL by team_190 L-GATE_S R2 (F-S-002
+RESOLVED; F-S-001 partial — Summer Squash/Zucchini duplicate target).
+v1.1.1: 1-line fix — Zucchini → "זוקיני" (distinct from "קישוא"). AC-03
+allow-list tightened with explicit Counter assertion.*
+*Pending: team_190 L-GATE_S R3 validation.*
