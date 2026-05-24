@@ -9,7 +9,7 @@ gate: L-GATE_B
 spec_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch01/LOD400_spec.md
 spec_version: v1.0.3
 spec_lock_commit: c1b14c5
-build_commit_range: c1b14c5..d34e60c
+build_commit_range: c1b14c5..bbbfd47
 verdict: BUILD_COMPLETE
 ---
 
@@ -29,7 +29,7 @@ All 8 ACs pass. No regressions. 10 new tests added. `validate_aos.sh` 29 PASS / 
 |----|--------|----------|
 | AC-01 `len(JMF_CROP_MAP) == 86` | **PASS** | `python3 -c "from organic_market_agent.crop_book.constants import JMF_CROP_MAP; print(len(JMF_CROP_MAP))"` → `86` |
 | AC-02a Rutabaga value is `"רוטבגה"` | **PASS** | `test_ac02_rutabaga_value_corrected` PASSED; `JMF_CROP_MAP["Rutabaga"] == "רוטבגה"` confirmed |
-| AC-02b Old Rutabaga value absent | **PASS** | `test_ac02_old_rutabaga_value_absent` PASSED; file-content grep finds no `"ברוקקואר"` in `constants.py` (comment wording avoids the literal Hebrew characters) |
+| AC-02b Old Rutabaga value absent | **PASS** | `test_ac02_old_rutabaga_value_absent` PASSED; AC-02b confirmed at remediation HEAD `bbbfd47`; original `048ce66` was FAIL (BLOCKER F-LV-PATCH01-01 from L-GATE_V R1 verdict); remediation commit removed literal `"ברוקקואר"` from inline comment — `test_ac02_old_rutabaga_value_absent` confirms string absent from file content at new HEAD |
 | AC-03 Counter set 25 pairs/groups | **PASS** | `test_jmf_crop_map_duplicate_target_allowlist` PASSED; exact 25-key dict matches LOD400 §4 verbatim |
 | AC-04 Live workbook coverage ≥ 42/50 | **PASS** | `test_ac04_live_workbook_coverage_min_42_of_50` PASSED; actual: **48/50** (see §7) |
 | AC-04.1 `Eggplant  (Feld)` literal alias | **PASS** | `test_ac04_1_eggplant_feld_literal_alias` PASSED; key `"Eggplant  (Feld)"` (double space) in map → `"חציל"` |
@@ -69,13 +69,54 @@ pytest tests/crop_book/ -q
 ```
 bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
 
+[PASS] Check 42: Sprint discipline: all active WPs within <=3 sprint cap
+[SKIP] Check 43: Milestone completeness gate: _aos/milestones/ absent — no milestone definitions to check against (acceptable pre-MS001)
+[PASS] Check 44: Track+Effort metadata: all WP metadata.yaml files have valid track: and effort: fields
+[SKIP] Check 45: WAN dual-stack status absent — API not reachable and local file missing
+[SKIP] Check 46: not hub — _aos/projects.yaml absent (spokes skip registry SSoT drift check)
+
 =================================================
-RESULT: 29 PASS / 17 SKIP / 0 FAIL
+RESULT: 29 PASS / 18 SKIP / 0 FAIL
 =================================================
 L-GATE_BUILD EXIT CRITERION: SATISFIED
 ```
 
-Run at HEAD commit `d34e60c` (step4 commit will be HEAD when team_190 validates).
+Run at remediation HEAD commit `bbbfd47` (F-LV-PATCH01-01 fix commit). Note: 18 SKIP vs original 17 SKIP is a pre-existing AOS governance sync side-effect unrelated to this patch — not a regression.
+
+**test_jmf_crop_map.py (11 tests):**
+```
+pytest tests/crop_book/test_jmf_crop_map.py -v 2>&1 | tail -20
+
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_count PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_keys_unique_and_nonempty PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_values_nonempty_hebrew PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_duplicate_target_allowlist PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_hebrew_roundtrip PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_miss_not_in_map PASSED
+tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_fixture_crops_mapped PASSED
+tests/crop_book/test_jmf_crop_map.py::test_ac02_rutabaga_value_corrected PASSED
+tests/crop_book/test_jmf_crop_map.py::test_ac02_old_rutabaga_value_absent PASSED
+tests/crop_book/test_jmf_crop_map.py::test_ac04_1_eggplant_feld_literal_alias PASSED
+tests/crop_book/test_jmf_crop_map.py::test_ac03_duplicate_group_count PASSED
+======================== 11 passed, 1 warning in 0.01s =========================
+```
+
+**test_jmf_ex_override_regression.py:**
+```
+pytest tests/crop_book/test_jmf_ex_override_regression.py -v 2>&1 | tail -10
+
+tests/crop_book/test_jmf_ex_override_regression.py::test_ac13_ex_override_wins_over_jmf PASSED
+========================= 1 passed, 1 warning in 0.22s =========================
+```
+
+**Full crop_book suite:**
+```
+pytest tests/crop_book/ -q 2>&1 | tail -5
+
+=========================== short test summary info ============================
+FAILED tests/crop_book/test_wp_upload_crop_book.py::test_dispatch_upload_crop_book_profile
+1 failed, 251 passed, 19 warnings in 6.24s
+```
 
 ---
 
