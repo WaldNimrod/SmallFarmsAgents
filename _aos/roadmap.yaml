@@ -795,18 +795,18 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1
   label: "ספר גידולים: JMF Excel Base Layer — Multi-Source Knowledge Foundation"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_LOCKED
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P002-WP-A"]
   brief_ref: "_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md"
-  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B1/LOD200_spec.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B1/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
@@ -820,6 +820,26 @@ work_packages:
       Planning/CROPPLANNINGTOOLMASTERCLASS-*.XLSX. spec_ref points to LOD200
       placeholder — file will be authored by team_110 per ACTIVATION_PROMPT."
     validator: team_00
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-24"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_S R3 PASS_WITH_FINDINGS
+      against LOD400 v1.1.2 at commit 3c92a67. 20/20 VCs PASS; 0 BLOCKERS; 0 MAJOR;
+      2 MINOR (CARRY). Prior rounds: R1 FAIL (F-S-001 incomplete JMF_CROP_MAP +
+      F-S-002 nullable days_offset UNIQUE hole — both BLOCKER); R2 FAIL (F-S-002
+      RESOLVED in v1.1.0; F-S-001 partial due to Summer Squash/Zucchini duplicate);
+      R3 PASS_WITH_FINDINGS after botanical correction in v1.1.2 (קישוא is species,
+      זוקיני is cultivar). v1.1.3 (this commit) is the MINOR carry-forward
+      cleanup per verdict §5. Verdict file:
+      _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.2.md.
+      Mandate file: MANDATE_L-GATE_S_RESUBMISSION_v1.0.3.md."
+    validator: team_190
+    validator_engine: GPT-5.5
+    spec_commit: "3c92a67"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 2     # F-S-002-MINOR-R3 (int|None drift), F-S-003-MINOR-R3 (process metadata drift); both addressed in v1.1.3
   notes: "WP-B1: JMF Excel ingestion. PR tier (0.70). Foundation for B2+B3.
     Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
     LOD200+LOD400 pending team_110 (handoff at

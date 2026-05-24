@@ -2,11 +2,22 @@
 id: SFA-S003-P002-WP-B1-LOD400
 wp: SFA-S003-P002-WP-B1 — JMF MasterClass Excel Base Layer
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict (R2)
+status: LOD400_LOCKED — L-GATE_S PASS_WITH_FINDINGS at v1.1.2 (R3); v1.1.3 cleans MINOR carries per verdict §5
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-24
-version: v1.1.2
+version: v1.1.3
 changelog: >
+  v1.1.3 — LOCK CLEANUP per L-GATE_S R3 verdict §5 carry-forward.
+  F-S-002-MINOR-R3: §6.4 example + AC-06 wording updated from
+  `int | None` / `<int or None>` to non-null sentinel terminology
+  (the governing rules in §3/§4/§6.4 cell rules / AC-15 / AC-16 were
+  already correct; this just removes residual prose drift).
+  F-S-003-MINOR-R3: frontmatter `status` updated from "awaiting
+  team_190 L-GATE_S verdict" to "LOD400_LOCKED"; AC-03 parenthetical
+  corrected (allow-list widened in R3 v1.1.2, not "tightened in R2
+  v1.1.1"); footer updated to point at the R3 verdict path. No
+  substantive content change; spec_commit at L-GATE_S PASS was
+  `3c92a67` (v1.1.2).
   v1.1.2 — Botanical correction (team_00 review note): `Zucchini` ↔
   `Summer Squash` are NOT separate species at the `crops.name_he`
   level. קישוא is the species; זוקיני is a cultivar of קישוא. The
@@ -542,7 +553,7 @@ cell:
     "task_type":   <one of TASK_TYPE_VALUES — derived from column header
                     via _TASK_COLUMN_MAP (defined below)>,
     "timing_anchor": "seeding",  # default for JMF (override via _TASK_TIMING_MAP)
-    "days_offset":   <int or None>,
+    "days_offset":   <int — DAYS_OFFSET_PRESENCE_ONLY for X cells>,
     "method":        None,
     "input_material": None,
     "notes":         None,
@@ -860,7 +871,7 @@ succeeds; all 13 columns map to the correct types; `TASK_TYPE_VALUES` and
 `TIMING_ANCHOR_VALUES` tuples are exported and match the migration enums.
 
 **AC-03 — `JMF_CROP_MAP` is exactly 52 entries.**
-*(F-S-001 R1 fix; allow-list tightened in R2 v1.1.1.)*
+*(F-S-001 R1 fix; allow-list widened to 2 by-design pairs in R3 v1.1.2 — species-level mapping per team_00 botanical review.)*
 `from organic_market_agent.crop_book.constants import JMF_CROP_MAP`
 succeeds; `len(JMF_CROP_MAP) == 52`; every key is a unique non-empty
 ASCII English string; every value is a non-empty Hebrew string.
@@ -905,7 +916,7 @@ Length ≥ 50 (allowing for empty trailing rows). Every row has
 **AC-06 — `parse_associated_tasks` emits typed rows per non-blank cell.**
 For the master XLSX, ≥ 100 rows emitted (30 crops × ~4 tasks each on
 average); every row's `task_type` is in `TASK_TYPE_VALUES`; days_offset is
-`int | None`; `notes` populated only when the raw cell is non-numeric and
+`int` (NOT NULL; `DAYS_OFFSET_PRESENCE_ONLY` for X cells per F-S-002 fix); `notes` populated only when the raw cell is non-numeric and
 non-`X`.
 
 **AC-07 — Idempotent re-import.**
@@ -1167,11 +1178,12 @@ See §14 LOD500_LOCKED inventory.
 
 ---
 
-*LOD400 v1.1.2 — patched 2026-05-24 by team_110 under EXECUTION_MANDATE
-SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.0.0 → v1.1.0: F-S-001 + F-S-002 fixes. v1.1.0 → v1.1.1: tried to
-disambiguate Zucchini ≠ Summer Squash (botanically incorrect). v1.1.1
-→ v1.1.2: team_00 botanical correction — קישוא is the species; זוקיני
-is a cultivar of קישוא. Both English labels correctly resolve to
-`"קישוא"`; AC-03 allow-list widened to 2 by-design pairs.*
-*Pending: team_190 L-GATE_S R3 validation (mandate to be re-issued).*
+*LOD400 v1.1.3 — LOCKED 2026-05-24 by team_110 under EXECUTION_MANDATE
+SFA-S003-P002-WP-B (ADR045, `execution_authority: full`). L-GATE_S
+PASS_WITH_FINDINGS at v1.1.2 (commit `3c92a67`); v1.1.3 is the MINOR
+cleanup commit per verdict §5 carry-forward instructions.*
+*Lifecycle: v1.0.0 → v1.1.0 (F-S-001 + F-S-002 fixes) → v1.1.1
+(botanically incorrect Zucchini split) → v1.1.2 (team_00 botanical
+correction: species/cultivar; AC-03 widened to 2 by-design pairs) →
+v1.1.3 (R3 MINOR carry-forward cleanup, LOCKED).*
+*L-GATE_S R3 verdict: PASS_WITH_FINDINGS (20/20 VCs PASS; 2 MINOR CARRY, addressed in v1.1.3 cleanup). Verdict: `_COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.2.md`. Next: L-GATE_B mandate to sfa_build.*
