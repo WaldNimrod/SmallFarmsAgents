@@ -11,6 +11,16 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — JMF_CROP_MAP Alias Extension + Rutabaga Fix (Team 10, SFA-S003-P002-WP-B1-patch01, 2026-05-25)
+
+- **2026-05-25 — Team 10 (WP-B1-patch01):** JMF_CROP_MAP alias extension and Rutabaga Hebrew correction. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.0.3 LOCKED at commit c1b14c5, L-GATE_S R3 PASS_WITH_FINDINGS).
+  - **Modified:** `organic_market_agent/crop_book/constants.py` — (a) `"Rutabaga"` value corrected from hallucinated value to `"רוטבגה"` (phonetic transliteration, team_00 directive 2026-05-25). (b) 34 alias entries appended to `JMF_CROP_MAP` before closing `}`: typo variants (4), synonyms (6), storage/season qualifiers (4), pepper variants (2), tomato variants (3), cucumber variants (2), cabbage variants (4), lettuce variants (2), brassica/misc (6), field-qualifier literal `"Eggplant  (Feld)"` (1). Grand total: 86 entries (AC-01). Hebrew-value-collision-set: 25 by-design duplicate-target pairs/groups (AC-03).
+  - **Updated:** `tests/crop_book/test_jmf_crop_map.py` — AC-01 count updated 52→86; AC-03 Counter assertion widened from 2 to 25 by-design duplicate pairs/groups (verbatim from LOD400 v1.0.3 §4). Added: `test_ac02_rutabaga_value_corrected`, `test_ac02_old_rutabaga_value_absent`, `test_ac04_1_eggplant_feld_literal_alias`, `test_ac03_duplicate_group_count`.
+  - **New:** `tests/crop_book/test_jmf_crop_map_aliases.py` — 3 tests: alias spot-check (5 samples), entry count grew by 34, Hebrew-collision-set has 25 groups.
+  - **New:** `tests/crop_book/test_jmf_live_workbook_coverage.py` — 1 test AC-04: live master XLSX ≥ 42/50 crops mapped (actual: 48/50 mapped).
+  - **New:** `tests/crop_book/test_jmf_seed_dry_run.py` — 2 tests AC-07: master CROP CHART ≤ 8 unmapped crops; seed --all --dry-run exits 0 with no ERROR-level logs.
+  - **Test totals:** 10 new tests; suite 251 passed / 1 pre-existing failure (`test_wp_upload_crop_book` — out of scope, unchanged from WP-B1 baseline).
+
 ### S003 ספר גידולים — JMF MasterClass Excel Base Layer (Team 10, SFA-S003-P002-WP-B1, 2026-05-24)
 
 - **2026-05-24 — Team 10 (WP-B1):** JMF MasterClass Excel ingestion layer. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.1.3 LOCKED, L-GATE_S PASS_WITH_FINDINGS R3 at commit `3c92a67`).
