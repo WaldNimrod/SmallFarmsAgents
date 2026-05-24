@@ -516,6 +516,7 @@ def main() -> None:
         from sqlalchemy import create_engine
         from sqlalchemy.orm import sessionmaker
         from organic_market_agent.crop_book.models import Base
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401 — resolve lazy CropFieldEnrichment relationship
         from organic_market_agent.crop_book.crop_task_templates import CropTaskTemplate  # noqa: F401
 
         engine = create_engine("sqlite:///:memory:")

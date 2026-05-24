@@ -942,7 +942,19 @@ def import_jmf_masterclass(
         # Get or create crop
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
-            crop_obj = Crop(name_he=name_he)
+            # For JMF-only crops not in the DB: create with minimal fields.
+            # `family_id` is NOT NULL in the schema — use the first available family
+            # as a placeholder, or skip if none exists.
+            from organic_market_agent.crop_book.models import CropFamily
+            family = session.query(CropFamily).first()
+            if family is None:
+                logger.warning(
+                    "Cannot create new crop %r — no family exists in DB. Skipping.", name_he
+                )
+                if name_he not in map_misses:
+                    map_misses.append(f"[no_family]:{name_he}")
+                continue
+            crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
             session.add(crop_obj)
             session.flush()
 
@@ -1038,7 +1050,11 @@ def import_jmf_masterclass(
 
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
-            crop_obj = Crop(name_he=name_he)
+            from organic_market_agent.crop_book.models import CropFamily
+            family = session.query(CropFamily).first()
+            if family is None:
+                continue
+            crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
             session.add(crop_obj)
             session.flush()
         crop_id = crop_obj.id

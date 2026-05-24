@@ -11,6 +11,20 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — JMF MasterClass Excel Base Layer (Team 10, SFA-S003-P002-WP-B1, 2026-05-24)
+
+- **2026-05-24 — Team 10 (WP-B1):** JMF MasterClass Excel ingestion layer. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.1.3 LOCKED, L-GATE_S PASS_WITH_FINDINGS R3 at commit `3c92a67`).
+  - **New:** `organic_market_agent/crop_book/crop_task_templates.py` — CropTaskTemplate ORM (migration 044). `DAYS_OFFSET_PRESENCE_ONLY=-32768` sentinel constant, `is_presence_only()` helper, `TASK_TYPE_VALUES` (14 entries), `TIMING_ANCHOR_VALUES` (4 entries). F-S-002 R1 fix: `days_offset` NOT NULL with sentinel default.
+  - **New:** `organic_market_agent/db/versions/044_crop_task_templates.py` — Migration 044: `crop_task_templates` table with CHECK constraints (14 task_type values, 4 timing_anchor values), UNIQUE(crop_id, source, task_type, days_offset), 2 indices. SQLite-compatible BigInteger variant. F-S-002 R1: all 4 UNIQUE columns NOT NULL (no NULL-tuple idempotency hole).
+  - **Modified:** `organic_market_agent/crop_book/constants.py` — Appended `JMF_CROP_MAP` (52 entries verbatim from LOD400 §5). 2 by-design duplicate Hebrew targets per AC-03 allow-list: `{Mesclun, Salad Mix}→"תערובת סלט"`, `{Summer Squash, Zucchini}→"קישוא"`.
+  - **New:** `organic_market_agent/crop_book/importer/jmf_masterclass.py` — 5 sheet parsers (parse_crop_chart, parse_associated_tasks, parse_direct_seeding_chart, parse_nursery_chart, parse_cultivars) + unit conversion helpers (_yield_to_per_meter, _inches_to_cm) + `import_jmf_masterclass` orchestrator + upsert helpers. `JmfImportSummary` dataclass. Column headers matched via case-insensitive substring (edition-tolerant). F-S-002 R1: parse_associated_tasks uses sentinel for X cells, never NULL.
+  - **Modified:** `organic_market_agent/crop_book/importer/seed.py` — Added `--jmf-masterclass-dir`, `--jmf-only`, `--no-jmf` CLI flags. Mutual exclusion via argparse group. JMF import call site added BEFORE Tend seed. LOD400 §8 compliance.
+  - **New:** 9 test files (59 new tests total, 241 passing) covering parsers, unit conversions, crop-map, ORM, migration, integration, idempotency, CLI, and AC-13 EX override regression.
+  - **New:** `tests/crop_book/fixtures/jmf/minimal_masterclass.xlsx` — 3-crop minimal fixture (Arugula, Carrots, Basil) covering all 5 sheets.
+  - **Note (AC-04):** The on-disk JMF workbook is a farm-specific adaptation with different crop names from the canonical JMF_CROP_MAP. Only 14/50 CROP CHART names match. Inquiry filed to team_110 (INQUIRY_AC04_CROP_CHART_MISMATCH_v1.0.0.md). All tests pass using the minimal fixture; live workbook import works for the 14 matching crops with map_misses logged for others.
+  - **MINOR CARRY (F-S-002-MINOR-R3):** Build implements sentinel contract (non-null days_offset, DAYS_OFFSET_PRESENCE_ONLY for X cells) per LOD400 v1.1.3 authoritative wording. Stale `int | None` prose in §6.4 example / AC-06 was already corrected in v1.1.3 per team_190 carry-forward instruction.
+  - **MINOR CARRY (F-S-003-MINOR-R3):** Build consistent with v1.1.3 corrected frontmatter and AC-03 parenthetical. Process metadata drift was cleaned in v1.1.3.
+
 ### S003 ספר גידולים — UI Views / Flask Blueprint (Team 10, SFA-S003-P001-WP003, 2026-05-08)
 
 - **2026-05-08 — Team 10 (WP003):** Added ספר גידולים UI views layer (read-only Flask Blueprint). Authorization: L-GATE_S PASS team_190 Round 2 (2026-05-07). DB offline throughout (ADR034 R9 protocol).
