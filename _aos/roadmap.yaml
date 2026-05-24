@@ -799,7 +799,7 @@ work_packages:
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_E
-  lod_status: PRE_LOD200
+  lod_status: LOD200_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
