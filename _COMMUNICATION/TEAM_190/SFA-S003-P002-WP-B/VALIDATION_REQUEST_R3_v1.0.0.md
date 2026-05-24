@@ -10,7 +10,7 @@ related_wp: SFA-S003-P002-WP-B
 expects_response: true
 status: SENT
 priority: BLOCKER
-reviewed_commit: "PENDING — issued after this commit"
+reviewed_commit: "4359403"
 prior_verdicts:
   - _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B/PRE_HANDOFF_VERDICT_v1.0.0.md     # R1 PASS (spec-only scope)
   - _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B/PRE_HANDOFF_VERDICT_R2_v1.0.0.md  # R2 FAIL (F-R2-001)
