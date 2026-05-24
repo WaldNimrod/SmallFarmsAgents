@@ -5,8 +5,15 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict (R2)
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.1
+version: v1.0.2
 changelog: >
+  v1.0.2 — Remediation of single BLOCKER from team_190 L-GATE_S R2
+  verdict: AC-01 title said "exactly 86 entries" but the assertion
+  body still said `len(JMF_CROP_MAP) == 85` (caught by team_190 as a
+  literal map patch precision failure). Fix is 1 line: `len ==
+  85` → `len == 86`. The v1.0.1 grep that was supposed to catch this
+  used `len == 85` instead of `len(JMF_CROP_MAP) == 85` — verified
+  the fix this time via the corrected probe.
   v1.0.1 — Remediation of two BLOCKERS from team_190 L-GATE_S R1
   verdict (LOD400-VERDICT_v1.0.0.md). B-01: §3.2 entry-count math
   reorganized — `Eggplant  (Feld)` integrated as a new "Field-qualifier
@@ -228,7 +235,7 @@ below). The exact final number depends on how the parser handles the
 
 **AC-01 — `JMF_CROP_MAP` has exactly 86 entries.**
 `from organic_market_agent.crop_book.constants import JMF_CROP_MAP` succeeds;
-`len(JMF_CROP_MAP) == 85`.
+`len(JMF_CROP_MAP) == 86`.
 
 **AC-02 — Rutabaga value corrected.**
 `JMF_CROP_MAP["Rutabaga"] == "רוטבגה"`. The historical value
@@ -468,9 +475,10 @@ See §7 LOD500_LOCKED inventory.
 
 ---
 
-*LOD400 v1.0.1 — patched 2026-05-25 by team_110 under EXECUTION_MANDATE
+*LOD400 v1.0.2 — patched 2026-05-25 by team_110 under EXECUTION_MANDATE
 SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.0.0 FAILed at team_190 L-GATE_S R1 with 2 BLOCKERS (B-01 count
-conflict; B-02 incomplete Counter assertion). v1.0.1 addresses both:
-§3.2 Eggplant integration + AC-03 expansion to 25 pairs/groups.
-Pending: team_190 L-GATE_S R2 validation.*
+*v1.0.0 FAILed R1 (2 BLOCKERS) → v1.0.1 fixed §3.2 + AC-03 but the
+AC-01 assertion body retained `len == 85` while the title said 86
+→ v1.0.1 FAILed R2 (1 BLOCKER on the count mismatch) → v1.0.2 is a
+1-line fix: AC-01 assertion `len(JMF_CROP_MAP) == 86`. Pending:
+team_190 L-GATE_S R3 validation.*
