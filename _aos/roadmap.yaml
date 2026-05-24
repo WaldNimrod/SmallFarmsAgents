@@ -795,11 +795,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1
   label: "ספר גידולים: JMF Excel Base Layer — Multi-Source Knowledge Foundation"
-  status: BUILDING
+  status: DONE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
@@ -840,10 +842,59 @@ work_packages:
       blocker: 0
       major: 0
       minor: 2     # F-S-002-MINOR-R3 (int|None drift), F-S-003-MINOR-R3 (process metadata drift); both addressed in v1.1.3
-  notes: "WP-B1: JMF Excel ingestion. PR tier (0.70). Foundation for B2+B3.
-    Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
-    LOD200+LOD400 pending team_110 (handoff at
-    _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/ACTIVATION_PROMPT.md)."
+  - gate: L-GATE_B
+    result: BUILD_COMPLETE_PASS_WITH_FINDINGS
+    date: "2026-05-24"
+    notes: "team_10 (sfa_build, Claude Sonnet 4.6 — sub-agent of team_110)
+      executed the 10-step build sequence from LOD400 §11 against spec at
+      262d9a3 (v1.1.3). 5 build commits b86983b..6eb312d. 56 new tests
+      across 9 files (spec required ≥25); 22/22 ACs PASS against fixture
+      workbook. LOD500_LOCKED audit CLEAN (zero diff on all 10 locked
+      paths). validate_aos.sh: 29 PASS / 17 SKIP / 0 FAIL. Pre-existing
+      failure in test_dispatch_upload_crop_book_profile (touches locked
+      publisher) acknowledged out-of-scope. FINDING-01 (live workbook
+      AC-04 coverage mismatch — 14/50 crops match canonical JMF_CROP_MAP)
+      filed by team_10 per spec §11 Step 4 non-improvisation rule;
+      disposed by team_110 as DATA-GAP (importer's WARN+skip on miss IS
+      the spec contract per §5 maintenance rule); deferred to follow-up
+      WP. BUILD_REPORT: BUILD_REPORT_v1.0.0.md."
+    validator: team_10
+    builder_engine: Claude-Sonnet-4.6
+    build_commits: ["b86983b", "db37572", "a976421", "3fef7ca", "6eb312d"]
+    findings:
+      blocker: 0
+      major: 0
+      minor: 1     # FINDING-01 — deferred to follow-up WP per DISPOSITION_FINDING-01_v1.0.0.md
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) constitutional
+      validation of the build at HEAD 6eb312d against spec at 262d9a3
+      (v1.1.3). 20/20 VVs PASS; 0 BLOCKER / 0 MAJOR / 1 MINOR (VV-15
+      historical int|None wording in spec changelog narrative — by
+      design, describes prior contract — non-blocking per verdict §6;
+      may be addressed in the same follow-up WP that fixes FINDING-01
+      + Hebrew terminology audit). Cross-engine separation maintained
+      across entire chain: team_110 Opus 4.7 ↔ team_10 Sonnet 4.6 ↔
+      team_190 GPT-5.5. AC-13 EX-override regression PASS (proves WP-A
+      engine reuse). AC-15a/b/c + AC-16a/b constraint regressions PASS
+      (13 tests). Verdict: LOD500-VERDICT_v1.0.0.md at commit e4e9b3b."
+    validator: team_190
+    validator_engine: GPT-5.5
+    build_head_commit: "6eb312d"
+    spec_commit: "262d9a3"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 1     # VV-15 historical wording in changelog narrative; carry to follow-up WP
+  notes: "WP-B1 CLOSED 2026-05-25 per ADR042 3-step closure under ADR045
+    EXECUTION_MANDATE SFA-S003-P002-WP-B. Archive manifest:
+    _archive/SFA-S003-P002-WP-B1/ARCHIVE_MANIFEST.md. Unblocks WP-B2 +
+    WP-B3 (both have B1 in depends_on). Follow-up WP scheduled to
+    address FINDING-01 alias extensions + Hebrew terminology audit +
+    VV-15 changelog cleanup per DISPOSITION_FINDING-01_v1.0.0.md §4
+    BEFORE the first live `seed.py --all` run against production DB
+    (prevents Rutabaga → ברוקקואר corruption)."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
