@@ -4,14 +4,14 @@ from: team_00
 to: team_110
 date: "2026-05-24"
 type: EXECUTION_MANDATE
-wp: SFA-S003-P002-WP-B  (program: B1 + B2 + B3)
+wp: "SFA-S003-P002-WP-B (program: B1 + B2 + B3)"
 project: smallfarmsagents
 branch: main
 execution_authority: full
 status: ACTIVE
 spec_ref: "_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md"
-mandate_basis: team_00 in-session grant 2026-05-24 (canonical registration grant)
-prior_gate: L-GATE_PRE_HANDOFF PASS (team_190 verdict at commit d70bf11)
+mandate_basis: "team_00 in-session grant 2026-05-24 (canonical registration grant)"
+prior_gate: "L-GATE_PRE_HANDOFF PASS (team_190 verdict at commit d70bf11)"
 ---
 
 # Execution Mandate — SFA-S003-P002-WP-B (Program: B1 + B2 + B3)
