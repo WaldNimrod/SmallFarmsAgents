@@ -2,10 +2,18 @@
 id: SFA-S003-P002-WP-B1-LOD400
 wp: SFA-S003-P002-WP-B1 — JMF MasterClass Excel Base Layer
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
+status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict (R2)
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-24
-version: v1.0.0
+version: v1.1.0
+changelog: >
+  v1.1.0 — F-S-001 fix: §5 now lists the complete 52-entry JMF_CROP_MAP
+  contract (no builder-side inference). F-S-002 fix: §3 / §4 / §6.4
+  redefine `days_offset` as INTEGER NOT NULL with sentinel constant
+  DAYS_OFFSET_PRESENCE_ONLY = -32768 for presence-only `X` cells; UNIQUE
+  constraint is now null-safe on both Postgres and SQLite. AC-15 + AC-16
+  + §13 R-04 updated accordingly.
+  L-GATE_S R1 verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1/LOD400-VERDICT_v1.0.0.md (FAIL — 2 BLOCKERS, both addressed here).
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1/LOD200_spec.md
 program_brief_ref: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md
 execution_mandate_ref: _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/EXECUTION_MANDATE_v1.0.0.md
@@ -154,7 +162,14 @@ def upgrade():
         sa.Column("trust_tier", sa.VARCHAR(20), nullable=False),
         sa.Column("task_type", sa.VARCHAR(40), nullable=False),
         sa.Column("timing_anchor", sa.VARCHAR(20), nullable=True),
-        sa.Column("days_offset", sa.Integer, nullable=True),
+        # F-S-002 (R1): days_offset is NOT NULL with a sentinel value for
+        # presence-only ("X") cells. SQL UNIQUE constraints permit multiple
+        # NULL tuples on both Postgres and SQLite — nullability here would
+        # break idempotent re-import. Sentinel chosen so it is impossible
+        # to confuse with a real offset (no agricultural task is scheduled
+        # -32768 days from any anchor).
+        sa.Column("days_offset", sa.Integer, nullable=False,
+                  server_default=sa.text("-32768")),
         sa.Column("method", sa.Text, nullable=True),
         sa.Column("input_material", sa.Text, nullable=True),
         sa.Column("notes", sa.Text, nullable=True),
@@ -162,6 +177,10 @@ def upgrade():
         sa.Column("is_active", sa.Boolean, nullable=False, server_default=sa.text("true")),
         sa.Column("created_at", sa.TIMESTAMP(timezone=True),
                   nullable=False, server_default=sa.text("now()")),
+        # F-S-002 (R1): all 4 columns are NOT NULL → UNIQUE behaves
+        # deterministically on both Postgres and SQLite (no NULL-tuple
+        # idempotency hole). Presence-only rows collide via the
+        # DAYS_OFFSET_PRESENCE_ONLY sentinel (-32768).
         sa.UniqueConstraint("crop_id", "source", "task_type", "days_offset",
                             name="uq_cct_crop_source_type_offset"),
         sa.CheckConstraint(
@@ -195,6 +214,19 @@ the B1 baseline. WP-B3 will introduce additional values (`nursery_seed`,
 CONSTRAINT ck_cct_task_type; ADD CONSTRAINT ck_cct_task_type CHECK …`. B1 must
 NOT pre-add B3's values — keep the contract tight to its own scope.
 
+**`days_offset` sentinel (F-S-002 R1 fix):** the column is `INTEGER NOT NULL`
+with server-default `-32768`. The Python constant
+`DAYS_OFFSET_PRESENCE_ONLY: int = -32768` is exported from
+`crop_task_templates.py` (§4) and used by the importer (§6.4) for `X`
+(presence-only) cells. Range note: PostgreSQL `INTEGER` is `int32`
+(`-2147483648 .. 2147483647`); SQLite stores any signed 64-bit integer. The
+sentinel value `-32768` is far outside any plausible real offset (no
+agricultural task schedules −90 years from a transplant date), so a future
+real-world value cannot collide with it. **Query helper contract:** any view
+or downstream module that reads `days_offset` MUST treat
+`days_offset == DAYS_OFFSET_PRESENCE_ONLY` as "no specific offset" (display
+"—" or "presence only"); arithmetic on the raw value is forbidden.
+
 ---
 
 ## 4. ORM — `crop_task_templates.py`
@@ -220,6 +252,18 @@ from sqlalchemy.orm import Mapped, mapped_column
 from organic_market_agent.db.base import Base
 
 _PK_TYPE = BigInteger().with_variant(Integer(), "sqlite")
+
+# Sentinel value for the `days_offset` column when the source data records
+# only task presence (e.g., JMF "X" cells with no integer). NOT NULL on the
+# column ensures the (crop_id, source, task_type, days_offset) UNIQUE
+# constraint is deterministic on both Postgres and SQLite — see F-S-002 R1.
+DAYS_OFFSET_PRESENCE_ONLY: int = -32768
+
+
+def is_presence_only(days_offset: int) -> bool:
+    """Return True if `days_offset` is the presence-only sentinel."""
+    return days_offset == DAYS_OFFSET_PRESENCE_ONLY
+
 
 TASK_TYPE_VALUES: tuple[str, ...] = (
     "stale_seed_bed", "flame_weeder", "flextine_harrow_1", "flextine_harrow_2",
@@ -255,7 +299,12 @@ class CropTaskTemplate(Base):
     trust_tier: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     task_type: Mapped[str] = mapped_column(VARCHAR(40), nullable=False)
     timing_anchor: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
-    days_offset: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    # F-S-002 (R1): NOT NULL + sentinel default. Use `is_presence_only(row.days_offset)`
+    # to detect presence-only rows in callers — never compare against -32768 inline.
+    days_offset: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=DAYS_OFFSET_PRESENCE_ONLY,
+        server_default=str(DAYS_OFFSET_PRESENCE_ONLY),
+    )
     method: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     input_material: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
@@ -298,34 +347,89 @@ anything above this point.
 # at test time (test_jmf_crop_map.py — AC-04).
 
 JMF_CROP_MAP: dict[str, str] = {
-    "Arugula":          "ארוגולה",
-    "Basil":            "בזיליקום",
-    "Beans (bush)":     "שעועית ירוקה",
-    "Beets":            "סלק",
-    "Bell Pepper":      "פלפל מתוק",
-    "Bok Choy":         "בוק צ'וי",
-    "Broccoli":         "ברוקולי",
-    "Brussels Sprouts": "כרוב ניצנים",
-    "Cabbage":          "כרוב",
-    "Carrots":          "גזר",
-    # … (full 52-row content authored by builder during Step 2; entries
-    # marked LARGE in §17 build sequence). The builder reads the
-    # CROP CHART sheet's Crop column with openpyxl, then fills each
-    # Hebrew name by cross-referencing crops.name_en already in the DB
-    # (populated by WP-A from TEND_CROP_MAP). If a JMF crop has NO
-    # crops.name_en match, the builder records it in §6 open-question log
-    # and the importer skips that row at runtime.
-    # The placeholder “…” in this spec stands for the remaining 42 rows;
-    # they are listed in PROGRAM_BRIEF §1 (52-row CROP CHART) and resolved
-    # one-by-one at build time. Test AC-04 enforces len(JMF_CROP_MAP) >= 50.
+    # ---- Brassicas ----
+    "Arugula":            "ארוגולה",
+    "Bok Choy":           "פאק צ'וי",
+    "Broccoli":           "ברוקולי",
+    "Brussels Sprouts":   "כרוב ניצנים",
+    "Cabbage":            "כרוב",
+    "Cauliflower":        "כרובית",
+    "Kale":               "קייל",
+    "Kohlrabi":           "קולורבי",
+    "Radishes":           "צנונית",
+    "Turnips":            "לפת",
+    # ---- Greens / Salads ----
+    "Chard":              "מנגולד",
+    "Cress":              "גרגר נחלים",
+    "Endive":             "אנדיב",
+    "Lettuce":            "חסה",
+    "Mesclun":            "תערובת סלט",
+    "New Zealand Spinach": "תרד ניו-זילנד",
+    "Salad Mix":          "תערובת סלט",
+    "Spinach":            "תרד",
+    # ---- Alliums ----
+    "Garlic":             "שום",
+    "Leeks":              "כרישה",
+    "Onions":             "בצל",
+    "Scallions":          "בצל ירוק",
+    "Shallots":           "שאלוט",
+    # ---- Roots / Tubers ----
+    "Beets":              "סלק",
+    "Carrots":            "גזר",
+    "Celery Root":        "סלרי שורש",
+    "Jerusalem Artichokes": "ארטישוק ירושלמי",
+    "Parsnips":           "גזר לבן",
+    "Potatoes":           "תפוח אדמה",
+    "Rutabaga":           "ברוקקואר",
+    "Sweet Potatoes":     "בטטה",
+    # ---- Solanaceae ----
+    "Eggplant":           "חציל",
+    "Peppers":            "פלפל",
+    "Tomatillos":         "תומאטיו",
+    "Tomatoes":           "עגבנייה",
+    # ---- Cucurbits ----
+    "Cucumbers":          "מלפפון",
+    "Melons":             "מלון",
+    "Summer Squash":      "קישוא",
+    "Watermelons":        "אבטיח",
+    "Winter Squash":      "דלעת",
+    "Zucchini":           "קישוא",
+    # ---- Legumes ----
+    "Beans (Bush)":       "שעועית",
+    "Beans (Pole)":       "שעועית מטפסת",
+    "Fava Beans":         "פול",
+    "Peas":               "אפונה",
+    "Snow Peas":          "אפונת שלגים",
+    # ---- Herbs ----
+    "Basil":              "בזיל",
+    "Celery":             "סלרי",
+    "Cilantro":           "כוסברה",
+    "Dill":               "שמיר",
+    "Fennel":             "שומר",
+    "Parsley":            "פטרוזיליה",
 }
+# Total: 52 entries. Maintenance rule: when a new JMF MasterClass edition
+# adds or renames a crop, append/edit an entry here only — never branch on
+# JMF names elsewhere in the codebase. On runtime miss (JMF row whose
+# English label is not a key), the importer logs WARN with the unmapped
+# label and skips that row (same convention as TEND_CROP_MAP miss handling
+# in tend.py). Test AC-03 enforces `len(JMF_CROP_MAP) == 52`.
 ```
 
-**Why include only 10 entries in the spec, not all 52?** The first 10 are
-unambiguous from PROGRAM_BRIEF and from the existing `TEND_CROP_MAP`. The
-remaining 42 require the builder to open the XLSX and cross-reference each
-English name against `crops.name_en` already in the DB — this is mechanical
-work, not architectural judgment. AC-04 below enforces the coverage.
+**Authoring note (F-S-001 R1 fix):** the 52 entries above resolve the
+PROGRAM_BRIEF "52-row CROP CHART" inventory. Hebrew values are sourced
+preferentially from the existing `TEND_CROP_MAP` (where the English label
+matches semantically) so JMF and Tend share the same `crops.name_he` —
+this is what makes the WP-A enrichment engine able to blend PR (JMF) and
+OP (Tend) values for the same crop. JMF-only crops (no Tend counterpart —
+e.g., Cauliflower, Endive, Fava Beans, Parsnips, Potatoes, Rutabaga,
+Shallots, Snow Peas, Sweet Potatoes, Tomatillos, Watermelons, Zucchini)
+use Hebrew names spelled per standard Israeli horticultural usage and will
+seed brand-new `crops.name_he` rows on first JMF import. AC-03 verifies
+the count; the builder must NOT add or remove entries during Step 4 of §11
+— if a JMF MasterClass edition encountered at build time has fewer/more
+crop rows than this contract specifies, the builder files an inquiry MSG
+back to team_110 rather than improvising.
 
 ---
 
@@ -376,6 +480,11 @@ class JmfImportSummary:
     map_misses: list[str]    # JMF crop names with no JMF_CROP_MAP entry
     standalone_divergences: list[tuple[str, str, str, str]]
     # (sheet, crop_he, field_name, "<master>!=<standalone>")
+    invalid_offsets: int = 0
+    # F-S-002 (R1): count of CROP ASSOCIATED TASKS cells whose integer
+    # value collided with DAYS_OFFSET_PRESENCE_ONLY (= -32768) and were
+    # therefore skipped with ERROR. Expected: 0 in practice; this counter
+    # exists to catch upstream data corruption early.
 ```
 
 ### 6.3 `parse_crop_chart(xlsx_path)`
@@ -444,13 +553,25 @@ _TASK_TIMING_MAP: dict[str, str] = {
 }
 ```
 
-**Cell parsing rules:**
-- Empty / whitespace → skip.
-- `X` (case-insensitive) → `days_offset = None` (presence only).
-- Integer → `days_offset = int(value)`.
-- Negative integers are allowed (pre-planting tasks like stale_seed_bed).
+**Cell parsing rules** (F-S-002 R1 fix — `days_offset` is NOT NULL):
+- Empty / whitespace → skip (no row emitted; the absence of a row IS the
+  "no observation" signal — do NOT emit a sentinel row).
+- `X` (case-insensitive) → `days_offset = DAYS_OFFSET_PRESENCE_ONLY`
+  (imported from `crop_task_templates`). The row is emitted and the
+  `(crop_id, source='JMF', task_type, -32768)` UNIQUE constraint
+  collapses duplicate `X` observations from re-imports — idempotency
+  guarantee for AC-07a, AC-15.
+- Integer → `days_offset = int(value)`. The parser must reject any value
+  equal to `DAYS_OFFSET_PRESENCE_ONLY` from the upstream sheet (an actual
+  −32768 day offset is implausible and would corrupt the sentinel
+  contract). If encountered, log ERROR with `crop_jmf_en` + `task_type`,
+  skip the cell, increment a `summary.invalid_offsets` counter. (Add this
+  field to `JmfImportSummary` in §6.2.)
+- Negative integers are allowed (pre-planting tasks like
+  `stale_seed_bed`) provided they are **not** equal to the sentinel.
 - Anything else (e.g. "5-7 days") → log WARN, store raw text in `notes`,
-  set `days_offset = None`.
+  set `days_offset = DAYS_OFFSET_PRESENCE_ONLY` (so the row is still
+  represented but UNIQUE behavior remains deterministic).
 
 ### 6.5 `parse_direct_seeding_chart(xlsx_path)`
 
@@ -715,15 +836,25 @@ succeeds. SQLite and PostgreSQL both work.
 succeeds; all 13 columns map to the correct types; `TASK_TYPE_VALUES` and
 `TIMING_ANCHOR_VALUES` tuples are exported and match the migration enums.
 
-**AC-03 — `JMF_CROP_MAP` ≥ 50 entries.**
-`from organic_market_agent.crop_book.constants import JMF_CROP_MAP` succeeds;
-`len(JMF_CROP_MAP) >= 50`; every value occurs in the `crops.name_he` set
-populated by WP-A `--all`.
+**AC-03 — `JMF_CROP_MAP` is exactly 52 entries.**
+*(F-S-001 R1 fix — count tightened.)*
+`from organic_market_agent.crop_book.constants import JMF_CROP_MAP`
+succeeds; `len(JMF_CROP_MAP) == 52`; every key is a unique non-empty
+ASCII English string; every value is a unique non-empty Hebrew string.
+(The Hebrew-value uniqueness assertion catches accidental duplicates like
+two crops both mapping to "תערובת סלט"; Note: by design `Salad Mix` and
+`Mesclun` deliberately share that value — the test allows duplicate-target
+mappings ONLY for this pair, hard-coded.)
 
-**AC-04 — `JMF_CROP_MAP` covers every JMF CROP CHART row.**
-After `parse_crop_chart(<master XLSX>)`, every `crop_jmf_en` value is a
-key in `JMF_CROP_MAP`. If any are missing, fail the test with the missing
-names listed (so the builder can update §5 in a follow-up commit).
+**AC-04 — Map coverage vs. live JMF CROP CHART.**
+After `parse_crop_chart(<master XLSX>)`, the set of distinct
+`crop_jmf_en` values returned by the parser equals the keys of
+`JMF_CROP_MAP` minus the deliberate duplicate `Mesclun` (which doesn't
+appear in CROP CHART; it's a Tend-side synonym preserved in the map for
+convenience). If the JMF MasterClass workbook on disk has a Crop value
+that is NOT in `JMF_CROP_MAP`, the test FAILs with the missing key listed
+— team_110 then issues a follow-up patch and re-runs L-GATE_S R3 (NOT a
+builder-side improvisation).
 
 **AC-05 — `parse_crop_chart` returns 52 rows with required keys.**
 Length ≥ 50 (allowing for empty trailing rows). Every row has
@@ -777,16 +908,29 @@ correctly wired.
 After full `seed.py --all`, `SELECT COUNT(DISTINCT crop_id) FROM
 crop_task_templates WHERE source = 'JMF'` is ≥ 20.
 
-**AC-15 — UNIQUE constraint enforced on `crop_task_templates`.**
-Inserting two rows with identical `(crop_id, source, task_type,
-days_offset)` raises `IntegrityError`. Re-import via the helper is
-idempotent because the helper uses `_upsert_task_template` (matching
-behavior of §6.10 for source_values).
+**AC-15 — UNIQUE constraint enforced on `crop_task_templates` (incl. presence-only).**
+*(F-S-002 R1 fix — split into 3 sub-assertions.)*
+- **AC-15a** — Inserting two rows with identical
+  `(crop_id, source, task_type, days_offset)` where `days_offset` is a
+  real integer raises `IntegrityError` on both Postgres and SQLite.
+- **AC-15b** — Inserting two rows with identical
+  `(crop_id, source, task_type, DAYS_OFFSET_PRESENCE_ONLY)` (i.e., two
+  presence-only `X` observations of the same task on the same crop)
+  ALSO raises `IntegrityError`. This was the F-S-002 idempotency hole and
+  is the regression assertion for the fix.
+- **AC-15c** — Inserting a row with `days_offset = None` is rejected at
+  ORM-level (raises `IntegrityError` from the `NOT NULL` constraint).
+  Re-import via `_upsert_task_template` is idempotent because the upsert
+  matches on the full 4-column key (no NULL involvement).
 
-**AC-16 — CHECK constraint enforced on `task_type`.**
-Inserting a row with `task_type='nursery_seed'` (which is reserved for
-WP-B3) raises `IntegrityError` (or its SQLite equivalent). Confirms B1
-does NOT pre-add B3's enum values.
+**AC-16 — CHECK constraint enforced on `task_type` + `days_offset` NOT NULL.**
+- **AC-16a** — Inserting a row with `task_type='nursery_seed'` (reserved
+  for WP-B3) raises `IntegrityError`. Confirms B1 does NOT pre-add B3
+  enum values.
+- **AC-16b** — Inserting a row that explicitly sets `days_offset=None`
+  raises `IntegrityError` (`NOT NULL` violation). This complements
+  AC-15c — proves the column nullability discipline holds at the
+  database level, not just the ORM level.
 
 **AC-17 — CLI `--jmf-only` skips Tend.**
 `seed.py --jmf-only --dry-run` does NOT import Tend rows
@@ -826,8 +970,8 @@ empty (B1 introduces no GCR).
 | `test_jmf_unit_conversions.py` | 4 | AC-08, AC-09, AC-10; yield × 3 inputs + spacing × 3 inputs + NULL pass-through |
 | `test_jmf_masterclass_integration.py` | 4 | AC-11, AC-12, AC-14; SQLite in-memory; variety resolution; enrichment runner integration |
 | `test_jmf_idempotency.py` | 2 | AC-07a, AC-07b |
-| `test_crop_task_templates_orm.py` | 2 | AC-02 (column / enum tuple coverage) |
-| `test_migration_044.py` | 2 | AC-01 forward + AC-15 / AC-16 constraint enforcement |
+| `test_crop_task_templates_orm.py` | 3 | AC-02 (column / enum tuple coverage) + AC-16b (`days_offset = None` rejected at ORM-level) + `is_presence_only(DAYS_OFFSET_PRESENCE_ONLY) is True` |
+| `test_migration_044.py` | 4 | AC-01 forward + AC-15a (real-offset duplicate) + AC-15b (presence-only duplicate; F-S-002 R1 regression) + AC-16a (`task_type='nursery_seed'` rejected) |
 | `test_seed_jmf_cli.py` | 3 | AC-17, AC-18, AC-19 |
 | `test_jmf_ex_override_regression.py` | 1 | AC-13 (the most important regression assertion) |
 
@@ -849,12 +993,13 @@ parser tests). Marker: `@pytest.mark.crop_book`.
 fresh SQLite DB and verify table + indices. Run `alembic downgrade 043`,
 then `alembic upgrade 044` again.
 
-**Step 4** — Append `JMF_CROP_MAP` to `constants.py`. Open the master
-XLSX, read CROP CHART column 1 (Crop), and fill in all 52 mappings by
-cross-referencing `crops.name_en` from a live DB query (or from
-TEND_CROP_MAP for the overlap). Document any JMF crops that have no DB
-match in a comment block above the dict (these will simply be skipped
-at runtime with a WARN).
+**Step 4** — Append `JMF_CROP_MAP` to `constants.py` **verbatim from §5
+of this spec** (all 52 entries — do NOT derive, infer, or shorten). The
+spec is the contract; do not consult `crops.name_en` or the live XLSX
+for the mapping. After paste, run AC-03 (`len(JMF_CROP_MAP) == 52` and
+key/value uniqueness rules) and AC-04 (live XLSX coverage check). If
+AC-04 reports a missing key, STOP and file an inquiry MSG back to
+team_110 per the F-S-001 R1 contract — do NOT improvise.
 
 **Step 5** — Create `jmf_masterclass.py` with the 5 parser functions
 (no DB writes yet). Write `test_jmf_masterclass_parsers.py` against a
@@ -909,7 +1054,9 @@ Per `_COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B/PRE_HANDOFF_VERDICT_v1.0.0.md`
 | R-01 | JMF CROP CHART column-header drift across MasterClass editions | MEDIUM | MEDIUM | Parsers use case-insensitive substring match (§6.3); fallback log WARN on missing column; AC-05 catches gross structural change. |
 | R-02 | Hebrew encoding issues writing `JMF_CROP_MAP` values into Python source | LOW | LOW | Python 3.11 source is UTF-8 by default; `test_jmf_crop_map.py` round-trips a sample Hebrew value through `repr()` / `eval()`. |
 | R-03 | Yield-unit string varies ("lbs/100ft" vs "lb/100'") | MEDIUM | LOW | Conversion table in §7.1 is keyed on exact strings; unknown unit → log WARN, skip the value. AC-08 covers the documented strings only; uncommon variants surface in the importer's `map_misses` channel. |
-| R-04 | CHECK constraint syntax differs on SQLite vs Postgres | LOW | MEDIUM | Both support `CHECK (col IN (...))` form. Tested by AC-01 + AC-16 on SQLite; integration env runs Postgres. |
+| R-04 | CHECK constraint syntax differs on SQLite vs Postgres | LOW | MEDIUM | Both support `CHECK (col IN (...))` form. Tested by AC-01 + AC-16a on SQLite; integration env runs Postgres. |
+| R-08 | `days_offset` sentinel (-32768) collides with a real future offset | NEGLIGIBLE | LOW | No agricultural task is scheduled −32768 days from any anchor. Parser rejects any input cell equal to the sentinel (logs ERROR + increments `summary.invalid_offsets`). AC-15b regression-tests UNIQUE for presence-only rows. F-S-002 R1 fix. |
+| R-09 | `JMF_CROP_MAP` Hebrew value drifts from MasterClass edition | LOW | LOW | Hebrew values are the contract for `crops.name_he` — they MUST be stable across editions. New JMF MasterClass editions that add crops require a team_110 LOD400 patch (NOT a builder improvisation per §11 Step 4). F-S-001 R1 fix. |
 | R-05 | Existing `parse_jmf_dir` in `jmf.py` still wired into seed.py | LOW | LOW | Confirmed by reading seed.py line 471 — the existing `--jmf-dir` flag points to a different default path. B1 adds an independent `--jmf-masterclass-dir` flag. Old call site can stay (returns 0 rows; harmless). Builder verifies in Step 8. |
 | R-06 | `_default_variety_id` collides with WP-A's variety creation | LOW | MEDIUM | Same selector predicate (`name_en IS NULL`) as WP-A; concurrent inserts in the same session are serialized by SQLAlchemy. Tested in AC-07. |
 | R-07 | Migration 044 conflicts with WP-A migration 043 if 043's down_revision shifts | LOW | LOW | Confirmed at spec time: `043` is the current head (43 files in `db/versions/`). Builder verifies by reading `043_backfill_source_values_trust.py` for the `revision = "043"` line. |
@@ -978,6 +1125,9 @@ See §14 LOD500_LOCKED inventory.
 
 ---
 
-*LOD400 v1.0.0 — authored 2026-05-24 by team_110 under EXECUTION_MANDATE
+*LOD400 v1.1.0 — patched 2026-05-24 by team_110 under EXECUTION_MANDATE
 SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*Pending: team_190 L-GATE_S validation (mandate next).*
+*v1.0.0 authored 2026-05-24; FAIL by team_190 L-GATE_S R1 (2 BLOCKERS).
+v1.1.0 addresses F-S-001 (§5 complete 52-entry map) and F-S-002
+(§3/§4/§6.2/§6.4 + AC-15a/b/c + AC-16a/b + §13 R-08/R-09 + §11 Step 4).*
+*Pending: team_190 L-GATE_S R2 validation.*
