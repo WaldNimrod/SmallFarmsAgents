@@ -702,11 +702,11 @@ work_packages:
 
 - id: SFA-S003-P002-WP-A
   label: "ספר גידולים: Data Enrichment — Multi-Source Confidence Layer"
-  status: ELIGIBLE
+  status: DONE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-23"
@@ -762,7 +762,33 @@ work_packages:
       F-190-WP-A-02 (MAD=0 branch): IMPLEMENTED + 3 dedicated tests.
       F-190-WP-A-03/04 MINOR: acknowledged.
       BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-A/BUILD_REPORT_v1.0.0.md"
-  notes: "SFA-S003-P002 opened 2026-05-23. LOD200_LOCKED. L-GATE_S PASS_WITH_FINDINGS.
-    LOD400 v1.1.0 (F-01+F-02 fixed inline). L-GATE_B PASS 2026-05-24. LOD400_LOCKED.
-    Ready for L-GATE_V (team_190)."
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-05-24"
+    reviewed_commit: "11edbd1"
+    notes: "team_190 (GPT-5.5, non-Claude). 3 BLOCKERs: LV-01 migration
+      backfill, LV-02 calibration harness algorithm, LV-03 JSON schema.
+      2 MAJORs: LV-04 seed --all default, LV-05 roadmap in builder commit.
+      Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-A/LOD500-VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-24"
+    reviewed_commit: "594cbc8"
+    notes: "team_190 (GPT-5.5, non-Claude). All 5 R1 findings CLOSED.
+      76 tests pass / 1 skip. validate_aos.sh 29/17/0. AC-13 exit 0.
+      AC-17 schema verified. No roadmap mutation in builder commit (IR#4).
+      Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-A/LOD500-VERDICT_v1.0.1.md
+      Remediation: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-A/REMEDIATION_REPORT_v1.0.0.md"
+    validator: team_190
+  notes: "COMPLETE 2026-05-24. Multi-source confidence layer: SOURCE_REGISTRY
+    (7 classes EX/NI/PR/OP/MK/WB/UC), FIELD_POLICY (9 fields + default),
+    reconciler engine (outlier gate + blend strategies + multi_year_op_mean),
+    crop_field_enrichment table (migrations 041+042+043), enrichment_runner,
+    ni_importer skeleton, validate_enrichment.py (shadow-run calibration,
+    CALIBRATED/MARGINAL/MISALIGNED, exit 0), enrichment_publisher.py (AC-17
+    JSON schema_version+enriched_fields+varieties). 76 enrichment tests.
+    L-GATE_V R2 PASS (team_190 GPT-5.5). LOD500_LOCKED at commit 594cbc8."
   profile: L0
