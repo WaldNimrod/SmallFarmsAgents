@@ -1,4 +1,4 @@
-"""Tests for JMF_CROP_MAP (AC-03, AC-04). SFA-S003-P002-WP-B1."""
+"""Tests for JMF_CROP_MAP (AC-01..AC-04.1). SFA-S003-P002-WP-B1 + WP-B1-patch01."""
 import pytest
 from collections import Counter
 from pathlib import Path
@@ -15,8 +15,8 @@ def jmf_crop_map():
 
 
 def test_jmf_crop_map_count(jmf_crop_map):
-    """AC-03: exactly 52 entries."""
-    assert len(jmf_crop_map) == 52, f"Expected 52 entries, got {len(jmf_crop_map)}"
+    """AC-01 (patch01): exactly 86 entries (52 baseline + 34 aliases)."""
+    assert len(jmf_crop_map) == 86, f"Expected 86 entries, got {len(jmf_crop_map)}"
 
 
 def test_jmf_crop_map_keys_unique_and_nonempty(jmf_crop_map):
@@ -35,15 +35,62 @@ def test_jmf_crop_map_values_nonempty_hebrew(jmf_crop_map):
 
 
 def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
-    """AC-03: exactly 2 by-design duplicate Hebrew targets per LOD400 §9 AC-03."""
+    """AC-03 (patch01): exactly 25 by-design duplicate Hebrew-target pairs/groups per LOD400 v1.0.3 §4 AC-03."""
     counts = Counter(jmf_crop_map.values())
     duplicates = {
         v: sorted([k for k, mv in jmf_crop_map.items() if mv == v])
         for v, c in counts.items() if c > 1
     }
     assert duplicates == {
-        "תערובת סלט": ["Mesclun", "Salad Mix"],
-        "קישוא": ["Summer Squash", "Zucchini"],
+        # ── Baseline pairs from WP-B1 ──
+        "תערובת סלט":  ["Mesclun", "Salad Mix"],
+        "קישוא":        ["Summer Squash", "Zucchini"],
+
+        # ── Pairs introduced by patch01 typo variants ──
+        "כרוב ניצנים":  ["Brussel Sprouts", "Brussels Sprouts"],
+
+        # ── Pairs introduced by patch01 synonyms ──
+        "פאק צ'וי":     ["Bok Choy", "Pak Choi"],
+        "כוסברה":       ["Cilantro", "Coriander"],
+        "מנגולד":       ["Chard", "Swiss Chard"],
+        "אבטיח":        ["Watermelon", "Watermelons"],
+        "תפוח אדמה":    ["Potato", "Potatoes"],
+        "גזר":          ["Carrots", "Fresh Carrots"],
+
+        # ── Pairs introduced by patch01 storage/season qualifiers ──
+        "בצל":          ["Onions", "Storage Onion"],
+        "בצל ירוק":     ["Green Onion", "Scallions"],
+        "כרישה":        ["Leek Storage", "Leek Summer", "Leeks"],
+
+        # ── Pairs introduced by patch01 pepper variants ──
+        "פלפל":         ["Bell Pepper", "Hot Pepper", "Peppers"],
+
+        # ── Pairs introduced by patch01 tomato variants ──
+        "עגבנייה":      ["Greenhouse Cherry Tomato", "Greenhouse Heirloom Tomato",
+                         "Roma Tomato", "Tomatoes"],
+
+        # ── Pairs introduced by patch01 cucumber variants ──
+        "מלפפון":       ["Cucumbers", "Greenhouse English Cucumber",
+                         "Greenhouse Libanese Cucumber"],
+
+        # ── Pairs introduced by patch01 cabbage variants ──
+        "כרוב":         ["Cabbage", "Chinese Cabbage", "Fall Cabbage",
+                         "Savoy Cabbage", "Summer Cabbage"],
+
+        # ── Pairs introduced by patch01 lettuce variants ──
+        "חסה":          ["Lettuce", "Salanova Lettuce", "Sucrine"],
+
+        # ── Pairs introduced by patch01 brassica & misc + spinach edition typos ──
+        "קייל":         ["Baby kale", "Kale"],
+        "צנונית":       ["Raddish", "Radishes", "Winter Radish"],
+        "תרד":          ["Spinach", "Spinach TR", "Spinarch SD"],
+        "כרובית":       ["Cauliflower", "Cauliflower / Romanesco"],
+        "לפת":          ["Hakurei Turnip", "Turnips"],
+        "סלרי שורש":    ["Celery Root", "Mini Celery Root"],
+        "שומר":         ["Fennel", "Mini Fennel"],
+
+        # ── Pair introduced by patch01 field-qualifier variant ──
+        "חציל":         ["Eggplant", "Eggplant  (Feld)"],
     }, f"unexpected Hebrew-value duplicates: {duplicates}"
 
 
@@ -66,3 +113,34 @@ def test_jmf_crop_map_fixture_crops_mapped():
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     for crop in ["Arugula", "Carrots", "Basil"]:
         assert crop in JMF_CROP_MAP, f"{crop!r} not in JMF_CROP_MAP"
+
+
+# ─── patch01 additions ───────────────────────────────────────────────────────
+
+def test_ac02_rutabaga_value_corrected(jmf_crop_map):
+    """AC-02a (patch01): Rutabaga value is 'רוטבגה' (phonetic transliteration)."""
+    assert jmf_crop_map["Rutabaga"] == "רוטבגה", (
+        f"Expected 'רוטבגה', got {jmf_crop_map['Rutabaga']!r}"
+    )
+
+
+def test_ac02_old_rutabaga_value_absent():
+    """AC-02b (patch01): hallucinated value 'ברוקקואר' must not appear in constants.py."""
+    constants_path = Path(__file__).parents[2] / "organic_market_agent" / "crop_book" / "constants.py"
+    content = constants_path.read_text(encoding="utf-8")
+    assert "ברוקקואר" not in content, "Hallucinated Rutabaga value 'ברוקקואר' still present in constants.py"
+
+
+def test_ac04_1_eggplant_feld_literal_alias(jmf_crop_map):
+    """AC-04.1 (patch01): 'Eggplant  (Feld)' (double-space literal) is a key mapping to 'חציל'."""
+    assert "Eggplant  (Feld)" in jmf_crop_map, "'Eggplant  (Feld)' literal alias missing from JMF_CROP_MAP"
+    assert jmf_crop_map["Eggplant  (Feld)"] == "חציל", (
+        f"Expected 'חציל', got {jmf_crop_map['Eggplant  (Feld)']!r}"
+    )
+
+
+def test_ac03_duplicate_group_count(jmf_crop_map):
+    """AC-03 (patch01): exactly 25 Hebrew values appear more than once."""
+    counts = Counter(jmf_crop_map.values())
+    dup_count = sum(1 for c in counts.values() if c > 1)
+    assert dup_count == 25, f"Expected 25 duplicate-target groups, got {dup_count}"
