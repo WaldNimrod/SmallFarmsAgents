@@ -5,8 +5,14 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: LOD400_LOCKED — L-GATE_S R3 PASS_WITH_FINDINGS at v1.0.2; v1.0.3 carries forward the single MINOR cleanup per verdict §5
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.3
+version: v1.0.4
 changelog: >
+  v1.0.4 — Documentation cleanup per L-GATE_V R1 verdict §5 MINOR
+  F-LV-PATCH01-03. Two non-operative prose lines still said "28 alias
+  entries" (lines 94 + 130 in §2.1 + §3.2 heading) while the
+  authoritative count throughout the operative spec is 34. Fix: prose
+  → 34. No operative content change (ACs, alias block, Counter
+  assertion, build sequence all stable from v1.0.3).
   v1.0.3 — LOCK CLEANUP per L-GATE_S R3 PASS_WITH_FINDINGS verdict §5
   carry-forward instruction. The R3 MINOR flagged stale non-operative
   prose still mentioning older approximate counts. Fix: §1 item 2
@@ -91,7 +97,7 @@ crops cleanly; the Rutabaga row writes `"רוטבגה"` to `crops.name_he`
 ```
 organic_market_agent/crop_book/constants.py   ← Edit JMF_CROP_MAP literal:
                                                   (a) change "Rutabaga" value;
-                                                  (b) append 28 alias entries
+                                                  (b) append 34 alias entries
 tests/crop_book/test_jmf_crop_map.py          ← Widen Counter-set assertion
                                                   in test_ac03_*; add Rutabaga
                                                   regression + ≥4 new tests
@@ -127,7 +133,7 @@ Replace with:
     "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; "ברוקקואר" was a hallucination, NOT a real Hebrew word)
 ```
 
-### 3.2 Append 28 alias entries
+### 3.2 Append 34 alias entries
 
 Append the following block to `JMF_CROP_MAP` AFTER the existing 52
 entries and BEFORE the closing `}`. Add a section comment to delineate
