@@ -171,3 +171,86 @@ OUTLIER_CROPS: set[str] = {
     "תרד",
     "תרד ניו-זילנד",
 }
+
+# ---------------------------------------------------------------------------
+# JMF MasterClass crop-name map (SFA-S003-P002-WP-B1 LOD400 §5)
+# ---------------------------------------------------------------------------
+# Maps the English crop-name strings used in JMF CROP CHART / CROP ASSOCIATED
+# TASKS / DIRECT SEEDING / NURSERY / CULTIVARS sheets to the canonical
+# Hebrew `crops.name_he` values already populated by WP-A.
+# On miss (importer encounters a JMF crop not in this map): log WARN and skip
+# the row — same convention as TEND_CROP_MAP miss handling in tend.py.
+#
+# Maintenance: when a new JMF crop appears, append here; do NOT branch on it
+# elsewhere. The 52 entries below cover all 52 CROP CHART rows in the
+# 2018-edition MasterClass workbook (PROGRAM_BRIEF §1). Spot-check the count
+# at test time (test_jmf_crop_map.py — AC-04).
+
+JMF_CROP_MAP: dict[str, str] = {
+    # ---- Brassicas ----
+    "Arugula":            "ארוגולה",
+    "Bok Choy":           "פאק צ'וי",
+    "Broccoli":           "ברוקולי",
+    "Brussels Sprouts":   "כרוב ניצנים",
+    "Cabbage":            "כרוב",
+    "Cauliflower":        "כרובית",
+    "Kale":               "קייל",
+    "Kohlrabi":           "קולורבי",
+    "Radishes":           "צנונית",
+    "Turnips":            "לפת",
+    # ---- Greens / Salads ----
+    "Chard":              "מנגולד",
+    "Cress":              "גרגר נחלים",
+    "Endive":             "אנדיב",
+    "Lettuce":            "חסה",
+    "Mesclun":            "תערובת סלט",
+    "New Zealand Spinach": "תרד ניו-זילנד",
+    "Salad Mix":          "תערובת סלט",
+    "Spinach":            "תרד",
+    # ---- Alliums ----
+    "Garlic":             "שום",
+    "Leeks":              "כרישה",
+    "Onions":             "בצל",
+    "Scallions":          "בצל ירוק",
+    "Shallots":           "שאלוט",
+    # ---- Roots / Tubers ----
+    "Beets":              "סלק",
+    "Carrots":            "גזר",
+    "Celery Root":        "סלרי שורש",
+    "Jerusalem Artichokes": "ארטישוק ירושלמי",
+    "Parsnips":           "גזר לבן",
+    "Potatoes":           "תפוח אדמה",
+    "Rutabaga":           "ברוקקואר",
+    "Sweet Potatoes":     "בטטה",
+    # ---- Solanaceae ----
+    "Eggplant":           "חציל",
+    "Peppers":            "פלפל",
+    "Tomatillos":         "תומאטיו",
+    "Tomatoes":           "עגבנייה",
+    # ---- Cucurbits ----
+    "Cucumbers":          "מלפפון",
+    "Melons":             "מלון",
+    "Summer Squash":      "קישוא",
+    "Watermelons":        "אבטיח",
+    "Winter Squash":      "דלעת",
+    "Zucchini":           "קישוא",   # cultivar of קישוא; cultivar-level distinction lives in crop_varieties
+    # ---- Legumes ----
+    "Beans (Bush)":       "שעועית",
+    "Beans (Pole)":       "שעועית מטפסת",
+    "Fava Beans":         "פול",
+    "Peas":               "אפונה",
+    "Snow Peas":          "אפונת שלגים",
+    # ---- Herbs ----
+    "Basil":              "בזיל",
+    "Celery":             "סלרי",
+    "Cilantro":           "כוסברה",
+    "Dill":               "שמיר",
+    "Fennel":             "שומר",
+    "Parsley":            "פטרוזיליה",
+}
+# Total: 52 entries. Maintenance rule: when a new JMF MasterClass edition
+# adds or renames a crop, append/edit an entry here only — never branch on
+# JMF names elsewhere in the codebase. On runtime miss (JMF row whose
+# English label is not a key), the importer logs WARN with the unmapped
+# label and skips that row (same convention as TEND_CROP_MAP miss handling
+# in tend.py). Test AC-03 enforces `len(JMF_CROP_MAP) == 52`.
