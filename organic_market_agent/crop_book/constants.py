@@ -220,7 +220,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Jerusalem Artichokes": "ארטישוק ירושלמי",
     "Parsnips":           "גזר לבן",
     "Potatoes":           "תפוח אדמה",
-    "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; "ברוקקואר" was a hallucination, NOT a real Hebrew word)
+    "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; prior value was a hallucination, NOT a real Hebrew word)
     "Sweet Potatoes":     "בטטה",
     # ---- Solanaceae ----
     "Eggplant":           "חציל",
