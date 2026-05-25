@@ -66,11 +66,11 @@
 
 | File | ACs covered |
 |------|------------|
-| `test_ni_migration.py` | AC-01 (migration upgrade/downgrade) |
-| `test_ni_orm.py` | AC-02 (ORM model, 13 note_type values) |
-| `test_ni_upsert_helper.py` | AC-03 (helper exists, always NI trust_tier) |
-| `test_ni_jmf_book_importer.py` | AC-06, AC-07, AC-08 (jmf_book load methods) |
-| `test_ni_jmf_book_alt_importer.py` | AC-08 (jmf_book_alt) |
+| `test_migration_045.py` | AC-01 (migration upgrade/downgrade) |
+| `test_crop_knowledge_notes_orm.py` | AC-02 (ORM model, 13 note_type values) |
+| `test_ni_cache_schema.py` | AC-03 (helper exists, always NI trust_tier) |
+| `test_ni_jmf_book.py` | AC-06, AC-07, AC-08 (jmf_book load methods) |
+| `test_ni_jmf_book_alt.py` | AC-08 (jmf_book_alt) |
 | `test_ni_jmf_ft_flameweed.py` | AC-09 (flame_weed_timing) |
 | `test_ni_jmf_ft_biopesticide.py` | AC-09 (biopesticide_spray) |
 | `test_ni_jmf_ft_phytoprotection.py` | AC-09 (phytoprotection_substance + _application) |
@@ -79,7 +79,7 @@
 | `test_ni_idempotency.py` | AC-11 (upsert idempotency) |
 | `test_ni_dedup_alt_edition.py` | AC-16 (jmf_book + jmf_book_alt coexist) |
 | `test_ni_publisher_isolation.py` | AC-19, AC-20, AC-21a (LOD500_LOCKED audit) |
-| `test_ni_seed_flags.py` | AC-17, AC-18 (seed.py CLI flags) |
+| `test_seed_ni_cli.py` | AC-13, AC-17, AC-18 (seed.py NI CLI flags + ni-only isolation) |
 
 ---
 
