@@ -1014,11 +1014,11 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B2
   label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
-  status: PROPOSED
+  status: ELIGIBLE
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_E
-  lod_status: PRE_LOD200
+  lod_status: LOD200_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
@@ -1046,11 +1046,11 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B3
   label: "ספר גידולים: Tend Israel Adaptation Overlay — Local Layer"
-  status: PROPOSED
+  status: ELIGIBLE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_E
-  lod_status: PRE_LOD200
+  lod_status: LOD200_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
