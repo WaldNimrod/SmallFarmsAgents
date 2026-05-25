@@ -5,12 +5,14 @@ gate: L-GATE_S
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-25
-version: v1.0.0
+version: v1.0.1
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch06/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch04-patch06_INTEGRATION-CLEANUP_2026-05-25_v1.0.0.md
 parent_wp_patch04_lock_commit: "TBD (patch04 must lock first)"
-builder: team_10 (Sonnet sub-agent)
-validator: team_190 (non-Claude, IR#1)
+orchestrator: team_110 (Claude Opus 4.7)
+builder: team_10 (Claude Sonnet sub-agent)
+validator: team_190 (GPT-5.5, non-Claude per IR#1)
+engine_chain: "team_110 Opus 4.7 (orchestrator) ≠ team_10 Sonnet (builder) ≠ team_190 GPT-5.5 (validator) — three distinct engines"
 ---
 
 # LOD400 — patch06 Cleanup
@@ -321,4 +323,5 @@ team_10 (Sonnet sub-agent). MEDIUM scope, high LOCKED-touch surface.
 ---
 
 *LOD400 v1.0.0 — 2026-05-25.*
-*Pending: team_190 L-GATE_S.*
+*v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 VC-1 BLOCKER: frontmatter now explicitly records the full three-engine chain (orchestrator + builder + validator + engine_chain summary). No other change.*
+*Pending: team_190 L-GATE_S R2.*
