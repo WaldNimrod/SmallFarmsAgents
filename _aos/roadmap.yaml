@@ -1014,11 +1014,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch02
   label: "ספר גידולים: JMF_CROP_MAP Hebrew terminology corrections (Q4)"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch02/ARCHIVE_MANIFEST.md"
   assigned_builder: team_110
   assigned_validator: external
   created_at: "2026-05-25"
@@ -1064,11 +1066,33 @@ work_packages:
       _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1-patch02/LOD400-VERDICT_R2_v1.0.0.md.
       Commit 971f91f."
     validator: team_190
-  notes: "WP-B1-patch02: SMALL follow-up to WP-B1+patch01+B2+B3. Scope:
-    2-line value edit to JMF_CROP_MAP in constants.py + 2 regression
-    test assertions + CHANGELOG entry. Closes the Hebrew terminology
-    debt from team_00 DECISION Q4. After this patch closes, the
-    EXECUTION_MANDATE SFA-S003-P002-WP-B is fully satisfied."
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-25"
+    notes: "team_110 (Opus 4.7, single-engine builder per LOD400 §11) applied
+      the 2 value edits + 2 regression tests + CHANGELOG entry as a single
+      atomic commit (89c1764). pytest tests/crop_book/test_jmf_crop_map.py:
+      13/13 PASS (including 2 new patch02 tests). pytest tests/crop_book/:
+      343 passed + 1 pre-existing publisher failure (out-of-scope per team_00).
+      validate_aos.sh: 29 PASS / 19 SKIP / 0 FAIL."
+    validator: team_110
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_V R1. PASS.
+      8/8 VCs verified independently: value edits applied, old values absent,
+      Tomatillos unchanged, 25-group allowlist preserved, 343 passed +
+      1 known out-of-scope publisher failure, validate_aos.sh 0 FAIL,
+      scope limited to 4 expected files. Build commit 89c1764. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1-patch02/LGATEV-VERDICT_v1.0.0.md.
+      Commit b330678."
+    validator: team_190
+  notes: "WP-B1-patch02 CLOSED 2026-05-25 — LOD500_LOCKED. Final WP in the
+    SFA-S003-P002-WP-B program (6/6 WPs LOD500_LOCKED). 3 team_190 rounds
+    (2 L-GATE_S + 1 L-GATE_V); 0 final blockers. Single-engine builder
+    pattern (team_110 Opus 4.7) validated as proportional to SMALL scope.
+    Archive: _archive/SFA-S003-P002-WP-B1-patch02/ARCHIVE_MANIFEST.md.
+    Program completion authorizes COMPLETION_REPORT to team_00 + team_100."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
