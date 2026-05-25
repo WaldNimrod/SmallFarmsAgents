@@ -1014,11 +1014,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B2
   label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
-  status: BUILDING
+  status: DONE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B2/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
@@ -1060,11 +1062,59 @@ work_packages:
       blocker: 0
       major: 0
       minor: 2     # F-R4-01 §7.1 phrasing closed in v1.1.3; F-R4-02 historical labels accepted as carry
-  notes: "WP-B2: JMF PDF extraction via NI source. NI tier (hard override). 6 PDF
-    sources (Q5 expansion); text-file input architecture (Q1). LOD500_LOCKED via
-    L-GATE_S R4. L-GATE_B mandate filed; Sonnet builder sub-agent to be spawned
-    (creates migration 045, unblocks B3 builder). Authorized 2026-05-24 by team_00.
-    PROGRAM_BRIEF v1.0.0 issued by team_10."
+  - gate: L-GATE_B
+    result: BUILD_COMPLETE
+    date: "2026-05-25"
+    notes: "team_10 (sfa_build, Claude Sonnet 4.6 — sub-agent of team_110)
+      executed 10-step build sequence against spec at d195b75 (v1.1.3).
+      8 build commits 6e9d92d..b6ecb6e. 37 new tests; 288 total passing.
+      LOD500_LOCKED CLEAN on all 16 paths. ni_importer.py append-only +65
+      lines (single _upsert_knowledge_note helper, no class change).
+      NI_IMPORTER_CLASSES=6; ni_registry.registered_labels EMPTY of B2
+      (bypass proof — AC-03b). Migration 045 (crop_knowledge_notes) +
+      6 NIImporter subclasses + extract_jmf_ni.py (text-file input).
+      validate_aos.sh: 29 PASS / 19 SKIP / 0 FAIL. BUILD_REPORT:
+      BUILD_REPORT_v1.0.0.md."
+    validator: team_10
+    builder_engine: Claude-Sonnet-4.6
+    build_commits: ["6e9d92d", "808eb47", "de38372", "ae8a3c0", "91f2081", "f0ce180", "e95dce4", "b6ecb6e"]
+    findings:
+      blocker: 0
+      major: 0
+      minor: 0
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) constitutional
+      validation. R1 FAIL (BLOCKER F-LV-B2-01 --ni-only not NI-only +
+      dup call-site; MINOR F-LV-B2-02 BUILD_REPORT inventory mismatch);
+      R2 PASS_WITH_FINDINGS at new HEAD 69966be (verdict c20119b).
+      Sub-agent commits 18f8671 + 69966be remediated both R1 findings.
+      R2 findings: 2 MINOR carries (probe-wording issues — too-strict
+      helper-call count + too-broad audit range — neither a build
+      defect; team_190 per-commit audit confirmed all 10 B2 commits
+      CLEAN). team_00 DECISION Q1 text-file input + Q5 6-source scope
+      authorized. Verdict: LOD500-VERDICT_v1.0.1.md (commit c20119b)."
+    validator: team_190
+    validator_engine: GPT-5.5
+    build_head_commit: "69966be"
+    spec_commit: "d195b75"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 2     # F-LV-B2-R2-01 + F-LV-B2-R2-02 — both probe-wording carries, NOT build defects
+  notes: "WP-B2 CLOSED 2026-05-25 per ADR042 3-step closure. Archive
+    manifest: _archive/SFA-S003-P002-WP-B2/ARCHIVE_MANIFEST.md.
+    Most-iterated WP in the program (4 L-GATE_S rounds + 2 L-GATE_V
+    rounds; spec evolved v1.0.0 → v1.1.3). 6 JMF PDF sources (Q5);
+    text-file input architecture (Q1). OPEN OPERATIONAL ITEMS:
+    (a) team_00 to provide text files at data/jmf/raw_text/<src>/
+        <crop>.txt and run scripts/extract_jmf_ni.py post-merge;
+    (b) team_00 to run alembic upgrade 045 on live Postgres (similar
+        to B3's migration 046 deferral). WP-B program 4/4 DONE
+        (B1 + patch01 + B3 + B2). WP-B1-patch02 (Hebrew Q4 per
+        team_00 DECISION) now ELIGIBLE."
+  profile: L0
   profile: L0
 
 - id: SFA-S003-P002-WP-B3
