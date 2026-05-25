@@ -318,3 +318,64 @@ JMF_CROP_MAP: dict[str, str] = {
 # English label is not a key), the importer logs WARN with the unmapped
 # label and skips that row (same convention as TEND_CROP_MAP miss handling
 # in tend.py). Test AC-01 enforces `len(JMF_CROP_MAP) == 86`.
+
+# ---------------------------------------------------------------------------
+# Tend overlay — task-type mapping + whitelist (SFA-S003-P002-WP-B3 LOD400 §6)
+# ---------------------------------------------------------------------------
+# team_00 confirmed whitelist on 2026-05-25 (Option B — 11 categories =
+# 9 baseline + Trellis + Fertilize & Amend = 758/798 rows = 95.0% coverage).
+# Source-of-truth analysis: TASKS.CSV row distribution captured in
+# _COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md
+# (filed alongside the L-GATE_S R1 mandate per advisory #3 protocol).
+
+TEND_TASK_WHITELIST: frozenset[str] = frozenset({
+    # ── Original 9 (PROGRAM_BRIEF §4) ──
+    "Transplant",            # 234 rows
+    "Greenhouse Sow",        # 143 rows
+    "Direct Sow",            # 124 rows
+    "Weed",                  #  78 rows
+    "Row Cover & Mulch",     #  55 rows
+    "Stale Bed",             #  42 rows
+    "Pest & Disease",        #  27 rows
+    "Potting up",            #  16 rows
+    "Thin",                  #   7 rows
+    # ── Added by team_00 Option-B decision (2026-05-25) ──
+    "Trellis",               #  13 rows
+    "Fertilize & Amend",     #  13 rows
+})
+
+TEND_TASK_BLACKLIST: frozenset[str] = frozenset({
+    "Maintenance",            #  6 rows — non-template
+    "Irrigate",               #  3 rows — non-template (per-event)
+    "Seed Cleaning",          #  2 rows — back-office
+    "Drill Sow",              #  1 row  — single occurrence
+    "השלמות שתילה",            #  4 rows — gap-fill (not template)
+    "ריכוז שעות",              #  1 row  — labor-tracking artifact
+    "הידרופוניקה",             #  1 row  — single occurrence
+    "Cultivation & Tillage",  #  6 rows — single-crop (Carrots only); 0.75% coverage value
+    "Prune",                  #  6 rows — low volume; overlaps `hand_weed` semantically
+    "Greenhouse Activity",    # 16 rows — mixed content (mostly השלמות gap-fills)
+})
+
+# Tend label → JMF task_type enum value mapping.
+# Some Tend rows require Method/Sub-method inspection to disambiguate
+# (e.g., Weed → hand_weed vs flextine; Row Cover & Mulch → net_row_cover
+# vs straw_mulch_topdress). See parse_tasks_templates() in tend_overlay.py.
+TEND_TASK_TYPE_MAP: dict[str, str] = {
+    # ── Direct 1-to-1 mappings ──
+    "Direct Sow":          "at_seeding_transplanting",   # timing_anchor=seeding
+    "Transplant":          "at_seeding_transplanting",   # timing_anchor=transplanting
+    "Greenhouse Sow":      "nursery_seed",               # NEW B3
+    "Stale Bed":           "stale_seed_bed",
+    "Pest & Disease":      "pest_spray",                 # NEW B3
+    "Potting up":          "potting_up",                 # NEW B3
+    "Thin":                "thinning",                   # NEW B3
+    "Trellis":             "trellis",                    # NEW B3
+    "Fertilize & Amend":   "fertilize",                  # NEW B3
+    # ── Method-disambiguated mappings (importer §7.4 logic) ──
+    # "Weed"               → "hand_weed" (default; reclassify if Method=Flextine)
+    # "Row Cover & Mulch"  → "net_row_cover" (default; reclassify if Sub-method=Mulch/Straw)
+}
+# Note: "Weed" and "Row Cover & Mulch" are NOT direct keys in this dict —
+# their mapping happens in tend_overlay.py with Method/Sub-method inspection.
+# Whitelist controls inclusion; this map controls task_type assignment.
