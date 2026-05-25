@@ -11,6 +11,30 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — JMF NI Extraction Layer (Team 10, SFA-S003-P002-WP-B2, 2026-05-25)
+
+- **2026-05-25 — Team 10 (WP-B2):** JMF NI (Non-Indexed) extraction layer: 6 NIImporter subclasses, migration 045, CropKnowledgeNote ORM, upsert helper, extract_jmf_ni.py script. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.1.3 LOCKED, L-GATE_S R4 PASS_WITH_FINDINGS).
+  - **New:** `organic_market_agent/crop_book/crop_knowledge_notes.py` — `CropKnowledgeNote` ORM model with 13 `NOTE_TYPE_VALUES`, `BODY_TEXT_MAX_LENGTH=2000`, `UNIQUE(crop_id, source, note_type)`, CHECK constraints for note_type and body_text length. `is_internal_farm_use_only=True` column default (OPERATIVE LICENSING INVARIANT §3.1).
+  - **New:** `organic_market_agent/db/versions/045_crop_knowledge_notes.py` — Migration 045 (down_revision="044"): `crop_knowledge_notes` table with all 13 note_type CHECK values, SQLite-compatible server_default for booleans and timestamps.
+  - **New:** `organic_market_agent/crop_book/importer/ni/__init__.py` — `NI_IMPORTER_CLASSES` tuple (6 subclasses). Bypasses ni_registry singleton per §7.1 (session-aware resolution required).
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_book.py` — `JmfBookImporter` (source="NI:jmf_book_v1"). Resolves crop_id + variety_id from JMF_CROP_MAP. `load()` returns cultivar_recommendation rows; `load_knowledge_notes()` returns all non-null note rows.
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_book_alt.py` — `JmfBookAltImporter` (source="NI:jmf_book_alt_v1"). Same pattern; different source label (AC-16 UNIQUE dedup).
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_ft_flameweed.py` — `JmfFtFlameweedImporter` (source="NI:jmf_ft_flameweed_v1"). note_type="flame_weed_timing". Dual format: _table.json (crops dict) or per-crop JSON files.
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_ft_biopesticide.py` — `JmfFtBiopesticideImporter` (source="NI:jmf_ft_biopesticide_v1"). note_type="biopesticide_spray".
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_ft_phytoprotection.py` — `JmfFtPhytoprotectionImporter` (source="NI:jmf_ft_phytoprotection_v1"). 2 note types: phytoprotection_substance + phytoprotection_application.
+  - **New:** `organic_market_agent/crop_book/importer/ni/jmf_ft_nurseryseeding.py` — `JmfFtNurseryseedingImporter` (source="NI:jmf_ft_nurseryseeding_v1"). note_type="nursery_seeding_process".
+  - **Modified:** `organic_market_agent/crop_book/importer/ni_importer.py` — APPEND ONLY: `_upsert_knowledge_note()` module-level helper. Always sets `trust_tier="NI"` and `is_internal_farm_use_only=True` regardless of caller args. SQLAlchemy 2.x `insert().on_conflict_do_update()`.
+  - **Modified:** `organic_market_agent/crop_book/importer/seed.py` — Added `--ni-only` / `--no-ni` mutually exclusive CLI flags. NI call-site block iterates `NI_IMPORTER_CLASSES` with open session; calls `_upsert_knowledge_note()` per row. NO new helper functions (resolution inside subclasses).
+  - **New:** `scripts/extract_jmf_ni.py` — Standalone CLI for extracting JMF NI text files. Reads text (not PDFs, per Q1). `--dry-run` stubs API responses. `_ALL_NOTE_TYPE_KEYS` defined inline (standalone; no package import).
+  - **New:** `data/jmf/raw_text/<6 sources>/.gitkeep` — Input text file directories (populated post-merge by team_00, per Q1).
+  - **New:** `data/jmf/extracted/<6 sources>/.gitkeep` — Output JSON cache directories.
+  - **New:** `.gitattributes` — `data/jmf/extracted/** linguist-vendored` to suppress GitHub language stats.
+  - **New:** 13 fixture JSONs at `tests/crop_book/fixtures/ni/<source>/<crop>.json` covering all 6 sources and 8 crops (all verified in JMF_CROP_MAP).
+  - **New:** 14 test files covering all 21 ACs: `test_ni_migration.py`, `test_ni_orm.py`, `test_ni_upsert_helper.py`, `test_ni_jmf_book_importer.py`, `test_ni_jmf_book_alt_importer.py`, `test_ni_jmf_ft_flameweed.py`, `test_ni_jmf_ft_biopesticide.py`, `test_ni_jmf_ft_phytoprotection.py`, `test_ni_jmf_ft_nurseryseeding.py`, `test_ni_licensing_flag.py`, `test_ni_idempotency.py`, `test_ni_dedup_alt_edition.py`, `test_ni_publisher_isolation.py`, `test_ni_seed_flags.py`.
+  - **Test totals:** 37 new tests; suite 288 passed / 1 pre-existing failure (`test_wp_upload_crop_book` — out of scope, unchanged from B1 baseline).
+  - **LOD500_LOCKED audit:** All 16 locked paths CLEAN — no modifications to publisher/, views.py, models.py, source_registry.py, field_policy.py, reconciler.py, enrichment_runner.py, enrichment_models.py, tend.py, jmf.py, migrations 001-044, constants.py, crop_task_templates.py, jmf_masterclass.py, ni_importer.py (body only, APPEND).
+  - **validate_aos.sh:** 29 PASS / 19 SKIP / 0 FAIL.
+
 ### S003 ספר גידולים — JMF_CROP_MAP Alias Extension + Rutabaga Fix (Team 10, SFA-S003-P002-WP-B1-patch01, 2026-05-25)
 
 - **2026-05-25 — Team 10 (WP-B1-patch01):** JMF_CROP_MAP alias extension and Rutabaga Hebrew correction. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.0.3 LOCKED at commit c1b14c5, L-GATE_S R3 PASS_WITH_FINDINGS).
