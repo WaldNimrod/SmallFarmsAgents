@@ -410,3 +410,9 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 - `Shallots`: Hebrew value changed from "שאלוט" (pure transliteration) to "בצלצלי שאלוט" (Hebrew + transliteration hybrid)
 - Per team_00 DECISION 2026-05-25 §Q4
 - Closes the WP-B program Q4 Hebrew terminology debt
+
+### SFA-S003-P002-WP-B1-patch04-hotfix01 — Postgres int↔bool fix (2026-05-26)
+- `scripts/load_masterclass_sheets.py`: INSERT statements now use `FALSE`/`TRUE` literals instead of `0`/`1` for boolean columns (`is_default`, `is_grafted`, `is_internal_farm_use_only`). SQLite was tolerant; production Postgres rejected silently → 0 DB rows inserted across 24 cache files.
+- `tests/integration/test_load_masterclass_sheets.py`: +1 regression test (`test_load_masterclass_uses_postgres_compatible_booleans`) that scans the script source for forbidden int-literal patterns + asserts corrected patterns present.
+- Defect surfaced during OP-2 operational run on production (post-patch06 closure). Backup taken before any operational mutation. Single-engine builder (team_110 Opus 4.7) per patch02 precedent — SMALL scope, no architecture, IR#1 preserved via team_190 validator.
+- Per team_00 DECISION_WP-B1-patch04-hotfix01_2026-05-26 §§1-3.

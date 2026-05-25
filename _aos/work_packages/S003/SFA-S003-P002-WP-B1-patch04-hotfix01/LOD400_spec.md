@@ -117,7 +117,7 @@ def test_load_masterclass_uses_postgres_compatible_booleans():
 - Per team_00 DECISION_WP-B1-patch04-hotfix01_2026-05-26 §§1-3.
 ```
 
-## 4. Acceptance Criteria (6 ACs)
+## 4. Acceptance Criteria (7 ACs)
 
 - **AC-01** `_upsert_variety` INSERT uses `FALSE, FALSE`
 - **AC-02** `_upsert_knowledge_note` INSERT uses `TRUE` (not `1`)

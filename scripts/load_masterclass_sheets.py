@@ -334,7 +334,7 @@ def _upsert_knowledge_note(session, crop_id: int, note_type: str, body_text: str
             "INSERT INTO crop_knowledge_notes "
             "(crop_id, source, trust_tier, note_type, body_text, "
             " is_internal_farm_use_only, extraction_model, created_at) "
-            "VALUES (:crop_id, :source, :tier, :nt, :body, 1, :model, :now) "
+            "VALUES (:crop_id, :source, :tier, :nt, :body, TRUE, :model, :now) "
             "ON CONFLICT (crop_id, source, note_type) DO NOTHING"
         ),
         {
@@ -356,7 +356,7 @@ def _upsert_variety(session, crop_id: int, variety_name: str):
         session.execute(
             text(
                 "INSERT INTO crop_varieties (crop_id, name_en, is_default, is_grafted) "
-                "VALUES (:crop_id, :name_en, 0, 0)"
+                "VALUES (:crop_id, :name_en, FALSE, FALSE)"
             ),
             {"crop_id": crop_id, "name_en": variety_name},
         )

@@ -694,3 +694,40 @@ class TestPatch03DataFixIdempotent:
         # Should not raise
         exit_code = fix.run_data_fix(db_url, dry_run=False)
         assert exit_code == 0
+
+
+# ─── patch04-hotfix01 regression test (DECISION 2026-05-26) ───
+
+def test_load_masterclass_uses_postgres_compatible_booleans():
+    """patch04-hotfix01: INSERT statements use FALSE/TRUE literals, not 0/1.
+
+    Postgres rejects int→bool coercion at INSERT time (CHECK + column-type
+    enforcement). SQLite tolerates it. Defect surfaced during OP-2
+    operational run on production (2026-05-26) — 0 rows inserted across
+    24 cache files. This test guards against regression.
+    """
+    from pathlib import Path
+    script_path = Path(__file__).parents[2] / "scripts" / "load_masterclass_sheets.py"
+    content = script_path.read_text(encoding="utf-8")
+
+    # Must NOT contain the buggy int-literal patterns in INSERT VALUES
+    bad_patterns = [
+        "(:crop_id, :name_en, 0, 0)",       # _upsert_variety
+        ", 1, :model, :now",                 # _upsert_knowledge_note
+    ]
+    for bp in bad_patterns:
+        assert bp not in content, (
+            f"patch04-hotfix01 regression: buggy int-literal pattern "
+            f"{bp!r} found in load_masterclass_sheets.py — must use "
+            f"FALSE/TRUE for Postgres compatibility"
+        )
+
+    # MUST contain the corrected patterns
+    assert "(:crop_id, :name_en, FALSE, FALSE)" in content, (
+        "_upsert_variety missing FALSE, FALSE in INSERT — patch04-hotfix01 "
+        "not applied or reverted"
+    )
+    assert ", TRUE, :model, :now" in content, (
+        "_upsert_knowledge_note missing TRUE literal for "
+        "is_internal_farm_use_only — patch04-hotfix01 not applied or reverted"
+    )

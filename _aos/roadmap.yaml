@@ -1383,10 +1383,10 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04-hotfix01
   label: "ספר גידולים: Postgres int↔bool fix in load_masterclass_sheets.py"
-  status: ELIGIBLE
+  status: IN_PROGRESS
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_E
+  current_lean_gate: L-GATE_S
   lod_status: LOD400_LOCKED
   assigned_builder: team_110
   assigned_validator: external
