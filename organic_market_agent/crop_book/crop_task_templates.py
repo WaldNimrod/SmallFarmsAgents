@@ -30,10 +30,14 @@ def is_presence_only(days_offset: int) -> bool:
 
 
 TASK_TYPE_VALUES: tuple[str, ...] = (
+    # ── B1 baseline (14) ──
     "stale_seed_bed", "flame_weeder", "flextine_harrow_1", "flextine_harrow_2",
     "biodisc", "hoe", "hand_weed", "boron_seaweed_1", "boron_seaweed_2",
     "straw_mulch_topdress", "head_pinch_chop", "mow_and_tarp",
     "at_seeding_transplanting", "net_row_cover",
+    # ── B3 extensions (6 — added under GCR-B3-1, team_00 approved 2026-05-25) ──
+    "nursery_seed", "pest_spray", "potting_up", "thinning",
+    "trellis", "fertilize",
 )
 
 TIMING_ANCHOR_VALUES: tuple[str, ...] = (
