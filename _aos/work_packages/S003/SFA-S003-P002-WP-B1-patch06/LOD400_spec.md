@@ -5,7 +5,7 @@ gate: L-GATE_S
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-25
-version: v1.0.2
+version: v1.0.3
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch06/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch04-patch06_INTEGRATION-CLEANUP_2026-05-25_v1.0.0.md
 parent_wp_patch04_lock_commit: "TBD (patch04 must lock first)"
@@ -26,11 +26,13 @@ Apply the "baselines-only" policy: remove 27 entries from `JMF_CROP_MAP` (22 cul
 
 ## 2. Architecture
 
-### 2.1 Files MODIFIED (4)
+### 2.1 Files MODIFIED (6 — extended in v1.0.3 R4)
 ```
 organic_market_agent/crop_book/constants.py        ← remove 27 lines from JMF_CROP_MAP literal
-tests/crop_book/test_jmf_crop_map.py               ← UPDATE 3 LOCKED tests + APPEND 3 new regression tests
+tests/crop_book/test_jmf_crop_map.py               ← UPDATE 3 LOCKED tests + APPEND 3 new + REMOVE 5 superseded patch01/patch03 tests (v1.0.2 R3 + v1.0.3 R4)
 tests/crop_book/test_jmf_crop_map_aliases.py       ← UPDATE 2 LOCKED tests + REMOVE 1 LOCKED test (test_alias_entry_count_grew_by_34)
+tests/crop_book/test_jmf_live_workbook_coverage.py ← REMOVE test_ac04_live_workbook_coverage_min_42_of_50 (v1.0.3 R4)
+tests/crop_book/test_jmf_seed_dry_run.py           ← REMOVE test_ac07_seed_dry_run_warn_only_for_unmapped (v1.0.3 R4)
 CHANGELOG.md                                        ← [Unreleased] entry
 ```
 
@@ -50,8 +52,14 @@ scripts/patch06_db_cleanup.py    ← idempotent orphan-crops cleanup (~80 LOC)
   - `test_salad_mix_value_post_patch03` — REMOVE (same)
   - `test_baby_kale_value_post_patch03` — REMOVE (same)
   - `test_lebanese_cucumber_value_post_patch03` — REMOVE (same)
-  - `test_ac04_live_workbook_coverage_min_42_of_50` — REMOVE (patch01-era coverage achievement no longer holds under baselines-only policy; semantically obsolete)
-  - `test_ac07_seed_dry_run_warn_only_for_unmapped` — REMOVE (asserts seed.py warns on unmapped — patch06's removed keys now LEGITIMATELY produce warnings; the test's pre-patch06 premise no longer holds)
+  - (v1.0.3 R4 — moved to separate file; see below)
+  - (v1.0.3 R4 — moved to separate file; see below)
+
+**In `tests/crop_book/test_jmf_live_workbook_coverage.py` (v1.0.3 R4 addition):**
+- `test_ac04_live_workbook_coverage_min_42_of_50` — REMOVE (patch01-era coverage achievement no longer holds under baselines-only policy; semantically obsolete)
+
+**In `tests/crop_book/test_jmf_seed_dry_run.py` (v1.0.3 R4 addition):**
+- `test_ac07_seed_dry_run_warn_only_for_unmapped` — REMOVE (asserts seed.py warns on unmapped — patch06's removed keys now LEGITIMATELY produce warnings; the test's pre-patch06 premise no longer holds)
 
 **In `test_jmf_crop_map_aliases.py`:**
 - `test_alias_spot_check_five_samples` (5 hardcoded keys, 4 of which are removed)
@@ -146,22 +154,38 @@ def test_ac03_duplicate_group_count(jmf_crop_map):
     assert dup_count == 6, f"Expected 6 duplicate-target groups, got {dup_count}"
 ```
 
-### 3.4c `test_jmf_crop_map.py` — REMOVE 7 superseded tests (v1.0.2 R3 amendment)
+### 3.4c REMOVE 7 superseded tests (v1.0.2 R3 + v1.0.3 R4 amendments) — across 3 files
 
-Delete each of the following function blocks entirely (full def + body):
+**`tests/crop_book/test_jmf_crop_map.py` — delete 5 function blocks:**
 
 ```python
-# DELETE:
-def test_ac04_1_eggplant_feld_literal_alias(...): ...      # ~line 120
-def test_mesclun_value_post_patch03(...): ...               # ~line 165
-def test_salad_mix_value_post_patch03(...): ...             # ~line 170
-def test_baby_kale_value_post_patch03(...): ...             # ~line 175
-def test_lebanese_cucumber_value_post_patch03(...): ...     # ~line 190
-def test_ac04_live_workbook_coverage_min_42_of_50(...): ... # location may vary
-def test_ac07_seed_dry_run_warn_only_for_unmapped(...): ... # location may vary
+# DELETE (full def + body):
+def test_ac04_1_eggplant_feld_literal_alias(...): ...
+def test_mesclun_value_post_patch03(...): ...
+def test_salad_mix_value_post_patch03(...): ...
+def test_baby_kale_value_post_patch03(...): ...
+def test_lebanese_cucumber_value_post_patch03(...): ...
 ```
 
-The other patch02/patch03 regression tests (Parsnips, Shallots, Cherry Tomato, Heirloom Tomato, Chinese Cabbage, Hot Pepper, Beans Bush, Snow Peas, Basil) — **KEEP UNCHANGED** (their assertions remain valid post-patch06 because those keys are baselines, not removed).
+**`tests/crop_book/test_jmf_live_workbook_coverage.py` — delete 1 function block (v1.0.3 R4):**
+
+```python
+# DELETE (full def + body):
+def test_ac04_live_workbook_coverage_min_42_of_50(...): ...
+```
+
+If this is the ONLY test in the file, also delete the file entirely (clean up the empty test module). If other tests remain in the file, leave it.
+
+**`tests/crop_book/test_jmf_seed_dry_run.py` — delete 1 function block (v1.0.3 R4):**
+
+```python
+# DELETE (full def + body):
+def test_ac07_seed_dry_run_warn_only_for_unmapped(...): ...
+```
+
+Same file-emptiness rule as above.
+
+**Do NOT delete** the other patch02/patch03 regression tests in `test_jmf_crop_map.py` (Parsnips, Shallots, Cherry Tomato, Heirloom Tomato, Chinese Cabbage, Hot Pepper, Beans Bush, Snow Peas, Basil — keys remain baselines).
 
 ### 3.5 `test_jmf_crop_map.py` — APPEND 3 new regression tests
 
@@ -331,11 +355,13 @@ Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
 | R-03 | `test_alias_entry_count_grew_by_34` removal pattern not understood by Sonnet | §3.6 shows exact "REMOVE this test" instruction. Builder should DELETE the function block entirely, not modify. |
 | R-04 | Orphan cleanup script touches wrong rows | dry-run mode default; --apply required; logs every row. |
 
-## 8. LOD500_LOCKED file inventory
+## 8. LOD500_LOCKED file inventory (extended in v1.0.3 R4)
 Same as patch04 + cumulative. Permitted modifications:
 - `constants.py` — 27-line removal block in JMF_CROP_MAP literal
-- `test_jmf_crop_map.py` — 3 LOCKED tests updated + 3 new appended (per DECISION §3 scope exception)
-- `test_jmf_crop_map_aliases.py` — 2 LOCKED tests updated + 1 removed (per DECISION §3 scope exception)
+- `test_jmf_crop_map.py` — 3 LOCKED tests updated + 3 new appended + 5 superseded tests REMOVED (per DECISION §3 + v1.0.2 R3 + v1.0.3 R4 scope exceptions)
+- `test_jmf_crop_map_aliases.py` — 2 LOCKED tests updated + 1 removed
+- `test_jmf_live_workbook_coverage.py` — 1 superseded test REMOVED (v1.0.3 R4; if file becomes empty, delete file)
+- `test_jmf_seed_dry_run.py` — 1 superseded test REMOVED (v1.0.3 R4; if file becomes empty, delete file)
 - `CHANGELOG.md` — entry
 
 All other LOCKED files untouched.
@@ -352,5 +378,6 @@ team_10 (Sonnet sub-agent). MEDIUM scope, high LOCKED-touch surface.
 
 *LOD400 v1.0.0 — 2026-05-25.*
 *v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 VC-1 BLOCKER: frontmatter now explicitly records the full three-engine chain (orchestrator + builder + validator + engine_chain summary). No other change.*
-*v1.0.2 (2026-05-25) — R3 amendment after Sonnet builder reported 7 non-LOCKED test failures as expected-consequence of the cleanup (BUILD_REPORT v1.0.0 at commit 6801e64; build commit 113b47d). 7 superseded tests added to LOCKED scope exception with REMOVE directive: 1 patch01 typo-alias assertion (`test_ac04_1_eggplant_feld_literal_alias`) + 4 patch03 cultivar-value assertions (Mesclun, Salad Mix, Baby kale, Lebanese Cucumber) + 1 patch01 workbook-coverage achievement test + 1 patch01 seed-dry-run unmapped-warn test. All 7 removals are subsumed by patch06's new `test_no_cultivar_keys_in_map_post_patch06` + `test_no_typo_keys_in_map_post_patch06` + `test_six_synonym_groups_exact`. Patch06 BUILD will be re-dispatched after R3 PASS.*
-*Pending: team_190 L-GATE_S R3.*
+*v1.0.2 (2026-05-25) — R3 amendment after Sonnet builder reported 7 non-LOCKED test failures as expected-consequence of the cleanup (BUILD_REPORT v1.0.0 at commit 6801e64; build commit 113b47d). 7 superseded tests added to LOCKED scope exception with REMOVE directive.*
+*v1.0.3 (2026-05-25) — R4 correction per team_190 L-GATE_S R3 BLOCKER: 2 of the 7 superseded tests actually live in separate files (`test_jmf_live_workbook_coverage.py` and `test_jmf_seed_dry_run.py`), not in `test_jmf_crop_map.py`. §2.1 file list extended (4→6 files); §2.3 LOCKED-scope listing updated to enumerate the correct file for each test; §3.4c REMOVE block split per-file; §8 LOD500_LOCKED inventory extended; if either of the two new files becomes empty after the single-function removal, builder deletes the file.*
+*Pending: team_190 L-GATE_S R4.*
