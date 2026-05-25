@@ -2,11 +2,28 @@
 id: SFA-S003-P002-WP-B2-LOD400
 wp: SFA-S003-P002-WP-B2 — JMF NI Extraction Layer (AI-assisted, text-file input)
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S R2 verdict
+status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S R4 verdict (v1.1.2 closes 2 R3 BLOCKERS + 1 MINOR carry)
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.1.1
+version: v1.1.2
 changelog: >
+  v1.1.2 — Remediation of 2 BLOCKERS + 1 MINOR from team_190 R3 verdict
+  (LOD400-VERDICT_v1.0.2.md at commit df26c40):
+  B1-R3 (internal inconsistency: bypass-vs-registry): closed all
+    contradictions. §2.1 module-tree comment, §7 intro narrative, and
+    AC-03 acceptance text aligned with the §7.1/§8 bypass design.
+    AC-03 now checks NI_IMPORTER_CLASSES directly (not
+    `ni_registry.registered_labels`). NEW AC-03b adds negative-check
+    confirming B2 subclasses are absent from ni_registry.
+  B2-R3 (internal inconsistency: seed.py helper additions): closed.
+    AC-19, Step 8, and §15 MODIFY summary all updated to reflect that
+    NO helper functions are added to seed.py — resolution helpers live
+    in NIImporter subclasses per §7.2. Diff guard is now consistent
+    with operative content.
+  M1-R3 (stale metadata): frontmatter status updated; H1 title bumped
+    to v1.1.2; v1.1.0/v1.1.1 mentions in narrative aligned to current
+    version where they describe current state (kept where they describe
+    history).
   v1.1.1 — Remediation of 3 BLOCKERS from team_190 R2 verdict
   (LOD400-VERDICT_v1.0.1.md at commit 89460bc):
   B1 (VC-6.R2): all literal occurrences of the obsolete class-name
@@ -70,7 +87,7 @@ builder: sfa_build (separate session per IR#1)
 validator: team_190 (non-Claude, Iron Rule #1)
 ---
 
-# LOD400 — SFA-S003-P002-WP-B2: JMF NI Extraction Layer (v1.1.0)
+# LOD400 — SFA-S003-P002-WP-B2: JMF NI Extraction Layer (v1.1.2)
 
 **Read before writing a single line of code:**
 1. LOD200 (this WP): `_aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md`
@@ -117,7 +134,7 @@ organic_market_agent/crop_book/
 └── importer/
     ├── ni_importer.py                  ← MODIFY (APPEND-only): +_upsert_knowledge_note helper
     ├── ni/                             ← NEW directory
-    │   ├── __init__.py                 ← NEW: re-export 6 subclasses + register on import
+    │   ├── __init__.py                 ← NEW: re-export 6 subclasses (NOT auto-registered with ni_registry per §7.1)
     │   ├── jmf_book.py                 ← NEW: 240pp main edition
     │   ├── jmf_book_alt.py             ← NEW: 209pp alternate edition (Q5)
     │   ├── jmf_ft_flameweed.py         ← NEW: FT_FLAMEWEEDING
@@ -552,9 +569,9 @@ def main():
 
 WP-A's actual abstract base class is `NIImporter`. The abstract method is `load() → list[dict[str, Any]]`, returning **variety-source-value row dicts** (matching the `crop_variety_source_values` shape). Subclass attribute is `name`.
 
-For B2's crop-scoped narrative content (which doesn't fit the variety-source-value shape natively), each subclass implements a **sibling method `load_knowledge_notes() → list[dict[str, Any]]`** that returns `crop_knowledge_notes` row dicts. The seed.py call-site invokes both:
-- `ni_registry.load_all()` (existing WP-A path) — produces variety-source-value rows; B2 subclasses contribute `cultivar_recommendation` rows here
-- Iterates `ni_registry.registered_labels` and calls each subclass's `load_knowledge_notes()` — produces crop_knowledge_notes rows
+For B2's crop-scoped narrative content (which doesn't fit the variety-source-value shape natively), each subclass implements a **sibling method `load_knowledge_notes(session) → list[dict[str, Any]]`** that returns `crop_knowledge_notes` row dicts.
+
+**B2 does NOT use the `ni_registry` mechanism at all.** Per §7.1 (architectural decision driven by WP-A's `validate()` dropping rows missing `variety_id`): the seed.py call-site iterates `NI_IMPORTER_CLASSES` directly, instantiates each subclass, and calls `load(session)` + `load_knowledge_notes(session)` per importer. See §8 for the exact call-site code.
 
 ### 7.1 `ni/__init__.py` (NEW) — bypasses ni_registry.load_all()
 
@@ -873,8 +890,21 @@ No additional helper functions are added to seed.py — resolution lives in the 
 **AC-02 — `CropKnowledgeNote` ORM correct (13 enum values + length constant).**
 `NOTE_TYPE_VALUES` has exactly 13 entries; `BODY_TEXT_MAX_LENGTH == 2000`.
 
-**AC-03 — All 6 NIImporter subclasses register correctly.**
-After importing `organic_market_agent.crop_book.importer.ni`, `ni_registry.registered_labels` contains 6 entries: `"NI:jmf_book_v1"`, `"NI:jmf_book_alt_v1"`, `"NI:jmf_ft_flameweed_v1"`, `"NI:jmf_ft_biopesticide_v1"`, `"NI:jmf_ft_phytoprotection_v1"`, `"NI:jmf_ft_nurseryseeding_v1"`.
+**AC-03 — All 6 NIImporter subclasses present in `NI_IMPORTER_CLASSES` and have correct `source_label`s.**
+*(Updated in v1.1.2 to match the §7.1 bypass architectural decision: B2 does NOT use `ni_registry`. AC-03 therefore checks `NI_IMPORTER_CLASSES` directly, not `ni_registry.registered_labels`.)*
+
+```python
+from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
+assert len(NI_IMPORTER_CLASSES) == 6
+labels = {cls().source_label for cls in NI_IMPORTER_CLASSES}
+assert labels == {
+    "NI:jmf_book_v1", "NI:jmf_book_alt_v1",
+    "NI:jmf_ft_flameweed_v1", "NI:jmf_ft_biopesticide_v1",
+    "NI:jmf_ft_phytoprotection_v1", "NI:jmf_ft_nurseryseeding_v1",
+}
+```
+
+**AC-03b** — Negative check confirming the bypass: after importing the package, `ni_registry.registered_labels` MUST NOT contain any B2 source label (the 6 listed above are all absent). This proves the `ni_registry.register()` call was NOT made at module load.
 
 **AC-04a — Body-text length CHECK enforced at DB level.**
 Insert with 2001-char body_text raises `IntegrityError`.
@@ -925,7 +955,7 @@ When both `jmf_book` and `jmf_book_alt` cache files contain the same crop with o
 `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns exit code 0 (`0 FAIL`). PASS/SKIP totals: any value (28/20, 29/18, 29/19 — lean-kit profile is drifting; gate-relevant criterion is 0 FAIL only).
 
 **AC-19 — LOD500_LOCKED audit (no touches beyond §2.3 scope).**
-`git diff <patch01-lock>..HEAD -- <each path in §2.2>` is empty. `git diff <patch01-lock>..HEAD -- ni_importer.py` shows ONLY the appended `_upsert_knowledge_note` function (no class change). `git diff <patch01-lock>..HEAD -- seed.py` shows ONLY 2 CLI flag additions + 1 call-site block + 2 helper function additions.
+`git diff <patch01-lock>..HEAD -- <each path in §2.2>` is empty. `git diff <patch01-lock>..HEAD -- ni_importer.py` shows ONLY the appended `_upsert_knowledge_note` function (no class change). `git diff <patch01-lock>..HEAD -- seed.py` shows ONLY 2 CLI flag additions + 1 call-site block. *(Updated in v1.1.2: NO helper function additions to seed.py — resolution helpers live in the NIImporter subclasses per §7.2, not on seed.py. The v1.1.0 text mentioning "+2 helper functions" was an internal inconsistency closed in v1.1.2.)*
 
 **AC-20 — `_aos/governance/` + `_aos/lean-kit/` CLEAN (F-S-B2-02 explicit add).**
 `git diff <patch01-lock>..HEAD -- _aos/governance/ _aos/lean-kit/ _aos/project_identity.yaml` is EMPTY. (These are hub-driven snapshots; B2 builder must never touch them.)
@@ -992,7 +1022,7 @@ All tests use SQLite in-memory + fixture JSONs. NO live Anthropic API calls. Mar
 
 **Step 7** — Create `scripts/extract_jmf_ni.py` (text-file-input version per Q1). Implement the 2 dispatch functions (book chapter; FT table). Stub Anthropic responses for `--dry-run` path. NO live API calls in build/test.
 
-**Step 8** — Wire `seed.py` flags (§8): `--ni-only`, `--no-ni`. Add `_resolve_default_variety_for_jmf_crop` + `_resolve_crop_id_for_jmf_crop` helpers. Verify the existing `_upsert_source_value(session, variety_id, sv)` signature is called with correct shape (F-S-B2-03 fix).
+**Step 8** — Wire `seed.py` flags (§8): `--ni-only`, `--no-ni`. Add the call-site block iterating `NI_IMPORTER_CLASSES` with session. **DO NOT add resolver helper functions to seed.py** — the resolution logic (`_resolve_crop_id` + `_resolve_default_variety_id`) lives in the NIImporter subclasses per §7.2. Verify the existing `_upsert_source_value(session, variety_id, sv)` signature is called with correct shape (F-S-B2-03 fix).
 
 **Step 9** — Write all 20+ tests (§10). Verify all 18 ACs (AC-01..AC-20 with 4a/b for AC-04 and 12a/b for AC-12).
 
@@ -1089,7 +1119,7 @@ _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B2/BUILD_REPORT_v1.0.0.md   (builder wri
 
 ```
 organic_market_agent/crop_book/importer/ni_importer.py    ← APPEND _upsert_knowledge_note ONLY
-organic_market_agent/crop_book/importer/seed.py           ← +2 CLI flags + 1 call-site block + 2 helper functions
+organic_market_agent/crop_book/importer/seed.py           ← +2 CLI flags + 1 call-site block (NO helper additions per v1.1.2)
 CHANGELOG.md                                                ← +[Unreleased] entry
 ```
 
@@ -1099,8 +1129,8 @@ See §2.2 LOD500_LOCKED inventory. Includes `_aos/governance/`, `_aos/lean-kit/`
 
 ---
 
-*LOD400 v1.1.1 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.1.0 → v1.1.1: 3 R2 BLOCKERS remediated (B1 stale token; B2 architectural; B3 licensing operative section).*
-*Pending: team_190 L-GATE_S R3 validation (R3 mandate next).*
+*LOD400 v1.1.2 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
+*v1.1.1 → v1.1.2: 2 R3 BLOCKERS (internal-inconsistency) + 1 MINOR closed. All operative content now consistent with the §7.1/§8 bypass + subclass-resolution design.*
+*Pending: team_190 L-GATE_S R4 validation (R4 mandate next).*
 
 Also: `tests/crop_book/test_ni_publisher_isolation.py` added to §10 test list (AC-21 enforcement, 2 tests minimum — publisher dir scan + views.py scan).
