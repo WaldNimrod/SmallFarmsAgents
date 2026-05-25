@@ -36,9 +36,25 @@ ORPHAN_MAP: dict[str, str] = {
 }
 
 
-def _get_session() -> Any:
-    """Return a SQLAlchemy session using the project's default DB URL."""
+def _get_session_cm() -> Any:
+    """Return the project's get_session() context manager.
+
+    NOTE: get_session is decorated with @contextmanager — callers MUST use
+    `with _get_session_cm() as session:`. team_190 L-GATE_V R1 BLOCKER
+    confirmed that treating the return value as a raw Session fails at
+    runtime. Also imports all related models so SQLAlchemy can resolve
+    cross-model relationships before any session.query() runs."""
     try:
+        # Pre-import all models referenced by Crop's relationships so the
+        # SQLAlchemy mapper registry is complete before query execution.
+        # Without this, CropFieldEnrichment (used in Crop relationships) is
+        # not resolvable when Crop's mapper initializes via session.query(Crop).
+        from organic_market_agent.crop_book import models  # noqa: F401 — register
+        from organic_market_agent.crop_book import enrichment_models  # noqa: F401 — register CropFieldEnrichment
+        try:
+            from organic_market_agent.crop_book import crop_knowledge_notes_crops  # noqa: F401 — register patch04 junction
+        except ImportError:
+            pass  # junction model exists only if patch04 is applied — gracefully optional
         from organic_market_agent.db.session import get_session
         return get_session()
     except ImportError as exc:
@@ -147,26 +163,30 @@ def main(dry_run: bool) -> None:
     else:
         log.info("=== patch06_db_cleanup: APPLY mode ===")
 
-    session = _get_session()
     total: dict[str, int] = {"crop_varieties": 0, "crop_knowledge_notes": 0, "crops_deleted": 0}
 
+    # get_session() is a @contextmanager — must use `with`. The CM handles
+    # commit-on-success / rollback-on-exception / close in its own teardown,
+    # so we only commit explicitly inside the block for the --apply path
+    # (the CM's default behavior commits on clean exit, matching our intent).
     try:
-        for orphan_name_he, canonical_name_he in ORPHAN_MAP.items():
-            stats = process_orphan(session, orphan_name_he, canonical_name_he, dry_run)
-            for k in total:
-                total[k] += stats[k]
+        with _get_session_cm() as session:
+            for orphan_name_he, canonical_name_he in ORPHAN_MAP.items():
+                stats = process_orphan(session, orphan_name_he, canonical_name_he, dry_run)
+                for k in total:
+                    total[k] += stats[k]
 
-        if not dry_run:
-            session.commit()
-            log.info("=== Committed. Summary: %s", total)
-        else:
-            log.info("=== DRY-RUN complete. Planned changes: %s", total)
+            if dry_run:
+                # Roll back any speculative changes (process_orphan may have
+                # done session.delete on dry-run path — defensively undo)
+                session.rollback()
+                log.info("=== DRY-RUN complete. Planned changes: %s", total)
+            else:
+                session.commit()
+                log.info("=== Committed. Summary: %s", total)
     except Exception:
-        session.rollback()
-        log.exception("Error during cleanup — rolled back")
+        log.exception("Error during cleanup — context manager rolled back")
         sys.exit(1)
-    finally:
-        session.close()
 
     if total["crops_deleted"] == 0:
         log.info("=== No orphan crops found — DB is already clean (idempotent). ===")
