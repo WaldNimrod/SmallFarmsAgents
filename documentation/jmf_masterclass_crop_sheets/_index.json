@@ -1,0 +1,424 @@
+[
+  {
+    "md": "038-ft-finale-pimentfort-eng-220613-142647.md",
+    "pages": "6",
+    "hebrew_name": "FT_FINALE_PIMENTFORT_ENG-220613-142647",
+    "pdf_title": "FT_editable_Piment-Fort_eng",
+    "md_size": 8528,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "039-document-039.md",
+    "pages": "3",
+    "hebrew_name": "כרוב",
+    "pdf_title": "",
+    "md_size": 4578,
+    "english_keys": [
+      "Cabbage",
+      "Fall Cabbage",
+      "Savoy Cabbage",
+      "Summer Cabbage",
+      "Chinese Cabbage"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "040-document-040.md",
+    "pages": "3",
+    "hebrew_name": "כרישה",
+    "pdf_title": "",
+    "md_size": 5349,
+    "english_keys": [
+      "Leeks",
+      "Leek Storage",
+      "Leek Summer"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "041-document-041.md",
+    "pages": "3",
+    "hebrew_name": "לפט",
+    "pdf_title": "",
+    "md_size": 4122,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "042-aaoao.md",
+    "pages": "3",
+    "hebrew_name": "צנונית",
+    "pdf_title": "",
+    "md_size": 5365,
+    "english_keys": [
+      "Radishes",
+      "Raddish",
+      "Winter Radish"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "043-document-043.md",
+    "pages": "4",
+    "hebrew_name": "תרד",
+    "pdf_title": "",
+    "md_size": 5955,
+    "english_keys": [
+      "Spinach",
+      "Spinach TR",
+      "Spinarch SD"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "044-ooo.md",
+    "pages": "3",
+    "hebrew_name": "קייל",
+    "pdf_title": "",
+    "md_size": 3592,
+    "english_keys": [
+      "Kale",
+      "Baby kale"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "045-oooe.md",
+    "pages": "3",
+    "hebrew_name": "קישוא",
+    "pdf_title": "",
+    "md_size": 3607,
+    "english_keys": [
+      "Summer Squash",
+      "Zucchini"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "046-ooy.md",
+    "pages": "4",
+    "hebrew_name": "רוקט",
+    "pdf_title": "",
+    "md_size": 7191,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "047-document-047.md",
+    "pages": "8",
+    "hebrew_name": "בצל",
+    "pdf_title": "FT_editable_Oignon_eng",
+    "md_size": 9898,
+    "english_keys": [
+      "Onions",
+      "Storage Onion"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "048-a-ooo.md",
+    "pages": "3",
+    "hebrew_name": "בצל ירוק",
+    "pdf_title": "",
+    "md_size": 3846,
+    "english_keys": [
+      "Scallions",
+      "Green Onion"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "049-oooo.md",
+    "pages": "4",
+    "hebrew_name": "ברוקולי",
+    "pdf_title": "",
+    "md_size": 5287,
+    "english_keys": [
+      "Broccoli"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "050-document-050.md",
+    "pages": "6",
+    "hebrew_name": "גינגר-220126-113229",
+    "pdf_title": "FT_editable_Bébé-gingembre_eng",
+    "md_size": 8440,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "051-ooo-ooi-uio.md",
+    "pages": "4",
+    "hebrew_name": "בייבי מיקס - חסה",
+    "pdf_title": "",
+    "md_size": 5899,
+    "english_keys": [
+      "Lettuce",
+      "Salanova Lettuce",
+      "Sucrine"
+    ],
+    "partial_match_he": "חסה",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "052-u-eouio.md",
+    "pages": "3",
+    "hebrew_name": "גזר איחסון",
+    "pdf_title": "",
+    "md_size": 5061,
+    "english_keys": [
+      "Carrots",
+      "Fresh Carrots"
+    ],
+    "partial_match_he": "גזר",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "053-u-yo.md",
+    "pages": "4",
+    "hebrew_name": "גזר טרי",
+    "pdf_title": "",
+    "md_size": 6457,
+    "english_keys": [
+      "Carrots",
+      "Fresh Carrots"
+    ],
+    "partial_match_he": "גזר",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "054-document-054.md",
+    "pages": "4",
+    "hebrew_name": "בזיל",
+    "pdf_title": "",
+    "md_size": 5977,
+    "english_keys": [
+      "Basil"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "055-enoao.md",
+    "pages": "4",
+    "hebrew_name": "אפונה",
+    "pdf_title": "",
+    "md_size": 6860,
+    "english_keys": [
+      "Peas"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "056-eouio-oyono.md",
+    "pages": "3",
+    "hebrew_name": "איחסון ושטיפהֿ",
+    "pdf_title": "JARD0001_tableaux-itinéraire_lavage_EN.indd",
+    "md_size": 3887,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "057-document-057.md",
+    "pages": "4",
+    "hebrew_name": "סלק",
+    "pdf_title": "",
+    "md_size": 6667,
+    "english_keys": [
+      "Beets"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "058-document-058.md",
+    "pages": "4",
+    "hebrew_name": "פלפל",
+    "pdf_title": "",
+    "md_size": 6366,
+    "english_keys": [
+      "Peppers",
+      "Bell Pepper",
+      "Hot Pepper"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "059-nn-uo.md",
+    "pages": "13",
+    "hebrew_name": "פלפל חממה",
+    "pdf_title": "FT_editable_Poivron-serre_eng",
+    "md_size": 17250,
+    "english_keys": [
+      "Peppers",
+      "Bell Pepper",
+      "Hot Pepper"
+    ],
+    "partial_match_he": "פלפל",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "060-nouo.md",
+    "pages": "3",
+    "hebrew_name": "פריזה",
+    "pdf_title": "",
+    "md_size": 4455,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "061-oaoo-oo.md",
+    "pages": "5",
+    "hebrew_name": "עגבניות - הרכבה",
+    "pdf_title": "",
+    "md_size": 10897,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "062-oaoo-uo.md",
+    "pages": "22",
+    "hebrew_name": "עגבניות חממה",
+    "pdf_title": "Tomatoes.pages",
+    "md_size": 34778,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "063-oaoo-yu-nou.md",
+    "pages": "5",
+    "hebrew_name": "עגבניות שטח פתוח",
+    "pdf_title": "",
+    "md_size": 6621,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "064-uao.md",
+    "pages": "4",
+    "hebrew_name": "חציל",
+    "pdf_title": "",
+    "md_size": 5021,
+    "english_keys": [
+      "Eggplant",
+      "Eggplant  (Feld)"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "065-uio.md",
+    "pages": "3",
+    "hebrew_name": "חסה",
+    "pdf_title": "",
+    "md_size": 3732,
+    "english_keys": [
+      "Lettuce",
+      "Salanova Lettuce",
+      "Sucrine"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "066-uio-e-oy.md",
+    "pages": "3",
+    "hebrew_name": "חסה ראש קטן",
+    "pdf_title": "",
+    "md_size": 4134,
+    "english_keys": [
+      "Lettuce",
+      "Salanova Lettuce",
+      "Sucrine"
+    ],
+    "partial_match_he": "חסה",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "067-nno-uo.md",
+    "pages": "17",
+    "hebrew_name": "מלפפון חממה",
+    "pdf_title": "",
+    "md_size": 33007,
+    "english_keys": [
+      "Greenhouse Libanese Cucumber"
+    ],
+    "status": "MATCHED_POST_PATCH03"
+  },
+  {
+    "md": "068-document-068.md",
+    "pages": "4",
+    "hebrew_name": "מלון",
+    "pdf_title": "",
+    "md_size": 6077,
+    "english_keys": [
+      "Melons"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "069-aoo.md",
+    "pages": "3",
+    "hebrew_name": "מנגולד",
+    "pdf_title": "",
+    "md_size": 3903,
+    "english_keys": [
+      "Chard",
+      "Swiss Chard"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "070-ouoao-ouo.md",
+    "pages": "4",
+    "hebrew_name": "מיזונה וחרדל",
+    "pdf_title": "",
+    "md_size": 5985,
+    "english_keys": [],
+    "status": "NEW_CROP_OR_VARIANT"
+  },
+  {
+    "md": "071-document-071.md",
+    "pages": "4",
+    "hebrew_name": "שום",
+    "pdf_title": "",
+    "md_size": 5954,
+    "english_keys": [
+      "Garlic"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "072-o-ooo.md",
+    "pages": "3",
+    "hebrew_name": "שומר בייבי",
+    "pdf_title": "",
+    "md_size": 3652,
+    "english_keys": [
+      "Fennel",
+      "Mini Fennel"
+    ],
+    "partial_match_he": "שומר",
+    "status": "PARTIAL_MATCH"
+  },
+  {
+    "md": "073-oooo.md",
+    "pages": "3",
+    "hebrew_name": "שעועית",
+    "pdf_title": "",
+    "md_size": 5193,
+    "english_keys": [
+      "Beans (Bush)"
+    ],
+    "status": "MATCHED_CURRENT"
+  },
+  {
+    "md": "074-oooo-yni.md",
+    "pages": "9",
+    "hebrew_name": "שעועית מטפסת",
+    "pdf_title": "FT_editable_Haricots-grimpants_eng",
+    "md_size": 12630,
+    "english_keys": [
+      "Beans (Pole)"
+    ],
+    "status": "MATCHED_CURRENT"
+  }
+]

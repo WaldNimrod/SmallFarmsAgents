@@ -47,11 +47,11 @@ A new baseline `crops.name_he` is introduced. Three existing JMF_CROP_MAP entrie
 
 | Key | Before | After |
 |-----|--------|-------|
-| `Greenhouse Lebanese Cucumber` | `"מלפפון"` | **`"מלפפון חממה"`** |
+| `Greenhouse Libanese Cucumber` | `"מלפפון"` | **`"מלפפון חממה"`** |
 | `Chinese Cabbage` | `"כרוב"` | **`"כרוב סיני"`** |
 | `Hot Pepper` | `"פלפל"` | **`"פלפל חריף"`** |
 
-**Rationale:** Lebanese cucumber and Chinese cabbage are commercially distinct in Israel (separate produce categories with distinct shopping behavior). Hot pepper is botanically a different species (*Capsicum chinense* / *C. frutescens* vs *C. annuum*) and culinarily distinct from sweet bell peppers.
+**Rationale:** Libanese (sic — source typo preserved as JMF_CROP_MAP key) cucumber and Chinese cabbage are commercially distinct in Israel (separate produce categories with distinct shopping behavior). Hot pepper is botanically a different species (*Capsicum chinense* / *C. frutescens* vs *C. annuum*) and culinarily distinct from sweet bell peppers.
 
 ### §1.4 Hebrew refinements (4)
 

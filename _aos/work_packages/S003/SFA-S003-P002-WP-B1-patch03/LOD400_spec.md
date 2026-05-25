@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.0
+version: v1.0.1
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch03/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch03_TAXONOMY_2026-05-25_v1.0.0.md
 parent_wp_patch02_lock_commit: "3d78007"
@@ -301,7 +301,7 @@ Then validate_aos.sh — must return 0 FAIL.
 build(WP-B1-patch03): JMF_CROP_MAP taxonomic expansion per team_00 DECISION
 ```
 
-**Builder safety:** verify the duplicate-target dict in §3.2 BYTE-EXACTLY by counting groups (24) and total keys-with-duplicates (38 keys total in the dict — sum of group sizes) BEFORE committing. Mismatch indicates an edit slipped.
+**Builder safety:** verify the duplicate-target dict in §3.2 BYTE-EXACTLY by counting groups (24) and total keys-with-duplicates (**55** keys total in the dict — sum of group sizes; verifiable via `python3 -c "from organic_market_agent.crop_book.constants import JMF_CROP_MAP; from collections import Counter; c=Counter(JMF_CROP_MAP.values()); print(sum(n for n in c.values() if n>1))"` after applying value edits) BEFORE committing. Mismatch indicates an edit slipped.
 
 ---
 
@@ -375,4 +375,5 @@ Sonnet sub-agent (team_10), spawned by team_110 per the standard IR#1 orchestrat
 ---
 
 *LOD400 v1.0.0 — authored 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*Pending: team_190 L-GATE_S validation.*
+*v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH03-01: §6 builder-safety line changed `38 keys total` → `55 keys total` (correct arithmetic of sum of group sizes for the 24-group dict). Added verification command. No change to ACs, values, scope, or builder identity.*
+*Pending: team_190 L-GATE_S R2 validation.*
