@@ -30,11 +30,20 @@ def test_crop_task_template_import():
 
 
 def test_task_type_values_exported():
-    """AC-02: TASK_TYPE_VALUES exported with 14 entries."""
+    """AC-02 / AC-03: TASK_TYPE_VALUES exported with 20 entries (14 B1 baseline + 6 B3 extensions
+    per GCR-B3-1, team_00 approved 2026-05-25). B1 baseline values still present at indices 0-13.
+    """
     from organic_market_agent.crop_book.crop_task_templates import TASK_TYPE_VALUES
-    assert len(TASK_TYPE_VALUES) == 14
+    assert len(TASK_TYPE_VALUES) == 20, (
+        f"Expected 20 entries (14 B1 + 6 B3 GCR-B3-1), got {len(TASK_TYPE_VALUES)}"
+    )
+    # B1 baseline still present
     assert "stale_seed_bed" in TASK_TYPE_VALUES
     assert "net_row_cover" in TASK_TYPE_VALUES
+    # B3 extensions present
+    assert "nursery_seed" in TASK_TYPE_VALUES
+    assert "trellis" in TASK_TYPE_VALUES
+    assert "fertilize" in TASK_TYPE_VALUES
 
 
 def test_timing_anchor_values_exported():
