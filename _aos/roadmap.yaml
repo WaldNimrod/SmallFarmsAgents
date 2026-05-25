@@ -1097,11 +1097,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch03
   label: "ספר גידולים: JMF_CROP_MAP taxonomic expansion (11 value changes)"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch03/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: external
   created_at: "2026-05-25"
@@ -1181,11 +1183,25 @@ work_packages:
       / len=86. 354 passed + 1 pre-existing publisher OOS. validate_aos.sh
       0 FAIL. Diff confined to 4 authorized files."
     validator: team_10
-  notes: "WP-B1-patch03: MEDIUM taxonomic expansion. Follow-up to the
-    WP-B program closure (6/6 LOD500_LOCKED). team_110 EXECUTION_MANDATE
-    extends for this one final WP before naturally ending. Sub-agent
-    builder pattern restored (Sonnet team_10) per IR#1 orchestrator-vs-builder.
-    Independent of NotebookLM JMF extraction (parallel-safe)."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_V R1.
+      PASS_WITH_FINDINGS (0 blockers). 12/12 VCs PASS. Focused tests:
+      27 passed (both modified test files). Full crop_book suite:
+      354 passed + 1 pre-existing publisher OOS. validate_aos.sh:
+      29 PASS / 19 SKIP / 0 FAIL. Build diff = exactly 4 authorized files.
+      1 MINOR: CHANGELOG.md said '2 test functions updated' instead of
+      '4 test functions across 2 files' — addressed inline by team_110
+      same-session. Build commit 37257e9. Verdict commit dcf6517."
+    validator: team_190
+  notes: "WP-B1-patch03 CLOSED 2026-05-25 — LOD500_LOCKED. Final WP under
+    team_110 EXECUTION_MANDATE SFA-S003-P002-WP-B (mandate naturally ends).
+    Program complete: 7/7 WPs LOD500_LOCKED (WP-A + B1 + patch01 + B2 + B3
+    + patch02 + patch03). 5 team_190 rounds (4 L-GATE_S + 1 L-GATE_V);
+    0 final blockers. Sonnet builder STOPped correctly at AC-18 in attempt 1
+    (forced spec amendment R3+R4); built cleanly in attempt 2 (commit 37257e9).
+    Archive: _archive/SFA-S003-P002-WP-B1-patch03/ARCHIVE_MANIFEST.md."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2

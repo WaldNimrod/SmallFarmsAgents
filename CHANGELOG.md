@@ -17,7 +17,7 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 - **Split off umbrella categories** (5 keys): Greenhouse Cherry Tomato (→ עגבניית שרי), Greenhouse Heirloom Tomato (→ עגבניות מורשת), Greenhouse Libanese Cucumber (→ מלפפון חממה), Chinese Cabbage (→ כרוב סיני), Hot Pepper (→ פלפל חריף)
 - **Hebrew refinements** (3 keys): Beans (Bush) → שעועית שיחית; Snow Peas → אפונת שלג; Basil → בזיליקום
 - Duplicate-target allowlist: 25 → 24 groups (תערובת סלט + קייל groups disappear; עלי בייבי group of 3 appears; 4 groups shrink)
-- LOD500_LOCKED scope exception: 2 test functions updated per DECISION_WP-B1-patch03_TAXONOMY §4
+- LOD500_LOCKED scope exception: 4 test functions across 2 files updated per DECISION_WP-B1-patch03_TAXONOMY §4 (amended)
 - Per team_00 DECISION_WP-B1-patch03_TAXONOMY_2026-05-25 §§1-4
 
 ### S003 ספר גידולים — Tend Israel Adaptation Overlay (Team 10, SFA-S003-P002-WP-B3, 2026-05-25)
