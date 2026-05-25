@@ -1246,6 +1246,18 @@ work_packages:
       + validator + engine_chain fields. validate_aos.sh: 29 PASS / 19
       SKIP / 0 FAIL. Verdict commit 40d7802."
     validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-25"
+    notes: "team_10 (Sonnet sub-agent) BUILD_COMPLETE. Build commit a0397cd
+      + report commit 7d578ac. All 22 ACs PASS. 5 NEW + 6 MODIFIED files.
+      24 JSON cache files at data/jmf/extracted/jmf_book/. 355 crop_book +
+      13 integration = 368 tests passed; 1 pre-existing publisher OOS.
+      validate_aos.sh 0 FAIL. Migration 047 applied (junction table +
+      ORM + back-ref). Notable: sheet 056 (storage/washing M2M) data
+      load deferred — infrastructure built and tested, but no english_keys
+      mapping in NotebookLM index. ADVISORY-grade deferral, NOT blocker."
+    validator: team_10
   notes: "WP-B1-patch04: Integration WP — operationalizes NotebookLM deliverable.
     Blocks patch06 (cleanup). EXECUTION_MANDATE WP-B extended in-session by team_00."
   profile: L0
