@@ -2,10 +2,19 @@
 id: SFA-S003-P002-WP-B3-LOD400
 wp: SFA-S003-P002-WP-B3 — Tend Israel Adaptation Overlay
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
+status: LOD400_LOCKED — L-GATE_S R1 PASS_WITH_FINDINGS at v1.0.0 (commit c4c0dac); v1.0.1 closes F1 carry per verdict §4
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.0
+version: v1.0.1
+changelog: >
+  v1.0.1 — LOCK CLEANUP per L-GATE_S R1 verdict F1 (4 stale path
+  references to team_00 DECISION file omitted "_v1.0.0" suffix). Fix:
+  lines 334, 743, 769, 812 now cite the versioned filename
+  `DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md`. No
+  operative content change (ACs, schemas, build sequence stable).
+  F2 (validate_aos.sh profile drift 28/20/0 vs mandated 29/18/0)
+  carried forward — non-blocking; the lean-kit profile drifted to
+  47 checks; gate-relevant criterion (0 FAIL) holds.
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B3/LOD200_spec.md
 program_brief_ref: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md
 execution_mandate_ref: _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/EXECUTION_MANDATE_v1.0.0.md
@@ -331,7 +340,7 @@ Append AFTER the existing `JMF_CROP_MAP` block (added by B1-patch01). Do NOT mod
 # team_00 confirmed whitelist on 2026-05-25 (Option B — 11 categories =
 # 9 baseline + Trellis + Fertilize & Amend = 758/798 rows = 95.0% coverage).
 # Source-of-truth analysis: TASKS.CSV row distribution captured in
-# _COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25.md
+# _COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md
 # (filed alongside the L-GATE_S R1 mandate per advisory #3 protocol).
 
 TEND_TASK_WHITELIST: frozenset[str] = frozenset({
@@ -740,7 +749,7 @@ All tests use SQLite in-memory or fixture CSVs at `tests/crop_book/fixtures/tend
 
 **Step 1** — Read this LOD400 + LOD200 + PROGRAM_BRIEF §4 + parent WP-B1 LOD400 §3-§4.
 
-**Step 2** — Verify GCR-B3-1 sign-off is in the team_00 DECISION record at `_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25.md` (team_110 will produce this file alongside the L-GATE_S R1 mandate; if missing, STOP and inquire). Verify migration 045 (B2) is committed before running step 4 — if not, STOP and inquire.
+**Step 2** — Verify GCR-B3-1 sign-off is in the team_00 DECISION record at `_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md` (team_110 will produce this file alongside the L-GATE_S R1 mandate; if missing, STOP and inquire). Verify migration 045 (B2) is committed before running step 4 — if not, STOP and inquire.
 
 **Step 3** — Create `crop_harvest_stats.py` (ORM). Verify import smoke: `from ... import CropHarvestStat, SEASON_VALUES; assert len(SEASON_VALUES) == 4`.
 
@@ -766,7 +775,7 @@ All tests use SQLite in-memory or fixture CSVs at `tests/crop_book/fixtures/tend
 |---|---|---|
 | 1 | JMF PDF licensing | **N/A for B3** (Tend CSV data, not PDF) |
 | 2 | LLM extraction cache | **N/A for B3** (no LLM) |
-| 3 | **Tend task whitelist — team_00 confirmation REQUIRED before LOD400 LOCK** | **RESOLVED 2026-05-25** — team_00 confirmed Option B: 11 categories whitelisted, 10 blacklisted, 95.0% coverage. Decision record filed at `_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25.md` (to be produced alongside L-GATE_S R1 mandate). |
+| 3 | **Tend task whitelist — team_00 confirmation REQUIRED before LOD400 LOCK** | **RESOLVED 2026-05-25** — team_00 confirmed Option B: 11 categories whitelisted, 10 blacklisted, 95.0% coverage. Decision record filed at `_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md` (to be produced alongside L-GATE_S R1 mandate). |
 | 4 | Transitive WP-A dependency | **Addressed** in §2.1 (named WP-A files); §3 (engine reuse via `reconcile_field()` for scalar fields); §7.6 (upsert helpers reuse B1 patterns); AC-20 (engine regression). |
 
 ---
@@ -809,7 +818,7 @@ tests/crop_book/test_crop_harvest_stats_orm.py
 tests/crop_book/test_migration_046.py
 tests/crop_book/test_seed_tend_overlay_cli.py
 tests/crop_book/fixtures/tend_2022/<minimal CSVs>      (builder generates ≥ 3 small CSVs)
-_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25.md   (team_110 produces alongside L-GATE_S R1 mandate)
+_COMMUNICATION/team_00/DECISION_SFA-S003-P002-WP-B3-WHITELIST_2026-05-25_v1.0.0.md   (team_110 produces alongside L-GATE_S R1 mandate)
 _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B3/BUILD_REPORT_v1.0.0.md             (builder writes after L-GATE_B)
 ```
 
