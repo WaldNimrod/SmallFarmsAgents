@@ -1,50 +1,89 @@
 ---
 id: SFA-S003-P002-WP-B2-LOD400
-wp: SFA-S003-P002-WP-B2 — JMF PDF NI Extraction Layer (AI-assisted)
+wp: SFA-S003-P002-WP-B2 — JMF NI Extraction Layer (AI-assisted, text-file input)
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
+status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S R2 verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.0
+version: v1.1.0
+changelog: >
+  v1.1.0 — Major remediation cycle addressing 4 findings from L-GATE_S
+  R1 verdict (LOD400-VERDICT_v1.0.0.md at commit 9db86b7) + applying 2
+  scope changes from team_00 DECISION file
+  (DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md).
+  FIXES:
+    F-S-B2-01 (BLOCKER): NiSourceBase → NIImporter (correct WP-A base
+      class name). All references in §6/§7/§8/§14/§15 corrected.
+      Subclass attribute = `name` (not `source_label`/`cache_dir` etc).
+      `load()` signature matches WP-A: returns variety-source-value
+      row dicts; the new `load_knowledge_notes()` method is sibling
+      to `load()` for the crop_knowledge_notes table.
+    F-S-B2-02 (MAJOR): §2.2 + §15 internal consistency — ni_importer.py
+      is "MODIFY (single function append)" not "DO NOT MODIFY". Added
+      explicit `_aos/governance/` + `_aos/lean-kit/` DO NOT TOUCH rows.
+    F-S-B2-03 (MAJOR): §8 call-site uses exact existing signature
+      `_upsert_source_value(session, variety_id, sv)` (not the
+      hallucinated `**row["payload"]` shape).
+    F-S-B2-04 (MINOR): §AC-17 + VC-equivalent phrased as 0 FAIL with
+      observed PASS/SKIP recorded (lean-kit profile drift acceptable).
+  SCOPE CHANGES (per team_00 DECISION 2026-05-25):
+    Q1: Input architecture: TEXT FILES provided by team_00 at
+        `data/jmf/raw_text/<source>/<crop>.txt`. extraction_runner.py
+        reads text files (not PDFs); no pdftotext step; R-01 risk
+        obsolete.
+    Q5: Scope EXPANSION from 3 → 6 JMF sources. Adds:
+        +jmf_book_alt (209pp alternate edition)
+        +jmf_ft_phytoprotection (3pp)
+        +jmf_ft_nurseryseeding (13pp)
+        +3 new note_type enum values: phytoprotection_substance,
+         phytoprotection_application, nursery_seeding_process.
+        crop_knowledge_notes table CHECK enum extended to 13 values.
+  v1.0.0 — Initial authoring (FAILed L-GATE_S R1 with 4 findings).
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md
 program_brief_ref: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md
 execution_mandate_ref: _COMMUNICATION/TEAM_110/SFA-S003-P002-WP-B/EXECUTION_MANDATE_v1.0.0.md
+prior_verdict_ref: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B2/LOD400-VERDICT_v1.0.0.md
+team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md
 wp_a_lod400_ref: _aos/work_packages/S003/SFA-S003-P002-WP-A/LOD400_spec.md
-wp_b1_patch01_lock_commit: "3e1f946"   # extended JMF_CROP_MAP
+wp_b1_patch01_lock_commit: "3e1f946"   # extended JMF_CROP_MAP (86 entries)
 builder: sfa_build (separate session per IR#1)
 validator: team_190 (non-Claude, Iron Rule #1)
 ---
 
-# LOD400 — SFA-S003-P002-WP-B2: JMF PDF NI Extraction Layer
+# LOD400 — SFA-S003-P002-WP-B2: JMF NI Extraction Layer (v1.1.0)
 
 **Read before writing a single line of code:**
 1. LOD200 (this WP): `_aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md`
-2. PROGRAM_BRIEF §3 (NI scope reference): `_COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B/PROGRAM_BRIEF_v1.0.0.md`
-3. WP-A `ni_importer.py` (LOD500_LOCKED — read-only): `organic_market_agent/crop_book/importer/ni_importer.py`. This is the `NiSourceBase` abstract class B2 subclasses.
-4. WP-A `source_registry.py` (LOD500_LOCKED): verify `get_source_spec("NI:any")` returns class `"NI"` with `is_hard_override=True` (prefix-match path).
-5. Extended `JMF_CROP_MAP` (86 entries; post-patch01): `organic_market_agent/crop_book/constants.py`. Used for ebook-to-crop_id resolution.
+2. team_00 DECISION (Q1 + Q5 scope changes): `_COMMUNICATION/team_00/DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md`
+3. team_190 R1 verdict (4 findings — all addressed in v1.1.0): `_COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B2/LOD400-VERDICT_v1.0.0.md`
+4. **WP-A `ni_importer.py`** (LOD500_LOCKED — VERIFY API): `organic_market_agent/crop_book/importer/ni_importer.py`. The class is `NIImporter` (not `NiSourceBase`). Subclass attribute: `name`. Abstract method: `load() → list[dict]`. The dict shape is variety-source-value, NOT a custom `target_table`-tagged shape.
+5. WP-A `_upsert_source_value` signature in `organic_market_agent/crop_book/importer/seed.py`: `_upsert_source_value(session, variety_id: int, sv: dict)`.
+6. Extended `JMF_CROP_MAP` (86 entries; post-patch01): `organic_market_agent/crop_book/constants.py`.
 
 ---
 
 ## 1. Goal
 
-Build the **first concrete `NIImporter` subclasses** materializing the WP-A skeleton — extracting per-crop narrative knowledge from JMF MasterClass PDFs as NI-tier hard-override data:
+Build the **first concrete `NIImporter` subclasses** materializing the WP-A skeleton — extracting per-crop narrative knowledge from **all** JMF MasterClass sources as NI-tier hard-override data. team_00 scope directive (DECISION 2026-05-25 Q5): include the entire JMF corpus.
 
-1. **Migration 045** — new table `crop_knowledge_notes` (per-crop narrative, type-classified, with licensing + provenance fields)
-2. **New ORM module** `organic_market_agent/crop_book/crop_knowledge_notes.py`
-3. **3 concrete `NIImporter` subclasses:**
-   - `ni/jmf_book.py` — Market Gardener 240-page ebook
-   - `ni/jmf_ft_flameweed.py` — Fiche Technique flame-weeding PDF
-   - `ni/jmf_ft_biopesticide.py` — Fiche Technique biopesticide table PDF
-4. **Extraction runner script** `scripts/extract_jmf_ni.py` — one-time CLI that calls Anthropic API to produce the JSON cache (NOT production code, NOT runtime)
-5. **JSON cache directory** `data/jmf/extracted/<source_name>/<crop_name_en>.json` — committed to repo per advisory #2 disposition
-6. **`seed.py` CLI additions** — `--ni-only`, `--no-ni`
-7. **≥ 15 tests** covering parser correctness, LLM stub handling, cache schema, DB integration, idempotency, FT PDF coverage, licensing flag enforcement
-8. **WP-A engine reuse only** — every NI row uses the standard `_upsert_source_value` semantics (for `cultivar_recommendation` field) or the new `_upsert_knowledge_note` (for `crop_knowledge_notes` table). Source label format: `'NI:jmf_book_v1'` / `'NI:jmf_ft_flameweed_v1'` / `'NI:jmf_ft_biopesticide_v1'`.
+Deliverables:
 
-On completion:
-- `python -m organic_market_agent.crop_book.importer.seed --all` (with `--ni-only`) populates `crop_knowledge_notes` rows from cached JSON.
-- `python scripts/extract_jmf_ni.py --source jmf_book --rebuild --crop arugula` regenerates the cache for a specific (source, crop) pair.
+1. **Migration 045** — new table `crop_knowledge_notes` (per-crop narrative, type-classified, with licensing + provenance fields). 13 `note_type` enum values.
+2. **New ORM module** `organic_market_agent/crop_book/crop_knowledge_notes.py`.
+3. **6 concrete `NIImporter` subclasses** (one per JMF source):
+   - `ni/jmf_book.py` — Market Gardener 240-page main edition
+   - `ni/jmf_book_alt.py` — Market Gardener 209-page alternate edition (Q5 addition)
+   - `ni/jmf_ft_flameweed.py` — FT_FLAMEWEEDING (3pp)
+   - `ni/jmf_ft_biopesticide.py` — FT_TABLEAUAPPLICATIONBIOPESTICIPE (5pp)
+   - `ni/jmf_ft_phytoprotection.py` — FT_PHYTOPROTECTION (3pp) (Q5 addition)
+   - `ni/jmf_ft_nurseryseeding.py` — FT_NURSERYSEEDING (13pp) (Q5 addition)
+4. **Extraction runner script** `scripts/extract_jmf_ni.py` — one-time CLI reading **text files** (provided by team_00, NOT raw PDFs per Q1) + calling Anthropic API to produce JSON cache.
+5. **JSON cache directory** `data/jmf/extracted/<source_name>/<crop_name_en>.json` — committed to repo per advisory #2.
+6. **Text-file input directory** `data/jmf/raw_text/<source_name>/<crop_name_en>.txt` (or single `_full.txt` for FT sources) — team_00 supplies post-merge.
+7. **`seed.py` CLI additions** — `--ni-only`, `--no-ni`.
+8. **≥ 20 tests** (was 15; expanded by Q5).
+9. **Append `_upsert_knowledge_note` helper** to `ni_importer.py` (single module-level function; NO class change).
+10. **WP-A engine reuse via the actual signature** `_upsert_source_value(session, variety_id, sv)` for cultivar_recommendation rows.
 
 ---
 
@@ -54,95 +93,88 @@ On completion:
 
 ```
 organic_market_agent/crop_book/
-├── crop_knowledge_notes.py            ← NEW: CropKnowledgeNote SQLAlchemy ORM
+├── crop_knowledge_notes.py             ← NEW: CropKnowledgeNote SQLAlchemy ORM
 └── importer/
-    ├── ni/                            ← NEW directory
-    │   ├── __init__.py                ← NEW: re-export the 3 subclasses + registry
-    │   ├── jmf_book.py                ← NEW: 240-page ebook subclass
-    │   ├── jmf_ft_flameweed.py        ← NEW: FT_FLAMEWEEDING PDF subclass
-    │   └── jmf_ft_biopesticide.py     ← NEW: FT_TABLEAUAPPLICATION PDF subclass
-    └── seed.py                        ← MODIFY: --ni-only, --no-ni flags + 1 call-site block
+    ├── ni_importer.py                  ← MODIFY (APPEND-only): +_upsert_knowledge_note helper
+    ├── ni/                             ← NEW directory
+    │   ├── __init__.py                 ← NEW: re-export 6 subclasses + register on import
+    │   ├── jmf_book.py                 ← NEW: 240pp main edition
+    │   ├── jmf_book_alt.py             ← NEW: 209pp alternate edition (Q5)
+    │   ├── jmf_ft_flameweed.py         ← NEW: FT_FLAMEWEEDING
+    │   ├── jmf_ft_biopesticide.py      ← NEW: FT_BIOPESTICIDE
+    │   ├── jmf_ft_phytoprotection.py   ← NEW: FT_PHYTOPROTECTION (Q5)
+    │   └── jmf_ft_nurseryseeding.py    ← NEW: FT_NURSERYSEEDING (Q5)
+    └── seed.py                         ← MODIFY: --ni-only, --no-ni + 1 call-site block
 
 organic_market_agent/db/versions/
-└── 045_crop_knowledge_notes.py        ← NEW
+└── 045_crop_knowledge_notes.py         ← NEW
 
 scripts/
-└── extract_jmf_ni.py                  ← NEW: one-time CLI (NOT production code)
+└── extract_jmf_ni.py                   ← NEW: reads TEXT files, calls Anthropic API
 
-data/jmf/extracted/                    ← NEW directory tree (COMMITTED)
-├── jmf_book/
-│   ├── arugula.json
-│   ├── basil.json
-│   └── … (per-crop files, one per JMF chapter found)
-├── jmf_ft_flameweed/
-│   └── _table.json                   ← single structured table (not per-crop)
-└── jmf_ft_biopesticide/
-    └── _table.json                   ← single structured table
+data/jmf/raw_text/                       ← NEW (team_00 provides post-merge)
+├── jmf_book/<crop>.txt                  ← per-crop chapter text
+├── jmf_book_alt/<crop>.txt
+├── jmf_ft_flameweed/_full.txt           ← single file (FT PDFs are short tables)
+├── jmf_ft_biopesticide/_full.txt
+├── jmf_ft_phytoprotection/_full.txt
+└── jmf_ft_nurseryseeding/_full.txt
+
+data/jmf/extracted/                       ← NEW directory tree (COMMITTED — gitkeep + final JSON)
+├── jmf_book/<crop>.json
+├── jmf_book_alt/<crop>.json
+├── jmf_ft_flameweed/<crop>.json
+├── jmf_ft_biopesticide/<crop>.json
+├── jmf_ft_phytoprotection/<crop>.json
+└── jmf_ft_nurseryseeding/<crop>.json
 
 tests/crop_book/
 ├── test_crop_knowledge_notes_orm.py
 ├── test_migration_045.py
 ├── test_ni_jmf_book.py
+├── test_ni_jmf_book_alt.py            ← Q5
 ├── test_ni_jmf_ft_flameweed.py
 ├── test_ni_jmf_ft_biopesticide.py
+├── test_ni_jmf_ft_phytoprotection.py  ← Q5
+├── test_ni_jmf_ft_nurseryseeding.py   ← Q5
 ├── test_ni_cache_schema.py
 ├── test_ni_idempotency.py
 ├── test_ni_licensing_flag.py
+├── test_ni_dedup_alt_edition.py       ← Q5 — handles overlap between jmf_book + jmf_book_alt
 └── test_seed_ni_cli.py
 
 CHANGELOG.md                                ← MODIFY: [Unreleased] entry
 ```
 
-### 2.2 No changes to these files (LOD500_LOCKED + raw-material)
+### 2.2 LOD500_LOCKED inventory (DO NOT TOUCH)
 
 | File / path | Reason |
 |-------------|--------|
-| `organic_market_agent/views.py`, `publisher/`, `mu-plugin/` | LIVE PRODUCTION |
+| `_aos/governance/` (entire tree) | IR#11 — governance is hub→snapshot only |
+| `_aos/lean-kit/` (entire tree) | IR#11 — lean-kit is hub→snapshot only |
+| `_aos/project_identity.yaml` | IR#11 |
+| `organic_market_agent/views.py` | LIVE PRODUCTION |
+| `organic_market_agent/publisher/wp_upload.py`, `upload_dispatch.py` | LIVE PRODUCTION |
 | `organic_market_agent/db/versions/001..044_*.py` | All prior migrations (045 reserved for B2) |
-| `organic_market_agent/crop_book/importer/tend.py` | Raw-material guard |
+| `organic_market_agent/crop_book/importer/tend.py` | Raw-material guard (CLAUDE.md) |
 | `organic_market_agent/crop_book/importer/jmf.py`, `jmf_masterclass.py` | B1 deliverables — LOD500_LOCKED |
 | `organic_market_agent/crop_book/crop_task_templates.py` | B1 deliverable — LOD500_LOCKED |
 | `organic_market_agent/db/versions/044_crop_task_templates.py` | B1 deliverable |
 | `organic_market_agent/crop_book/models.py`, `source_registry.py`, `field_policy.py`, `enrichment_models.py`, `importer/reconciler.py`, `importer/enrichment_runner.py` | WP-A engine SSoT |
-| `organic_market_agent/crop_book/importer/ni_importer.py` | WP-A skeleton — DO NOT MODIFY (B2 SUBCLASSES it without touching the base) |
-| `organic_market_agent/crop_book/constants.py` | LOD500_LOCKED via B1-patch01 (extended JMF_CROP_MAP). B2 does NOT modify constants.py — uses JMF_CROP_MAP read-only. |
+| `organic_market_agent/crop_book/constants.py` | LOD500_LOCKED via B1 + patch01 (B2 reads `JMF_CROP_MAP` read-only; does NOT modify) |
+| `mu-plugin/` | Deployed |
 
-**Permitted modifications:**
-- `organic_market_agent/crop_book/importer/seed.py` — add `--ni-only`, `--no-ni` flags + 1 new call-site block
-- `CHANGELOG.md` — `[Unreleased]` entry
+### 2.3 MODIFY scope (explicit — F-S-B2-02 fix)
 
-### 2.3 Engine + cache flow
+The internal-consistency issue in v1.0.0 between §2.2 (DO NOT MODIFY) and §7.5 (single helper append) is resolved here:
 
-```
-                          ┌─── one-time prepare step ────┐
-                          │   (NOT runtime; NOT in tests) │
-                          │                                │
-JMF PDFs (3 files)        │   pdftotext → text chunks     │
-       │                  │       ↓                        │
-       ▼                  │   scripts/extract_jmf_ni.py    │
-   pdftotext              │       ↓                        │
-       │                  │   Anthropic API (Claude Sonnet)│
-       ▼                  │       ↓                        │
-   raw text               │   structured JSON              │
-                          │       ↓                        │
-                          │   data/jmf/extracted/...json   │   ← COMMITTED
-                          └────────────────────────────────┘
-                                       │
-                                       ▼  (committed cache, deterministic)
-                          ┌─── runtime importer ───────────┐
-                          │                                 │
-                          │   ni/jmf_book.py.load()         │
-                          │       reads JSON; emits rows    │
-                          │       ↓                         │
-                          │   _upsert_knowledge_note(...)   │
-                          │       ↓                         │
-                          │   crop_knowledge_notes (DB)     │
-                          │   crop_variety_source_values    │
-                          │       (cultivar_recommendation) │
-                          └─────────────────────────────────┘
-```
+| File | Allowed change scope |
+|------|----------------------|
+| `organic_market_agent/crop_book/importer/ni_importer.py` | **APPEND-ONLY**: add `_upsert_knowledge_note(session, ...)` helper at module scope (after the `ni_registry = _NIRegistry()` line). The `NIImporter` abstract class MUST remain unchanged. The `_NIRegistry` class MUST remain unchanged. The `ni_registry` singleton MUST remain unchanged. No new classes, no method additions to existing classes. |
+| `organic_market_agent/crop_book/importer/seed.py` | Add 2 CLI flags + 1 new call-site block (after the existing JMF + Tend imports). |
+| `CHANGELOG.md` | Append `[Unreleased]` entry. |
 
-**Critical invariant:** the runtime path NEVER calls the Anthropic API and NEVER reads PDFs. Tests stub the cache directly with fixture JSON files.
+AC-19 enforces these limits via `git diff <patch01-lock>..HEAD -- <each LOD500_LOCKED path>` showing empty + the MODIFY-list files showing only the specified additive scope.
 
 ---
 
@@ -153,7 +185,7 @@ File: `organic_market_agent/db/versions/045_crop_knowledge_notes.py`
 ```python
 """Migration 045: crop_knowledge_notes table — per-crop NI narrative.
 
-SFA-S003-P002-WP-B2 LOD400 §3. Additive only.
+SFA-S003-P002-WP-B2 LOD400 v1.1.0 §3. Additive only.
 """
 from alembic import op
 import sqlalchemy as sa
@@ -164,11 +196,18 @@ branch_labels = None
 depends_on = None
 
 _NOTE_TYPE_ENUM = (
+    # From JMF book (main + alt editions) — 8 baseline types
     "pest_disease", "harvest_marker", "storage_handling",
     "rotation_companion", "cultivar_recommendation", "growing_tip",
     "irrigation", "nursery_specific",
-    "flame_weed_timing", "biopesticide_spray",
+    # From FT PDFs — 2 baseline + 3 new (Q5 expansion)
+    "flame_weed_timing",          # FT_FLAMEWEEDING
+    "biopesticide_spray",         # FT_TABLEAUAPPLICATIONBIOPESTICIPE
+    "phytoprotection_substance",  # FT_PHYTOPROTECTION (Q5 — substances catalogued)
+    "phytoprotection_application", # FT_PHYTOPROTECTION (Q5 — application protocols)
+    "nursery_seeding_process",    # FT_NURSERYSEEDING (Q5 — process descriptions)
 )
+# Total: 13 enum values. Was 10 in v1.0.0; +3 from Q5.
 
 def upgrade():
     op.create_table(
@@ -209,9 +248,7 @@ def downgrade():
     op.drop_table("crop_knowledge_notes")
 ```
 
-**SQLite compatibility:** `length(body_text) <= 2000` is portable (both Postgres and SQLite use `length()`). `now()` may need `CURRENT_TIMESTAMP` on SQLite via dialect branch — handle in same fashion as B1 §3 if `alembic upgrade 045` fails.
-
-**Body-text length CHECK** is the schema-level enforcement of advisory #1's fair-use snippet bound. AC-04b regression-tests this constraint.
+The `length(body_text) <= 2000` CHECK is the schema-level enforcement of advisory #1's fair-use snippet bound. AC-04a regression-tests this constraint at INSERT time.
 
 ---
 
@@ -222,7 +259,7 @@ File: `organic_market_agent/crop_book/crop_knowledge_notes.py` (NEW)
 ```python
 """CropKnowledgeNote ORM — per-crop NI narrative (migration 045).
 
-SFA-S003-P002-WP-B2 LOD400 §4. Mirrors WP-A/B1 pattern.
+SFA-S003-P002-WP-B2 LOD400 v1.1.0 §4. Mirrors WP-A/B1/B3 pattern.
 """
 from __future__ import annotations
 from datetime import datetime
@@ -243,11 +280,12 @@ NOTE_TYPE_VALUES: tuple[str, ...] = (
     "rotation_companion", "cultivar_recommendation", "growing_tip",
     "irrigation", "nursery_specific",
     "flame_weed_timing", "biopesticide_spray",
+    "phytoprotection_substance", "phytoprotection_application",
+    "nursery_seeding_process",
 )
+# 13 values total.
 
-# Body-text length cap — fair-use snippet bound (LOD400 §5.4)
 BODY_TEXT_MAX_LENGTH: int = 2000
-
 
 class CropKnowledgeNote(Base):
     __tablename__ = "crop_knowledge_notes"
@@ -290,7 +328,7 @@ class CropKnowledgeNote(Base):
 
 Path: `data/jmf/extracted/<source_name>/<crop_name_en>.json`
 
-Schema (top-level — same shape for jmf_book / jmf_ft_flameweed / jmf_ft_biopesticide):
+Schema (top-level — same shape for all 6 sources):
 
 ```json
 {
@@ -300,197 +338,305 @@ Schema (top-level — same shape for jmf_book / jmf_ft_flameweed / jmf_ft_biopes
   "provenance": {
     "pdf": "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF",
     "pages": "42-45",
-    "extraction_model": "claude-sonnet-4.6",
+    "extraction_model": "claude-sonnet-4-6",
     "extracted_at": "2026-05-25T14:23:00Z"
   },
   "notes": {
-    "pest_disease":           "Flea beetles affect early-season plantings...",
-    "harvest_marker":         "Harvest when leaves are 4–6 inches...",
-    "storage_handling":       "Store at 1–4 °C, 95% humidity...",
-    "rotation_companion":     "Rotate away from brassicas...",
-    "cultivar_recommendation": "Astro is more bolt-resistant...",
-    "growing_tip":            "Direct seed every 7–10 days for continuous harvest...",
-    "irrigation":             "Light, frequent watering...",
-    "nursery_specific":       null
+    "pest_disease":                "Flea beetles affect early-season plantings...",
+    "harvest_marker":              "Harvest when leaves are 4–6 inches...",
+    "storage_handling":            "Store at 1–4 °C, 95% humidity...",
+    "rotation_companion":          null,
+    "cultivar_recommendation":     "Astro is more bolt-resistant...",
+    "growing_tip":                 null,
+    "irrigation":                  "Light, frequent watering...",
+    "nursery_specific":            null,
+    "flame_weed_timing":           null,
+    "biopesticide_spray":          null,
+    "phytoprotection_substance":   null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process":     null
   }
 }
 ```
 
-For `jmf_ft_flameweed` / `jmf_ft_biopesticide` cache files, only the FT-specific note types are present (`flame_weed_timing` / `biopesticide_spray`) and `nursery_specific` etc. are absent. Schema validators allow missing keys (null-equivalent).
+Each source produces JSON files where ONLY the source-relevant `notes` keys are populated; the rest are null. E.g., `jmf_ft_flameweed/<crop>.json` only has `flame_weed_timing` populated. `jmf_book/<crop>.json` populates the 8 book types. `jmf_book_alt/<crop>.json` populates the same 8 types but from the 209pp alternate edition (potentially duplicating `jmf_book` content — see §13 R-08 dedup strategy).
 
-**Field constraints (enforced at extraction time and re-verified at runtime upsert):**
+**Field constraints (enforced at extraction time and re-verified at DB upsert):**
 - `body_text` for each note ≤ 2000 chars (matches DB CHECK constraint)
-- `note_type` keys MUST be a subset of `NOTE_TYPE_VALUES` (ORM tuple from §4)
-- `provenance.pdf` MUST match the filename of the source PDF
+- `note_type` keys MUST be a subset of `NOTE_TYPE_VALUES` (ORM tuple)
+- `provenance.pdf` MUST match the canonical filename of the source PDF
 - `provenance.pages` MUST be a valid page range string (regex `^\d+(-\d+)?$`)
 
-JSON files are committed to repo. `.gitattributes` adds `data/jmf/extracted/** linguist-vendored` to keep diff stats reasonable.
+JSON files are committed to repo. `.gitattributes` rule: `data/jmf/extracted/** linguist-vendored`.
 
 ---
 
-## 6. `extraction_runner` — `scripts/extract_jmf_ni.py`
+## 6. Extraction runner — `scripts/extract_jmf_ni.py` (text-file input per Q1)
 
 File: `scripts/extract_jmf_ni.py` (NEW; CLI tool, NOT production code)
 
 ```python
-"""One-time extraction runner — calls Anthropic API to produce the JSON cache.
+"""One-time extraction runner — reads TEXT FILES (provided by team_00) and
+calls Anthropic API to produce the JSON cache.
 
 NOT runtime. NOT in tests. NOT imported by the runtime path. Run manually:
 
     python scripts/extract_jmf_ni.py --source jmf_book --crop arugula
     python scripts/extract_jmf_ni.py --source jmf_book --all
-    python scripts/extract_jmf_ni.py --source jmf_ft_flameweed
+    python scripts/extract_jmf_ni.py --source jmf_ft_phytoprotection
     python scripts/extract_jmf_ni.py --source jmf_book --rebuild --crop arugula
 
-Requires: ANTHROPIC_API_KEY env var. Reads PDFs from JMF_PDF_DIR
-(default: /Users/nimrod/Documents/old Mac BackUpp/Market Gardening/MasterClass).
+Requires:
+    - ANTHROPIC_API_KEY env var
+    - Text files at data/jmf/raw_text/<source>/<crop>.txt (or _full.txt for FT)
+      provided by team_00 post-merge (Q1 architectural decision — no PDFs).
+
+NOTE per Q1: this script does NOT call pdftotext or read PDFs. Input is plain
+text files. team_00 performs the PDF→text conversion themselves.
 """
 import argparse, json, pathlib, sys
 from datetime import datetime, timezone
 import anthropic
 
-# Constants
-SUPPORTED_SOURCES = ("jmf_book", "jmf_ft_flameweed", "jmf_ft_biopesticide")
+SUPPORTED_SOURCES = (
+    "jmf_book", "jmf_book_alt",
+    "jmf_ft_flameweed", "jmf_ft_biopesticide",
+    "jmf_ft_phytoprotection", "jmf_ft_nurseryseeding",
+)
 DEFAULT_MODEL = "claude-sonnet-4-6"
-DEFAULT_TEMPERATURE = 0.0     # deterministic structured extraction
+DEFAULT_TEMPERATURE = 0.0
+RAW_TEXT_BASE = pathlib.Path("data/jmf/raw_text")
 CACHE_BASE = pathlib.Path("data/jmf/extracted")
 SCHEMA_VERSION = "1.0"
 
-# Per-source dispatch
-def extract_jmf_book(client, pdf_text, crop_jmf_en, crop_chapter_pages):
-    """Extract per-crop notes from a chapter slice. Returns dict matching §5 schema."""
+# Per-source canonical PDF filename (for provenance)
+SOURCE_PDF_MAP = {
+    "jmf_book":               "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF",
+    "jmf_book_alt":           "THE MARKET GARDENER_*.PDF",
+    "jmf_ft_flameweed":       "FT_FINALE_FLAMEWEEDING.PDF",
+    "jmf_ft_biopesticide":    "FT_FINALE_TABLEAUAPPLICATIONBIOPESTICIPE.PDF",
+    "jmf_ft_phytoprotection": "FT_FINALE_PHYTOPROTECTION.PDF",
+    "jmf_ft_nurseryseeding":  "FT_FINALE_NURSERYSEEDING.PDF",
+}
+
+# Per-source note_type set (which keys are populated in the JSON `notes` dict)
+SOURCE_NOTE_TYPES = {
+    "jmf_book":               ("pest_disease", "harvest_marker", "storage_handling",
+                               "rotation_companion", "cultivar_recommendation",
+                               "growing_tip", "irrigation", "nursery_specific"),
+    "jmf_book_alt":           ("pest_disease", "harvest_marker", "storage_handling",
+                               "rotation_companion", "cultivar_recommendation",
+                               "growing_tip", "irrigation", "nursery_specific"),
+    "jmf_ft_flameweed":       ("flame_weed_timing",),
+    "jmf_ft_biopesticide":    ("biopesticide_spray",),
+    "jmf_ft_phytoprotection": ("phytoprotection_substance", "phytoprotection_application"),
+    "jmf_ft_nurseryseeding":  ("nursery_seeding_process",),
+}
+
+def extract_book_chapter(client, text, crop_jmf_en, note_types):
+    """Generic per-chapter extractor — used by jmf_book + jmf_book_alt."""
     prompt = f"""You are extracting structured horticultural knowledge from a
 book chapter about the crop "{crop_jmf_en}". The chapter text follows.
 Extract concise farm-relevant notes (≤2000 characters each) for these
-8 note types: pest_disease, harvest_marker, storage_handling,
-rotation_companion, cultivar_recommendation, growing_tip, irrigation,
-nursery_specific. Return ONLY valid JSON with the structure shown.
-Use null for any note_type that the chapter does not address.
+note types: {', '.join(note_types)}. Return ONLY valid JSON with the
+structure shown. Use null for any note_type the chapter does not address.
 
 Chapter text:
 \"\"\"
-{pdf_text}
+{text}
 \"\"\"
 
-Output JSON ONLY (no preamble, no markdown):
-{{
-  "pest_disease": "..." or null,
-  "harvest_marker": "..." or null,
-  ... (all 8 keys)
-}}"""
+Output JSON ONLY:
+{{ {', '.join(f'"{nt}": "..." or null' for nt in note_types)} }}"""
     response = client.messages.create(
-        model=DEFAULT_MODEL,
-        max_tokens=4096,
-        temperature=DEFAULT_TEMPERATURE,
+        model=DEFAULT_MODEL, max_tokens=4096, temperature=DEFAULT_TEMPERATURE,
         messages=[{"role": "user", "content": prompt}],
     )
-    # Parse JSON from response; validate length; return.
+    # Parse JSON, validate length per field ≤2000, return dict.
 
-def extract_jmf_ft_flameweed(client, pdf_text):
-    """Extract flame-weed timing table → per-crop dict."""
-    # ... similar pattern; produces dict mapping crop_jmf_en → flame_weed_timing string
-
-def extract_jmf_ft_biopesticide(client, pdf_text):
-    """Extract biopesticide application table → per-crop dict."""
-    # ... similar pattern
+def extract_ft_table(client, text, source_name, note_types):
+    """Generic FT-table extractor — per-crop dict mapping crop_jmf_en → field values."""
+    # Similar pattern; produces dict per crop covered in the FT table.
 
 def main():
     parser = argparse.ArgumentParser(...)
     parser.add_argument("--source", choices=SUPPORTED_SOURCES, required=True)
     parser.add_argument("--crop", help="Restrict to single crop (English JMF name)")
-    parser.add_argument("--all", action="store_true", help="Run all crops in JMF_CROP_MAP")
-    parser.add_argument("--rebuild", action="store_true", help="Overwrite existing cache file")
-    parser.add_argument("--pdf-dir", type=pathlib.Path, default=...)
-    # ... arg parsing
-    # Dispatch per --source. Call appropriate extract_* function. Write JSON. Done.
+    parser.add_argument("--all", action="store_true", help="All crops with text-file fixtures present")
+    parser.add_argument("--rebuild", action="store_true")
+    parser.add_argument("--raw-text-base", type=pathlib.Path, default=RAW_TEXT_BASE)
+    args = parser.parse_args()
 
-if __name__ == "__main__":
-    main()
+    # Read text file(s) from RAW_TEXT_BASE / args.source / ...
+    # Dispatch to extract_book_chapter (for jmf_book[_alt]) or extract_ft_table (for jmf_ft_*)
+    # Write JSON to CACHE_BASE / args.source / <crop>.json
 ```
 
 **Anthropic API contract:**
 - Model: `claude-sonnet-4-6` (or current Sonnet); temperature `0.0` for determinism
-- Max tokens: 4096 per call (chapter excerpts ≤ 3000 tokens; output ≤ 2000 chars × 8 = 16 KB ≪ 4096 tokens)
-- Cost estimate: ~52 crops × 8 notes × 1 LLM call ≈ 416 calls @ Sonnet pricing. One-time cost; cached forever after.
+- Max tokens: 4096 per call
+- Per-source estimated cost (one-time): ~52 crops × n note types × 1 LLM call. For 6 sources, total ~150 calls. Cached forever after.
+
+**Q1 architectural simplification:** no `pdftotext` step. team_00 provides text files; runner reads them directly. If a text file is missing, the runner logs WARN and skips that crop (graceful — same as the WARN+skip pattern in B1).
 
 ---
 
-## 7. NIImporter subclasses
+## 7. NIImporter subclasses (correct API per WP-A — F-S-B2-01 fix)
 
-### 7.1 `ni/__init__.py` (NEW — re-export + registry)
+WP-A's actual class is `NIImporter` (NOT `NiSourceBase` as v1.0.0 incorrectly stated). The abstract method is `load() → list[dict[str, Any]]`, returning **variety-source-value row dicts** (matching the `crop_variety_source_values` shape). Subclass attribute is `name`.
+
+For B2's crop-scoped narrative content (which doesn't fit the variety-source-value shape natively), each subclass implements a **sibling method `load_knowledge_notes() → list[dict[str, Any]]`** that returns `crop_knowledge_notes` row dicts. The seed.py call-site invokes both:
+- `ni_registry.load_all()` (existing WP-A path) — produces variety-source-value rows; B2 subclasses contribute `cultivar_recommendation` rows here
+- Iterates `ni_registry.registered_labels` and calls each subclass's `load_knowledge_notes()` — produces crop_knowledge_notes rows
+
+### 7.1 `ni/__init__.py` (NEW)
 
 ```python
-"""NI importer subclasses (SFA-S003-P002-WP-B2).
+"""NI importer subclasses (SFA-S003-P002-WP-B2 v1.1.0).
 
-Each subclass reads a committed JSON cache and produces DB rows via
-the WP-A NiSourceBase abstract base.
+Importing this package registers all 6 concrete NIImporter subclasses
+with the WP-A ni_registry singleton.
 """
-from organic_market_agent.crop_book.importer.ni.jmf_book import JmfBookSource
-from organic_market_agent.crop_book.importer.ni.jmf_ft_flameweed import JmfFtFlameweedSource
-from organic_market_agent.crop_book.importer.ni.jmf_ft_biopesticide import JmfFtBiopesticideSource
+from organic_market_agent.crop_book.importer.ni_importer import ni_registry
+from organic_market_agent.crop_book.importer.ni.jmf_book import JmfBookImporter
+from organic_market_agent.crop_book.importer.ni.jmf_book_alt import JmfBookAltImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_flameweed import JmfFtFlameweedImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_biopesticide import JmfFtBiopesticideImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_phytoprotection import JmfFtPhytoprotectionImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_nurseryseeding import JmfFtNurseryseedingImporter
 
-NI_SOURCES = (JmfBookSource, JmfFtFlameweedSource, JmfFtBiopesticideSource)
-__all__ = ["JmfBookSource", "JmfFtFlameweedSource", "JmfFtBiopesticideSource", "NI_SOURCES"]
+NI_IMPORTER_CLASSES = (
+    JmfBookImporter, JmfBookAltImporter,
+    JmfFtFlameweedImporter, JmfFtBiopesticideImporter,
+    JmfFtPhytoprotectionImporter, JmfFtNurseryseedingImporter,
+)
+
+# Register all 6 at module load (per WP-A docstring "Subclasses register
+# themselves by calling ni_registry.register()").
+for cls in NI_IMPORTER_CLASSES:
+    ni_registry.register(cls())
+
+__all__ = [cls.__name__ for cls in NI_IMPORTER_CLASSES] + ["NI_IMPORTER_CLASSES"]
 ```
 
-### 7.2 `ni/jmf_book.py` (NEW)
+### 7.2 `ni/jmf_book.py` (NEW — pattern for all 6 subclasses)
 
 ```python
-"""JmfBookSource — Market Gardener 240-page ebook NI subclass.
+"""JmfBookImporter — Market Gardener 240-page main edition.
 
-Reads cached JSON from data/jmf/extracted/jmf_book/<crop>.json.
+Subclass of WP-A NIImporter. Reads cached JSON from
+data/jmf/extracted/jmf_book/<crop>.json. Produces:
+  - 0-or-1 variety-source-value row per crop (cultivar_recommendation)
+    via load() — goes through WP-A standard NI path
+  - 0..8 crop_knowledge_notes rows per crop via load_knowledge_notes()
+    — goes through the B2-specific path
 """
-from pathlib import Path
+from __future__ import annotations
 import json
-from organic_market_agent.crop_book.importer.ni_importer import NiSourceBase
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
 
-class JmfBookSource(NiSourceBase):
-    source_label: str = "NI:jmf_book_v1"
-    cache_dir: Path = Path("data/jmf/extracted/jmf_book")
-    canonical_pdf_filename: str = "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF"
+from organic_market_agent.crop_book.importer.ni_importer import NIImporter
 
-    def load(self) -> list[dict]:
-        """Read all <crop>.json files in cache_dir; return upsert-ready row dicts.
 
-        Each cache file produces:
-          - 1 CropKnowledgeNote row per non-null `notes.<type>` key (up to 8)
-          - 0-or-1 CropVarietySourceValue row for cultivar_recommendation
-            (when present, mapped to the default-baseline variety; same
-            pattern as B1 _default_variety_id).
+class JmfBookImporter(NIImporter):
+    name = "jmf_book_v1"
+    cache_dir = Path("data/jmf/extracted/jmf_book")
+    canonical_pdf_filename = "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF"
 
-        Rows returned with:
-          source = "NI:jmf_book_v1"
-          trust_tier = "NI"
-          confidence_weight = None
-          is_internal_farm_use_only = True
-          provenance_pdf = canonical_pdf_filename
-          provenance_pages = cache_file["provenance"]["pages"]
+    def _iter_cache_files(self):
+        if not self.cache_dir.exists():
+            return
+        yield from sorted(self.cache_dir.glob("*.json"))
+
+    def _load_cache_file(self, path: Path) -> dict:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        # Validate schema_version, source, crop_jmf_en, provenance, notes
+        if data.get("schema_version") != "1.0":
+            raise ValueError(f"{path}: missing or wrong schema_version")
+        return data
+
+    def _resolve_crop_id_and_variety_id(self, session, crop_jmf_en: str):
+        """Use B1's pattern: JMF_CROP_MAP → crops.name_he → crops.id;
+        default-baseline variety (name_en IS NULL)."""
+        # ... implementation matching B1's _default_variety_id helper
+
+    def load(self) -> list[dict[str, Any]]:
+        """Return variety-source-value rows for cultivar_recommendation only.
+
+        Per WP-A NIImporter contract, each row has:
+          variety_id, field_name, source (self.source_label),
+          value_text, value_numeric, unit, note,
+          trust_tier='NI', confidence_weight=None, is_outlier_rejected=False.
         """
+        rows = []
+        for path in self._iter_cache_files():
+            data = self._load_cache_file(path)
+            crop_jmf_en = data["crop_jmf_en"]
+            cultivar = data["notes"].get("cultivar_recommendation")
+            if not cultivar:
+                continue
+            # Resolve variety_id; build row
+            session = None  # NOTE: load() is called by ni_registry.load_all()
+                            # in the context of an open session — but the WP-A
+                            # contract is to return dicts ready for upsert,
+                            # NOT to write directly. Resolution of variety_id
+                            # happens at the seed.py call-site (which has the
+                            # session). The subclass returns rows tagged with
+                            # `crop_jmf_en` and the call-site resolves to
+                            # variety_id before calling _upsert_source_value.
+            rows.append({
+                "_resolution_crop_jmf_en": crop_jmf_en,  # call-site resolves to variety_id
+                "field_name": "cultivar_recommendation",
+                "source": self.source_label,
+                "value_text": cultivar[:2000],  # bounded per advisory #1
+                "value_numeric": None,
+                "unit": None,
+                "note": f"From {self.canonical_pdf_filename} pages {data['provenance']['pages']}",
+                "trust_tier": "NI",
+                "confidence_weight": None,
+                "is_outlier_rejected": False,
+            })
+        return rows
+
+    def load_knowledge_notes(self) -> list[dict[str, Any]]:
+        """Return crop_knowledge_notes row dicts (B2-specific path)."""
+        rows = []
+        for path in self._iter_cache_files():
+            data = self._load_cache_file(path)
+            crop_jmf_en = data["crop_jmf_en"]
+            for note_type, body in data["notes"].items():
+                if not body:
+                    continue
+                if len(body) > 2000:
+                    raise ValueError(f"{path}: note_type={note_type} body_text > 2000")
+                rows.append({
+                    "_resolution_crop_jmf_en": crop_jmf_en,
+                    "source": self.source_label,
+                    "trust_tier": "NI",
+                    "note_type": note_type,
+                    "body_text": body,
+                    "provenance_pdf": data["provenance"]["pdf"],
+                    "provenance_pages": data["provenance"]["pages"],
+                    "is_internal_farm_use_only": True,
+                    "extraction_model": data["provenance"]["extraction_model"],
+                    "extracted_at": data["provenance"]["extracted_at"],
+                })
+        return rows
 ```
 
-### 7.3 `ni/jmf_ft_flameweed.py` (NEW)
+The other 5 subclasses follow the same pattern with their own `name`, `cache_dir`, `canonical_pdf_filename`. For FT subclasses, the cache structure may be a single `_table.json` (mapping crop_jmf_en → fields) instead of per-crop files — the `_iter_cache_files` + `_load_cache_file` methods adapt accordingly.
+
+### 7.3 `_upsert_knowledge_note` helper (F-S-B2-02 fix — single APPEND to ni_importer.py)
+
+The ONLY permitted modification to `ni_importer.py`. Append at module scope AFTER the `ni_registry = _NIRegistry()` line:
 
 ```python
-"""JmfFtFlameweedSource — FT_FLAMEWEEDING PDF NI subclass.
+# ---------------------------------------------------------------------------
+# Knowledge-note upsert helper (added by WP-B2)
+# ---------------------------------------------------------------------------
 
-Reads cached JSON from data/jmf/extracted/jmf_ft_flameweed/_table.json.
-The cache file is a single dict mapping crop_jmf_en → flame_weed_timing string.
-Produces 1 CropKnowledgeNote row per crop with note_type='flame_weed_timing'.
-"""
-class JmfFtFlameweedSource(NiSourceBase):
-    source_label = "NI:jmf_ft_flameweed_v1"
-    cache_dir = Path("data/jmf/extracted/jmf_ft_flameweed")
-    canonical_pdf_filename = "FT_FINALE_FLAMEWEEDING.PDF"
-    ...
-```
-
-### 7.4 `ni/jmf_ft_biopesticide.py` (NEW)
-
-Mirror pattern: `source_label = "NI:jmf_ft_biopesticide_v1"`; produces one `biopesticide_spray` note per crop covered in the table.
-
-### 7.5 `_upsert_knowledge_note` helper (in `ni_importer.py` extension — additive only)
-
-```python
 def _upsert_knowledge_note(
     session,
     crop_id: int,
@@ -501,21 +647,49 @@ def _upsert_knowledge_note(
     provenance_pdf: str | None = None,
     provenance_pages: str | None = None,
     extraction_model: str | None = None,
-    extracted_at: datetime | None = None,
-) -> CropKnowledgeNote:
-    """Upsert on (crop_id, source, note_type).
+    extracted_at = None,
+) -> "CropKnowledgeNote":
+    """Upsert one crop_knowledge_notes row on (crop_id, source, note_type).
 
-    trust_tier='NI', is_internal_farm_use_only=True hardcoded.
+    Always sets trust_tier='NI' and is_internal_farm_use_only=True.
+    Body text bounded ≤ 2000 chars (DB CHECK + ORM constraint also enforce).
+
+    Added by SFA-S003-P002-WP-B2 LOD400 v1.1.0 §7.3.
     """
+    # Lazy import to avoid circular dependency
+    from organic_market_agent.crop_book.crop_knowledge_notes import (
+        CropKnowledgeNote, BODY_TEXT_MAX_LENGTH,
+    )
+    if len(body_text) > BODY_TEXT_MAX_LENGTH:
+        raise ValueError(f"body_text exceeds {BODY_TEXT_MAX_LENGTH} chars")
+    row = (session.query(CropKnowledgeNote)
+           .filter_by(crop_id=crop_id, source=source, note_type=note_type)
+           .one_or_none())
+    if row is None:
+        row = CropKnowledgeNote(
+            crop_id=crop_id, source=source, note_type=note_type,
+        )
+        session.add(row)
+    row.trust_tier = "NI"
+    row.body_text = body_text
+    row.provenance_pdf = provenance_pdf
+    row.provenance_pages = provenance_pages
+    row.is_internal_farm_use_only = True
+    row.extraction_model = extraction_model
+    row.extracted_at = extracted_at
+    session.flush()
+    return row
 ```
 
-**Where to put this helper:** add to `ni_importer.py` as a module-level helper function NEXT TO the existing `NiSourceBase` class (not inside). This is the ONLY permitted modification to the LOD500_LOCKED `ni_importer.py` — append-only, no class change, no base modification.
+NO other modification to `ni_importer.py`. The `NIImporter` class, `_NIRegistry` class, `ni_registry` singleton remain unchanged.
 
 ---
 
-## 8. `seed.py` modifications
+## 8. `seed.py` modifications (F-S-B2-03 fix — exact signature)
 
-Add (after the existing B1 + patch01 + B3 flags):
+Existing `_upsert_source_value(session, variety_id, sv)` signature from `seed.py`. B2 does NOT introduce a new signature; it uses the existing one. The `sv` parameter is a dict matching the `CropVarietySourceValue` column shape.
+
+Add CLI flags (after existing B1+patch01+B3 flags):
 
 ```python
 parser.add_argument(
@@ -528,24 +702,46 @@ parser.add_argument(
 )
 ```
 
-Mutual exclusion: `--ni-only ↔ --no-ni`.
+Mutual exclusion: `--ni-only` ↔ `--no-ni`.
 
-Call site (inside `with SessionFactory() as session:` block, AFTER JMF MasterClass + Tend overlay + WP-A Tend imports — NI hard-override comes LAST so it wins precedence):
+Call site (inside `with SessionFactory() as session:` block, AFTER all other importers — NI hard-override comes LAST so it wins precedence):
 
 ```python
 if not args.no_ni:
-    from organic_market_agent.crop_book.importer.ni import NI_SOURCES
-    for src_class in NI_SOURCES:
-        src = src_class()
-        rows = src.load()
-        for row in rows:
-            # Each row is a dict tagged with target_table=
-            #   "crop_knowledge_notes" → call _upsert_knowledge_note
-            #   "crop_variety_source_values" → call _upsert_source_value (for cultivar_recommendation)
-            if row["target_table"] == "crop_knowledge_notes":
-                _upsert_knowledge_note(session, **row["payload"])
-            else:
-                _upsert_source_value(session, **row["payload"])
+    # Import the NI package — registers all 6 subclasses via __init__
+    from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
+    from organic_market_agent.crop_book.importer.ni_importer import (
+        ni_registry, _upsert_knowledge_note,
+    )
+
+    # PATH A: variety-source-value rows via WP-A standard path
+    # (B2 subclasses contribute cultivar_recommendation rows here)
+    for row in ni_registry.load_all():   # already validated by validate() hook
+        # Resolve _resolution_crop_jmf_en → variety_id (B2 subclasses tag rows
+        # with this key; resolution uses JMF_CROP_MAP + default-baseline pattern)
+        crop_jmf_en = row.pop("_resolution_crop_jmf_en", None)
+        if crop_jmf_en is None:
+            continue   # row pre-resolved by subclass (defensive)
+        variety_id = _resolve_default_variety_for_jmf_crop(session, crop_jmf_en)
+        if variety_id is None:
+            continue   # crop not in JMF_CROP_MAP; logged WARN by helper
+        # Call the EXISTING _upsert_source_value(session, variety_id, sv) signature
+        # sv is the remaining dict (variety_id-less); helper handles the rest.
+        _upsert_source_value(session, variety_id, row)
+
+    # PATH B: crop_knowledge_notes rows via B2-specific path
+    for cls in NI_IMPORTER_CLASSES:
+        importer = next((imp for imp in ni_registry._importers.values()
+                          if isinstance(imp, cls)), None)
+        if importer is None:
+            continue
+        for row in importer.load_knowledge_notes():
+            crop_jmf_en = row.pop("_resolution_crop_jmf_en")
+            crop_id = _resolve_crop_id_for_jmf_crop(session, crop_jmf_en)
+            if crop_id is None:
+                continue
+            _upsert_knowledge_note(session, crop_id=crop_id, **row)
+
     session.flush()
 
 if args.ni_only:
@@ -554,155 +750,164 @@ if args.ni_only:
     return
 ```
 
+The two new helper functions `_resolve_default_variety_for_jmf_crop` and `_resolve_crop_id_for_jmf_crop` are added to seed.py at module scope (existing module — small additions). Both use `JMF_CROP_MAP` from `constants.py` to translate English JMF crop names to `crops.name_he`/`crops.id`.
+
 ---
 
-## 9. Acceptance Criteria
+## 9. Acceptance Criteria (≥18; v1.0.0 had 18; v1.1.0 same count + 2 new for Q5)
 
-**AC-01 — Migration 045 created and clean.**
-`alembic upgrade head` creates `crop_knowledge_notes` with correct DDL; `alembic downgrade 044` drops it. CHECK constraints on `note_type` and `body_text` length active. Both Postgres and SQLite work.
+**AC-01 — Migration 045 + 13-value note_type CHECK clean.**
+`alembic upgrade head` succeeds; CHECK constraint accepts all 13 enum values; `length(body_text) <= 2000` CHECK active. Both Postgres + SQLite.
 
-**AC-02 — `CropKnowledgeNote` ORM correct.**
-13 columns mapped with correct types; `NOTE_TYPE_VALUES` exported (10 entries); `BODY_TEXT_MAX_LENGTH == 2000`.
+**AC-02 — `CropKnowledgeNote` ORM correct (13 enum values + length constant).**
+`NOTE_TYPE_VALUES` has exactly 13 entries; `BODY_TEXT_MAX_LENGTH == 2000`.
 
-**AC-03 — NI subclasses importable + properly registered.**
-`from organic_market_agent.crop_book.importer.ni import NI_SOURCES; assert len(NI_SOURCES) == 3`. Each subclass has `source_label` matching `'NI:<source>_v1'` pattern. Each subclass's `load()` method is callable.
+**AC-03 — All 6 NIImporter subclasses register correctly.**
+After importing `organic_market_agent.crop_book.importer.ni`, `ni_registry.registered_labels` contains 6 entries: `"NI:jmf_book_v1"`, `"NI:jmf_book_alt_v1"`, `"NI:jmf_ft_flameweed_v1"`, `"NI:jmf_ft_biopesticide_v1"`, `"NI:jmf_ft_phytoprotection_v1"`, `"NI:jmf_ft_nurseryseeding_v1"`.
 
 **AC-04a — Body-text length CHECK enforced at DB level.**
-Attempting to insert a row with `body_text` of 2001 characters raises `IntegrityError`. (Validates the fair-use snippet bound is at the schema layer, not just runtime.)
+Insert with 2001-char body_text raises `IntegrityError`.
 
-**AC-04b — `note_type` CHECK enforced.**
-Inserting `note_type='nonsense_type'` raises `IntegrityError`. All 10 enum values accepted.
+**AC-04b — `note_type` CHECK enforced (13 values).**
+Inserting `note_type='nonsense_type'` raises `IntegrityError`. All 13 enum values accepted (including 3 Q5 additions).
 
-**AC-05 — Licensing flag default + enforcement.**
-After importing any NI cache row, the resulting `crop_knowledge_notes` row has `is_internal_farm_use_only=True`. Test asserts this default cannot be silently flipped by the importer.
+**AC-05 — Licensing flag default + ORM enforcement.**
+Default `is_internal_farm_use_only=True`. The `_upsert_knowledge_note` helper hardcodes this value (cannot be set to False by importer code).
 
 **AC-06 — UNIQUE constraint on (crop_id, source, note_type).**
-Two inserts with identical `(crop_id, source='NI:jmf_book_v1', note_type='pest_disease')` raises `IntegrityError`. Re-import via `_upsert_knowledge_note` is idempotent (update path).
+Two inserts with identical key raises `IntegrityError`. `_upsert_knowledge_note` is idempotent.
 
-**AC-07 — `JmfBookSource.load()` reads fixture JSON correctly.**
-Given a fixture file at `tests/crop_book/fixtures/ni/jmf_book/arugula.json` with 3 non-null note types, `JmfBookSource(cache_dir=fixture_dir).load()` returns 3 row dicts (one per non-null note_type), each carrying provenance + source + correct note_type.
+**AC-07 — `JmfBookImporter` extends `NIImporter` correctly.**
+`isinstance(JmfBookImporter(), NIImporter)` is True. `JmfBookImporter().name == "jmf_book_v1"`. `JmfBookImporter().source_label == "NI:jmf_book_v1"` (derived via base class property).
 
-**AC-08 — Cache schema validation.**
-A fixture cache file missing the `schema_version` field is rejected with a clear error message. A file with `note_type` not in `NOTE_TYPE_VALUES` is rejected. A file with `body_text > 2000` chars in a note is rejected pre-DB.
+**AC-08 — Cache schema validation rejects malformed JSON.**
+Missing `schema_version` → ValueError. Bad `note_type` key → ValueError. body_text > 2000 → ValueError.
 
-**AC-09 — FT PDF subclasses work against fixture caches.**
-`JmfFtFlameweedSource` + `JmfFtBiopesticideSource` each load their fixture cache and produce ≥ 1 row per crop in the cache. note_type matches the source.
+**AC-09 — All 6 source subclasses produce rows from fixture caches.**
+For each of the 6 subclasses, given a fixture cache with 2+ crops, `subclass.load_knowledge_notes()` returns ≥ 2 rows per crop's non-null note types.
 
-**AC-10 — DB integration: end-to-end with fixture cache.**
-On a SQLite in-memory DB seeded with 3 crops + all 3 NI cache fixtures populated: `import_ni()` (or the seed.py NI loop) produces ≥ 3 `crop_knowledge_notes` rows.
+**AC-10 — DB integration: end-to-end via seed.py NI flow.**
+On a SQLite in-memory DB seeded with 3 crops + all 6 NI cache fixtures: NI loop produces (a) ≥ 3 `crop_knowledge_notes` rows; (b) ≥ 1 `crop_variety_source_values` row with `source LIKE 'NI:%'` and `field_name='cultivar_recommendation'`.
 
 **AC-11 — Idempotency.**
-Running the NI import twice in a row produces the same row count after second call as after first.
+Running NI loop twice yields same row count after second call as after first.
 
-**AC-12 — Engine reuse: cultivar_recommendation via _upsert_source_value.**
-When a JmfBook cache contains a `cultivar_recommendation` note, the NI loader ALSO produces a `crop_variety_source_values` row with `field_name='cultivar_recommendation'`, `source='NI:jmf_book_v1'`, `trust_tier='NI'`, `confidence_weight=NULL`, `is_outlier_rejected=False`. This row is hard-override per WP-A engine.
+**AC-12 — Engine reuse: cultivar_recommendation via existing `_upsert_source_value`.**
+The seed.py call-site invokes `_upsert_source_value(session, variety_id, sv)` with `sv` dict shape matching the existing helper. AC-12a: call signature verified at the existing `_upsert_source_value` function location (see seed.py:169-180). AC-12b: resulting row has `trust_tier='NI'`, `confidence_weight=NULL`, `is_outlier_rejected=False`.
 
 **AC-13 — CLI `--ni-only` + `--no-ni`.**
-`seed.py --ni-only --dry-run` populates only NI rows. `seed.py --all --no-ni --dry-run` produces zero rows with `source LIKE 'NI:%'`. Mutual exclusion enforced.
+`seed.py --ni-only --dry-run` populates only NI rows (no JMF/Tend). `--all --no-ni --dry-run` produces zero NI rows. Mutual exclusion enforced.
 
 **AC-14 — `extraction_runner` integration test (stubbed).**
-With ANTHROPIC_API_KEY stubbed, `scripts/extract_jmf_ni.py --source jmf_book --crop arugula --dry-run` produces a valid JSON file matching the schema. (Real Anthropic calls are NOT run in tests; the dry-run path uses a fixture response.)
+With `ANTHROPIC_API_KEY` stubbed, `scripts/extract_jmf_ni.py --source jmf_book --crop arugula --dry-run` produces a valid JSON file. NO live API calls in tests.
 
-**AC-15 — Cache directory commit policy.**
-`data/jmf/extracted/` directory exists in the repo (NOT gitignored). `.gitattributes` declares `data/jmf/extracted/** linguist-vendored`. At least 1 sample JSON file per source is committed (for repository reproducibility).
+**AC-15 — Cache directory commit policy (`.gitkeep` + `.gitattributes`).**
+6 `.gitkeep` files exist (one per source subdir). `.gitattributes` declares `data/jmf/extracted/** linguist-vendored`.
 
-**AC-16 — All existing tests still PASS (regression).**
-After the patch lands, full `pytest tests/crop_book/ -q` shows no regressions on the B1 + patch01 + B3 (if B3 has landed) tests.
+**AC-16 — `jmf_book` and `jmf_book_alt` dedup handling (Q5).**
+When both `jmf_book` and `jmf_book_alt` cache files contain the same crop with overlapping note types, both produce `crop_knowledge_notes` rows (one per source) — the UNIQUE constraint allows this because `source` differs. Optional `test_ni_dedup_alt_edition.py` documents the behavior for team_00 manual review post-extraction.
 
-**AC-17 — validate_aos.sh 0 FAIL.**
-`bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` → 0 FAIL.
+**AC-17 — All existing tests still PASS (regression — phrased as 0 FAIL per F-S-B2-04).**
+`pytest tests/crop_book/ -q`: zero net regressions on B1 + patch01 + B3 tests (if B3 build has landed) + the new B2 ≥ 20 tests. Pre-existing publisher failure remains out-of-scope.
 
-**AC-18 — No LOD500_LOCKED file modified beyond §2.2 scope.**
-`git diff <patch01-lock-commit>..HEAD -- <each path in §2.2>` empty for all locked paths.
-The only PERMITTED change to `ni_importer.py` is the APPEND of `_upsert_knowledge_note` helper at module level (§7.5). The `NiSourceBase` class itself MUST NOT be modified.
+**AC-18 — `validate_aos.sh` 0 FAIL (F-S-B2-04 fix).**
+`bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns exit code 0 (`0 FAIL`). PASS/SKIP totals: any value (28/20, 29/18, 29/19 — lean-kit profile is drifting; gate-relevant criterion is 0 FAIL only).
+
+**AC-19 — LOD500_LOCKED audit (no touches beyond §2.3 scope).**
+`git diff <patch01-lock>..HEAD -- <each path in §2.2>` is empty. `git diff <patch01-lock>..HEAD -- ni_importer.py` shows ONLY the appended `_upsert_knowledge_note` function (no class change). `git diff <patch01-lock>..HEAD -- seed.py` shows ONLY 2 CLI flag additions + 1 call-site block + 2 helper function additions.
+
+**AC-20 — `_aos/governance/` + `_aos/lean-kit/` CLEAN (F-S-B2-02 explicit add).**
+`git diff <patch01-lock>..HEAD -- _aos/governance/ _aos/lean-kit/ _aos/project_identity.yaml` is EMPTY. (These are hub-driven snapshots; B2 builder must never touch them.)
 
 ---
 
 ## 10. Test requirements
 
-**Minimum 15 new tests** across 9 new test files:
+**Minimum 20 new tests** (was 15 in v1.0.0; +5 for Q5 expansion) across 13 new test files:
 
 | File | Tests | Coverage |
 |------|-------|----------|
-| `test_crop_knowledge_notes_orm.py` | 2 | AC-02 + AC-04b |
-| `test_migration_045.py` | 2 | AC-01 + AC-04a (length CHECK enforcement) |
-| `test_ni_jmf_book.py` | 3 | AC-03 + AC-07 + AC-12 (cultivar_recommendation engine reuse) |
-| `test_ni_jmf_ft_flameweed.py` | 1 | AC-09 (FT cache load) |
-| `test_ni_jmf_ft_biopesticide.py` | 1 | AC-09 (FT cache load) |
-| `test_ni_cache_schema.py` | 2 | AC-08 (schema validation: missing version, bad note_type, oversize body) |
+| `test_crop_knowledge_notes_orm.py` | 2 | AC-02 + AC-04b (13 enum values) |
+| `test_migration_045.py` | 2 | AC-01 + AC-04a |
+| `test_ni_jmf_book.py` | 2 | AC-07 + AC-09 (+ load() returns cultivar_recommendation for AC-12) |
+| `test_ni_jmf_book_alt.py` | 1 | AC-09 for alt edition (Q5) |
+| `test_ni_jmf_ft_flameweed.py` | 1 | AC-09 for flameweed |
+| `test_ni_jmf_ft_biopesticide.py` | 1 | AC-09 for biopesticide |
+| `test_ni_jmf_ft_phytoprotection.py` | 1 | AC-09 for phytoprotection (Q5) |
+| `test_ni_jmf_ft_nurseryseeding.py` | 1 | AC-09 for nursery seeding (Q5) |
+| `test_ni_cache_schema.py` | 2 | AC-08 (schema validation) |
 | `test_ni_idempotency.py` | 1 | AC-11 |
-| `test_ni_licensing_flag.py` | 1 | AC-05 (flag default + immutability) |
-| `test_seed_ni_cli.py` | 2 | AC-13 (--ni-only, --no-ni, mutual exclusion) |
+| `test_ni_licensing_flag.py` | 2 | AC-05 (default + helper hardcodes True) |
+| `test_ni_dedup_alt_edition.py` | 1 | AC-16 (Q5 — alt-edition coexistence) |
+| `test_seed_ni_cli.py` | 3 | AC-13 (--ni-only, --no-ni, mutual exclusion) |
 
-**+1 fixture file** per source under `tests/crop_book/fixtures/ni/`:
-- `jmf_book/arugula.json` (3 non-null note types)
-- `jmf_book/basil.json` (different non-null set)
-- `jmf_ft_flameweed/_table.json` (3 crops)
-- `jmf_ft_biopesticide/_table.json` (3 crops)
+**+1 fixture file** per source (6 sources × ≥ 2 crops each = 12 fixture JSONs minimum).
 
-All tests use SQLite in-memory + fixture JSON files. NO live Anthropic API calls in tests. Marker: `@pytest.mark.crop_book`.
+All tests use SQLite in-memory + fixture JSONs. NO live Anthropic API calls. Marker: `@pytest.mark.crop_book`.
 
 ---
 
 ## 11. Build sequence (10 steps)
 
-**Step 1** — Read this LOD400 + LOD200 + PROGRAM_BRIEF §3 + WP-A `ni_importer.py` (verify NiSourceBase signature).
+**Step 1** — Read this LOD400 + DECISION file + verdict + WP-A `ni_importer.py` (verify NIImporter signature byte-exactly).
 
-**Step 2** — Create `crop_knowledge_notes.py` (ORM). Smoke test: `from … import CropKnowledgeNote, NOTE_TYPE_VALUES, BODY_TEXT_MAX_LENGTH; assert len(NOTE_TYPE_VALUES) == 10; assert BODY_TEXT_MAX_LENGTH == 2000`.
+**Step 2** — Create `crop_knowledge_notes.py` (ORM with 13 NOTE_TYPE_VALUES). Smoke test imports.
 
-**Step 3** — Create migration 045. Run `alembic upgrade 045` on a fresh SQLite DB and verify table + indices + CHECK constraints active. Run `downgrade 044` then `upgrade 045` again.
+**Step 3** — Create migration 045. `alembic upgrade 045` on fresh SQLite. CHECK constraints active.
 
-**Step 4** — Create the `ni/` subdirectory + `__init__.py` + 3 subclass files (§7). Each subclass currently raises `NotImplementedError` in `load()` — implementation in Step 6.
+**Step 4** — Create `ni/` directory + `__init__.py` + 6 subclass files (NIImporter subclasses). All 6 raise `NotImplementedError` initially.
 
-**Step 5** — Add `_upsert_knowledge_note` helper to `ni_importer.py` (APPEND ONLY — do NOT modify NiSourceBase). Verify `git diff ni_importer.py` shows ONLY the appended function.
+**Step 5** — Append `_upsert_knowledge_note` helper to `ni_importer.py` (APPEND ONLY). Verify `git diff ni_importer.py` shows ONLY the appended function — no class change.
 
-**Step 6** — Implement `load()` for all 3 subclasses against fixture caches at `tests/crop_book/fixtures/ni/`. Builder generates the fixture files by hand (3 small JSON files per source).
+**Step 6** — Implement `load()` + `load_knowledge_notes()` for all 6 subclasses against fixture caches at `tests/crop_book/fixtures/ni/`. Builder hand-generates ≥ 12 fixture JSON files (≥ 2 crops × 6 sources).
 
-**Step 7** — Create `scripts/extract_jmf_ni.py` (extraction runner). Implement the 3 `extract_*` dispatch functions. Test the `--dry-run` path with a stubbed Anthropic response. Do NOT make live API calls during the build — the runtime importer should work against existing fixture JSON.
+**Step 7** — Create `scripts/extract_jmf_ni.py` (text-file-input version per Q1). Implement the 2 dispatch functions (book chapter; FT table). Stub Anthropic responses for `--dry-run` path. NO live API calls in build/test.
 
-**Step 8** — Wire `seed.py --ni-only` + `--no-ni` flags (§8). Write `test_seed_ni_cli.py`.
+**Step 8** — Wire `seed.py` flags (§8): `--ni-only`, `--no-ni`. Add `_resolve_default_variety_for_jmf_crop` + `_resolve_crop_id_for_jmf_crop` helpers. Verify the existing `_upsert_source_value(session, variety_id, sv)` signature is called with correct shape (F-S-B2-03 fix).
 
-**Step 9** — Write remaining tests (§10). Achieve all 18 ACs.
+**Step 9** — Write all 20+ tests (§10). Verify all 18 ACs (AC-01..AC-20 with 4a/b for AC-04 and 12a/b for AC-12).
 
-**Step 10** — Run `pytest tests/crop_book/ -q` → all green (≥ 256 tests = 241 + 15 new patch01+B3 baseline). Run `validate_aos.sh` → 0 FAIL. Update `CHANGELOG.md`. Write BUILD_REPORT_v1.0.0.md per the canonical template (8 sections). **DO NOT commit any actual extracted PDF content to `data/jmf/extracted/`** — only commit the fixture JSON files in `tests/crop_book/fixtures/ni/` plus an EMPTY `data/jmf/extracted/<source>/` directory tree with a `.gitkeep` per directory + the `.gitattributes` entry. The real extraction (real Anthropic API calls against real PDFs) is a separate manual step team_00 will run post-merge.
+**Step 10** — Run `pytest tests/crop_book/ -q` → all green (≥ B1 + patch01 + B3 baseline + 20 B2 new tests; 1 pre-existing publisher failure remains out-of-scope). Run `validate_aos.sh` → 0 FAIL (PASS/SKIP may be 28/20 or 29/18 or 29/19 — F-S-B2-04 carry). Update `CHANGELOG.md`. Write `BUILD_REPORT_v1.0.0.md` with the 8 canonical sections.
 
-**Note on Step 10's cache-commit-policy nuance:** the spec policy is "cache is committed", but the BUILDER doesn't run the real extraction (it requires ANTHROPIC_API_KEY + the actual PDFs which are on team_00's filesystem). The builder commits ONLY:
-  (a) fixture JSONs (tests-scope)
-  (b) `data/jmf/extracted/` directory structure with `.gitkeep` placeholders
-  (c) `.gitattributes` entry
-team_00 runs `scripts/extract_jmf_ni.py --all` post-merge to populate the real cache. This is documented in BUILD_REPORT §8 (open items).
+**Important post-merge step (NOT builder's job):** team_00 produces text files at `data/jmf/raw_text/<source>/<crop>.txt` for each of the 6 sources, then runs `python scripts/extract_jmf_ni.py --source <X> --all` per source. This populates the real cache. Builder commits ONLY `.gitkeep` placeholders + fixture JSONs.
 
 ---
 
 ## 12. PRE_HANDOFF advisory disposition
 
-| # | Advisory | B2 disposition |
+| # | Advisory | B2 disposition (v1.1.0) |
 |---|---|---|
-| 1 | **JMF PDF licensing — internal farm-use only** | **Addressed via schema + spec language.** §3 CHECK constraint enforces `body_text ≤ 2000 chars` (snippet length). §4 ORM declares `is_internal_farm_use_only=True` as default-not-null. §6 + §11 cache files carry `provenance.pdf` + `provenance.pages` for audit. AC-04a, AC-05 are the regression tests. Spec explicitly forbids publication: "Extracted narrative may be displayed to logged-in farm operators ONLY; never to public WordPress visitors. B2 does NOT push NI prose to WordPress." |
-| 2 | **LLM extraction cache strategy** | **Resolved: cache is COMMITTED.** §5 + §6 + §11. Reasoning: (a) reproducibility — anyone running the project gets the same DB without LLM costs; (b) review — each extraction is a code-reviewable artifact; (c) cache invalidation explicit via `extract_jmf_ni.py --rebuild --crop <name>`. JSON files contain ONLY structured fields, never raw PDF text > 2000 chars per snippet. `.gitattributes` marks them `linguist-vendored` to suppress diff noise. *Alternatives considered:* gitignored (rejected — breaks reproducibility); redacted fixtures (rejected — B2 IS the canonical extraction). |
-| 3 | Tend task whitelist | **N/A for B2** — Tend handling is WP-B3 (resolved by team_00 DECISION 2026-05-25 Option B). |
-| 4 | Transitive WP-A dependency | **Addressed** explicitly. §2.2 lists WP-A `ni_importer.py` as LOD500_LOCKED; §7.5 declares the ONLY permitted modification (append `_upsert_knowledge_note` helper); §2.1 names the patch01 commit `3e1f946` for the `JMF_CROP_MAP` dependency; AC-18 enforces. |
+| 1 | **JMF PDF licensing — internal farm-use only** | **Addressed via schema + spec language.** §3 CHECK `length(body_text) <= 2000`. §4 ORM `is_internal_farm_use_only=True` default-not-null. §7.3 `_upsert_knowledge_note` hardcodes the True value. §11 forbids publication. AC-04a + AC-05 enforce. |
+| 2 | **LLM extraction cache strategy** | **Resolved: cache COMMITTED.** §5 + §15. Reasoning: reproducibility + review + audit. `.gitattributes linguist-vendored` to suppress diff noise. |
+| 3 | Tend task whitelist | **N/A** (B3 scope; resolved). |
+| 4 | Transitive WP-A dependency | **Addressed**. §2.3 declares the ONE permitted ni_importer.py modification (helper append). §7 verifies the WP-A NIImporter API contract byte-exactly. AC-19 + AC-20 enforce. |
+
+**Q5 scope-change risk (new):** the 209pp alternate edition may overlap content with the 240pp main edition. AC-16 + `test_ni_dedup_alt_edition.py` document the behavior — both produce rows (different `source` keys); team_00 manually arbitrates post-extraction.
+
+**Q1 input-architecture change (new):** extraction_runner reads text files (not PDFs). team_00 provides text files. R-01 (pdftotext install) from v1.0.0 is OBSOLETE — removed.
 
 ---
 
-## 13. Risk register
+## 13. Risk register (updated for v1.1.0)
 
 | ID | Risk | Likelihood | Severity | Mitigation |
 |----|------|-----------|---------|-----------|
-| R-01 | `pdftotext` not installed on builder's system | LOW | LOW | Extraction runner is NOT exercised by the build/test (per Step 10 nuance) — only by team_00 post-merge. Builder verifies presence via `which pdftotext` as documented step; missing → install or skip Step 7's live test. |
-| R-02 | `crop_chapter` heuristic in `extract_jmf_book` misses a crop's chapter | MEDIUM | LOW | Builder writes the heuristic with a fallback regex; team_00 verifies per-crop coverage post-extraction; missed crops produce zero JSON files (graceful). Cache is per-crop, so a miss on one crop doesn't break others. |
-| R-03 | Anthropic API model name changes (`claude-sonnet-4-6` deprecated) | LOW | LOW | `extraction_runner` accepts `--model` flag; team_00 can re-run with a current model post-deprecation; the cache JSON carries `provenance.extraction_model` for audit. |
-| R-04 | LLM hallucinates content not in source PDF | MEDIUM | MEDIUM | Temperature `0.0` for determinism; prompt includes the verbatim chapter text and instructs to return null on uncertain extractions; team_00 reviews JSON files before approving for production. The 2000-char bound limits hallucination surface. |
-| R-05 | `body_text` CHECK constraint syntax differs between Postgres and SQLite | LOW | LOW | `length(body_text) <= 2000` is portable. AC-04a tests on SQLite; production runs Postgres (same SQL). |
-| R-06 | B3 migration 046 collides with B2 migration 045 if B3 runs first | LOW | LOW | The migration chain is linear (`044 → 045 → 046`). If B3 lands before B2, B3's `down_revision = "045"` will fail (no 045). Both WPs' specs explicitly say to verify the prior migration before running. Builder of whichever lands second STOPs and inquires if the prior is missing. |
-| R-07 | NI hard-override semantics break PR/OP blending in `reconcile_field()` | LOW | LOW | WP-A engine already supports NI prefix-match (`get_source_spec("NI:any")` returns hard-override class). B2 just produces source labels matching that pattern. AC-12 verifies cultivar_recommendation engine reuse. |
-| R-08 | Future ebook edition adds new chapters → cache stale | LOW | LOW | Cache invalidation explicit via `--rebuild`. New chapters require updating `JMF_CROP_MAP` (a B1-patch level concern). Out-of-scope for B2 itself. |
+| R-01 | ~~pdftotext not installed on builder's system~~ | — | — | **OBSOLETE** per Q1 — extraction_runner reads text files |
+| R-02 | LLM extraction produces inconsistent format across runs | LOW | LOW | Temperature 0.0 enforces determinism; schema validation in step 8 rejects bad cache files |
+| R-03 | Anthropic API model name changes | LOW | LOW | `--model` flag; provenance captures version |
+| R-04 | LLM hallucinates content not in source text | MEDIUM | MEDIUM | Prompt instructs return null on uncertain; 2000-char bound limits surface; team_00 reviews JSON pre-import |
+| R-05 | `length(body_text)` CHECK syntax differs PG vs SQLite | LOW | LOW | `length()` portable |
+| R-06 | B3 migration 046 collides with B2 045 if B3 runs first | LOW | LOW | Linear chain; B3 builder verifies 045 present before `alembic upgrade 046` |
+| R-07 | NI hard-override semantics break PR/OP blending | LOW | LOW | WP-A engine already supports NI prefix-match |
+| R-08 | **209pp alternate edition duplicates content** (Q5 new) | MEDIUM | LOW | Both sources produce rows (different `source` key); team_00 arbitrates manually post-extraction; AC-16 documents behavior |
+| R-09 | **3 new note_types ambiguous in content scope** (Q5 new) | MEDIUM | LOW | LOD400 §3 prescribes per-source note_type sets; extraction_runner per-source dispatch enforces |
+| R-10 | **text-file naming convention mismatch** (Q1 new) | LOW | MEDIUM | extraction_runner expects `data/jmf/raw_text/<source>/<crop>.txt` (or `_full.txt` for FT). Convention documented; runner WARN+skips on missing files; team_00 follows convention |
 
 ---
 
-## 14. LOD500_LOCKED file inventory (must not be modified)
+## 14. LOD500_LOCKED file inventory (DO NOT TOUCH)
 
-See §2.2 above. The ONLY permitted exception is `ni_importer.py` `_upsert_knowledge_note` helper append (§7.5). AC-18 enforces.
+See §2.2 above. The ONLY permitted exception is the single-function APPEND to `ni_importer.py` (§7.3). AC-19 + AC-20 enforce.
 
 ---
 
@@ -714,44 +919,57 @@ See §2.2 above. The ONLY permitted exception is `ni_importer.py` `_upsert_knowl
 organic_market_agent/crop_book/crop_knowledge_notes.py
 organic_market_agent/crop_book/importer/ni/__init__.py
 organic_market_agent/crop_book/importer/ni/jmf_book.py
+organic_market_agent/crop_book/importer/ni/jmf_book_alt.py            ← Q5
 organic_market_agent/crop_book/importer/ni/jmf_ft_flameweed.py
 organic_market_agent/crop_book/importer/ni/jmf_ft_biopesticide.py
+organic_market_agent/crop_book/importer/ni/jmf_ft_phytoprotection.py  ← Q5
+organic_market_agent/crop_book/importer/ni/jmf_ft_nurseryseeding.py   ← Q5
 organic_market_agent/db/versions/045_crop_knowledge_notes.py
 scripts/extract_jmf_ni.py
+data/jmf/raw_text/jmf_book/.gitkeep                                    ← Q1
+data/jmf/raw_text/jmf_book_alt/.gitkeep                                ← Q1+Q5
+data/jmf/raw_text/jmf_ft_flameweed/.gitkeep                            ← Q1
+data/jmf/raw_text/jmf_ft_biopesticide/.gitkeep                         ← Q1
+data/jmf/raw_text/jmf_ft_phytoprotection/.gitkeep                      ← Q1+Q5
+data/jmf/raw_text/jmf_ft_nurseryseeding/.gitkeep                       ← Q1+Q5
 data/jmf/extracted/jmf_book/.gitkeep
+data/jmf/extracted/jmf_book_alt/.gitkeep                               ← Q5
 data/jmf/extracted/jmf_ft_flameweed/.gitkeep
 data/jmf/extracted/jmf_ft_biopesticide/.gitkeep
-.gitattributes                                  ← APPEND linguist-vendored rule (or CREATE if missing)
-tests/crop_book/fixtures/ni/jmf_book/arugula.json
-tests/crop_book/fixtures/ni/jmf_book/basil.json
-tests/crop_book/fixtures/ni/jmf_ft_flameweed/_table.json
-tests/crop_book/fixtures/ni/jmf_ft_biopesticide/_table.json
+data/jmf/extracted/jmf_ft_phytoprotection/.gitkeep                     ← Q5
+data/jmf/extracted/jmf_ft_nurseryseeding/.gitkeep                      ← Q5
+.gitattributes                                  ← APPEND linguist-vendored
+tests/crop_book/fixtures/ni/<source>/<crop>.json (12+ fixture files; 6 sources × 2+ crops)
 tests/crop_book/test_crop_knowledge_notes_orm.py
 tests/crop_book/test_migration_045.py
 tests/crop_book/test_ni_jmf_book.py
+tests/crop_book/test_ni_jmf_book_alt.py                                ← Q5
 tests/crop_book/test_ni_jmf_ft_flameweed.py
 tests/crop_book/test_ni_jmf_ft_biopesticide.py
+tests/crop_book/test_ni_jmf_ft_phytoprotection.py                      ← Q5
+tests/crop_book/test_ni_jmf_ft_nurseryseeding.py                       ← Q5
 tests/crop_book/test_ni_cache_schema.py
 tests/crop_book/test_ni_idempotency.py
 tests/crop_book/test_ni_licensing_flag.py
+tests/crop_book/test_ni_dedup_alt_edition.py                           ← Q5
 tests/crop_book/test_seed_ni_cli.py
 _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B2/BUILD_REPORT_v1.0.0.md   (builder writes after L-GATE_B)
 ```
 
-### MODIFY (existing files — additive scope only)
+### MODIFY (existing files — strict additive scope only)
 
 ```
-organic_market_agent/crop_book/importer/ni_importer.py    ← APPEND _upsert_knowledge_note() only
-organic_market_agent/crop_book/importer/seed.py           ← +2 CLI flags + 1 call-site block
+organic_market_agent/crop_book/importer/ni_importer.py    ← APPEND _upsert_knowledge_note ONLY
+organic_market_agent/crop_book/importer/seed.py           ← +2 CLI flags + 1 call-site block + 2 helper functions
 CHANGELOG.md                                                ← +[Unreleased] entry
 ```
 
 ### DO NOT TOUCH
 
-See §2.2 LOD500_LOCKED inventory. Critical exclusions: `models.py`, `source_registry.py`, `field_policy.py`, `reconciler.py`, `enrichment_runner.py`, `enrichment_models.py`, `tend.py`, `jmf.py`, `jmf_masterclass.py`, `crop_task_templates.py`, `constants.py`, all prior migrations.
+See §2.2 LOD500_LOCKED inventory. Includes `_aos/governance/`, `_aos/lean-kit/`, `_aos/project_identity.yaml` (F-S-B2-02 explicit fix).
 
 ---
 
-*LOD400 v1.0.0 — authored 2026-05-25 by team_110 under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*Parallel-eligible with WP-B3 — no inter-dependency.*
-*Pending: team_190 L-GATE_S validation (mandate next).*
+*LOD400 v1.1.0 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
+*All 4 R1 findings remediated + Q1 + Q5 scope changes applied per team_00 DECISION.*
+*Pending: team_190 L-GATE_S R2 validation (mandate next).*
