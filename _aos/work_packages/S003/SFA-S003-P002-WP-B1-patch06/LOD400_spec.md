@@ -5,7 +5,7 @@ gate: L-GATE_S
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-25
-version: v1.0.1
+version: v1.0.2
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch06/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch04-patch06_INTEGRATION-CLEANUP_2026-05-25_v1.0.0.md
 parent_wp_patch04_lock_commit: "TBD (patch04 must lock first)"
@@ -39,13 +39,24 @@ CHANGELOG.md                                        ← [Unreleased] entry
 scripts/patch06_db_cleanup.py    ← idempotent orphan-crops cleanup (~80 LOC)
 ```
 
-### 2.3 LOCKED scope exception (per DECISION §3 + extends patch03 R3+R4 pattern)
-- `test_jmf_crop_map.py::test_jmf_crop_map_count` (asserts size)
-- `test_jmf_crop_map.py::test_jmf_crop_map_duplicate_target_allowlist` (24-group dict)
-- `test_jmf_crop_map.py::test_ac03_duplicate_group_count` (assert 24)
-- `test_jmf_crop_map_aliases.py::test_alias_spot_check_five_samples` (5 hardcoded keys, 4 of which are removed)
-- `test_jmf_crop_map_aliases.py::test_alias_entry_count_grew_by_34` (the "34 aliases" assertion no longer holds; REMOVE)
-- `test_jmf_crop_map_aliases.py::test_hebrew_value_collision_set_has_24_groups` (rename + value)
+### 2.3 LOCKED scope exception (per DECISION §3 + extends patch03 R3+R4 pattern; v1.0.2 R3 expansion)
+**In `test_jmf_crop_map.py`:**
+- `test_jmf_crop_map_count` (asserts size)
+- `test_jmf_crop_map_duplicate_target_allowlist` (24-group dict)
+- `test_ac03_duplicate_group_count` (assert 24)
+- **v1.0.2 R3 additions** — superseded regression tests for keys removed by patch06:
+  - `test_ac04_1_eggplant_feld_literal_alias` — REMOVE (asserts `Eggplant  (Feld)` is in MAP — key removed; coverage subsumed by `test_no_typo_keys_in_map_post_patch06`)
+  - `test_mesclun_value_post_patch03` — REMOVE (asserts `Mesclun → עלי בייבי` — key removed; coverage subsumed by `test_no_cultivar_keys_in_map_post_patch06`)
+  - `test_salad_mix_value_post_patch03` — REMOVE (same)
+  - `test_baby_kale_value_post_patch03` — REMOVE (same)
+  - `test_lebanese_cucumber_value_post_patch03` — REMOVE (same)
+  - `test_ac04_live_workbook_coverage_min_42_of_50` — REMOVE (patch01-era coverage achievement no longer holds under baselines-only policy; semantically obsolete)
+  - `test_ac07_seed_dry_run_warn_only_for_unmapped` — REMOVE (asserts seed.py warns on unmapped — patch06's removed keys now LEGITIMATELY produce warnings; the test's pre-patch06 premise no longer holds)
+
+**In `test_jmf_crop_map_aliases.py`:**
+- `test_alias_spot_check_five_samples` (5 hardcoded keys, 4 of which are removed)
+- `test_alias_entry_count_grew_by_34` (the "34 aliases" assertion no longer holds; REMOVE)
+- `test_hebrew_value_collision_set_has_24_groups` (rename + value)
 
 ## 3. Implementation — exact code paths
 
@@ -134,6 +145,23 @@ def test_ac03_duplicate_group_count(jmf_crop_map):
     dup_count = sum(1 for c in counts.values() if c > 1)
     assert dup_count == 6, f"Expected 6 duplicate-target groups, got {dup_count}"
 ```
+
+### 3.4c `test_jmf_crop_map.py` — REMOVE 7 superseded tests (v1.0.2 R3 amendment)
+
+Delete each of the following function blocks entirely (full def + body):
+
+```python
+# DELETE:
+def test_ac04_1_eggplant_feld_literal_alias(...): ...      # ~line 120
+def test_mesclun_value_post_patch03(...): ...               # ~line 165
+def test_salad_mix_value_post_patch03(...): ...             # ~line 170
+def test_baby_kale_value_post_patch03(...): ...             # ~line 175
+def test_lebanese_cucumber_value_post_patch03(...): ...     # ~line 190
+def test_ac04_live_workbook_coverage_min_42_of_50(...): ... # location may vary
+def test_ac07_seed_dry_run_warn_only_for_unmapped(...): ... # location may vary
+```
+
+The other patch02/patch03 regression tests (Parsnips, Shallots, Cherry Tomato, Heirloom Tomato, Chinese Cabbage, Hot Pepper, Beans Bush, Snow Peas, Basil) — **KEEP UNCHANGED** (their assertions remain valid post-patch06 because those keys are baselines, not removed).
 
 ### 3.5 `test_jmf_crop_map.py` — APPEND 3 new regression tests
 
@@ -324,4 +352,5 @@ team_10 (Sonnet sub-agent). MEDIUM scope, high LOCKED-touch surface.
 
 *LOD400 v1.0.0 — 2026-05-25.*
 *v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 VC-1 BLOCKER: frontmatter now explicitly records the full three-engine chain (orchestrator + builder + validator + engine_chain summary). No other change.*
-*Pending: team_190 L-GATE_S R2.*
+*v1.0.2 (2026-05-25) — R3 amendment after Sonnet builder reported 7 non-LOCKED test failures as expected-consequence of the cleanup (BUILD_REPORT v1.0.0 at commit 6801e64; build commit 113b47d). 7 superseded tests added to LOCKED scope exception with REMOVE directive: 1 patch01 typo-alias assertion (`test_ac04_1_eggplant_feld_literal_alias`) + 4 patch03 cultivar-value assertions (Mesclun, Salad Mix, Baby kale, Lebanese Cucumber) + 1 patch01 workbook-coverage achievement test + 1 patch01 seed-dry-run unmapped-warn test. All 7 removals are subsumed by patch06's new `test_no_cultivar_keys_in_map_post_patch06` + `test_no_typo_keys_in_map_post_patch06` + `test_six_synonym_groups_exact`. Patch06 BUILD will be re-dispatched after R3 PASS.*
+*Pending: team_190 L-GATE_S R3.*
