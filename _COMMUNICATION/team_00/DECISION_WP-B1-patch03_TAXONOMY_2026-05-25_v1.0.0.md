@@ -91,7 +91,7 @@ Current 25-group allowlist → projected **24-group** allowlist after patch03:
 | `כרוב` group | shrinks 5 → 4 (Chinese Cabbage leaves) |
 | `עגבנייה` group | shrinks 4 → 2 (Cherry + Heirloom leave; Roma + Tomatoes stay) |
 | `פלפל` group | shrinks 3 → 2 (Hot Pepper leaves) |
-| `מלפפון` group | shrinks 3 → 2 (Lebanese leaves) |
+| `מלפפון` group | shrinks 3 → 2 (Libanese key leaves) |
 | 18 other groups | unchanged |
 
 **Net:** 25 − 2 + 1 = **24 groups.**

@@ -120,7 +120,7 @@ def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
         # ── Shrunk groups (patch03 splits removed members) ──
         "פלפל":           ["Bell Pepper", "Peppers"],                       # was 3; Hot Pepper left
         "עגבנייה":        ["Roma Tomato", "Tomatoes"],                       # was 4; Cherry + Heirloom left
-        "מלפפון":         ["Cucumbers", "Greenhouse English Cucumber"],     # was 3; Lebanese left
+        "מלפפון":         ["Cucumbers", "Greenhouse English Cucumber"],     # was 3; Libanese key left
         "כרוב":           ["Cabbage", "Fall Cabbage", "Savoy Cabbage",
                            "Summer Cabbage"],                                # was 5; Chinese left
 
@@ -375,5 +375,5 @@ Sonnet sub-agent (team_10), spawned by team_110 per the standard IR#1 orchestrat
 ---
 
 *LOD400 v1.0.0 — authored 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH03-01: §6 builder-safety line changed `38 keys total` → `55 keys total` (correct arithmetic of sum of group sizes for the 24-group dict). Added verification command. No change to ACs, values, scope, or builder identity.*
+*v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH03-01: §6 builder-safety line corrected to state "55 keys total" (sum of group sizes for the 24-group dict — prior wording had incorrect arithmetic). Added verification command. No change to ACs, values, scope, or builder identity.*
 *Pending: team_190 L-GATE_S R2 validation.*
