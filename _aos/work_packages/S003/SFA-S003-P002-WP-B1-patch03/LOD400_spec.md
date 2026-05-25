@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.2
+version: v1.0.3
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch03/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch03_TAXONOMY_2026-05-25_v1.0.0.md
 parent_wp_patch02_lock_commit: "3d78007"
@@ -276,7 +276,7 @@ Append under `[Unreleased]`:
 - **Split off umbrella categories** (5 keys): Greenhouse Cherry Tomato (→ עגבניית שרי), Greenhouse Heirloom Tomato (→ עגבניות מורשת), Greenhouse Libanese Cucumber (→ מלפפון חממה), Chinese Cabbage (→ כרוב סיני), Hot Pepper (→ פלפל חריף)
 - **Hebrew refinements** (3 keys): Beans (Bush) → שעועית שיחית; Snow Peas → אפונת שלג; Basil → בזיליקום
 - Duplicate-target allowlist: 25 → 24 groups (תערובת סלט + קייל groups disappear; עלי בייבי group of 3 appears; 4 groups shrink)
-- LOD500_LOCKED scope exception: 2 test functions updated per DECISION_WP-B1-patch03_TAXONOMY §4
+- LOD500_LOCKED scope exception: 4 test functions across 2 files updated per DECISION_WP-B1-patch03_TAXONOMY §4 (amended)
 - Per team_00 DECISION_WP-B1-patch03_TAXONOMY_2026-05-25 §§1-4
 ```
 
@@ -309,7 +309,7 @@ For each of the 11 keys, `JMF_CROP_MAP[<key>] == <new value>`:
 
 ### 4.3 Hygiene (AC-16..AC-18)
 
-- **AC-16** `pytest tests/crop_book/ -q` returns 354 passed (343 baseline + 11 new patch03 tests; 2 LOCKED test updates absorb in place) + 1 pre-existing publisher failure (out-of-scope per team_00).
+- **AC-16** `pytest tests/crop_book/ -q` returns 354 passed (343 baseline + 11 new patch03 tests; 4 LOCKED test updates across 2 files absorb in place — 2 in `test_jmf_crop_map.py`, 2 in `test_jmf_crop_map_aliases.py`) + 1 pre-existing publisher failure (out-of-scope per team_00).
 - **AC-17** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns exit code 0.
 - **AC-18** `git diff <patch02-lock>..HEAD` shows changes ONLY in: `constants.py`, `test_jmf_crop_map.py`, `test_jmf_crop_map_aliases.py` (v1.0.2 R3 amendment), `CHANGELOG.md`, and lifecycle-only fields of `_aos/roadmap.yaml`. All other locked paths empty.
 
@@ -387,11 +387,19 @@ build(WP-B1-patch03): JMF_CROP_MAP taxonomic expansion per team_00 DECISION
 
 ## 9. LOD500_LOCKED file inventory (patch03 narrow exception)
 
-Same as patch02 + cumulative. The narrow scope exception authorized in DECISION §4 is limited to:
-- `tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_duplicate_target_allowlist` (single function body)
-- `tests/crop_book/test_jmf_crop_map.py::test_ac03_duplicate_group_count` (single constant `25` → `24`)
+Same as patch02 + cumulative. The narrow scope exception authorized in DECISION §4 (amended v1.0.2) is limited to **4 test functions across 2 files**:
 
-All OTHER locked files (models, importers, migrations, governance) untouched.
+**`tests/crop_book/test_jmf_crop_map.py`:**
+- `test_jmf_crop_map_duplicate_target_allowlist` (single function body — 24-group dict)
+- `test_ac03_duplicate_group_count` (single constant `25` → `24`)
+
+**`tests/crop_book/test_jmf_crop_map_aliases.py`:**
+- `test_alias_spot_check_five_samples` (single dict entry — Cherry Tomato value)
+- `test_hebrew_value_collision_set_has_25_pairs` → renamed `test_hebrew_value_collision_set_has_24_groups` (constant + docstring + name)
+
+The 3rd function in the alias file (`test_alias_entry_count_grew_by_34`) is NOT modified — `len(JMF_CROP_MAP)` remains 86.
+
+All OTHER locked files (models, importers, migrations, governance, the 3rd alias-file test) untouched.
 
 ---
 
@@ -403,12 +411,13 @@ All OTHER locked files (models, importers, migrations, governance) untouched.
 _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-B1-patch03/BUILD_REPORT_v1.0.0.md   (sub-agent writes after build)
 ```
 
-### MODIFY (3 existing files — additive scope + 2-function LOCKED exception)
+### MODIFY (4 existing files — additive scope + 4-function LOCKED exception across 2 test files)
 
 ```
-organic_market_agent/crop_book/constants.py     ← 11 value edits + 1 comment block in JMF_CROP_MAP
-tests/crop_book/test_jmf_crop_map.py            ← 2 LOCKED tests updated + 11 regression tests appended
-CHANGELOG.md                                     ← [Unreleased] entry
+organic_market_agent/crop_book/constants.py        ← 11 value edits + 1 comment block in JMF_CROP_MAP
+tests/crop_book/test_jmf_crop_map.py               ← 2 LOCKED tests updated + 11 regression tests appended
+tests/crop_book/test_jmf_crop_map_aliases.py       ← 2 LOCKED tests updated (Cherry Tomato value + 25→24 rename, per §3.4b)
+CHANGELOG.md                                        ← [Unreleased] entry
 ```
 
 ### DO NOT TOUCH
@@ -434,4 +443,5 @@ Sonnet sub-agent (team_10), spawned by team_110 per the standard IR#1 orchestrat
 *LOD400 v1.0.0 — authored 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
 *v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH03-01: §6 builder-safety line corrected to state "55 keys total" (sum of group sizes for the 24-group dict — prior wording had incorrect arithmetic). Added verification command. No change to ACs, values, scope, or builder identity.*
 *v1.0.2 (2026-05-25) — R3 amendment after Sonnet builder STOP at AC-18 surfaced a second test file (`test_jmf_crop_map_aliases.py`) that hardcodes the pre-patch03 25-group baseline + Cherry Tomato value. Spec amended: §2.1 file list extended (3→4 files); §2.2 LOCKED exception extended (2→4 functions); §3.4b added with the 2 alias-file edits; §4 AC-18 extended; §5 test-count target 13→15; §6 Step 3b added; DECISION §4 amended in lock-step. No change to Hebrew values, builder identity, or any other AC.*
-*Pending: team_190 L-GATE_S R3 validation.*
+*v1.0.3 (2026-05-25) — R4 mechanical cleanup per team_190 L-GATE_S R3 verdict F-S-PATCH03-R3-01 (BLOCKER) + F-S-PATCH03-R3-02 (MINOR): §9 LOCKED inventory updated from 2 → 4 functions across 2 files (was inconsistent with §2.2); §10 MODIFY list updated from 3 → 4 files (added test_jmf_crop_map_aliases.py); §3.5 CHANGELOG bullet "2 test functions" → "4 test functions across 2 files"; AC-16 parenthetical updated to mention 4 LOCKED test updates. No change to architecture, Hebrew values, §3.2 dict, AC numerics, or builder identity.*
+*Pending: team_190 L-GATE_S R4 validation.*
