@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_book_v1",
+  "crop_jmf_en": "Kale",
+  "provenance": {
+    "pdf": "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF",
+    "pages": "85-89",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T14:27:00Z"
+  },
+  "notes": {
+    "pest_disease": "Cabbage worms and aphids are primary pests. Row covers during early growth protect against caterpillars. Check under leaves regularly for aphid colonies.",
+    "harvest_marker": "Harvest outer leaves when 8-12 inches long, leaving the growing center intact for continuous production. Leaves should be deep green and firm, not yellowing.",
+    "storage_handling": "Store at 0-2 degrees C with high humidity. Kale holds well for 2-3 weeks when properly cooled. Blanch and freeze excess harvest.",
+    "rotation_companion": "Rotate with legumes or root crops. Avoid planting after other brassicas. Plant dill or celery nearby to attract beneficial insects.",
+    "cultivar_recommendation": "Red Russian is tender and fast-growing for baby leaf. Lacinato (Dinosaur) has excellent flavor and texture for mature harvest. Winterbor is extremely cold-hardy.",
+    "growing_tip": "Frost improves sweetness significantly. Kale is one of the most nutrient-dense and cold-tolerant crops. Fall plantings often outperform spring plantings in quality.",
+    "irrigation": "Moderate, consistent irrigation. Kale tolerates short dry spells better than lettuce but benefits from regular moisture during establishment.",
+    "nursery_specific": "Start 4-6 weeks before transplant date. Kale transplants well and benefits from nursery start for early spring crops.",
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_book_v1",
+  "crop_jmf_en": "Arugula",
+  "provenance": {
+    "pdf": "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF",
+    "pages": "42-45",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T14:23:00Z"
+  },
+  "notes": {
+    "pest_disease": "Flea beetles are the main pest affecting early-season arugula plantings. Row covers provide effective protection during vulnerable seedling stage. Aphids can also colonize in warm conditions.",
+    "harvest_marker": "Harvest when leaves are 4-6 inches long for baby leaf or 6-8 inches for full size. Leaves should be tender and bright green, before plants begin to bolt.",
+    "storage_handling": "Store at 1-4 degrees C at 95% relative humidity. Arugula is highly perishable and wilts quickly at room temperature. Use within 5-7 days of harvest.",
+    "rotation_companion": null,
+    "cultivar_recommendation": "Astro is more bolt-resistant than standard varieties and performs well across seasons. Sylvetta (wild arugula) is slower growing but has stronger flavor and longer shelf life.",
+    "growing_tip": "Succession plant every 2-3 weeks for continuous harvest. Arugula germinates quickly in cool soil and is one of the fastest crops to first harvest.",
+    "irrigation": "Light, frequent watering to keep soil consistently moist. Drought stress accelerates bolting. Drip irrigation preferred to avoid leaf wetness diseases.",
+    "nursery_specific": null,
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null
+  }
+}

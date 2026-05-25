@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_book_alt_v1",
+  "crop_jmf_en": "Arugula",
+  "provenance": {
+    "pdf": "THE MARKET GARDENER_alt.PDF",
+    "pages": "38-40",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T14:30:00Z"
+  },
+  "notes": {
+    "pest_disease": "Flea beetle damage is the primary concern for arugula, creating small holes in leaves. Floating row covers are the most effective prevention method.",
+    "harvest_marker": "Harvest at 4-5 inches for baby leaf market. Leaves should be dark green and peppery. Cut above the growing point for regrowth.",
+    "storage_handling": "Cool immediately after harvest. Store at 2-4 degrees C. Arugula has a short post-harvest life of 5-7 days even under ideal conditions.",
+    "rotation_companion": null,
+    "cultivar_recommendation": "Runway variety offers good bolt resistance and yield. For year-round production in protected environments, choose slower-bolting types.",
+    "growing_tip": "Arugula is one of the easiest crops to direct seed. Broadcast seeding works well for baby leaf production at high density.",
+    "irrigation": "Even moisture is critical; drought stress causes premature bolting. Irrigation at early morning reduces disease pressure.",
+    "nursery_specific": null,
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_biopesticide_v1",
+  "crop_jmf_en": "Broccoli",
+  "provenance": {
+    "pdf": "FT_FINALE_TABLEAUAPPLICATIONBIOPESTICIPE.PDF",
+    "pages": "1-5",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T15:10:00Z"
+  },
+  "notes": {
+    "biopesticide_spray": "Apply spinosad or Bt against imported cabbageworm and diamondback moth larvae on broccoli. Apply when larvae are small (first or second instar) for best efficacy. Always spray undersides of leaves where larvae feed."
+  }
+}

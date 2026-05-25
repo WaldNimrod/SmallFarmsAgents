@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_book_alt_v1",
+  "crop_jmf_en": "Spinach",
+  "provenance": {
+    "pdf": "THE MARKET GARDENER_alt.PDF",
+    "pages": "155-158",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T14:32:00Z"
+  },
+  "notes": {
+    "pest_disease": "Downy mildew is the primary disease concern, especially in humid conditions. Leaf miners can disfigure leaves. Choose resistant varieties and ensure good air circulation.",
+    "harvest_marker": "Harvest baby spinach at 3-4 inches. Full-size leaves at 5-7 inches. Harvest before plants bolt in warm weather.",
+    "storage_handling": "Store at 0 degrees C with very high humidity. Spinach is very perishable and should be sold within 5 days of harvest.",
+    "rotation_companion": null,
+    "cultivar_recommendation": "Tyee is bolt-resistant and performs well across seasons. Corvair is excellent for baby leaf production. Bloomsdale is a classic savoy-type with excellent flavor.",
+    "growing_tip": "Spinach is a cool-season crop that struggles above 24 degrees C. Shade cloth extends production into early summer.",
+    "irrigation": "Consistent moisture promotes tender leaves. Overhead irrigation should be avoided in humid conditions to prevent disease.",
+    "nursery_specific": null,
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null
+  }
+}

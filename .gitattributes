@@ -1,0 +1,2 @@
+# SFA-S003-P002-WP-B2: suppress diff noise for committed NI cache JSONs
+data/jmf/extracted/** linguist-vendored

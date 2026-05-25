@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_book_v1",
+  "crop_jmf_en": "Lettuce",
+  "provenance": {
+    "pdf": "THEMARKETGARDENEREBOOK (from macBook Air - nimrod).PDF",
+    "pages": "98-103",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T14:25:00Z"
+  },
+  "notes": {
+    "pest_disease": "Slugs and aphids are common lettuce pests. Bottom rot caused by Botrytis can develop in cool, wet conditions. Ensure good air circulation and avoid overhead irrigation.",
+    "harvest_marker": "Cut-and-come-again at 3-4 inches for baby leaf. Full heads harvested when compact and dense, before bolting begins. Morning harvest preferred for crispness.",
+    "storage_handling": "Store at 0-2 degrees C with high humidity. Wash and spin dry gently before storage. Use within 7-10 days. Avoid ethylene-producing fruits nearby.",
+    "rotation_companion": "Rotate with brassicas or alliums. Companion planting with chives or basil may reduce aphid pressure.",
+    "cultivar_recommendation": "Butterhead varieties like Buttercrunch perform well in warm conditions. Batavian types such as Nevada are heat-tolerant. For baby leaf mix, use looseleaf varieties.",
+    "growing_tip": "Direct seed or transplant depending on season. Keep soil temperature below 25 degrees C for good germination. Shade cloth in summer extends the season.",
+    "irrigation": "Regular, consistent moisture prevents tip burn. Drip irrigation at the base reduces disease pressure.",
+    "nursery_specific": "Germinate at 18-20 degrees C. Transplant at 3-4 true leaves. Harden off seedlings for 5-7 days before field planting.",
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null
+  }
+}
