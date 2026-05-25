@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.1
+version: v1.0.2
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch03/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch03_TAXONOMY_2026-05-25_v1.0.0.md
 parent_wp_patch02_lock_commit: "3d78007"
@@ -32,22 +32,29 @@ Apply 11 Hebrew-value corrections + update 2 LOCKED tests + append 11 regression
 
 ## 2. Architecture
 
-### 2.1 Files modified (3)
+### 2.1 Files modified (4)
 
 ```
-organic_market_agent/crop_book/constants.py    ← 11 value edits in JMF_CROP_MAP
-                                                  + 1 inline comment block citing DECISION
-tests/crop_book/test_jmf_crop_map.py            ← UPDATE 2 LOCKED tests + APPEND 11 regression tests
-CHANGELOG.md                                     ← [Unreleased] entry
+organic_market_agent/crop_book/constants.py        ← 11 value edits in JMF_CROP_MAP
+                                                     + 1 inline comment block citing DECISION
+tests/crop_book/test_jmf_crop_map.py                ← UPDATE 2 LOCKED tests + APPEND 11 regression tests
+tests/crop_book/test_jmf_crop_map_aliases.py        ← UPDATE 2 LOCKED tests (per v1.0.2 R3 amendment)
+CHANGELOG.md                                         ← [Unreleased] entry
 ```
 
-### 2.2 LOD500_LOCKED scope exception
+### 2.2 LOD500_LOCKED scope exception (4 test functions)
 
-Per DECISION §4, two test functions are modifiable in this WP only:
+Per DECISION §4 (amended 2026-05-25 after Sonnet builder STOP), the following 4 test functions are modifiable in this WP only:
+
+**In `tests/crop_book/test_jmf_crop_map.py`:**
 - `test_jmf_crop_map_duplicate_target_allowlist`
 - `test_ac03_duplicate_group_count`
 
-All other locked files untouched.
+**In `tests/crop_book/test_jmf_crop_map_aliases.py` (added v1.0.2):**
+- `test_alias_spot_check_five_samples` — update the `Greenhouse Cherry Tomato` row
+- `test_hebrew_value_collision_set_has_25_pairs` — update count 25 → 24 + rename / docstring
+
+All other locked files untouched. The 3rd function in `test_jmf_crop_map_aliases.py` (`test_alias_entry_count_grew_by_34`) is NOT modified.
 
 ---
 
@@ -214,6 +221,50 @@ def test_basil_value_post_patch03():
     assert JMF_CROP_MAP["Basil"] == "בזיליקום"
 ```
 
+### 3.4b `test_jmf_crop_map_aliases.py` — update 2 LOCKED tests (v1.0.2 R3 amendment)
+
+**Edit #1 — `test_alias_spot_check_five_samples` (line ~14):**
+
+Locate the `expected` dict literal and update the Cherry Tomato row:
+
+```python
+# OLD line ~20:
+"Greenhouse Cherry Tomato": "עגבנייה",         # tomato variant
+# NEW:
+"Greenhouse Cherry Tomato": "עגבניית שרי",     # patch03 §1.2: tomato sub-species split
+```
+
+The other 4 spot-check entries (Brussel Sprouts, Pak Choi, Swiss Chard, Eggplant (Feld)) remain UNCHANGED.
+
+**Edit #2 — `test_hebrew_value_collision_set_has_25_pairs` (line ~41):**
+
+Rename the function and update the assertion:
+
+```python
+# OLD:
+def test_hebrew_value_collision_set_has_25_pairs(jmf_crop_map):
+    """patch01: Hebrew-value-collision-set has exactly 25 duplicate-target pairs/groups."""
+    counts = Counter(jmf_crop_map.values())
+    duplicate_targets = {v for v, c in counts.items() if c > 1}
+    assert len(duplicate_targets) == 25, (
+        f"Expected 25 Hebrew values appearing >1 time, found {len(duplicate_targets)}: "
+        f"{sorted(duplicate_targets)}"
+    )
+
+# NEW:
+def test_hebrew_value_collision_set_has_24_groups(jmf_crop_map):
+    """patch03: Hebrew-value-collision-set has exactly 24 duplicate-target groups
+    (was 25 pre-patch03; 2 disappeared + 1 new = 24)."""
+    counts = Counter(jmf_crop_map.values())
+    duplicate_targets = {v for v, c in counts.items() if c > 1}
+    assert len(duplicate_targets) == 24, (
+        f"Expected 24 Hebrew values appearing >1 time, found {len(duplicate_targets)}: "
+        f"{sorted(duplicate_targets)}"
+    )
+```
+
+**`test_alias_entry_count_grew_by_34` (line ~30) is NOT modified** — len remains 86.
+
 ### 3.5 `CHANGELOG.md` — `[Unreleased]` entry
 
 Append under `[Unreleased]`:
@@ -260,15 +311,19 @@ For each of the 11 keys, `JMF_CROP_MAP[<key>] == <new value>`:
 
 - **AC-16** `pytest tests/crop_book/ -q` returns 354 passed (343 baseline + 11 new patch03 tests; 2 LOCKED test updates absorb in place) + 1 pre-existing publisher failure (out-of-scope per team_00).
 - **AC-17** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns exit code 0.
-- **AC-18** `git diff <patch02-lock>..HEAD` shows changes ONLY in: `constants.py`, `test_jmf_crop_map.py`, `CHANGELOG.md`, and lifecycle-only fields of `_aos/roadmap.yaml`. All other locked paths empty.
+- **AC-18** `git diff <patch02-lock>..HEAD` shows changes ONLY in: `constants.py`, `test_jmf_crop_map.py`, `test_jmf_crop_map_aliases.py` (v1.0.2 R3 amendment), `CHANGELOG.md`, and lifecycle-only fields of `_aos/roadmap.yaml`. All other locked paths empty.
 
 ---
 
 ## 5. Test requirements
 
-**Minimum 13 tests touched:**
-- 2 LOCKED tests updated in place (per DECISION §4 exception)
-- 11 new regression tests appended
+**Minimum 15 tests touched:**
+- 4 LOCKED tests updated in place (per DECISION §4 amended exception):
+  - `test_jmf_crop_map.py::test_jmf_crop_map_duplicate_target_allowlist`
+  - `test_jmf_crop_map.py::test_ac03_duplicate_group_count`
+  - `test_jmf_crop_map_aliases.py::test_alias_spot_check_five_samples`
+  - `test_jmf_crop_map_aliases.py::test_hebrew_value_collision_set_has_24_groups` (renamed)
+- 11 new regression tests appended (to `test_jmf_crop_map.py`)
 
 Existing patch02 tests (`test_parsnips_value_post_patch02`, `test_shallots_value_post_patch02`) and all WP-B1/patch01 tests remain unchanged.
 
@@ -281,6 +336,8 @@ Existing patch02 tests (`test_parsnips_value_post_patch02`, `test_shallots_value
 **Step 2** — Apply the 11 value edits to `constants.py` (one Edit per line; use unique-substring matching since some values appear in multiple lines).
 
 **Step 3** — Update the 2 LOCKED tests in `test_jmf_crop_map.py` per §3.2 + §3.3.
+
+**Step 3b** — Update the 2 LOCKED tests in `test_jmf_crop_map_aliases.py` per §3.4b (v1.0.2 R3 amendment).
 
 **Step 4** — Append the 11 regression tests per §3.4.
 
@@ -376,4 +433,5 @@ Sonnet sub-agent (team_10), spawned by team_110 per the standard IR#1 orchestrat
 
 *LOD400 v1.0.0 — authored 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
 *v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH03-01: §6 builder-safety line corrected to state "55 keys total" (sum of group sizes for the 24-group dict — prior wording had incorrect arithmetic). Added verification command. No change to ACs, values, scope, or builder identity.*
-*Pending: team_190 L-GATE_S R2 validation.*
+*v1.0.2 (2026-05-25) — R3 amendment after Sonnet builder STOP at AC-18 surfaced a second test file (`test_jmf_crop_map_aliases.py`) that hardcodes the pre-patch03 25-group baseline + Cherry Tomato value. Spec amended: §2.1 file list extended (3→4 files); §2.2 LOCKED exception extended (2→4 functions); §3.4b added with the 2 alias-file edits; §4 AC-18 extended; §5 test-count target 13→15; §6 Step 3b added; DECISION §4 amended in lock-step. No change to Hebrew values, builder identity, or any other AC.*
+*Pending: team_190 L-GATE_S R3 validation.*

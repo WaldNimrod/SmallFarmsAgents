@@ -98,11 +98,17 @@ Current 25-group allowlist → projected **24-group** allowlist after patch03:
 
 ## §4. LOD500_LOCKED scope exception authorization
 
-This patch requires modifying two LOD500_LOCKED test functions:
-- `tests/crop_book/test_jmf_crop_map.py::test_jmf_crop_map_duplicate_target_allowlist` — update the 25-group dict literal to the new 24-group dict.
-- `tests/crop_book/test_jmf_crop_map.py::test_ac03_duplicate_group_count` — change the constant `25` to `24`.
+This patch requires modifying **four** LOD500_LOCKED test functions across two files (extended in-session 2026-05-25 after Sonnet builder STOP at AC-18 surfaced the second file):
 
-team_00 authorizes a **narrowly-scoped LOD500_LOCKED exception** limited to these 2 test functions for the purpose of regression-allowlist alignment. The exception is NOT a hub-level GCR; it is a project-internal scope exception following the pattern established at patch01 (constants.py value edits) and B3 (crop_task_templates.py TASK_TYPE_VALUES append).
+**File 1 — `tests/crop_book/test_jmf_crop_map.py`** (original DECISION scope):
+- `test_jmf_crop_map_duplicate_target_allowlist` — update the 25-group dict literal to the new 24-group dict.
+- `test_ac03_duplicate_group_count` — change the constant `25` to `24`.
+
+**File 2 — `tests/crop_book/test_jmf_crop_map_aliases.py`** (added 2026-05-25 amendment):
+- `test_alias_spot_check_five_samples` (line 20): update the spot-check entry `"Greenhouse Cherry Tomato": "עגבנייה"` → `"עגבניית שרי"` to reflect patch03 §1.2 Cherry split.
+- `test_hebrew_value_collision_set_has_25_pairs` — change the constant `25` to `24` AND rename the function to `test_hebrew_value_collision_set_has_24_groups` (or update docstring + assertion message to say 24). The 3rd function in this file (`test_alias_entry_count_grew_by_34`) is NOT modified — `len(JMF_CROP_MAP)` remains 86.
+
+team_00 authorizes a **narrowly-scoped LOD500_LOCKED exception** limited to these 4 test functions for the purpose of regression-allowlist alignment. The exception is NOT a hub-level GCR; it is a project-internal scope exception following the pattern established at patch01 (constants.py value edits) and B3 (crop_task_templates.py TASK_TYPE_VALUES append).
 
 ## §5. Builder engine
 
