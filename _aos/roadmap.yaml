@@ -1381,6 +1381,36 @@ work_packages:
     team_110 EXECUTION_MANDATE NATURALLY ENDS with this closure."
   profile: L0
 
+- id: SFA-S003-P002-WP-B1-patch04-hotfix01
+  label: "ספר גידולים: Postgres int↔bool fix in load_masterclass_sheets.py"
+  status: ELIGIBLE
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD400_LOCKED
+  assigned_builder: team_110
+  assigned_validator: external
+  created_at: "2026-05-26"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-B1-patch04"]
+  brief_ref: "_COMMUNICATION/team_00/DECISION_WP-B1-patch04-hotfix01_2026-05-26_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B1-patch04-hotfix01/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-26"
+    notes: "team_00 in-session authorization via DECISION_WP-B1-patch04-hotfix01.
+      Defect surfaced during OP-2 operational run on production Postgres:
+      load_masterclass_sheets.py uses int literals (0/1) for boolean
+      columns; SQLite tolerated (patch04 tests SQLite-only), Postgres
+      rejected silently → 0 DB rows inserted. Fix: 3 line edits +
+      1 regression test. SMALL effort, single-engine builder (team_110
+      Opus 4.7) per patch02 precedent."
+    validator: team_00
+  notes: "WP-B1-patch04-hotfix01: SMALL hotfix WP, reopens team_110
+    EXECUTION_MANDATE briefly to unblock OP-2 operational continuation."
+  profile: L0
+
 - id: SFA-S003-P002-WP-B2
   label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
   status: DONE
