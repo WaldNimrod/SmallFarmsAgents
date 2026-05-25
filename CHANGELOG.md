@@ -11,6 +11,15 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-B1-patch03 — JMF_CROP_MAP taxonomic expansion (2026-05-25)
+- **NEW baseline crops** (5 name_he values introduced): עלי בייבי, עגבניית שרי, עגבניות מורשת, מלפפון חממה, כרוב סיני
+- **Remapped to עלי בייבי** (3 keys): Mesclun, Salad Mix, Baby kale
+- **Split off umbrella categories** (5 keys): Greenhouse Cherry Tomato (→ עגבניית שרי), Greenhouse Heirloom Tomato (→ עגבניות מורשת), Greenhouse Libanese Cucumber (→ מלפפון חממה), Chinese Cabbage (→ כרוב סיני), Hot Pepper (→ פלפל חריף)
+- **Hebrew refinements** (3 keys): Beans (Bush) → שעועית שיחית; Snow Peas → אפונת שלג; Basil → בזיליקום
+- Duplicate-target allowlist: 25 → 24 groups (תערובת סלט + קייל groups disappear; עלי בייבי group of 3 appears; 4 groups shrink)
+- LOD500_LOCKED scope exception: 2 test functions updated per DECISION_WP-B1-patch03_TAXONOMY §4
+- Per team_00 DECISION_WP-B1-patch03_TAXONOMY_2026-05-25 §§1-4
+
 ### S003 ספר גידולים — Tend Israel Adaptation Overlay (Team 10, SFA-S003-P002-WP-B3, 2026-05-25)
 
 - **2026-05-25 — Team 10 (WP-B3):** Tend Israel adaptation overlay: migration 046, CropHarvestStat ORM, TASK_TYPE_VALUES extension (GCR-B3-1), TEND_TASK_* constants, tend_overlay.py importer (3 parsers + orchestrator), seed.py CLI flags, 52 new tests. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.0.1 LOCKED, L-GATE_S R1 PASS_WITH_FINDINGS). team_00 DECISION 2026-05-25 (Option B whitelist + GCR-B3-1).

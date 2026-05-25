@@ -203,9 +203,14 @@ JMF_CROP_MAP: dict[str, str] = {
     "Cress":              "גרגר נחלים",
     "Endive":             "אנדיב",
     "Lettuce":            "חסה",
-    "Mesclun":            "תערובת סלט",
+    # ─── BEGIN patch03 taxonomy corrections (2026-05-25) ───
+    # Per team_00 DECISION_WP-B1-patch03_TAXONOMY_2026-05-25_v1.0.0.md.
+    # 11 value changes; introduces 5 new baseline crops.name_he values
+    # (עלי בייבי, עגבניית שרי, עגבניות מורשת, מלפפון חממה, כרוב סיני).
+    # Net effect on duplicate-target allowlist: 25 → 24 groups.
+    "Mesclun":            "עלי בייבי",
     "New Zealand Spinach": "תרד ניו-זילנד",
-    "Salad Mix":          "תערובת סלט",
+    "Salad Mix":          "עלי בייבי",
     "Spinach":            "תרד",
     # ---- Alliums ----
     "Garlic":             "שום",
@@ -235,13 +240,13 @@ JMF_CROP_MAP: dict[str, str] = {
     "Winter Squash":      "דלעת",
     "Zucchini":           "קישוא",   # cultivar of קישוא; cultivar-level distinction lives in crop_varieties
     # ---- Legumes ----
-    "Beans (Bush)":       "שעועית",
+    "Beans (Bush)":       "שעועית שיחית",
     "Beans (Pole)":       "שעועית מטפסת",
     "Fava Beans":         "פול",
     "Peas":               "אפונה",
-    "Snow Peas":          "אפונת שלגים",
+    "Snow Peas":          "אפונת שלג",
     # ---- Herbs ----
-    "Basil":              "בזיל",
+    "Basil":              "בזיליקום",
     "Celery":             "סלרי",
     "Cilantro":           "כוסברה",
     "Dill":               "שמיר",
@@ -279,29 +284,29 @@ JMF_CROP_MAP: dict[str, str] = {
 
     # ── Pepper variants ──
     "Bell Pepper":                  "פלפל",         # Peppers (bell variant — same species at crops.name_he level)
-    "Hot Pepper":                   "פלפל",         # Peppers (hot variant)
+    "Hot Pepper":                   "פלפל חריף",    # Peppers (hot variant) — patch03: split from פלפל umbrella
 
     # ── Tomato variants (all Solanum lycopersicum at species level) ──
     "Roma Tomato":                  "עגבנייה",      # paste cultivar
-    "Greenhouse Cherry Tomato":     "עגבנייה",      # protected-culture cherry
-    "Greenhouse Heirloom Tomato":   "עגבנייה",      # protected-culture heirloom
+    "Greenhouse Cherry Tomato":     "עגבניית שרי",  # protected-culture cherry — patch03: split from עגבנייה umbrella
+    "Greenhouse Heirloom Tomato":   "עגבניות מורשת", # protected-culture heirloom — patch03: split from עגבנייה umbrella
 
     # ── Cucumber variants ──
     "Greenhouse English Cucumber":  "מלפפון",       # protected-culture long
-    "Greenhouse Libanese Cucumber": "מלפפון",       # protected-culture Lebanese (note: workbook spelling preserved)
+    "Greenhouse Libanese Cucumber": "מלפפון חממה",  # protected-culture Lebanese — patch03: split from מלפפון umbrella (note: workbook spelling preserved)
 
     # ── Cabbage variants ──
     "Fall Cabbage":                 "כרוב",
     "Savoy Cabbage":                "כרוב",
     "Summer Cabbage":               "כרוב",
-    "Chinese Cabbage":              "כרוב",
+    "Chinese Cabbage":              "כרוב סיני",    # patch03: split from כרוב umbrella
 
     # ── Lettuce variants ──
     "Salanova Lettuce":             "חסה",
     "Sucrine":                      "חסה",
 
     # ── Brassica & misc variants ──
-    "Baby kale":                    "קייל",
+    "Baby kale":                    "עלי בייבי",    # patch03: split from קייל umbrella
     "Cauliflower / Romanesco":      "כרובית",       # workbook literal preserves the "/" (parser already substring-matches; this is the EXACT cell label)
     "Hakurei Turnip":               "לפת",
     "Mini Celery Root":             "סלרי שורש",

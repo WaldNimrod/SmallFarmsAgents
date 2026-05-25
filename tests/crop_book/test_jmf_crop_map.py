@@ -35,62 +35,48 @@ def test_jmf_crop_map_values_nonempty_hebrew(jmf_crop_map):
 
 
 def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
-    """AC-03 (patch01): exactly 25 by-design duplicate Hebrew-target pairs/groups per LOD400 v1.0.3 §4 AC-03."""
+    """AC-03 (patch03): exactly 24 by-design duplicate Hebrew-target groups
+    per LOD400 v1.0.0 §3.4 + DECISION_WP-B1-patch03_TAXONOMY §3."""
     counts = Counter(jmf_crop_map.values())
     duplicates = {
         v: sorted([k for k, mv in jmf_crop_map.items() if mv == v])
         for v, c in counts.items() if c > 1
     }
     assert duplicates == {
-        # ── Baseline pairs from WP-B1 ──
-        "תערובת סלט":  ["Mesclun", "Salad Mix"],
-        "קישוא":        ["Summer Squash", "Zucchini"],
+        # ── NEW patch03 group ──
+        "עלי בייבי":     ["Baby kale", "Mesclun", "Salad Mix"],
 
-        # ── Pairs introduced by patch01 typo variants ──
-        "כרוב ניצנים":  ["Brussel Sprouts", "Brussels Sprouts"],
+        # ── Baseline pairs from WP-B1 (Mesclun/Salad Mix תערובת סלט group disappeared) ──
+        "קישוא":          ["Summer Squash", "Zucchini"],
 
-        # ── Pairs introduced by patch01 synonyms ──
-        "פאק צ'וי":     ["Bok Choy", "Pak Choi"],
-        "כוסברה":       ["Cilantro", "Coriander"],
-        "מנגולד":       ["Chard", "Swiss Chard"],
-        "אבטיח":        ["Watermelon", "Watermelons"],
-        "תפוח אדמה":    ["Potato", "Potatoes"],
-        "גזר":          ["Carrots", "Fresh Carrots"],
+        # ── patch01 typo / synonym / qualifier groups (mostly unchanged) ──
+        "כרוב ניצנים":    ["Brussel Sprouts", "Brussels Sprouts"],
+        "פאק צ'וי":       ["Bok Choy", "Pak Choi"],
+        "כוסברה":         ["Cilantro", "Coriander"],
+        "מנגולד":         ["Chard", "Swiss Chard"],
+        "אבטיח":          ["Watermelon", "Watermelons"],
+        "תפוח אדמה":      ["Potato", "Potatoes"],
+        "גזר":            ["Carrots", "Fresh Carrots"],
+        "בצל":            ["Onions", "Storage Onion"],
+        "בצל ירוק":       ["Green Onion", "Scallions"],
+        "כרישה":          ["Leek Storage", "Leek Summer", "Leeks"],
 
-        # ── Pairs introduced by patch01 storage/season qualifiers ──
-        "בצל":          ["Onions", "Storage Onion"],
-        "בצל ירוק":     ["Green Onion", "Scallions"],
-        "כרישה":        ["Leek Storage", "Leek Summer", "Leeks"],
+        # ── Shrunk groups (patch03 splits removed members) ──
+        "פלפל":           ["Bell Pepper", "Peppers"],                       # was 3; Hot Pepper left
+        "עגבנייה":        ["Roma Tomato", "Tomatoes"],                       # was 4; Cherry + Heirloom left
+        "מלפפון":         ["Cucumbers", "Greenhouse English Cucumber"],     # was 3; Libanese key left
+        "כרוב":           ["Cabbage", "Fall Cabbage", "Savoy Cabbage",
+                           "Summer Cabbage"],                                # was 5; Chinese left
 
-        # ── Pairs introduced by patch01 pepper variants ──
-        "פלפל":         ["Bell Pepper", "Hot Pepper", "Peppers"],
-
-        # ── Pairs introduced by patch01 tomato variants ──
-        "עגבנייה":      ["Greenhouse Cherry Tomato", "Greenhouse Heirloom Tomato",
-                         "Roma Tomato", "Tomatoes"],
-
-        # ── Pairs introduced by patch01 cucumber variants ──
-        "מלפפון":       ["Cucumbers", "Greenhouse English Cucumber",
-                         "Greenhouse Libanese Cucumber"],
-
-        # ── Pairs introduced by patch01 cabbage variants ──
-        "כרוב":         ["Cabbage", "Chinese Cabbage", "Fall Cabbage",
-                         "Savoy Cabbage", "Summer Cabbage"],
-
-        # ── Pairs introduced by patch01 lettuce variants ──
-        "חסה":          ["Lettuce", "Salanova Lettuce", "Sucrine"],
-
-        # ── Pairs introduced by patch01 brassica & misc + spinach edition typos ──
-        "קייל":         ["Baby kale", "Kale"],
-        "צנונית":       ["Raddish", "Radishes", "Winter Radish"],
-        "תרד":          ["Spinach", "Spinach TR", "Spinarch SD"],
-        "כרובית":       ["Cauliflower", "Cauliflower / Romanesco"],
-        "לפת":          ["Hakurei Turnip", "Turnips"],
-        "סלרי שורש":    ["Celery Root", "Mini Celery Root"],
-        "שומר":         ["Fennel", "Mini Fennel"],
-
-        # ── Pair introduced by patch01 field-qualifier variant ──
-        "חציל":         ["Eggplant", "Eggplant  (Feld)"],
+        # ── Unchanged patch01 groups ──
+        "חסה":            ["Lettuce", "Salanova Lettuce", "Sucrine"],
+        "צנונית":         ["Raddish", "Radishes", "Winter Radish"],
+        "תרד":            ["Spinach", "Spinach TR", "Spinarch SD"],
+        "כרובית":         ["Cauliflower", "Cauliflower / Romanesco"],
+        "לפת":            ["Hakurei Turnip", "Turnips"],
+        "סלרי שורש":      ["Celery Root", "Mini Celery Root"],
+        "שומר":           ["Fennel", "Mini Fennel"],
+        "חציל":           ["Eggplant", "Eggplant  (Feld)"],
     }, f"unexpected Hebrew-value duplicates: {duplicates}"
 
 
@@ -140,10 +126,10 @@ def test_ac04_1_eggplant_feld_literal_alias(jmf_crop_map):
 
 
 def test_ac03_duplicate_group_count(jmf_crop_map):
-    """AC-03 (patch01): exactly 25 Hebrew values appear more than once."""
+    """AC-03 (patch03): exactly 24 Hebrew values appear more than once."""
     counts = Counter(jmf_crop_map.values())
     dup_count = sum(1 for c in counts.values() if c > 1)
-    assert dup_count == 25, f"Expected 25 duplicate-target groups, got {dup_count}"
+    assert dup_count == 24, f"Expected 24 duplicate-target groups, got {dup_count}"
 
 
 # ─── patch02 regression tests (DECISION 2026-05-25 §Q4) ───
@@ -172,3 +158,60 @@ def test_shallots_value_post_patch02():
     assert JMF_CROP_MAP["Shallots"] != "שאלוט", (
         "Shallots still uses pure transliteration; patch02 not applied"
     )
+
+
+# ─── patch03 regression tests (DECISION_WP-B1-patch03_TAXONOMY_2026-05-25) ───
+
+def test_mesclun_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Mesclun"] == "עלי בייבי"
+
+
+def test_salad_mix_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Salad Mix"] == "עלי בייבי"
+
+
+def test_baby_kale_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Baby kale"] == "עלי בייבי"
+
+
+def test_cherry_tomato_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Greenhouse Cherry Tomato"] == "עגבניית שרי"
+
+
+def test_heirloom_tomato_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Greenhouse Heirloom Tomato"] == "עגבניות מורשת"
+
+
+def test_lebanese_cucumber_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Greenhouse Libanese Cucumber"] == "מלפפון חממה"
+
+
+def test_chinese_cabbage_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Chinese Cabbage"] == "כרוב סיני"
+
+
+def test_hot_pepper_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Hot Pepper"] == "פלפל חריף"
+
+
+def test_beans_bush_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Beans (Bush)"] == "שעועית שיחית"
+
+
+def test_snow_peas_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Snow Peas"] == "אפונת שלג"
+
+
+def test_basil_value_post_patch03():
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Basil"] == "בזיליקום"

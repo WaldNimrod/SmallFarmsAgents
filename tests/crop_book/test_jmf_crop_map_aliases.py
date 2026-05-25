@@ -17,7 +17,7 @@ def test_alias_spot_check_five_samples(jmf_crop_map):
         "Brussel Sprouts":          "כרוב ניצנים",   # typo variant
         "Pak Choi":                 "פאק צ'וי",       # synonym
         "Swiss Chard":              "מנגולד",          # synonym
-        "Greenhouse Cherry Tomato": "עגבנייה",         # tomato variant
+        "Greenhouse Cherry Tomato": "עגבניית שרי",     # patch03 §1.2: tomato sub-species split
         "Eggplant  (Feld)":         "חציל",            # field-qualifier literal (double space)
     }
     for key, expected_value in expected.items():
@@ -38,11 +38,12 @@ def test_alias_entry_count_grew_by_34(jmf_crop_map):
     )
 
 
-def test_hebrew_value_collision_set_has_25_pairs(jmf_crop_map):
-    """patch01: Hebrew-value-collision-set has exactly 25 duplicate-target pairs/groups."""
+def test_hebrew_value_collision_set_has_24_groups(jmf_crop_map):
+    """patch03: Hebrew-value-collision-set has exactly 24 duplicate-target groups
+    (was 25 pre-patch03; 2 disappeared + 1 new = 24)."""
     counts = Counter(jmf_crop_map.values())
     duplicate_targets = {v for v, c in counts.items() if c > 1}
-    assert len(duplicate_targets) == 25, (
-        f"Expected 25 Hebrew values appearing >1 time, found {len(duplicate_targets)}: "
+    assert len(duplicate_targets) == 24, (
+        f"Expected 24 Hebrew values appearing >1 time, found {len(duplicate_targets)}: "
         f"{sorted(duplicate_targets)}"
     )
