@@ -11,6 +11,15 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-B1-patch06 — JMF_CROP_MAP cleanup (2026-05-25)
+- **REMOVED 27 entries** from JMF_CROP_MAP per DECISION §3:
+  - 22 cultivars moved to crop_varieties (populated by patch04)
+  - 5 workbook typos / edition suffixes deleted as artifact noise
+- **Net:** 87 → 60 entries; duplicate-target groups 24 → 6 (all pure synonyms)
+- Implicitly reverts patch03 §1.3 (Greenhouse Libanese Cucumber removed from MAP — variety now in crop_varieties with "Greenhouse" + "Libanese" attributes)
+- LOD500_LOCKED scope exception: 6 LOCKED test functions updated/removed across 2 test files
+- `scripts/patch06_db_cleanup.py` automates orphan crops row cleanup
+
 ### SFA-S003-P002-WP-B1-patch04 — JMF MasterClass Integration (2026-05-25)
 - **NEW baseline:** `Ginger → ג'ינג'ר` (37th of NotebookLM crop sheets — "Baby Ginger")
 - **NEW infrastructure:** Migration 047 creates `crop_knowledge_notes_crops` junction (many-to-many)

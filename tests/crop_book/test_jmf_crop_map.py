@@ -15,8 +15,8 @@ def jmf_crop_map():
 
 
 def test_jmf_crop_map_count(jmf_crop_map):
-    """AC-01 (patch04): exactly 87 entries (52 baseline + 34 aliases + 1 Ginger)."""
-    assert len(jmf_crop_map) == 87, f"Expected 87 entries, got {len(jmf_crop_map)}"
+    """patch06: 60 entries (53 baselines + 6 synonyms + 1 Ginger from patch04)."""
+    assert len(jmf_crop_map) == 60, f"Expected 60, got {len(jmf_crop_map)}"
 
 
 def test_jmf_crop_map_keys_unique_and_nonempty(jmf_crop_map):
@@ -35,48 +35,19 @@ def test_jmf_crop_map_values_nonempty_hebrew(jmf_crop_map):
 
 
 def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
-    """AC-03 (patch03): exactly 24 by-design duplicate Hebrew-target groups
-    per LOD400 v1.0.0 §3.4 + DECISION_WP-B1-patch03_TAXONOMY §3."""
+    """patch06: exactly 6 synonym-pair duplicate-target groups."""
     counts = Counter(jmf_crop_map.values())
     duplicates = {
         v: sorted([k for k, mv in jmf_crop_map.items() if mv == v])
         for v, c in counts.items() if c > 1
     }
     assert duplicates == {
-        # ── NEW patch03 group ──
-        "עלי בייבי":     ["Baby kale", "Mesclun", "Salad Mix"],
-
-        # ── Baseline pairs from WP-B1 (Mesclun/Salad Mix תערובת סלט group disappeared) ──
-        "קישוא":          ["Summer Squash", "Zucchini"],
-
-        # ── patch01 typo / synonym / qualifier groups (mostly unchanged) ──
-        "כרוב ניצנים":    ["Brussel Sprouts", "Brussels Sprouts"],
-        "פאק צ'וי":       ["Bok Choy", "Pak Choi"],
-        "כוסברה":         ["Cilantro", "Coriander"],
-        "מנגולד":         ["Chard", "Swiss Chard"],
-        "אבטיח":          ["Watermelon", "Watermelons"],
-        "תפוח אדמה":      ["Potato", "Potatoes"],
-        "גזר":            ["Carrots", "Fresh Carrots"],
-        "בצל":            ["Onions", "Storage Onion"],
-        "בצל ירוק":       ["Green Onion", "Scallions"],
-        "כרישה":          ["Leek Storage", "Leek Summer", "Leeks"],
-
-        # ── Shrunk groups (patch03 splits removed members) ──
-        "פלפל":           ["Bell Pepper", "Peppers"],                       # was 3; Hot Pepper left
-        "עגבנייה":        ["Roma Tomato", "Tomatoes"],                       # was 4; Cherry + Heirloom left
-        "מלפפון":         ["Cucumbers", "Greenhouse English Cucumber"],     # was 3; Libanese key left
-        "כרוב":           ["Cabbage", "Fall Cabbage", "Savoy Cabbage",
-                           "Summer Cabbage"],                                # was 5; Chinese left
-
-        # ── Unchanged patch01 groups ──
-        "חסה":            ["Lettuce", "Salanova Lettuce", "Sucrine"],
-        "צנונית":         ["Raddish", "Radishes", "Winter Radish"],
-        "תרד":            ["Spinach", "Spinach TR", "Spinarch SD"],
-        "כרובית":         ["Cauliflower", "Cauliflower / Romanesco"],
-        "לפת":            ["Hakurei Turnip", "Turnips"],
-        "סלרי שורש":      ["Celery Root", "Mini Celery Root"],
-        "שומר":           ["Fennel", "Mini Fennel"],
-        "חציל":           ["Eggplant", "Eggplant  (Feld)"],
+        "פאק צ'וי":    ["Bok Choy", "Pak Choi"],
+        "מנגולד":      ["Chard", "Swiss Chard"],
+        "בצל ירוק":    ["Green Onion", "Scallions"],
+        "תפוח אדמה":   ["Potato", "Potatoes"],
+        "אבטיח":       ["Watermelon", "Watermelons"],
+        "כוסברה":      ["Cilantro", "Coriander"],
     }, f"unexpected Hebrew-value duplicates: {duplicates}"
 
 
@@ -126,10 +97,10 @@ def test_ac04_1_eggplant_feld_literal_alias(jmf_crop_map):
 
 
 def test_ac03_duplicate_group_count(jmf_crop_map):
-    """AC-03 (patch03): exactly 24 Hebrew values appear more than once."""
+    """patch06: exactly 6 Hebrew values appear more than once (all synonyms)."""
     counts = Counter(jmf_crop_map.values())
     dup_count = sum(1 for c in counts.values() if c > 1)
-    assert dup_count == 24, f"Expected 24 duplicate-target groups, got {dup_count}"
+    assert dup_count == 6, f"Expected 6 duplicate-target groups, got {dup_count}"
 
 
 # ─── patch02 regression tests (DECISION 2026-05-25 §Q4) ───
@@ -224,3 +195,37 @@ def test_ginger_baseline_post_patch04():
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     assert JMF_CROP_MAP["Ginger"] == "ג'ינג'ר"
     assert "ג'ינג'ר" in JMF_CROP_MAP.values()
+
+
+# ─── patch06 regression tests (DECISION 2026-05-25 §3) ───
+
+def test_no_cultivar_keys_in_map_post_patch06():
+    """patch06: 22 cultivar keys removed from JMF_CROP_MAP (now in crop_varieties)."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    removed_cultivars = {
+        "Baby kale", "Bell Pepper", "Cauliflower / Romanesco", "Fall Cabbage",
+        "Fresh Carrots", "Greenhouse English Cucumber", "Greenhouse Libanese Cucumber",
+        "Hakurei Turnip", "Leek Storage", "Leek Summer", "Mesclun",
+        "Mini Celery Root", "Mini Fennel", "Roma Tomato", "Salad Mix",
+        "Salanova Lettuce", "Savoy Cabbage", "Storage Onion", "Sucrine",
+        "Summer Cabbage", "Winter Radish", "Zucchini",
+    }
+    for k in removed_cultivars:
+        assert k not in JMF_CROP_MAP, f"Cultivar key {k!r} still in MAP — patch06 incomplete"
+
+
+def test_no_typo_keys_in_map_post_patch06():
+    """patch06: 5 workbook typo keys removed from JMF_CROP_MAP."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    removed_typos = {"Brussel Sprouts", "Eggplant  (Feld)", "Raddish", "Spinach TR", "Spinarch SD"}
+    for k in removed_typos:
+        assert k not in JMF_CROP_MAP, f"Typo key {k!r} still in MAP — patch06 incomplete"
+
+
+def test_six_synonym_groups_exact():
+    """patch06: the 6 remaining duplicate-target groups are all pure synonym pairs."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    from collections import Counter
+    counts = Counter(JMF_CROP_MAP.values())
+    duplicates = {v for v, c in counts.items() if c > 1}
+    assert duplicates == {"פאק צ'וי", "מנגולד", "בצל ירוק", "תפוח אדמה", "אבטיח", "כוסברה"}

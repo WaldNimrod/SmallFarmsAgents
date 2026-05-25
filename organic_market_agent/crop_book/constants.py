@@ -208,9 +208,8 @@ JMF_CROP_MAP: dict[str, str] = {
     # 11 value changes; introduces 5 new baseline crops.name_he values
     # (עלי בייבי, עגבניית שרי, עגבניות מורשת, מלפפון חממה, כרוב סיני).
     # Net effect on duplicate-target allowlist: 25 → 24 groups.
-    "Mesclun":            "עלי בייבי",
+    # patch06: Mesclun + Salad Mix (cultivar-level) removed; New Zealand Spinach kept.
     "New Zealand Spinach": "תרד ניו-זילנד",
-    "Salad Mix":          "עלי בייבי",
     "Spinach":            "תרד",
     # ---- Alliums ----
     "Garlic":             "שום",
@@ -238,7 +237,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Summer Squash":      "קישוא",
     "Watermelons":        "אבטיח",
     "Winter Squash":      "דלעת",
-    "Zucchini":           "קישוא",   # cultivar of קישוא; cultivar-level distinction lives in crop_varieties
+    # patch06: Zucchini (cultivar) removed — variety data in crop_varieties
     # ---- Legumes ----
     "Beans (Bush)":       "שעועית שיחית",
     "Beans (Pole)":       "שעועית מטפסת",
@@ -265,11 +264,7 @@ JMF_CROP_MAP: dict[str, str] = {
     # JMF workbook edition, append here — NEVER branch on the
     # English label elsewhere in the codebase.
 
-    # ── Typo / spelling variants ──
-    "Brussel Sprouts":              "כרוב ניצנים",   # Brussels Sprouts (singular-l typo)
-    "Raddish":                      "צנונית",       # Radishes (double-d typo)
-    "Spinach TR":                   "תרד",          # Spinach (edition suffix)
-    "Spinarch SD":                  "תרד",          # Spinach (edition typo + suffix)
+    # ── Typo / spelling variants (5 removed by patch06 — edition suffixes and typos) ──
 
     # ── Synonyms / alternative English names ──
     "Pak Choi":                     "פאק צ'וי",     # Bok Choy synonym (matches existing TEND_CROP_MAP value)
@@ -277,55 +272,50 @@ JMF_CROP_MAP: dict[str, str] = {
     "Swiss Chard":                  "מנגולד",       # Chard with explicit Swiss qualifier
     "Watermelon":                   "אבטיח",        # Watermelons singular
     "Potato":                       "תפוח אדמה",    # Potatoes singular
-    "Fresh Carrots":                "גזר",          # Carrots with freshness qualifier
+    # patch06: Fresh Carrots (cultivar qualifier) removed — variety data in crop_varieties
 
     # ── Storage / season qualifiers (same species, marketed differently) ──
-    "Storage Onion":                "בצל",          # Onions for storage
+    # patch06: Storage Onion, Leek Storage, Leek Summer removed (cultivar-level qualifiers)
     "Green Onion":                  "בצל ירוק",     # Scallions synonym (matches TEND_CROP_MAP)
-    "Leek Storage":                 "כרישה",        # Leeks (storage cultivar)
-    "Leek Summer":                  "כרישה",        # Leeks (summer cultivar)
 
     # ── Pepper variants ──
-    "Bell Pepper":                  "פלפל",         # Peppers (bell variant — same species at crops.name_he level)
+    # patch06: Bell Pepper (cultivar) removed — variety data in crop_varieties
     "Hot Pepper":                   "פלפל חריף",    # Peppers (hot variant) — patch03: split from פלפל umbrella
 
     # ── Tomato variants (all Solanum lycopersicum at species level) ──
-    "Roma Tomato":                  "עגבנייה",      # paste cultivar
+    # patch06: Roma Tomato (cultivar) removed — variety data in crop_varieties
     "Greenhouse Cherry Tomato":     "עגבניית שרי",  # protected-culture cherry — patch03: split from עגבנייה umbrella
     "Greenhouse Heirloom Tomato":   "עגבניות מורשת", # protected-culture heirloom — patch03: split from עגבנייה umbrella
 
     # ── Cucumber variants ──
-    "Greenhouse English Cucumber":  "מלפפון",       # protected-culture long
-    "Greenhouse Libanese Cucumber": "מלפפון חממה",  # protected-culture Lebanese — patch03: split from מלפפון umbrella (note: workbook spelling preserved)
+    # patch06: Greenhouse English Cucumber + Greenhouse Libanese Cucumber removed (cultivars)
+    # Greenhouse Libanese Cucumber removal also implicitly reverts patch03 §1.3 anomaly
 
     # ── Cabbage variants ──
-    "Fall Cabbage":                 "כרוב",
-    "Savoy Cabbage":                "כרוב",
-    "Summer Cabbage":               "כרוב",
+    # patch06: Fall Cabbage, Savoy Cabbage, Summer Cabbage removed (season/cultivar qualifiers)
     "Chinese Cabbage":              "כרוב סיני",    # patch03: split from כרוב umbrella
 
     # ── Lettuce variants ──
-    "Salanova Lettuce":             "חסה",
-    "Sucrine":                      "חסה",
+    # patch06: Salanova Lettuce + Sucrine removed (cultivar-level variants)
 
     # ── Brassica & misc variants ──
-    "Baby kale":                    "עלי בייבי",    # patch03: split from קייל umbrella
-    "Cauliflower / Romanesco":      "כרובית",       # workbook literal preserves the "/" (parser already substring-matches; this is the EXACT cell label)
-    "Hakurei Turnip":               "לפת",
-    "Mini Celery Root":             "סלרי שורש",
-    "Mini Fennel":                  "שומר",
-    "Winter Radish":                "צנונית",
+    # patch06: Baby kale, Cauliflower / Romanesco, Hakurei Turnip, Mini Celery Root,
+    # Mini Fennel, Winter Radish removed (cultivar/size qualifiers → crop_varieties)
 
-    # ── Field-qualifier variants (preserved workbook literals — no parser-side normalization) ──
-    "Eggplant  (Feld)":             "חציל",         # workbook literal: double space + (Feld) field qualifier. See §4 AC-04.1 rationale for why this is a literal alias rather than a parser change.
+    # ── Field-qualifier variants removed by patch06 (Eggplant  (Feld) — typo/artifact) ──
     # ─── END patch01 alias additions ───
+
+    # ─── patch06 (2026-05-25): 22 cultivars + 5 typos removed per DECISION §3.
+    # Variants now live in crop_varieties (populated by patch04). The MAP is
+    # now baselines-only (53 baselines + 6 synonyms + 1 Ginger = 60 entries).
 }
-# Total: 87 entries (52 baseline + 34 patch01 aliases + 1 patch04 Ginger). Maintenance rule: when a new JMF MasterClass edition
+# Total: 60 entries (53 baselines + 6 synonyms + 1 Ginger from patch04).
+# patch06 removed 27 entries (22 cultivars + 5 typos). Maintenance rule: when a new JMF MasterClass edition
 # adds or renames a crop, append/edit an entry here only — never branch on
 # JMF names elsewhere in the codebase. On runtime miss (JMF row whose
 # English label is not a key), the importer logs WARN with the unmapped
 # label and skips that row (same convention as TEND_CROP_MAP miss handling
-# in tend.py). Test AC-01 enforces `len(JMF_CROP_MAP) == 86`.
+# in tend.py). Test AC-01 enforces `len(JMF_CROP_MAP) == 60`.
 
 # ---------------------------------------------------------------------------
 # Tend overlay — task-type mapping + whitelist (SFA-S003-P002-WP-B3 LOD400 §6)
