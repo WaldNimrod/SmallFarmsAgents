@@ -1279,11 +1279,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch06
   label: "ספר גידולים: JMF_CROP_MAP cleanup (remove 22 cultivars + 5 typos)"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_BUILD
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch06/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: external
   created_at: "2026-05-25"
@@ -1352,9 +1354,31 @@ work_packages:
       succeeded; team_110 authored BUILD_REPORT v1.0.1 stub post-hoc
       with all probes re-verified independently."
     validator: team_10
-  notes: "WP-B1-patch06: Cleanup WP. Spec authored in parallel with patch04;
-    BUILD sequenced after patch04. Final WP under team_110 EXECUTION_MANDATE
-    extension — mandate naturally ends after patch06 LOD500_LOCKED."
+  - gate: L-GATE_V
+    result: FAIL
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_V R1. FAIL with 1 BLOCKER on
+      AC-12/AC-13: scripts/patch06_db_cleanup.py treated get_session()
+      as raw Session instead of @contextmanager. Verdict commit 0a4a03c.
+      team_110 fix commit fb3d6aa (with-block + SQLAlchemy mapper registry
+      pre-imports)."
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-26"
+    round: 2
+    notes: "team_190 (GPT-5.5) L-GATE_V R2. PASS clean. Cleanup dry-run
+      exits 0, idempotent. MAP probe 60/6/12. 350 + 1 OOS publisher.
+      validate_aos.sh 0 FAIL. Verdict commit 7e467a4. EXECUTION_MANDATE
+      ENDS after this WP closes."
+    validator: team_190
+  notes: "WP-B1-patch06 CLOSED 2026-05-26 — LOD500_LOCKED. Final WP under
+    EXECUTION_MANDATE SFA-S003-P002-WP-B (extended). 6 team_190 rounds
+    (4 L-GATE_S + 2 L-GATE_V); 0 final blockers. Final JMF_CROP_MAP state:
+    60 entries / 6 synonym groups / 12 keys-with-duplicates.
+    Archive: _archive/SFA-S003-P002-WP-B1-patch06/ARCHIVE_MANIFEST.md.
+    team_110 EXECUTION_MANDATE NATURALLY ENDS with this closure."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
