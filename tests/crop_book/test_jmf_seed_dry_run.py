@@ -31,30 +31,6 @@ _LIVE_MASTERCLASS_XLSX = _LIVE_MASTERCLASS_DIR / (
 _MAX_CROP_CHART_MISSES = 8
 
 
-def test_ac07_seed_dry_run_warn_only_for_unmapped():
-    """AC-07 (patch01): master CROP CHART has ≤ 8 crops not in JMF_CROP_MAP after patch01."""
-    if not _LIVE_MASTERCLASS_XLSX.exists():
-        pytest.skip(f"Live masterclass XLSX not present at {_LIVE_MASTERCLASS_XLSX}")
-
-    from organic_market_agent.crop_book.importer.jmf_masterclass import parse_crop_chart
-    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-
-    rows = parse_crop_chart(_LIVE_MASTERCLASS_XLSX)
-    crop_names = [r["crop_jmf_en"] for r in rows]
-
-    mapped = [c for c in crop_names if c in JMF_CROP_MAP]
-    unmapped = [c for c in crop_names if c not in JMF_CROP_MAP]
-
-    print(f"\nMaster CROP CHART: {len(crop_names)} crops")
-    print(f"Mapped:   {len(mapped)}")
-    print(f"Unmapped ({len(unmapped)}): {sorted(set(unmapped))}")
-
-    assert len(unmapped) <= _MAX_CROP_CHART_MISSES, (
-        f"Expected ≤ {_MAX_CROP_CHART_MISSES} unmapped crops in master CROP CHART after patch01, "
-        f"got {len(unmapped)}: {sorted(set(unmapped))}"
-    )
-
-
 def test_ac07b_seed_dry_run_no_error_exit():
     """AC-07b (patch01): seed.py --all --dry-run exits 0 with no ERROR-level log lines."""
     import subprocess

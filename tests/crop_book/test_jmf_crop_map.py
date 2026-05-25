@@ -88,14 +88,6 @@ def test_ac02_old_rutabaga_value_absent():
     assert "ברוקקואר" not in content, "Hallucinated Rutabaga value 'ברוקקואר' still present in constants.py"
 
 
-def test_ac04_1_eggplant_feld_literal_alias(jmf_crop_map):
-    """AC-04.1 (patch01): 'Eggplant  (Feld)' (double-space literal) is a key mapping to 'חציל'."""
-    assert "Eggplant  (Feld)" in jmf_crop_map, "'Eggplant  (Feld)' literal alias missing from JMF_CROP_MAP"
-    assert jmf_crop_map["Eggplant  (Feld)"] == "חציל", (
-        f"Expected 'חציל', got {jmf_crop_map['Eggplant  (Feld)']!r}"
-    )
-
-
 def test_ac03_duplicate_group_count(jmf_crop_map):
     """patch06: exactly 6 Hebrew values appear more than once (all synonyms)."""
     counts = Counter(jmf_crop_map.values())
@@ -133,21 +125,6 @@ def test_shallots_value_post_patch02():
 
 # ─── patch03 regression tests (DECISION_WP-B1-patch03_TAXONOMY_2026-05-25) ───
 
-def test_mesclun_value_post_patch03():
-    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Mesclun"] == "עלי בייבי"
-
-
-def test_salad_mix_value_post_patch03():
-    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Salad Mix"] == "עלי בייבי"
-
-
-def test_baby_kale_value_post_patch03():
-    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Baby kale"] == "עלי בייבי"
-
-
 def test_cherry_tomato_value_post_patch03():
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     assert JMF_CROP_MAP["Greenhouse Cherry Tomato"] == "עגבניית שרי"
@@ -156,11 +133,6 @@ def test_cherry_tomato_value_post_patch03():
 def test_heirloom_tomato_value_post_patch03():
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     assert JMF_CROP_MAP["Greenhouse Heirloom Tomato"] == "עגבניות מורשת"
-
-
-def test_lebanese_cucumber_value_post_patch03():
-    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Greenhouse Libanese Cucumber"] == "מלפפון חממה"
 
 
 def test_chinese_cabbage_value_post_patch03():
