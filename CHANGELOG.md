@@ -11,6 +11,22 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### S003 ספר גידולים — Tend Israel Adaptation Overlay (Team 10, SFA-S003-P002-WP-B3, 2026-05-25)
+
+- **2026-05-25 — Team 10 (WP-B3):** Tend Israel adaptation overlay: migration 046, CropHarvestStat ORM, TASK_TYPE_VALUES extension (GCR-B3-1), TEND_TASK_* constants, tend_overlay.py importer (3 parsers + orchestrator), seed.py CLI flags, 52 new tests. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.0.1 LOCKED, L-GATE_S R1 PASS_WITH_FINDINGS). team_00 DECISION 2026-05-25 (Option B whitelist + GCR-B3-1).
+  - **New:** `organic_market_agent/crop_book/crop_harvest_stats.py` — `CropHarvestStat` ORM model. 15 columns, `SEASON_VALUES` tuple (4 seasons), UNIQUE constraint on (crop_id, season, year, source), season CHECK constraint.
+  - **New:** `organic_market_agent/db/versions/046_tend_overlay.py` — Migration 046 (down_revision="045"): creates `crop_harvest_stats` table + dialect-aware ALTER on `crop_task_templates` CHECK constraint (Postgres: DROP+ADD; SQLite: batch_alter_table(recreate="always")). Extends task_type enum from 14 to 20 values.
+  - **Modified:** `organic_market_agent/crop_book/crop_task_templates.py` — GCR-B3-1: append 6 entries to `TASK_TYPE_VALUES` tuple (nursery_seed, pest_spray, potting_up, thinning, trellis, fertilize). Tuple grows from 14 → 20. No other change.
+  - **Modified:** `organic_market_agent/crop_book/constants.py` — Append: `TEND_TASK_WHITELIST` (11 entries, Option B: 9 baseline + Trellis + Fertilize & Amend), `TEND_TASK_BLACKLIST` (10 entries), `TEND_TASK_TYPE_MAP` (9 direct entries). No modification to existing constants.
+  - **New:** `organic_market_agent/crop_book/importer/tend_overlay.py` — 3 parsers: `parse_tasks_templates()` (whitelist/blacklist enforcement, Weed/RowCover Method/Sub-method disambiguation), `parse_greenhouse_plan()` (days_in_gh_total + days_to_first_potting as OP source values), `parse_harvests_aggregate()` (NEVER per-record; groups by crop×season×year with hard bound assertion). Orchestrator `import_tend_overlay()` with dry_run support. 3 upsert helpers reusing B1 patterns (OP tier, weight=0.55).
+  - **Modified:** `organic_market_agent/crop_book/importer/seed.py` — Add 4 CLI flags: `--tend-overlay-dir`, `--tend-overlay-year`, `--tend-overlay-only`, `--no-tend-overlay` (mutually exclusive pair). Call-site block in both dry-run and live paths: after JMF, before WP-A Tend raw-material import.
+  - **New:** `tests/crop_book/fixtures/tend_2022/` — 3 fixture CSVs (TASKS.CSV, GREENHOUSE_PLAN.CSV, HARVESTS.CSV; 3 crops, 5 rows each).
+  - **New:** 9 test files, 52 new tests covering AC-01 through AC-20: `test_migration_046.py`, `test_crop_harvest_stats_orm.py`, `test_tend_task_whitelist.py`, `test_tend_task_type_mapping.py`, `test_tend_overlay_parsers.py`, `test_tend_overlay_aggregation.py`, `test_tend_overlay_integration.py`, `test_tend_idempotency.py`, `test_seed_tend_overlay_cli.py`.
+  - **Updated:** `tests/crop_book/test_crop_task_templates_orm.py` — Updated TASK_TYPE_VALUES count assertion 14→20 (expected GCR-B3-1 consequence per AC-03/AC-17 note).
+  - **Test totals:** 52 new tests; suite 341 collected, 340 passed / 1 pre-existing failure (`test_dispatch_upload_crop_book_profile` — publisher regression unrelated to WP-B3; present since before B3 build).
+  - **LOD500_LOCKED audit (AC-19):** All 15 locked paths CLEAN. GCR-B3-1 sole permitted exception: `crop_task_templates.py` diff scoped to TASK_TYPE_VALUES tuple extension (6 entries + section comment). No modification to publisher/, views.py, models.py, source_registry.py, field_policy.py, reconciler.py, enrichment_runner.py, enrichment_models.py, tend.py (raw-material guard untouched), jmf.py, jmf_masterclass.py, ni_importer.py, migrations 001-045, ni/ subdir.
+  - **validate_aos.sh:** 0 FAIL (PASS/SKIP per F2 carry; lean-kit profile drift — non-blocking per L-GATE_S verdict).
+
 ### S003 ספר גידולים — JMF NI Extraction Layer (Team 10, SFA-S003-P002-WP-B2, 2026-05-25)
 
 - **2026-05-25 — Team 10 (WP-B2):** JMF NI (Non-Indexed) extraction layer: 6 NIImporter subclasses, migration 045, CropKnowledgeNote ORM, upsert helper, extract_jmf_ni.py script. Authorization: L-GATE_B mandate from team_110 (LOD400 v1.1.3 LOCKED, L-GATE_S R4 PASS_WITH_FINDINGS).
