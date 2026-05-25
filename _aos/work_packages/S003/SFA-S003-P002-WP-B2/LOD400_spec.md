@@ -2,11 +2,20 @@
 id: SFA-S003-P002-WP-B2-LOD400
 wp: SFA-S003-P002-WP-B2 — JMF NI Extraction Layer (AI-assisted, text-file input)
 gate: L-GATE_S (LOD400 — implementation spec)
-status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S R4 verdict (v1.1.2 closes 2 R3 BLOCKERS + 1 MINOR carry)
+status: LOD400_LOCKED — L-GATE_S R4 PASS_WITH_FINDINGS at v1.1.2; v1.1.3 closes 2 MINOR cleanups inline per verdict §4
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.1.2
+version: v1.1.3
 changelog: >
+  v1.1.3 — LOCK CLEANUP per L-GATE_S R4 PASS_WITH_FINDINGS verdict §4
+  (LOD400-VERDICT_v1.0.3.md at commit cdc3a87, 2 MINOR cleanups):
+  F-R4-01: §7.1 explanatory line rephrased to avoid the bare literal
+    `ni_registry.register()` token (replaced with "that WP-A
+    registration pattern (which B2 does NOT use)"). The probe-friendly
+    phrasing eliminates any ambiguity.
+  F-R4-02: historical version labels in code snippets — accepted as
+    carried-forward historical context per verdict text "several
+    references are valid historical changelog context". No change.
   v1.1.2 — Remediation of 2 BLOCKERS + 1 MINOR from team_190 R3 verdict
   (LOD400-VERDICT_v1.0.2.md at commit df26c40):
   B1-R3 (internal inconsistency: bypass-vs-registry): closed all
@@ -87,7 +96,7 @@ builder: sfa_build (separate session per IR#1)
 validator: team_190 (non-Claude, Iron Rule #1)
 ---
 
-# LOD400 — SFA-S003-P002-WP-B2: JMF NI Extraction Layer (v1.1.2)
+# LOD400 — SFA-S003-P002-WP-B2: JMF NI Extraction Layer (v1.1.3 LOCKED)
 
 **Read before writing a single line of code:**
 1. LOD200 (this WP): `_aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md`
@@ -583,7 +592,7 @@ Importing this package re-exports the 6 concrete subclasses.
 IMPORTANT — B2 does NOT use `ni_registry.load_all()`. Reason: WP-A's
 `NIImporter.validate()` drops rows missing `variety_id`. B2 subclasses
 need DB session access to resolve `crop_jmf_en` → `variety_id`, but
-the `ni_registry.register()` pattern instantiates subclasses at
+that WP-A registration pattern (which B2 does NOT use) instantiates subclasses at
 module-load time with no session available. Therefore:
 
   - B2 subclasses are NOT registered with ni_registry — the
@@ -1129,8 +1138,8 @@ See §2.2 LOD500_LOCKED inventory. Includes `_aos/governance/`, `_aos/lean-kit/`
 
 ---
 
-*LOD400 v1.1.2 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*v1.1.1 → v1.1.2: 2 R3 BLOCKERS (internal-inconsistency) + 1 MINOR closed. All operative content now consistent with the §7.1/§8 bypass + subclass-resolution design.*
-*Pending: team_190 L-GATE_S R4 validation (R4 mandate next).*
+*LOD400 v1.1.3 — LOCKED 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
+*Round chain: v1.0.0 R1 FAIL (4 findings) → v1.1.0 R2 FAIL (3 internal-inconsistency BLOCKERS) → v1.1.1 R3 FAIL (2 internal-inconsistency BLOCKERS) → v1.1.2 R4 PASS_WITH_FINDINGS (2 MINOR) → v1.1.3 LOCKED (MINOR cleanups closed inline).*
+*Next: L-GATE_B mandate to sfa_build sub-agent.*
 
 Also: `tests/crop_book/test_ni_publisher_isolation.py` added to §10 test list (AC-21 enforcement, 2 tests minimum — publisher dir scan + views.py scan).
