@@ -503,6 +503,26 @@ def main() -> None:
         help="Skip NI ingestion.",
     )
     parser.add_argument(
+        "--tend-overlay-dir", type=Path,
+        default=Path("/Users/nimrod/Documents/israel Microgreens/crop data/Tend_2022"),
+        metavar="PATH",
+        help="Tend overlay CSV directory (default: %(default)s; year inferred from dirname suffix)",
+    )
+    parser.add_argument(
+        "--tend-overlay-year", type=int, default=2022, metavar="YEAR",
+        help="Year for source label and HARVESTS aggregation (default: %(default)s)",
+    )
+    # --tend-overlay-only and --no-tend-overlay are mutually exclusive (LOD400 §8)
+    tend_excl = parser.add_mutually_exclusive_group()
+    tend_excl.add_argument(
+        "--tend-overlay-only", action="store_true",
+        help="Run only Tend overlay ingestion (skip JMF / NI / WP-A Tend).",
+    )
+    tend_excl.add_argument(
+        "--no-tend-overlay", action="store_true",
+        help="Skip Tend overlay ingestion.",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -583,6 +603,23 @@ def main() -> None:
                 session.flush()
             if args.ni_only:
                 return
+
+            # Tend overlay ingestion (dry-run path)
+            if not args.no_tend_overlay and not args.ni_only:
+                from organic_market_agent.crop_book.importer.tend_overlay import import_tend_overlay
+                tend_summary = import_tend_overlay(
+                    session, args.tend_overlay_dir, year=args.tend_overlay_year,
+                    dry_run=True,
+                )
+                logger.info("Tend overlay: %s", tend_summary)
+                if tend_summary.crop_map_misses:
+                    logger.warning("Tend overlay crop_map misses (%d): %s",
+                                   len(tend_summary.crop_map_misses),
+                                   ", ".join(tend_summary.crop_map_misses[:10]))
+                session.flush()
+
+            if args.tend_overlay_only:
+                return
         return
 
     from organic_market_agent.db.session import SessionFactory
@@ -610,6 +647,26 @@ def main() -> None:
                 enrich_summary = run_enrichment(session, dry_run=False)
                 logger.info("Enrichment: %s", enrich_summary)
             session.commit()
+            return
+
+        # Tend overlay ingestion (AFTER JMF, BEFORE WP-A Tend raw-material import)
+        if not args.no_tend_overlay:
+            from organic_market_agent.crop_book.importer.tend_overlay import import_tend_overlay
+            tend_summary = import_tend_overlay(
+                session, args.tend_overlay_dir, year=args.tend_overlay_year,
+                dry_run=False,
+            )
+            logger.info("Tend overlay: %s", tend_summary)
+            if tend_summary.crop_map_misses:
+                logger.warning("Tend overlay crop_map misses (%d): %s",
+                               len(tend_summary.crop_map_misses),
+                               ", ".join(tend_summary.crop_map_misses[:10]))
+            session.flush()
+
+        if args.tend_overlay_only:
+            # Early return — skip remaining importers
+            if not args.dry_run:
+                session.commit()
             return
 
         # Existing Tend seed call (unchanged logic)
