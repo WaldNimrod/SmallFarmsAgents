@@ -5,15 +5,35 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S R2 verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.1.0
+version: v1.1.1
 changelog: >
-  v1.1.0 — Major remediation cycle addressing 4 findings from L-GATE_S
+  v1.1.1 — Remediation of 3 BLOCKERS from team_190 R2 verdict
+  (LOD400-VERDICT_v1.0.1.md at commit 89460bc):
+  B1 (VC-6.R2): all literal occurrences of the obsolete class-name
+    token removed from spec body (3 sites: changelog §, "Read before
+    writing" item 4, §7 intro). The R3 evidence probe (see R3
+    mandate §3 probe #1) now passes.
+  B2 (VC-15/17): architectural fix — B2 subclasses are NOT registered
+    with ni_registry. seed.py iterates NI_IMPORTER_CLASSES directly
+    with session. Subclass load(session) and load_knowledge_notes(session)
+    accept session and return fully-resolved rows (variety_id /
+    crop_id already present). Resolution logic lives in subclasses
+    (`_resolve_crop_id` + `_resolve_default_variety_id` helpers,
+    mirroring B1 patterns). Rationale documented in §7.1.
+  B3 (VC-16): NEW operative §3.1 "Display boundary — OPERATIVE
+    LICENSING INVARIANT" — declares 4 binding prohibitions (no publisher
+    read; no upload payload; no public view; admin/test-only DB access).
+    NEW AC-21 (a/b/c) enforces via git diff audit + 2 publisher-isolation
+    test assertions. §3.1.3 explains the elevation from advisory to
+    operative content.
+  v1.1.0 — Remediation cycle addressing 4 findings from L-GATE_S
   R1 verdict (LOD400-VERDICT_v1.0.0.md at commit 9db86b7) + applying 2
   scope changes from team_00 DECISION file
   (DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md).
   FIXES:
-    F-S-B2-01 (BLOCKER): NiSourceBase → NIImporter (correct WP-A base
-      class name). All references in §6/§7/§8/§14/§15 corrected.
+    F-S-B2-01 (BLOCKER): the v1.0.0 spec named the WP-A abstract base
+      incorrectly. v1.1.0 corrected the name to `NIImporter` (the
+      actual WP-A class). All references in §6/§7/§8/§14/§15 corrected.
       Subclass attribute = `name` (not `source_label`/`cache_dir` etc).
       `load()` signature matches WP-A: returns variety-source-value
       row dicts; the new `load_knowledge_notes()` method is sibling
@@ -56,7 +76,7 @@ validator: team_190 (non-Claude, Iron Rule #1)
 1. LOD200 (this WP): `_aos/work_packages/S003/SFA-S003-P002-WP-B2/LOD200_spec.md`
 2. team_00 DECISION (Q1 + Q5 scope changes): `_COMMUNICATION/team_00/DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md`
 3. team_190 R1 verdict (4 findings — all addressed in v1.1.0): `_COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B2/LOD400-VERDICT_v1.0.0.md`
-4. **WP-A `ni_importer.py`** (LOD500_LOCKED — VERIFY API): `organic_market_agent/crop_book/importer/ni_importer.py`. The class is `NIImporter` (not `NiSourceBase`). Subclass attribute: `name`. Abstract method: `load() → list[dict]`. The dict shape is variety-source-value, NOT a custom `target_table`-tagged shape.
+4. **WP-A `ni_importer.py`** (LOD500_LOCKED — VERIFY API): `organic_market_agent/crop_book/importer/ni_importer.py`. The abstract base class is `NIImporter`. Subclass attribute: `name`. Abstract method: `load() → list[dict]`. The dict shape is variety-source-value, NOT a custom `target_table`-tagged shape.
 5. WP-A `_upsert_source_value` signature in `organic_market_agent/crop_book/importer/seed.py`: `_upsert_source_value(session, variety_id: int, sv: dict)`.
 6. Extended `JMF_CROP_MAP` (86 entries; post-patch01): `organic_market_agent/crop_book/constants.py`.
 
@@ -249,6 +269,53 @@ def downgrade():
 ```
 
 The `length(body_text) <= 2000` CHECK is the schema-level enforcement of advisory #1's fair-use snippet bound. AC-04a regression-tests this constraint at INSERT time.
+
+---
+
+## 3.1 Display boundary — OPERATIVE LICENSING INVARIANT
+
+This section is OPERATIVE spec content, NOT advisory. It defines the binding display/publication rules for `crop_knowledge_notes` content extracted from JMF PDFs.
+
+### 3.1.1 Prohibition (BINDING)
+
+The `crop_knowledge_notes` table is **INTERNAL ONLY**. Its content is extracted from copyrighted JMF MasterClass material under fair-use snippet bounds (≤ 2000 chars per note) and is licensed for **internal farm-operator use only**.
+
+**The following are FORBIDDEN by this LOD400 specification:**
+
+1. **No WordPress publish path may read `crop_knowledge_notes` data.**
+   No file under `organic_market_agent/publisher/` may import, query, or
+   reference the `crop_knowledge_notes` table or `CropKnowledgeNote` ORM
+   class.
+
+2. **No WordPress upload payload may include `crop_knowledge_notes` content.**
+   Artifacts produced by `dispatch_upload()` or related helpers MUST NOT
+   contain text derived from `crop_knowledge_notes.body_text`.
+
+3. **No public-facing WordPress view may display `crop_knowledge_notes` content.**
+   No modification of `organic_market_agent/views.py` (LOD500_LOCKED) is
+   in B2 scope; any future modification adding NI prose to public views
+   requires (a) a new GCR to team_00, (b) a separate WP-C UI work
+   package, and (c) explicit authorization in that WP-C's LOD400.
+
+4. **Database queries against `crop_knowledge_notes` are permitted ONLY for:**
+   - Operator-side administrative tools (separate, authenticated)
+   - Future logged-in-farm-operator dashboard (out of scope for B2 — TBD WP-C)
+   - Test code (in-memory SQLite, fixtures only)
+   - The `_upsert_knowledge_note` helper itself
+
+### 3.1.2 Enforcement at build time
+
+AC-21 (NEW — see §9) enforces the prohibition via `git diff` audit: any modification to `organic_market_agent/publisher/` or `organic_market_agent/views.py` by the B2 build is grounds for L-GATE_V FAIL.
+
+A test file `test_ni_publisher_isolation.py` provides additional regression coverage by asserting that:
+- `organic_market_agent/publisher/` modules do NOT import from `organic_market_agent.crop_book.crop_knowledge_notes`
+- The string `crop_knowledge_notes` does NOT appear in any file under `organic_market_agent/publisher/`
+
+### 3.1.3 Why this section is operative (not advisory)
+
+The L-GATE_S R2 verdict (F-LV-PATCH01-R2-style B3 finding) correctly observed that the v1.1.0 advisory-table claim "§11 forbids publication" was non-operative — no spec section actually contained the binding rule. v1.1.1 fixes this by elevating the prohibition to the data-model section (§3.1) where the schema CHECK constraints live, making it part of the operative contract.
+
+The schema-level enforcement (§3 `length(body_text) <= 2000` + `is_internal_farm_use_only=TRUE` default) covers ROW-LEVEL fair-use bounds. §3.1 covers SYSTEM-LEVEL display boundaries.
 
 ---
 
@@ -483,21 +550,43 @@ def main():
 
 ## 7. NIImporter subclasses (correct API per WP-A — F-S-B2-01 fix)
 
-WP-A's actual class is `NIImporter` (NOT `NiSourceBase` as v1.0.0 incorrectly stated). The abstract method is `load() → list[dict[str, Any]]`, returning **variety-source-value row dicts** (matching the `crop_variety_source_values` shape). Subclass attribute is `name`.
+WP-A's actual abstract base class is `NIImporter`. The abstract method is `load() → list[dict[str, Any]]`, returning **variety-source-value row dicts** (matching the `crop_variety_source_values` shape). Subclass attribute is `name`.
 
 For B2's crop-scoped narrative content (which doesn't fit the variety-source-value shape natively), each subclass implements a **sibling method `load_knowledge_notes() → list[dict[str, Any]]`** that returns `crop_knowledge_notes` row dicts. The seed.py call-site invokes both:
 - `ni_registry.load_all()` (existing WP-A path) — produces variety-source-value rows; B2 subclasses contribute `cultivar_recommendation` rows here
 - Iterates `ni_registry.registered_labels` and calls each subclass's `load_knowledge_notes()` — produces crop_knowledge_notes rows
 
-### 7.1 `ni/__init__.py` (NEW)
+### 7.1 `ni/__init__.py` (NEW) — bypasses ni_registry.load_all()
 
 ```python
-"""NI importer subclasses (SFA-S003-P002-WP-B2 v1.1.0).
+"""NI importer subclasses (SFA-S003-P002-WP-B2 v1.1.1).
 
-Importing this package registers all 6 concrete NIImporter subclasses
-with the WP-A ni_registry singleton.
+Importing this package re-exports the 6 concrete subclasses.
+
+IMPORTANT — B2 does NOT use `ni_registry.load_all()`. Reason: WP-A's
+`NIImporter.validate()` drops rows missing `variety_id`. B2 subclasses
+need DB session access to resolve `crop_jmf_en` → `variety_id`, but
+the `ni_registry.register()` pattern instantiates subclasses at
+module-load time with no session available. Therefore:
+
+  - B2 subclasses are NOT registered with ni_registry — the
+    `ni_registry.register()` call is NEVER invoked at module load.
+  - seed.py iterates `NI_IMPORTER_CLASSES` directly with an open session.
+  - Each subclass's `load(self, session)` and
+    `load_knowledge_notes(self, session)` accept the session and return
+    rows with `variety_id` / `crop_id` already resolved.
+  - Rows then flow through `_upsert_source_value(session, variety_id, sv)`
+    (existing WP-A helper) and `_upsert_knowledge_note(session, ...)`
+    (new helper appended to ni_importer.py per §7.3) — both expect
+    fully-resolved keys.
+
+Future generic NI sources whose `load()` does NOT need DB access MAY
+still use the `ni_registry.register()` + `load_all()` pattern; B2 simply
+takes a different path because of its specific data-shape requirements.
+This deviation is acknowledged in spec §7 and AC-15.
+
+This file does NOT call `ni_registry.register()` at module load.
 """
-from organic_market_agent.crop_book.importer.ni_importer import ni_registry
 from organic_market_agent.crop_book.importer.ni.jmf_book import JmfBookImporter
 from organic_market_agent.crop_book.importer.ni.jmf_book_alt import JmfBookAltImporter
 from organic_market_agent.crop_book.importer.ni.jmf_ft_flameweed import JmfFtFlameweedImporter
@@ -510,11 +599,6 @@ NI_IMPORTER_CLASSES = (
     JmfFtFlameweedImporter, JmfFtBiopesticideImporter,
     JmfFtPhytoprotectionImporter, JmfFtNurseryseedingImporter,
 )
-
-# Register all 6 at module load (per WP-A docstring "Subclasses register
-# themselves by calling ni_registry.register()").
-for cls in NI_IMPORTER_CLASSES:
-    ni_registry.register(cls())
 
 __all__ = [cls.__name__ for cls in NI_IMPORTER_CLASSES] + ["NI_IMPORTER_CLASSES"]
 ```
@@ -562,13 +646,19 @@ class JmfBookImporter(NIImporter):
         default-baseline variety (name_en IS NULL)."""
         # ... implementation matching B1's _default_variety_id helper
 
-    def load(self) -> list[dict[str, Any]]:
+    def load(self, session) -> list[dict[str, Any]]:
         """Return variety-source-value rows for cultivar_recommendation only.
 
-        Per WP-A NIImporter contract, each row has:
-          variety_id, field_name, source (self.source_label),
-          value_text, value_numeric, unit, note,
-          trust_tier='NI', confidence_weight=None, is_outlier_rejected=False.
+        Each row is fully-resolved (variety_id present) per the
+        `_upsert_source_value(session, variety_id, sv)` call contract.
+        Session is REQUIRED — used to resolve crop_jmf_en → variety_id
+        via JMF_CROP_MAP lookup + default-baseline-variety pattern
+        (mirrors B1 `_default_variety_id` helper).
+
+        Note: this is a B2-specific signature (adds `session` param vs.
+        the WP-A base abstract `load()`). B2 subclasses are NOT
+        auto-registered with ni_registry per §7.1 — the seed.py
+        call-site instantiates them with session.
         """
         rows = []
         for path in self._iter_cache_files():
@@ -577,17 +667,12 @@ class JmfBookImporter(NIImporter):
             cultivar = data["notes"].get("cultivar_recommendation")
             if not cultivar:
                 continue
-            # Resolve variety_id; build row
-            session = None  # NOTE: load() is called by ni_registry.load_all()
-                            # in the context of an open session — but the WP-A
-                            # contract is to return dicts ready for upsert,
-                            # NOT to write directly. Resolution of variety_id
-                            # happens at the seed.py call-site (which has the
-                            # session). The subclass returns rows tagged with
-                            # `crop_jmf_en` and the call-site resolves to
-                            # variety_id before calling _upsert_source_value.
+            variety_id = self._resolve_default_variety_id(session, crop_jmf_en)
+            if variety_id is None:
+                # JMF_CROP_MAP miss → log WARN + skip (B1 pattern)
+                continue
             rows.append({
-                "_resolution_crop_jmf_en": crop_jmf_en,  # call-site resolves to variety_id
+                "variety_id": variety_id,
                 "field_name": "cultivar_recommendation",
                 "source": self.source_label,
                 "value_text": cultivar[:2000],  # bounded per advisory #1
@@ -600,19 +685,26 @@ class JmfBookImporter(NIImporter):
             })
         return rows
 
-    def load_knowledge_notes(self) -> list[dict[str, Any]]:
-        """Return crop_knowledge_notes row dicts (B2-specific path)."""
+    def load_knowledge_notes(self, session) -> list[dict[str, Any]]:
+        """Return fully-resolved crop_knowledge_notes row dicts.
+
+        Each row has `crop_id` (resolved from crop_jmf_en via session lookup);
+        ready for `_upsert_knowledge_note(session, crop_id=..., **rest)`.
+        """
         rows = []
         for path in self._iter_cache_files():
             data = self._load_cache_file(path)
             crop_jmf_en = data["crop_jmf_en"]
+            crop_id = self._resolve_crop_id(session, crop_jmf_en)
+            if crop_id is None:
+                continue  # WARN + skip
             for note_type, body in data["notes"].items():
                 if not body:
                     continue
                 if len(body) > 2000:
                     raise ValueError(f"{path}: note_type={note_type} body_text > 2000")
                 rows.append({
-                    "_resolution_crop_jmf_en": crop_jmf_en,
+                    "crop_id": crop_id,
                     "source": self.source_label,
                     "trust_tier": "NI",
                     "note_type": note_type,
@@ -624,6 +716,38 @@ class JmfBookImporter(NIImporter):
                     "extracted_at": data["provenance"]["extracted_at"],
                 })
         return rows
+
+    def _resolve_crop_id(self, session, crop_jmf_en: str) -> int | None:
+        """Resolve JMF English crop name → crops.id via JMF_CROP_MAP.
+
+        Returns None on miss (logs WARN). Shared helper used by both
+        load() and load_knowledge_notes().
+        """
+        from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+        from organic_market_agent.crop_book.models import Crop
+        name_he = JMF_CROP_MAP.get(crop_jmf_en)
+        if name_he is None:
+            return None
+        crop = session.query(Crop).filter_by(name_he=name_he).one_or_none()
+        return crop.id if crop else None
+
+    def _resolve_default_variety_id(self, session, crop_jmf_en: str) -> int | None:
+        """Resolve crop_jmf_en → default-baseline variety_id (name_en IS NULL).
+
+        Mirrors B1's _default_variety_id helper (`jmf_masterclass.py` §6.9).
+        Returns None on miss.
+        """
+        from organic_market_agent.crop_book.models import CropVariety
+        crop_id = self._resolve_crop_id(session, crop_jmf_en)
+        if crop_id is None:
+            return None
+        v = (session.query(CropVariety)
+             .filter(CropVariety.crop_id == crop_id, CropVariety.name_en.is_(None))
+             .one_or_none())
+        if v is None:
+            v = CropVariety(crop_id=crop_id, name_en=None, name_he=None)
+            session.add(v); session.flush()
+        return v.id
 ```
 
 The other 5 subclasses follow the same pattern with their own `name`, `cache_dir`, `canonical_pdf_filename`. For FT subclasses, the cache structure may be a single `_table.json` (mapping crop_jmf_en → fields) instead of per-crop files — the `_iter_cache_files` + `_load_cache_file` methods adapt accordingly.
@@ -708,39 +832,26 @@ Call site (inside `with SessionFactory() as session:` block, AFTER all other imp
 
 ```python
 if not args.no_ni:
-    # Import the NI package — registers all 6 subclasses via __init__
+    # B2 bypasses ni_registry.load_all() per §7.1 architectural decision.
+    # B2 does NOT call ni_registry.register; the 6 subclasses are NOT
+    # registered with ni_registry; seed.py iterates NI_IMPORTER_CLASSES
+    # directly with session for the variety_id / crop_id resolution.
     from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
-    from organic_market_agent.crop_book.importer.ni_importer import (
-        ni_registry, _upsert_knowledge_note,
-    )
+    from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
 
-    # PATH A: variety-source-value rows via WP-A standard path
-    # (B2 subclasses contribute cultivar_recommendation rows here)
-    for row in ni_registry.load_all():   # already validated by validate() hook
-        # Resolve _resolution_crop_jmf_en → variety_id (B2 subclasses tag rows
-        # with this key; resolution uses JMF_CROP_MAP + default-baseline pattern)
-        crop_jmf_en = row.pop("_resolution_crop_jmf_en", None)
-        if crop_jmf_en is None:
-            continue   # row pre-resolved by subclass (defensive)
-        variety_id = _resolve_default_variety_for_jmf_crop(session, crop_jmf_en)
-        if variety_id is None:
-            continue   # crop not in JMF_CROP_MAP; logged WARN by helper
-        # Call the EXISTING _upsert_source_value(session, variety_id, sv) signature
-        # sv is the remaining dict (variety_id-less); helper handles the rest.
-        _upsert_source_value(session, variety_id, row)
-
-    # PATH B: crop_knowledge_notes rows via B2-specific path
     for cls in NI_IMPORTER_CLASSES:
-        importer = next((imp for imp in ni_registry._importers.values()
-                          if isinstance(imp, cls)), None)
-        if importer is None:
-            continue
-        for row in importer.load_knowledge_notes():
-            crop_jmf_en = row.pop("_resolution_crop_jmf_en")
-            crop_id = _resolve_crop_id_for_jmf_crop(session, crop_jmf_en)
-            if crop_id is None:
-                continue
-            _upsert_knowledge_note(session, crop_id=crop_id, **row)
+        importer = cls()  # constructor takes no args (subclass attrs are class-level)
+
+        # PATH A: variety-source-value rows (cultivar_recommendation only)
+        for row in importer.load(session):
+            # Row is fully resolved by load(); use existing WP-A signature:
+            variety_id = row.pop("variety_id")
+            _upsert_source_value(session, variety_id, row)
+
+        # PATH B: crop_knowledge_notes rows (B2-specific)
+        for row in importer.load_knowledge_notes(session):
+            # Row is fully resolved by load_knowledge_notes(); crop_id is in the dict
+            _upsert_knowledge_note(session, **row)
 
     session.flush()
 
@@ -750,7 +861,7 @@ if args.ni_only:
     return
 ```
 
-The two new helper functions `_resolve_default_variety_for_jmf_crop` and `_resolve_crop_id_for_jmf_crop` are added to seed.py at module scope (existing module — small additions). Both use `JMF_CROP_MAP` from `constants.py` to translate English JMF crop names to `crops.name_he`/`crops.id`.
+No additional helper functions are added to seed.py — resolution lives in the subclasses (`_resolve_crop_id` + `_resolve_default_variety_id` per §7.2). seed.py changes are limited to: 2 CLI flag definitions + this call-site block. AC-19 audit covers this.
 
 ---
 
@@ -818,6 +929,24 @@ When both `jmf_book` and `jmf_book_alt` cache files contain the same crop with o
 
 **AC-20 — `_aos/governance/` + `_aos/lean-kit/` CLEAN (F-S-B2-02 explicit add).**
 `git diff <patch01-lock>..HEAD -- _aos/governance/ _aos/lean-kit/ _aos/project_identity.yaml` is EMPTY. (These are hub-driven snapshots; B2 builder must never touch them.)
+
+**AC-21 — Publisher / Views isolation (§3.1 operative licensing invariant).**
+*(NEW in v1.1.1 — closes R2 BLOCKER B3.)*
+- **AC-21a:** `git diff <patch01-lock>..HEAD -- organic_market_agent/publisher/ organic_market_agent/views.py` is EMPTY. (B2 must NOT modify any publisher or view file.)
+- **AC-21b:** `test_ni_publisher_isolation.py` (new test file) asserts:
+  ```python
+  import pathlib
+  pub_dir = pathlib.Path("organic_market_agent/publisher")
+  for py in pub_dir.rglob("*.py"):
+      content = py.read_text(encoding="utf-8")
+      assert "crop_knowledge_notes" not in content, (
+          f"§3.1 violation: publisher/{py.name} references crop_knowledge_notes"
+      )
+      assert "CropKnowledgeNote" not in content, (
+          f"§3.1 violation: publisher/{py.name} references CropKnowledgeNote"
+      )
+  ```
+- **AC-21c:** Same assertion for `organic_market_agent/views.py`.
 
 ---
 
@@ -970,6 +1099,8 @@ See §2.2 LOD500_LOCKED inventory. Includes `_aos/governance/`, `_aos/lean-kit/`
 
 ---
 
-*LOD400 v1.1.0 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*All 4 R1 findings remediated + Q1 + Q5 scope changes applied per team_00 DECISION.*
-*Pending: team_190 L-GATE_S R2 validation (mandate next).*
+*LOD400 v1.1.1 — patched 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
+*v1.1.0 → v1.1.1: 3 R2 BLOCKERS remediated (B1 stale token; B2 architectural; B3 licensing operative section).*
+*Pending: team_190 L-GATE_S R3 validation (R3 mandate next).*
+
+Also: `tests/crop_book/test_ni_publisher_isolation.py` added to §10 test list (AC-21 enforcement, 2 tests minimum — publisher dir scan + views.py scan).
