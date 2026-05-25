@@ -127,3 +127,68 @@ class _NIRegistry:
 
 
 ni_registry = _NIRegistry()
+
+
+# ---------------------------------------------------------------------------
+# Knowledge-note upsert helper (added by WP-B2)
+# ---------------------------------------------------------------------------
+
+
+def _upsert_knowledge_note(
+    session,
+    crop_id: int,
+    source: str,
+    note_type: str,
+    body_text: str,
+    *,
+    trust_tier: str = "NI",
+    provenance_pdf: "str | None" = None,
+    provenance_pages: "str | None" = None,
+    is_internal_farm_use_only: bool = True,
+    extraction_model: "str | None" = None,
+    extracted_at=None,
+) -> "CropKnowledgeNote":
+    """Upsert one crop_knowledge_notes row on (crop_id, source, note_type).
+
+    Always sets trust_tier='NI' and is_internal_farm_use_only=True (enforced
+    by this helper regardless of the is_internal_farm_use_only argument, which
+    is accepted only to allow **row unpacking from load_knowledge_notes()).
+    Body text bounded <= 2000 chars (DB CHECK + ORM constraint also enforce).
+
+    Added by SFA-S003-P002-WP-B2 LOD400 v1.1.3 §7.3.
+    """
+    # Lazy import to avoid circular dependency at module load
+    from organic_market_agent.crop_book.crop_knowledge_notes import (
+        CropKnowledgeNote,
+        BODY_TEXT_MAX_LENGTH,
+    )
+
+    if len(body_text) > BODY_TEXT_MAX_LENGTH:
+        raise ValueError(f"body_text exceeds {BODY_TEXT_MAX_LENGTH} chars")
+
+    row = (
+        session.query(CropKnowledgeNote)
+        .filter_by(crop_id=crop_id, source=source, note_type=note_type)
+        .one_or_none()
+    )
+    if row is None:
+        row = CropKnowledgeNote(
+            crop_id=crop_id,
+            source=source,
+            note_type=note_type,
+        )
+        session.add(row)
+
+    # Hardcoded trust and licensing — cannot be overridden by importer code
+    row.trust_tier = "NI"
+    row.body_text = body_text
+    row.provenance_pdf = provenance_pdf
+    row.provenance_pages = provenance_pages
+    row.is_internal_farm_use_only = True
+    row.extraction_model = extraction_model
+    row.extracted_at = extracted_at
+    if row.created_at is None:
+        from datetime import datetime, timezone
+        row.created_at = datetime.now(timezone.utc)
+    session.flush()
+    return row
