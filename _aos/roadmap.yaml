@@ -1095,6 +1095,44 @@ work_packages:
     Program completion authorizes COMPLETION_REPORT to team_00 + team_100."
   profile: L0
 
+- id: SFA-S003-P002-WP-B1-patch03
+  label: "ספר גידולים: JMF_CROP_MAP taxonomic expansion (11 value changes)"
+  status: ELIGIBLE
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_LOCKED
+  assigned_builder: team_10
+  assigned_validator: external
+  created_at: "2026-05-25"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-B1-patch02"]
+  brief_ref: "_COMMUNICATION/team_00/DECISION_WP-B1-patch03_TAXONOMY_2026-05-25_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-B1-patch03/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-25"
+    notes: "team_00 in-session authorization 2026-05-25 via
+      DECISION_WP-B1-patch03_TAXONOMY. Scope: 11 value changes in
+      JMF_CROP_MAP introducing 5 new baseline crops.name_he values
+      (עלי בייבי, עגבניית שרי, עגבניות מורשת, מלפפון חממה, כרוב סיני);
+      remapping Mesclun+Salad Mix+Baby kale to עלי בייבי; splitting
+      Cherry+Heirloom tomatoes off the עגבנייה umbrella; refining
+      4 existing Hebrew terms (Beans Bush, Snow Peas, Basil, Hot Pepper).
+      Effect on duplicate-target allowlist: 25 → 24 groups. MEDIUM effort
+      requires Sonnet sub-agent build (NOT single-engine like patch02).
+      LOD500_LOCKED scope exception authorized in DECISION §4 for 2 test
+      functions (test_jmf_crop_map_duplicate_target_allowlist,
+      test_ac03_duplicate_group_count) — regression-allowlist alignment only."
+    validator: team_00
+  notes: "WP-B1-patch03: MEDIUM taxonomic expansion. Follow-up to the
+    WP-B program closure (6/6 LOD500_LOCKED). team_110 EXECUTION_MANDATE
+    extends for this one final WP before naturally ending. Sub-agent
+    builder pattern restored (Sonnet team_10) per IR#1 orchestrator-vs-builder.
+    Independent of NotebookLM JMF extraction (parallel-safe)."
+  profile: L0
+
 - id: SFA-S003-P002-WP-B2
   label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
   status: DONE
