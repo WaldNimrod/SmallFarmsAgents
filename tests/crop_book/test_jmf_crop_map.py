@@ -15,8 +15,8 @@ def jmf_crop_map():
 
 
 def test_jmf_crop_map_count(jmf_crop_map):
-    """AC-01 (patch01): exactly 86 entries (52 baseline + 34 aliases)."""
-    assert len(jmf_crop_map) == 86, f"Expected 86 entries, got {len(jmf_crop_map)}"
+    """AC-01 (patch04): exactly 87 entries (52 baseline + 34 aliases + 1 Ginger)."""
+    assert len(jmf_crop_map) == 87, f"Expected 87 entries, got {len(jmf_crop_map)}"
 
 
 def test_jmf_crop_map_keys_unique_and_nonempty(jmf_crop_map):
@@ -215,3 +215,12 @@ def test_snow_peas_value_post_patch03():
 def test_basil_value_post_patch03():
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     assert JMF_CROP_MAP["Basil"] == "בזיליקום"
+
+
+# ─── patch04 regression tests (DECISION_WP-B1-patch04-patch06 §2.5) ───
+
+def test_ginger_baseline_post_patch04():
+    """patch04 (DECISION §2.5): Ginger Hebrew is 'ג'ינג'ר'."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Ginger"] == "ג'ינג'ר"
+    assert "ג'ינג'ר" in JMF_CROP_MAP.values()

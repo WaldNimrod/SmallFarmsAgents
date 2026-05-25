@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Beans (Pole)",
+  "crop_name_he": "שעועית מטפסת",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "074-oooo-yni.md",
+    "pages": "9",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.648628+00:00"
+  },
+  "cultivars": [
+    "●",
+    "Green beans: Emerite, Seychelles, Cobra",
+    "●",
+    "Yellow beans: Monte Gusto",
+    "Intensive Spacing",
+    "●",
+    "1 row per bed every 12 in (30 cm) on the row - 3 seeds per cell.",
+    "marketgardenerinstitute.com",
+    "1",
+    "Pole Beans"
+  ],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Pole Beans Pole Beans Pole beans offer faster picking, much higher yields and longer harvest periods than bush beans and can be profitably harvested for 6 to 10 weeks, if grown the right way. They can be cultivated both in the field and in a greenhouse and will grow on a treillis. All and all, they don't generate as much revenue as other greenhouse crops like cucumbers, tomatoes or bell peppers. However, they are very popular at the market and they’ll attract a lot of clients that will also buy other products from your stall. Since they require constant temperature, if you have extra space in your greenhouse they are worth it. If not, focus on planting more profitable greenhouse crops and consider growing bush beans in the field instead. Note that many pole beans varieties are developed for greenhouse production, and so they are more sensitive to temperature fluctuations. Night temperatures below 50°F (10°C) inhibit growth and flowering, same for temperatures above | Family ● Fabaceae | ● 2 weeks before transplant, sow 3 seeds per cell in 72 plug flats. Seeds should be about ½ in (1.3 cm) deep in the cell. ● Place trays on heating mats and maintain soil temperature at 86°F (30°C) until emergence. At that time, the potting-mix must be kept moist at all times. ● After emergence, the ambient temperature in the nursery can be kept around 75°F (24°C) during the day and 65°F (18°C) at night. ● If you are not transplanting the bean seedlings in a controlled temperature greenhouse, don’t forget to acclimatize the plants before transplanting. We do this by exposing them to outside temperatures and reducing the water intake 4 days before the transplant date. | We plan to grow greenhouse pole beans two times in the growing season. We plan for a first generation in early spring to be the first at the market with beans. Then, we plan a second generation in the fall, when it gets too cold in the field for the beans. In between these two generations, we plan for 1 or 2 generati...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "cultivar_recommendation": [
+      {
+        "body_text": "● Green beans: Emerite, Seychelles, Cobra ● Yellow beans: Monte Gusto Intensive Spacing ● 1 row per bed every 12 in (30 cm) on the row - 3 seeds per cell. marketgardenerinstitute.com 1 Pole Beans",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "● Drip tapes only (4 per bed) ● No sprinkler to keep foliage and pods dry and to prevent fungal diseases. | ● Root depth: Shallow (6 to 24 in or 15 to 61 cm ) ● General: Rapid growth and ongoing flower production requires frequent and consistent watering. ● It is critical to water consistently at the flowering and fruit development stages. If you are growing pole beans in a greenhouse, set the irrigation on an automated watering clock. Program three different irrigation cycles: ● Sunny (6 irrigation cycles per day) ● Partially sunny (4 irrigation cycles per day) ● Cloudy (2 irrigation cycles per day) marketgardenerinstitute.com 3 Pole Beans To manage this, set different start times and cycles on the clock. The irrigation is adjusted each morning according to the outside temperature. It takes only a few seconds per day to adjust the water clock. Irrigation cycles begin when the plants are active: 3 hours after sunrise if it’s a sunny day or 4 hours after sunrise if it’s cloudy. Cycles should stop 6 hours before sunset. The length of each irrigation pulse has to be adjusted to ensure that the plants are getting the right amount of water according to their needs (those will vary with different factors like outside temperature and plant size). A good way to confirm your irrigation cycles is to sample soil in the greenhouse at the end of the day and the first thing the next morning. When taking a handful of soil, both should feel about the same. Implantation Pole beans are grown on strings or on a treillis (we recommend the Hortonova net). We transplant the plant on soil covered with landscape fabric. The success of pole beans will also depend on ideal soil temperatures which need to be at least 60°F (16°C). This is particularly important for the first generation implanted in early spring. Equipment ● Power harrow ● 30 in (75 cm) bed preparation rake ● Landscape fabric, staples, drip tape and fittings ● For the treillis set-up: T-posts every 8 ft (2.5 m), post pounder...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "harvest_marker": [
+      {
+        "body_text": "● Beans are harvested by moving up and down the plant profile and moving forward using tree planting bags. ● Beans are harvested twice a week during peak season. ● Harvest bean pods when they are 6-7 in long (15–18 cm) and as wide as a pencil at most. You want to pick them before the seeds become bulbous and more visible in the pod. ● You want to be able to harvest the pods with only one hand. This technique will allow you to use both hands simultaneously. To harvest pole beans, pinch the peduncle between your thumb and index. Wrap gently your remaining fingers around the pod, then snap the bean off the peduncle by pushing your thumb on your index. ● Make sure to gather as many beans as you can in each of your hands before putting them in your harvest bag. ● Pods should be clean and free from any mold or rotting. marketgardenerinstitute.com 8 Pole Beans ● When harvesting plants that are well supplied with beans, plan an average of 2 hours for one person for a 100 ft row. Conditioning ● Freshly picked beans should not be washed or they can otherwise become moldy. Beans should be cooled in the cold room in sealed bins. ● If the beans do get damp, open the bins and let them dry in the cold room for a couple of hours (max 4 hours as they may decrease in quality). Storing ● Beans are stored in airtight bins and kept in the cold room at 39°F (4°C). They should not stay longer than 4 days before being sold. marketgardenerinstitute.com 9",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

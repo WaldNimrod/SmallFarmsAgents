@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Leeks",
+  "crop_name_he": "כרישה",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "040-document-040.md",
+    "pages": "3",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.645112+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Leeks | → King Richard (Summer) → Tadorna (Fall) → *3 rows (12’’- 30 cm), spaced every 6” (15 cm) on the row → Leeks will do great in beds that were previously amended with compost and fertilized with a mix of alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2). → At mid-point of the crop, we top dress with more alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2) | transplants, we start our leeks 6 weeks before the transplant date in harvest crates that are at least 3 times as deep as regular seeding trays. We trim their tops and fertilize them twice during their stay in the nursery. → Broadfork → Rotary harrow → 30” bed prep rake → Leek dibbler → Scissors → Remove tarp and clean out large debris. Use the rake if needed. → Pass through beds with the broadfork. → Uniformly apply amendments and pass with the rotary harrow at a depth of 2” (5 cm). To make transplanting easier (seeing as the soil is loose after being harrowed), we only prepare the beds when we are about to transplant. → Pass with the leek dibbler to mark the planting holes. If the wholes tend to crumble, water the bed surface first with your irrigation system. The success of the technic lies in making perfect hollow long holes for the leeks to grow into. → Once the holes are ready, bring out the well-watered trays from the nursery and remove the leek seedlings from them. They’ll be planted bare root. → Using scissors, trim the roots at 1’’(2.5cm). To have uniform seedlings, also trim their tops at about 10’’(25cm). Leeks less than 8’’ (20cm) are not planted. → Drop each leek seedling in a hole, pressing them down at the bottom. In the end, more than 1’’ (2.5cm) should be sticking out of the ground. → Install irrigation and water gently until the soil is deeply moistened. → 10–14 days after transplanting, cultivate gently around the young leeks using a stirrup hoe. The goal here is to destroy small emerging weeds, but most importantly, to bring some soil in the bottom of each leeks hole. → F...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) or sprinkler, although drip tape may interfere with hilling the leeks. | → Root depth: Shallow (6”-24”) → General: Never let the soil dry out Leeks are a reliable, popular and relatively easy crop to grow. Growing them with long white blanch stem is the secret to their popularity and one of the reasons why we bury them at the seedling stage of their growth. The other factor is that with this technique, we don’t need to hill them much and can space them more intensively 3 rows over our 30’’ (75cm) beds. We plant our summer and fall leeks with different maturity dates at the same time and harvest in succession. They are planted alongside storage onions and parsnips, all crops which spend a major part of the season in the fields (+/- 110 days). To grow pencil thick 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

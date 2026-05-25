@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Beans (Bush)",
+  "crop_name_he": "שעועית שיחית",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "073-oooo.md",
+    "pages": "3",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.648405+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Beans | → Green beans: Jade II, Maxibell → Yellow beans: Rocdor, Gold Rush → 2 rows (20”- 50 cm) per bed spaced every 2” (5 cm) along the row. Approximately 1500 seeds/100’ bed → Earthway seeder: bean plate. Seed into 1” (2.5cm) deep furrow → Like peas, beans will do best in beds amended with compost, fresh or aged. Rule of thumb is to spread 1 inch (5 cm) in the middle of the bed. → When planting in beds where compost was applied in the previous crops, we only supplement with a mixture of alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2). We add this extra fertility boost at first cultivation 2-3 weeks after the direct sown date. Inoculants can increase yields by promoting a rhizobium-bean symbiosis that facilitates nitrogen fixation. If nitrogen-fixing nodules are not found on most legumes grown in a specific planting area (ie new beds), inoculants are added to the seeds when sowing. Follow the manufacturer’s instructions. | → Beans are a popular crop with customers, but have low productivity rates being time-consuming to harvest. To grow this crop profitability, we favour filet-type beans that command better prices and only harvest plants 2 to 3 weeks before moving to a new succession. → For a continuous supply, we simultaneously seed two cultivars with different DTM and make successive sowings every +/- 18 days. → Rotary harrow → 30” bed prep rake → Direct Seeding: Earthway seeder + bean plate. 2 tubes for the rake, scale, notepad and your seeds → Transplanting: Popping tray → Remove tarp and clean out large debris. Use the rake if needed.* → Uniformly apply amendments and pass with the rotary harrow at a depth of 1.5” (4 cm). Use the rake to remove debris if needed. Otherwise, the bed is ready to be seeded. → Mark your 2 rows with the bed prep rake and seed with the Earthway. Write down the total amount of seed dropped onto the first bed and comparing with the target. Adjust calibration if required. → Install irrigation and water until the soil is dee...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape only (2 per bed) → No sprinkler to keep foliage and pods dry and thus prevent diseases. | → Root depth: Shallow (6”-24”) → General: Can drink lots of water because they are fast growing. Vulnerable to disease with overhead water. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

@@ -19,7 +19,7 @@ from sqlalchemy import (
     UniqueConstraint,
     VARCHAR,
 )
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from organic_market_agent.db.base import Base
 
@@ -78,6 +78,14 @@ class CropKnowledgeNote(Base):
     )
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False
+    )
+
+    # patch04: many-to-many link via junction table (Migration 047)
+    # secondary= references 'crop_knowledge_notes_crops' Table object from crop_knowledge_notes_crops module
+    crops_linked: Mapped[list] = relationship(
+        'Crop',
+        secondary='crop_knowledge_notes_crops',
+        back_populates='knowledge_notes_linked',
     )
 
     def __repr__(self) -> str:

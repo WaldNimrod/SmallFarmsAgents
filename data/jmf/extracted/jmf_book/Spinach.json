@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Spinach",
+  "crop_name_he": "תרד",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "043-document-043.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.645360+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Spinach | → Red Kitten → Space → Direct Sown: 6 rows (5” - 12 cm) per bed spaced every 5” (12 cm) on the row JANG  seeder: F-24, 14F-9B, Brush open 2/3 ≠ → Transplanted: 5 rows (6’’-15 cm), spaced every 6” (15cm) on the row → Spinach will do great in beds that were previously amended with compost and fertilized with a mix of alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2). | → Rotary harrow → 30” bed prep rake → Direct Seeding: Jang seeder + F24 roller, 5 tubes for the rake, scale, notepad and your seeds → Transplanting: Popping tray and marking roller → Remove tarp and clean out large debris. Use the rake if needed.* → Uniformly apply amendments and pass with the rotary harrow at a depth of 2” (5 cm). To make transplanting easier (seeing as the soil is loose after being harrowed), we only prepare the beds when we are about to transplant. → Pass with the dibbler-roller to mark the planting holes and bring out the well-watered trays. → Once the beds are ready, 2 people begin to drop seedlings while another person starts to plant. Use the popping tray to facilitate extraction. 3 people/100’ bed is a good ratio for efficient workflow. → Install irrigation and water until the soil is deeply moistened. * If the previous crop is too well established, or if the bed is too messy, mow the crop as low as possible and harrow at a depth of 2” (5 cm). Add 1’’ (2.5 cm) of compost evenly spread on the whole width of the bed and transplant into compost following a no-till strategy. → Remove tarp and clean out large debris. Use the rake if needed.* → Uniformly apply amendments and pass with the rotary harrow at a depth of 1.5” (4 cm). Use the rake to remove debris if needed. Otherwise, the bed is ready to be seeded. → Seed with the Jang, writing down the total amount of seed dropped onto the first bed and comparing with the target. Adjust calibration if required. → Install irrigation and water until the soil is deeply moistened. Keep moist for the next 7–10 days until al...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) or sprinkler | → Root depth: Shallow (6”-24”) → General: Keep evenly moist to forestall bolting. Because spinach doesn’t do well in hot temperatures, we only grow it towards the tail end of the summer and all through fall and winter. We use a cut and come again strategy where we only harvest the large outer leaves of each plant over many weeks. To ensure a continuous supply, we stagger our planting to transition from the field to winter greenhouse, planting enough beds to supply our weekly sales targets. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

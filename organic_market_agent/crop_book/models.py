@@ -97,6 +97,12 @@ class Crop(Base):
         "CropConversionGroup", back_populates="crops"
     )
     varieties: Mapped[list["CropVariety"]] = relationship("CropVariety", back_populates="crop")
+    # patch04: many-to-many back-ref for cross-crop knowledge notes (Migration 047)
+    knowledge_notes_linked: Mapped[list] = relationship(
+        "CropKnowledgeNote",
+        secondary="crop_knowledge_notes_crops",
+        back_populates="crops_linked",
+    )
     unit_conversions: Mapped[list["CropUnitConversion"]] = relationship(
         "CropUnitConversion",
         foreign_keys="CropUnitConversion.crop_id",

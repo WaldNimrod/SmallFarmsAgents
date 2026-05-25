@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Ginger",
+  "crop_name_he": "ג'ינג'ר",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "050-document-050.md",
+    "pages": "6",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.646208+00:00"
+  },
+  "cultivars": [
+    "●",
+    "food store. Any cultivar works."
+  ],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Baby Ginger Baby Ginger Baby ginger is one of the most lucrative crops per unit area. It is highly dependent on heat and that is why we grow it in our heated greenhouse. Ginger takes a long time to grow, but it is well worth it as it is a low maintenance and high yielding crop. The rarity of baby ginger provides a lot of excitement to customers. Family ● Zingiberaceae | We plan for one generation of ginger per season. The crop will take a month and a half in the nursery and 4 months in the ground to be ready for harvest. In our climate, the peak growing season of baby ginger is from April to September. Ginger can be transplanted into an unheated tunnel or greenhouse, but best yields are achieved in a heated greenhouse (in temperate climates). | ● 88 lbs (40 kg) of ginger seeds is needed for one bed. Those need to be started as seedlings in the nursery before being transplanted to get a jump start on the long season required to grow ginger. ● Buy seeds 6 weeks ahead of the transplant date. If seeds are bought earlier than that, keep them in a cool room at 54 °F (12 °C). marketgardenerinstitute.com 1 Baby Ginger ● From seed to transplant, plan for a 4 to 6 week period depending on light availability and capacity to maintain heat for seedlings. Seeds are best started in March for a transplant date in April and a first harvest in August. ● When ready to seed, cut ginger seeds in pieces of 100g each. Avoid seeding smaller pieces. Make cuts on the narrower section of ginger. ● Fill 4 in (10 cm) pots with a mix of 70% high fertility potting mix and 30% compost. Leave 1 in (2,5 cm) unfilled. Deposit 1 seed per pot. Cover the seed with a small layer of potting mix and water the seedlings. ● Keep seedlings moist, but do not over water, since it could induce rotting of the seed. ● Germinate seeds at a temperature of 75-82 °F (24 to 28 °C). Use heating mats in order to get to that heat. In addition, a clear plastic or a row cover placed on seedlings can also help germination...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "cultivar_recommendation": [
+      {
+        "body_text": "● Use mature organic ginger as your seeds. Those can be bought in any food store. Any cultivar works.",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "● Drip tape (2 lines per bed), placed on each side of the row. | ● Root depth: Shallow (15-24 in [38-61 cm]) ● Likes steady supply of water. Can be on the same irrigation schedule as tomatoes, eggplants or peppers. Avoid over-watering ginger. ● General guideline : on a hot and sunny summer day, give 6 water cycles of 10 minutes each. Soil should be moist, but never soaked. Implantation Ginger is ready to be transplanted in the greenhouse as soon as the soil is at 50 °F (10 °C) or more and the seedlings are approximately 11 in (30 cm) high. It should be around mid-April. Equipment ● Broadfork ●",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "harvest_marker": [
+      {
+        "body_text": "● Start harvesting your crops four months after the initial transplant in order to sell baby ginger (pink skin with juicy and tender flesh). At that stage, the ginger will have developed big rhizomes, but won’t have yet developed its rough skin (each seed generating a rhizome at least 4 times its size). If rhizomes are too small, a few growing weeks can be added before harvest. ● Harvest ginger by first loosening the rhizomes in the soil with a fork. Then, slowly pull the ginger out of the soil by pulling on the leaves. ● Since ginger can stay in the soil for many weeks without damage, harvest each bed progressively. Harvest each week the quantity that you are able to sell until there is none left. Note that after 10 months in the soil, ginger is at full maturity. Between month 4 and month 10 it will grow its beige rough skin. Conditioning ● Rinse rhizomes. ● Cut roots with scissors or cutters. ● Cut rhizomes to the size needed and rinse again until no more soil is left. ● Leaves can be sold with the rhizomes or cut off. marketgardenerinstitute.com 5 Baby Ginger ● 1 person should package 44 lbs (20 kg) of ginger per hour. Storing ● Harvest the day of your market/delivery or a day before. Store ginger inside a plastic bag placed in a closed container at a temperature around",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

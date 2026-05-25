@@ -28,12 +28,13 @@ def test_alias_spot_check_five_samples(jmf_crop_map):
 
 
 def test_alias_entry_count_grew_by_34(jmf_crop_map):
-    """patch01: total entry count is exactly 86 (52 baseline + 34 aliases)."""
+    """patch01+patch04: total entry count is exactly 87 (52 baseline + 34 aliases + 1 Ginger)."""
     baseline = 52
     added = 34
-    expected_total = baseline + added
+    patch04 = 1  # Ginger (DECISION §2.5)
+    expected_total = baseline + added + patch04
     assert len(jmf_crop_map) == expected_total, (
-        f"Expected {expected_total} entries (baseline {baseline} + {added} aliases), "
+        f"Expected {expected_total} entries (baseline {baseline} + {added} aliases + {patch04} Ginger), "
         f"got {len(jmf_crop_map)}"
     )
 

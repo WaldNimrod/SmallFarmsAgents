@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Eggplant",
+  "crop_name_he": "חציל",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "064-uao.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.647344+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Eggplant (field) | → Fairy Tale → Nadia → Orient Express → Orient Charm → Hansel → 1 rows per bed spaced every 18’’ (45 cm) on the row. → Eggplants are heavy feeders that stay in the garden for 100 + day . We front-load the total amount of fertility requirement at the initial bed prep stage and do not top dressed them afterwards. → Apply lots of compost, +/- 1.5 inch (7 cm) all across the bed along with a dose of nitrogen-rich organic fertilizers like pelleted chicken manure (5-3-2) and alfalfa meal (2-0-2). Also, add potassium sulfate (0-0-50) and organic Sul-Po-Mag (0-0-22) | → Start transplants 7-8 weeks before transplantation date. Sow seeds in 128 cell flats in seed-starting soil mix. 1 seed per cell. → Place trays on heating mats and maintain floor temperature at 80 °F (27 °C) until emergence. → After emergence, maintain the ambient temperature in the nursery around 75°F (24 °C) during the day and 65°F (18 °C) at night. The soil-mix must be kept moist at all times. → Pot-up in 4’’ (10cm) pots 3 weeks after sowing. → Plants are ready to transplant when the seedlings are about 7–8 weeks old they should be 10–12” (25-30 cm) tall. Ideally, they will have some flowers that are open or ready to open. → Harden off plants by exposing them to outside temperatures and reducing water for 4-5 days before transplanting Eggplants are planted once a year and like bell peppers and field tomatoes are heat-loving crops that like to be grown under cover (tunnels, caterpillars). → Rotary harrow → Broadfork → 30” bed prep rake → Landscape fabric, staples, drip tape and fittings. → 4’ (1.2M) steel bars (cement rods); 1 stake every 3 plants. → Before transplanting, make sure minimum soil temperature is above 60°F (16°C ), 20°C is optimal. → Pass through with the broadfork. → Remove large debris from the bed if needed (use flail mower, rake or manually remove the large chunks). → Apply compost and amendments in the middle of the bed and pass with the rotary harrow at a depth of 2....",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) : Under plastic mulch. → No sprinkler to keep foliage dry and thus prevent diseases. | → Root depth: Medium (24”-40”) → General: Constant and even moisture from flower through fruit. Eggplants like to dry down before being watered again. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Onions",
+  "crop_name_he": "בצל",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "047-document-047.md",
+    "pages": "8",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.645782+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Onions Fresh and Storage Onions Onions are an excellent complement to your vegetable offering. We sow a lot of them at the beginning of the season, mainly to make bunches of fresh onions. These onions do not last as long as storage onions, but you will get a better price. In addition, there is a great demand for them and consumers love them. If you wish to sell during the cold season, don't hesitate to reserve a portion of your production plan for storage onions. Family ● Amaryllidaceae Cultivars - Fresh ● Eclipse ● Purplette ● Sierra Blanca ● Red long of Tropea ● Ailsa Craig ● Bianca Di Maggio Cultivars - Storage ● Redwing ● Talon ● Rossa Di Milano ● Red Carpet ● Cortland | Fresh Onions Fresh onions are one of the most profitable crops to grow. Always popular at the market, the trick is to extend the harvest window the most you can. marketgardenerinstitute.com 1 Onions Any planting program needs to factor in the fact that onions are photoperiodic plants. This means that their stages of growth evolve with day length. To factor this in, we plan two generations transplants of fresh onions per season. In the spring, we transplant these generations two weeks apart. This allows us to spread out our harvest later in the season and have a constant supply of fresh onions. Another trick to increase this constancy in our supply of fresh onions is to include cultivars with different days to maturity in each generation. This allows for a more evenly spread out harvest. Storage Onions Plan for one transplant of storage onions. Transplant as soon as the soil is ready in the spring. This timing is important as onions need the short days of spring to complete their vegetative growth before starting their bulb development in the long days of summer. | ● +/- 45 days before the transplantation date, sow 3-4 seeds per cell in 128 plug flats. To speed up this process, the vacuum seeder can be used. ● Place trays on heating mats and maintain soil temperature at 80 °F (27 °C) until eme...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "● Drip tapes (4 per bed) or sprinkler, although overhead irrigation can increase foliar diseases. | ● Root depth: Shallow (6-24 in or 15-60 cm) ● General: Steady supply of moisture; if too dry, onions develop a strong unpleasant flavor. Avoid water on leaves to minimize downy mildew. ● Storage onions : stop irrigating the onions when the first leaves start to fall, indicating the start of maturation. marketgardenerinstitute.com 3 Onions Implantation Equipment ● Fertilization and amendments ● Power harrow ● 30 in (75 cm) bed prep rake ● Plug popper ● Dibbler (or marking tubes for the bed prep rake) ● Irrigation equipment ● Insect netting and flexible hoops (optional) Itinerary ● To facilitate the transplantation, we prepare each bed just before the implantation (since the ground is quite soft after having been harrowed). ● Remove the tarp and if there is a lot of large debris, use the rake quickly to clean each bed. ● Uniformly apply fertilization and compost on each bed and pass with the power harrow at a depth of 2 in (5 cm). ● Mark the spacing by running a dibbler over each bed. ● Bring the well-irrigated cell trays close to the bed and use the plug popper to remove the seedlings from their cells. Since this crop is not very sensitive to transplanting, rely on speed rather than perfection in the planting process. Just make sure the top of the plug is leveled with the soil. ● 1 person will drop the seedling while 2 others transplant the plants as fast as possible. 3 people/100 ft (30 m) bed is a good ratio for efficient workflow. ● Install irrigation and water until the soil is deeply moistened. marketgardenerinstitute.com 4 Onions ● If you have a history of damages caused by onion flies, install hoops every 5 ft (1.5 m) and cover the crop with an anti-insect net. Place sandbags on every hoop to stabilize the net. Weeding ● Unlike other crops grown with close spacings, onions do not create a good canopy and can’t outcompete weeds very well. For this reason, plan...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "harvest_marker": [
+      {
+        "body_text": "Fresh Onions ● Fresh onions are harvested with their tops on and bunched in the fields in a kneeled position. ● Fresh onions are picked when their size is between 1-2 in (2.5–5 cm). Bottoms should be white (or red), without any dead leaves—make sure to strip off any leaves that are crushed, or have signs of rip damage. ● Make bunches of +/- 7-8 onions and tie them with a rubber band. Cut the tip of the leaves with a knife to allow the bunches to be stacked in the storage bins. ● 1 person should be able to harvest at least 60 bunches/hour Storage Onions ● Storage onions are harvested when their tops start to die off and fold onto themselves. ● Choose a sunny day to harvest; the onions need to be dry at harvest time in order to cure well afterwards. ● Place the onions delicately in the harvest bins to avoid any bruises on the bulbs. marketgardenerinstitute.com 6 Onions Conditioning Fresh Onions ● Upon arriving from the fields, the bins are transferred from the cart and placed to the left of the sinks. ● A couple of bunches are placed side by side with the roots facing the operator. The operator sprays the soil off with the pressure gun. Pile the clean bunches to the right and repeat. ● Once the clean pile of onions has reached a certain height, place the onions in a storage bin and identify the bin. ● 1 person should be able to package at least 100 bunches per hour. Storage Onions ● Cure storage onions in the nursery for 2-3 weeks. Place all the onions on the tables in a single layer. Place fans below the tables to increase air circulation. ● Note that a room with temperature, humidity and air circulation control can also be used for this purpose. ● The curing process is done when the collars are completely dry. At that stage, all stems can be cut off. ● Place the bulbs in either mesh bags or cardboard boxes. ● Make sure to discard all onions that are not completely dried or that are damaged. ● Avoid removing any peel at that stage. Onions can be stored longer with...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

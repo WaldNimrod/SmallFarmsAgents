@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Greenhouse Libanese Cucumber",
+  "crop_name_he": "מלפפון חממה",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "067-nno-uo.md",
+    "pages": "17",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.647930+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Greenhouse Cucumbers | → Kalunga ( English ) → Katrina ( Lebanese ) → English  : 1 row per bed spaced every 18” ( 45 cm ) on the row. → Lebanese  : 1 row per bed spaced every 12” ( 30 cm ) on the row. → These are parthenocarpic varieties ( meaning they don’t need to be pollinated ) planted on 30’’ beds ( 75 cm ) with 12’’ ( 30 cm ) pathways and trellised in a modified umbrella style. Final density for English cukes is 2.2 plants/m2. For Lebanese cukes, the final density is 3 plants/m2. SEE DENSITY APPENDIX FOR EXPLANATIONS. → Bi-monthly application of compost ( 2-1-1 ), alfalfa meal ( 2-0-2 ), feather meal ( 11-0-0 ) Sul-Po-Mag ( 0-0-22 ), chicken manure ( 5-3-2 ) and potassium sulfate | → Perform an EC ( electrical conductivity ) test every 2 weeks to monitor the progression of the fertilization. The EC will determine whether we need to fertilize or not. → We fertilize once on the one side of the row, then once on the other side, 2 weeks later. The EC test is to be conducted, before fertilization, on the side that is meant to be fertilized that week. 1 | them in the trays. Note that cucumber generations started in hot and sunny parts of the summer could only need 21 days in the nursery to be transplant-ready. → Use the best available organic potting mix ( ideally one inoculated with mycorrhizae ). For preventive measure against pythium damage at transplant, we inoculate the soil mix with Rootshield. An organic biological fungicide that prevents a broad spectrum of root diseases. → Soil must be kept moist at all times and humidity must be constant. Use a mist nozzle for gentle watering. → After emergence, maintain the ambient temperature at 64-66 °F ( 18-19°C ), day and night. Favor a soft-flow watering nozzle that won't damage your plants ( 400 perforations ). It is important to let the soil dry between waterings in order to prevent moisture problems. Do not water after 2 pm ( spring ) and 4 pm ( summer ). → Seedlings will be ready for transplant when the plants...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape ( 4 per bed ) - under plastic mulch. | → Root depth : Shallow ( 6”-24” ) to Medium ( 24”-40” ) → General : Sensitive to disturbance. Needs consistently moist soil. Lack of water when fruits are developing will cut down on production. Favor drip irrigation and avoid overhead watering since cukes are susceptible to fungal disease, which spreads through wet leaves. Cucumber plants require lots of water when in full production during the summer : 3 to 4 litres per plant per day. The exact amount will depend on the stage of growth and outside temperatures. Generally, the 9am to 2pm rule should be followed : → Schedule 1 to 5 irrigation cycles per day. These cycles should be done between 9am and 2pm. Start irrigation 2 to 3 hours after sunrise ( giving the plants time to get active ) and stop irrigation 5 to 6 hours before sunset ( avoiding too much water in the rootzone at night ). We also program 3 irrigation schedules on the timer. The frequency of watering cycles will depend on outside temperatures; Sunny : 3 to 5 cycles per day Partially sunny : 2 to 3 per cycles day Cloudy : 1 to 2 cycles per day To manage this, we use a watering clock with different start times and schedules. The irrigation is adjusted each morning according to sunrise and sunset times and weather. It takes only a few seconds per day to adjust the water clock. The length of each irrigation pulse has to be adjusted to ensure that the plants are getting the right amount of water. A good way to test this is to sample soil in the greenhouse at the end of the day and first thing the next morning - take a handful of soil at each point, and judge the moisture content. Both should feel about the same. → Greenhouse cucumbers are started in 6’’ ( 15 cm ) pots staying ±28 days in a heated nursery. We favor round pots which won’t allow the plants to fall over when moving 2",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "pest_disease": [
+      {
+        "body_text": "15 APPENDIX 5 – Greenhouse Cucumbers | 16 APPENDIX 5 – Greenhouse Cucumbers",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

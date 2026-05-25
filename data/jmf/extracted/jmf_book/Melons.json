@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Melons",
+  "crop_name_he": "מלון",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "068-document-068.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.648046+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Melons | → Savor (charentais) → Escorial (cahrentais) → Halona (cantaloupe) → Athena (cantaloupe) → Sugar baby (watermelon) → 1 row per bed every 30” (75 cm) on the row → Melons do well in beds amended with lots of compost, fresh or aged. The rule of thumb is to spread 1 inch (5 cm) in the middle of the bed. Since it’s a single row crop, there’s no need to apply the compost on the whole width of the bed. → When planting in beds where compost was applied in the previous crops, we only supplement with a mixture of alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2). | → 2 weeks before transplantation date, sow 1 seed per cells in 72 plug flats. Seeds should be about 1/4” (5mm) deep in the cell. → Place trays on heating mats and maintain soil temperature at 86 °F (30 °C) until emergence. At that time, the potting-mix must be kept moist at all times. → After emergence, the ambient temperature in the nursery can at set be kept around 75°F (24 °C) during the day and 65°F (18 °C) at night. → 4 days before transplanting, harden off plants by exposing them to outside temperatures and reducing water. We plan for only 1 melon seeding of both charentais, cantaloupe and watermelon. For all of these, we stager our succession (to avoid bumper crops) by planting 2 varieties with different DTM one early followed by another one better tasting. → Rotary harrow → Broadfork → 30” bed prep rake → Declumping tray → Landscape fabric, staples, drip tape and fittings. → Pass through with the broadfork. → Remove large debris from the bed if needed (use flail mower, rake or manually remove the large chunks). → Apply compost and-or amendments in the middle of the bed and pass with the rotary harrow at a depth of 2.5” (6 cm). Since the bed is covered with landscape fabric, it needs not to be clean up with another pass of the rake. → Install 4 lines of drip tape per bed and start the system. Fix leaks at that point, if any. → Lay down landscape fabric and secured with staples each second ...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) : under plastic mulch. → No sprinkler to keep foliage dry and thus prevent diseases. | → Root depth: Medium (24”-40”) → General: Rapid growth and ongoing fruit production requires frequent deep water. Critical to water consistently at flowering and fruit development stage. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

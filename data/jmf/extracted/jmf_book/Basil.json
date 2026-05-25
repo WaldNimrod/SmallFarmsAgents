@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Basil",
+  "crop_name_he": "בזיליקום",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "054-document-054.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.646621+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Basil → Genovese → Everleaf → 4 rows per bed, spaced every 12” (30 cm) on the row → Basil will stay a long time in the ground and therefore is amended with lots of compost, whether fresh or aged. The rule of thumb is to spread it ±1 inch (2,5 cm) across the entire bed. When the conditions of biological activity are not optimal (e.g., in cold or poor soils), add extra amendments of organic fertilizers like alfalfa meal (2-0-2) and/or pelleted chicken manure (5-3-2). | → We plan for 3 basil planting in the season and intend to harvest the plants over 6 to 8 weeks. This ensures a continuous supply of new leaves to be harvested every week. Basil is usually planted inside a hoop house or tunnel in order to prevent mildew diseases and extend the growing period. 4 weeks before transplantation date, sow 1 seed per cells in 128 plug flats. Seeds should be about 1/4” (5mm) deep in the cell. → Place trays on heating mats and maintain soil temperature at 70 °F (21 °C) until emergence. At that time, the potting-mix must be kept moist at all times. → After emergence, the ambient temperature in the nursery can be kept around 75 °F (24 °C) during the day and 65 °F (18 °C) at night. → Transplants are ready to go in the fields when seedlings have 3-4 sets of leaves. → 4 days before transplanting, harden off plants by exposing them to outside temperatures and reducing water. → Rotary harrow → Broadfork → 30” bed prep rake → Popping tray → Landscape fabric, staples, drip tape and fittings. → Pass through beds with the broadfork. → Remove large debris from the bed if needed (use a flail mower or rake). → Apply compost and/or amendments across the bed and pass with the rotary harrow at a depth of 2.5” (6 cm). Since the bed is covered with landscape fabric, it doesn’t need to be cleaned up with another pass of the rake. → Set out drip tapes, 4 lines per bed and start the system. Fix any leaks you may find at that point. 2 → Lay down landscape fabric and secure it with landscape staples...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) : under plastic mulch. | → Root depth: Medium (24”-40”) → General: Average water needs, except during warm weather when more water is required to prevent wilting. Regular moisture throughout the growing season helps to ensure a good crop. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

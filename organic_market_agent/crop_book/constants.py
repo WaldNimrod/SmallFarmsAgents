@@ -252,6 +252,9 @@ JMF_CROP_MAP: dict[str, str] = {
     "Dill":               "שמיר",
     "Fennel":             "שומר",
     "Parsley":            "פטרוזיליה",
+    # ─── BEGIN patch04 single-baseline addition (2026-05-25) ───
+    "Ginger":             "ג'ינג'ר",   # team_00 DECISION_WP-B1-patch04-patch06 §2.5: Baby Ginger from MasterClass sheet 050. Cultivars (Baby variant) → crop_varieties.
+    # ─── END patch04 single-baseline addition ───
 
     # ─── BEGIN patch01 alias additions (2026-05-25) ───
     # Maps farm-specific JMF MasterClass workbook variants to the same
@@ -317,7 +320,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Eggplant  (Feld)":             "חציל",         # workbook literal: double space + (Feld) field qualifier. See §4 AC-04.1 rationale for why this is a literal alias rather than a parser change.
     # ─── END patch01 alias additions ───
 }
-# Total: 86 entries (52 baseline + 34 patch01 aliases). Maintenance rule: when a new JMF MasterClass edition
+# Total: 87 entries (52 baseline + 34 patch01 aliases + 1 patch04 Ginger). Maintenance rule: when a new JMF MasterClass edition
 # adds or renames a crop, append/edit an entry here only — never branch on
 # JMF names elsewhere in the codebase. On runtime miss (JMF row whose
 # English label is not a key), the importer logs WARN with the unmapped

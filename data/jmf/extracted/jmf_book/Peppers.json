@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Peppers",
+  "crop_name_he": "פלפל",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "059-nn-uo.md",
+    "pages": "13",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.647200+00:00"
+  },
+  "cultivars": [
+    "●",
+    "Carmen",
+    "●",
+    "Ace",
+    "●",
+    "Sprinter",
+    "●",
+    "Escamillo"
+  ],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Greenhouse Peppers Greenhouse Peppers Greenhouse peppers are a technically challenging crop to grow. After gaining skill with greenhouse tomatoes and cucumbers it’s a next step into greenhouse production. The techniques listed here only concern heated greenhouse production. The added labor cost of pruning and trellising pepper plants is only worth it in a context of increased yields made possible by a controlled climate. In order to succeed in this production, sources of stress for the plant should be minimized at all levels (climate, irrigation, etc). A stressed pepper plant will be stunted and will have very low yields. This goal must be kept in mind at every step of the production. Family ● Solanaceae | We plan for only one generation of greenhouse peppers per year. If successful, this generation remains productive for 6 months or more. Splitting this production over two generations is more labor intensive and does not generate more yields, so we limit ourselves to one. themarketgardener.com 1 Greenhouse Peppers We seed the greenhouse peppers in January and plan to transplant them at the same time as the greenhouse tomatoes. Harvest will go on throughout the summer and early fall. We remove the plants late fall when their productivity declines and their yields no longer justify the heating costs associated with this production. Most often, the greenhouse bed space is replaced with frost hardy crops grown during the winter months. | ● Start seeds in the nursery 8 to 10 weeks before the transplant. Sow seeds in 128 cell flats in low fertility soil mix. 1 seed per cell. ● Place trays on heating mats and maintain floor temperature at 80 °F (27 °C) until emergence. A plastic dome can be used to help retain heat and humidity. Remove the dome after emergence. ● Remove the trays from the heating mats and maintain nursery temperature between 70 and 75 °F (21-24 °C) during the day and 68-70 °F (20-21 °C) at night. The soil-mix must be kept moist at all times. ● Pot-up i...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "cultivar_recommendation": [
+      {
+        "body_text": "● Carmen ● Ace ● Sprinter ● Escamillo",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "● Drip tapes (4 per bed) : Under black & white tarp (white side up). themarketgardener.com 3 Greenhouse Peppers | ● Root depth: Medium (24-40 in or 61-101 cm) ● General information: Constant and even moisture from flower through fruit. Peppers like to dry down before being watered again. ● In hot conditions, imbalances of moisture may lead to blossom end rot. To mitigate, frequent deep water is critical. ● Exact amount of water given should be continuously adjusted throughout the season depending on the amount of light received, temperatures and stage of growth. These guidelines should be followed at all time : ○ Schedule 1 to 6 irrigation cycles per day. These cycles should be done between 9 AM and 2 PM. The general guideline to follow is to start irrigation 2 to 3 hours after sunrise (giving the plants time to get active) and stop irrigation 5 to 6 hours before sunset (avoiding too much water in the rootzone at night). ○ The 9 AM to 2 PM rule can be adjusted, as long as it follows those principles. ○ We program 3 irrigation schedules on the timer: one each for sunny, partially sunny and cloudy days. Outside conditions necessitate different watering cycles in the greenhouse : 3 to 6 per day when sunny, 2 to 3 per day when partially sunny and 1 to 2 per day when cloudy. To manage this, we use a watering clock with different start times and schedules. The irrigation is adjusted each morning according to sunrise and sunset times and weather. It takes only a few seconds a day to adjust the water clock. ● The length of each irrigation pulse has to be adjusted to ensure that the plants are getting the right amount of water. A good way to test this is to sample soil in the greenhouse at the end of the day and first themarketgardener.com 4 Greenhouse Peppers thing the next morning—take a handful of soil at each point, and judge the moisture content. Both should feel about the same. Implantation Equipment ● Shovel ●",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "harvest_marker": [
+      {
+        "body_text": "The first fruit will be ready to harvest when the plant has set approximately 5 fruits/head. A first harvest can be anticipated 2 to 2.5 months after transplant, depending on temperatures and light. Harvest is done twice a week using a pruner and a tree planting bag. It is preferable to cut the fruit peduncle close to the stem in order to avoid creating an entryway for diseases. Peppers are ready to harvest when they are firm, large and 80% and + rippen (ie. fully colored). They will reach full color in storage or at the client's house. This harvesting technique ensures a longer shelf life. Only peppers that are free of blemishes are harvested. The rest are picked and discarded in the pathways. It is important to take the time to remove those bad peppers since they act as energy sinks on the plants. Note that fruits with blossom end rot are an exception at the beginning of the season. They must be left on the plants until those have reached a full fruit load. This technique ensures that the blossom end rot does not spread to the other fruits on the plant. From that point going forward, the best practice is to remove any pepper with blossom end rot immediately. themarketgardener.com 10 Greenhouse Peppers Conditioning ● Peppers are not washed but must be wiped clean if dirty. ● In the event of an important aphid or white flies infestation, peppers can be washed in the bubbler to get all the honeydew and fumagine off the fruits. Storing ● Peppers are stored in a cold room kept at +/- 54 °F (12 °C) and should not be stored for more than 4 days before being sold. themarketgardener.com 11 Greenhouse Peppers Appendix 1: Calculating plant density When growing peppers with more than one leader (head), it’s misleading to understand density only in terms of in-row spacing. In greenhouse production language, density is measured by calculating the surface area that is planted and multiplying it by a density target, measured in square meters. (1 m = 3.2 ft). Common density tar...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

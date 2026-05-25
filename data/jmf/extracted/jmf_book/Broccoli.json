@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Broccoli",
+  "crop_name_he": "ברוקולי",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "049-oooo.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.645969+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Broccoli | → Batavia → Marathon → Imperial (summer) → 2 rows per bed spaced every 18” (45 cm) on the row → Broccoli, cabbage and cauliflowers are all heavy feeders that require lots of compost, +/-1 inch (5 cm) all across the bed. In rich soils, compost can be replaced with a buried cover crop of leguminous nature, but in both cases, we add nitrogen-rich organic fertilizers like pelleted chicken manure (5-3-2) to help the plant quickly develops its canopy. → A second boost of nitrogen is added to the crop +/- 14 days after the transplant by amending the soil with blood or alfalfa meal. | For weekly supply throughout the growing season, we plant 2 different cultivars every 15 days. Each of these cultivars has a different DTM (days to maturity) which stagger the harvest window. We plant them with other heavy feeding crucifers like cauliflowers, cabbages and kohlrabi, all crops which spend +/- 60 days in the field. For summer plantings, plan for heat tolerant cultivars. → Rotary harrow → Broadfork → 30” bed prep rake + marking tubes → Declumping tray → Anti-insect net and hoops → Remove tarp and-or clean large debris. Use the rake if needed.* → Uniformly apply compost and amendments and pass with the rotary harrow at a depth of 2” (5 cm). To make transplanting easier (seeing as the soil is loose after being harrowed), we only prepare the beds when we are about to transplant. → Using the bed prep rake and 2 tubes, mark the rows both lengthways and sideways. Bring the well-watered trays. → Using the declumping tray to facilitate clump extraction, 1 person will drop the seedling while 2 others transplants the plants as fast as possible. 3 people/100’bed is good ratio for efficient workflow. → Bury the seedling all the way to where the leaves start to branch out. → Install the hoops every 5’ (1.5 m) and cover the crops with the anti-insect net. Set sand bags on every hoop. → Water the bed thoroughly the first time, keeping the soil moist for the first week after the tra...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape or sprinkler | → Root depth: Shallow (6”-24”) → Critical period: Head development. → General: Commercial growers use 1-1-1/2” per week. Extra water during crown will add bulk to the harvest. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

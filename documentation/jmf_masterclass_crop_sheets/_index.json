@@ -145,8 +145,10 @@
     "hebrew_name": "גינגר-220126-113229",
     "pdf_title": "FT_editable_Bébé-gingembre_eng",
     "md_size": 8440,
-    "english_keys": [],
-    "status": "NEW_CROP_OR_VARIANT"
+    "english_keys": [
+      "Ginger"
+    ],
+    "status": "MATCHED_PATCH04"
   },
   {
     "md": "051-ooo-ooi-uio.md",

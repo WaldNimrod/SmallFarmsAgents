@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Lettuce",
+  "crop_name_he": "חסה",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "066-uio-e-oy.md",
+    "pages": "3",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.647505+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Sucrine (Little gem mini Lettuce) | → Dragoon → Bambi → Winter Density → 4 rows (8”-20 cm) per bed spaced every 6” (15 cm) on the row → Sucrine will do great in beds that were previously amended with compost and fertilized with a mix of alfalfa meal (2-0-2) and pelleted chicken manure (5-3-2). | → Rotary harrow → 30” bed prep rake → Popping tray and marking roller → Remove tarp and clean out large debris. Use the rake if needed.* → Uniformly apply amendments and pass with the rotary harrow at a depth of 2” (5 cm). To make transplanting easier (seeing as the soil is loose after being harrowed), we only prepare the beds when we are about to transplant. → Pass with the dibbler-roller to mark the planting holes and bring out the well-watered trays. → Once the beds are ready, 1 person will drop the seedlings while 2 others transplant as fast as possible. Sucrine seedlings are very hardy and don’t need special care. 3 people/100’ bed is a good ratio for efficient workflow. → Install irrigation and water the soil until it is deeply moistened. * If the previous crop is too well established, or if the bed is too messy, mow the crop as low as possible and harrow at a depth of 2” (5 cm). Add 1’’ (2.5 cm) of compost evenly spread on the whole width of the bed and transplant into compost following a no-till strategy. → Sucrines are cultivated using the flex tine weeder 10 to 12 days after implantation when the weeds are at the filament/cotyledon stage. In weedy beds, a second pass should be planned 7 days later. → Slugs and aphids are sometimes present, but rarely enough to justify an intervention. 2 → Sucrines are harvested in the fields in a kneeling position. → Harvesting is done using a VERY sharp knife. Sharpen your blades before each harvest; this will help reduce potential oxidation (browning or discolouration) on the cut surface. For the same reason, do not use carbon or rusted blades for that same reason. Kneeling in the pathway, 1 person harvests 2 rows at a time, p...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) or sprinkler | → Root depth: Shallow (6”-24”) → General: Water consistently for succulent growth and to avoid bitter taste. Sucrine is a good crop to grow for restaurants or other sales outlets where deliveries can be expected weekly over a long period of the year. They are somewhat frost tolerant, chic and generate great yields per square foot. We plant sucrine every 2 weeks to ensure a constant supply throughout our growing season. For every seeding, we plan enough beds for an estimated 2 weeks of harvest. In our planting program, sucrine is grouped with green onions, chicory, mini-fennel and head lettuce  —  all crops that stay in the fields +/- 50 days and that have similar crop requirements. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Garlic",
+  "crop_name_he": "שום",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "071-document-071.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.648240+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Garlic | → Music → Siberian → 3 rows (5”-12 cm) per bed spaced every 5.5” (14 cm) on the row → Garlic is a crop worth amending with lots of compost, +/-1 inch (5 cm) all across thebed. When planting garlic in the fall, it’s important to protect the soil with straw in order to avoid fertility leaching over the winter. Alternatively mulch with hay mulch (without seeds which supplies nitrogen to garlic at double the rate of straw (but it breaks down much faster and should be applied in larger amounts). → Come springtime, add a foliar application of a rich organic fertilizer like fish emulsion (5-1-1) to help the plant quickly develop its canopy | → Rotary harrow → Broadfork → 30” bed prep rake and tubes → Garlic dibbler → Weed free straw, 4 bales per 100’ (30M) beds → First, separate cloves from the bulb. This should be done the day prior or the same day of the planting. Make sure to discard anything that is too small, rotten or black. The largest cloves will make the largest bulbs. → Prepare seed beds by first passing through with the broadfork. → Uniformly apply compost and pass with the rotary harrow at a depth of 2” (5 cm). To make seeding the garlic cloves easier (seeing as the soil is loose after being harrowed), we only prepare the beds that will be seeded that day. → Mark the 3 rows using the bed prep rake and the spacings on the rows using the garlic planter. Make sure that all holes are +/- 2.5 “ (6 cm) deep. → 2 people work face to face planting the cloves while moving up the aisle. Push the clove, root end down, all the way into the planting holes. The tops of the cloves are pointing up. → Rake over with the back of the rake and cover the beds of at least 6” (15 cm) of straw mulch. → Keep the growing area free of weeds by hand weeding once or twice. Garlic does not compete well with weeds, hence the importance of putting down enough straw to inhib it weed growth in the first place. → Make sure to always use straw (or hay) that is weed free. First cut rye...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per bed) or sprinkler | → Root depth: Shallow (6”-24”) → General: Likes steady supply of water. Stop watering several weeks before harvest to reduce succulence and therefore reduce rot during drying. Critical to water during bulb enlargement. We grow fall garlic and plant from the first fall frost date until as late as November. The objective is that the plant develops good roots, but no top growth before freezing temperatures set in. Compared to spring planting, this method produces larger bulb size. 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_masterclass",
+  "crop_jmf_en": "Carrots",
+  "crop_name_he": "גזר",
+  "is_internal_farm_use_only": true,
+  "provenance": {
+    "md_filename": "053-u-yo.md",
+    "pages": "4",
+    "extraction_model": "load_masterclass_sheets.py/v1.0",
+    "extracted_at": "2026-05-25T20:10:40.646519+00:00"
+  },
+  "cultivars": [],
+  "notes": {
+    "growing_tip": [
+      {
+        "body_text": "Fresh Carrots | → Napoli → Adelaide (early) → 6 rows (5”-12 cm) per bed spaced every 2” (5 cm) on the row → Size 1.8–2.0: JANG 3X seeder: X-24, 11 F-13B, brush “0”, ≠ → Alfalfa meal (2-0-2) or chicken manure (5-3-2) in a bed where the previous crop was amended with compost. | → Broadfork → Rotary harrow → Jang seeder 3X + X-24 rollers, scale, notepad and seeds → 30” rake → Flame weeder Pre-emergent flame weeding (when beds are available 7 to 10 days before the seeding date). Pass through beds with the broadfork. → Remove large debris from the bed, if needed (use flail mower, rake or manually remove the large chunks). → Uniformly apply the alfalfa meal (2-0-2) and pass with the rotary harrow at a depth of 1” (2.5 cm). → Rake one last time, removing small rocks and debris. The bed must be completely clean. → Cover the beds with floating row cover to promote the growth of weeds. → Install sprinklers and keep beds well moistened at all time. → 7 days later, seed using the Jang 3X. Check seeding density by measuring the weight of seeds distributed. → Place a handful of beet seeds (as an indicator) at the end of one of the beds and identify with a flag. The beets are the control plants which will indicate when to flame weeds (under the same conditions, beets always germinate before the carrots). Set an alarm or reminder to yourself to check daily, after the 8th day, to see if the beets have emerged. For the seeding to be successful, it is crucial not to miss this indicator. → As soon as the indicator seeds germinate, flame weed the beds. Adjust the flame weeder to full throttle and move forward slowly and evenly. Your carrots will now have a important head start on any weeds. 2 2 Seeding on compost (when beds are not available 7-10 days before seeding). Pass through beds with the broad fork → Remove large debris from the bed if needed (use flail mower, rake or manually remove the large chunks). → Pass the rotary harrow at a 1” (2.5 cm) depth. If there still is debris l...",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ],
+    "irrigation": [
+      {
+        "body_text": "→ Drip tape (4 per beds) or sprinkler | → Root depth: Medium (24”-40”) → Need deep watering until later stages of root development, at which time excess water can cause roots to crack. Cracking is also caused by too great a fluctuation between wet and dry. Generally, we seed 2 weeks worth of carrots every 1 weeks to ensure a continuous supply of freshly harvested carrots. Every time we seed, we prepare next week’s beds in order to force weeds, according to our pre-emergence flame weeding strategy. Our spacing (6 rows, 2’ on the row) means that all the carrots are ready more or less at once. They are then graded in the fields and the bed is cropped out and replanted faster. 1 1",
+        "page_ref": null,
+        "confidence": "high",
+        "is_internal_farm_use_only": true
+      }
+    ]
+  }
+}
