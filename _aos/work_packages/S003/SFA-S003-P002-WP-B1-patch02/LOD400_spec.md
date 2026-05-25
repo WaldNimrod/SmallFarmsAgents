@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400 — implementation spec)
 status: PRE_LOD400_LOCK — awaiting team_190 L-GATE_S verdict
 author: team_110 (execution mandate per ADR045)
 date: 2026-05-25
-version: v1.0.0
+version: v1.0.1
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-B1-patch02/LOD200_spec.md
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B-OPEN-QUESTIONS_2026-05-25_v1.0.0.md
 parent_wp_b1_patch01_lock_commit: "3e1f946"
@@ -133,13 +133,19 @@ def test_shallots_value_post_patch02():
     )
 ```
 
-### 3.4 AC-03 Counter assertion — UNCHANGED
+### 3.4 AC-03 duplicate-target allowlist — UNCHANGED (25 groups)
 
-The existing AC-03 Counter assertion (test_ac03_*) in `test_jmf_crop_map.py` checks the 2 by-design duplicate pairs:
-- `"תערובת סלט": ["Mesclun", "Salad Mix"]`
-- `"קישוא": ["Summer Squash", "Zucchini"]`
+The existing duplicate-target regression coverage in `tests/crop_book/test_jmf_crop_map.py` consists of two tests that MUST remain unmodified:
 
-Parsnips and Shallots are NOT in any duplicate-target group (each has a unique Hebrew value before AND after this patch). The Counter assertion remains correct without modification. AC-04 in §4 of this spec verifies this.
+1. **`test_jmf_crop_map_duplicate_target_allowlist`** (line ~37) — asserts the exact 25-group dict of by-design Hebrew-target duplicates as established at patch01 LOD400 v1.0.3 §4 AC-03 (2 WP-B1 baseline pairs + 23 patch01-introduced groups).
+2. **`test_ac03_duplicate_group_count`** (line ~142) — asserts `len(duplicate_groups) == 25`.
+
+**Parsnips** (`גזר לבן` → `שורש פטרוזילה`) and **Shallots** (`שאלוט` → `בצלצלי שאלוט`) have unique Hebrew values in BOTH the pre-patch02 AND post-patch02 maps. Neither old nor new value collides with any existing entry. Therefore:
+- No new duplicate group is introduced.
+- No existing duplicate group changes membership.
+- Both AC-03 tests continue to pass without modification.
+
+AC-04 in §4 of this spec verifies this 25-group baseline is preserved.
 
 ### 3.5 CHANGELOG.md — `[Unreleased]` entry
 
@@ -166,13 +172,8 @@ Append under `[Unreleased]` section:
 **AC-03 — Tomatillos unchanged (confirmed as-is).**
 `JMF_CROP_MAP["Tomatillos"] == "תומאטיו"` (the patch01 value). No change introduced by this patch.
 
-**AC-04 — AC-03 Counter assertion regression — STILL PASSES unchanged.**
-Running the existing `test_ac03_*` test (from patch01) yields the same duplicate-target dict as before:
-```python
-{"תערובת סלט": ["Mesclun", "Salad Mix"],
- "קישוא": ["Summer Squash", "Zucchini"]}
-```
-Parsnips and Shallots do NOT introduce new duplicates (each Hebrew value remains unique across the dict).
+**AC-04 — AC-03 duplicate-target allowlist (25 groups) — STILL PASSES unchanged.**
+Running the existing `test_jmf_crop_map_duplicate_target_allowlist` AND `test_ac03_duplicate_group_count` tests (both from patch01 LOD400 v1.0.3 §4 AC-03) yields the SAME 25-group duplicate-target dict as the post-patch01 LOCKED baseline — no membership changes, no new groups, count stays at 25. Parsnips and Shallots remain OUTSIDE all duplicate groups before AND after this patch (each Hebrew value is unique across the dict in both states).
 
 **AC-05 — `JMF_CROP_MAP` size unchanged.**
 `len(JMF_CROP_MAP) == 86` (same as post-patch01).
@@ -281,4 +282,5 @@ See §2.2 + §9. Effectively ALL files except the 3 in MODIFY.
 ---
 
 *LOD400 v1.0.0 — authored 2026-05-25 by team_110 (Claude Opus 4.7) under EXECUTION_MANDATE SFA-S003-P002-WP-B (ADR045, `execution_authority: full`).*
-*Pending: team_190 L-GATE_S validation.*
+*v1.0.1 (2026-05-25) — R2 correction per team_190 L-GATE_S R1 verdict F-S-PATCH02-01: §3.4 and AC-04 rewritten to reflect the actual post-patch01 25-group duplicate-target allowlist (was incorrectly described as the 2-pair WP-B1 baseline). Cite existing test names instead of restating the dict. No change to Hebrew values, builder rationale, or other ACs.*
+*Pending: team_190 L-GATE_S R2 validation.*
