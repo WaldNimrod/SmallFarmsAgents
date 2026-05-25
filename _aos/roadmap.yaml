@@ -1279,10 +1279,10 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch06
   label: "ספר גידולים: JMF_CROP_MAP cleanup (remove 22 cultivars + 5 typos)"
-  status: HELD_FOR_DEPENDENCY
+  status: IN_PROGRESS
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_BUILD
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: external
@@ -1319,6 +1319,39 @@ work_packages:
       PASS / 19 SKIP / 0 FAIL. Verdict commit 8ef4356.
       BUILD held until patch04 LOD500_LOCKED."
     validator: team_190
+  - gate: L-GATE_S
+    result: FAIL
+    date: "2026-05-25"
+    round: 3
+    notes: "team_190 (GPT-5.5) L-GATE_S R3. FAIL with 1 BLOCKER on
+      missing-scope: 2 of 7 superseded tests live in separate files
+      (test_jmf_live_workbook_coverage.py + test_jmf_seed_dry_run.py).
+      Verdict commit 6cc57a9."
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    round: 4
+    notes: "team_190 (GPT-5.5) L-GATE_S R4. PASS_WITH_FINDINGS (0 blockers).
+      §2.1 file list 4→6; §2.3+§3.4c+§8 split per-file. 1 ADVISORY on
+      §3.8+§5 stale prose — addressed inline by team_110 commit ec4b62e.
+      Verdict commit 554c88b."
+    validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-25"
+    notes: "team_10 (Sonnet sub-agent) — TWO commits. (1) Initial build
+      113b47d per v1.0.1: 27 removals + 3 LOCKED test updates + 3 new
+      regression tests + cleanup script. Counter probe 60/6/12 ✓; 15/15 ACs
+      PASS; but 7 non-LOCKED tests failed as expected consequence.
+      Builder correctly STOPPED at scope boundary. (2) Incremental cleanup
+      8920269 per v1.0.3 (post-R3+R4 amendments): 7 superseded functions
+      deleted across 3 files; test_jmf_live_workbook_coverage.py deleted
+      (file became empty). Final state: 350 passed + 1 pre-existing OOS
+      publisher. Sonnet session terminated by socket error AFTER commit
+      succeeded; team_110 authored BUILD_REPORT v1.0.1 stub post-hoc
+      with all probes re-verified independently."
+    validator: team_10
   notes: "WP-B1-patch06: Cleanup WP. Spec authored in parallel with patch04;
     BUILD sequenced after patch04. Final WP under team_110 EXECUTION_MANDATE
     extension — mandate naturally ends after patch06 LOD500_LOCKED."
