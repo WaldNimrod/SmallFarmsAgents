@@ -1069,11 +1069,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B3
   label: "ספר גידולים: Tend Israel Adaptation Overlay — Local Layer"
-  status: BUILDING
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B3/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-24"
@@ -1111,8 +1113,54 @@ work_packages:
       blocker: 0
       major: 0
       minor: 2     # F1 closed in v1.0.1; F2 lean-kit profile drift carried
-  notes: "WP-B3: Tend Israel adaptation overlay. OP tier (0.55) layers on PR
-    baseline. team_00 directive: templates only, no per-record harvest data.
-    Authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by team_10.
-    LOD200+LOD400 pending team_110."
+  - gate: L-GATE_B
+    result: BUILD_COMPLETE_PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_10 (sfa_build, Claude Sonnet 4.6 — sub-agent of team_110)
+      executed 10-step build sequence against spec at c4c0dac (v1.0.1).
+      9 build commits d18ed39..d5d1366. 52 new tests; 288 baseline; 340
+      total passing; 1 pre-existing publisher failure out-of-scope.
+      LOD500_LOCKED audit CLEAN on all 15 paths. GCR-B3-1 scope perfect:
+      crop_task_templates.py = +4 lines (6 enum entries + 2-line comment
+      header, 0 deletions). Migration 046 dialect-aware (Postgres ALTER
+      + SQLite batch_alter_table). validate_aos.sh: 29 PASS / 19 SKIP /
+      0 FAIL. BUILD_REPORT: BUILD_REPORT_v1.0.0.md. Operational open
+      item: live-Postgres `alembic upgrade 046` deferred to team_00
+      manual deployment (sub-agent sandbox classifier blocked live-DB
+      apply; SQLite tests covered all ACs)."
+    validator: team_10
+    builder_engine: Claude-Sonnet-4.6
+    build_commits: ["d18ed39", "8d105dc", "11e8af5", "4d11627", "fc86f7a", "d7301d3", "0b84d6b", "ce20208", "d5d1366"]
+    findings:
+      blocker: 0
+      major: 0
+      minor: 0
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) constitutional
+      validation. R1 PASS_WITH_FINDINGS against build head d5d1366
+      (spec c4c0dac v1.0.1). 20 VVs PASS; 0 BLOCKER / 0 MAJOR / 1 MINOR
+      non-blocking range-noise carry (interleaved non-B3 commits in
+      range — in-scope B3 commits pass cleanly). Open operational item
+      acknowledged: live-Postgres alembic upgrade 046 awaiting team_00
+      manual deployment. Verdict: LOD500-VERDICT_v1.0.0.md (commit
+      8014599)."
+    validator: team_190
+    validator_engine: GPT-5.5
+    build_head_commit: "d5d1366"
+    spec_commit: "c4c0dac"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 1     # non-blocking range noise; carry. Open operational item: live PG alembic upgrade 046
+  notes: "WP-B3 CLOSED 2026-05-25 per ADR042 3-step closure under ADR045
+    EXECUTION_MANDATE SFA-S003-P002-WP-B. Archive manifest:
+    _archive/SFA-S003-P002-WP-B3/ARCHIVE_MANIFEST.md. OPEN OPERATIONAL
+    ITEM: team_00 must run `alembic upgrade 046` on live Postgres
+    post-merge (sandbox blocked sub-agent's blind apply; SQLite tests
+    covered all ACs). WP-B program: 3 of 4 WPs CLOSED (B1 + patch01 +
+    B3); B2 in L-GATE_V R1 remediation cycle (parallel). Originally
+    authorized 2026-05-24 by team_00. PROGRAM_BRIEF v1.0.0 issued by
+    team_10."
   profile: L0
