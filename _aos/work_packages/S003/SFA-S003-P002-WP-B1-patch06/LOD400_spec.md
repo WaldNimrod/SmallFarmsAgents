@@ -286,7 +286,7 @@ def main(dry_run: bool):
   - 5 workbook typos / edition suffixes deleted as artifact noise
 - **Net:** 87 → 60 entries; duplicate-target groups 24 → 6 (all pure synonyms)
 - Implicitly reverts patch03 §1.3 (Greenhouse Libanese Cucumber removed from MAP — variety now in crop_varieties with "Greenhouse" + "Libanese" attributes)
-- LOD500_LOCKED scope exception: 6 LOCKED test functions updated/removed across 2 test files
+- LOD500_LOCKED scope exception: 13 LOCKED test touches across 4 test files (per DECISION §3 + v1.0.2 R3 + v1.0.3 R4 amendments) — 5 updates + 8 removals
 - `scripts/patch06_db_cleanup.py` automates orphan crops row cleanup
 ```
 
@@ -318,12 +318,23 @@ def main(dry_run: bool):
 - **AC-15** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` returns 0 FAIL
 
 ## 5. Test requirements
-- **3 LOCKED tests** updated in `test_jmf_crop_map.py` (count + allowlist + ac03_count)
-- **2 LOCKED tests** updated in `test_jmf_crop_map_aliases.py` (spot_check + collision rename)
-- **1 LOCKED test** REMOVED from `test_jmf_crop_map_aliases.py` (entry_count_grew_by_34)
-- **3 new** regression tests appended to `test_jmf_crop_map.py`
 
-Total = 6 LOCKED touches + 3 new = 9 test functions touched.
+**LOCKED updates (5 functions):**
+- 3 in `test_jmf_crop_map.py` (count + allowlist + ac03_count)
+- 2 in `test_jmf_crop_map_aliases.py` (spot_check + collision rename)
+
+**LOCKED removals (8 functions across 4 files; v1.0.2 R3 + v1.0.3 R4):**
+- 5 in `test_jmf_crop_map.py` (test_ac04_1_eggplant_feld_literal_alias + 4 patch03 cultivar-value tests)
+- 1 in `test_jmf_crop_map_aliases.py` (test_alias_entry_count_grew_by_34)
+- 1 in `test_jmf_live_workbook_coverage.py` (test_ac04_live_workbook_coverage_min_42_of_50; delete file if empty)
+- 1 in `test_jmf_seed_dry_run.py` (test_ac07_seed_dry_run_warn_only_for_unmapped; delete file if empty)
+
+**New regression tests (3 appended to `test_jmf_crop_map.py`):**
+- test_no_cultivar_keys_in_map_post_patch06
+- test_no_typo_keys_in_map_post_patch06
+- test_six_synonym_groups_exact
+
+**Total:** 5 LOCKED updates + 8 LOCKED removals + 3 new = **16 test functions touched** across 4 files.
 
 ## 6. Build sequence
 
