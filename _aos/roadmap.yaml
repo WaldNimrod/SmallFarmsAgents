@@ -899,11 +899,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch01
   label: "ספר גידולים: JMF_CROP_MAP alias extension + Rutabaga Hebrew correction"
-  status: BUILDING
+  status: DONE
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch01/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-25"
@@ -949,7 +951,62 @@ work_packages:
       blocker: 0
       major: 0
       minor: 1     # stale non-operative prose; addressed in v1.0.3 cleanup
-  notes: "WP-B1-patch01: SMALL follow-up to WP-B1 (LOD500_LOCKED at 6a85561).
+  - gate: L-GATE_B
+    result: BUILD_COMPLETE_PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_10 (sfa_build, Claude Sonnet 4.6 — sub-agent of team_110)
+      executed the 4-step build sequence from LOD400 §6 against spec at
+      c1b14c5 (v1.0.3). 3 build commits 929c30b..048ce66. 10 new tests
+      across 4 files; 56 prior WP-B1 tests still PASS; 251 total in
+      crop_book suite; 1 pre-existing publisher failure acknowledged
+      out-of-scope. LOD500_LOCKED audit CLEAN on all 15 paths.
+      validate_aos.sh: 29 PASS / 18 SKIP / 0 FAIL (the +1 SKIP is from
+      unrelated AOS governance sync 417f3cc+7942166 during build window,
+      not a regression). Live workbook coverage: 48/50 (target ≥42 —
+      exceeded by 6; only Baby Mustard + Rapini remain unmapped per spec
+      §3.3 design intent). BUILD_REPORT: BUILD_REPORT_v1.0.0.md."
+    validator: team_10
+    builder_engine: Claude-Sonnet-4.6
+    build_commits: ["929c30b", "d34e60c", "048ce66"]
+    findings:
+      blocker: 0
+      major: 0
+      minor: 0
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) constitutional
+      validation. R1 FAILed against build head 048ce66 with 1 BLOCKER
+      (F-LV-PATCH01-01 ברוקקואר literal still in inline comment) + 1
+      MAJOR (F-LV-PATCH01-02 BUILD_REPORT inaccuracies) + 1 MINOR
+      (F-LV-PATCH01-03 spec prose). Remediation cycle: team_10 sub-agent
+      committed bbbfd47 (constants.py fix) + fd30d1b (BUILD_REPORT fix);
+      team_110 committed d5282c2 (LOD400 v1.0.4 prose cleanup +
+      verdict file). R2 PASS_WITH_FINDINGS against new HEAD fd30d1b at
+      spec d5282c2 (v1.0.4): 20/20 VVs PASS; 1 MINOR carry
+      (F-LV-PATCH01-R2-01 — BUILD_REPORT metadata still cites v1.0.3/
+      c1b14c5; non-blocking documentation drift; BUILD_REPORT is true
+      to the BUILD it documents, which was against v1.0.3 before the
+      prose-only v1.0.4 patch). Verdict: LOD500-VERDICT_v1.0.1.md
+      (commit e1f91d8)."
+    validator: team_190
+    validator_engine: GPT-5.5
+    build_head_commit: "fd30d1b"
+    spec_commit: "d5282c2"
+    findings:
+      blocker: 0
+      major: 0
+      minor: 1     # F-LV-PATCH01-R2-01 BUILD_REPORT metadata drift; carried — non-blocking
+  notes: "WP-B1-patch01 CLOSED 2026-05-25 per ADR042 3-step closure
+    under ADR045 EXECUTION_MANDATE SFA-S003-P002-WP-B. Archive manifest:
+    _archive/SFA-S003-P002-WP-B1-patch01/ARCHIVE_MANIFEST.md.
+    Operational gate LIFTED: `seed.py --all` against live JMF MasterClass
+    workbook is now safe to run on production DB (Rutabaga writes רוטבגה
+    correctly; 48/50 crops map cleanly; 2 unmapped WARN+skip per spec).
+    This patch was the last tail of WP-B1 per team_00 sequencing directive
+    2026-05-25 — B1+patch01 fully and finally sealed. WP-B2 + WP-B3
+    unblocked for LOD200 authoring (parallel-eligible).
+    Originally registered as SMALL follow-up to WP-B1 (LOD500_LOCKED at 6a85561).
     MUST land before SFA-S003-P002-WP-B2 per team_00 sequencing directive
     2026-05-25. LOD200+LOD400 pending team_110 (same EXECUTION_MANDATE
     SFA-S003-P002-WP-B applies; ADR045 R2 #1 spec-author authority)."
