@@ -144,3 +144,31 @@ def test_ac03_duplicate_group_count(jmf_crop_map):
     counts = Counter(jmf_crop_map.values())
     dup_count = sum(1 for c in counts.values() if c > 1)
     assert dup_count == 25, f"Expected 25 duplicate-target groups, got {dup_count}"
+
+
+# ─── patch02 regression tests (DECISION 2026-05-25 §Q4) ───
+
+def test_parsnips_value_post_patch02():
+    """patch02 (DECISION 2026-05-25 §Q4): Parsnips Hebrew is 'שורש פטרוזילה'."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Parsnips"] == "שורש פטרוזילה", (
+        f"Parsnips Hebrew value drifted from DECISION §Q4. "
+        f"Got: {JMF_CROP_MAP['Parsnips']!r}"
+    )
+    # Negative — the old colloquial value must NOT be present
+    assert "גזר לבן" not in JMF_CROP_MAP.values(), (
+        "Stale 'גזר לבן' value found in JMF_CROP_MAP — patch02 not applied?"
+    )
+
+
+def test_shallots_value_post_patch02():
+    """patch02 (DECISION 2026-05-25 §Q4): Shallots Hebrew is 'בצלצלי שאלוט'."""
+    from organic_market_agent.crop_book.constants import JMF_CROP_MAP
+    assert JMF_CROP_MAP["Shallots"] == "בצלצלי שאלוט", (
+        f"Shallots Hebrew value drifted from DECISION §Q4. "
+        f"Got: {JMF_CROP_MAP['Shallots']!r}"
+    )
+    # Negative — the pure-transliteration value must NOT be the lone match anymore
+    assert JMF_CROP_MAP["Shallots"] != "שאלוט", (
+        "Shallots still uses pure transliteration; patch02 not applied"
+    )

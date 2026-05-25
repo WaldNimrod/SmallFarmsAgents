@@ -1014,11 +1014,11 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch02
   label: "ספר גידולים: JMF_CROP_MAP Hebrew terminology corrections (Q4)"
-  status: ELIGIBLE
+  status: IN_PROGRESS
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_LOCKED
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: team_110
   assigned_validator: external
   created_at: "2026-05-25"
@@ -1039,6 +1039,31 @@ work_packages:
       (team_110 Opus 4.7) per LOD200 §10 rationale; IR#1 preserved via
       team_190 validator (GPT-5.5)."
     validator: team_00
+  - gate: L-GATE_S
+    result: FAIL
+    date: "2026-05-25"
+    round: 1
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_S R1. FAIL with
+      1 BLOCKER (F-S-PATCH02-01 on VC-9): LOD400 v1.0.0 §3.4 and §4 AC-04
+      incorrectly described duplicate-target baseline as the old 2-pair
+      WP-B1 state instead of the post-patch01 25-group allowlist. All
+      other 14 VCs PASSED, including single-engine builder rationale (VC-6).
+      Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1-patch02/LOD400-VERDICT_v1.0.0.md.
+      Commit 8afd443."
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-25"
+    round: 2
+    notes: "team_190 (GPT-5.5, non-Claude per IR#1) L-GATE_S R2. PASS.
+      LOD400 v1.0.1 §3.4 + AC-04 corrected to reference the 25-group
+      duplicate-target allowlist and cite test_jmf_crop_map_duplicate_target_allowlist
+      + test_ac03_duplicate_group_count by name. All 15 VCs PASS.
+      validate_aos.sh: 29 PASS / 19 SKIP / 0 FAIL. Constitutional linter PASS.
+      Single-engine builder rationale accepted. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P002-WP-B1-patch02/LOD400-VERDICT_R2_v1.0.0.md.
+      Commit 971f91f."
+    validator: team_190
   notes: "WP-B1-patch02: SMALL follow-up to WP-B1+patch01+B2+B3. Scope:
     2-line value edit to JMF_CROP_MAP in constants.py + 2 regression
     test assertions + CHANGELOG entry. Closes the Hebrew terminology

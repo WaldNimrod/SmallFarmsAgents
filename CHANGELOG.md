@@ -379,3 +379,9 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 - **Added** SQLAlchemy 2.x models for all 23 tables
 - **Added** Seed data: 11 units, 29 products, 20 sources, initial aliases
 - **Added** `tests/test_db_health.py`
+
+### SFA-S003-P002-WP-B1-patch02 — JMF_CROP_MAP Hebrew terminology corrections (2026-05-25)
+- `Parsnips`: Hebrew value changed from "גזר לבן" (colloquial) to "שורש פטרוזילה" (botanically accurate parsley root)
+- `Shallots`: Hebrew value changed from "שאלוט" (pure transliteration) to "בצלצלי שאלוט" (Hebrew + transliteration hybrid)
+- Per team_00 DECISION 2026-05-25 §Q4
+- Closes the WP-B program Q4 Hebrew terminology debt

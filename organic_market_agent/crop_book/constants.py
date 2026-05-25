@@ -212,13 +212,13 @@ JMF_CROP_MAP: dict[str, str] = {
     "Leeks":              "כרישה",
     "Onions":             "בצל",
     "Scallions":          "בצל ירוק",
-    "Shallots":           "שאלוט",
+    "Shallots":           "בצלצלי שאלוט",   # patch02 (team_00 DECISION 2026-05-25 §Q4): pure transliteration "שאלוט" replaced with "shallot small-onions" hybrid
     # ---- Roots / Tubers ----
     "Beets":              "סלק",
     "Carrots":            "גזר",
     "Celery Root":        "סלרי שורש",
     "Jerusalem Artichokes": "ארטישוק ירושלמי",
-    "Parsnips":           "גזר לבן",
+    "Parsnips":           "שורש פטרוזילה",   # patch02 (team_00 DECISION 2026-05-25 §Q4): "גזר לבן" was colloquial; replaced with botanically accurate "parsley root"
     "Potatoes":           "תפוח אדמה",
     "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; prior value was a hallucination, NOT a real Hebrew word)
     "Sweet Potatoes":     "בטטה",
