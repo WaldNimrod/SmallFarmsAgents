@@ -1206,11 +1206,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04
   label: "ספר גידולים: JMF MasterClass Integration (NotebookLM → DB) + Ginger baseline"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-25"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch04/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: external
   created_at: "2026-05-25"
@@ -1258,8 +1260,21 @@ work_packages:
       load deferred — infrastructure built and tested, but no english_keys
       mapping in NotebookLM index. ADVISORY-grade deferral, NOT blocker."
     validator: team_10
-  notes: "WP-B1-patch04: Integration WP — operationalizes NotebookLM deliverable.
-    Blocks patch06 (cleanup). EXECUTION_MANDATE WP-B extended in-session by team_00."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-25"
+    notes: "team_190 (GPT-5.5) L-GATE_V R1. PASS_WITH_FINDINGS (0 blockers,
+      0 majors, 0 minors, 3 advisories — all pre-acknowledged). 16/16 VCs
+      PASS. 355 crop_book + 13 integration passed; 1 pre-existing publisher
+      OOS. validate_aos.sh 0 FAIL. IR#4 CLEAN. Verdict commit 9514e67.
+      Unblocks patch06 BUILD."
+    validator: team_190
+  notes: "WP-B1-patch04 CLOSED 2026-05-25 — LOD500_LOCKED. Integration WP
+    operationalized NotebookLM deliverable (24 JSON cache + Migration 047
+    junction table + Ginger baseline + automated patch03 data-fix script).
+    3 R-rounds (1 L-GATE_S R1 FAIL → R2 PASS clean + L-GATE_V R1 PASS_WITH_FINDINGS).
+    Archive: _archive/SFA-S003-P002-WP-B1-patch04/ARCHIVE_MANIFEST.md.
+    Unblocks patch06 BUILD (cleanup WP)."
   profile: L0
 
 - id: SFA-S003-P002-WP-B1-patch06
