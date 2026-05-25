@@ -69,3 +69,37 @@ class TestSeedNiCli:
         assert len(intersection) == 0, (
             f"B2 subclasses must NOT be in ni_registry; found: {intersection}"
         )
+
+    def test_ac13_ni_only_dry_run_suppresses_jmf_and_tend(self):
+        """AC-13 regression: --ni-only --dry-run must NOT run JMF MasterClass or Tend.
+
+        F-LV-B2-01 fix verification: captures stdout+stderr and asserts zero lines
+        containing JMF MasterClass, Seeding crop_families, or Parsed ... Tend markers.
+        """
+        result = subprocess.run(
+            SEED_CMD + ["--all", "--ni-only", "--dry-run"],
+            capture_output=True,
+            text=True,
+        )
+        combined = result.stdout + result.stderr
+
+        # These strings appear in JMF MasterClass and Tend output — must be absent
+        forbidden_patterns = [
+            "JMF MasterClass:",
+            "Seeding crop_families",
+            "Parsed",
+        ]
+        violations = [
+            line
+            for line in combined.splitlines()
+            if any(pat in line for pat in forbidden_patterns)
+        ]
+        assert not violations, (
+            "--ni-only --dry-run must not run JMF MasterClass or Tend; "
+            f"found forbidden output lines:\n" + "\n".join(violations)
+        )
+        # Sanity: the command should succeed (exit 0)
+        assert result.returncode == 0, (
+            f"seed --ni-only --dry-run exited {result.returncode};\n"
+            f"stdout: {result.stdout}\nstderr: {result.stderr}"
+        )

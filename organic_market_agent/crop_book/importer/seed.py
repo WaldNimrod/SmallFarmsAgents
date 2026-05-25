@@ -456,6 +456,34 @@ _DEFAULT_JMF_MASTERCLASS_DIR = Path(
 )
 
 
+def _run_ni_ingestion(session: Session) -> None:
+    """Single NI call-site block — iterates NI_IMPORTER_CLASSES once.
+
+    B2 bypasses ni_registry.load_all() per §7.1 architectural decision.
+    B2 does NOT call ni_registry.register; the 6 subclasses are NOT
+    registered with ni_registry; seed.py iterates NI_IMPORTER_CLASSES
+    directly with session for the variety_id / crop_id resolution.
+    """
+    from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
+    from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
+
+    for cls in NI_IMPORTER_CLASSES:
+        importer = cls()  # constructor takes no args (subclass attrs are class-level)
+
+        # PATH A: variety-source-value rows (cultivar_recommendation only)
+        for row in importer.load(session):
+            # Row is fully resolved by load(); use existing WP-A signature:
+            variety_id = row.pop("variety_id")
+            _upsert_source_value(session, variety_id, row)
+
+        # PATH B: crop_knowledge_notes rows (B2-specific)
+        for row in importer.load_knowledge_notes(session):
+            # Row is fully resolved by load_knowledge_notes(); crop_id is in the dict
+            _upsert_knowledge_note(session, **row)
+
+    session.flush()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="ספר גידולים seed importer — populate crop-book tables from Tend CSV + JMF XLSX"
@@ -538,8 +566,33 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only:
-        parser.error("Specify --all, --jmf-only, or --crops NAME [NAME ...]")
+    elif not args.all and not args.jmf_only and not args.ni_only:
+        parser.error("Specify --all, --jmf-only, --ni-only, or --crops NAME [NAME ...]")
+
+    # ── NI-only fast path (AC-13): runs BEFORE any JMF/Tend/Tend-overlay work ──
+    if args.ni_only:
+        if args.dry_run:
+            logger.info("DRY RUN — no DB writes")
+            from sqlalchemy import create_engine
+            from sqlalchemy.orm import sessionmaker
+            from organic_market_agent.crop_book.models import Base
+            from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+            from organic_market_agent.crop_book.crop_task_templates import CropTaskTemplate  # noqa: F401
+
+            engine = create_engine("sqlite:///:memory:")
+            Base.metadata.create_all(engine)
+            from sqlalchemy import inspect as sa_inspect
+            if "crop_task_templates" not in sa_inspect(engine).get_table_names():
+                CropTaskTemplate.__table__.create(engine, checkfirst=True)
+            SessionLocal = sessionmaker(engine)
+            with SessionLocal() as session:
+                _run_ni_ingestion(session)
+        else:
+            from organic_market_agent.db.session import SessionFactory
+            with SessionFactory() as session:
+                _run_ni_ingestion(session)
+                session.commit()
+        return
 
     if args.dry_run:
         logger.info("DRY RUN — no DB writes")
@@ -585,27 +638,9 @@ def main() -> None:
                 source_dir=args.source_dir,
                 jmf_dir=args.jmf_dir,
             )
-            if not args.no_ni:
-                # B2 bypasses ni_registry.load_all() per §7.1 architectural decision.
-                # B2 does NOT call ni_registry.register; the 6 subclasses are NOT
-                # registered with ni_registry; seed.py iterates NI_IMPORTER_CLASSES
-                # directly with session for the variety_id / crop_id resolution.
-                from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
-                from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
-
-                for cls in NI_IMPORTER_CLASSES:
-                    importer = cls()
-                    for row in importer.load(session):
-                        variety_id = row.pop("variety_id")
-                        _upsert_source_value(session, variety_id, row)
-                    for row in importer.load_knowledge_notes(session):
-                        _upsert_knowledge_note(session, **row)
-                session.flush()
-            if args.ni_only:
-                return
 
             # Tend overlay ingestion (dry-run path)
-            if not args.no_tend_overlay and not args.ni_only:
+            if not args.no_tend_overlay:
                 from organic_market_agent.crop_book.importer.tend_overlay import import_tend_overlay
                 tend_summary = import_tend_overlay(
                     session, args.tend_overlay_dir, year=args.tend_overlay_year,
@@ -620,6 +655,10 @@ def main() -> None:
 
             if args.tend_overlay_only:
                 return
+
+            # NI ingestion runs LAST (hard-override precedence) — single call-site via helper
+            if not args.no_ni:
+                _run_ni_ingestion(session)
         return
 
     from organic_market_agent.db.session import SessionFactory
@@ -665,8 +704,7 @@ def main() -> None:
 
         if args.tend_overlay_only:
             # Early return — skip remaining importers
-            if not args.dry_run:
-                session.commit()
+            session.commit()
             return
 
         # Existing Tend seed call (unchanged logic)
@@ -686,34 +724,10 @@ def main() -> None:
             logger.info("Enrichment: %s", summary)
             session.commit()
 
+        # NI ingestion runs LAST (hard-override wins precedence) — single call-site via helper
         if not args.no_ni:
-            # B2 bypasses ni_registry.load_all() per §7.1 architectural decision.
-            # B2 does NOT call ni_registry.register; the 6 subclasses are NOT
-            # registered with ni_registry; seed.py iterates NI_IMPORTER_CLASSES
-            # directly with session for the variety_id / crop_id resolution.
-            from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
-            from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
-
-            for cls in NI_IMPORTER_CLASSES:
-                importer = cls()  # constructor takes no args (subclass attrs are class-level)
-
-                # PATH A: variety-source-value rows (cultivar_recommendation only)
-                for row in importer.load(session):
-                    # Row is fully resolved by load(); use existing WP-A signature:
-                    variety_id = row.pop("variety_id")
-                    _upsert_source_value(session, variety_id, row)
-
-                # PATH B: crop_knowledge_notes rows (B2-specific)
-                for row in importer.load_knowledge_notes(session):
-                    # Row is fully resolved by load_knowledge_notes(); crop_id is in the dict
-                    _upsert_knowledge_note(session, **row)
-
-            session.flush()
-
-        if args.ni_only:
-            if not args.dry_run:
-                session.commit()
-            return
+            _run_ni_ingestion(session)
+            session.commit()
 
 
 if __name__ == "__main__":
