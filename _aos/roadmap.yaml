@@ -806,6 +806,31 @@ work_packages:
   notes: "COMPLETE 2026-05-23. Canonical KNOWN_DEBT.md is the SoT for spoke backlog. Refresh obligation: every P-program closure (per F-LV-01 §2). LOD500_LOCKED — refreshes are additive, never destructive."
   profile: L0
 
+- id: SFA-S003-P002-WP-UI
+  label: "Standalone web UX shell — adopt team_35 LOD300 onto Slim/PHP/uPress"
+  status: ELIGIBLE
+  phase: P002
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_DRAFT
+  assigned_builder: sfa_build
+  assigned_validator: team_190
+  created_at: "2026-05-24"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P003-WP-3"]
+  blocked_by: ["L-GATE_S verdict from team_190"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-UI/LOD400_spec.md"
+  handoff_ref: "_COMMUNICATION/team_35/SFA-S003-P002-WP-UI/_handoff/HANDOFF_LOD300.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-24"
+    notes: "team_00 in-session approval 2026-05-24 of Option B (adapt team_35 LOD300 v1.2.0 design to Slim/PHP/uPress stack). team_35 had assumed Flask+gunicorn+waldhomeserver — incompatible with parent DECISION_SFA-S003-P003 §2 (waldhomeserver = backend only). LOD400 by team_100 preserves all team_35 design intent (CSS, tokens, components, modules registry, mental model, 3-tier language, mobile-first, crop→variety hierarchy, mandatory market disclaimer, community surfaces) and supersedes only the IMPLEMENTATION_PLAN (Flask → PHP/Slim). 22 ACs. 10 risks. No GCRs. 14.5h budget."
+    validator: team_00
+  notes: "Opened 2026-05-24. LOD400 authored by team_100; submitted to team_190 for L-GATE_S validation before BUILD dispatch. Validation prompt: _COMMUNICATION/team_190/SFA-S003-P002-WP-UI/L-GATE_S_VALIDATION_PROMPT_v1.0.0.md. Source handoff package: _COMMUNICATION/team_35/SFA-S003-P002-WP-UI/_handoff/ (548 KB, 33 files, v1.2.0). No BUILD until L-GATE_S PASS or PASS_WITH_FINDINGS (no BLOCKERs)."
+  profile: L0
+
 # ============================================================================
 # S003 — Phase 3: Delivery Infrastructure Migration Program (SFA-S003-P003)
 # Opened 2026-05-23. team_00 directive: migrate SFA delivery off WordPress

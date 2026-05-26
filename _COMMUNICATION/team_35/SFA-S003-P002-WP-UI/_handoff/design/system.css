@@ -1,0 +1,182 @@
+/* ============================================================
+   Nimrod.bio Design System v3 — LOCKED Stage 0 tokens
+   Approved: 11.05.2026
+   Direction: B · עם רסן (structural recursion, rare spark)
+   Palette:   Cool Stone
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ─── Foundation: Cool Stone paper ─── */
+  --paper:      #f5f3ec;
+  --paper-2:    #e8e7df;
+  --paper-3:    #dedccf;
+  --line:       #d6d2c2;
+  --ink:        #1f1e1c;
+  --ink-soft:   #4a4844;
+  --soil:       #5b483a;
+
+  /* ─── 3 Worlds (v3.3 — LOCKED · אדמה · ידע · דיגיטל · approved 22.05.2026) ───
+     Soil · Know · Code — deep + light per world  */
+  --w-soil-deep:  #3a5220;   /* אדמה · עמוק (h1, btn) */
+  --w-soil:       #6a8a3a;   /* אדמה · בהיר (chip, accent) */
+  --w-know-deep:  #9a4f2b;   /* ידע · עמוק */
+  --w-know:       #c46a3e;   /* ידע · בהיר (גם primary CTA) */
+  --w-code-deep:  #1f5e60;   /* דיגיטל/מיזו · עמוק */
+  --w-code:       #2d8a8c;   /* דיגיטל/מיזו · בהיר */
+
+  /* ─── v3.1 aliases (back-compat, do not use in new code) ─── */
+  --w-garden:  var(--w-soil);
+  --w-field:   #6d4a2a;
+  --w-table:   var(--w-know);
+  --b-garden:  #6a8a3a;   /* = --w-garden */
+  --b-bcs:     #6d4a2a;   /* = --w-field */
+  --b-table:   #c46a3e;   /* = --w-table */
+  --b-teach:   #e2b23a;   /* sun   · סדנאות (under שולחן) */
+  --b-aos:     #2d8a8c;   /* teal  · AOS (under שטח) */
+  --b-ai:      #8c3a4a;   /* beet  · AI/מיזו (under שולחן) */
+
+  /* legacy aliases (still used by v1/v2 mockups) */
+  --terracotta: var(--b-table);
+  --leaf:       var(--b-garden);
+  --leaf-deep:  #3f5a22;
+  --beet:       var(--b-ai);
+  --sun:        var(--b-teach);
+  --sky:        #a9c5cc;
+
+  /* ─── Spark (rare, 3–5 places site-wide) ─── */
+  --spark:        #d23a2e;
+  --spark-ink:    #1c1a18;
+
+  /* ─── Spacing scale · base 16, x1.5-ish ─── */
+  --s-1: 16px;
+  --s-2: 24px;
+  --s-3: 32px;
+  --s-4: 48px;
+  --s-5: 64px;
+  --s-6: 96px;
+  --s-7: 128px;
+  --s-8: 160px;
+
+  /* ─── Radii — default is radius-m ─── */
+  --radius-s:  6px;
+  --radius-m:  14px;     /* DEFAULT */
+  --radius-l:  22px;
+  --radius-xl: 36px;
+  --radius-pill: 100px;
+
+  /* ─── Shadows — default is shadow-m ─── */
+  --shadow-s: 0 1px 2px rgba(60,40,10,.06);
+  --shadow-m: 0 10px 30px -14px rgba(60,40,10,.22);   /* DEFAULT */
+  --shadow-l: 0 30px 60px -30px rgba(60,40,10,.30);
+
+  /* ─── Grid · 6-col max ─── */
+  --grid-cols:   6;
+  --grid-gutter: 24px;
+  --grid-max:    1200px;
+  --grid-margin: clamp(20px, 4vw, 56px);
+}
+
+/* ─── Reset & base ─── */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Assistant", "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  direction: rtl;
+}
+
+.mono  { font-family: "JetBrains Mono", monospace; }
+.serif { font-family: "Frank Ruhl Libre", "David Libre", Georgia, serif; }
+
+/* ─── Type scale (locked from typography.md) ─── */
+.t-display { font-family: "Frank Ruhl Libre", serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.05; font-weight: 900; }
+.t-h1      { font-family: "Frank Ruhl Libre", serif; font-size: 40px; line-height: 1.15; font-weight: 700; }
+.t-h2      { font-family: "Frank Ruhl Libre", serif; font-size: 28px; line-height: 1.25; font-weight: 600; }
+.t-h3      { font-family: "Frank Ruhl Libre", serif; font-size: 20px; line-height: 1.30; font-weight: 600; }
+.t-quote   { font-family: "Frank Ruhl Libre", serif; font-size: 24px; line-height: 1.5;  font-weight: 300; font-style: italic; }
+.t-body    { font-family: "Assistant", sans-serif; font-size: 17px; line-height: 1.65; font-weight: 400; }
+.t-body-sm { font-family: "Assistant", sans-serif; font-size: 14px; line-height: 1.55; font-weight: 400; color: var(--ink-soft); }
+.t-ui      { font-family: "Assistant", sans-serif; font-size: 15px; line-height: 1.0;  font-weight: 600; }
+
+/* ─── 6-column grid primitive ─── */
+.grid-6 {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  gap: var(--grid-gutter);
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding-inline: var(--grid-margin);
+}
+
+/* ─── Cards (default radius-m + shadow-m) ─── */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-m);
+  padding: var(--s-2);
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  font-family: inherit; font-weight: 600; font-size: 15px;
+  padding: 12px 22px; border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  cursor: pointer; text-decoration: none;
+  transition: transform .15s ease, background .15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary   { background: var(--b-table); color: #fff; }
+.btn-primary:hover { background: #b15c33; }
+.btn-secondary { background: var(--leaf-deep); color: #fff; }
+.btn-ghost     { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* Spark CTA — use ≤5× per site */
+.btn-spark {
+  background: var(--spark); color: #fff;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  padding: 14px 28px;
+  box-shadow: 3px 3px 0 var(--spark-ink);
+}
+.btn-spark:hover { transform: translateY(-2px); }
+
+/* Hand-drawn underline (kept) */
+.under {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23c46a3e' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: 100% 8px;
+  padding-bottom: 6px;
+}
+
+/* ============================================================
+   CHANGELOG
+   v3.3 · 22.05.2026 · world rename: שטח → אדמה (אקולוגי, חקלאי)
+        - tokens identical (--w-soil-* retained semantic alignment)
+        - display text updated everywhere (Sitemap, TAXONOMY, Components, Foundations banner)
+   v3.2 · 13.05.2026 · LOCKED · Option D taxonomy (שטח/ידע/דיגיטל)
+        - --w-{soil,know,code}-deep + light · deep for h1/btn, light for chip/accent
+        - taxonomy: שטח (P-01/03/04) · ידע (P-05a/b/c, P-06) · דיגיטל (P-07 SFA חינם, tiktrack)
+        - bridges: שטח×ידע · ידע×דיגיטל · שטח×דיגיטל · 3-way
+        - v3.1 garden/field/table aliases retained for back-compat
+   v3.1 · amendment · 3 Worlds taxonomy (superseded by v3.2)
+        - added --w-garden / --w-field / --w-table (primary)
+        - 6-branch tokens retained as sub-branch accents (no breaks)
+   v3 · 11.05.2026 · Stage 0 lock
+        - palette switched: warm-paper → Cool Stone (#f5f3ec)
+        - grid: 12-col → 6-col
+        - spacing: introduced --s-1..--s-8, base 16px
+        - radius default: radius-m (14px)
+        - shadow default: shadow-m
+        - spark renamed from seuss-* (no IP overlap)
+   v2 · prior · warm-paper + Seuss-flavored accents
+   ============================================================ */
