@@ -1,8 +1,8 @@
 # LOD400 — SFA-S003-P002-WP-UI — UX shell + design adoption (Slim/PHP, uPress)
 
-**Version:** v1.0.1 (Round 2 amendment after team_190 R1 FAIL)
-**Date:** 2026-05-24 (R1) → amended 2026-05-27 (R2)
-**Status:** LOD400_DRAFT — awaiting team_190 L-GATE_S Round 2 validation before BUILD.
+**Version:** v1.0.2 (R2 verdict cleanup — addresses LV-S-6/7 stale text)
+**Date:** 2026-05-24 (R1) → 2026-05-27 (R2 amendment + R2 verdict cleanup)
+**Status:** LOD400_LOCKED — L-GATE_S R2 PASS_WITH_FINDINGS (team_190, 2026-05-27). Ready for BUILD dispatch.
 **Builder (assigned post-validation):** sfa_build (Sonnet)
 **Validator:** team_190 (external, non-Claude per IR#1)
 **Effort:** NORMAL (~13h estimated — slightly reduced after community-writes scope drop)
@@ -57,7 +57,7 @@ team_00 approved **Option B** (in-session 2026-05-24): adopt the **design** (CSS
 - `SQLAlchemy direct query on prod Postgres` → **PDO query on uPress MySQL mirror** (populated by waldhomeserver `sfa_ingest_push.py` cron — already running)
 - `gunicorn on waldhomeserver:5002` → **PHP-FPM on uPress nginx** (already serving)
 - `Jinja2 context_processor inject_globals` → **PHP autoload of `modules.php` + helpers** in `Bootstrap.php`
-- Asset URL prefix `/sfa/` (WP-relative) → **root-relative** (subdomain-relative): `/`, `/book/`, `/market/`, `/calc/`, `/community/`, `/api/v1/*`
+- Asset URL prefix `/sfa/` (WP-relative) → **root-relative** (subdomain-relative): `/`, `/crop-book/`, `/market/`, `/calc/`, `/community/`, `/api/v1/*` (per binding §4 + LV-S-2 R2 — `/crop-book/*` is the canonical URL contract)
 
 ---
 
@@ -82,7 +82,7 @@ The existing `site.css` (6.5 KB minimal interim from WP-3) is **deleted** — su
 | Source | Target |
 |--------|--------|
 | Extract SVG vegetable sprite from `illustrations.jsx::CROP_ICON` | `sfa_delivery/public_assets/img/icons.svg` |
-| Vanilla JS for accordion state + contribute form submit | `sfa_delivery/public_assets/js/sfa.js` (new, ~80 lines) |
+| Vanilla JS for `<details>` accordion state persistence via `sessionStorage` (NO contribute-form submit — community writes deferred per LV-S-1 R2) | `sfa_delivery/public_assets/js/sfa.js` (new, ~40 lines) |
 | AI-rendered thumbnails (referenced in `art-prompts.jsx`) | **DEFERRED** to post-MVP. Use SVG icon as placeholder for v1. |
 
 ### §3.3 Templates — translate JSX/Jinja2 → PHP includes
@@ -415,26 +415,29 @@ Macros (B.2) gate all page templates (B.3..B.6); B.7 endpoints have no template 
 
 ---
 
-## §12 Definition of "L-GATE_S PASS" (this LOD400 → BUILD)
+## §12 L-GATE_S — STATUS (after R2)
 
-team_190 (external, non-Claude per IR#1) reviews **this LOD400** for:
-1. Architectural consistency with parent DECISION_SFA-S003-P003 (Slim/PHP/uPress is enforced; no Flask resurrection)
-2. AC completeness (22 ACs cover all 14 routes + APIs + regression)
-3. Risk register completeness (R-01..R-10 sane)
-4. GCR analysis correctness (no locked-file changes hidden)
-5. Test plan adequacy (~20 phpunit covers behavior; visual diff covers presentation)
-6. Out-of-scope items are genuinely deferrable (don't smuggle scope creep into v1)
-7. Phase plan is realistic (14.5h is achievable for the listed deliverables)
+**team_190 R2 verdict: PASS_WITH_FINDINGS — DISPATCH_BUILD.**
+- Verdict file: `_COMMUNICATION/TEAM_190/VERDICT_SFA-S003-P002-WP-UI_L-GATE_S_v1.0.1.md`
+- Engine: GPT-5.5 / Cursor (non-Claude per IR#1)
+- Date: 2026-05-27
+- Both R1 BLOCKERs (LV-S-1 community writes, LV-S-2 URL contract) resolved
+- 2 MINOR findings carried forward (LV-S-6 stale `/book/` text in §2 + `sfa.js` contribute mention in §3.2; LV-S-7 stale §12 wording) — addressed inline in this v1.0.2 cleanup commit
+- `validate_aos.sh`: 29 PASS / 17 SKIP / 0 FAIL
 
-Validation request → `_COMMUNICATION/team_190/SFA-S003-P002-WP-UI/L-GATE_S_VALIDATION_PROMPT_v1.0.0.md`.
+**Validated against (canonical):**
+1. Architectural consistency with `DECISION_SFA-S003-P003` — PASS_WITH_FINDINGS (stale text only)
+2. AC completeness — PASS (38 ACs cover all 14 routes + 10 API + 5 non-functional + 3 regression)
+3. Risk register adequacy — PASS (R-04/R-07 marked moot; R-11/R-12 added)
+4. GCR analysis correctness — PASS (no canonical doc drift; fully additive within binding contracts)
+5. Test plan adequacy — PASS (sqlite::memory + visual-diff threshold + Lighthouse ownership matrix in §9.5)
+6. Out-of-scope discipline — PASS (community writes explicitly deferred to S004)
+7. Phase plan realism — PASS (B.8 split into B.8a + B.8b; 9 phases; 13h total)
 
-team_190 verdict → `_COMMUNICATION/team_190/SFA-S003-P002-WP-UI/L-GATE_S_VERDICT_v1.0.x.md`.
-
-If PASS or PASS_WITH_FINDINGS (no BLOCKERs): team_100 dispatches BUILD to sfa_build via canonical handoff message.
-
-If FAIL: team_100 amends LOD400, re-submits.
+**Disposition:** L-GATE_S CLOSED. WP-UI status → BUILDING. team_100 dispatches canonical L-GATE_B mandate to sfa_build (team_10, Claude Sonnet).
 
 ---
 
 *LOD400 v1.0.0 authored 2026-05-24 by team_100. team_190 R1 verdict FAIL 2026-05-27 (5 findings: 2 BLOCKER + 2 MAJOR + 1 MINOR).*
-*LOD400 v1.0.1 amended 2026-05-27 by team_100 — see §0 for full Round 2 change summary. Awaiting team_190 L-GATE_S Round 2 validation. No BUILD activity until then per IR#1 + IR#4.*
+*LOD400 v1.0.1 amended 2026-05-27 by team_100 — full Round 2 change summary in §0.*
+*LOD400 v1.0.2 cleanup 2026-05-27 by team_100 — addresses team_190 R2 verdict findings LV-S-6 (stale /book/ + contribute-form text in §2/§3.2) + LV-S-7 (stale §12 wording). team_190 R2 PASS_WITH_FINDINGS, DISPATCH_BUILD. LOD400_LOCKED.*
