@@ -1383,11 +1383,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04-hotfix01
   label: "ספר גידולים: Postgres int↔bool fix in load_masterclass_sheets.py"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch04-hotfix01/ARCHIVE_MANIFEST.md"
   assigned_builder: team_110
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1407,8 +1409,36 @@ work_packages:
       1 regression test. SMALL effort, single-engine builder (team_110
       Opus 4.7) per patch02 precedent."
     validator: team_00
-  notes: "WP-B1-patch04-hotfix01: SMALL hotfix WP, reopens team_110
-    EXECUTION_MANDATE briefly to unblock OP-2 operational continuation."
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_S R1. PASS_WITH_FINDINGS — 0 blockers,
+      1 MINOR (roadmap drift) + 1 ADVISORY (§4 6→7 ACs). Both addressed
+      inline in build commit 0d26b13. Verdict commit 5f7d727."
+    validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-26"
+    notes: "team_110 single-engine build. 3 line edits + 1 regression test
+      + CHANGELOG. 14 integration + 350 crop_book + 1 OOS publisher.
+      Commit 0d26b13."
+    validator: team_110
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_V. PASS clean, 8/8 VCs. Boolean
+      fixes byte-exact; 14 integration tests; 350+1 OOS unchanged;
+      diff scope 5 mandated files; R1 findings addressed inline.
+      Verdict commit 6cabf44. Unblocks OP-2/OP-3 resume."
+    validator: team_190
+  notes: "WP-B1-patch04-hotfix01 CLOSED 2026-05-26 — LOD500_LOCKED. SMALL
+    hotfix successfully fixed Postgres int↔bool defect. Single-engine
+    builder pattern validated again for SMALL scope. Unblocks operational
+    OP-2 (load_masterclass_sheets --load-db) + OP-3 (patch06_db_cleanup
+    --apply) on production Postgres. Archive:
+    _archive/SFA-S003-P002-WP-B1-patch04-hotfix01/ARCHIVE_MANIFEST.md."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
