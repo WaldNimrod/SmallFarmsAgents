@@ -1524,11 +1524,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch08
   label: "ספר גידולים: Variety-parser cleanup (filter noise + DELETE existing)"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch08/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1544,7 +1546,42 @@ work_packages:
       Scope: _extract_cultivar_names filter + DELETE 11 noise rows +
       regression test. MEDIUM, Sonnet sub-agent build."
     validator: team_00
-  notes: "WP-B1-patch08: MEDIUM. Cleans noise from OP-2 prod load."
+  - gate: L-GATE_S
+    result: FAIL
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_S R1. FAIL 1 BLOCKER F-S-PATCH08-01:
+      'Intensive Spacing' (no colon, no period, 17 chars) bypassed generic
+      heuristics. Verdict commit aada1e0."
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-26"
+    round: 2
+    notes: "team_190 (GPT-5.5) L-GATE_S R2. PASS clean. KNOWN_SECTION_HEADERS
+      frozenset (10 entries) added. Verdict commit f455b38."
+    validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-26"
+    notes: "team_10 (Sonnet) BUILD_COMPLETE. Filter + cleanup script +
+      regression test. Build commit 7645860 + (empty marker) report
+      commit 083aadc. 16 integration tests passing."
+    validator: team_10
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_V R1. PASS_WITH_FINDINGS (0 blockers,
+      1 MINOR process). VC-V8 flagged that BUILD_REPORT was bundled in
+      build commit 7645860 (should have been in separate report commit).
+      Product/code scope clean; roadmap untouched; non-blocking.
+      Verdict commit dd41e1f."
+    validator: team_190
+  notes: "WP-B1-patch08 CLOSED 2026-05-26 — LOD500_LOCKED. MEDIUM cleanup
+    WP. Archive: _archive/SFA-S003-P002-WP-B1-patch08/ARCHIVE_MANIFEST.md.
+    Operational follow-up: patch08_cleanup_noise_varieties.py --apply on
+    production to remove 11 noise variety rows from OP-2."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
