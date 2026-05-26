@@ -1835,11 +1835,12 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C1
   label: "ספר גידולים: Wave 1 — Israeli Structured Data + Tend Multi-Year Backfill"
-  status: BUILDING
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1883,10 +1884,39 @@ work_packages:
       + CHANGELOG updated.
       Note: new jmf/ package re-exports legacy parse_jmf_dir to avoid shadowing.
       BUILD_REPORT: _COMMUNICATION/team_10/SFA-S003-P002-WP-C1/BUILD_REPORT_v1.0.0.md"
-  notes: "WP-C1 first wave of external sources integration. Lowest risk (pure
-    tabular, no LLM/OCR). Largest immediate DB delta: 3 new Tend years +
-    2 new Israeli sources. BUILD COMPLETE 2026-05-26 at commit 72323aa.
-    Ready for team_190 L-GATE_V."
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-05-26"
+    reviewed_commit: "72323aa"
+    notes: "team_190 (GPT-5.5 / Cursor, non-Claude per IR#1) R1 FAIL.
+      4 findings: F-LV-04 (MAJOR, reproducibility — gitignored fixtures),
+      F-LV-03 (BLOCKER, migration reversibility unverifiable — live PG at 052
+      after parallel WP-C4), F-LV-02 (BLOCKER, full-suite envelope mismatch
+      — transient state), F-LV-01 (BLOCKER, AC-C1-13 CALIBRATED=2 < 3).
+      Verdict: _COMMUNICATION/team_190/SFA-S003-P002-WP-C1/L-GATE_V_VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-26"
+    reviewed_commit: "ccd14d2"
+    notes: "team_190 (GPT-5.5 / Cursor, non-Claude per IR#1) R2 PASS. All 4
+      R1 findings CLOSED. F-LV-01 resolved via ENGINE V1.1 — variety→species
+      inheritance helper in reconciler.py (per team_00 directive 'no patches
+      — fix from foundation'). Original AC-C1-13 wording unchanged; CALIBRATED
+      now 5/5 (was 2/5). Production enrichment grew 319 → 2,848 rows (×8.9).
+      31/31 WP-C1 focused tests pass + 47/47 reconciler/enrichment tests
+      (0 regressions). validate_aos.sh 29/19/0. LOD500_LOCKED authorized.
+      Verdict: _COMMUNICATION/team_190/SFA-S003-P002-WP-C1/L-GATE_V_VERDICT_R2_v1.0.0.md
+      Remediation: _COMMUNICATION/team_10/SFA-S003-P002-WP-C1/REMEDIATION_REPORT_v1.0.0.md"
+    validator: team_190
+  notes: "COMPLETE 2026-05-26 at commit ccd14d2. WP-C1 first wave of external
+    sources integration: Israeli structured data + Tend 2019/20/21 backfill
+    + JMF cover crops chart. BONUS: engine v1.1 variety→species inheritance
+    fix landed during R2 remediation (per team_00 directive — proper engine
+    fix, not workaround). Production enrichment now 8.9× larger (2,848 vs
+    319 rows). LOD500_LOCKED via team_190 R2 PASS (GPT-5.5)."
   profile: L0
 
 - id: SFA-S003-P002-WP-C2
