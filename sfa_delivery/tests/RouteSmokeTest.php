@@ -57,7 +57,7 @@ final class RouteSmokeTest extends TestCase
             ['/crop-book/table/'],
             ['/crop-book/search/?q=עגב'],
             ['/crop-book/anise-hyssop/'],
-            ['/crop-book/anise-hyssop/variety/blue-fortune/'],
+            ['/crop-book/anise-hyssop/variety/variety-11/'],
             ['/market/'],
             ['/market/onion-dry/'],
             ['/community/'],

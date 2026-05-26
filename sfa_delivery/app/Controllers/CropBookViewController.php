@@ -99,7 +99,7 @@ final class CropBookViewController
             if (is_array($vPayload)) {
                 $variety = array_merge($variety, $vPayload);
             }
-            $variety['slug'] = self::slugify((string)$variety['name']);
+            $variety['slug'] = self::varietySlug($variety);
             unset($variety['payload_json']);
         }
 
@@ -125,7 +125,7 @@ final class CropBookViewController
         $varStmt->execute([$crop['id']]);
         $variety = null;
         foreach ($varStmt->fetchAll() as $row) {
-            if (self::slugify((string)$row['name']) === $vslug) {
+            if (self::varietySlug($row) === $vslug) {
                 $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
                 $variety = array_merge($row, is_array($payload) ? $payload : []);
                 unset($variety['payload_json']);
@@ -155,5 +155,24 @@ final class CropBookViewController
         $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug) ?? '';
         $slug = preg_replace('/\s+/', '-', $slug) ?? '';
         return trim($slug, '-') ?: 'variety';
+    }
+
+    /**
+     * Build a deterministic URL slug for a variety row.
+     * Fix for F-BUILD-04: Hebrew variety names previously slugged to a
+     * shared fallback 'variety' (slugify strips non-ASCII), causing all
+     * varieties of a crop to collide on the same URL. Now we use the
+     * numeric id as the unique deterministic component.
+     * Pattern: variety-{id}  (e.g., variety-401, variety-415)
+     */
+    private static function varietySlug(array $variety): string
+    {
+        $id = (int)($variety['id'] ?? 0);
+        if ($id <= 0) {
+            // Shouldn't happen — id is PK in crop_varieties — but keep a
+            // legacy fallback to the old ASCII-only slugifier just in case.
+            return self::slugify((string)($variety['name'] ?? ''));
+        }
+        return 'variety-' . $id;
     }
 }

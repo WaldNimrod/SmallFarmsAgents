@@ -35,36 +35,44 @@ captured at OS window content area (~1456×835), regardless of the requested
 | AC-14 | `/crop-book/table`                   | 200 | ✓ | 52 crops in table, `<th scope="col">` confirmed |
 | AC-15 | `/crop-book/search?q=`               | 200 | ✓ | Search box |
 | AC-16 | `/crop-book/anise-hyssop`            | 200 | ✓ | Crop detail + 1 variety listed |
-| AC-17 | `/crop-book/anise-hyssop/variety/variety` | 200 | ⚠️ | Renders payload_json as raw text — see F-BUILD-04 |
+| AC-17 | `/crop-book/anise-hyssop/variety/variety-1` | 200 | ✓ | (v1.0.2) deterministic `variety-{id}` slug pattern (F-BUILD-04 RESOLVED); labeled Hebrew fields per CB5 design — שם באנגלית / ימים לבגרות / מרווח בשורה / שיטת שתילה / etc. (F-BUILD-05 RESOLVED); skip-empty rendering |
 | AC-18 | `/market/`                           | 200 | ✓ | Disclaimer block + 65 products with REAL prices |
 | AC-19 | `/market/prd017`                     | 200 | ✓ | בצל יבש detail, מחיר אחרון 15.25 ₪ |
 | AC-20 | `/community`                         | 200 | ✓ | Static info page + WhatsApp link (no form, no POST) |
 
-## New findings from visual evidence
+## Findings from initial visual evidence (RESOLVED in v1.0.2)
 
-### F-BUILD-04 (MAJOR) — variety slug collision
+### F-BUILD-04 (MAJOR — RESOLVED 2026-05-27)
 
-`CropBookViewController::slugify()` strips all non-ASCII characters (`[^a-z0-9\s-]`).
-For Hebrew variety names (which is most/all of our 190 varieties), this returns
-empty string and falls back to literal `'variety'`. Therefore:
-- All `<a href>` links in CB5 detail page point to `/crop-book/{slug}/variety/variety`
-- Only the FIRST variety per crop is ever reachable via the route
-- Other 189 varieties are effectively orphaned at the URL layer
+**Original symptom (v1.0.1):** `CropBookViewController::slugify()` strips all non-ASCII
+characters (`[^a-z0-9\s-]`). For Hebrew variety names (all 190 of them), this
+returned the fallback literal `'variety'` — every variety of every crop collided
+on the same URL; only the first variety per crop was URL-reachable.
 
-**Remediation:** Use Hebrew-aware slug (Unicode-letters `\p{L}` regex via `preg_replace`
-with `/u` flag), OR add a deterministic numeric suffix (e.g. `variety-{id}`), OR
-URL-encode the Hebrew name directly. Defer to L-GATE_V verdict — team_190 may
-choose to flag this BUILD_PARTIAL or accept as MAJOR-with-fix-required.
+**Fix (v1.0.2):** New `CropBookViewController::varietySlug($variety)` static method
+returns `'variety-' . (int)$variety['id']`. Deterministic, unique, ASCII-safe,
+no URL-encoding needed. Both the CB5 link generator (line ~102) and the variety
+route lookup (line ~128) now use it.
 
-### F-BUILD-05 (MINOR) — variety detail template renders raw JSON
+**Live verification:** CB5 detail page renders `<a href="/crop-book/{slug}/variety/variety-1">`
+etc. with unique IDs; multi-variety crops correctly produce distinct URLs.
+phpunit `RouteSmokeTest::testHtmlRoutesReturnSuccess` updated for new pattern.
 
-`book_variety.php` template appears to render the variety payload as serialized
-text rather than discrete labeled fields. Visual screenshot of
-`/crop-book/anise-hyssop/variety/variety` shows JSON-like text dump.
+### F-BUILD-05 (MINOR — RESOLVED 2026-05-27)
 
-**Remediation:** Format the variety payload fields (days_to_maturity,
-planting_method, harvest_unit, etc.) per the CB5 design artboard expectations.
-Defer to L-GATE_V verdict.
+**Original symptom (v1.0.1):** `book_variety.php` rendered `json_encode($variety, ...)`
+inside `<pre>` — raw JSON text on the user-facing page.
+
+**Fix (v1.0.2):** Template fully rewritten. Renders breadcrumb (ספר גידולים ›
+{crop} › {variety}), title with optional "ברירת מחדל" tag, then `<dl
+class="variety-fields">` with Hebrew labels per field (שם באנגלית, ימים
+לבגרות, חלון קציר מינ׳/מקס׳, מרווח בשורה, שיטת שתילה, עונת שתילה, יחידת
+קציר, מחיר מתועד, יחידת מחיר, מקור מחיר, הערות). Skips empty fields
+gracefully. Back-link with proper a11y touch target. Inline scoped CSS
+for layout.
+
+**Live verification:** `<pre>` raw-JSON count: 0; `<dt>` labels count: 12;
+`.variety-fields` class present.
 
 ## Console errors
 
