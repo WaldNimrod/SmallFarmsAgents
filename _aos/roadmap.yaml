@@ -1835,10 +1835,10 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C1
   label: "ספר גידולים: Wave 1 — Israeli Structured Data + Tend Multi-Year Backfill"
-  status: ELIGIBLE
+  status: BUILDING
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
@@ -1867,9 +1867,26 @@ work_packages:
       validation per IR#1 OR direct builder activation per team_00 preference.
       Spec: _aos/work_packages/S003/SFA-S003-P002-WP-C1/LOD400_spec.md"
     validator: team_10
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-26"
+    commits: ["72323aa"]
+    notes: "sfa_build (Claude Sonnet 4.7, separate session) BUILD COMPLETE.
+      Migrations 049+050 (not 047/048 — head was already 048 from WP-B2/B1 patches).
+      All 5 importers built + 25 focused tests + 7 new test files. IL_CROP_MAP:
+      90.7% resolution of 107 distinct labels (AC-C1-05 PASS). Live ingestion:
+      crop_planting_calendar=113 rows (NI:groworganic=41, NI:bustan=44),
+      OP:Idan_2017 source values=155, crop_cover_crops=35, Tend harvest_stats
+      2019/2020/2021 = 111/128/119 (358 total). Full suite: 673 PASS / 1 pre-existing
+      fail (test_admin_routes). validate_aos.sh 29/19/0. LOD500_LOCKED check OK.
+      BUILD_REPORT + UNMAPPED_CROPS (10 unmapped labels — worksheet artifacts)
+      + CHANGELOG updated.
+      Note: new jmf/ package re-exports legacy parse_jmf_dir to avoid shadowing.
+      BUILD_REPORT: _COMMUNICATION/team_10/SFA-S003-P002-WP-C1/BUILD_REPORT_v1.0.0.md"
   notes: "WP-C1 first wave of external sources integration. Lowest risk (pure
-    tabular, no LLM/OCR). Largest immediate DB delta (3 new Tend years × ~3,000
-    harvests + 2 new Israeli sources). Authorized 2026-05-26 by team_00."
+    tabular, no LLM/OCR). Largest immediate DB delta: 3 new Tend years +
+    2 new Israeli sources. BUILD COMPLETE 2026-05-26 at commit 72323aa.
+    Ready for team_190 L-GATE_V."
   profile: L0
 
 - id: SFA-S003-P002-WP-C2
