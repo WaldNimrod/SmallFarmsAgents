@@ -10,70 +10,76 @@ use SFA\Lib\Template;
 
 final class MarketViewController
 {
-    public function __construct(private PDO $pdo) {}
+    public function __construct(private PDO $pdo)
+    {
+    }
 
     public function index(Request $request, Response $response): Response
     {
-        $q = $request->getQueryParams();
-        $category = $q['category'] ?? null;
-
-        $sql = 'SELECT id, slug, hebrew_name, category, unit, last_price, last_price_date, freshness_days
-                FROM products WHERE 1=1';
-        $params = [];
-        if ($category !== null && $category !== '') { $sql .= ' AND category = ?'; $params[] = $category; }
-        $sql .= ' ORDER BY category, hebrew_name';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+        $stmt = $this->pdo->query('SELECT id, slug, hebrew_name, category, unit, last_price, last_price_date, freshness_days FROM products ORDER BY hebrew_name');
         $products = $stmt->fetchAll();
-
-        $cats = $this->pdo->query(
-            'SELECT category, COUNT(*) c FROM products WHERE category IS NOT NULL GROUP BY category ORDER BY category'
-        )->fetchAll();
-
-        $html = Template::render('market/list', [
-            'products' => $products,
-            'categories' => $cats,
-            'current_category' => $category,
-            'total' => count($products),
-        ]);
-        return self::html($response, $html);
+        return $this->html($response, Template::render('pages/market_list', ['products' => $products]));
     }
 
     public function detail(Request $request, Response $response, array $args): Response
     {
         $slug = (string)($args['slug'] ?? '');
-        $stmt = $this->pdo->prepare(
-            'SELECT id, slug, hebrew_name, category, unit, last_price, last_price_date,
-                    freshness_days, last_pushed_at, payload_json
-             FROM products WHERE slug = ?'
-        );
+        $stmt = $this->pdo->prepare('SELECT id, slug, hebrew_name, category, unit, last_price, last_price_date, freshness_days, payload_json FROM products WHERE slug = ? LIMIT 1');
+        $stmt->execute([$slug]);
+        $product = $stmt->fetch();
+
+        if (!$product) {
+            return $this->html($response, Template::render('error', ['code' => 404, 'message' => 'מוצר לא נמצא']), 404);
+        }
+
+        $history = $this->fetchHistory((int)$product['id'], 28);
+
+        return $this->html($response, Template::render('pages/market_product', [
+            'product' => $product,
+            'history' => $history,
+        ]));
+    }
+
+    public function productHistoryApi(Request $request, Response $response, array $args): Response
+    {
+        $slug = (string)($args['slug'] ?? '');
+        $days = max(1, min(365, (int)($request->getQueryParams()['days'] ?? 28)));
+
+        $stmt = $this->pdo->prepare('SELECT id FROM products WHERE slug = ? LIMIT 1');
         $stmt->execute([$slug]);
         $product = $stmt->fetch();
         if (!$product) {
-            $html = Template::render('error', ['code' => 404, 'message' => 'מוצר לא נמצא']);
-            return self::html($response, $html, 404);
+            $response->getBody()->write(json_encode([], JSON_UNESCAPED_UNICODE));
+            return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
         }
-        $payload = !empty($product['payload_json']) ? (json_decode($product['payload_json'], true) ?: []) : [];
-        $product = array_merge($product, $payload);
-        unset($product['payload_json']);
 
-        $priceStmt = $this->pdo->prepare(
-            'SELECT price_date, price, source FROM product_prices
-             WHERE product_id = ? AND price_date >= (CURRENT_DATE - INTERVAL 30 DAY)
-             ORDER BY price_date DESC LIMIT 30'
-        );
-        $priceStmt->execute([$product['id']]);
-        $history = $priceStmt->fetchAll();
-
-        $html = Template::render('market/detail', [
-            'product' => $product, 'history' => $history,
-        ]);
-        return self::html($response, $html);
+        $history = $this->fetchHistory((int)$product['id'], $days);
+        $response->getBody()->write(json_encode($history, JSON_UNESCAPED_UNICODE));
+        return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 
-    private static function html(Response $r, string $body, int $status = 200): Response
+    private function fetchHistory(int $productId, int $days): array
     {
-        $r->getBody()->write($body);
-        return $r->withStatus($status)->withHeader('Content-Type', 'text/html; charset=utf-8');
+        $driver = (string)$this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $sql = $driver === 'sqlite'
+            ? 'SELECT price_date, price, source FROM product_prices WHERE product_id = ? ORDER BY price_date DESC LIMIT ?'
+            : 'SELECT price_date, price, source FROM product_prices WHERE product_id = ? AND price_date >= (CURRENT_DATE - INTERVAL ? DAY) ORDER BY price_date DESC';
+
+        $stmt = $this->pdo->prepare($sql);
+        if ($driver === 'sqlite') {
+            $stmt->bindValue(1, $productId, PDO::PARAM_INT);
+            $stmt->bindValue(2, $days, PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            $stmt->execute([$productId, $days]);
+        }
+
+        return $stmt->fetchAll();
+    }
+
+    private function html(Response $response, string $body, int $status = 200): Response
+    {
+        $response->getBody()->write($body);
+        return $response->withStatus($status)->withHeader('Content-Type', 'text/html; charset=utf-8');
     }
 }

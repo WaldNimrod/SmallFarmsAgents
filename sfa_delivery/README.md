@@ -15,10 +15,13 @@ sfa_delivery/
 ├── .env.example           env template (real .env created on uPress)
 ├── app/
 │   ├── bootstrap.php      app factory, container, error handler
-│   ├── routes.php         /api/v1/* routes
-│   ├── Controllers/       Health, Ingest, Crops, Products
+│   ├── routes.php         HTML shell + /api/v1/* routes
+│   ├── Controllers/       Hub/CropBook/Market + Health, Ingest, Crops, Products
 │   ├── Middleware/        HmacAuth, JsonError, JsonResponse
-│   └── Lib/               Db (PDO), Hmac, Logger (Monolog)
+│   └── Lib/               Db (PDO), Hmac, Logger (Monolog), Modules
+├── modules.php            generated module catalog (from team_35 YAML)
+├── bin/
+│   └── regenerate_modules.php
 ├── migrations/
 │   ├── 001_schema_migrations.sql   plumbing tracker + ingest_log
 │   ├── 002_crops.sql               crops + crop_varieties
@@ -36,6 +39,7 @@ sfa_delivery/
 
 ```bash
 composer install
+php bin/regenerate_modules.php
 composer test           # phpunit (uses sqlite::memory:)
 php -S localhost:8080   # ad-hoc dev server (index.php as router via .htaccess emulation: php -S localhost:8080 -t .)
 ```

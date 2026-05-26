@@ -1,0 +1,25 @@
+/ 200
+/about/ 200
+/search/ 200
+/calc/ 200
+/crop-book/ 200
+/crop-book/questions/ 200
+/crop-book/family/ 200
+/crop-book/table/ 200
+/crop-book/search/?q=%D7%A2%D7%92%D7%91 200
+/crop-book/anise-hyssop/ 200
+/crop-book/anise-hyssop/variety/blue-fortune/ 200
+/market/ 200
+/market/onion-dry/ 200
+/community/ 200
+api_health {
+    "status": "ok",
+    "php_version": "8.5.6",
+    "db": "ok",
+    "ts": "2026-05-26T22:16:42+00:00"
+}
+api_modules 8
+api_search True True
+api_history 1
+ingest_valid 200
+ingest_bad 401

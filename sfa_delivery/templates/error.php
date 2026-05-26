@@ -1,13 +1,12 @@
 <?php
 use SFA\Lib\Template;
-$h = [Template::class, 'h'];
-$page_title = "שגיאה " . ($code ?? 500);
+$page_title = 'שגיאה';
 ob_start();
 ?>
-<section class="error">
-  <h1>שגיאה <?= (int)($code ?? 500) ?></h1>
-  <p class="lead"><?= $h($message ?? 'אירעה שגיאה') ?></p>
-  <p><a class="btn" href="/">חזרה לדף הבית</a></p>
+<section>
+  <h1><?= htmlspecialchars((string)($code ?? 500), ENT_QUOTES, 'UTF-8') ?></h1>
+  <p><?= htmlspecialchars((string)($message ?? 'אירעה שגיאה'), ENT_QUOTES, 'UTF-8') ?></p>
+  <a href="/">חזרה לדף הבית</a>
 </section>
 <?php
 $content = ob_get_clean();

@@ -53,13 +53,24 @@ final class ProductsController
             $product = array_merge($product, $payload ?? []);
         }
 
-        // Fetch price history (last 30 days)
-        $priceStmt = $this->pdo->prepare(
-            'SELECT price_date, price, source FROM product_prices
-             WHERE product_id = ? AND price_date >= (CURRENT_DATE - INTERVAL 30 DAY)
-             ORDER BY price_date'
-        );
-        $priceStmt->execute([$product['id']]);
+        // Keep sqlite::memory tests compatible while preserving MySQL semantics.
+        $driver = (string)$this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if ($driver === 'sqlite') {
+            $priceStmt = $this->pdo->prepare(
+                'SELECT price_date, price, source FROM product_prices
+                 WHERE product_id = ?
+                 ORDER BY price_date DESC
+                 LIMIT 30'
+            );
+            $priceStmt->execute([$product['id']]);
+        } else {
+            $priceStmt = $this->pdo->prepare(
+                'SELECT price_date, price, source FROM product_prices
+                 WHERE product_id = ? AND price_date >= (CURRENT_DATE - INTERVAL 30 DAY)
+                 ORDER BY price_date'
+            );
+            $priceStmt->execute([$product['id']]);
+        }
         $product['price_history_30d'] = $priceStmt->fetchAll();
 
         return self::json($response, $product);
