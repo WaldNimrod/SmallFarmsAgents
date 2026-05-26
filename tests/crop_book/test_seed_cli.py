@@ -117,6 +117,8 @@ class TestSeedAllEnrichDefault:
         with (
             patch.object(sys, "argv", ["seed.py", "--all"]),
             patch("organic_market_agent.crop_book.importer.seed.seed", side_effect=lambda **kw: None),
+            patch("organic_market_agent.crop_book.importer.seed._run_c1_ingestion"),
+            patch("organic_market_agent.crop_book.importer.seed._run_c4_ingestion"),
             # SessionFactory is imported inside main() from db.session — patch source
             patch("organic_market_agent.db.session.SessionFactory", return_value=fake_factory),
             # run_enrichment is imported inside main() — patch source module
@@ -144,6 +146,8 @@ class TestSeedAllEnrichDefault:
         with (
             patch.object(sys, "argv", ["seed.py", "--all", "--no-enrich"]),
             patch("organic_market_agent.crop_book.importer.seed.seed", side_effect=lambda **kw: None),
+            patch("organic_market_agent.crop_book.importer.seed._run_c1_ingestion"),
+            patch("organic_market_agent.crop_book.importer.seed._run_c4_ingestion"),
             patch("organic_market_agent.db.session.SessionFactory", return_value=fake_factory),
             patch(
                 "organic_market_agent.crop_book.importer.enrichment_runner.run_enrichment",

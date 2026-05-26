@@ -11,6 +11,15 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-C4 — Web sources integration (2026-05-27, team_10)
+- **Migrations 051/052:** `crop_companion_matrix` + `crop_postharvest_storage` (051–052; C1 owns 050).
+- **Web importers (CW-01..08):** `importer/web/` — UC ANR germination, OSU frost, UMD pH, NE Veg NPK, IL MoA/Shaham calendar, seeds/gram, UF/IFAS companion, UC Davis postharvest.
+- **`scripts/download_web_sources.py`** — caches sources under `data/external_sources/web/`.
+- **`EN_CROP_MAP`**, 14 `source_registry` entries, `FIELD_POLICY` extensions for C4 fields.
+- **`seed.py`:** `--c4-only`, `--no-c4`, `_run_c4_ingestion()`.
+- **Tests:** +27 in `tests/crop_book/test_c4_*.py`.
+- **Reports:** `_COMMUNICATION/team_10/SFA-S003-P002-WP-C4/BUILD_REPORT_v1.0.0.md`, `URL_AUDIT_v1.0.0.md`, `LICENSE_AUDIT_v1.0.0.md`.
+
 ### SFA-S003-P002-WP-C1 — Israeli structured data + Tend multi-year (2026-05-27, team_10)
 - **Migrations 049/050:** `crop_planting_calendar` + `crop_cover_crops` (TIMESTAMPTZ; renumbered from LOD400 047/048).
 - **New importers:** `israeli/groworganic_importer`, `bustan_importer`, `idan_planning_importer`; `jmf/cover_crops_importer`.

@@ -90,6 +90,55 @@ FIELD_POLICY: dict[str, FieldPolicy] = {
         trust_order=("EX", "NI", "OP"),
         blend_strategy="hard_winner",
     ),
+    # --- WP-C4 web-source fields ---
+    "germination_temp_c_min": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "germination_temp_c_opt": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "germination_temp_c_max": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "frost_tolerance_class": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="hard_winner",
+    ),
+    "soil_ph_target": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "soil_ph_liming_threshold": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "nutrient_removal_n_kg_ha": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "nutrient_removal_p_kg_ha": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "nutrient_removal_k_kg_ha": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "nutrient_removal_ca_kg_ha": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "nutrient_removal_mg_kg_ha": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
+    "seeds_per_gram": FieldPolicy(
+        trust_order=("EX", "NI", "OP", "PR"),
+        blend_strategy="weighted_mean",
+    ),
 }
 
 # Default policy for fields not in the table

@@ -510,3 +510,95 @@ def resolve_il_crop(name_he: str) -> str | None:
     if normalized in IL_CROP_MAP:
         return IL_CROP_MAP[normalized]
     return None
+
+
+# ---------------------------------------------------------------------------
+# English extension-source → crops.name_he (SFA-S003-P002-WP-C4 LOD400 §4)
+# ---------------------------------------------------------------------------
+EN_CROP_MAP: dict[str, str] = {
+    **{k: v for k, v in TEND_CROP_MAP.items()},
+    # Common extension aliases (singular/plural, shortened labels)
+    "Tomato": "עגבנייה",
+    "Tomatoes": "עגבנייה",
+    "Pepper": "פלפל",
+    "Peppers": "פלפל",
+    "Sweet Pepper": "פלפל",
+    "Hot Pepper": "פלפל",
+    "Bean": "שעועית",
+    "Beans": "שעועית",
+    "Bush Bean": "שעועית",
+    "Pole Bean": "שעועית",
+    "Cucumber": "מלפפון",
+    "Cucumbers": "מלפפון",
+    "Squash": "קישוא",
+    "Summer Squash": "קישוא",
+    "Winter Squash": "דלעת",
+    "Melon": "מלון",
+    "Melons": "מלון",
+    "Watermelon": "אבטיח",
+    "Onion": "בצל",
+    "Onions": "בצל",
+    "Garlic": "שום",
+    "Carrot": "גזר",
+    "Carrots": "גזר",
+    "Beet": "סלק",
+    "Beets": "סלק",
+    "Broccoli": "ברוקולי",
+    "Cabbage": "כרוב",
+    "Cauliflower": "כרובית",
+    "Kale": "קייל",
+    "Lettuce": "חסה",
+    "Spinach": "תרד",
+    "Swiss Chard": "מנגולד",
+    "Chard": "מנגולד",
+    "Eggplant": "חציל",
+    "Pea": "אפונה",
+    "Peas": "אפונה",
+    "Radish": "צנונית",
+    "Radishes": "צנונית",
+    "Turnip": "לפת",
+    "Turnips": "לפת",
+    "Leek": "כרישה",
+    "Leeks": "כרישה",
+    "Celery": "סלרי",
+    "Parsley": "פטרוזיליה",
+    "Cilantro": "כוסברה",
+    "Coriander": "כוסברה",
+    "Dill": "שמיר",
+    "Basil": "בזיל",
+    "Mint": "נענע",
+    "Sage": "מרווה",
+    "Thyme": "טימין",
+    "Arugula": "ארוגולה",
+    "Rocket": "ארוגולה",
+    "Okra": "במיה",
+    "Asparagus": "סלרי",
+    "Artichoke": "ארטישוק",
+    "Potato": "תפוח אדמה",
+    "Potatoes": "תפוח אדמה",
+    "Sweet Potato": "בטטה",
+    "Corn": "תירס",
+    "Sweet Corn": "תירס",
+    "Strawberry": "תות שדה",
+    "Strawberries": "תות שדה",
+    "Pak Choi": "פאק צ'וי",
+    "Bok Choy": "פאק צ'וי",
+    "Kohlrabi": "קולורבי",
+    "Fennel": "שומר",
+    "Ginger": "ג'ינג'ר",
+    "Turmeric": "כורכום",
+}
+
+
+def resolve_en_crop(name_en: str) -> str | None:
+    """Map an English crop label from web extension sources to canonical name_he."""
+    key = (name_en or "").strip()
+    if not key:
+        return None
+    if key in EN_CROP_MAP:
+        return EN_CROP_MAP[key]
+    lower = key.lower()
+    for src, dst in EN_CROP_MAP.items():
+        if src.lower() == lower:
+            return dst
+    return None

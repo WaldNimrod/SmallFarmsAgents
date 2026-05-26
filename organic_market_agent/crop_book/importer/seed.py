@@ -460,6 +460,36 @@ _EXTERNAL_SOURCES_DIR = (
 _TEND_MULTI_YEAR_DIR = _EXTERNAL_SOURCES_DIR / "tend_multi_year"
 
 
+def _run_c4_ingestion(session: Session) -> None:
+    """WP-C4: Web sources (team_80 multi-engine scout)."""
+    from organic_market_agent.crop_book.importer.web import (
+        il_moa_calendar,
+        ne_veg_guide_nutrients,
+        osu_frost_tolerance,
+        seeds_per_gram,
+        uc_anr_germination,
+        uc_davis_postharvest,
+        uf_ifas_companion,
+        umd_soil_ph,
+    )
+
+    logger.info("WP-C4: Web sources ingestion (8 importers)")
+    modules = [
+        il_moa_calendar,
+        uc_anr_germination,
+        osu_frost_tolerance,
+        umd_soil_ph,
+        ne_veg_guide_nutrients,
+        seeds_per_gram,
+        uf_ifas_companion,
+        uc_davis_postharvest,
+    ]
+    for module in modules:
+        summary = module.import_all(session)
+        logger.info("WP-C4 %s: %s", module.__name__.split(".")[-1], summary)
+    session.flush()
+
+
 def _run_c1_ingestion(session: Session) -> None:
     """WP-C1: Israeli structured sources + Tend 2019/2020/2021 backfill."""
     from organic_market_agent.crop_book.importer.israeli import (
@@ -535,6 +565,10 @@ def main() -> None:
         help="Run WP-C1 importers only (Israeli structured + Tend multi-year)",
     )
     mode.add_argument(
+        "--c4-only", action="store_true",
+        help="Run WP-C4 web-source importers only",
+    )
+    mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
         help="Import named crops (Tend English names, e.g. Arugula Broccoli)",
     )
@@ -599,6 +633,10 @@ def main() -> None:
         help="Skip WP-C1 importers when --all is used",
     )
     parser.add_argument(
+        "--no-c4", action="store_true",
+        help="Skip WP-C4 importers when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -614,8 +652,23 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only:
-        parser.error("Specify --all, --c1-only, --jmf-only, --ni-only, or --crops NAME [NAME ...]")
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only:
+        parser.error(
+            "Specify --all, --c1-only, --c4-only, --jmf-only, --ni-only, "
+            "or --crops NAME [NAME ...]"
+        )
+
+    # ── C4-only fast path (WP-C4 LOD400 §6) ──
+    if args.c4_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+
+        with SessionFactory() as session:
+            _run_c4_ingestion(session)
+            enrich_summary = run_enrichment(session, dry_run=False)
+            logger.info("Enrichment: %s", enrich_summary)
+            session.commit()
+        return
 
     # ── C1-only fast path (WP-C1 LOD400 §7) ──
     if args.c1_only:
@@ -769,6 +822,10 @@ def main() -> None:
 
         if args.all and not args.no_c1:
             _run_c1_ingestion(session)
+            session.flush()
+
+        if args.all and not args.no_c4:
+            _run_c4_ingestion(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)

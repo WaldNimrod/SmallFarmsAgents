@@ -53,6 +53,26 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
     "OP:Idan_2017": SourceSpec("OP:Idan_2017", "OP", weight=0.55),
     "PR:jmf_cover_crops": SourceSpec("PR:jmf_cover_crops", "PR", weight=0.70),
 
+    # --- WP-C4: Web sources (team_80 multi-engine scout) ---
+    "PR:uc_anr_germination": SourceSpec("PR:uc_anr_germination", "PR", weight=0.70),
+    "PR:purdue_germination": SourceSpec("PR:purdue_germination", "PR", weight=0.70),
+    "PR:osu_frost_tolerance": SourceSpec("PR:osu_frost_tolerance", "PR", weight=0.70),
+    "PR:csu_planting_guide": SourceSpec("PR:csu_planting_guide", "PR", weight=0.70),
+    "PR:umn_field_planning": SourceSpec("PR:umn_field_planning", "PR", weight=0.70),
+    "PR:umd_soil_ph": SourceSpec("PR:umd_soil_ph", "PR", weight=0.70),
+    "PR:ne_veg_guide": SourceSpec("PR:ne_veg_guide", "PR", weight=0.70),
+    "PR:fao_fertilizer_use": SourceSpec("PR:fao_fertilizer_use", "PR", weight=0.70),
+    "NI:il_moa_garden_guide": SourceSpec(
+        "NI:il_moa_garden_guide", "NI", weight=None, is_hard_override=True,
+    ),
+    "NI:shaham_extension": SourceSpec(
+        "NI:shaham_extension", "NI", weight=None, is_hard_override=True,
+    ),
+    "OP:vital_seeds_count": SourceSpec("OP:vital_seeds_count", "OP", weight=0.55),
+    "OP:osborne_seed_count": SourceSpec("OP:osborne_seed_count", "OP", weight=0.55),
+    "PR:uf_ifas_companion": SourceSpec("PR:uf_ifas_companion", "PR", weight=0.70),
+    "PR:uc_davis_postharvest": SourceSpec("PR:uc_davis_postharvest", "PR", weight=0.70),
+
     # --- MK: Market index (design-registered; importer in WP-B) ---
     "_MK_CLASS_SENTINEL": SourceSpec("_MK_CLASS_SENTINEL", "MK", weight=0.40),
 

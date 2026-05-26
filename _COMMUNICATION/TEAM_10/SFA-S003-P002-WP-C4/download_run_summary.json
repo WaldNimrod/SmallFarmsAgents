@@ -1,0 +1,13 @@
+{
+  "total": 1,
+  "ok": 0,
+  "results": [
+    {
+      "source": "uf_ifas_companion",
+      "url": "https://edis.ifas.ufl.edu/publication/HS389",
+      "ok": false,
+      "path": null,
+      "status": 410
+    }
+  ]
+}
