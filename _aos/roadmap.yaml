@@ -1994,11 +1994,12 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C4
   label: "ספר גידולים: Wave 4 — Web Sources (multi-engine team_80 consolidated)"
-  status: ELIGIBLE
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
@@ -2037,10 +2038,39 @@ work_packages:
       2/3 on soil pH + Israeli sources + ECOCROP; 1/3 on companion + EPPO.
       Consolidated findings: _COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/CONSOLIDATED_FINDINGS_v1.0.0.md"
     validator: team_10
-  notes: "WP-C4 LOD400_LOCKED 2026-05-26 after multi-engine team_80 scout
-    (OpenAI + Perplexity + Gemini). 8 sources to ingest covering germination
-    temp, frost tolerance, soil pH, NPK removal, Israeli planting calendar
-    (CRITICAL — multi-engine win), seeds/gram, companion planting, postharvest.
-    3 sources deferred (ECOCROP, EPPO, Cornell Mediterranean varieties) to
-    future WP-D. Authorized 2026-05-26 by team_00."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-26"
+    commits: ["27f6152"]
+    notes: "sfa_build (Claude Sonnet 4.7, separate session) BUILD COMPLETE.
+      Migrations 051+052 (renumbered from spec 050/051 — head was already 050
+      from WP-C1). 8 web importers under crop_book/importer/web/ + downloader
+      script (10/14 URLs cached, 71%). EN_CROP_MAP + 14 source_registry
+      entries. Live DB: 56 IL NI calendar rows, 29 companion pairs, 32
+      postharvest rows, 98+ source values from PR/OP sources. 27 new
+      test_c4_* tests + 403 crop_book tests pass. validate_aos.sh 29/19/0.
+      4 URLs blocked (IL MoA/Shaham/UF-IFAS/Osborne); committed extract.json
+      fallbacks per URL_AUDIT. BUILD_REPORT + URL_AUDIT + LICENSE_AUDIT filed."
+  - gate: L-GATE_V
+    result: PASS
+    round: 1
+    date: "2026-05-26"
+    reviewed_commit: "27f6152"
+    notes: "team_190 (non-Claude per IR#1) R1 PASS with LOD500_LOCKED
+      recommendation. C4 tests passed 27/27. AOS validation 29 PASS / 19 SKIP
+      / 0 FAIL. CRITICAL AC-C4-07: IL MoA + Shaham rows = 56 (>= 30 required)
+      — multi-engine team_80 investment validated end-to-end (OpenAI failed
+      to find IL sources but Perplexity + Gemini did). Enrichment remains
+      CALIBRATED=5/5 from sister WP-C1 engine v1.1 inheritance. Protected-file
+      + AOS mutation checks clean. Pre-existing admin-route envelope issue
+      noted as known caveat (706 PASS / 14 SKIP excluding that single
+      pre-existing failure), NOT classified as C4 finding.
+      Verdict: _COMMUNICATION/team_190/SFA-S003-P002-WP-C4/L-GATE_V_VERDICT_v1.0.0.md"
+    validator: team_190
+  notes: "COMPLETE 2026-05-26 at commit 27f6152. WP-C4 fourth wave of
+    external sources: 8 web importers from multi-engine team_80 scout
+    consolidation. CRITICAL gap-fill: Israeli MoA + Shaham planting calendar
+    (56 rows; the multi-engine win that closed OpenAI's blind spot).
+    LOD500_LOCKED via team_190 R1 PASS. 3 sources deferred (ECOCROP, EPPO,
+    Cornell Mediterranean varieties) to future WP-D."
   profile: L0
