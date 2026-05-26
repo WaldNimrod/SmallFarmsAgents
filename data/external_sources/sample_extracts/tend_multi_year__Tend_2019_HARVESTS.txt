@@ -1,0 +1,10 @@
+# Tend_2019_HARVESTS.csv
+# Total data rows: 1884
+# Columns: ['Date', 'Planting Name', 'Crop', 'Amount', 'Unit', 'Outlet Type', 'Outlet Name', 'Harvest Stage', 'Final Harvest']
+
+## First 5 data rows:
+  ['12/02/2019', 'Lettuce מסולסלת מעורב 18/11/2018 Ra.1 > L2 > Bed 121 12 bed m', 'Lettuce', '', '', '', 'Unknown outlet', 'Full-Size', 'Yes']
+  ['09/03/2019', 'Arugula Arugula 13/11/2018 Ra.1 > L6m > Bed 103 6 bed m', 'Arugula', '', '', 'Farmers Market', 'הדוכן יום ב', 'Baby Leaf', 'Yes']
+  ['09/03/2019', 'Arugula Arugula 13/11/2018 Ra.1 > L6m > Bed 103 6 bed m', 'Arugula', '', '', '', 'Unknown outlet', 'Baby Leaf', 'Yes']
+  ['09/03/2019', 'Arugula Arugula 13/11/2018 Ra.1 > L6m > Bed 103 6 bed m', 'Arugula', '', '', 'Farmers Market', 'קטיף יום ה', 'Baby Leaf', 'Yes']
+  ['01/04/2019', 'Anise Hyssop אזוב מצוי 17/07/2018 HH > A > Bed 4 4 bed m', 'Anise Hyssop', '20.0', 'Bunches', '', 'Unknown outlet', 'Full-Size', 'No']

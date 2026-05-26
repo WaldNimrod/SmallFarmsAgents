@@ -1,0 +1,10 @@
+# Tend_2020_GREENHOUSE_PLAN.csv
+# Total data rows: 479
+# Columns: ['Sow Date', 'Category', 'Crop', 'Crop Type', 'Variety', 'Days In Greenhouse', 'Transplant Date', '# Of Flats', 'Flat Type', 'Seeds Per Cell', 'Number Of Transplants', 'Days to 1st potting up', '1st Potting up date', 'Days to 2nd Potting up', '2nd Potting up date', 'Days to 3rd Potting up', '3rd Potting up date', 'Estimated loss', 'Total Seeds needed', 'Average seed weight', 'Average seed weight unit', 'Total weight needed', 'Total seed weight needed unit', 'Extra Seed %', 'Seed spec', '1st Potting up flat/pot type', '1st Potting up plants per cell/pot', '1st Potting up # of flats/pots', '2nd Potting up flat/pot type', '2nd Potting up plants per cell/pot', '2nd Potting up # of flats/pots', '3rd Potting up flat/pot type', '3rd Potting up plants per cell/pot', '3rd Potting up # of flats/pots', 'Microgreens/Plant sale']
+
+## First 5 data rows:
+  ['06/11/2019', 'Herbs', 'Parsley', 'Parsley', "בורג'ו - נטע", '61', '06/01/2020', '1.95', '', '5', '780.0', '', '', '', '', '', '', '30', '4310', '599', 'seeds/g', '7.20', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']
+  ['18/11/2019', 'Vegetables', 'Fennel', 'Fennel', 'Generic Variety', '58', '15/01/2020', '1.01', '310 cell flats', '1', '312.0', '', '', '', '', '', '', '30', '313', '195', 'seeds/g', '1.61', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']
+  ['18/11/2019', 'Vegetables', 'Onions: Scallions', 'Onions: Scallions', 'Generic Variety', '44', '01/01/2020', '0.63', '', '8', '252.0', '', '', '', '', '', '', '40', '2228', '300', 'seeds/g', '7.43', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']
+  ['28/11/2019', 'Vegetables', 'Kohlrabi', 'Kohlrabi', 'Generic Variety', '44', '11/01/2020', '1.01', '310 cell flats', '1', '312.0', '', '', '', '', '', '', '30', '312', '210', 'seeds/g', '1.49', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']
+  ['02/12/2019', 'Vegetables', 'Lettuce', 'Romaine', 'hyd. ערבית - נהורה נטע', '44', '15/01/2020', '0.52', '', '1', '208.0', '', '', '', '', '', '', '30', '230', '875', 'seeds/g', '0.26', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']

@@ -1,0 +1,10 @@
+# Tend_2019_SEED_LIST.csv
+# Total data rows: 382
+# Columns: ['Parents Crop', 'Variety', 'Year', 'Total Seeds Needed', 'Total Weight Needed', 'Total Seed Weight Needed Unit', 'Planting', 'Planting Seed Needed', 'Planting Seed Weight Needed', 'Planting Seed Weight Needed Unit', 'Planting Extra Seed Order %', 'Planting Seed Spec']
+
+## First 5 data rows:
+  ['Amaranth (Vegetable)', 'Generic Variety', '2018', '2500', '5.0', 'g', '29/4/2019,  12 bed m, HH > C > Bed 18', '2500', '5.0', 'g', '0.0', 'Organic']
+  ['Artichokes', 'גבע - דור 2', '2019', '125', '6.58', 'g', '14/11/2019,  36 bed m, HH > A > Beds 5-6 + 1 more Block', '125', '6.58', 'g', '0.0', '']
+  ['Arugula', 'Arugula', '2018', '44880', '30.08', 'g', '6/5/2019,  6 bed m, HH > C > Bed 15', '3960', '1.03', 'g', '10.0', 'Organic']
+  ['', '', '', '', '', '', '19/6/2019,  12 bed m, Ra.2 > C1 > Bed 215', '21120', '5.52', 'g', '10.0', 'Organic']
+  ['', '', '', '', '', '', '12/8/2019,  6 bed m, Ra.1 > L6m > Bed 101', '10560', '21.12', 'g', '10.0', 'Organic']

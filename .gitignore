@@ -28,3 +28,15 @@ backups/*.sql.gz
 # _COMMUNICATION — large PDF attachments not tracked; NotebookLM source packages are exceptions
 _COMMUNICATION/**/*.pdf
 !_COMMUNICATION/team_100/**/*.pdf
+
+# External sources — binaries gitignored; INDEX.md + raw_text/ + sample_extracts/ committed
+data/external_sources/**/*.xlsx
+data/external_sources/**/*.docx
+data/external_sources/**/*.pdf
+data/external_sources/**/*.jpg
+data/external_sources/**/*.jpeg
+data/external_sources/**/*.png
+data/external_sources/**/*.csv
+!data/external_sources/INDEX.md
+!data/external_sources/raw_text/
+!data/external_sources/sample_extracts/

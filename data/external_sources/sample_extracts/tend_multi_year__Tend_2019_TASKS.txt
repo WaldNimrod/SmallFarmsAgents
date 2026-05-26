@@ -1,0 +1,10 @@
+# Tend_2019_TASKS.csv
+# Total data rows: 566
+# Columns: ['Due Date', 'Date Completed', 'Task Name', 'Task Type', 'Assignees', 'Plantings Assigned', 'Location Assigned', 'Method', 'Sub-method', 'Input', 'Description', 'Manufacturer', 'OMRI', 'Application Rate Amount', 'Application Rate Amount Unit', 'Application Rate Area', 'Comments', 'Name Of Pest Identified', 'Number Of Minutes', 'Lines Of Drip', '360 Pipe #Lines', '360 Pipe Minutes', '360 Pipe Heads Per Line', '180 Pipe #Lines', '180 Pipe Minutes', '180 Pipe Heads Per Line', 'Total Inches', 'Total Gallons', 'Completed', 'Total Labor Hours']
+
+## First 5 data rows:
+  ['25/04/2019', '25/04/2019', 'Transplant', 'Transplant', 'Nimrod Wald', "Summer Squash Benning's Green Tint Scallop 03/04/2019 ", 'Ramim,Ra.3,Block R3,Beds 331', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['03/04/2019', '03/04/2019', 'Greenhouse Sow', 'Greenhouse Sow', 'Nimrod Wald', "Summer Squash Benning's Green Tint Scallop 03/04/2019 ", 'Ramim,Ra.3,Block R3,Beds 331', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['03/04/2019', '03/04/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Winter Squash Generic Variety 11/03/2019 ', 'Ramim,Ra.3,Block R3,Beds 331', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['11/03/2019', '', 'Greenhouse Sow', 'Greenhouse Sow', 'Garden Admin', 'Winter Squash Generic Variety 11/03/2019 ', 'Ramim,Ra.3,Block R3,Beds 331', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['28/08/2019', '28/08/2019', 'Direct Sow', 'Direct Sow', 'Garden Admin', 'Beets MIX עלי ביבי 28/08/2019 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']

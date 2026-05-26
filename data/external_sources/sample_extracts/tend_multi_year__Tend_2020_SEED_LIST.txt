@@ -1,0 +1,10 @@
+# Tend_2020_SEED_LIST.csv
+# Total data rows: 610
+# Columns: ['Parents Crop', 'Variety', 'Year', 'Total Seeds Needed', 'Total Weight Needed', 'Total Seed Weight Needed Unit', 'Planting', 'Planting Seed Needed', 'Planting Seed Weight Needed', 'Planting Seed Weight Needed Unit', 'Planting Extra Seed Order %', 'Planting Seed Spec']
+
+## First 5 data rows:
+  ['Amaranth (Vegetable)', 'Generic Variety', '2019', '9000', '6.0', 'g', '12/3/2020,  12 bed m, Ra.2 > C2 > Bed 222', '1800', '3.6', 'g', '0.0', '']
+  ['', '', '', '', '', '', '16/7/2020,  12 bed m, Ra.2 > C1 > Bed 213', '7200', '2.4', 'g', '0.0', '']
+  ['Arugula', 'Arugula', '2019', '126720', '48.47', 'g', '6/1/2020,  12 bed m, HH > B > Bed 10', '21120', '8.45', 'g', '10.0', 'Organic']
+  ['', '', '', '', '', '', '25/2/2020,  12 bed m, HH > B > Bed 12', '21120', '8.45', 'g', '10.0', 'Organic']
+  ['', '', '', '', '', '', '12/3/2020,  12 bed m, HH > B > Bed 9', '21120', '7.04', 'g', '10.0', 'Organic']

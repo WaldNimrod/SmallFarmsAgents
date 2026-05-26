@@ -1,0 +1,10 @@
+# Tend_2019_NOTES.csv
+# Total data rows: 31
+# Columns: ['Date', 'Creator', 'Note', 'Plantings', 'Location']
+
+## First 5 data rows:
+  ['11/12/2019', 'Nimrod Wald', 'השרייה 24 + מי חמצן', 'Sunflower - Field not assigned', '']
+  ['04/12/2019', 'Nimrod Wald', 'השרייה שעה בחומץ ומי חמצן ואז 10 שעות במים. \nזריעה עם תןספת אדמה מעל', 'Sunflower - Field not assigned', '']
+  ['26/11/2019', 'Nimrod Wald', 'השרייה קצרה', 'Sunflower - Field not assigned', '']
+  ['26/11/2019', 'Nimrod Wald', 'השרייה ממושכת - קצת מעל 24 שעות עם חומץ בחוץ\nזריעה באיזור חדש', 'Sunflower - Field not assigned', '']
+  ['19/11/2019', 'Nimrod Wald', 'השרייה עם חומץ מחוץ למקרר', 'Sunflower - Field not assigned', '']

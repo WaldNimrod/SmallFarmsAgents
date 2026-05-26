@@ -1,0 +1,10 @@
+# Tend_2020_TASKS.csv
+# Total data rows: 1101
+# Columns: ['Due Date', 'Date Completed', 'Task Name', 'Task Type', 'Assignees', 'Plantings Assigned', 'Location Assigned', 'Method', 'Sub-method', 'Input', 'Description', 'Manufacturer', 'OMRI', 'Application Rate Amount', 'Application Rate Amount Unit', 'Application Rate Area', 'Comments', 'Name Of Pest Identified', 'Number Of Minutes', 'Lines Of Drip', '360 Pipe #Lines', '360 Pipe Minutes', '360 Pipe Heads Per Line', '180 Pipe #Lines', '180 Pipe Minutes', '180 Pipe Heads Per Line', 'Total Inches', 'Total Gallons', 'Completed', 'Total Labor Hours']
+
+## First 5 data rows:
+  ['09/12/2020', '30/12/2020', 'Transplant', 'Transplant', 'Nimrod Wald', 'Spinach Regata ריגאטה 09/12/2020 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['10/09/2020', '13/09/2020', 'Transplant', 'Transplant', 'Nimrod Wald', 'Onions: Scallions אלדורדו 06/08/2020 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['23/07/2020', '23/07/2020', 'Transplant', 'Transplant', 'Nimrod Wald', 'Onions: Scallions אלדורדו 22/06/2020 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['23/07/2020', '23/07/2020', 'Transplant', 'Transplant', 'Nimrod Wald', 'Sorrel Red Veined 01/06/2020 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['10/04/2020', '10/04/2020', 'Direct Sow', 'Direct Sow', 'Nimrod Wald', 'Beets MIX עלי ביבי 10/04/2020 ', 'Ramim,Ra.2,Block C6m,Beds 208', '', '', '', '', '', '', '0', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']

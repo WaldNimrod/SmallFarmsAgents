@@ -1,0 +1,692 @@
+[
+  {
+    "path": "israeli/L01_GROWORGANIC_sowing_dates_base.xlsx",
+    "size_kb": 20,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "גיליון1",
+        "rows": 86,
+        "cols": 26
+      },
+      {
+        "name": "גיליון2",
+        "rows": 1,
+        "cols": 1
+      },
+      {
+        "name": "גיליון3",
+        "rows": 1,
+        "cols": 1
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L01_GROWORGANIC_sowing_dates_base.txt"
+  },
+  {
+    "path": "israeli/L02_AOSNOT_variety_info.docx",
+    "size_kb": 1282,
+    "type": "docx",
+    "chars": 6486,
+    "sample_path": "raw_text/israeli__L02_AOSNOT_variety_info.txt"
+  },
+  {
+    "path": "israeli/L03_IDAN_winter_planning.xlsx",
+    "size_kb": 36,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "תוכנית גידול",
+        "rows": 203,
+        "cols": 19
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L03_IDAN_winter_planning.txt"
+  },
+  {
+    "path": "israeli/L04_IDAN_summer_planning.xlsx",
+    "size_kb": 30,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "תוכנית גידול",
+        "rows": 150,
+        "cols": 17
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L04_IDAN_summer_planning.txt"
+  },
+  {
+    "path": "israeli/L05a_IDAN_seedlings_winter_18-19.xlsx",
+    "size_kb": 10,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "הזמנת שתילים וזרעים",
+        "rows": 21,
+        "cols": 12
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L05a_IDAN_seedlings_winter_18-19.txt"
+  },
+  {
+    "path": "israeli/L05b_IDAN_seedlings_summer_18-19.xlsx",
+    "size_kb": 12,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "הזמנת שתילים וזרעים",
+        "rows": 24,
+        "cols": 14
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L05b_IDAN_seedlings_summer_18-19.txt"
+  },
+  {
+    "path": "israeli/L06_covers_and_tunnels.xlsx",
+    "size_kb": 23,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "גיליון1",
+        "rows": 68,
+        "cols": 30
+      },
+      {
+        "name": "גיליון2",
+        "rows": 29,
+        "cols": 5
+      },
+      {
+        "name": "גיליון3",
+        "rows": 1,
+        "cols": 1
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L06_covers_and_tunnels.txt"
+  },
+  {
+    "path": "israeli/L09_hydro_vegetable_guide.pdf",
+    "size_kb": 2125,
+    "type": "pdf",
+    "pages": "24",
+    "chars_first2": 5163,
+    "sample_path": "raw_text/israeli__L09_hydro_vegetable_guide.txt"
+  },
+  {
+    "path": "israeli/L10_DR_ZACKS_leafy_hydro_survey.pdf",
+    "size_kb": 6732,
+    "type": "pdf",
+    "pages": "52",
+    "chars_first2": 84,
+    "sample_path": "raw_text/israeli__L10_DR_ZACKS_leafy_hydro_survey.txt"
+  },
+  {
+    "path": "israeli/L11_variety_trials_2021.pdf",
+    "size_kb": 3040,
+    "type": "pdf",
+    "pages": "14",
+    "chars_first2": 3279,
+    "sample_path": "raw_text/israeli__L11_variety_trials_2021.txt"
+  },
+  {
+    "path": "israeli/L36_BUSTAN_sowing_calendar.pdf",
+    "size_kb": 454,
+    "type": "pdf",
+    "pages": "1",
+    "chars_first2": 5341,
+    "sample_path": "raw_text/israeli__L36_BUSTAN_sowing_calendar.txt"
+  },
+  {
+    "path": "israeli/L43_customer_leafy_greens.xlsx",
+    "size_kb": 211,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "cost per head",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "space",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "electricity cost for lights",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "trial space shafir",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "layout shafir",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "trial space Avigdor",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "Layout avigdor",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "trial space brown",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "P&L",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "Income 2026",
+        "rows": 0,
+        "cols": 0
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L43_customer_leafy_greens.txt"
+  },
+  {
+    "path": "israeli/L44_israel_organic_greens.pdf",
+    "size_kb": 3127,
+    "type": "pdf",
+    "pages": "1",
+    "chars_first2": 1657,
+    "sample_path": "raw_text/israeli__L44_israel_organic_greens.txt"
+  },
+  {
+    "path": "israeli/L45_2017_data_summary.xlsx",
+    "size_kb": 58,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "מפת חלקה",
+        "rows": 281,
+        "cols": 20
+      },
+      {
+        "name": "תכנית שתילה ומעקב",
+        "rows": 100,
+        "cols": 23
+      },
+      {
+        "name": "נתוני בסיס",
+        "rows": 100,
+        "cols": 21
+      },
+      {
+        "name": "תכנון ראשוני",
+        "rows": 279,
+        "cols": 20
+      },
+      {
+        "name": "תקציב חורף 2017",
+        "rows": 20,
+        "cols": 5
+      },
+      {
+        "name": "עצים",
+        "rows": 100,
+        "cols": 8
+      },
+      {
+        "name": "ירוק",
+        "rows": 100,
+        "cols": 13
+      },
+      {
+        "name": "מחירים",
+        "rows": 100,
+        "cols": 14
+      },
+      {
+        "name": "השכרת גינות",
+        "rows": 100,
+        "cols": 13
+      },
+      {
+        "name": "קטיפים",
+        "rows": 100,
+        "cols": 11
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L45_2017_data_summary.txt"
+  },
+  {
+    "path": "israeli/L49_IDAN_market_gardening_tech.xlsx",
+    "size_kb": 58,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "תוכנית גידול",
+        "rows": 192,
+        "cols": 17
+      },
+      {
+        "name": "מפת חלקה",
+        "rows": 74,
+        "cols": 21
+      },
+      {
+        "name": "הזמנת שתילים וזרעים",
+        "rows": 46,
+        "cols": 24
+      },
+      {
+        "name": "קטיפים",
+        "rows": 38,
+        "cols": 60
+      }
+    ],
+    "sample_path": "sample_extracts/israeli__L49_IDAN_market_gardening_tech.txt"
+  },
+  {
+    "path": "jmf_extension/L12_cover_crop_chart.pdf",
+    "size_kb": 36,
+    "type": "pdf",
+    "pages": "1",
+    "chars_first2": 2273,
+    "sample_path": "raw_text/jmf_extension__L12_cover_crop_chart.txt"
+  },
+  {
+    "path": "jmf_extension/L13_cover_crops_guide.pdf",
+    "size_kb": 140,
+    "type": "pdf",
+    "pages": "7",
+    "chars_first2": 3967,
+    "sample_path": "raw_text/jmf_extension__L13_cover_crops_guide.txt"
+  },
+  {
+    "path": "jmf_extension/L14_FT_FINALE_NURSERYSEEDING.pdf",
+    "size_kb": 211,
+    "type": "pdf",
+    "pages": "13",
+    "chars_first2": 3678,
+    "sample_path": "raw_text/jmf_extension__L14_FT_FINALE_NURSERYSEEDING.txt"
+  },
+  {
+    "path": "jmf_extension/L16_seeding_in_cell_flats.pdf",
+    "size_kb": 94,
+    "type": "pdf",
+    "pages": "3",
+    "chars_first2": 3664,
+    "sample_path": "raw_text/jmf_extension__L16_seeding_in_cell_flats.txt"
+  },
+  {
+    "path": "jmf_extension/L26_BEIN_HATLAMIM_hebrew.pdf",
+    "size_kb": 88,
+    "type": "pdf",
+    "pages": "1",
+    "chars_first2": 454,
+    "sample_path": "raw_text/jmf_extension__L26_BEIN_HATLAMIM_hebrew.txt"
+  },
+  {
+    "path": "misc_investigate/L38_libretto_orto_italian.pdf",
+    "size_kb": 2519,
+    "type": "pdf",
+    "pages": "9",
+    "chars_first2": 2,
+    "sample_path": "raw_text/misc_investigate__L38_libretto_orto_italian.txt"
+  },
+  {
+    "path": "misc_investigate/L39_mesclun_guide.pdf",
+    "size_kb": 94,
+    "type": "pdf",
+    "pages": "4",
+    "chars_first2": 2747,
+    "sample_path": "raw_text/misc_investigate__L39_mesclun_guide.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_CROP_PLAN.csv",
+    "size_kb": 20,
+    "type": "csv",
+    "rows": 60,
+    "cols": 62,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_CROP_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_GREENHOUSE_PLAN.csv",
+    "size_kb": 8,
+    "type": "csv",
+    "rows": 59,
+    "cols": 35,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_GREENHOUSE_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_HARVESTS.csv",
+    "size_kb": 0,
+    "type": "csv",
+    "rows": 0,
+    "cols": 9,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_HARVESTS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_NOTES.csv",
+    "size_kb": 0,
+    "type": "csv",
+    "rows": 0,
+    "cols": 5,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_NOTES.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_SEED_LIST.csv",
+    "size_kb": 7,
+    "type": "csv",
+    "rows": 81,
+    "cols": 12,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_SEED_LIST.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2018_TASKS.csv",
+    "size_kb": 15,
+    "type": "csv",
+    "rows": 97,
+    "cols": 30,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2018_TASKS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_CROP_PLAN.csv",
+    "size_kb": 145,
+    "type": "csv",
+    "rows": 442,
+    "cols": 62,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_CROP_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_GREENHOUSE_PLAN.csv",
+    "size_kb": 35,
+    "type": "csv",
+    "rows": 255,
+    "cols": 35,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_GREENHOUSE_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_HARVESTS.csv",
+    "size_kb": 255,
+    "type": "csv",
+    "rows": 1884,
+    "cols": 9,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_HARVESTS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_NOTES.csv",
+    "size_kb": 2,
+    "type": "csv",
+    "rows": 31,
+    "cols": 5,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_NOTES.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_SEED_LIST.csv",
+    "size_kb": 31,
+    "type": "csv",
+    "rows": 382,
+    "cols": 12,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_SEED_LIST.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2019_TASKS.csv",
+    "size_kb": 89,
+    "type": "csv",
+    "rows": 566,
+    "cols": 30,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2019_TASKS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_CROP_PLAN.csv",
+    "size_kb": 232,
+    "type": "csv",
+    "rows": 724,
+    "cols": 62,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_CROP_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_GREENHOUSE_PLAN.csv",
+    "size_kb": 66,
+    "type": "csv",
+    "rows": 479,
+    "cols": 35,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_GREENHOUSE_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_HARVESTS.csv",
+    "size_kb": 508,
+    "type": "csv",
+    "rows": 3720,
+    "cols": 9,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_HARVESTS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_NOTES.csv",
+    "size_kb": 4,
+    "type": "csv",
+    "rows": 51,
+    "cols": 5,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_NOTES.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_SEED_LIST.csv",
+    "size_kb": 48,
+    "type": "csv",
+    "rows": 610,
+    "cols": 12,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_SEED_LIST.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2020_TASKS.csv",
+    "size_kb": 173,
+    "type": "csv",
+    "rows": 1101,
+    "cols": 30,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2020_TASKS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_CROP_PLAN.csv",
+    "size_kb": 181,
+    "type": "csv",
+    "rows": 552,
+    "cols": 62,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_CROP_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_GREENHOUSE_PLAN.csv",
+    "size_kb": 43,
+    "type": "csv",
+    "rows": 318,
+    "cols": 35,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_GREENHOUSE_PLAN.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_HARVESTS.csv",
+    "size_kb": 234,
+    "type": "csv",
+    "rows": 1723,
+    "cols": 9,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_HARVESTS.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_NOTES.csv",
+    "size_kb": 3,
+    "type": "csv",
+    "rows": 35,
+    "cols": 5,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_NOTES.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_SEED_LIST.csv",
+    "size_kb": 36,
+    "type": "csv",
+    "rows": 412,
+    "cols": 12,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_SEED_LIST.txt"
+  },
+  {
+    "path": "tend_multi_year/Tend_2021_TASKS.csv",
+    "size_kb": 129,
+    "type": "csv",
+    "rows": 825,
+    "cols": 30,
+    "sample_path": "sample_extracts/tend_multi_year__Tend_2021_TASKS.txt"
+  },
+  {
+    "path": "urban_farmer/L40_curtis_crop_profiles.xlsx",
+    "size_kb": 10,
+    "type": "xlsx",
+    "sheets": [
+      {
+        "name": "Export Summary",
+        "rows": 0,
+        "cols": 0
+      },
+      {
+        "name": "Sheet 1 - Master Chart-1",
+        "rows": 23,
+        "cols": 29
+      }
+    ],
+    "sample_path": "sample_extracts/urban_farmer__L40_curtis_crop_profiles.txt"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_01.jpg",
+    "size_kb": 434,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_02.jpg",
+    "size_kb": 1117,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_03.jpg",
+    "size_kb": 370,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_04.jpg",
+    "size_kb": 401,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_05.jpg",
+    "size_kb": 468,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_06.jpg",
+    "size_kb": 1141,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_07.jpg",
+    "size_kb": 376,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_08.jpg",
+    "size_kb": 929,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_09.jpg",
+    "size_kb": 964,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_10.jpg",
+    "size_kb": 1110,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_11.jpg",
+    "size_kb": 1167,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_12.jpg",
+    "size_kb": 666,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_13.jpg",
+    "size_kb": 1108,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_14.jpg",
+    "size_kb": 1048,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_15.jpg",
+    "size_kb": 923,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_16.jpg",
+    "size_kb": 368,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_17.jpg",
+    "size_kb": 1235,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_18.jpg",
+    "size_kb": 432,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_19.jpg",
+    "size_kb": 1043,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_20.jpg",
+    "size_kb": 424,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_21.jpg",
+    "size_kb": 844,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_22.jpg",
+    "size_kb": 986,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_23.jpg",
+    "size_kb": 435,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_24.jpg",
+    "size_kb": 1138,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_25.jpg",
+    "size_kb": 454,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_26.jpg",
+    "size_kb": 444,
+    "type": "image"
+  },
+  {
+    "path": "urban_farmer/L41_curtis_chart_27.jpg",
+    "size_kb": 976,
+    "type": "image"
+  }
+]

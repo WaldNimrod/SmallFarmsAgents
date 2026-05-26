@@ -1,0 +1,10 @@
+# Tend_2020_NOTES.csv
+# Total data rows: 51
+# Columns: ['Date', 'Creator', 'Note', 'Plantings', 'Location']
+
+## First 5 data rows:
+  ['07/10/2020', 'Nimrod Wald', '7g seeds', 'Radishes in HH', '']
+  ['12/09/2020', 'Nimrod Wald', 'זרעי מורשת - לשמור זרעים', 'Chard in Ra.1', '']
+  ['20/08/2020', 'Nimrod Wald', '100 ג זרעים\n', 'Cilantro in Ra.2', '']
+  ['16/07/2020', 'Nimrod Wald', 'מברשת למעלה 80ג לערןגה', 'Lettuce: Salad Mix in Ra.1', '']
+  ['22/06/2020', 'Nimrod Wald', 'ערוגה מעורבת - בלגן זנים', 'Tomatoes in Ra.3', '']

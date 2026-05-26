@@ -1,0 +1,5 @@
+# Tend_2018_HARVESTS.csv
+# Total data rows: 0
+# Columns: ['Date', 'Planting Name', 'Crop', 'Amount', 'Unit', 'Outlet Type', 'Outlet Name', 'Harvest Stage', 'Final Harvest']
+
+## First 5 data rows:

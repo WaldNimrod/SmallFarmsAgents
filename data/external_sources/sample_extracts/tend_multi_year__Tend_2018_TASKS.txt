@@ -1,0 +1,10 @@
+# Tend_2018_TASKS.csv
+# Total data rows: 97
+# Columns: ['Due Date', 'Date Completed', 'Task Name', 'Task Type', 'Assignees', 'Plantings Assigned', 'Location Assigned', 'Method', 'Sub-method', 'Input', 'Description', 'Manufacturer', 'OMRI', 'Application Rate Amount', 'Application Rate Amount Unit', 'Application Rate Area', 'Comments', 'Name Of Pest Identified', 'Number Of Minutes', 'Lines Of Drip', '360 Pipe #Lines', '360 Pipe Minutes', '360 Pipe Heads Per Line', '180 Pipe #Lines', '180 Pipe Minutes', '180 Pipe Heads Per Line', 'Total Inches', 'Total Gallons', 'Completed', 'Total Labor Hours']
+
+## First 5 data rows:
+  ['17/07/2018', '26/03/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Anise Hyssop אזוב מצוי 17/07/2018 ', 'Home,HH,Block A,Beds 4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['17/07/2018', '28/03/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Tarragon שיבה 17/07/2018 ', 'Home,HH,Block A,Beds 4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['17/07/2018', '28/03/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Sage Generic Variety 17/07/2018 ', 'Home,HH,Block A,Beds 4', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['17/07/2018', '26/03/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Anise Hyssop אזוב מצוי 17/07/2018 ', 'Ramim,Ra.1,Block L1,Beds 109', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']
+  ['17/07/2018', '28/03/2019', 'Transplant', 'Transplant', 'Garden Admin', 'Sage Common 17/07/2018 ', 'Ramim,Ra.1,Block L1,Beds 109', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '0.0', '0.0', 'Yes', '']

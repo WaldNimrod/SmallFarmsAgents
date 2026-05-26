@@ -1,0 +1,5 @@
+# Tend_2018_NOTES.csv
+# Total data rows: 0
+# Columns: ['Date', 'Creator', 'Note', 'Plantings', 'Location']
+
+## First 5 data rows:

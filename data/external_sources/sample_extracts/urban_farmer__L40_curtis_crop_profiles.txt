@@ -1,0 +1,28 @@
+# L40_curtis_crop_profiles.xlsx
+# Sheets: 2
+
+## Sheet 'Export Summary'  (0 rows × 0 cols)
+  row1: []
+  row2: []
+  row3: ['', 'This document was exported from Numbers.  Each tab', '', '']
+  row4: []
+  row5: []
+  row6: []
+  row7: ['', 'Numbers Sheet Name', 'Numbers Table Name', 'Excel Worksheet Name']
+  row8: []
+  row9: ['', 'Sheet 1', '', '']
+  row10: ['', '', 'Master Chart-1', 'Sheet 1 - Master Chart-1']
+
+## Sheet 'Sheet 1 - Master Chart-1'  (23 rows × 29 cols)
+  row1: ['Crop', 'Avg DTM from seed date', 'Available for harvest', 'Crop Type', 'CVR5/5', 'Quick or Steady', 'DS/TR', 'Bed Size', 'Walkway width', 'When to DS', 'When to TRN', 'Last Field Plant Date', 'Last GH Plant Date', 'Jang Roller', 'EW Plate']
+  row2: ['Arugula', '35', 'early spring', 'greens', '5', 'Q', 'ds', '25', '6"+', 'May 15-Oct', 'Mar 1-May 14', '2015-09-08 00:00:00', '2015-09-22 00:00:00', 'YYJ24', '-']
+  row3: ['Beet Greens', '40', 'summer', 'greens', '4', 'S', 'ds', '25', '8"+', 'may-aug', '-', '2015-08-03 00:00:00', '-', '-', 'chard']
+  row4: ['Carrots (baby)', '65', 'summer', 'roots', '4', 'S', 'ds', '25', "1'+", 'apr-aug', '-', '2015-08-03 00:00:00', '', 'XY24', '-']
+  row5: ['Hakurei', '38', 'spring', 'roots', '5', 'Q', 'ds', '25', '6"+', 'apr-sep', '-', '2015-08-18 00:00:00', '', 'YYJ24', '-']
+  row6: ['Lettuce (Salanova)', '45', 'spring', 'greens', '5', 'Q', 'ds', '25', '6"+', 'mar-oct', '-', '', '', '-', '-']
+  row7: ['Mustard', '35', 'spring', 'greens', '4', 'Q', 'ds', '25', '6"+', 'mar-sep', '-', '', '', 'X24', '-']
+  row8: ["Pea shoots (6' bed)", '14', 'early spring', 'micros', '4', 'Q', 'ds', '25', '6"+', 'may-sep', '-', '', '', '-', '-']
+  row9: ['Peppers (Interplanted)', '', 'summer', '', '3', '', '', '', '', '', '', '', '', '', '']
+  row10: ['Radish', '28', 'spring', 'roots', '5', 'Q', 'ds', '25', '6"+', 'mar-sep', '-', '2015-08-25 00:00:00', '', 'F24', '-']
+  row11: ["Radish shoots (6' bed)", '12', 'early spring', 'micros', '4', 'Q', 'ds', '25', '6"+', 'may-sep', '-', '', '', '-', '-']
+  row12: ['Red Russian Kale', '30', 'early spring', 'greens', '5', 'Q', 'ds', '25', '6"+', 'apr-sep', '-', '2015-08-10 00:00:00', '', 'F24', '-']

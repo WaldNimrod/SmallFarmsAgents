@@ -1,0 +1,10 @@
+# Tend_2021_GREENHOUSE_PLAN.csv
+# Total data rows: 318
+# Columns: ['Sow Date', 'Category', 'Crop', 'Crop Type', 'Variety', 'Days In Greenhouse', 'Transplant Date', '# Of Flats', 'Flat Type', 'Seeds Per Cell', 'Number Of Transplants', 'Days to 1st potting up', '1st Potting up date', 'Days to 2nd Potting up', '2nd Potting up date', 'Days to 3rd Potting up', '3rd Potting up date', 'Estimated loss', 'Total Seeds needed', 'Average seed weight', 'Average seed weight unit', 'Total weight needed', 'Total seed weight needed unit', 'Extra Seed %', 'Seed spec', '1st Potting up flat/pot type', '1st Potting up plants per cell/pot', '1st Potting up # of flats/pots', '2nd Potting up flat/pot type', '2nd Potting up plants per cell/pot', '2nd Potting up # of flats/pots', '3rd Potting up flat/pot type', '3rd Potting up plants per cell/pot', '3rd Potting up # of flats/pots', 'Microgreens/Plant sale']
+
+## First 5 data rows:
+  ['11/10/2020', 'Vegetables', 'Celery', 'Celery', 'hyd. Giant Dorato', '123', '11/02/2021', '2.01', '310 cell flats', '1', '624.0', '', '', '', '', '', '', '30', '374', '2000', 'seeds/g', '0.19', 'g', '0.00', 'Organic', '', '', '', '', '', '', '', '', '', '']
+  ['05/11/2020', 'Vegetables', 'Chard', 'Chard', 'Silverado', '57', '01/01/2021', '1.01', '310 cell flats', '1', '312.0', '', '', '', '', '', '', '30', '156', '50', 'seeds/g', '3.12', 'g', '0.00', 'Organic', '', '', '', '', '', '', '', '', '', '']
+  ['05/11/2020', 'Vegetables', 'Chard', 'Chard', 'Fordhook Giant', '57', '01/01/2021', '0.75', '310 cell flats', '1', '234.0', '', '', '', '', '', '', '30', '117', '50', 'seeds/g', '2.34', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']
+  ['05/11/2020', 'Vegetables', 'Fennel', 'Fennel', 'Orion', '57', '01/01/2021', '1.01', '310 cell flats', '2', '312.0', '', '', '', '', '', '', '30', '312', '200', 'seeds/g', '1.56', 'g', '0.00', 'Organic', '', '', '', '', '', '', '', '', '', '']
+  ['21/11/2020', 'Vegetables', 'Sorrel', 'Sorrel', 'Red Veined', '53', '13/01/2021', '1.06', '', '5', '468.0', '', '', '', '', '', '', '30', '2343', '800', 'seeds/g', '2.93', 'g', '0.00', '', '', '', '', '', '', '', '', '', '', '']

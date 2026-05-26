@@ -1,0 +1,10 @@
+# Tend_2020_HARVESTS.csv
+# Total data rows: 3720
+# Columns: ['Date', 'Planting Name', 'Crop', 'Amount', 'Unit', 'Outlet Type', 'Outlet Name', 'Harvest Stage', 'Final Harvest']
+
+## First 5 data rows:
+  ['01/01/2020', 'Beets MIX עלי ביבי 25/10/2019 Ra.1 > L1 > Bed 110 10 bed m', 'Beets', '3.0', 'Bunches', '', 'Unknown outlet', 'Baby Leaf Greens', 'No']
+  ['01/01/2020', 'Chard Fordhook Giant 10/10/2019 Ra.3 > R1 > Bed 316 12 bed m', 'Chard', '6.0', 'Bunches', '', 'Unknown outlet', 'Full-Size', 'No']
+  ['01/01/2020', 'Cilantro Santirini - נטע 09/10/2019 Ra.1 > L2 > Bed 130 12 bed m', 'Cilantro', '12.0', 'Bunches', '', 'Unknown outlet', 'Leaf', 'No']
+  ['01/01/2020', 'Dill Generic Variety 23/09/2019 Ra.1 > L2 > Bed 123 5 bed m', 'Dill', '4.0', 'Bunches', '', 'Unknown outlet', 'Leaf', 'No']
+  ['01/01/2020', 'Kale Lacinato (Dinosaur) 26/08/2019 Ra.2 > C2 > Bed 228 12 bed m', 'Kale', '4.0', 'Bunches', '', 'Unknown outlet', 'Full-Size', 'No']

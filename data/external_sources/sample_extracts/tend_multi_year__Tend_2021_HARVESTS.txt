@@ -1,0 +1,10 @@
+# Tend_2021_HARVESTS.csv
+# Total data rows: 1723
+# Columns: ['Date', 'Planting Name', 'Crop', 'Amount', 'Unit', 'Outlet Type', 'Outlet Name', 'Harvest Stage', 'Final Harvest']
+
+## First 5 data rows:
+  ['04/01/2021', 'Anise Hyssop אזוב מצוי 17/07/2018 HH > A > Bed 4 4 bed m', 'Anise Hyssop', '4.0', 'Bunches', 'Farmers Market', 'הדוכן יום ב', 'Full-Size', 'No']
+  ['04/01/2021', 'Arugula Arugula 24/09/2020 Ra.3 > R2 > Bed 328 12 bed m', 'Arugula', '1.2', 'Kilograms', 'Farmers Market', 'הדוכן יום ב', 'Baby Leaf', 'No']
+  ['04/01/2021', 'Broccoli Partenon 01/10/2020 Ra.4 > Lo18 > Bed 403 18 bed m', 'Broccoli', '6.3', 'Kilograms', 'Farmers Market', 'הדוכן יום ב', 'Head', 'No']
+  ['04/01/2021', 'Cabbage סגול חישתיל 10/09/2020 Ra.4 > Lo18 > Bed 406 16 bed m', 'Cabbage', '6.3', 'Kilograms', 'Farmers Market', 'הדוכן יום ב', 'Full-Size', 'No']
+  ['04/01/2021', 'Chard Fordhook Giant 22/10/2020 Ra.1 > L2 > Bed 130 12 bed m', 'Chard', '7.0', 'Bunches', 'Farmers Market', 'הדוכן יום ב', 'Full-Size', 'No']
