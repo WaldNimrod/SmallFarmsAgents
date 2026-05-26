@@ -11,6 +11,15 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-C1 — Israeli structured data + Tend multi-year (2026-05-27, team_10)
+- **Migrations 049/050:** `crop_planting_calendar` + `crop_cover_crops` (TIMESTAMPTZ; renumbered from LOD400 047/048).
+- **New importers:** `israeli/groworganic_importer`, `bustan_importer`, `idan_planning_importer`; `jmf/cover_crops_importer`.
+- **`IL_CROP_MAP`** in `constants.py` + `resolve_il_crop()`; source registry entries for `NI:groworganic`, `NI:bustan`, `OP:Idan_2017`, `PR:jmf_cover_crops`.
+- **`tend_overlay.py`:** flat `Tend_{year}_*.csv` resolution under `data/external_sources/tend_multi_year/`; variety lookup uses `.first()` for duplicate defaults.
+- **`seed.py`:** `--c1-only`, `--no-c1`; `_run_c1_ingestion()` helper.
+- **Deps:** `openpyxl`, `pdfplumber` pinned in `requirements.txt`.
+- **Tests:** +25 in `tests/crop_book/test_*` (planting calendar, cover crops, 5 importers, tend multi-year).
+
 ### SFA-S003-P002-WP-B1-patch07 — Sheet 056 M2M data load + Migration 048 (2026-05-26)
 - **Migration 048:** `crop_knowledge_notes.crop_id` now nullable (was NOT NULL). Enables M2M-only notes (storage/washing procedures applying to multiple crops via junction table from Migration 047).
 - **`scripts/load_sheet_056_storage.py`:** new parser for sheet 056 ("WASHING ITINERARY FOR CROPS IN THE MASTERCLASS"). Inserts ~6-10 procedure notes (crop_id=NULL) + populates `crop_knowledge_notes_crops` junction with ~30-50 (note, crop) pairs.

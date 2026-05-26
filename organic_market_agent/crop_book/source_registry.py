@@ -47,6 +47,12 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
     "Tend_2022": SourceSpec("Tend_2022", "OP", weight=0.55),
     "Tend": SourceSpec("Tend", "OP", weight=0.55),          # legacy flat export
 
+    # --- WP-C1: Israeli structured + JMF cover crops ---
+    "NI:groworganic": SourceSpec("NI:groworganic", "NI", weight=None, is_hard_override=True),
+    "NI:bustan": SourceSpec("NI:bustan", "NI", weight=None, is_hard_override=True),
+    "OP:Idan_2017": SourceSpec("OP:Idan_2017", "OP", weight=0.55),
+    "PR:jmf_cover_crops": SourceSpec("PR:jmf_cover_crops", "PR", weight=0.70),
+
     # --- MK: Market index (design-registered; importer in WP-B) ---
     "_MK_CLASS_SENTINEL": SourceSpec("_MK_CLASS_SENTINEL", "MK", weight=0.40),
 

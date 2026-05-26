@@ -101,7 +101,8 @@ def _resolve_variety_id(session: Session, crop_id: int) -> int:
     from organic_market_agent.crop_book.models import CropVariety
     v = (session.query(CropVariety)
          .filter(CropVariety.crop_id == crop_id, CropVariety.name_en.is_(None))
-         .one_or_none())
+         .order_by(CropVariety.id)
+         .first())
     if v is None:
         v = CropVariety(crop_id=crop_id, name_en=None, name_he=None)
         session.add(v)
@@ -617,6 +618,36 @@ def _find_csv(directory: Path, primary: str, fallbacks: list[str]) -> Optional[P
     return None
 
 
+def _find_csv_for_year(
+    base_dir: Path,
+    year: int,
+    primary: str,
+    fallbacks: list[str],
+) -> Optional[Path]:
+    """Resolve CSV for a Tend year — flat multi-year layout or legacy subdir."""
+    flat_stems = [primary.split(".")[0].split(" ")[0]]
+    for fb in fallbacks:
+        stem = Path(fb).stem.upper()
+        if stem not in flat_stems:
+            flat_stems.append(stem)
+    for stem in flat_stems:
+        flat_name = f"Tend_{year}_{stem}.csv"
+        flat_path = base_dir / flat_name
+        if flat_path.exists():
+            return flat_path
+        flat_path_upper = base_dir / flat_name.upper()
+        if flat_path_upper.exists():
+            return flat_path_upper
+
+    year_dir = base_dir / f"Tend_{year}"
+    if year_dir.is_dir():
+        found = _find_csv(year_dir, primary, fallbacks)
+        if found is not None:
+            return found
+
+    return _find_csv(base_dir, primary, fallbacks)
+
+
 def import_tend_overlay(
     session: Session,
     tend_dir: Path,
@@ -640,9 +671,9 @@ def import_tend_overlay(
     source = f"Tend_{year}"
 
     # 1. Resolve paths
-    tasks_path = _find_csv(tend_dir, _TASKS_FILENAME, _TASKS_FALLBACKS)
-    gh_plan_path = _find_csv(tend_dir, _GH_PLAN_FILENAME, _GH_FALLBACKS)
-    harvests_path = _find_csv(tend_dir, _HARVESTS_FILENAME, _HARVESTS_FALLBACKS)
+    tasks_path = _find_csv_for_year(tend_dir, year, _TASKS_FILENAME, _TASKS_FALLBACKS)
+    gh_plan_path = _find_csv_for_year(tend_dir, year, _GH_PLAN_FILENAME, _GH_FALLBACKS)
+    harvests_path = _find_csv_for_year(tend_dir, year, _HARVESTS_FILENAME, _HARVESTS_FALLBACKS)
 
     if tasks_path is None:
         logger.warning("TASKS CSV not found in %s — skipping task templates", tend_dir)

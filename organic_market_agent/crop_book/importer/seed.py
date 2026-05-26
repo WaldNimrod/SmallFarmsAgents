@@ -454,6 +454,46 @@ def _setup_logging(verbose: bool = False) -> None:
 _DEFAULT_JMF_MASTERCLASS_DIR = Path(
     "/Users/nimrod/Documents/old Mac BackUpp/Market Gardening/MasterClass/Crop Planning"
 )
+_EXTERNAL_SOURCES_DIR = (
+    Path(__file__).resolve().parents[3] / "data" / "external_sources"
+)
+_TEND_MULTI_YEAR_DIR = _EXTERNAL_SOURCES_DIR / "tend_multi_year"
+
+
+def _run_c1_ingestion(session: Session) -> None:
+    """WP-C1: Israeli structured sources + Tend 2019/2020/2021 backfill."""
+    from organic_market_agent.crop_book.importer.israeli import (
+        bustan_importer,
+        groworganic_importer,
+        idan_planning_importer,
+    )
+    from organic_market_agent.crop_book.importer.jmf.cover_crops_importer import import_all as import_cover_crops
+    from organic_market_agent.crop_book.importer.tend_overlay import import_tend_overlay
+
+    logger.info("WP-C1: Running Israeli structured data + Tend multi-year backfill")
+    groworganic_importer.import_all(
+        session,
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L01_GROWORGANIC_sowing_dates_base.xlsx",
+    )
+    bustan_importer.import_all(
+        session,
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L36_BUSTAN_sowing_calendar.pdf",
+    )
+    idan_planning_importer.import_all(
+        session,
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L03_IDAN_winter_planning.xlsx",
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L04_IDAN_summer_planning.xlsx",
+    )
+    import_cover_crops(
+        session,
+        _EXTERNAL_SOURCES_DIR / "jmf_extension" / "L12_cover_crop_chart.pdf",
+    )
+    for year in (2019, 2020, 2021):
+        summary = import_tend_overlay(
+            session, _TEND_MULTI_YEAR_DIR, year=year, dry_run=False,
+        )
+        logger.info("Tend overlay %s: %s", year, summary)
+    session.flush()
 
 
 def _run_ni_ingestion(session: Session) -> None:
@@ -490,6 +530,10 @@ def main() -> None:
     )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--all", action="store_true", help="Import all crops in TEND_CROP_MAP")
+    mode.add_argument(
+        "--c1-only", action="store_true",
+        help="Run WP-C1 importers only (Israeli structured + Tend multi-year)",
+    )
     mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
         help="Import named crops (Tend English names, e.g. Arugula Broccoli)",
@@ -551,6 +595,10 @@ def main() -> None:
         help="Skip Tend overlay ingestion.",
     )
     parser.add_argument(
+        "--no-c1", action="store_true",
+        help="Skip WP-C1 importers when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -566,8 +614,20 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only:
-        parser.error("Specify --all, --jmf-only, --ni-only, or --crops NAME [NAME ...]")
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only:
+        parser.error("Specify --all, --c1-only, --jmf-only, --ni-only, or --crops NAME [NAME ...]")
+
+    # ── C1-only fast path (WP-C1 LOD400 §7) ──
+    if args.c1_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+
+        with SessionFactory() as session:
+            _run_c1_ingestion(session)
+            enrich_summary = run_enrichment(session, dry_run=False)
+            logger.info("Enrichment: %s", enrich_summary)
+            session.commit()
+        return
 
     # ── NI-only fast path (AC-13): runs BEFORE any JMF/Tend/Tend-overlay work ──
     if args.ni_only:
@@ -706,6 +766,10 @@ def main() -> None:
             # Early return — skip remaining importers
             session.commit()
             return
+
+        if args.all and not args.no_c1:
+            _run_c1_ingestion(session)
+            session.flush()
 
         # Existing Tend seed call (unchanged logic)
         seed(
