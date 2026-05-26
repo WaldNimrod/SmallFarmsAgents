@@ -1443,11 +1443,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04-hotfix02
   label: "ספר גידולים: Postgres transaction-poisoning fix in _upsert_variety"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch04-hotfix02/ARCHIVE_MANIFEST.md"
   assigned_builder: team_110
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1466,7 +1468,33 @@ work_packages:
       Fix: ON CONFLICT (crop_id, name_en) DO NOTHING (mirror of
       _upsert_knowledge_note pattern). SMALL effort, single-engine builder."
     validator: team_00
-  notes: "WP-B1-patch04-hotfix02: SMALL hotfix WP. Sibling of hotfix01."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_S R1. PASS clean — no findings.
+      Verdict commit d88919f."
+    validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-26"
+    notes: "team_110 single-engine build. _upsert_variety rewrite +
+      regression test. 15 integration (was 14 + 1 new) + 350 crop_book
+      + 1 OOS publisher. Commit c2a257d."
+    validator: team_110
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_V. PASS clean, 8/8 VCs. ON CONFLICT
+      present (1 match); forbidden snippet absent; 15 integration; 350+1
+      OOS; diff scope 3 files. Verdict commit 4efaeb0. Cleanest WP in
+      EXECUTION_MANDATE extension (0 R-cycles)."
+    validator: team_190
+  notes: "WP-B1-patch04-hotfix02 CLOSED 2026-05-26 — LOD500_LOCKED. SMALL
+    hotfix successfully fixed Postgres transaction-poisoning. Unblocks
+    OP-2 resume on production (now expected to succeed end-to-end).
+    Archive: _archive/SFA-S003-P002-WP-B1-patch04-hotfix02/ARCHIVE_MANIFEST.md."
   profile: L0
 
 - id: SFA-S003-P002-WP-B2
