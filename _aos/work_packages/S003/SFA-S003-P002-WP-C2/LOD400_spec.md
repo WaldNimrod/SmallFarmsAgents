@@ -24,7 +24,7 @@ upsert pipeline as WP-B2.
 
 | Action | Path |
 |--------|------|
-| NEW | `organic_market_agent/db/versions/049_extend_ckn_note_type.py` |
+| NEW | `organic_market_agent/db/versions/053_extend_ckn_note_type.py` |
 | NEW (each) | `organic_market_agent/crop_book/importer/ni/aosnot_variety_info.py` |
 | NEW (each) | `organic_market_agent/crop_book/importer/ni/sham_variety_trials.py` |
 | NEW (each) | `organic_market_agent/crop_book/importer/ni/sham_hydro_guide.py` |
@@ -37,13 +37,13 @@ upsert pipeline as WP-B2.
 | NEW | `data/external_sources/extracted/` (cache root — gitignored binaries, committed JSONs) |
 | NEW | `tests/crop_book/test_c2_*.py` (≥15 tests) |
 
-## 3. Migration 049 DDL
+## 3. Migration 053 DDL (renumbered from 049 — head is 052 after WP-C1+C4)
 
 ```python
 """049: extend crop_knowledge_notes.note_type CHECK (WP-C2)"""
 from alembic import op
-revision = "049"
-down_revision = "048"
+revision = "053"
+down_revision = "052"
 
 def upgrade() -> None:
     bind = op.get_bind()

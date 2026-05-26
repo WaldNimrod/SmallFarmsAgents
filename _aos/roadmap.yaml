@@ -2074,3 +2074,34 @@ work_packages:
     LOD500_LOCKED via team_190 R1 PASS. 3 sources deferred (ECOCROP, EPPO,
     Cornell Mediterranean varieties) to future WP-D."
   profile: L0
+
+- id: SFA-S003-P002-WP-C5
+  label: "ספר גידולים: Wave 5 — Manual Data Cleanup & Refinement (team_00 phase)"
+  status: PROPOSED
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_LOCKED
+  assigned_builder: team_00
+  assigned_validator: team_00
+  created_at: "2026-05-26"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-C2", "SFA-S003-P002-WP-C3"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-C5/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-26"
+    notes: "team_00 directive 2026-05-26: 'נגדיר שלב נוסף בסיום כל תהליך
+      הקליטה בו אני ישלים או יספק החלטות לניקיון וטיוב סופי לנתונים'.
+      WP-C5 is the team_00 manual cleanup phase activated after all ingestion
+      waves (C1+C2+C3+C4) close. NO code, NO new tables, NO new sources —
+      pure data discipline: EX overrides for confident-knowledge fields,
+      crop name resolution, outlier flagging, knowledge note QA, gap-fill
+      via team_00 expertise. Activation: when C2+C3 LOD500_LOCKED."
+    validator: team_00
+  notes: "WP-C5 manual cleanup phase. Not a builder mandate — team_00 reviews
+    consolidated DB and applies targeted refinements. EX-tier hard overrides
+    for crops/fields where team_00 has authoritative knowledge. Activation
+    blocked on C2+C3 closure. Authorized 2026-05-26 by team_00."
+  profile: L0
