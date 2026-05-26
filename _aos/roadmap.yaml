@@ -1499,11 +1499,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch07
   label: "ספר גידולים: Sheet 056 storage/washing M2M data load + Migration 048"
-  status: IN_PROGRESS
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-B1-patch07/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1519,7 +1521,45 @@ work_packages:
       Scope: Migration 048 (crop_id nullable) + sheet 056 parser + junction
       population. MEDIUM, Sonnet sub-agent build."
     validator: team_00
-  notes: "WP-B1-patch07: MEDIUM. Opens M2M-only note semantics."
+  - gate: L-GATE_S
+    result: FAIL
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_S R1. FAIL — 1 BLOCKER (AC-06
+      unreachable, 18/33 labels resolved) + 1 MAJOR (Migration 048
+      SQLite incompat) + 1 MINOR (AC-11 vague). Verdict commit 5a006a8."
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-26"
+    round: 2
+    notes: "team_190 (GPT-5.5) L-GATE_S R2. PASS_WITH_FINDINGS — 1 ADVISORY
+      (Mesclun Mix + Baby Asian Greens missing alias target). v1.0.1
+      addressed all 3 R1 findings. Advisory addressed inline in v1.0.2
+      via 'he:' prefix resolver extension. Verdict commit b326b91."
+    validator: team_190
+  - gate: L-GATE_BUILD
+    result: BUILD_COMPLETE
+    date: "2026-05-26"
+    notes: "team_10 (Sonnet) BUILD_COMPLETE. Migration 048 + sheet 056
+      parser + 5 new integration tests. Build commit 443c021 + report
+      commit 76e2427. 14 notes + 30 junction rows on SQLite fixture.
+      All 33 sheet-056 labels resolved post-v1.0.2."
+    validator: team_10
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-26"
+    round: 1
+    notes: "team_190 (GPT-5.5) L-GATE_V R1. PASS clean. 13/13 VCs,
+      0 findings (no blockers/majors/minors/advisories). AC-11 honorable
+      +1 discrepancy (21 not 20 — patch08 baseline) confirmed benign by
+      team_190. Verdict commit 870563b. EXECUTION_MANDATE EXTENSION
+      naturally ENDS after this closure."
+    validator: team_190
+  notes: "WP-B1-patch07 CLOSED 2026-05-26 — LOD500_LOCKED. MEDIUM scope.
+    Archive: _archive/SFA-S003-P002-WP-B1-patch07/ARCHIVE_MANIFEST.md.
+    Operational follow-up: alembic upgrade 048 + load_sheet_056_storage
+    --apply on production Postgres."
   profile: L0
 
 - id: SFA-S003-P002-WP-B1-patch08
