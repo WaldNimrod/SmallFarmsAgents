@@ -40,3 +40,13 @@ data/external_sources/**/*.csv
 !data/external_sources/INDEX.md
 !data/external_sources/raw_text/
 !data/external_sources/sample_extracts/
+
+# WP-C1 test fixtures — commit small structured tabular sources for reproducibility (F-C1-LV-04 remediation)
+!data/external_sources/israeli/L01_GROWORGANIC_sowing_dates_base.xlsx
+!data/external_sources/israeli/L03_IDAN_winter_planning.xlsx
+!data/external_sources/israeli/L04_IDAN_summer_planning.xlsx
+!data/external_sources/israeli/L36_BUSTAN_sowing_calendar.pdf
+!data/external_sources/jmf_extension/L12_cover_crop_chart.pdf
+!data/external_sources/tend_multi_year/Tend_2019_*.csv
+!data/external_sources/tend_multi_year/Tend_2020_*.csv
+!data/external_sources/tend_multi_year/Tend_2021_*.csv
