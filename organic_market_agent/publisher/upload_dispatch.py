@@ -96,12 +96,25 @@ def dispatch_upload(
             "dispatch_upload(crop_book): WP REST upload OK — %d artifacts uploaded",
             len(artifacts),
         )
+        # WP009 (commit d2d3426) refactored UploadResult: removed `wp_artifacts`
+        # init kwarg in favor of `static_artifacts: dict[str, str]` (url-only)
+        # plus a `wp_artifacts` @property that reconstructs (0, url) tuples
+        # for legacy callers. This call site was not updated → production
+        # TypeError on crop_book profile uploads (uploads succeeded, then
+        # result construction crashed). Surface remained masked because the
+        # test was treated as out-of-scope across patch02-patch08 cycles.
+        #
+        # Minimal fix: extract URL from each (media_id, url) tuple and store
+        # in static_artifacts. The wp_artifacts property reconstructs
+        # (0, url) tuples for callers — media_id is lost in this conversion,
+        # acceptable because the IDs were already consumed by upload+delete
+        # operations before this return statement.
         return UploadResult(
             protocol_used="wp_rest",
             success=True,
             success_count=len(artifacts),
             total_count=len(artifacts),
-            wp_artifacts=artifacts,
+            static_artifacts={k: url for k, (_media_id, url) in artifacts.items()},
         )
 
     # --- Market profile (default): existing behavior unchanged (AC-15) ---
