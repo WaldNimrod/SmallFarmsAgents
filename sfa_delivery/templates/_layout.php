@@ -3,7 +3,8 @@ use SFA\Lib\Template;
 
 $h = [Template::class, 'h'];
 $page_title = $page_title ?? 'Small Farms Agents';
-$asset_ver = $asset_ver ?? 'build';
+// Asset version: file mtime of the LAST-loaded CSS in the chain. Cheap, deploy-tied, CF-cache-bust friendly.
+$asset_ver = $asset_ver ?? @filemtime(__DIR__ . '/../public_assets/css/desktop-extras.css') ?: 'build';
 ?><!doctype html>
 <html lang="he" dir="rtl">
 <head>

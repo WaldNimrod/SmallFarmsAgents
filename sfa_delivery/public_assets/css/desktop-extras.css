@@ -444,3 +444,86 @@
   border-top: 1px dashed var(--gj-line);
   margin-top: 6px;
 }
+
+/* ============================================================
+ * a11y patch — WCAG 2.5.8 target size (≥24px) + screen-reader utility
+ * Added 2026-05-27 by team_100 (Path B remediation, per team_190 R1 F-BUILD-01)
+ * Lighthouse audits: target-size (all routes) + td-has-header (table routes)
+ * ============================================================ */
+
+/* Screen-reader-only utility for hidden table headers + skip links */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Touch-target minimums on interactive primitives (Lighthouse target-size) */
+button, a.btn, a.btn-primary, .btn, .btn-primary {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile chips: ensure tap target + spacing */
+.gj-chips a, .gj-chips button, .chip {
+  min-height: 44px;
+  padding: 10px 14px;
+  display: inline-flex;
+  align-items: center;
+}
+.gj-chips { gap: 8px; }
+
+/* Mobile tabs */
+.gj-tab {
+  min-height: 44px;
+  padding-block: 10px;
+}
+
+/* Icon buttons */
+.gj-iconbtn {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Desktop sidebar accordion summary + nav links */
+.dt-acc summary, .dt-nav a, .dt-nav__cta, .dt-side__contrib {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Table row link cells — make the link itself tap-sized */
+table td a {
+  display: inline-block;
+  min-height: 32px;
+  padding: 6px 10px;
+}
+
+/* Module cards (full-bleed links) */
+.module-card a, .hub-tier-list a, .card-link {
+  min-height: 44px;
+}
+
+/* Tier badges (when clickable) */
+a.tier, button.tier {
+  min-height: 32px;
+  padding: 6px 12px;
+}
+
+/* ============================================================
+ * Shell swap @ 900px per team_35 LOD300 §3.5 (was missing — caused target-size
+ * audit to fire on hidden desktop sidebar at mobile viewport). 2026-05-27.
+ * ============================================================ */
+@media (max-width: 899.98px) {
+  .dt-shell { display: none !important; }
+  .gj-shell { display: block; }
+}
+@media (min-width: 900px) {
+  .gj-shell { display: none !important; }
+  .dt-shell { display: grid; }
+}

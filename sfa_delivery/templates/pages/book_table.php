@@ -7,7 +7,7 @@ ob_start();
   <h1>טבלת גידולים</h1>
   <?php if (!empty($category)): ?><p>פילטר: <?= htmlspecialchars((string)$category, ENT_QUOTES, 'UTF-8') ?></p><?php endif; ?>
   <table>
-    <thead><tr><th>שם</th><th>קטגוריה</th><th>עונה</th><th></th></tr></thead>
+    <thead><tr><th scope="col">שם</th><th scope="col">קטגוריה</th><th scope="col">עונה</th><th scope="col"><span class="visually-hidden">פעולות</span></th></tr></thead>
     <tbody>
       <?php foreach (($crops ?? []) as $crop): ?>
         <tr>

@@ -7,7 +7,7 @@ ob_start();
   <?php include __DIR__ . '/../macros/market_disclaimer.php'; ?>
   <h1>מחירון</h1>
   <table>
-    <thead><tr><th>מוצר</th><th>מחיר</th><th>תאריך</th><th></th></tr></thead>
+    <thead><tr><th scope="col">מוצר</th><th scope="col">מחיר</th><th scope="col">תאריך</th><th scope="col"><span class="visually-hidden">פעולות</span></th></tr></thead>
     <tbody>
       <?php foreach (($products ?? []) as $product): ?>
         <tr>
