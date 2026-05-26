@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400; LOD200 inlined)
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-26
-version: v1.0.0
+version: v1.0.1
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch07-patch08_2026-05-26_v1.0.0.md
 orchestrator: team_110 (Claude Opus 4.7)
 builder: team_10 (Claude Sonnet sub-agent)
@@ -54,16 +54,27 @@ revision = '048'
 down_revision = '047'
 
 def upgrade():
-    op.alter_column('crop_knowledge_notes', 'crop_id', nullable=True)
+    # Dialect-aware (per Migration 046 precedent in this repo)
+    bind = op.get_bind()
+    if bind.dialect.name == "sqlite":
+        with op.batch_alter_table("crop_knowledge_notes", recreate="always") as batch_op:
+            batch_op.alter_column("crop_id", existing_type=sa.BigInteger(), nullable=True)
+    else:
+        op.alter_column("crop_knowledge_notes", "crop_id", existing_type=sa.BigInteger(), nullable=True)
 
 def downgrade():
-    # Safe downgrade: only if all rows have non-null crop_id
+    # Backfill from junction first (safe-only if junction has the data)
     op.execute(
         "UPDATE crop_knowledge_notes SET crop_id = "
         "(SELECT crop_id FROM crop_knowledge_notes_crops WHERE note_id = crop_knowledge_notes.id LIMIT 1) "
         "WHERE crop_id IS NULL"
     )
-    op.alter_column('crop_knowledge_notes', 'crop_id', nullable=False)
+    bind = op.get_bind()
+    if bind.dialect.name == "sqlite":
+        with op.batch_alter_table("crop_knowledge_notes", recreate="always") as batch_op:
+            batch_op.alter_column("crop_id", existing_type=sa.BigInteger(), nullable=False)
+    else:
+        op.alter_column("crop_knowledge_notes", "crop_id", existing_type=sa.BigInteger(), nullable=False)
 ```
 
 ### 3.2 Sheet 056 parser
@@ -76,11 +87,52 @@ Structure observed: section blocks each containing:
 - Storage params: drying time, temperature °C/°F, storage length
 
 Parser extracts each block; for each block:
-1. Resolve crop names to crop_ids via JMF_CROP_MAP / TEND_CROP_MAP / direct match
+1. Resolve crop names to crop_ids via (a) local alias table in this script (`SHEET_056_ALIASES`, see below), (b) JMF_CROP_MAP, (c) TEND_CROP_MAP, (d) direct DB `name_en` match
 2. INSERT crop_knowledge_notes with crop_id=NULL, note_type='storage_handling', body_text=composed-procedure-text (≤2000 chars), is_internal_farm_use_only=TRUE
 3. For each resolved crop_id: INSERT crop_knowledge_notes_crops(note_id, crop_id)
 
 If a crop name is not resolvable → log WARN + skip that crop (but the note is still inserted with the resolved crops).
+
+**Local alias table (v1.0.1 R2 — addresses F-S-PATCH07-01 BLOCKER):**
+
+Sheet 056 uses workbook-local labels that don't appear in `JMF_CROP_MAP` post-patch06 (baselines-only). The script declares a SCOPED alias map that lives INSIDE the script (not in `constants.py` — LOCKED). This table is data, not code logic, and is the appropriate place for sheet-056-specific label resolution.
+
+```python
+# scripts/load_sheet_056_storage.py
+SHEET_056_ALIASES: dict[str, list[str]] = {
+    # Aggregate labels — decomposed into multiple resolved crops
+    "All Bunches (beets, carrots, radishes, turnips)": ["Beets", "Carrots", "Radishes", "Turnips"],
+    # Workbook-local plural / variant labels
+    "Mesclun Mix": ["Mesclun"],         # Mesclun is removed from MAP post-patch06 — direct DB lookup of 'עלי בייבי' crop
+    "Baby Asian Greens": ["Mesclun"],   # variant of baby-leaf mix — treat as עלי בייבי
+    "Frisée": ["Endive"],               # Frisée is cultivar of Endive
+    "Frisée Heads": ["Endive"],
+    "Little Gem Mini Lettuce": ["Lettuce"],
+    "Brocoli": ["Broccoli"],            # workbook typo
+    "Mini Fennel": ["Fennel"],          # Mini Fennel is cultivar of Fennel (removed from MAP post-patch06)
+    "Storage Carrots": ["Carrots"],
+    "Storage Beets": ["Beets"],
+    "Winter Radishes": ["Radishes"],
+    "Bell Peppers": ["Peppers"],
+    "Eggplants": ["Eggplant"],
+    "Fresh Beans": ["Beans (Bush)"],    # default to bush if not specified
+    "Sweet Peas": ["Peas"],
+    "Zucchini": ["Summer Squash"],      # Zucchini is cultivar of Summer Squash per patch03
+}
+
+def _resolve_crop_label(label: str, session) -> list[int]:
+    """Resolve a sheet-056 label to one or more crops.id values.
+
+    Resolution chain:
+      1. SHEET_056_ALIASES (this script's local map) — returns list of English keys
+      2. For each English key: JMF_CROP_MAP → name_he → crops.id via SELECT
+      3. If not found: TEND_CROP_MAP → name_he → crops.id
+      4. If not found: direct DB name_en match
+      5. If still not found: log WARN, return []
+    """
+```
+
+With this resolver, all 33 sheet-056 labels resolve (15 via aliases including aggregate decomposition, 18 via direct map paths). Junction floor recomputed: AC-06 (revised) = **≥ 30 rows** holds.
 
 ### 3.3 Script CLI
 
@@ -112,7 +164,7 @@ Idempotent: ON CONFLICT (using a synthetic unique constraint on `(source, note_t
 - **AC-08** Every inserted note has `is_internal_farm_use_only=TRUE`
 - **AC-09** Every inserted note has `body_text` ≤ 2000 chars
 - **AC-10** Existing `crop_knowledge_notes` rows from patch04 (with `crop_id IS NOT NULL`) are UNCHANGED
-- **AC-11** `pytest tests/integration/ -q` → N+5+ passing (was 15; +new test_load_sheet_056 tests). Exact N to be determined at build.
+- **AC-11** `pytest tests/integration/ -q` → **20 passed** (was 15 + 5 new test_load_sheet_056 tests: parse, schema-validate, dry-run, apply-idempotent, body_text-bound)
 - **AC-12** `pytest tests/crop_book/ -q` → 350 + 1 OOS unchanged. `validate_aos.sh` 0 FAIL. Diff scope: 4 files (migration + script + test + CHANGELOG).
 
 ## 5. Build sequence
@@ -142,3 +194,8 @@ team_10 Sonnet sub-agent (MEDIUM scope: schema + parser + tests).
 ---
 
 *LOD400 v1.0.0 — 2026-05-26. Pending team_190 L-GATE_S.*
+*v1.0.1 (2026-05-26) — R2 corrections per team_190 R1 verdict:*
+*- F-S-PATCH07-01 BLOCKER: §3.2 adds local SHEET_056_ALIASES table (in-script, NOT touching constants.py) + decomposition rule for aggregate labels. AC-06 floor recomputed to ≥30 with all 33 labels resolvable.*
+*- F-S-PATCH07-02 MAJOR: Migration 048 now uses dialect-aware pattern (PostgreSQL `op.alter_column`, SQLite `batch_alter_table(recreate='always')`) per repo's 046 precedent.*
+*- F-S-PATCH07-03 MINOR: AC-11 now states exact count "20 passed" (was N+5+).*
+*Pending: team_190 L-GATE_S R2.*

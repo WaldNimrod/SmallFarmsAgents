@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400; LOD200 inlined)
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-26
-version: v1.0.0
+version: v1.0.1
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch07-patch08_2026-05-26_v1.0.0.md
 orchestrator: team_110 (Claude Opus 4.7)
 builder: team_10 (Claude Sonnet sub-agent)
@@ -36,9 +36,28 @@ scripts/patch08_cleanup_noise_varieties.py   ← idempotent DELETE script (~50 L
 
 ### 3.1 Filter logic in `_extract_cultivar_names`
 
-Add filter function:
+Add module-level constant + filter function:
 
 ```python
+# Explicit blacklist of MasterClass section headers that the parser may pick up
+# as if they were cultivar names. Per patch08 v1.0.1 R2 (addresses F-S-PATCH08-01):
+# 'Intensive Spacing' is 17 chars without colon/period — it slips through the
+# generic heuristics, so we list it explicitly. Add more entries here as future
+# noise patterns surface.
+KNOWN_SECTION_HEADERS: frozenset[str] = frozenset({
+    "Intensive Spacing",
+    "Cultivars",
+    "Cultivar Suggestions",
+    "Pests",
+    "Diseases",
+    "Harvest",
+    "Storage",
+    "Sowing",
+    "Transplanting",
+    "Yield",
+})
+
+
 def _is_valid_cultivar_name(name: str) -> bool:
     """Heuristic filter: is this a real cultivar name vs MD noise?
 
@@ -46,11 +65,18 @@ def _is_valid_cultivar_name(name: str) -> bool:
     'Emerite', 'Marnero'). Noise includes URLs, bullets, section headers,
     spacing instructions, sentence fragments.
 
-    Per patch08 (DECISION_WP-B1-patch07-patch08 §2.2).
+    Per patch08 (DECISION_WP-B1-patch07-patch08 §2.2). v1.0.1 R2 adds
+    KNOWN_SECTION_HEADERS exact-match check for headers that don't trip
+    the generic heuristics (e.g., 'Intensive Spacing').
     """
     if not name or not name.strip():
         return False
     name = name.strip()
+
+    # Explicit blacklist (R2 addition) — catches short Title-Case section headers
+    # that look like cultivar names but aren't
+    if name in KNOWN_SECTION_HEADERS:
+        return False
 
     # Length: cultivar names are short (typically ≤ 40 chars)
     if len(name) > 40:
@@ -98,14 +124,24 @@ def _extract_cultivar_names(sections: dict[str, list[str]]) -> list[str]:
 `scripts/patch08_cleanup_noise_varieties.py` — DELETE rows matching the known noise patterns from production crop_varieties. Idempotent (no-op if already clean).
 
 ```python
-NOISE_PATTERNS = [
-    # Will be parameterized; matches the categorical patterns
-    # rather than specific strings to remain idempotent across re-runs
-]
+# Mirrors the Python filter's KNOWN_SECTION_HEADERS — kept in sync.
+# Adding 'Intensive Spacing' explicitly resolves F-S-PATCH08-01 BLOCKER (v1.0.1 R2).
+KNOWN_SECTION_HEADERS = (
+    'Intensive Spacing',
+    'Cultivars',
+    'Cultivar Suggestions',
+    'Pests',
+    'Diseases',
+    'Harvest',
+    'Storage',
+    'Sowing',
+    'Transplanting',
+    'Yield',
+)
 
 def main(dry_run: bool, db_url: str):
     with engine.begin() as conn:
-        # Find all varieties matching noise heuristics
+        # Find all varieties matching noise heuristics OR the explicit blacklist
         result = conn.execute(text("""
             SELECT id, name_en FROM crop_varieties
             WHERE
@@ -114,8 +150,9 @@ def main(dry_run: bool, db_url: str):
                 name_en IN ('●', '○', '-', '*', '1', '2', '3') OR
                 length(name_en) > 40 OR
                 name_en LIKE '%: %' OR
-                (length(name_en) > 6 AND name_en LIKE '%.')
-        """))
+                (length(name_en) > 6 AND name_en LIKE '%.') OR
+                name_en = ANY(:section_headers)
+        """), {"section_headers": list(KNOWN_SECTION_HEADERS)})
         rows = result.fetchall()
         log.info(f"Found {len(rows)} noise variety rows")
         for r in rows:
@@ -137,21 +174,20 @@ def test_extract_cultivar_filter_rejects_noise():
     for valid in ['Carmen', 'Emerite', 'Marnero', 'Sprinter', 'Maxifort (rootstock)']:
         assert _is_valid_cultivar_name(valid), f"Real cultivar {valid!r} rejected"
 
-    # Noise should fail
+    # Noise should fail (R2: 'Intensive Spacing' now caught explicitly via KNOWN_SECTION_HEADERS)
     for noise in [
         '●', '○', '-', '*',                              # bullets
         '1', '2', '3',                                    # numerics
         'marketgardenerinstitute.com',                    # URL
         'https://example.com',                            # URL
-        'Intensive Spacing',                              # 'Intensive Spacing' — has space but no colon — should pass? Actually no
+        'Intensive Spacing',                              # R2: caught by KNOWN_SECTION_HEADERS
+        'Cultivars',                                       # R2: caught by KNOWN_SECTION_HEADERS
         '1 row per bed every 12 in (30 cm) on the row.',  # spacing instruction
         'food store. Any cultivar works.',                # sentence
         'Green beans: Emerite, Seychelles, Cobra',        # header with embedded list
     ]:
         assert not _is_valid_cultivar_name(noise), f"Noise {noise!r} accepted"
 ```
-
-Note: 'Intensive Spacing' is 17 chars without colon — would pass the filter as-is. We accept this as a known limitation; the parser's section-header detection (separate from cultivar filter) should handle this. **Spec adjustment: filter test will skip 'Intensive Spacing' and rely on parser-level section-header skip.**
 
 ### 3.4 CHANGELOG
 
@@ -207,3 +243,5 @@ team_10 Sonnet sub-agent (MEDIUM scope: filter logic + cleanup script + tests).
 ---
 
 *LOD400 v1.0.0 — 2026-05-26. Pending team_190 L-GATE_S.*
+*v1.0.1 (2026-05-26) — R2 correction per team_190 R1 F-S-PATCH08-01 BLOCKER: 'Intensive Spacing' (17 chars, no colon, no period) slipped through generic heuristics. Added explicit `KNOWN_SECTION_HEADERS` constant (frozenset in Python filter + tuple in SQL cleanup) listing 10 known MasterClass section headers including 'Intensive Spacing'. Both Python filter (§3.1) and SQL cleanup (§3.2) check this allowlist. Regression test (§3.3) explicitly asserts rejection of 'Intensive Spacing' and 'Cultivars'.*
+*Pending: team_190 L-GATE_S R2.*
