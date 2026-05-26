@@ -1946,37 +1946,54 @@ work_packages:
   profile: L0
 
 - id: SFA-S003-P002-WP-C4
-  label: "ספר גידולים: Wave 4 — Web Sources (multi-engine team_80 scout)"
-  status: PROPOSED
+  label: "ספר גידולים: Wave 4 — Web Sources (multi-engine team_80 consolidated)"
+  status: ELIGIBLE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_S
-  lod_status: PRE_LOD400_PENDING_TEAM_80_FEEDBACK
+  lod_status: LOD400_LOCKED
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P002-WP-C1"]
   brief_ref: "_COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/MISSION_v1.0.0.md"
-  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-C4/LOD200_spec.md"
+  consolidated_findings_ref: "_COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/CONSOLIDATED_FINDINGS_v1.0.0.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-C4/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
     date: "2026-05-26"
     notes: "team_00 grant 2026-05-26 for WP-C program. Mission: consolidate
-      free/open web crop data sources from team_80 multi-engine scout
-      (Perplexity + ChatGPT + Claude Chat + Gemini). LOD400 authoring blocked
-      pending team_00 routing of activation prompt to ≥3 engines + return of
-      FINDINGS reports for consolidation."
+      free/open web crop data sources from team_80 multi-engine scout."
     validator: team_00
   - gate: L-GATE_S
     result: PASS_WITH_DEFERRAL
     date: "2026-05-26"
-    notes: "LOD200 authored by team_10. LOD400 explicitly deferred until
-      team_80 multi-engine feedback consolidation. Mission, gaps, anticipated
-      scope, anticipated trust-layer placement, activation path all documented
-      in LOD200. Roadmap kept as PRE_LOD400_PENDING_TEAM_80_FEEDBACK."
+    notes: "Initial LOD200 placeholder authored. LOD400 deferred pending
+      multi-engine feedback (superseded by R2 below)."
     validator: team_10
-  notes: "WP-C4 web sources via team_80 multi-engine scout. team_00 routing
-    activation prompt now. Authorized 2026-05-26 by team_00."
+    superseded_by: L-GATE_S R2
+  - gate: L-GATE_S
+    result: PASS
+    round: 2
+    date: "2026-05-26"
+    notes: "team_80 multi-engine scout completed: OpenAI ChatGPT, Perplexity,
+      Gemini provided 3 independent FINDINGS reports. team_10 consolidated
+      into 11 unique candidate groups → 8 INGEST + 3 INVESTIGATE_FURTHER.
+      Multi-engine win: OpenAI explicitly admitted not finding Israeli
+      sources; Perplexity + Gemini both found Israeli MoA + Shaham →
+      CRITICAL gap covered. LOD400 authored: 8 web importers, 3 new
+      migrations (050 region docs, 051 crop_companion_matrix, 052
+      crop_postharvest_storage), 20 ACs, 20+ tests target. Cross-engine
+      consensus: 3/3 on germination temp + frost tolerance + NPK + postharvest;
+      2/3 on soil pH + Israeli sources + ECOCROP; 1/3 on companion + EPPO.
+      Consolidated findings: _COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/CONSOLIDATED_FINDINGS_v1.0.0.md"
+    validator: team_10
+  notes: "WP-C4 LOD400_LOCKED 2026-05-26 after multi-engine team_80 scout
+    (OpenAI + Perplexity + Gemini). 8 sources to ingest covering germination
+    temp, frost tolerance, soil pH, NPK removal, Israeli planting calendar
+    (CRITICAL — multi-engine win), seeds/gram, companion planting, postharvest.
+    3 sources deferred (ECOCROP, EPPO, Cornell Mediterranean varieties) to
+    future WP-D. Authorized 2026-05-26 by team_00."
   profile: L0

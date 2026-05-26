@@ -2,17 +2,18 @@
 id: SFA-S003-P002-WP-C4-LOD200
 wp: SFA-S003-P002-WP-C4 — Web Sources (multi-engine team_80 scout output)
 gate: L-GATE_S (LOD200 — placeholder pending team_80 multi-engine feedback)
-status: PRE_LOD400_PENDING_TEAM_80_FEEDBACK
+status: LOD200_LOCKED  # was PRE_LOD400_PENDING; team_80 multi-engine FEEDBACK received 2026-05-26
 author: team_10 (Claude Sonnet 4.7) under team_00 grant
 date: 2026-05-26
-version: v1.0.0
+version: v1.1.0
 parent_wp_chain:
   - SFA-S003-P002-WP-A
   - SFA-S003-P002-WP-B (LOD500_LOCKED)
 depends_on: [SFA-S003-P002-WP-C1]
-soft_depends_on: [team_80 web scout feedback from multiple engines]
 brief_ref: _COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/MISSION_v1.0.0.md
-mission_status: AWAITING_TEAM_80_MULTI_ENGINE_FEEDBACK
+consolidated_findings_ref: _COMMUNICATION/team_80/SFA-CROP-DATA-SCOUT-2026-05-26/CONSOLIDATED_FINDINGS_v1.0.0.md
+lod400_spec_ref: _aos/work_packages/S003/SFA-S003-P002-WP-C4/LOD400_spec.md
+mission_status: FEEDBACK_RECEIVED_LOD400_AUTHORED
 ---
 
 # LOD200 — WP-C4: Web Sources Integration (multi-engine team_80 scout)
