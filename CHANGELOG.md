@@ -11,6 +11,11 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-B1-patch07 — Sheet 056 M2M data load + Migration 048 (2026-05-26)
+- **Migration 048:** `crop_knowledge_notes.crop_id` now nullable (was NOT NULL). Enables M2M-only notes (storage/washing procedures applying to multiple crops via junction table from Migration 047).
+- **`scripts/load_sheet_056_storage.py`:** new parser for sheet 056 ("WASHING ITINERARY FOR CROPS IN THE MASTERCLASS"). Inserts ~6-10 procedure notes (crop_id=NULL) + populates `crop_knowledge_notes_crops` junction with ~30-50 (note, crop) pairs.
+- Per team_00 DECISION_WP-B1-patch07-patch08_2026-05-26 §1.
+
 ### SFA-S003-P002-WP-B1-patch08 — Variety-parser cleanup (2026-05-26)
 - `scripts/load_masterclass_sheets.py::_extract_cultivar_names`: added `_is_valid_cultivar_name` filter to skip URLs, bullets, single chars, sentence fragments, comma-separated lists, and overly long strings (>40 chars). Added `KNOWN_SECTION_HEADERS` frozenset (10 entries) to explicitly catch Title-Case section headers that pass generic heuristics (e.g., 'Intensive Spacing' — F-S-PATCH08-01 R2).
 - `scripts/patch08_cleanup_noise_varieties.py`: new idempotent DELETE script for ~11 noise rows added by OP-2 (2026-05-26) before patch08. Default dry-run; pass `--apply` to mutate. SQLite-compatible (test fixture) and Postgres-compatible (production).
