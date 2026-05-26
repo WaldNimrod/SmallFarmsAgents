@@ -350,18 +350,24 @@ def _upsert_knowledge_note(session, crop_id: int, note_type: str, body_text: str
 
 
 def _upsert_variety(session, crop_id: int, variety_name: str):
-    """Insert a crop_varieties row if not exists."""
+    """Insert a crop_varieties row if not exists.
+
+    Uses Postgres ON CONFLICT clause so a UNIQUE-constraint conflict does NOT
+    poison the transaction. The previous try/except: pass pattern caught the
+    Python exception but left Postgres in an aborted-transaction state →
+    all subsequent INSERTs failed with InFailedSqlTransaction. SQLite did not
+    exhibit this behavior; defect surfaced operationally on production
+    (2026-05-26 OP-2 re-run post-hotfix01). Per patch04-hotfix02.
+    """
     from sqlalchemy import text
-    try:
-        session.execute(
-            text(
-                "INSERT INTO crop_varieties (crop_id, name_en, is_default, is_grafted) "
-                "VALUES (:crop_id, :name_en, FALSE, FALSE)"
-            ),
-            {"crop_id": crop_id, "name_en": variety_name},
-        )
-    except Exception:
-        pass  # UNIQUE conflict — variety already exists
+    session.execute(
+        text(
+            "INSERT INTO crop_varieties (crop_id, name_en, is_default, is_grafted) "
+            "VALUES (:crop_id, :name_en, FALSE, FALSE) "
+            "ON CONFLICT (crop_id, name_en) DO NOTHING"
+        ),
+        {"crop_id": crop_id, "name_en": variety_name},
+    )
 
 
 def load_to_db(cache_records: list[dict], db_url: str) -> dict[str, int]:

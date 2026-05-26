@@ -731,3 +731,31 @@ def test_load_masterclass_uses_postgres_compatible_booleans():
         "_upsert_knowledge_note missing TRUE literal for "
         "is_internal_farm_use_only — patch04-hotfix01 not applied or reverted"
     )
+
+
+def test_load_masterclass_no_silent_try_except_around_execute():
+    """patch04-hotfix02: _upsert_variety must use ON CONFLICT, not try/except: pass.
+
+    Python try/except around session.execute catches the IntegrityError but
+    does NOT rollback the Postgres transaction. All subsequent INSERTs fail
+    with InFailedSqlTransaction. Defect surfaced 2026-05-26 during OP-2 prod
+    re-run post-hotfix01. This test guards against regression to the
+    silent-swallow pattern.
+    """
+    from pathlib import Path
+    script_path = Path(__file__).parents[2] / "scripts" / "load_masterclass_sheets.py"
+    content = script_path.read_text(encoding="utf-8")
+
+    # The fixed _upsert_variety must use ON CONFLICT (crop_id, name_en) DO NOTHING
+    assert "ON CONFLICT (crop_id, name_en) DO NOTHING" in content, (
+        "_upsert_variety must use ON CONFLICT clause to avoid Postgres "
+        "transaction-poisoning on UNIQUE conflict"
+    )
+
+    # The forbidden pattern: bare try/except: pass around session.execute
+    forbidden = "except Exception:\n        pass  # UNIQUE conflict"
+    assert forbidden not in content, (
+        "patch04-hotfix02 regression: silent try/except: pass around "
+        "session.execute found in load_masterclass_sheets.py — must use "
+        "ON CONFLICT DO NOTHING instead"
+    )

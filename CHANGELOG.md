@@ -416,3 +416,9 @@ _(Log new changes here as they happen. Move to a versioned section at milestone 
 - `tests/integration/test_load_masterclass_sheets.py`: +1 regression test (`test_load_masterclass_uses_postgres_compatible_booleans`) that scans the script source for forbidden int-literal patterns + asserts corrected patterns present.
 - Defect surfaced during OP-2 operational run on production (post-patch06 closure). Backup taken before any operational mutation. Single-engine builder (team_110 Opus 4.7) per patch02 precedent — SMALL scope, no architecture, IR#1 preserved via team_190 validator.
 - Per team_00 DECISION_WP-B1-patch04-hotfix01_2026-05-26 §§1-3.
+
+### SFA-S003-P002-WP-B1-patch04-hotfix02 — Postgres transaction-poisoning fix (2026-05-26)
+- `scripts/load_masterclass_sheets.py::_upsert_variety`: replaced Python `try/except: pass` UNIQUE-conflict swallow with `ON CONFLICT (crop_id, name_en) DO NOTHING` SQL clause. Python `except` caught the IntegrityError but didn't rollback the Postgres transaction → all subsequent INSERTs failed with `InFailedSqlTransaction`. SQLite tolerated; production Postgres poisoned.
+- `tests/integration/test_load_masterclass_sheets.py`: +1 regression test (`test_load_masterclass_no_silent_try_except_around_execute`).
+- Defect surfaced during OP-2 re-run post-hotfix01 (2026-05-26).
+- Per team_00 DECISION_WP-B1-patch04-hotfix02_2026-05-26 §§1-3.
