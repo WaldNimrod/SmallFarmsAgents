@@ -1499,10 +1499,10 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch07
   label: "ספר גידולים: Sheet 056 storage/washing M2M data load + Migration 048"
-  status: ELIGIBLE
+  status: IN_PROGRESS
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_E
+  current_lean_gate: L-GATE_S
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: external
@@ -1524,10 +1524,10 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch08
   label: "ספר גידולים: Variety-parser cleanup (filter noise + DELETE existing)"
-  status: ELIGIBLE
+  status: IN_PROGRESS
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_E
+  current_lean_gate: L-GATE_S
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: external

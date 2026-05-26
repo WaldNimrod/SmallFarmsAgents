@@ -5,7 +5,7 @@ gate: L-GATE_S (LOD400; LOD200 inlined)
 status: PRE_LOD400_LOCK
 author: team_110
 date: 2026-05-26
-version: v1.0.1
+version: v1.0.2
 team_00_decision_ref: _COMMUNICATION/team_00/DECISION_WP-B1-patch07-patch08_2026-05-26_v1.0.0.md
 orchestrator: team_110 (Claude Opus 4.7)
 builder: team_10 (Claude Sonnet sub-agent)
@@ -103,8 +103,11 @@ SHEET_056_ALIASES: dict[str, list[str]] = {
     # Aggregate labels — decomposed into multiple resolved crops
     "All Bunches (beets, carrots, radishes, turnips)": ["Beets", "Carrots", "Radishes", "Turnips"],
     # Workbook-local plural / variant labels
-    "Mesclun Mix": ["Mesclun"],         # Mesclun is removed from MAP post-patch06 — direct DB lookup of 'עלי בייבי' crop
-    "Baby Asian Greens": ["Mesclun"],   # variant of baby-leaf mix — treat as עלי בייבי
+    # v1.0.2 R3: "Mesclun Mix" + "Baby Asian Greens" target name_he directly (resolver extended).
+    # The corresponding English baseline was removed post-patch06; resolver supports
+    # "he:" prefix to look up by crops.name_he directly when no English key exists.
+    "Mesclun Mix": ["he:עלי בייבי"],
+    "Baby Asian Greens": ["he:עלי בייבי"],
     "Frisée": ["Endive"],               # Frisée is cultivar of Endive
     "Frisée Heads": ["Endive"],
     "Little Gem Mini Lettuce": ["Lettuce"],
@@ -123,16 +126,19 @@ SHEET_056_ALIASES: dict[str, list[str]] = {
 def _resolve_crop_label(label: str, session) -> list[int]:
     """Resolve a sheet-056 label to one or more crops.id values.
 
-    Resolution chain:
-      1. SHEET_056_ALIASES (this script's local map) — returns list of English keys
-      2. For each English key: JMF_CROP_MAP → name_he → crops.id via SELECT
-      3. If not found: TEND_CROP_MAP → name_he → crops.id
-      4. If not found: direct DB name_en match
-      5. If still not found: log WARN, return []
+    Resolution chain (v1.0.2):
+      1. SHEET_056_ALIASES — returns list of resolution targets. Each target may be:
+         - An English JMF_CROP_MAP key (regular case)
+         - A "he:<hebrew>" prefix indicating direct crops.name_he lookup
+      2. For English keys: JMF_CROP_MAP → name_he → crops.id via SELECT
+      3. For "he:" targets: direct SELECT id FROM crops WHERE name_he = <hebrew>
+      4. If not found: TEND_CROP_MAP → name_he → crops.id
+      5. If not found: direct DB name_en match
+      6. If still not found: log WARN, return []
     """
 ```
 
-With this resolver, all 33 sheet-056 labels resolve (15 via aliases including aggregate decomposition, 18 via direct map paths). Junction floor recomputed: AC-06 (revised) = **≥ 30 rows** holds.
+With this resolver, all 33 sheet-056 labels resolve (15 via aliases including aggregate decomposition + "he:" targets, 18 via direct map paths). Junction floor: AC-06 = **≥ 30 rows** holds with margin (33 expected after the v1.0.2 "he:" extension).
 
 ### 3.3 Script CLI
 
@@ -199,3 +205,4 @@ team_10 Sonnet sub-agent (MEDIUM scope: schema + parser + tests).
 *- F-S-PATCH07-02 MAJOR: Migration 048 now uses dialect-aware pattern (PostgreSQL `op.alter_column`, SQLite `batch_alter_table(recreate='always')`) per repo's 046 precedent.*
 *- F-S-PATCH07-03 MINOR: AC-11 now states exact count "20 passed" (was N+5+).*
 *Pending: team_190 L-GATE_S R2.*
+*v1.0.2 (2026-05-26) — R2 ADVISORY addressed inline: "Mesclun Mix" + "Baby Asian Greens" alias targets changed from `["Mesclun"]` (English key removed in patch06) to `["he:עלי בייבי"]`. Resolver extended to support "he:" prefix for direct name_he lookup. All 33 labels now resolvable; AC-06 holds at ≥30 with 33 expected.*
