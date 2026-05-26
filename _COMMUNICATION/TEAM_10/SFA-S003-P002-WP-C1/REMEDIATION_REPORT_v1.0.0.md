@@ -125,7 +125,64 @@ work. These tests pass cleanly when migrations are stable. Not a WP-C1 defect.
 
 ---
 
-## F-C1-LV-01 — BLOCKER — AC-C1-13 CALIBRATED count
+## F-C1-LV-01 — BLOCKER — AC-C1-13 CALIBRATED count → RESOLVED via engine fix
+
+**Update 2026-05-26 (post-team_00 directive)**: team_00 rejected the AC-amendment
+path (Path A) and directed root-cause fix. The original AC-C1-13 wording is
+UNCHANGED. The engine was the bug, not the spec.
+
+**Root cause (architectural)**: A variety is an OVERRIDE on the species defaults
+(team_00 design principle). When a specific cultivar has no own data for
+(variety, field), the reconciler MUST inherit from the default variety of the
+same crop. The previous engine treated each variety as isolated, so EX
+overrides on named cultivars with no own non-EX data were marked MISALIGNED in
+the shadow-run calibration — even though the species default had perfectly
+matching data.
+
+**Engine fix (v1.1) landed in this remediation**:
+
+1. **New helper in `reconciler.py`** —
+   `collect_source_values_with_inheritance(session, variety_id, field_name=None, exclude_ex=False)`.
+   Implements the variety→species inheritance: if own data is empty for a
+   given field, fall back to the default variety's data for that field.
+   Default variety identified by `crop_varieties.is_default = TRUE`.
+
+2. **`enrichment_runner.run_enrichment()`** — now uses the helper instead of
+   loading own source_values only. Production enrichment data now reflects
+   species-default inheritance (varieties without own data get values from
+   their species default).
+
+3. **`scripts/validate_enrichment.py run_calibration()`** — same helper with
+   `exclude_ex=True`. Shadow-run now properly inherits non-EX data from
+   default variety.
+
+4. **6 new tests** in `tests/crop_book/test_reconciler_inheritance.py`:
+   - inheritance fires when own field empty
+   - own data takes priority (no inheritance fallback)
+   - default variety doesn't inherit from itself (no self-loop)
+   - `field_name=None` mode (per-field inheritance across all fields)
+   - no-default-on-crop case (graceful empty return)
+   - `exclude_ex=False` (production mode) preserves EX without inheriting
+
+5. **Re-ran enrichment on live PG** with the new engine:
+   - Before: 319 enrichment rows
+   - After:  2,848 enrichment rows (8.9× growth — varieties now inherit data
+     instead of having empty enrichment)
+   - 1,542 rows reach `confidence_score ≥ 0.70`
+
+6. **`validate_enrichment.py` after fix**:
+   ```
+   Summary: 5 rows — CALIBRATED=5  MARGINAL=0  MISALIGNED=0
+   ```
+   All 5 ארוגולה varieties now CALIBRATED (was 2). **AC-C1-13 PASSES with
+   the original wording** (≥3 required, 5 delivered).
+
+**Companion artifact**: `_COMMUNICATION/team_00/INQUIRY_*` from R1 WITHDRAWN
+(no longer needed — see WITHDRAWAL note appended to that file).
+
+**Status**: ✅ RESOLVED via engine inheritance fix (not via spec amendment).
+
+
 
 **Root cause analysis** — investigation of why `validate_enrichment.py` reports
 CALIBRATED=2 below the required ≥3:
@@ -176,22 +233,22 @@ this is resolved.
 
 ---
 
-## Summary
+## Summary (updated 2026-05-26 post-engine-fix)
 
 | Finding | Severity | Status | Action |
 |---------|----------|--------|--------|
 | F-C1-LV-04 | MAJOR | ✅ RESOLVED | Committed 8 test fixtures; updated gitignore |
-| F-C1-LV-03 | BLOCKER | ✅ RESOLVED | Created `scripts/wp_c1/verify_migrations_reversibility.py` (static + optional PG); passes |
+| F-C1-LV-03 | BLOCKER | ✅ RESOLVED | `scripts/wp_c1/verify_migrations_reversibility.py` (static + optional PG); passes |
 | F-C1-LV-02 | BLOCKER | ✅ RESOLVED | Documented state-dependency; tests pass locally |
-| F-C1-LV-01 | BLOCKER | ⏳ PENDING | INQUIRY filed to team_00 for AC-C1-13 spec decision (Path A/B/C) |
+| F-C1-LV-01 | BLOCKER | ✅ RESOLVED | **Engine v1.1 inheritance fix** in reconciler.py + enrichment_runner.py + validate_enrichment.py; 6 new tests; CALIBRATED=5/5 |
 
-3 of 4 findings have remediation code committed. 1 awaits team_00 decision
-on AC interpretation. Once team_00 responds:
-- **Path A**: I update AC-C1-13 wording, validate, resubmit R2
-- **Path B**: team_00 adds EX overrides, re-run validate_enrichment, resubmit R2
-- **Path C**: Mark AC-C1-13 PASS_WITH_NOTE, resubmit R2
+**ALL 4 findings RESOLVED.** Per team_00 directive "no patches — fix from the
+foundation", F-C1-LV-01 was fixed at the engine level (variety→species
+inheritance helper) rather than via AC amendment.
+
+Original AC-C1-13 wording unchanged; passes with 5 CALIBRATED (>= 3).
 
 ---
 
 *Remediation report authored by team_10 (Claude Sonnet 4.7) 2026-05-26.
-Ready to file R2 to team_190 once F-C1-LV-01 resolved.*
+Ready to file R2 to team_190.*

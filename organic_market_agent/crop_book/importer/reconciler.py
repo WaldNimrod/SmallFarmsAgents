@@ -340,6 +340,108 @@ def reconcile_field(
 
 
 # ---------------------------------------------------------------------------
+# Variety→species inheritance helper (engine v1.1 — 2026-05-26)
+# ---------------------------------------------------------------------------
+#
+# Architectural principle: a variety is an OVERRIDE on the species (crop)
+# defaults, not an isolated entity. If a specific variety has no data for
+# (variety, field), the engine MUST inherit from the default variety of the
+# same crop. This applies to:
+#   - Production enrichment (enrichment_runner.run_enrichment)
+#   - Calibration shadow run (validate_enrichment.run_calibration)
+#
+# Why this matters: team_00 EX overrides for named cultivars (e.g.,
+# ארוגולה "Wild Rocket") were marked MISALIGNED in calibration because the
+# specific cultivar had no non-EX data, even though the species default
+# variety did. The fix is in the data-collection layer (where candidates
+# are assembled), NOT in reconcile_field itself.
+# Root cause discussion: REMEDIATION_REPORT_v1.0.0.md §F-C1-LV-01.
+
+
+def collect_source_values_with_inheritance(
+    session,
+    variety_id: int,
+    field_name: str | None = None,
+    exclude_ex: bool = False,
+):
+    """Collect CropVarietySourceValue rows for a variety with default-variety fallback.
+
+    Returns a list of CropVarietySourceValue rows.
+
+    Logic (applied per field_name when field_name is None — i.e., iterating
+    over all fields the crop has data for):
+      1. Load own rows (variety_id == target, optionally exclude EX).
+      2. For each field where own data is EMPTY, fall back to the default
+         variety's data for that field.
+      3. The default variety is `is_default=True` on the same crop.
+      4. If target IS the default variety, no fallback (would be self-loop).
+      5. The returned rows are real ORM rows from the default variety; callers
+         that need to distinguish own-vs-inherited can check `row.variety_id`.
+
+    Args:
+        session: SQLAlchemy session
+        variety_id: target variety
+        field_name: optional — if given, apply inheritance only to this field.
+                    If None, apply to ALL fields the crop has data for.
+        exclude_ex: if True, filter out trust_tier='EX' (use for shadow runs).
+
+    Returns:
+        list of CropVarietySourceValue rows (own + inherited).
+    """
+    from organic_market_agent.crop_book.models import CropVariety, CropVarietySourceValue
+
+    # Step 1: own rows
+    own_q = session.query(CropVarietySourceValue).filter_by(variety_id=variety_id)
+    if field_name is not None:
+        own_q = own_q.filter_by(field_name=field_name)
+    if exclude_ex:
+        own_q = own_q.filter(CropVarietySourceValue.trust_tier != "EX")
+    own_rows = own_q.all()
+
+    # Determine which fields have OWN data so we know what to inherit
+    own_fields_with_data = {row.field_name for row in own_rows}
+
+    # Step 2: find default variety of same crop
+    own_variety = session.query(CropVariety).filter_by(id=variety_id).first()
+    if own_variety is None or own_variety.is_default:
+        # No fallback possible: target is default OR doesn't exist
+        return own_rows
+
+    default_variety = (
+        session.query(CropVariety)
+        .filter_by(crop_id=own_variety.crop_id, is_default=True)
+        .first()
+    )
+    if default_variety is None or default_variety.id == variety_id:
+        return own_rows
+
+    # Step 3: collect inheritable rows from default variety
+    inherit_q = session.query(CropVarietySourceValue).filter_by(variety_id=default_variety.id)
+    if field_name is not None:
+        # Only inherit if own has no data for this field
+        if field_name in own_fields_with_data:
+            return own_rows
+        inherit_q = inherit_q.filter_by(field_name=field_name)
+    if exclude_ex:
+        inherit_q = inherit_q.filter(CropVarietySourceValue.trust_tier != "EX")
+    inherit_rows = inherit_q.all()
+
+    # When field_name is None: only inherit rows for fields where own has nothing
+    if field_name is None:
+        inherit_rows = [r for r in inherit_rows if r.field_name not in own_fields_with_data]
+
+    if inherit_rows:
+        logger.debug(
+            "Inheritance: variety_id=%s fell back to default_variety_id=%s "
+            "for %d row(s); fields=%s",
+            variety_id, default_variety.id, len(inherit_rows),
+            sorted({r.field_name for r in inherit_rows}),
+        )
+
+    return own_rows + inherit_rows
+
+
+# ---------------------------------------------------------------------------
 # Backward-compat wrapper — reconcile_dtm
 # ---------------------------------------------------------------------------
 

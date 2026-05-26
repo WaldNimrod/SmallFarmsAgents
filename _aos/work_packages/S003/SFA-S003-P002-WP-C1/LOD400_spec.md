@@ -9,6 +9,12 @@ version: v1.0.0
 supersedes: LOD200_spec.md §10 AC count target
 lod200_ref: _aos/work_packages/S003/SFA-S003-P002-WP-C1/LOD200_spec.md
 sources_ref: data/external_sources/INDEX.md + WAVE_PLAN_v1.0.0.md
+# AC-C1-13 root-cause fix (not an amendment):
+#   team_190 R1 surfaced CALIBRATED=2<3; investigation showed the engine
+#   was missing variety→species inheritance. Fix landed at the reconciler
+#   engine (collect_candidates_for_variety_field with default-variety
+#   fallback). Original AC-C1-13 unchanged; engine now supports it correctly.
+#   See REMEDIATION_REPORT_v1.0.0.md §F-C1-LV-01.
 ---
 
 # LOD400 — WP-C1: Israeli Structured Data + Tend Multi-Year Backfill

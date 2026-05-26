@@ -174,11 +174,14 @@ def run_enrichment(
     high_conf_count = 0
 
     for variety in varieties:
-        sv_rows = (
-            session.query(CropVarietySourceValue)
-            .filter_by(variety_id=variety.id)
-            .all()
+        # Use variety→species inheritance helper (engine v1.1) so non-default
+        # varieties inherit data for fields where they have no own coverage.
+        # See reconciler.collect_source_values_with_inheritance docstring +
+        # REMEDIATION_REPORT §F-C1-LV-01 for the architectural rationale.
+        from organic_market_agent.crop_book.importer.reconciler import (
+            collect_source_values_with_inheritance,
         )
+        sv_rows = collect_source_values_with_inheritance(session, variety.id)
 
         name_he: str = ""
         if variety.crop is not None:

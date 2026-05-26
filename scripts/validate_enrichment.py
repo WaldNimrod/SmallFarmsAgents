@@ -190,16 +190,16 @@ def run_calibration(field_filter: Optional[str] = None, verbose: bool = False) -
             ex_value: Decimal = ex_sv.value_numeric
 
             # Shadow run: collect non-EX source_values for this (variety, field)
-            non_ex_svs = (
-                session.query(CropVarietySourceValue)
-                .filter(
-                    CropVarietySourceValue.variety_id == variety_id,
-                    CropVarietySourceValue.field_name == field_name,
-                    CropVarietySourceValue.trust_tier != "EX",
-                )
-                .filter(CropVarietySourceValue.value_numeric.isnot(None))
-                .all()
+            # with variety→species inheritance fallback (engine v1.1 — 2026-05-26).
+            # If this variety has no own non-EX data, inherit from default
+            # variety of same crop. See reconciler.collect_source_values_with_inheritance.
+            from organic_market_agent.crop_book.importer.reconciler import (
+                collect_source_values_with_inheritance,
             )
+            non_ex_svs_all = collect_source_values_with_inheritance(
+                session, variety_id, field_name=field_name, exclude_ex=True
+            )
+            non_ex_svs = [sv for sv in non_ex_svs_all if sv.value_numeric is not None]
 
             # Build Candidate list from non-EX rows
             candidates = []

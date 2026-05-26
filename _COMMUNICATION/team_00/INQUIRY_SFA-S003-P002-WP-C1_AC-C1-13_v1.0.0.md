@@ -10,6 +10,17 @@ ac_in_question: AC-C1-13
 verdict_ref: _COMMUNICATION/team_190/SFA-S003-P002-WP-C1/L-GATE_V_VERDICT_v1.0.0.md
 remediation_ref: _COMMUNICATION/team_10/SFA-S003-P002-WP-C1/REMEDIATION_REPORT_v1.0.0.md
 priority: BLOCKER
+status: WITHDRAWN
+withdrawn_date: 2026-05-26
+withdrawal_reason: |
+  team_00 directive: "no patches — fix from the foundation". The 3 options
+  (A spec amend / B add EX / C PASS_WITH_NOTE) were all workarounds. team_00
+  identified the true root cause: the engine was missing variety→species
+  inheritance. A variety is an OVERRIDE on species defaults; the reconciler
+  must inherit when own data is empty.
+  Engine v1.1 fix landed in remediation (reconciler.collect_source_values_with_inheritance
+  + enrichment_runner + validate_enrichment). Original AC-C1-13 wording
+  preserved. See REMEDIATION_REPORT §F-C1-LV-01 (updated section).
 ---
 
 # Inquiry — AC-C1-13 interpretation (CALIBRATED count)
