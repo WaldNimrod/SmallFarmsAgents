@@ -63,6 +63,24 @@ SECTION_NOTE_TYPE_MAP: dict[str, str] = {
 # Sections we extract cultivar names from
 CULTIVAR_HEADERS = {"cultivar", "cultivars", "variety", "varieties"}
 
+# Explicit blacklist of MasterClass section headers that the parser may pick up
+# as if they were cultivar names. Per patch08 v1.0.1 R2 (addresses F-S-PATCH08-01):
+# 'Intensive Spacing' is 17 chars without colon/period — it slips through the
+# generic heuristics, so we list it explicitly. Add more entries here as future
+# noise patterns surface.
+KNOWN_SECTION_HEADERS: frozenset[str] = frozenset({
+    "Intensive Spacing",
+    "Cultivars",
+    "Cultivar Suggestions",
+    "Pests",
+    "Diseases",
+    "Harvest",
+    "Storage",
+    "Sowing",
+    "Transplanting",
+    "Yield",
+})
+
 # ---------------------------------------------------------------------------
 # MD parser
 # ---------------------------------------------------------------------------
@@ -140,6 +158,59 @@ def _resolve_note_type(section_key: str) -> str:
     return "growing_tip"
 
 
+def _is_valid_cultivar_name(name: str) -> bool:
+    """Heuristic filter: is this a real cultivar name vs MD noise?
+
+    Real cultivar names are typically 1-3 short words (e.g., 'Carmen',
+    'Emerite', 'Marnero'). Noise includes URLs, bullets, section headers,
+    spacing instructions, sentence fragments.
+
+    Per patch08 (DECISION_WP-B1-patch07-patch08 §2.2). v1.0.1 R2 adds
+    KNOWN_SECTION_HEADERS exact-match check for headers that don't trip
+    the generic heuristics (e.g., 'Intensive Spacing').
+    """
+    if not name or not name.strip():
+        return False
+    name = name.strip()
+
+    # Explicit blacklist (R2 addition) — catches short Title-Case section headers
+    # that look like cultivar names but aren't
+    if name in KNOWN_SECTION_HEADERS:
+        return False
+
+    # Length: cultivar names are short (typically <= 40 chars)
+    if len(name) > 40:
+        return False
+    if len(name) < 2:
+        return False  # bullets, single chars
+
+    # URL patterns
+    if any(p in name.lower() for p in ['http://', 'https://', '://', '.com', '.org', '.io', 'www.']):
+        return False
+
+    # Sentence-like (ends with period; not just abbreviation)
+    if name.endswith('.') and len(name) > 6:
+        return False
+
+    # Section headers (contain colon followed by space, like "Intensive Spacing:")
+    if ': ' in name:
+        return False
+
+    # Comma-separated lists (e.g., "Green beans: Emerite, Seychelles, Cobra") —
+    # these should be split, not taken as one variety. But splitting is more
+    # complex; for now, treat as section header.
+    if ',' in name and name.count(',') >= 2:
+        return False
+
+    # Pure-numeric / pure-bullet
+    if name in {'●', '○', '-', '*', '◦', '·'}:
+        return False
+    if name.isdigit():
+        return False
+
+    return True
+
+
 def _extract_cultivar_names(sections: dict[str, list[str]]) -> list[str]:
     """Pull cultivar names from the cultivar section lines."""
     cultivar_names: list[str] = []
@@ -151,7 +222,8 @@ def _extract_cultivar_names(sections: dict[str, list[str]]) -> list[str]:
                 # Skip lines that look like instructions / sentences
                 if clean and len(clean) < 80 and not clean.lower().startswith(("use ", "any ", "those ", "plant ")):
                     cultivar_names.append(clean)
-    return cultivar_names
+    filtered = [n for n in cultivar_names if _is_valid_cultivar_name(n)]
+    return filtered
 
 
 def parse_md_sheet(md_path: Path) -> dict:

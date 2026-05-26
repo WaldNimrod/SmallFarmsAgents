@@ -759,3 +759,29 @@ def test_load_masterclass_no_silent_try_except_around_execute():
         "session.execute found in load_masterclass_sheets.py — must use "
         "ON CONFLICT DO NOTHING instead"
     )
+
+
+def test_extract_cultivar_filter_rejects_noise():
+    """patch08: _is_valid_cultivar_name must reject known noise patterns."""
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    import importlib
+    loader = importlib.import_module("load_masterclass_sheets")
+    _is_valid_cultivar_name = loader._is_valid_cultivar_name
+
+    # Real cultivars should pass
+    for valid in ['Carmen', 'Emerite', 'Marnero', 'Sprinter', 'Maxifort (rootstock)']:
+        assert _is_valid_cultivar_name(valid), f"Real cultivar {valid!r} rejected"
+
+    # Noise should fail (R2: 'Intensive Spacing' now caught explicitly via KNOWN_SECTION_HEADERS)
+    for noise in [
+        '●', '○', '-', '*',                              # bullets
+        '1', '2', '3',                                    # numerics
+        'marketgardenerinstitute.com',                    # URL
+        'https://example.com',                            # URL
+        'Intensive Spacing',                              # R2: caught by KNOWN_SECTION_HEADERS
+        'Cultivars',                                      # R2: caught by KNOWN_SECTION_HEADERS
+        '1 row per bed every 12 in (30 cm) on the row.',  # spacing instruction
+        'food store. Any cultivar works.',                # sentence
+        'Green beans: Emerite, Seychelles, Cobra',        # header with embedded list
+    ]:
+        assert not _is_valid_cultivar_name(noise), f"Noise {noise!r} accepted"

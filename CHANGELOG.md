@@ -11,6 +11,13 @@ All notable changes to OrganicMarketAgent are documented in this file.
 
 _(Log new changes here as they happen. Move to a versioned section at milestone end.)_
 
+### SFA-S003-P002-WP-B1-patch08 — Variety-parser cleanup (2026-05-26)
+- `scripts/load_masterclass_sheets.py::_extract_cultivar_names`: added `_is_valid_cultivar_name` filter to skip URLs, bullets, single chars, sentence fragments, comma-separated lists, and overly long strings (>40 chars). Added `KNOWN_SECTION_HEADERS` frozenset (10 entries) to explicitly catch Title-Case section headers that pass generic heuristics (e.g., 'Intensive Spacing' — F-S-PATCH08-01 R2).
+- `scripts/patch08_cleanup_noise_varieties.py`: new idempotent DELETE script for ~11 noise rows added by OP-2 (2026-05-26) before patch08. Default dry-run; pass `--apply` to mutate. SQLite-compatible (test fixture) and Postgres-compatible (production).
+- `tests/integration/test_load_masterclass_sheets.py`: +1 regression test (`test_extract_cultivar_filter_rejects_noise`) — asserts real cultivars pass and noise patterns (including 'Intensive Spacing', 'Cultivars', URLs, bullets, sentence fragments) are rejected.
+- Defect surfaced during OP-2 prod load (15 new varieties: ~4 real cultivars + ~11 noise).
+- Per team_00 DECISION_WP-B1-patch07-patch08_2026-05-26 §2.
+
 ### SFA-S003-P002-WP-B1-patch06 — JMF_CROP_MAP cleanup (2026-05-25)
 - **REMOVED 27 entries** from JMF_CROP_MAP per DECISION §3:
   - 22 cultivars moved to crop_varieties (populated by patch04)
