@@ -13,209 +13,239 @@ expects_response: true
 response_artifact: CROP_DATA_FINDINGS_16_CROPS_v1.0.0.md
 ---
 
-# Mandate — Web Data Scouting: 16 New Crops
+# Mandate — Web Data Scouting: 16 New Crops (v1.0.0 CORRECTED)
 
-## Background
+## Correction Note (2026-05-27)
 
-The SFA crop book (`crops` table) has just been expanded with 16 new crops.  
-All 16 have **zero structured data** — no source_values, no knowledge_notes.
+The original mandate listed עגבניית שרי as zero-data. **Incorrect.** Investigation showed:
+- עגבניית שרי has Idan 2017 data (spacing, rows, yield) already in DB
+- JMF and Tend CSVs both contain cherry tomato data; routing was partially blocked (tech fix pending)
+- Cherry tomato is therefore NOT a candidate for full web research by Team 80 for core fields
 
-Before these crops can appear on the live product page, we need **at least 2
-independent sources** per core data point, so the reconciler can produce a
-reliable consensus value.
-
-This mandate authorises team_80 to run a focused web research sprint.
-
----
-
-## Crops List
-
-| id | Hebrew | English | Family | Category |
-|----|--------|---------|--------|----------|
-| 61 | אוסנה | Blackberry | ורדיים (Rosaceae) | fruits |
-| 73 | עגבניית שרי | Cherry Tomato | סולניים (Solanaceae) | fruits |
-| 74 | אבטיח | Watermelon | דלועיים (Cucurbitaceae) | fruits |
-| 75 | כרובית | Cauliflower | מצליבים (Brassicaceae) | vegetables |
-| 76 | בטטה | Sweet Potato | לשוניתניים (Convolvulaceae) | vegetables |
-| 77 | במיה | Okra | חלמיתיים (Malvaceae) | vegetables |
-| 78 | פול | Fava Bean | קטניות (Fabaceae) | vegetables |
-| 79 | ציקוריה | Chicory / Endive | מורכבים (Asteraceae) | vegetables |
-| 80 | תירס | Sweet Corn | דשאיים (Poaceae) | vegetables |
-| 81 | תפוח אדמה | Potato | סולניים (Solanaceae) | vegetables |
-| 82 | חומוס | Chickpea | קטניות (Fabaceae) | vegetables |
-| 83 | שומשום | Sesame | שומשומיים (Pedaliaceae) | herbs |
-| 84 | חמניה | Sunflower | מורכבים (Asteraceae) | vegetables |
-| 85 | חיטה | Wheat | דשאיים (Poaceae) | vegetables |
-| 86 | סויה | Soybean | קטניות (Fabaceae) | vegetables |
-| 87 | אדממה | Edamame | קטניות (Fabaceae) | vegetables |
+Crops with partial Idan 2017 data (spacing/rows/yield) that still need DTM + other fields:
+עגבניית שרי, אבטיח, כרובית, במיה, תירס, תפוח אדמה, אדממה.
 
 ---
 
-## Data Points Required — Priority A (Critical)
+## Current Data Coverage (post-ingestion state)
 
-These 6 fields are required before a crop can appear in the production planner.
-We need **≥ 2 independent sources** for each crop × field combination.
+Legend: ✅ = ≥2 sources · ⚠ = 1 source (Idan only) · ❌ = completely missing
 
-| Field | Description | Typical unit | Example value |
-|-------|-------------|-------------|---------------|
-| `days_to_maturity` | Days from transplant (or direct seed) to first harvest | days | 60–90 |
-| `in_row_spacing_cm` | Distance between plants within the row | cm | 30–45 |
-| `rows_per_bed` | Number of rows on a 75–90 cm bed | integer | 2–4 |
-| `planting_method` | `transplant` or `direct` | enum | `direct` |
-| `yield_per_m2_kg` | Marketable yield per square metre | kg/m² | 2.5 |
-| `avg_yield_per_bed_m` | Marketable yield per linear bed metre | kg/bed-m | 0.8 |
-
----
-
-## Data Points Required — Priority B (Important)
-
-These are needed for scheduling, seed ordering, and soil management.  
-Minimum **1 source** per crop; **≥ 2** preferred.
-
-| Field | Description | Unit |
-|-------|-------------|------|
-| `seeds_per_gram` | Seed count per gram | count/g |
-| `germination_temp_c_opt` | Optimal germination temperature | °C |
-| `frost_tolerance_class` | `hardy` / `half_hardy` / `tender` | enum |
-| `harvest_window_max_days` | Days between first and last harvestable day | days |
-| `succession_interval_weeks` | Weeks between successive plantings | weeks |
-| `soil_ph_target` | Ideal soil pH for production | pH |
+| Crop | DTM | Spacing | Rows/bed | Planting | Yield/m² | Avg yield/bed-m | Seeds/g | Germ°C | Frost | H.Window | Succession | Soil pH |
+|------|-----|---------|----------|----------|----------|----------------|---------|--------|-------|----------|------------|---------|
+| אוסנה (Blackberry) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| עגבניית שרי (Cherry Tomato) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| אבטיח (Watermelon) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| כרובית (Cauliflower) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| בטטה (Sweet Potato) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| במיה (Okra) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| פול (Fava Bean) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| ציקוריה (Chicory) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| תירס (Sweet Corn) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| תפוח אדמה (Potato) | ❌ | ⚠ | ⚠ | ❌ | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| חומוס (Chickpea) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| שומשום (Sesame) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| חמניה (Sunflower) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| חיטה (Wheat) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| סויה (Soybean) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| אדממה (Edamame) | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 ---
 
-## Data Points Required — Priority C (Narrative / NI)
+## Inline Prompt for Team 80 (copy below this line)
 
-For each crop, please find at least 1 authoritative source (extension service,
-university, Israeli MOA/SHAHAM) covering the following narrative points:
-
-| note_type | Description |
-|-----------|-------------|
-| `growing_tip` | General production tips for small-scale/market-garden context |
-| `israeli_regions` | Which Israeli regions are suitable (climate zones, elevation) |
-| `frost_tolerance` | Narrative description of frost tolerance (in Hebrew preferred) |
-| `nursery_specific` | Seedling / transplant specific notes (if transplanted) |
+Copy everything inside the code block below and paste it as your first message into a new Claude.ai conversation.
 
 ---
 
-## Scope & Prioritisation
-
-Not all crops are equally urgent. Please work in this order:
-
-**Tier 1 — Highest commercial priority (cover all Priority A + B fields):**
-- עגבניית שרי (Cherry Tomato) — highest-value market garden crop
-- כרובית (Cauliflower) — common Israeli winter crop
-- בטטה (Sweet Potato) — growing market demand
-- במיה (Okra) — strong Israeli local demand
-- פול (Fava Bean) — winter staple
-
-**Tier 2 — Cover Priority A fields, Priority B best-effort:**
-- אבטיח (Watermelon)
-- ציקוריה (Chicory/Endive)
-- תירס (Sweet Corn)
-- תפוח אדמה (Potato)
-- אדממה (Edamame)
-
-**Tier 3 — Priority A only; note that some are niche / field crops:**
-- אוסנה (Blackberry) — perennial fruit, different lifecycle
-- חומוס (Chickpea) — field scale, not market garden
-- שומשום (Sesame) — specialty; Israeli production context important
-- חמניה (Sunflower) — edible-seed context (not ornamental)
-- חיטה (Wheat) — wheatgrass / cover crop / grain context
-- סויה (Soybean) — field scale
+```
+You are a senior agronomist assistant performing structured web research for a small farm
+planning system serving market farmers in Israel. Your task is to find and compile agronomic
+data for 16 crops that are currently missing critical values in our database. The system
+helps farmers plan bed-based growing schedules, so all measurements should target
+**bed-based small farm scale** (75–90 cm wide beds).
 
 ---
 
-## Source Guidance
+## TASK
 
-### Preferred sources (highest credibility)
+For each crop listed below, search the web and compile the best available data for every
+field marked ❌ (completely missing) or ⚠ (single source — needs confirmation).
+We need **at least 2 independent credible sources** per field.
 
-| Source type | Examples |
-|-------------|---------|
-| Israeli MOA / SHAHAM extension guides | shaham.moag.gov.il, moag.gov.il |
-| Hebrew agricultural periodicals | גלרוב, ירקנות, עלון הנוטע |
-| Cornell Cooperative Extension / UC ANR / UGA Extension | cce.cornell.edu, ucanr.edu |
-| ATTRA National Sustainable Agriculture | attra.ncat.org |
-| Johnny's Selected Seeds crop library | johnnyseeds.com/growers-library |
-| Rodale Institute | rodaleinstitute.org |
-| Haifa Chemicals crop nutrition library | haifa-group.com/crops |
+Acceptable sources:
+- University extension services (UC Davis, Cornell, Purdue, UF/IFAS, Wageningen, etc.)
+- National agricultural research centers (USDA, INRAE, Volcani Institute / ARO Israel)
+- Israeli/Mediterranean agricultural research (Shaham, MIGAL, Leket, Tahal)
+- Authoritative seed company technical sheets (Johnny's Selected Seeds, High Mowing,
+  Burpee Professional, Bejo, Hazera)
+- Recognized crop handbooks (Knott's Handbook for Vegetable Growers, FAO crop guides)
 
-### Minimum quality bar
-- Source must be publicly accessible (no paywall)
-- Source must be traceable (full URL + retrieval date)
-- Data must be specific to the crop (not a general vegetable guide)
-- Prefer **small/market-farm scale** data over industrial-scale field data
-
-### Language
-- Hebrew sources preferred for `israeli_regions`, `frost_tolerance` (narrative)
-- English acceptable for all structured fields (Priority A + B)
+Do NOT use: Wikipedia, general gardening blogs, wikihow, answers.com, any source without
+a named author/institution, or AI-generated summaries without cited primary sources.
 
 ---
 
-## Deliverable Format
+## CRITICAL NOTES — READ BEFORE STARTING
 
-Create file:
-`_COMMUNICATION/TEAM_80/CROP_DATA_FINDINGS_16_CROPS_v1.0.0.md`
+### Note 1 — עגבניית שרי (Cherry Tomato) is DISTINCT from regular tomato
+Cherry tomato (Solanum lycopersicum var. cerasiforme) is a separate crop with different
+spacing, yield, and growing characteristics from field/beefsteak tomatoes. Do NOT use
+regular tomato sources for this crop. Look specifically for indeterminate cherry tomato
+varieties (e.g., Sungold, Sweet 100, Black Cherry). Typical cherry tomato values:
+DTM ~60–75 days from transplant; in-row spacing 45–60 cm; yield 3–8 kg/m² field,
+higher in tunnel. We already have some Idan farm data (spacing ⚠, rows ⚠, avg yield ⚠)
+— we need DTM + all other fields, and a confirming source for the Idan values.
 
-**One section per crop**, in Tier order:
+### Note 2 — אדממה (Edamame) = סויה טרייה (fresh soybean, same plant)
+Edamame and dry soybean (סויה) are the SAME plant (Glycine max), harvested at different
+stages. Edamame = harvested fresh at R6 stage (pods fully filled, beans still green and
+tender). The relevant DTM is ~70–95 days to fresh-pod harvest — NOT the dry-seed DTM
+(~100–120+ days to hard dry bean). Spacing and yield also differ; edamame is often
+planted more densely. Use sources that specifically address edamame / fresh green soybean.
+We have 1 spacing value for edamame — need DTM + all other fields + spacing confirmation.
 
-```markdown
-## עגבניית שרי — Cherry Tomato (id=73)
+### Note 3 — Israeli/Mediterranean context
+These crops are grown in Israel's climate zones (Mediterranean coast, Jordan Valley,
+Northern valleys). Where Israeli-specific data is available, prefer it and flag it.
+For DTM and planting windows, note whether the source is temperate vs. Mediterranean.
 
-### Priority A fields
+### Note 4 — Bed measurements
+"Rows per bed" assumes 75–90 cm bed width. Yield per bed metre = yield/m² × 0.80 m.
 
-| field | value | unit | source_name | source_url | notes |
-|-------|-------|------|------------|-----------|-------|
-| days_to_maturity | 65 | days | Johnny's Seeds | https://... | from transplant |
-| days_to_maturity | 70 | days | Cornell CCE | https://... | field average |
-| in_row_spacing_cm | 30 | cm | Johnny's Seeds | https://... | |
-| rows_per_bed | 2 | — | UC ANR | https://... | 90cm bed |
-| planting_method | transplant | — | Cornell | https://... | |
-| yield_per_m2_kg | 3.5 | kg/m² | UC ANR | https://... | |
+---
 
-### Priority B fields
+## THE 16 CROPS — DATA COVERAGE STATUS
 
-| field | value | unit | source_name | source_url |
-|-------|-------|------|------------|-----------|
-| seeds_per_gram | 280 | count/g | Johnny's | https://... |
-...
+Legend: ❌ = completely missing · ⚠ = 1 source exists (Idan 2017 farm data), need
+confirmation + DTM · ✅ = already have ≥2 sources (skip)
 
-### Priority C — Narrative notes
+| # | Crop | Tier | DTM | Spacing | Rows/bed | Planting | Yield/m² | Seeds/g | Germ°C | Frost | H.Window | Succession | Soil pH |
+|---|------|------|-----|---------|----------|----------|----------|---------|--------|-------|----------|------------|---------|
+| 1 | עגבניית שרי (Cherry Tomato) | 1 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 2 | כרובית (Cauliflower) | 1 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 3 | בטטה (Sweet Potato) | 1 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 4 | במיה (Okra) | 1 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 5 | פול (Fava Bean) | 1 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 6 | אבטיח (Watermelon) | 2 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 7 | תירס (Sweet Corn) | 2 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 8 | תפוח אדמה (Potato) | 2 | ❌ | ⚠ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 9 | אדממה (Edamame) | 2 | ❌ | ⚠ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 10 | ציקוריה (Chicory) | 2 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 11 | חומוס (Chickpea) | 2 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 12 | שומשום (Sesame) | 3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 13 | חמניה (Sunflower) | 3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 14 | חיטה (Wheat) | 3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 15 | סויה (Soybean) | 3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 16 | אוסנה (Blackberry) | 3 | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
-**growing_tip:** [1–3 sentences; source: ...]
-**israeli_regions:** [which regions suit this crop; source: ...]
-**frost_tolerance:** [narrative, preferably Hebrew; source: ...]
+---
+
+## FIELD DEFINITIONS
+
+| Field | Definition | Units / Format |
+|-------|-----------|---------------|
+| **DTM** | Days to maturity — from transplant (T) or direct seed (D) to first harvest | Integer days; state T or D. If both methods exist, give both (e.g., "65T / 80D") |
+| **Spacing** | In-row spacing between plants (not row-to-row distance) | cm |
+| **Rows/bed** | Number of planting rows on a standard 75–90 cm wide bed | Integer (1, 2, 3, or 4) |
+| **Planting method** | How the crop is established | transplant / direct seed / slip (sweet potato) / tuber (potato) |
+| **Yield/m²** | Expected fresh weight yield under good management | kg/m² |
+| **Seeds/g** | Approximate number of seeds per gram | Integer or range; write "N/A (vegetative)" for sweet potato, potato |
+| **Germ°C** | Optimal soil temperature range for germination | °C range (e.g., "18–24") |
+| **Frost** | Frost tolerance classification | hardy (survives hard frost) / half-hardy (survives light frost) / tender (no frost) |
+| **H.Window** | Harvest window — days between first possible harvest and last before quality loss | Days; write "0" for single-harvest crops (grain, tubers) |
+| **Succession** | Recommended interval between successive plantings for continuous supply | Weeks; write "N/A" if succession not applicable (perennials, single-season crops) |
+| **Soil pH** | Target soil pH range | Numeric range (e.g., "6.0–7.0") |
+
+---
+
+## OUTPUT FORMAT — FOLLOW EXACTLY
+
+For each crop, produce one section using this template:
+
+---
+
+### [N]. [Hebrew name] ([English name])
+
+**Planting method:** [value]
+*(Source 1: [Author/Organization, Year — Title or URL])*
+
+**DTM:** [value] days from [transplant/direct seed]
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**In-row spacing:** [value] cm
+*(Source 1: [...])*
+*(Source 2: [...])*
+[Note if ⚠: "Idan 2017 farm record shows [X] cm — Source 2 [confirms / differs at Y cm]"]*
+
+**Rows per 75–90 cm bed:** [value] rows
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Yield per m²:** [value] kg/m²
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Seeds per gram:** [value] seeds/g — OR — N/A (vegetative propagation)
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Germination temperature:** [value] °C
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Frost tolerance:** [hardy / half-hardy / tender]
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Harvest window:** [value] days
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Succession interval:** [value] weeks — OR — N/A
+*(Source 1: [...])*
+
+**Soil pH target:** [value]
+*(Source 1: [...])*
+*(Source 2: [...])*
+
+**Israeli/Mediterranean notes:** [Any Israel or Mediterranean-climate specific data found —
+e.g., Volcani Institute recommendations, planting calendar for Israel, local yield data.
+Write "None found" if not applicable.]*
+
+---
+
+## QUALITY RULES
+
+1. **Source every single value** — no number without a citation.
+2. **Minimum 2 sources per field** — if you only found 1, write:
+   `⚠ SINGLE SOURCE — [source]. Could not confirm independently.`
+3. **If data not found after genuine search, write:**
+   `❌ NOT FOUND — searched [sources tried] with no result.`
+4. **Do not hallucinate sources** — only cite sources you actually accessed in this session.
+5. **Cherry tomato ≠ regular tomato** — reject any source that is clearly about
+   beefsteak/processing/slicing tomatoes when researching עגבניית שרי.
+6. **Edamame ≠ dry soybean** — reject dry-bean DTM values for אדממה.
+7. **Blackberry (אוסנה):** Note that commercial maturity is years from planting (perennial).
+   DTM here means "days from new-season budbreak to ripe fruit" (~60–80 days depending
+   on variety). Give both the years-to-establishment and the annual fruiting window.
+8. **Wheat (חיטה):** Specify variety type (winter/spring soft/hard) and whether DTM is
+   to soft dough, hard harvest, or grain dry-down.
+9. **For ⚠ fields** (Idan 2017 value exists): confirm or note divergence — if confirming
+   source differs by >20% from the Idan value, flag it explicitly.
+
+---
+
+## DELIVERABLE
+
+A single structured document with all 16 crops researched, all fields filled, all sources
+cited. Work Tier 1 first (crops 1–5), then Tier 2 (crops 6–11), then Tier 3 (crops 12–16).
+If you reach context limits, stop at a clean crop boundary and state which crops remain.
+
+Expected output length: approximately 5,000–9,000 words.
 ```
 
 ---
 
-## Budget & SLA
-
-- **Budget cap:** $10.00 total (web searches, no paid databases)
-- **SLA:** 5 working days from mandate receipt
-- **Minimum deliverable:** Tier 1 crops (5 crops) fully covered, Priority A fields
-- **Target deliverable:** All 16 crops, Priority A + B fields
-
----
-
-## Notes
-
-1. **עגבניית שרי vs עגבנייה:** Cherry Tomato is a **distinct crop** (id=73) from
-   regular Tomatoes (id=49). Do not mix sources. Cherry tomato spacing/yield
-   differs significantly from beefsteak/slicing varieties.
-
-2. **אדממה vs סויה:** Edamame (id=87) is immature soybean harvested at the green
-   stage (R6). Yield and maturity data differ from dry soybean (id=86). Use
-   edamame-specific sources for id=87.
-
-3. **Israeli context:** For `israeli_regions` and `frost_tolerance`, Israeli
-   agroclimatic zones apply (Galilee highlands, coastal plain, Negev, Jordan
-   Valley). Where found, note which zone the data pertains to.
-
-4. **Perennials:** אוסנה (Blackberry) is a perennial. `days_to_maturity` refers
-   to days from bud burst to ripe berry in the productive season (year 2+),
-   not from planting.
-
----
-
-*Issued by team_10 (sfa_build) on behalf of team_00 · 2026-05-27*
-*SmallFarmsAgents · SFA-S003-P002 crop book expansion*
+*Issued by team_10 (sfa_build) · 2026-05-27*

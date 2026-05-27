@@ -283,6 +283,18 @@ def parse_greenhouse_plan(csv_path: Path, year: int) -> list[dict]:
 
             name_he = TEND_CROP_MAP[tend_crop_name]
 
+            # Cherry/Heirloom Tomato override: check Crop Type column before
+            # using the TEND_CROP_MAP value so that Tomatoes/Cherry rows route
+            # to עגבניית שרי (crop_id=73) instead of עגבנייה (crop_id=49).
+            crop_type = row.get("Crop Type", "").strip().lower()
+            if crop_type == "cherry" and tend_crop_name == "Tomatoes":
+                name_he = "עגבניית שרי"
+            elif crop_type == "heirloom" and tend_crop_name == "Tomatoes":
+                name_he = "עגבניות מורשת"
+                # עגבניות מורשת may not exist in DB yet; if crop lookup returns
+                # None the row will be skipped with a warning in the upsert
+                # loop — that is the intended graceful-skip behaviour.
+
             if gh_col:
                 raw = row.get(gh_col, "").strip()
                 try:
