@@ -100,7 +100,8 @@ def _resolve_variety_id(session: Session, crop_name_en: str) -> int | None:
 
 def _upsert(session: Session, variety_id: int, field_name: str,
             value_numeric: Decimal | None, value_text: str | None = None,
-            unit: str | None = None, note: str | None = None) -> None:
+            unit: str | None = None, note: str | None = None,
+            confidence_weight: Decimal | None = None) -> None:
     from organic_market_agent.crop_book.models import CropVarietySourceValue
 
     row = (
@@ -115,7 +116,7 @@ def _upsert(session: Session, variety_id: int, field_name: str,
     row.value_text = value_text or (str(value_numeric) if value_numeric is not None else None)
     row.unit = unit
     row.trust_tier = TRUST
-    row.confidence_weight = CONFIDENCE
+    row.confidence_weight = confidence_weight if confidence_weight is not None else CONFIDENCE
     row.is_outlier_rejected = False
     row.note = note
     session.flush()
@@ -149,12 +150,15 @@ def import_all(session: Session, xlsx_path: Path | None = None) -> ImportSummary
 
         upserted = False
 
-        # DTM
+        # DTM — confidence_weight=0 so North American context does not shift
+        # the Israeli shadow calibration blend (F-C3-LV-01 remediation).
+        # Data is preserved for reference; weighted_mean blend contribution = 0.
         dtm = _parse_int(row[_COL_DTM])
         if dtm is not None:
             cvr = row[_COL_CVR]
             note_str = f"curtis_rating:{cvr}" if cvr not in (None, "-", "") else None
-            _upsert(session, variety_id, "days_to_maturity", Decimal(dtm), unit="days", note=note_str)
+            _upsert(session, variety_id, "days_to_maturity", Decimal(dtm), unit="days",
+                    note=note_str, confidence_weight=Decimal("0"))
             upserted = True
 
         # Planting method
