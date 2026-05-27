@@ -425,7 +425,9 @@ IL_CROP_MAP: dict[str, str] = {
     "גזר לבן": "גזר",
     "דלורית": "דלעת",
     "דלעת": "דלעת",
-    "דלעות": "דלעת",        # plural → canonical singular (Idan L49)
+    "דלעות": "דלעת",                          # plural → canonical singular (Idan L49)
+    "(עלי בייבי) רוקט/אורגולה": "ארוגולה",   # Bustan calendar variant → canonical
+    "תרד ניו-זילנדי": "תרד ניו-זילנד",       # Bustan spelling variant
     "זוקיני": "קישוא",
     "חיטה": "חיטה",
     "חמניה": "חמניה",
