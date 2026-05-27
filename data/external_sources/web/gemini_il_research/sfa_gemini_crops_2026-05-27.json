@@ -1,0 +1,207 @@
+{
+  "dataset_id": "sfa_gemini_il_research_2026_05_27",
+  "generated_at": "2026-05-27",
+  "note": "Gemini deep-research session. First crop in sandbox JSON was truncated (no crop_id visible); 20 complete records ingested. NPK values are in elemental form (N/P/K), not oxide form.",
+  "crops": [
+    {
+      "crop_id": "cauliflower",
+      "common_name": { "he": "כרובית", "en": "Cauliflower" },
+      "DTM": { "min_days": 62, "max_days": 75, "harvest_stage": "transplant_to_curd" },
+      "germination_temp_c": { "min": 10.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "half-hardy",
+      "nutrient_removal_N_P_K": { "N": 180.0, "P": 50.0, "K": 150.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "high", "storage_life_days": 21 }
+    },
+    {
+      "crop_id": "sweet_potato",
+      "common_name": { "he": "בטטה", "en": "Sweet Potato" },
+      "DTM": { "min_days": 90, "max_days": 120, "harvest_stage": "slips_to_root" },
+      "germination_temp_c": { "min": 16.0, "opt": 29.0, "max": 35.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 5.8 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 100.0, "P": 30.0, "K": 150.0 },
+      "postharvest_storage": { "temp_c": 15.5, "RH_pct": 85.0, "ethylene_sensitivity": "medium", "storage_life_days": 150 }
+    },
+    {
+      "crop_id": "okra",
+      "common_name": { "he": "במיה", "en": "Okra" },
+      "DTM": { "min_days": 50, "max_days": 60, "harvest_stage": "seed_to_tender_pod" },
+      "germination_temp_c": { "min": 21.0, "opt": 29.0, "max": 35.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 80.0, "P": 20.0, "K": 100.0 },
+      "postharvest_storage": { "temp_c": 10.0, "RH_pct": 90.0, "ethylene_sensitivity": "medium", "storage_life_days": 10 }
+    },
+    {
+      "crop_id": "fava_bean",
+      "common_name": { "he": "פול", "en": "Fava Bean" },
+      "DTM": { "min_days": 75, "max_days": 90, "harvest_stage": "seed_to_green_shell" },
+      "germination_temp_c": { "min": 5.0, "opt": 15.0, "max": 21.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 120.0, "P": 30.0, "K": 80.0 },
+      "postharvest_storage": { "temp_c": 5.0, "RH_pct": 90.0, "ethylene_sensitivity": "low", "storage_life_days": 10 }
+    },
+    {
+      "crop_id": "watermelon",
+      "common_name": { "he": "אבטיח", "en": "Watermelon" },
+      "DTM": { "min_days": 85, "max_days": 95, "harvest_stage": "transplant_to_mature_fruit" },
+      "germination_temp_c": { "min": 21.0, "opt": 29.0, "max": 35.0 },
+      "soil_pH": { "target": 7.0, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 110.0, "P": 30.0, "K": 140.0 },
+      "postharvest_storage": { "temp_c": 10.0, "RH_pct": 90.0, "ethylene_sensitivity": "high", "storage_life_days": 21 }
+    },
+    {
+      "crop_id": "sweet_corn",
+      "common_name": { "he": "תירס מתוק", "en": "Sweet Corn" },
+      "DTM": { "min_days": 65, "max_days": 90, "harvest_stage": "seed_to_milky_kernel" },
+      "germination_temp_c": { "min": 13.0, "opt": 20.0, "max": 30.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 150.0, "P": 50.0, "K": 110.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "low", "storage_life_days": 7 }
+    },
+    {
+      "crop_id": "potato",
+      "common_name": { "he": "תפוח אדמה", "en": "Potato" },
+      "DTM": { "min_days": 75, "max_days": 90, "harvest_stage": "tuber_to_new_potato" },
+      "germination_temp_c": { "min": 7.0, "opt": 15.0, "max": 24.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 5.5 },
+      "frost_tolerance_class": "half-hardy",
+      "nutrient_removal_N_P_K": { "N": 140.0, "P": 45.0, "K": 200.0 },
+      "postharvest_storage": { "temp_c": 4.4, "RH_pct": 90.0, "ethylene_sensitivity": "medium", "storage_life_days": 120 }
+    },
+    {
+      "crop_id": "edamame",
+      "common_name": { "he": "אדממה", "en": "Edamame" },
+      "DTM": { "min_days": 75, "max_days": 90, "harvest_stage": "green_pod_R6" },
+      "germination_temp_c": { "min": 15.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 120.0, "P": 18.0, "K": 120.0 },
+      "postharvest_storage": { "temp_c": 4.0, "RH_pct": 90.0, "ethylene_sensitivity": "low", "storage_life_days": 14 }
+    },
+    {
+      "crop_id": "chicory",
+      "common_name": { "he": "ציקוריה", "en": "Chicory" },
+      "DTM": { "min_days": 60, "max_days": 70, "harvest_stage": "transplant_to_head" },
+      "germination_temp_c": { "min": 15.5, "opt": 18.0, "max": 25.0 },
+      "soil_pH": { "target": 6.4, "liming_threshold": 5.8 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 100.0, "P": 30.0, "K": 120.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "medium", "storage_life_days": 28 }
+    },
+    {
+      "crop_id": "chickpea",
+      "common_name": { "he": "חומוס", "en": "Chickpea" },
+      "DTM": { "min_days": 90, "max_days": 100, "harvest_stage": "seed_to_mature_pod" },
+      "germination_temp_c": { "min": 10.0, "opt": 15.0, "max": 25.0 },
+      "soil_pH": { "target": 6.6, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 80.0, "P": 25.0, "K": 70.0 },
+      "postharvest_storage": { "temp_c": 10.0, "RH_pct": 60.0, "ethylene_sensitivity": "low", "storage_life_days": 365 }
+    },
+    {
+      "crop_id": "sesame",
+      "common_name": { "he": "שומשום", "en": "Sesame" },
+      "DTM": { "min_days": 100, "max_days": 110, "harvest_stage": "seed_to_mature_capsule" },
+      "germination_temp_c": { "min": 20.0, "opt": 21.0, "max": 35.0 },
+      "soil_pH": { "target": 6.2, "liming_threshold": 5.5 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 65.0, "P": 20.0, "K": 50.0 },
+      "postharvest_storage": { "temp_c": 15.0, "RH_pct": 50.0, "ethylene_sensitivity": "low", "storage_life_days": 730 }
+    },
+    {
+      "crop_id": "sunflower",
+      "common_name": { "he": "חמניה", "en": "Sunflower" },
+      "DTM": { "min_days": 50, "max_days": 95, "harvest_stage": "seed_to_cut_flower" },
+      "germination_temp_c": { "min": 7.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 90.0, "P": 30.0, "K": 120.0 },
+      "postharvest_storage": { "temp_c": 4.0, "RH_pct": 90.0, "ethylene_sensitivity": "low", "storage_life_days": 10 }
+    },
+    {
+      "crop_id": "wheat",
+      "common_name": { "he": "חיטה", "en": "Wheat" },
+      "DTM": { "min_days": 100, "max_days": 280, "harvest_stage": "seed_to_dry_grain" },
+      "germination_temp_c": { "min": 12.0, "opt": 20.0, "max": 25.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 80.0, "P": 40.0, "K": 60.0 },
+      "postharvest_storage": { "temp_c": 15.0, "RH_pct": 60.0, "ethylene_sensitivity": "low", "storage_life_days": 365 }
+    },
+    {
+      "crop_id": "soybean",
+      "common_name": { "he": "סויה", "en": "Soybean" },
+      "DTM": { "min_days": 100, "max_days": 120, "harvest_stage": "seed_to_dry_grain" },
+      "germination_temp_c": { "min": 15.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "tender",
+      "nutrient_removal_N_P_K": { "N": 140.0, "P": 35.0, "K": 100.0 },
+      "postharvest_storage": { "temp_c": 10.0, "RH_pct": 60.0, "ethylene_sensitivity": "low", "storage_life_days": 365 }
+    },
+    {
+      "crop_id": "blackberry",
+      "common_name": { "he": "אוסנה", "en": "Blackberry" },
+      "DTM": { "min_days": 365, "max_days": 730, "harvest_stage": "plug_to_floricanes" },
+      "germination_temp_c": { "min": null, "opt": null, "max": null },
+      "soil_pH": { "target": 6.5, "liming_threshold": 5.6 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 60.0, "P": 20.0, "K": 80.0 },
+      "postharvest_storage": { "temp_c": 0.5, "RH_pct": 90.0, "ethylene_sensitivity": "low", "storage_life_days": 7 }
+    },
+    {
+      "crop_id": "beet",
+      "common_name": { "he": "סלק", "en": "Beet" },
+      "DTM": { "min_days": 50, "max_days": 65, "harvest_stage": "seed_to_root" },
+      "germination_temp_c": { "min": 4.5, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.5, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 100.0, "P": 30.0, "K": 120.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "low", "storage_life_days": 90 }
+    },
+    {
+      "crop_id": "broccoli",
+      "common_name": { "he": "ברוקולי", "en": "Broccoli" },
+      "DTM": { "min_days": 50, "max_days": 70, "harvest_stage": "transplant_to_head" },
+      "germination_temp_c": { "min": 10.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "half-hardy",
+      "nutrient_removal_N_P_K": { "N": 150.0, "P": 40.0, "K": 140.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "high", "storage_life_days": 14 }
+    },
+    {
+      "crop_id": "cabbage",
+      "common_name": { "he": "כרוב", "en": "Cabbage" },
+      "DTM": { "min_days": 60, "max_days": 85, "harvest_stage": "transplant_to_head" },
+      "germination_temp_c": { "min": 10.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 170.0, "P": 45.0, "K": 160.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "medium", "storage_life_days": 60 }
+    },
+    {
+      "crop_id": "chinese_cabbage",
+      "common_name": { "he": "כרוב סיני", "en": "Chinese Cabbage" },
+      "DTM": { "min_days": 55, "max_days": 75, "harvest_stage": "transplant_to_head" },
+      "germination_temp_c": { "min": 10.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "half-hardy",
+      "nutrient_removal_N_P_K": { "N": 140.0, "P": 35.0, "K": 130.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "medium", "storage_life_days": 30 }
+    },
+    {
+      "crop_id": "brussels_sprouts",
+      "common_name": { "he": "כרוב ניצנים", "en": "Brussels Sprouts" },
+      "DTM": { "min_days": 90, "max_days": 110, "harvest_stage": "transplant_to_sprout" },
+      "germination_temp_c": { "min": 10.0, "opt": 21.0, "max": 30.0 },
+      "soil_pH": { "target": 6.8, "liming_threshold": 6.0 },
+      "frost_tolerance_class": "hardy",
+      "nutrient_removal_N_P_K": { "N": 160.0, "P": 40.0, "K": 150.0 },
+      "postharvest_storage": { "temp_c": 0.0, "RH_pct": 95.0, "ethylene_sensitivity": "medium", "storage_life_days": 30 }
+    }
+  ]
+}

@@ -666,6 +666,10 @@ def main() -> None:
         help="Run WP-G importer only (Israeli planting calendar — GrowOrganic L01 + Bustan L36)",
     )
     mode.add_argument(
+        "--gemini-only", action="store_true",
+        help="Run WP-H importer only (Gemini IL research — 20 crops incl. sweet_potato/okra/fava/chicory/etc.)",
+    )
+    mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
         help="Import named crops (Tend English names, e.g. Arugula Broccoli)",
     )
@@ -757,7 +761,7 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only and not args.openai_only and not args.idan_only and not args.calendar_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only and not args.openai_only and not args.idan_only and not args.calendar_only and not args.gemini_only:
         parser.error(
             "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --wd-only, --openai-only, --idan-only, "
             "--jmf-only, --ni-only, or --crops NAME [NAME ...]"
@@ -834,6 +838,18 @@ def main() -> None:
             summary = _openai_ingest(session)
             session.commit()
         logger.info("WP-E complete: %s", summary)
+        return
+
+    # ── Gemini-only fast path (WP-H: Gemini IL research, 20 crops) ──
+    if args.gemini_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+        from organic_market_agent.crop_book.importer.ni.gemini_il_research import ingest as _gemini_ingest
+
+        with SessionFactory() as session:
+            summary = _gemini_ingest(session)
+            session.commit()
+        logger.info("WP-H complete: %s", summary)
         return
 
     # ── Calendar-only fast path (WP-G: Israeli planting calendar L01+L36) ──
@@ -1040,6 +1056,13 @@ def main() -> None:
                 ingest as _cal_ingest,
             )
             _cal_ingest(session)
+            session.flush()
+
+        if args.all and not getattr(args, "no_gemini", False):
+            from organic_market_agent.crop_book.importer.ni.gemini_il_research import (
+                ingest as _gemini_ingest,
+            )
+            _gemini_ingest(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)
