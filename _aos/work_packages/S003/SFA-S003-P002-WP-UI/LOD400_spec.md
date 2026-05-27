@@ -1,8 +1,8 @@
 # LOD400 — SFA-S003-P002-WP-UI — UX shell + design adoption (Slim/PHP, uPress)
 
-**Version:** v1.0.2 (R2 verdict cleanup — addresses LV-S-6/7 stale text)
-**Date:** 2026-05-24 (R1) → 2026-05-27 (R2 amendment + R2 verdict cleanup)
-**Status:** LOD400_LOCKED — L-GATE_S R2 PASS_WITH_FINDINGS (team_190, 2026-05-27). Ready for BUILD dispatch.
+**Version:** v1.0.3 (Q1=A amendment — team_00 BEM-SSoT clarification for RE-BUILD)
+**Date:** 2026-05-24 (R1) → 2026-05-27 (R2 amendment + R2 verdict cleanup) → 2026-05-27 20:00 IDT (v1.0.3 Q1=A amendment)
+**Status:** LOD400_LOCKED — L-GATE_S R2 PASS_WITH_FINDINGS (team_190, 2026-05-27). Post-revoke RE-BUILD active per `_COMMUNICATION/TEAM_100/MANDATE_WP-UI-RE-BUILD_v1.0.0.md`. Ready for BUILD dispatch.
 **Builder (assigned post-validation):** sfa_build (Sonnet)
 **Validator:** team_190 (external, non-Claude per IR#1)
 **Effort:** NORMAL (~13h estimated — slightly reduced after community-writes scope drop)
@@ -23,6 +23,39 @@ team_190 R1 verdict (`_COMMUNICATION/TEAM_190/VERDICT_SFA-S003-P002-WP-UI_L-GATE
 | **LV-S-5** B.8 budget not credible (28 screenshots + Lighthouse + report in 1h) | MINOR | B.8 split into B.8a (browser evidence, 1.5h) + B.8b (Lighthouse + commit + BUILD_REPORT, 1h). Total 14.5h → 13h (community drop offsets the +1.5h split). |
 
 Total scope shrinks by ~1.5h via community removal, then grows by ~0.5h via B.8 split. Net: ~13h.
+
+---
+
+## §0.5 — team_00 in-session approval (Q1=A) — 2026-05-27 20:00 IDT (17:00 UTC)
+
+**Status:** APPROVED IN-SESSION
+**Authority:** team_00 (Principal — direct in-session response)
+**Recorded by:** team_100 (this RE-BUILD orchestrator session)
+**Trigger:** Decision Brief filed 2026-05-27 by team_100 — 3 opening questions before P.1 execution.
+
+### Decision
+
+When `MANDATE_WP-UI-RE-BUILD_v1.0.0.md §3` BEM class names diverge from `_archive/SFA-S003-P002-WP-UI/team_35/_handoff/COMPONENTS.md` (e.g., mandate uses `module-card` but COMPONENTS.md declares `.mod-card`; mandate uses `crop-detail__h1` but COMPONENTS.md uses `cb-crop-hero__title`), **`COMPONENTS.md` is the binding SSoT for the actual class names emitted in HTML.** Mandate §3 is treated as colloquial shorthand documenting *intent* — not as a literal grep target.
+
+### Provenance
+
+- **Q raised:** team_100 Decision Brief 2026-05-27 (after sub-agent research surfaced the drift, ~16:30 IDT)
+- **A given:** team_00 in-session response 2026-05-27 ~19:55 IDT: "1. a + להוסיף הערה באפיון שהנושא אושר עי צוות 00 עם הזמן של עכשיו למניעת פסילה מיותרת"
+- **Recorded here per team_00 directive** to forestall mistaken rejection at L-GATE_V.
+
+### Effect on §5 ACs (Visual fidelity)
+
+The visual-fidelity acceptance criteria (§5.2 in the mandate, mirrored under LOD400 §5) MUST be evaluated against the **COMPONENTS.md class set**, not the mandate §3 stub names. team_190 cross-engine validator should:
+
+1. Read this §0.5 block first.
+2. Reference the canonical `BEM_MAPPING_TABLE` that BUILD_REPORT v2.0.0 §3 will include — listing every mandate §3 name → its canonical COMPONENTS.md equivalent (e.g., `module-card → mod-card`, `crop-detail__head → cb-crop-hero`).
+3. Run `grep -c` checks against COMPONENTS.md names (which the rebuild emits), not mandate stub names.
+
+### Effect on rebuild execution
+
+- team_100 (this session, orchestrator) instructs all family-build sub-agents to emit **COMPONENTS.md class names verbatim**.
+- No dual-class duplication required.
+- `BEM_MAPPING_TABLE` to live in BUILD_REPORT v2.0.0 §3 — single source of cross-reference.
 
 ---
 
