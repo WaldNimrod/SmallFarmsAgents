@@ -63,6 +63,13 @@ if (!isset($asset_ver)) {
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
 </head>
 <body class="sfa-app">
+<?php /* Inline the SVG sprite once per page. Chrome (and others) do not resolve
+       <use href="external.svg#id"> reliably without CORS headers from the asset
+       host — the sprite ends up with empty bboxes despite a 200 fetch. Inlining
+       via readfile preserves a single sprite definition and lets every <use
+       href="#icon-X"> in macros/templates resolve synchronously. */
+@readfile(__DIR__ . '/../public_assets/img/icons.svg');
+?>
 <?php include __DIR__ . '/shell/mobile.php'; ?>
 <?php include __DIR__ . '/shell/desktop.php'; ?>
 </body>

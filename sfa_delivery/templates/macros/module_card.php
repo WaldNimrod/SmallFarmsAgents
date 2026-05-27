@@ -30,7 +30,8 @@ $data_tier  = (string)($module['data_tier']  ?? $tier);
 // Fallback: if icon_svg not provided but icon_id is, build a <use> ref to icons.svg sprite.
 if ($icon_svg === '' && $icon_id !== '') {
     $icon_id_esc = htmlspecialchars($icon_id, ENT_QUOTES, 'UTF-8');
-    $icon_svg = '<svg aria-hidden="true" viewBox="0 0 24 24"><use href="/public_assets/img/icons.svg#' . $icon_id_esc . '"></use></svg>';
+    // Sprite is inlined by _layout.php; reference by fragment only (cross-browser-safe).
+    $icon_svg = '<svg aria-hidden="true" viewBox="0 0 24 24"><use href="#' . $icon_id_esc . '"></use></svg>';
 }
 ?>
 <a class="mod-card mod-card--<?= htmlspecialchars($color, ENT_QUOTES, 'UTF-8') ?> mod-card--<?= htmlspecialchars($tier, ENT_QUOTES, 'UTF-8') ?>" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" data-tier="<?= htmlspecialchars($data_tier, ENT_QUOTES, 'UTF-8') ?>">

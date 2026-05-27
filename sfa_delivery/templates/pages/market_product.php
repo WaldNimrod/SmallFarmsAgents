@@ -56,7 +56,7 @@ ob_start();
 
 <section class="gj-pricebig">
   <div class="gj-pricebig__head">
-    <span class="gj-pricebig__glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="/public_assets/img/icons.svg#icon-<?= htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') ?>"/></svg></span>
+    <span class="gj-pricebig__glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-<?= htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') ?>"/></svg></span>
     <div>
       <h1 class="gj-pricebig__name"><?= htmlspecialchars($name_he, ENT_QUOTES, 'UTF-8') ?></h1>
       <p class="gj-pricebig__en"><?= htmlspecialchars($en_name, ENT_QUOTES, 'UTF-8') ?></p>
@@ -108,7 +108,7 @@ ob_start();
 <?php /* Cross-link to crop book (COMPONENTS.md §4 — market-to-book direction) */ ?>
 <?php if ($book_slug !== ''):
   $href       = '/crop-book/' . $book_slug;
-  $art_html   = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="/public_assets/img/icons.svg#icon-' . htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') . '"/></svg>';
+  $art_html   = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' . htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') . '"/></svg>';
   $big_text   = $book_label_he;
   $small_unit = '';
   $sub_text   = 'ספר גידולים — זנים, DTM, יבול';

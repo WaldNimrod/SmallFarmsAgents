@@ -53,7 +53,7 @@ ob_start();
 
   <div class="cb-crop-hero__head">
     <span class="cb-crop-hero__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><use href="/public_assets/img/icons.svg#icon-<?= $h($icon_slug) ?>"></use></svg>
+      <svg viewBox="0 0 24 24"><use href="#icon-<?= $h($icon_slug) ?>"></use></svg>
     </span>
     <div>
       <h1 class="cb-crop-hero__h"><?= $h($name_he) ?></h1>
@@ -99,7 +99,7 @@ endif;
 if (!empty($crop['market_link']) && is_array($crop['market_link'])):
     $ml = $crop['market_link'];
     $href       = '/market/' . (string)($ml['slug'] ?? '');
-    $art_html   = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="/public_assets/img/icons.svg#icon-' . htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') . '"></use></svg>';
+    $art_html   = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' . htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') . '"></use></svg>';
     $big_text   = number_format((float)($ml['price_current'] ?? 0), 2);
     $small_unit = '₪/ק״ג';
     $sub_text   = 'מחיר שוק נוכחי · ' . (int)($ml['source_count'] ?? 0) . ' מקורות';
