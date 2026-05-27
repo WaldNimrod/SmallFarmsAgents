@@ -84,9 +84,9 @@ def _resolve_crop_and_variety(session, crop_he: str):
     """Return (crop_id, variety_id) for the default variety of crop_he.
 
     Uses IL_CROP_MAP for spelling normalization.
-    Creates the default variety if it doesn't exist yet.
+    Creates the default variety (named DEFAULT_VARIETY_NAME_HE) if it doesn't exist yet.
     """
-    from organic_market_agent.crop_book.constants import IL_CROP_MAP
+    from organic_market_agent.crop_book.constants import IL_CROP_MAP, DEFAULT_VARIETY_NAME_HE
     from organic_market_agent.crop_book.models import Crop, CropVariety
 
     canonical = IL_CROP_MAP.get(crop_he, crop_he)
@@ -99,9 +99,17 @@ def _resolve_crop_and_variety(session, crop_he: str):
 
     variety = session.query(CropVariety).filter_by(crop_id=crop.id, is_default=True).first()
     if variety is None:
-        variety = CropVariety(crop_id=crop.id, name_en=None, is_default=True)
+        variety = CropVariety(
+            crop_id=crop.id,
+            name_he=DEFAULT_VARIETY_NAME_HE,
+            name_en=None,
+            is_default=True,
+        )
         session.add(variety)
         session.flush()
+    elif variety.name_he is None:
+        # Back-fill name on existing unnamed default variety
+        variety.name_he = DEFAULT_VARIETY_NAME_HE
 
     return crop.id, variety.id
 

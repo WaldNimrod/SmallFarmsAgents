@@ -150,18 +150,31 @@ def _get_or_create_crop(session: Session, name_he: str, data: dict[str, Any]) ->
 def _get_or_create_variety(
     session: Session, crop_id: int, name_en: str | None, is_default: bool, data: dict[str, Any]
 ) -> CropVariety:
+    from organic_market_agent.crop_book.constants import DEFAULT_VARIETY_NAME_HE
+
     if name_en is not None:
         obj = session.query(CropVariety).filter_by(crop_id=crop_id, name_en=name_en).first()
     else:
         obj = session.query(CropVariety).filter_by(crop_id=crop_id, is_default=True).first()
 
     if obj is None:
-        obj = CropVariety(crop_id=crop_id, name_en=name_en, is_default=is_default, **{k: v for k, v in data.items()})
+        # Apply system-wide naming rule: default variety always carries name_he
+        name_he_val = DEFAULT_VARIETY_NAME_HE if is_default else data.pop("name_he", None)
+        obj = CropVariety(
+            crop_id=crop_id,
+            name_en=name_en,
+            name_he=name_he_val,
+            is_default=is_default,
+            **{k: v for k, v in data.items() if k != "name_he"},
+        )
         session.add(obj)
         session.flush()
     else:
+        # Back-fill name_he on existing unnamed default varieties
+        if is_default and obj.name_he is None:
+            obj.name_he = DEFAULT_VARIETY_NAME_HE
         for k, v in data.items():
-            if v is not None:
+            if v is not None and k != "name_he":
                 setattr(obj, k, v)
     return obj
 

@@ -6,6 +6,12 @@ All DB enum values are English per LOD400 v2.0.0 §3 AC-01.
 
 from __future__ import annotations
 
+# ── System-wide variety naming convention ────────────────────────────────────
+# Every crop species that has no named varieties must have exactly one default
+# variety. The default variety is always named with this Hebrew string.
+# Rule: auto-created on crop creation; holds species-level agronomic defaults.
+DEFAULT_VARIETY_NAME_HE: str = "מצוי-ברירת מחדל"
+
 TEND_CROP_MAP: dict[str, str] = {
     "Anise Hyssop": "אזוב מצוי",
     "Artichokes": "ארטישוק",
