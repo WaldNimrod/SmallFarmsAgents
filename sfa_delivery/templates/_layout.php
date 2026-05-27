@@ -15,8 +15,23 @@ $canonical_path   = $canonical_path   ?? ($_SERVER['REQUEST_URI'] ?? '/');
 $canonical_path = strtok($canonical_path, '?');
 $og_image_url   = $og_image_url ?? 'https://sfa.nimrod.bio/public_assets/img/og-default.webp';
 
-// Asset version: file mtime of the LAST-loaded CSS in the chain. Cheap, deploy-tied, CF-cache-bust friendly.
-$asset_ver = $asset_ver ?? @filemtime(__DIR__ . '/../public_assets/css/desktop-extras.css') ?: 'build';
+// Asset version: max(filemtime) across ALL CSS + the JS bundle.
+// Previous version used only desktop-extras.css mtime, which left stale
+// cache when other CSS files were updated (Cloudflare keeps serving old
+// hub.css if its ?v= query didn't change). Now any file in the asset
+// chain bumps the buster.
+if (!isset($asset_ver)) {
+    $_css_dir = __DIR__ . '/../public_assets/css';
+    $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
+    $_mtimes  = [];
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'desktop', 'desktop-extras'] as $_n) {
+        $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
+        if ($_mt) { $_mtimes[] = $_mt; }
+    }
+    $_mt = @filemtime($_js_file);
+    if ($_mt) { $_mtimes[] = $_mt; }
+    $asset_ver = $_mtimes ? max($_mtimes) : 'build';
+}
 ?><!doctype html>
 <html lang="he" dir="rtl">
 <head>
