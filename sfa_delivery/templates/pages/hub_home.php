@@ -96,7 +96,9 @@ ob_start();
           'tier_color' => (string)($m['color']   ?? 'leaf'),
           'sub_he'     => (string)($m['sub']     ?? ''),
           'stat_he'    => (string)($m['stat']    ?? ''),
-          'href'       => (string)($m['route']   ?? '#'),
+          // Strip legacy /sfa/ URL prefix (MODULES_REGISTRY.yaml predates subdomain split — DECISION_SFA-S003-P003)
+          // + remap /book/ → /crop-book/ (LOD400 LV-S-2: canonical URL contract is /crop-book/*)
+          'href'       => str_replace('/book/', '/crop-book/', preg_replace('#^/sfa/#', '/', (string)($m['route'] ?? '#'))),
           'icon_id'    => $icon_id,
       ];
       include __DIR__ . '/../macros/module_card.php';
