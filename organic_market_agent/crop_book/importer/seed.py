@@ -526,6 +526,43 @@ def _run_c1_ingestion(session: Session) -> None:
     session.flush()
 
 
+def _run_c3_ingestion(session: Session) -> None:
+    """WP-C3: Curtis Stone + Idan succession + FRANCHI + L49 diff + Tend 2018."""
+    from organic_market_agent.crop_book.importer.urban_farmer import (
+        curtis_profiles_importer,
+        curtis_ocr_importer,
+    )
+    from organic_market_agent.crop_book.importer.israeli import (
+        idan_seedlings_importer,
+        franchi_catalog_importer,
+        idan_2018_diff,
+    )
+    from organic_market_agent.crop_book.importer.tend_overlay import import_tend_overlay
+
+    logger.info("WP-C3: Curtis Stone + Israeli secondary + Tend 2018")
+    summary_l40 = curtis_profiles_importer.import_all(session)
+    logger.info("WP-C3 Curtis L40: %s", summary_l40)
+    summary_ocr = curtis_ocr_importer.import_all(session)
+    logger.info("WP-C3 Curtis OCR: %s", summary_ocr)
+    summary_seedlings = idan_seedlings_importer.import_all(session, [
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L05a_IDAN_seedlings_winter_18-19.xlsx",
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L05b_IDAN_seedlings_summer_18-19.xlsx",
+    ])
+    logger.info("WP-C3 Idan seedlings: %s", summary_seedlings)
+    summary_franchi = franchi_catalog_importer.import_all(session)
+    logger.info("WP-C3 FRANCHI: %s", summary_franchi)
+    summary_diff = idan_2018_diff.import_all(
+        session,
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L49_IDAN_market_gardening_tech.xlsx",
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L03_IDAN_winter_planning.xlsx",
+        _EXTERNAL_SOURCES_DIR / "israeli" / "L04_IDAN_summer_planning.xlsx",
+    )
+    logger.info("WP-C3 L49 diff: %s", summary_diff)
+    summary_tend = import_tend_overlay(session, _TEND_MULTI_YEAR_DIR, year=2018, dry_run=False)
+    logger.info("WP-C3 Tend 2018: %s", summary_tend)
+    session.flush()
+
+
 def _run_ni_ingestion(session: Session) -> None:
     """Single NI call-site block — iterates NI_IMPORTER_CLASSES once.
 
@@ -594,6 +631,10 @@ def main() -> None:
     mode.add_argument(
         "--c2-only", action="store_true",
         help="Run WP-C2 Hebrew narrative NI importers only",
+    )
+    mode.add_argument(
+        "--c3-only", action="store_true",
+        help="Run WP-C3 importers only (Curtis Stone + Idan succession + FRANCHI + L49 diff + Tend 2018)",
     )
     mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
@@ -668,6 +709,10 @@ def main() -> None:
         help="Skip WP-C2 Hebrew narrative NI importers when --all is used",
     )
     parser.add_argument(
+        "--no-c3", action="store_true",
+        help="Skip WP-C3 importers when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -683,9 +728,9 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only:
         parser.error(
-            "Specify --all, --c1-only, --c2-only, --c4-only, --jmf-only, --ni-only, "
+            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --jmf-only, --ni-only, "
             "or --crops NAME [NAME ...]"
         )
 
@@ -720,6 +765,18 @@ def main() -> None:
 
         with SessionFactory() as session:
             _run_c2_ingestion(session)
+            session.commit()
+        return
+
+    # ── C3-only fast path (WP-C3) ──
+    if args.c3_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+
+        with SessionFactory() as session:
+            _run_c3_ingestion(session)
+            enrich_summary = run_enrichment(session, dry_run=False)
+            logger.info("Enrichment: %s", enrich_summary)
             session.commit()
         return
 
@@ -871,6 +928,10 @@ def main() -> None:
 
         if args.all and not args.no_c2:
             _run_c2_ingestion(session)
+            session.flush()
+
+        if args.all and not args.no_c3:
+            _run_c3_ingestion(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)

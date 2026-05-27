@@ -73,6 +73,13 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
     "PR:uf_ifas_companion": SourceSpec("PR:uf_ifas_companion", "PR", weight=0.70),
     "PR:uc_davis_postharvest": SourceSpec("PR:uc_davis_postharvest", "PR", weight=0.70),
 
+    # --- WP-C3: Curtis Stone + Idan seedlings + FRANCHI + Idan 2018 ---
+    "OP:CurtisStone": SourceSpec("OP:CurtisStone", "OP", weight=0.55),
+    "NI:curtis_stone_book": SourceSpec("NI:curtis_stone_book", "NI", weight=None, is_hard_override=True),
+    "OP:Idan_seedlings": SourceSpec("OP:Idan_seedlings", "OP", weight=0.55),
+    "OP:FRANCHI_catalog": SourceSpec("OP:FRANCHI_catalog", "OP", weight=0.55),
+    "OP:Idan_2018": SourceSpec("OP:Idan_2018", "OP", weight=0.55),
+
     # --- MK: Market index (design-registered; importer in WP-B) ---
     "_MK_CLASS_SENTINEL": SourceSpec("_MK_CLASS_SENTINEL", "MK", weight=0.40),
 
