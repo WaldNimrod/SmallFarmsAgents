@@ -3,30 +3,12 @@
   "source": "NI:sham_variety_trials_v1",
   "provenance": {
     "pdf": "L11_variety_trials_2021.pdf",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.776754+00:00"
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "crops": {
     "חסה": {
-      "pest_disease": null,
-      "harvest_marker": null,
-      "storage_handling": null,
-      "rotation_companion": null,
-      "cultivar_recommendation": null,
-      "growing_tip": null,
-      "irrigation": null,
-      "nursery_specific": null,
-      "flame_weed_timing": null,
-      "biopesticide_spray": null,
-      "phytoprotection_substance": null,
-      "phytoprotection_application": null,
-      "nursery_seeding_process": null,
-      "frost_tolerance": null,
-      "flowering_date": null,
-      "pollination_mechanism": null,
-      "israeli_regions": null,
-      "variety_trial_score": "[STUB] חסה / variety_trial_score",
-      "hydro_suitability": null
+      "variety_trial_score": "ניסוי זני חסה בהידרופוניקה NFT, קיץ 2021, בני עטרות (שה\"מ). שתילה 5.8, קטיף 30.8 (25 ימים). EC=4.6 dS/m.\nציון כללי (סולם 2–5):\n4.0: אולגדה (רומיין, ממוצע 106 ג'), סנטרד (מיני רומיין)\n3.5: רופוס, דיקלה, נוגה, אלנדי, רפאל, לליק, מולטיגרין, ארצ'יבל\n3.0: טמפר, אסף, אבונה, ג'ברד, פרנק, קרנליאן, סולטרו, בונרדה\n2.5: ג'ריקן, 9063, 15190\n2.0: 9125\nהמלצה לקיץ: אולגדה וסנטרד. קטיף מוקדם (21–23 ימים) למניעת הפרגה. כל הזנים קוצרו לאחר 25 ימים בלבד."
     }
   }
 }

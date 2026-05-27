@@ -3,30 +3,15 @@
   "source": "NI:jmf_ft_seedingincellflats_v1",
   "provenance": {
     "pdf": "L16_seeding_in_cell_flats.pdf",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.778216+00:00"
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "crops": {
-    "Arugula": {
-      "pest_disease": null,
-      "harvest_marker": null,
-      "storage_handling": null,
-      "rotation_companion": null,
-      "cultivar_recommendation": null,
-      "growing_tip": null,
-      "irrigation": null,
-      "nursery_specific": "[STUB] Arugula / nursery_specific",
-      "flame_weed_timing": null,
-      "biopesticide_spray": null,
-      "phytoprotection_substance": null,
-      "phytoprotection_application": null,
-      "nursery_seeding_process": null,
-      "frost_tolerance": null,
-      "flowering_date": null,
-      "pollination_mechanism": null,
-      "israeli_regions": null,
-      "variety_trial_score": null,
-      "hydro_suitability": null
+    "Lettuce": {
+      "nursery_specific": "Salanova (pelleted) lettuce seeds: use vacuum seeder with 128 or 72-cell trays. Non-pelleted lettuce seeds are very small and irregular — sow by hand or with small hand-held seeder. Use low-fertility potting mix (no compost) for germination. Watering regime: Stage 1 (germination) frequent with 1000-hole nozzle; Stage 2 (seedlings) as needed with 400-hole nozzle; Stage 3 (transplant-ready) less frequent, let surface dry. Spray weekly with seaweed or compost tea to inoculate with beneficial microorganisms."
+    },
+    "Basil": {
+      "nursery_specific": "Small, irregular seeds require hand seeding or small hand-held seeder — vacuum seeder not suitable. Use low-fertility potting mix for germination. Group trays by cell count (128 with 128, 72 with 72) for uniform watering. Maintain humidity 65-80%."
     }
   }
 }

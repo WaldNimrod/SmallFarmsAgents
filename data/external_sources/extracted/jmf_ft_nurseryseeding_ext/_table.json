@@ -2,31 +2,31 @@
   "schema_version": "1.0",
   "source": "NI:jmf_ft_nurseryseeding_ext_v1",
   "provenance": {
-    "pdf": "FT_FINALE_NURSERYSEEDING.PDF",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.777931+00:00"
+    "pdf": "L14_FT_FINALE_NURSERYSEEDING.pdf",
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "crops": {
-    "Arugula": {
-      "pest_disease": null,
-      "harvest_marker": null,
-      "storage_handling": null,
-      "rotation_companion": null,
-      "cultivar_recommendation": null,
-      "growing_tip": null,
-      "irrigation": null,
-      "nursery_specific": "[STUB] Arugula / nursery_specific",
-      "flame_weed_timing": null,
-      "biopesticide_spray": null,
-      "phytoprotection_substance": null,
-      "phytoprotection_application": null,
-      "nursery_seeding_process": null,
-      "frost_tolerance": null,
-      "flowering_date": null,
-      "pollination_mechanism": null,
-      "israeli_regions": null,
-      "variety_trial_score": null,
-      "hydro_suitability": null
+    "Tomatoes": {
+      "nursery_specific": "Requires potting up (128-cell tray to 4in or 6in pot) due to high commercial value and long life cycle. Pinch the head of greenhouse tomato seedlings so they develop two heads. Susceptible to whiteflies in the nursery — use yellow sticky traps and insect netting. Keep nursery humidity 65-80%. Harden off one week before transplant date."
+    },
+    "Peppers": {
+      "nursery_specific": "Requires potting up due to high commercial value and long life cycle. Seeds are susceptible to rodent predation — protect nursery trays with mechanical deterrents (sticky traps around table legs). Susceptible to whiteflies. Hardening off one week before transplanting is essential for field recovery."
+    },
+    "Eggplant": {
+      "nursery_specific": "Requires potting up due to high commercial value and long life cycle. Susceptible to whiteflies in the nursery — primary challenge. Use yellow sticky traps; consider insect netting. Bury plug up to first true leaves when potting up to encourage root development."
+    },
+    "Celery": {
+      "nursery_specific": "Requires potting up due to low and uneven germination rate. Long nursery stay makes it highly susceptible to sciarids (fungus gnats) in moist potting soil — let soil dry between waterings and use well-draining mix. Place trays over compost bins before transplant to boost nutrients via root uptake."
+    },
+    "Onions": {
+      "nursery_specific": "Trim back about 1 inch (2.5 cm) one week before transplanting to encourage robust root growth. Susceptible to thrips — monitor with yellow sticky traps and blue sticky traps. Does not require potting up."
+    },
+    "Spinach": {
+      "nursery_specific": "Seeds highly susceptible to rodent predation (mice and rats). Protect nursery trays with mechanical deterrents: sticky traps around table legs, ultrasonic repellents. Does not require potting up. Short nursery stay."
+    },
+    "Cucumbers": {
+      "nursery_specific": "Long stay in nursery makes it susceptible to sciarids (fungus gnats) developing in moist potting soil. Use insect netting to prevent thrips infestation. Requires potting up. Bury plug only to first true leaves — not deeper for cucurbits."
     }
   }
 }

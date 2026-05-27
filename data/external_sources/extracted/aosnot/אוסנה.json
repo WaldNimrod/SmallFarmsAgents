@@ -4,28 +4,13 @@
   "crop_he": "אוסנה",
   "provenance": {
     "pdf": "L02_AOSNOT_variety_info.docx",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.775724+00:00"
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "notes": {
-    "pest_disease": null,
-    "harvest_marker": null,
-    "storage_handling": null,
-    "rotation_companion": null,
-    "cultivar_recommendation": null,
-    "growing_tip": null,
-    "irrigation": null,
-    "nursery_specific": null,
-    "flame_weed_timing": null,
-    "biopesticide_spray": null,
-    "phytoprotection_substance": null,
-    "phytoprotection_application": null,
-    "nursery_seeding_process": null,
-    "frost_tolerance": "[STUB] אוסנה / frost_tolerance — dry-run placeholder",
-    "flowering_date": "[STUB] אוסנה / flowering_date — dry-run placeholder",
-    "pollination_mechanism": "[STUB] אוסנה / pollination_mechanism — dry-run placeholder",
-    "israeli_regions": "[STUB] אוסנה / israeli_regions — dry-run placeholder",
-    "variety_trial_score": null,
-    "hydro_suitability": null
+    "frost_tolerance": "עמיד לקור. לאחר שנה ראשונה הצמח חזק ועמיד בתנאים קשים של בצורת, חום וקור. מתאים לגידול בכל חלקי הארץ.",
+    "flowering_date": "פריחה באביב: אפריל–יוני. פרחים לבנים קטנים עם אבקנים צהובים. תנובת פרי: מאי–יולי.",
+    "pollination_mechanism": "האבקה על ידי דבורים. יש לנטוע במקום מוגן מרוחות כדי לאפשר פעילות דבורים בזמן פריחה — ברוח, הדבורים לא יצליחו להאביק.",
+    "israeli_regions": "מתאים לגידול בכל אזורי הארץ. זני האוסנה הנמכרים בישראל: נבאחו (ללא קוצים, מתוק, מאוחר), ארפאהו (ללא קוצים, מוקדם, פורה), 45 (קוצני, מתוק מאוד), טריפל קראון (ללא קוצים, גדול, מאוחר)."
   }
 }

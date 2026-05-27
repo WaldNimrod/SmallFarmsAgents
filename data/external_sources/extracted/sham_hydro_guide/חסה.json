@@ -4,28 +4,10 @@
   "crop_he": "חסה",
   "provenance": {
     "pdf": "L09_hydro_vegetable_guide.pdf",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.777259+00:00"
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "notes": {
-    "pest_disease": null,
-    "harvest_marker": null,
-    "storage_handling": null,
-    "rotation_companion": null,
-    "cultivar_recommendation": null,
-    "growing_tip": null,
-    "irrigation": null,
-    "nursery_specific": null,
-    "flame_weed_timing": null,
-    "biopesticide_spray": null,
-    "phytoprotection_substance": null,
-    "phytoprotection_application": null,
-    "nursery_seeding_process": null,
-    "frost_tolerance": null,
-    "flowering_date": null,
-    "pollination_mechanism": null,
-    "israeli_regions": null,
-    "variety_trial_score": null,
-    "hydro_suitability": "[STUB] חסה / hydro_suitability — dry-run placeholder"
+    "hydro_suitability": "הגידול המרכזי בהידרופוניקה ישראלית. מתאים ל-NFT וDWC.\nתנאים אופטימליים: טמפ' יום 24°C (מינ' 15, מקס' 29); לילה 19°C; מים 25°C (מקס' 28°C); לחות 60%; DLI 15–17 מול/מ²/יום; חמצן מומס ≥7 מג'/ל; CO₂ ≥400 ppm.\nמחזור: קיץ 18–24 ימים, חורף 30–40 ימים. צפיפות: 54 צמחים/מ² → 25 לפני קטיף; מרווח 18–20 ס\"מ.\nאתגרי קיץ: החמות (מחסור Ca ברקמת עלה) והפרגה. יש לאוורר מבנה ולבחור זנים קיציים. לטיפול שורשים: H₂O₂ 1mM.\nזנים מומלצים לקיץ: אולגדה (ציון 4, רומיין), סנטרד (ציון 4, מיני רומיין). טיפוסים: ערבית/רומיין, אייסברג, מסולסלת, סלנובה."
   }
 }

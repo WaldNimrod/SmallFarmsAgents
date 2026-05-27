@@ -3,51 +3,13 @@
   "source": "NI:jmf_cover_crops_narrative_v1",
   "provenance": {
     "pdf": "L13_cover_crops_guide.pdf",
-    "extraction_model": "claude-sonnet-4-6",
-    "extracted_at": "2026-05-27T00:04:02.778825+00:00"
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
   },
   "crops": {
-    "Clover": {
-      "pest_disease": null,
-      "harvest_marker": null,
-      "storage_handling": null,
-      "rotation_companion": "[STUB] companion",
-      "cultivar_recommendation": null,
-      "growing_tip": "[STUB] clover tip",
-      "irrigation": null,
-      "nursery_specific": null,
-      "flame_weed_timing": null,
-      "biopesticide_spray": null,
-      "phytoprotection_substance": null,
-      "phytoprotection_application": null,
-      "nursery_seeding_process": null,
-      "frost_tolerance": null,
-      "flowering_date": null,
-      "pollination_mechanism": null,
-      "israeli_regions": null,
-      "variety_trial_score": null,
-      "hydro_suitability": null
-    },
-    "Buckwheat": {
-      "pest_disease": null,
-      "harvest_marker": null,
-      "storage_handling": null,
-      "rotation_companion": null,
-      "cultivar_recommendation": null,
-      "growing_tip": "[STUB] buckwheat tip",
-      "irrigation": null,
-      "nursery_specific": null,
-      "flame_weed_timing": null,
-      "biopesticide_spray": null,
-      "phytoprotection_substance": null,
-      "phytoprotection_application": null,
-      "nursery_seeding_process": null,
-      "frost_tolerance": null,
-      "flowering_date": null,
-      "pollination_mechanism": null,
-      "israeli_regions": null,
-      "variety_trial_score": null,
-      "hydro_suitability": null
+    "General": {
+      "growing_tip": "Cover crops (green manure) serve 4 functions: erosion protection, soil structuring (deep roots), nitrogen fixation (legumes via Rhizobium), and feeding the soil web. Allow 8-10 weeks of growth minimum. Mow just before flowering for maximum N contribution. After mowing: cover with silage tarp ~2 weeks before planting. Mix legumes + cereals; seed at ≥1/4 bucket per 100ft (30m) bed to outcompete weeds. For compacted soils: broadfork deep + add 2in compost + cover crop for 10+ weeks.",
+      "rotation_companion": "Inoculate legume seeds with Rhizobium bacteria if legumes haven't been grown in that bed for some time. Good combination: legumes (vetch, clover) + cereals (oats, rye). Add Ramial Wood Chips in walkways for fungal element. Avoid continuous tillage — maintain permabed system with cover crops to protect soil web between cash crop cycles."
     }
   }
 }

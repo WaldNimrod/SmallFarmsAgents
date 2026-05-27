@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:sham_hydro_guide_v1",
+  "crop_he": "בזיליקום",
+  "provenance": {
+    "pdf": "L09_hydro_vegetable_guide.pdf",
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-27T00:00:00+00:00"
+  },
+  "notes": {
+    "hydro_suitability": "מוזכר במדריך ההדרכה של שה\"מ לגידול ירקות בהידרופוניקה (מולי זקס, 2019) כצמח תבלין מתאים לשיטה רב-קצירית. מחזור ממושך יותר מחסה. ניתן לגידול בNFT ו-DWC עם הארכת מחזור הגידול."
+  }
+}
