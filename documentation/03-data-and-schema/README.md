@@ -66,6 +66,14 @@ Revision chain starts at `organic_market_agent/db/versions/`. New revisions must
 
 Full table-level narrative may still live in Hebrew-titled files under `docs/` (see [`../external-references/`](../external-references/)). When English replacements exist, prefer them; otherwise treat DB + migrations as authoritative.
 
+## Delivery tier — MySQL mirror (since SFA-S003-P003 — 2026-05-23)
+
+Postgres on waldhomeserver remains the **canonical SSoT**. End-user-facing data is **mirrored** to a small MySQL schema on `sfa.nimrod.bio` (uPress) via HMAC-authenticated push from the publisher. The mirror is read-only from the delivery tier's perspective; all writes happen on Postgres and flow downstream.
+
+- **MySQL schema (binding):** [`sfa-mysql-mirror.md`](sfa-mysql-mirror.md) — 4 data tables + 2 plumbing tables; hybrid strategy (top-level filter cols + `payload_json` blob).
+- **Architecture context:** [`../02-architecture/sfa-delivery-tier.md`](../02-architecture/sfa-delivery-tier.md)
+- **Decision record:** [`../../_COMMUNICATION/team_00/DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_2026-05-23_v1.0.0.md`](../../_COMMUNICATION/team_00/DECIDE_SFA-S003-P003-WP-2_SCHEMA_STRATEGY_2026-05-23_v1.0.0.md) (Option B — Hybrid — APPROVED 2026-05-23)
+
 ## Related
 
 - Admin catalog UI: `/catalog/scope-skip` (numbered `display_order`)

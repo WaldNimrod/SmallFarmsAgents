@@ -75,6 +75,15 @@ organic_market_agent/
 └── utils/               # Config, logging, checksum, alerts, data quality
 ```
 
+## Delivery tier (user-facing, since SFA-S003-P003 — 2026-05-23)
+
+End-user serving runs on a **dedicated subdomain `sfa.nimrod.bio`** (uPress shared LAMP, Cloudflare DNS+proxy), **not** on waldhomeserver and **not** as a WordPress shortcode on `www.nimrod.bio`. The pipeline above (Collect → Aggregate) still runs on waldhomeserver; results are **pushed** to MySQL on the delivery tier via HMAC-authenticated `POST /api/v1/ingest`.
+
+- **Canonical architecture (binding):** [`sfa-delivery-tier.md`](sfa-delivery-tier.md)
+- **MySQL mirror schema (binding):** [`../03-data-and-schema/sfa-mysql-mirror.md`](../03-data-and-schema/sfa-mysql-mirror.md)
+
+**Hard invariant:** waldhomeserver is backend-only and never serves end users. All public HTTP traffic terminates at the delivery tier.
+
 ## Further reading
 
 - Pipelines detail: [`../04-pipelines-and-runtime/`](../04-pipelines-and-runtime/)

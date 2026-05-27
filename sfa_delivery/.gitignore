@@ -1,0 +1,18 @@
+# Composer
+/vendor/
+
+# Environment + secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+/logs/*
+!/logs/.gitkeep
+
+# Tests
+.phpunit.result.cache
+
+# Deploy bundles
+*.tgz
+*.tar.gz
