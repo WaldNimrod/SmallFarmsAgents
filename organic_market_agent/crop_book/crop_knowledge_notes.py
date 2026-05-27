@@ -39,8 +39,15 @@ NOTE_TYPE_VALUES: tuple[str, ...] = (
     "phytoprotection_substance",
     "phytoprotection_application",
     "nursery_seeding_process",
+    # WP-C2: Hebrew narrative NI extraction (migration 053)
+    "frost_tolerance",
+    "flowering_date",
+    "pollination_mechanism",
+    "israeli_regions",
+    "variety_trial_score",
+    "hydro_suitability",
 )
-# 13 values total: 8 JMF book types + 2 FT baseline + 3 Q5 additions.
+# 19 values total: 13 WP-B2 + 6 WP-C2 Hebrew narrative types.
 
 BODY_TEXT_MAX_LENGTH: int = 2000
 

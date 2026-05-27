@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:sham_variety_trials_v1",
+  "provenance": {
+    "pdf": "L11_variety_trials_2021.pdf",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-27T00:04:02.776754+00:00"
+  },
+  "crops": {
+    "חסה": {
+      "pest_disease": null,
+      "harvest_marker": null,
+      "storage_handling": null,
+      "rotation_companion": null,
+      "cultivar_recommendation": null,
+      "growing_tip": null,
+      "irrigation": null,
+      "nursery_specific": null,
+      "flame_weed_timing": null,
+      "biopesticide_spray": null,
+      "phytoprotection_substance": null,
+      "phytoprotection_application": null,
+      "nursery_seeding_process": null,
+      "frost_tolerance": null,
+      "flowering_date": null,
+      "pollination_mechanism": null,
+      "israeli_regions": null,
+      "variety_trial_score": "[STUB] חסה / variety_trial_score",
+      "hydro_suitability": null
+    }
+  }
+}

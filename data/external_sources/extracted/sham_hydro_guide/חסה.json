@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:sham_hydro_guide_v1",
+  "crop_he": "חסה",
+  "provenance": {
+    "pdf": "L09_hydro_vegetable_guide.pdf",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-27T00:04:02.777259+00:00"
+  },
+  "notes": {
+    "pest_disease": null,
+    "harvest_marker": null,
+    "storage_handling": null,
+    "rotation_companion": null,
+    "cultivar_recommendation": null,
+    "growing_tip": null,
+    "irrigation": null,
+    "nursery_specific": null,
+    "flame_weed_timing": null,
+    "biopesticide_spray": null,
+    "phytoprotection_substance": null,
+    "phytoprotection_application": null,
+    "nursery_seeding_process": null,
+    "frost_tolerance": null,
+    "flowering_date": null,
+    "pollination_mechanism": null,
+    "israeli_regions": null,
+    "variety_trial_score": null,
+    "hydro_suitability": "[STUB] חסה / hydro_suitability — dry-run placeholder"
+  }
+}

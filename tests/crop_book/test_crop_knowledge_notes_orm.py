@@ -8,13 +8,14 @@ pytestmark = pytest.mark.crop_book
 
 
 class TestCropKnowledgeNoteORM:
-    """AC-02: NOTE_TYPE_VALUES has 13 entries; BODY_TEXT_MAX_LENGTH == 2000."""
+    """AC-02: NOTE_TYPE_VALUES has 19 entries (13 WP-B2 + 6 WP-C2); BODY_TEXT_MAX_LENGTH == 2000."""
 
     def test_ac02_note_type_values_count(self):
         from organic_market_agent.crop_book.crop_knowledge_notes import NOTE_TYPE_VALUES
 
-        assert len(NOTE_TYPE_VALUES) == 13, (
-            f"Expected 13 NOTE_TYPE_VALUES, got {len(NOTE_TYPE_VALUES)}: {NOTE_TYPE_VALUES}"
+        # WP-C2 (migration 053) extended from 13 → 19 (added 6 Hebrew narrative types)
+        assert len(NOTE_TYPE_VALUES) == 19, (
+            f"Expected 19 NOTE_TYPE_VALUES (13 WP-B2 + 6 WP-C2), got {len(NOTE_TYPE_VALUES)}: {NOTE_TYPE_VALUES}"
         )
 
     def test_ac02_note_type_values_content(self):
@@ -36,6 +37,13 @@ class TestCropKnowledgeNoteORM:
         assert "phytoprotection_substance" in NOTE_TYPE_VALUES
         assert "phytoprotection_application" in NOTE_TYPE_VALUES
         assert "nursery_seeding_process" in NOTE_TYPE_VALUES
+        # 6 WP-C2 Hebrew narrative types (migration 053)
+        assert "frost_tolerance" in NOTE_TYPE_VALUES
+        assert "flowering_date" in NOTE_TYPE_VALUES
+        assert "pollination_mechanism" in NOTE_TYPE_VALUES
+        assert "israeli_regions" in NOTE_TYPE_VALUES
+        assert "variety_trial_score" in NOTE_TYPE_VALUES
+        assert "hydro_suitability" in NOTE_TYPE_VALUES
 
     def test_ac02_body_text_max_length(self):
         from organic_market_agent.crop_book.crop_knowledge_notes import BODY_TEXT_MAX_LENGTH
@@ -43,7 +51,7 @@ class TestCropKnowledgeNoteORM:
         assert BODY_TEXT_MAX_LENGTH == 2000
 
     def test_ac04b_note_type_check_13_values(self):
-        """AC-04b: All 13 note_type values are accepted; 'nonsense_type' raises IntegrityError."""
+        """AC-04b: All 19 note_type values are accepted; 'nonsense_type' raises IntegrityError."""
         from sqlalchemy import create_engine, text, inspect as sa_inspect
         from sqlalchemy.orm import sessionmaker
         from organic_market_agent.crop_book.crop_knowledge_notes import (
@@ -83,7 +91,7 @@ class TestCropKnowledgeNoteORM:
         SessionLocal = sessionmaker(engine)
         now_str = datetime.now(timezone.utc).isoformat()
 
-        # All 13 note_type values should be accepted
+        # All 19 note_type values should be accepted
         with SessionLocal() as session:
             for i, nt in enumerate(NOTE_TYPE_VALUES):
                 session.execute(text(

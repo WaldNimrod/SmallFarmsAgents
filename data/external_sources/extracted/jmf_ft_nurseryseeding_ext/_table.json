@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_nurseryseeding_ext_v1",
+  "provenance": {
+    "pdf": "FT_FINALE_NURSERYSEEDING.PDF",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-27T00:04:02.777931+00:00"
+  },
+  "crops": {
+    "Arugula": {
+      "pest_disease": null,
+      "harvest_marker": null,
+      "storage_handling": null,
+      "rotation_companion": null,
+      "cultivar_recommendation": null,
+      "growing_tip": null,
+      "irrigation": null,
+      "nursery_specific": "[STUB] Arugula / nursery_specific",
+      "flame_weed_timing": null,
+      "biopesticide_spray": null,
+      "phytoprotection_substance": null,
+      "phytoprotection_application": null,
+      "nursery_seeding_process": null,
+      "frost_tolerance": null,
+      "flowering_date": null,
+      "pollination_mechanism": null,
+      "israeli_regions": null,
+      "variety_trial_score": null,
+      "hydro_suitability": null
+    }
+  }
+}

@@ -43,3 +43,26 @@ NI_IMPORTER_CLASSES = (
 )
 
 __all__ = [cls.__name__ for cls in NI_IMPORTER_CLASSES] + ["NI_IMPORTER_CLASSES"]
+
+# ---------------------------------------------------------------------------
+# WP-C2: Hebrew narrative NI importers (7 sources)
+# ---------------------------------------------------------------------------
+from organic_market_agent.crop_book.importer.ni.aosnot_variety_info import AosnotImporter
+from organic_market_agent.crop_book.importer.ni.sham_variety_trials import ShamVarietyTrialsImporter
+from organic_market_agent.crop_book.importer.ni.sham_hydro_guide import ShamHydroGuideImporter
+from organic_market_agent.crop_book.importer.ni.zacks_leafy_survey import ZacksLeafySurveyImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_nurseryseeding_ext import JmfFtNurseryseedingExtImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_seedingincellflats import JmfFtSeedingincellflatImporter
+from organic_market_agent.crop_book.importer.ni.jmf_cover_crops_narrative import JmfCoverCropsNarrativeImporter
+
+NI_C2_IMPORTER_CLASSES = (
+    AosnotImporter,
+    ShamVarietyTrialsImporter,
+    ShamHydroGuideImporter,
+    ZacksLeafySurveyImporter,
+    JmfFtNurseryseedingExtImporter,
+    JmfFtSeedingincellflatImporter,
+    JmfCoverCropsNarrativeImporter,
+)
+
+__all__ += [cls.__name__ for cls in NI_C2_IMPORTER_CLASSES] + ["NI_C2_IMPORTER_CLASSES"]

@@ -554,6 +554,29 @@ def _run_ni_ingestion(session: Session) -> None:
     session.flush()
 
 
+def _run_c2_ingestion(session: Session) -> None:
+    """WP-C2: Hebrew narrative NI importers (7 sources).
+
+    Mirrors _run_ni_ingestion pattern but iterates NI_C2_IMPORTER_CLASSES.
+    All C2 importers produce crop_knowledge_notes rows only (load() returns []).
+    """
+    from organic_market_agent.crop_book.importer.ni import NI_C2_IMPORTER_CLASSES
+    from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
+
+    logger.info("WP-C2: Hebrew narrative NI ingestion (%d importers)", len(NI_C2_IMPORTER_CLASSES))
+    for cls in NI_C2_IMPORTER_CLASSES:
+        importer = cls()
+
+        for row in importer.load(session):
+            variety_id = row.pop("variety_id")
+            _upsert_source_value(session, variety_id, row)
+
+        for row in importer.load_knowledge_notes(session):
+            _upsert_knowledge_note(session, **row)
+
+    session.flush()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="ספר גידולים seed importer — populate crop-book tables from Tend CSV + JMF XLSX"
@@ -567,6 +590,10 @@ def main() -> None:
     mode.add_argument(
         "--c4-only", action="store_true",
         help="Run WP-C4 web-source importers only",
+    )
+    mode.add_argument(
+        "--c2-only", action="store_true",
+        help="Run WP-C2 Hebrew narrative NI importers only",
     )
     mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
@@ -637,6 +664,10 @@ def main() -> None:
         help="Skip WP-C4 importers when --all is used",
     )
     parser.add_argument(
+        "--no-c2", action="store_true",
+        help="Skip WP-C2 Hebrew narrative NI importers when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -652,9 +683,9 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only:
         parser.error(
-            "Specify --all, --c1-only, --c4-only, --jmf-only, --ni-only, "
+            "Specify --all, --c1-only, --c2-only, --c4-only, --jmf-only, --ni-only, "
             "or --crops NAME [NAME ...]"
         )
 
@@ -679,6 +710,16 @@ def main() -> None:
             _run_c1_ingestion(session)
             enrich_summary = run_enrichment(session, dry_run=False)
             logger.info("Enrichment: %s", enrich_summary)
+            session.commit()
+        return
+
+    # ── C2-only fast path (WP-C2 LOD400 §6) ──
+    if args.c2_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+
+        with SessionFactory() as session:
+            _run_c2_ingestion(session)
             session.commit()
         return
 
@@ -826,6 +867,10 @@ def main() -> None:
 
         if args.all and not args.no_c4:
             _run_c4_ingestion(session)
+            session.flush()
+
+        if args.all and not args.no_c2:
+            _run_c2_ingestion(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)
