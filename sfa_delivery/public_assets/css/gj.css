@@ -494,3 +494,186 @@
 /* corner decoration */
 .gj-corner { position: absolute; opacity: .5; pointer-events: none; z-index: 0; }
 .gj-corner--bl { left: -10px; bottom: 30px; }
+
+/* ─── Market pricebig extensions (R1+R2 BEM additions) ────────────────── */
+/* head row above the big numeric (icon + name + english) */
+.gj-pricebig__head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px;
+}
+.gj-pricebig__glyph {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: color-mix(in oklch, var(--gj-tomato) 14%, var(--gj-paper));
+  border-radius: 12px;
+  font-size: 22px;
+  flex: none;
+}
+.gj-pricebig__name {
+  font-family: var(--gj-font-head);
+  font-weight: 700; font-size: 20px;
+  line-height: 1.1;
+  margin: 0;
+}
+.gj-pricebig__en {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  font-style: italic;
+  margin-top: 2px;
+}
+/* alias slot — when template uses __price/__unit instead of __big/__lbl */
+.gj-pricebig__price {
+  font-family: var(--gj-font-head);
+  font-weight: 900;
+  font-size: 60px;
+  color: var(--gj-tomato-deep);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.gj-pricebig__unit {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  margin-top: 4px;
+}
+.gj-pricebig__meta {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  margin-top: 6px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ─── Market price history (B5) ───────────────────────────────────────── */
+.gj-pricehist {
+  margin: 14px 0;
+  padding: 12px 14px;
+  background: var(--gj-paper);
+  border: 1px solid var(--gj-line);
+  border-radius: 12px;
+}
+.gj-pricehist__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700; font-size: 15px;
+  margin: 0 0 8px;
+}
+.gj-pricehist__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.gj-pricehist__table th,
+.gj-pricehist__table td {
+  text-align: start;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--gj-line);
+}
+.gj-pricehist__table th {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  font-weight: 700;
+}
+.gj-pricehist__table tr:last-child td { border-bottom: 0; }
+
+/* ─── Market list / grid / chips containers (B5) ──────────────────────── */
+.mk-list { display: flex; flex-direction: column; }
+.mk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.mk-chips {
+  display: flex; gap: 6px; overflow-x: auto;
+  margin: 0 -18px 14px;
+  padding: 0 18px 4px;
+  scrollbar-width: none;
+}
+.mk-chips::-webkit-scrollbar { display: none; }
+.mk-chip {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: var(--gj-paper);
+  border: 1px solid var(--gj-line);
+  font-size: 12px; font-weight: 600;
+  color: var(--gj-ink-soft);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.mk-chip.is-active {
+  background: var(--gj-tomato-deep);
+  border-color: var(--gj-tomato-deep);
+  color: var(--gj-paper);
+}
+.mk-empty {
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--gj-paper-2);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--gj-ink-soft);
+  line-height: 1.55;
+}
+
+/* ─── Search input/submit (B6 — extends .gj-search) ───────────────────── */
+.gj-search__input {
+  flex: 1;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--gj-ink);
+  outline: none;
+  min-width: 0;
+}
+.gj-search__input::placeholder { color: var(--gj-ink-soft); }
+.gj-search__submit {
+  appearance: none; border: 0;
+  background: var(--gj-leaf-deep);
+  color: var(--gj-paper);
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-family: inherit; font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  flex: none;
+}
+
+/* ─── Generic muted text helper ───────────────────────────────────────── */
+.muted { color: var(--gj-ink-soft); }
+
+/* ─── Trust-tier source pills (7 tiers — ex/ni/pr/op/mk/wb/uc) ────────── */
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.4;
+  white-space: nowrap;
+  background: var(--gj-paper-2);
+  color: var(--gj-ink-soft);
+  border: 1px solid var(--gj-line);
+}
+/* ex = EXpert */
+.pill--ex { background: var(--gj-paper); color: var(--gj-leaf-deep); border-color: var(--gj-leaf-deep); }
+/* ni = NImrod */
+.pill--ni { background: var(--gj-paper); color: var(--gj-soil-deep); border-color: var(--gj-soil-deep); }
+/* pr = PRofessional */
+.pill--pr { background: var(--gj-paper-2); color: var(--gj-ink); border-color: var(--gj-ink); }
+/* op = OPinion */
+.pill--op { background: var(--gj-paper); color: var(--gj-soil-deep); border-color: var(--gj-sun); }
+/* mk = MarKet */
+.pill--mk { background: var(--gj-paper); color: var(--gj-tomato-deep); border-color: var(--gj-tomato); }
+/* wb = WebBook */
+.pill--wb { background: var(--gj-paper-3); color: var(--gj-ink-soft); border-color: var(--gj-line); }
+/* uc = UnConfirmed (muted) */
+.pill--uc { background: var(--gj-paper-3); color: var(--gj-ink-soft); border-style: dashed; opacity: .8; }

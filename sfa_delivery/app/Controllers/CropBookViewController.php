@@ -10,6 +10,23 @@ use SFA\Lib\Template;
 
 final class CropBookViewController
 {
+    /**
+     * Icon slug mapping (sprite id without 'icon-' prefix).
+     * Used by book_crop hero + market_link art. Defaults to 'leaf' for unknown.
+     */
+    private const ICON_MAP = [
+        'tomato'     => 'tomato',
+        'lettuce'    => 'lettuce',
+        'cucumber'   => 'cucumber',
+        'pepper'     => 'pepper',
+        'eggplant'   => 'eggplant',
+        'carrot'     => 'carrot',
+        'onion'      => 'onion',
+        'zucchini'   => 'zucchini',
+        'basil'      => 'leaf',
+        'strawberry' => 'tomato',
+    ];
+
     public function __construct(private PDO $pdo)
     {
     }
@@ -21,12 +38,13 @@ final class CropBookViewController
 
     public function questions(Request $request, Response $response): Response
     {
+        // Template (book_questions.php) expects q_he/sub_he/href shape.
         $questions = [
-            ['title' => 'מה מתאים לקיץ?', 'category' => 'summer'],
-            ['title' => 'מה זורעים לחורף?', 'category' => 'winter'],
-            ['title' => 'מה גדל מהר?', 'category' => 'fast'],
-            ['title' => 'מה מתאים למתחילים?', 'category' => 'beginner'],
-            ['title' => 'מה מתאים לשטח קטן?', 'category' => 'small-space'],
+            ['slug' => 'summer',      'q_he' => 'מה מתאים לקיץ?',     'sub_he' => 'גידולי קיץ פוריים',     'href' => '/crop-book/table?category=summer'],
+            ['slug' => 'winter',      'q_he' => 'מה זורעים לחורף?',   'sub_he' => 'גידולי חורף קלים',     'href' => '/crop-book/table?category=winter'],
+            ['slug' => 'fast',        'q_he' => 'מה גדל מהר?',        'sub_he' => 'DTM קצר',              'href' => '/crop-book/table?category=fast'],
+            ['slug' => 'beginner',    'q_he' => 'מה מתאים למתחילים?', 'sub_he' => 'התחלה רכה',            'href' => '/crop-book/table?category=beginner'],
+            ['slug' => 'small-space', 'q_he' => 'מה מתאים לשטח קטן?',  'sub_he' => 'כדים, מרפסות, מ״ר',    'href' => '/crop-book/table?category=small-space'],
         ];
         return $this->html($response, Template::render('pages/book_questions', ['questions' => $questions]));
     }
@@ -34,7 +52,20 @@ final class CropBookViewController
     public function family(Request $request, Response $response): Response
     {
         $rows = $this->pdo->query('SELECT COALESCE(family_name_he, "לא ידוע") AS family_name_he, COUNT(*) AS total FROM crops GROUP BY family_name_he ORDER BY total DESC, family_name_he')->fetchAll();
-        return $this->html($response, Template::render('pages/book_family', ['families' => $rows]));
+
+        $families = [];
+        foreach ($rows as $r) {
+            $name = (string)($r['family_name_he'] ?? '');
+            $families[] = [
+                'slug'       => self::slugify($name) ?: 'family',
+                'name_he'    => $name,
+                'name_lat'   => '',
+                'crop_count' => (int)($r['total'] ?? 0),
+                'total'      => (int)($r['total'] ?? 0), // back-compat alias
+            ];
+        }
+
+        return $this->html($response, Template::render('pages/book_family', ['families' => $families]));
     }
 
     public function tableView(Request $request, Response $response): Response
@@ -50,9 +81,26 @@ final class CropBookViewController
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+        $rows = $stmt->fetchAll();
+
+        // Map legacy keys → canonical template keys (name_he/family_he/dtm_days/...).
+        $crops = [];
+        foreach ($rows as $row) {
+            $slug = (string)($row['slug'] ?? '');
+            $dtm  = isset($row['dtm_max']) ? (int)$row['dtm_max'] : (isset($row['dtm_min']) ? (int)$row['dtm_min'] : null);
+            $crops[] = array_merge($row, [
+                'name_he'         => (string)($row['hebrew_name'] ?? ''),
+                'family_he'       => (string)($row['family_name_he'] ?? ''),
+                'dtm_days'        => $dtm,
+                'yield_kg_per_m2' => null,
+                'best_season'     => (string)($row['season'] ?? '—'),
+                'source_count'    => null,
+                'icon_slug'       => self::ICON_MAP[$slug] ?? 'leaf',
+            ]);
+        }
 
         return $this->html($response, Template::render('pages/book_table', [
-            'crops' => $stmt->fetchAll(),
+            'crops'    => $crops,
             'category' => $category,
         ]));
     }
@@ -62,14 +110,25 @@ final class CropBookViewController
         $q = trim((string)($request->getQueryParams()['q'] ?? ''));
         $items = [];
         if ($q !== '') {
-            $stmt = $this->pdo->prepare('SELECT slug, hebrew_name, scientific_name, category FROM crops WHERE hebrew_name LIKE ? ORDER BY hebrew_name LIMIT 30');
+            $stmt = $this->pdo->prepare('SELECT slug, hebrew_name, scientific_name, family_name_he, category, dtm_min, dtm_max FROM crops WHERE hebrew_name LIKE ? ORDER BY hebrew_name LIMIT 30');
             $stmt->execute(['%' . $q . '%']);
-            $items = $stmt->fetchAll();
+            foreach ($stmt->fetchAll() as $row) {
+                $items[] = [
+                    'slug'          => (string)($row['slug'] ?? ''),
+                    'name_he'       => (string)($row['hebrew_name'] ?? ''),
+                    'en_name'       => (string)($row['scientific_name'] ?? ''),
+                    'family_tag_he' => (string)($row['family_name_he'] ?? ''),
+                    'dtm_days'      => isset($row['dtm_max']) ? (int)$row['dtm_max'] : null,
+                    'icon_svg'      => '',
+                ];
+            }
         }
 
         return $this->html($response, Template::render('pages/book_search', [
-            'q' => $q,
-            'items' => $items,
+            'query'   => $q,
+            'q'       => $q,      // back-compat alias
+            'results' => $items,
+            'items'   => $items,  // back-compat alias
         ]));
     }
 
@@ -99,13 +158,52 @@ final class CropBookViewController
             if (is_array($vPayload)) {
                 $variety = array_merge($variety, $vPayload);
             }
-            $variety['slug'] = self::varietySlug($variety);
+            $variety['vslug']   = self::varietySlug($variety);
+            $variety['slug']    = $variety['vslug']; // back-compat
+            $variety['name_he'] = (string)($variety['name_he'] ?? ($variety['name'] ?? ''));
             unset($variety['payload_json']);
+        }
+        unset($variety);
+
+        // Canonical shape for book_crop.php
+        $crop['name_he']       = (string)($crop['name_he']  ?? ($crop['hebrew_name']    ?? ''));
+        $crop['name_lat']      = (string)($crop['name_lat'] ?? ($crop['scientific_name'] ?? ''));
+        $crop['en_name']       = (string)($crop['en_name']  ?? '');
+        $crop['icon_slug']     = (string)($crop['icon_slug'] ?? (self::ICON_MAP[$slug] ?? 'leaf'));
+        $crop['description_he'] = (string)($crop['description_he'] ?? '');
+        $crop['family_tag_he'] = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
+        $crop['dtm_days']      = $crop['dtm_days'] ?? ($crop['dtm_max'] ?? ($crop['dtm_min'] ?? null));
+        $crop['varieties']     = $varieties;
+
+        // family object — template uses $crop['family']['slug'] / ['name_he']
+        if (!isset($crop['family']) || !is_array($crop['family'])) {
+            $famName = (string)($crop['family_name_he'] ?? '');
+            if ($famName !== '') {
+                $crop['family'] = ['slug' => self::slugify($famName) ?: 'family', 'name_he' => $famName];
+            }
+        }
+
+        // Best-effort market_link: only attach when a matching product exists.
+        $marketStmt = $this->pdo->prepare('SELECT slug, hebrew_name, last_price FROM products WHERE slug = ? LIMIT 1');
+        $marketStmt->execute([$slug]);
+        $marketRow = $marketStmt->fetch();
+        if ($marketRow) {
+            $crop['market_link'] = [
+                'slug'          => (string)($marketRow['slug'] ?? $slug),
+                'price_current' => (float)($marketRow['last_price'] ?? 0.0),
+                'source_count'  => 0, // aggregate not joined here; template tolerates 0.
+            ];
+        }
+
+        // knowledge_notes — preserve as-is from payload (template filters
+        // is_internal_farm_use_only). Default to empty array when missing.
+        if (!isset($crop['knowledge_notes']) || !is_array($crop['knowledge_notes'])) {
+            $crop['knowledge_notes'] = [];
         }
 
         return $this->html($response, Template::render('pages/book_crop', [
             'crop' => $crop,
-            'varieties' => $varieties,
+            'varieties' => $varieties, // legacy top-level for any template that reads it
         ]));
     }
 
@@ -120,6 +218,8 @@ final class CropBookViewController
         if (!$crop) {
             return $this->html($response, Template::render('error', ['code' => 404, 'message' => 'גידול לא נמצא']), 404);
         }
+        $crop['name_he']  = (string)($crop['hebrew_name'] ?? '');
+        $crop['name_lat'] = (string)($crop['scientific_name'] ?? '');
 
         $varStmt = $this->pdo->prepare('SELECT id, name, payload_json FROM crop_varieties WHERE crop_id = ? ORDER BY name');
         $varStmt->execute([$crop['id']]);
@@ -129,6 +229,8 @@ final class CropBookViewController
                 $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
                 $variety = array_merge($row, is_array($payload) ? $payload : []);
                 unset($variety['payload_json']);
+                $variety['vslug']   = $vslug;
+                $variety['name_he'] = (string)($variety['name_he'] ?? ($variety['name'] ?? ''));
                 break;
             }
         }

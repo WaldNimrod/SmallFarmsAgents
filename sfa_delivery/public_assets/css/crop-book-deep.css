@@ -458,3 +458,223 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+/* ─── R1+R2 BEM extensions ─────────────────────────────────────────────
+   The blocks below cover new class names emitted by the rewritten
+   crop-book templates / macros that the original LOD300 sheet did not
+   yet style. Designed to plug into existing aesthetic (paper / leaf /
+   soil) with minimal pixel-perfect refinement. */
+
+/* ─── cb-crop-hero — extended head/icon/sci/lede ───────────────────── */
+.cb-crop-hero__head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 4px;
+}
+.cb-crop-hero__icon {
+  width: 80px; height: 80px;
+  display: grid; place-items: center;
+  background: color-mix(in oklch, var(--gj-leaf) 14%, var(--gj-paper));
+  border-radius: 16px;
+  flex: none;
+}
+.cb-crop-hero__sci {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--gj-ink-soft);
+  margin: 2px 0 0;
+}
+.cb-crop-hero__lede {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--gj-ink-soft);
+}
+
+/* ─── cb-vars — varieties list block (header + container) ──────────── */
+.cb-vars__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 16px 0 8px;
+}
+.cb-vars__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── cb-notes — agronomic note callouts ───────────────────────────── */
+.cb-notes {
+  display: flex; flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+}
+.cb-notes__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+.cb-note {
+  padding: 12px 14px;
+  background: var(--gj-paper);
+  border: 1px solid var(--gj-line);
+  border-inline-start: 4px solid var(--gj-leaf);
+  border-radius: 10px;
+}
+.cb-note__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+.cb-note__body {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--gj-ink);
+  margin: 0;
+}
+.cb-note__src {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  margin-top: 6px;
+}
+/* note kind variants (controller-provided) */
+.cb-note--warn      { border-inline-start-color: var(--gj-tomato); background: color-mix(in oklch, var(--gj-tomato) 4%, var(--gj-paper)); }
+.cb-note--tip       { border-inline-start-color: var(--gj-sun); }
+.cb-note--soil      { border-inline-start-color: var(--gj-soil); }
+.cb-note--expert    { border-inline-start-color: var(--gj-leaf-deep); }
+.cb-note--ref       { border-inline-start-color: var(--gj-ink-soft); }
+
+/* ─── cb-var-detail — expanded variety panel (inline) ──────────────── */
+.cb-var__row--expanded {
+  background: var(--gj-paper);
+  border: 1px solid var(--gj-line);
+}
+.cb-var-detail {
+  padding: 14px 14px 16px;
+  background: var(--gj-paper);
+  border-radius: 10px;
+  border: 1px solid var(--gj-line);
+  margin-bottom: 10px;
+}
+.cb-var-detail__head {
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed var(--gj-line);
+}
+.cb-var-detail__back {
+  appearance: none; border: 0; background: transparent;
+  font-family: inherit; font-size: 12px;
+  color: var(--gj-leaf-deep);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.cb-var-detail__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 0;
+  flex: 1;
+}
+
+/* ─── cb-var-conf — confidence indicator for a variety ─────────────── */
+.cb-var-conf {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--gj-paper-2);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.cb-var-conf__label {
+  color: var(--gj-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.cb-var-conf__score {
+  font-weight: 700;
+  color: var(--gj-ink);
+  font-variant-numeric: tabular-nums;
+}
+.cb-var-conf__tier {
+  font-weight: 700;
+  color: var(--gj-leaf-deep);
+  text-transform: uppercase;
+}
+
+/* ─── variety-fields — AC-DB-1 fallback DOM, more-info disclosure ──── */
+.variety-fields {
+  margin: 8px 0 0;
+}
+.variety-fields__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 6px 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--gj-line);
+  font-size: 12px;
+}
+.variety-fields__row:first-child { border-top: 0; }
+.variety-fields__row dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--gj-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin: 0;
+}
+.variety-fields__row dd {
+  font-family: var(--gj-font-head);
+  font-weight: 600;
+  font-size: 13px;
+  margin: 0;
+}
+.variety-fields__extras {
+  margin-top: 10px;
+}
+.variety-fields__extras > summary {
+  font-style: italic;
+  font-size: 12px;
+  color: var(--gj-ink-soft);
+  cursor: pointer;
+  padding: 4px 0;
+  list-style: none;
+}
+.variety-fields__extras > summary::-webkit-details-marker { display: none; }
+.variety-fields__extras > summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-inline-end: 6px;
+  font-style: normal;
+  transition: transform .15s;
+}
+.variety-fields__extras[open] > summary::before { transform: rotate(90deg); }
+.variety-fields__extras[open] > summary { color: var(--gj-ink); }
+
+/* ─── cb-search-input + cb-cropgrid (B4 search/results) ────────────── */
+.cb-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gj-line);
+  border-radius: 99px;
+  background: var(--gj-paper);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--gj-ink);
+  box-sizing: border-box;
+}
+.cb-search-input::placeholder { color: var(--gj-ink-soft); }
+.cb-cropgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}

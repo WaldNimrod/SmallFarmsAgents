@@ -304,3 +304,101 @@
   font-family: "JetBrains Mono", monospace;
   margin: 8px 0 0;
 }
+
+/* ─── R1+R2 BEM extensions ─────────────────────────────────────────── */
+
+/* ─── contact-card icon (community.php emits .contact-card__icon at top, */
+/*     instead of the hub.css .contact-card__art photo block; the icon is */
+/*     a simple decorative emoji/glyph centered above the title)           */
+.contact-card__icon {
+  display: block;
+  font-size: 48px;
+  line-height: 1;
+  text-align: center;
+  padding: var(--gj-sp-5) 0 var(--gj-sp-3);
+  color: var(--gj-tomato);
+}
+
+/* ─── contact-card sub-line (extends hub.css block) ────────────────── */
+.contact-card__sub {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--gj-paper) 60%, var(--gj-sun));
+  margin-top: 8px;
+}
+
+/* ─── Community page layout ────────────────────────────────────────── */
+.community {
+  padding: 14px 18px 80px;
+}
+.community__feed {
+  margin: 16px 0;
+}
+.community__feed-h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--gj-line);
+}
+.community__tiers {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--gj-line);
+}
+.community__tiers-h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+/* ─── Search page layout ───────────────────────────────────────────── */
+.search-page {
+  padding: 14px 18px 80px;
+}
+.search-page__head {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--gj-line);
+}
+.search-page__meta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  margin-top: 4px;
+}
+.search-page__empty {
+  margin: 24px 0;
+  padding: 24px 16px;
+  background: var(--gj-paper-2);
+  border-radius: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gj-ink-soft);
+  line-height: 1.55;
+}
+
+/* ─── Search section (per-domain result group) ─────────────────────── */
+.search-section {
+  margin: 18px 0;
+}
+.search-section__h {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 8px;
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--gj-line);
+}
+.search-section__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
