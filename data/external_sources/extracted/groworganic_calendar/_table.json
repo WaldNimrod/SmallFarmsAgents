@@ -1,0 +1,985 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:groworganic_calendar_v1",
+  "provenance": {
+    "file": "L01_GROWORGANIC_sowing_dates_base.xlsx",
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-05-28"
+  },
+  "crops": [
+    {
+      "crop_he": "אלפלפא",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Alfalfa"
+    },
+    {
+      "crop_he": "ארטישוק (קנרס תר')",
+      "seed_months": [
+        3,
+        4
+      ],
+      "transplant_months": [
+        1,
+        2,
+        8
+      ],
+      "notes": "variety: Artichokes"
+    },
+    {
+      "crop_he": "אספרגוס",
+      "seed_months": [
+        3,
+        4
+      ],
+      "transplant_months": [],
+      "notes": "variety: Asparagus"
+    },
+    {
+      "crop_he": "שעועית",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Beans"
+    },
+    {
+      "crop_he": "פול",
+      "seed_months": [
+        1,
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: bean.Fava"
+    },
+    {
+      "crop_he": "לימה",
+      "seed_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "transplant_months": [],
+      "notes": "variety: bean.Lima"
+    },
+    {
+      "crop_he": "מטפסת",
+      "seed_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "transplant_months": [],
+      "notes": "variety: bean.Pole"
+    },
+    {
+      "crop_he": "שעועית",
+      "seed_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "transplant_months": [],
+      "notes": "variety: bean.Snap"
+    },
+    {
+      "crop_he": "לוביה",
+      "seed_months": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "transplant_months": [],
+      "notes": "variety: bean.lobia"
+    },
+    {
+      "crop_he": "סלק",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        6,
+        7,
+        8
+      ],
+      "notes": "variety: Beet"
+    },
+    {
+      "crop_he": "ברוקולי",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transplant_months": [
+        7,
+        8,
+        9
+      ],
+      "notes": "variety: Broccoli"
+    },
+    {
+      "crop_he": "כרוב ניצנים",
+      "seed_months": [
+        4,
+        5,
+        10
+      ],
+      "transplant_months": [
+        6,
+        7,
+        8
+      ],
+      "notes": "variety: Brussels Sprouts"
+    },
+    {
+      "crop_he": "כרוב",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Cabbage"
+    },
+    {
+      "crop_he": "כרוב סיני",
+      "seed_months": [
+        9,
+        10,
+        11
+      ],
+      "transplant_months": [
+        1,
+        2,
+        12
+      ],
+      "notes": "variety: Cabbage.chinese"
+    },
+    {
+      "crop_he": "כרוב אדום",
+      "seed_months": [
+        3,
+        4,
+        5
+      ],
+      "transplant_months": [
+        1,
+        2,
+        6,
+        7,
+        12
+      ],
+      "notes": "variety: Cabbage.Red"
+    },
+    {
+      "crop_he": "כרוב לבן",
+      "seed_months": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        11
+      ],
+      "transplant_months": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        12
+      ],
+      "notes": "variety: Cabbage.White"
+    },
+    {
+      "crop_he": "כרוב קאייל",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Cabbage.Kale"
+    },
+    {
+      "crop_he": "כרוב קולרד",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Cabbage.Collards"
+    },
+    {
+      "crop_he": "גזר",
+      "seed_months": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Carrot"
+    },
+    {
+      "crop_he": "כרובית",
+      "seed_months": [],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Cauliflower"
+    },
+    {
+      "crop_he": "סלרי עלים (כרפס)",
+      "seed_months": [],
+      "transplant_months": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "notes": "variety: Celery leaf"
+    },
+    {
+      "crop_he": "סלרי שורש (כרפס)",
+      "seed_months": [],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Celery root"
+    },
+    {
+      "crop_he": "עולש (ציקוריה)",
+      "seed_months": [
+        5,
+        6
+      ],
+      "transplant_months": [],
+      "notes": "variety: Chicory"
+    },
+    {
+      "crop_he": "תלתן",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Clover"
+    },
+    {
+      "crop_he": "תירס מתוק",
+      "seed_months": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "transplant_months": [],
+      "notes": "variety: Corn"
+    },
+    {
+      "crop_he": "מלפפון",
+      "seed_months": [
+        4,
+        5
+      ],
+      "transplant_months": [
+        2,
+        3,
+        8,
+        9,
+        10,
+        11
+      ],
+      "notes": "variety: Cucumber"
+    },
+    {
+      "crop_he": "חציל",
+      "seed_months": [],
+      "transplant_months": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "notes": "variety: Egg Plant"
+    },
+    {
+      "crop_he": "חזרת",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: HorseRadish"
+    },
+    {
+      "crop_he": "חימצה (חומוס)",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Humus"
+    },
+    {
+      "crop_he": "קולורבי",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Kohl Rabi"
+    },
+    {
+      "crop_he": "כרישה (כרתי,לוף)",
+      "seed_months": [],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "notes": "variety: Leek"
+    },
+    {
+      "crop_he": "חסה",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Lettuce"
+    },
+    {
+      "crop_he": "ראש",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Lettuce.butterhead"
+    },
+    {
+      "crop_he": "איסברג",
+      "seed_months": [],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Lettuce.Iceberg"
+    },
+    {
+      "crop_he": "יריחו",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Lettuce.jerico"
+    },
+    {
+      "crop_he": "אדום",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Lettuce.red salad"
+    },
+    {
+      "crop_he": "ציקוריה",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Lettuce.Endive"
+    },
+    {
+      "crop_he": "סילקה (מנגולד)",
+      "seed_months": [
+        2,
+        3,
+        8,
+        9,
+        10
+      ],
+      "transplant_months": [
+        4,
+        5,
+        6,
+        7,
+        11,
+        12
+      ],
+      "notes": "variety: Mangold"
+    },
+    {
+      "crop_he": "מלון",
+      "seed_months": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transplant_months": [
+        1,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Melons"
+    },
+    {
+      "crop_he": "חרדל",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Mustard"
+    },
+    {
+      "crop_he": "במיה",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Okra"
+    },
+    {
+      "crop_he": "בצלים",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Onions"
+    },
+    {
+      "crop_he": "שורש",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: onions.Dry"
+    },
+    {
+      "crop_he": "מצרי",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12
+      ],
+      "notes": "variety: onions.Egypt"
+    },
+    {
+      "crop_he": "ירוק",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: onions.Green"
+    },
+    {
+      "crop_he": "לבן",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12
+      ],
+      "notes": "variety: onions.white"
+    },
+    {
+      "crop_he": "פטרוזליה",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Parsley"
+    },
+    {
+      "crop_he": "מסולסלת",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: parsley.curly"
+    },
+    {
+      "crop_he": "עלים",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: parsley.leaf"
+    },
+    {
+      "crop_he": "שורש",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: parsley.root"
+    },
+    {
+      "crop_he": "גזר לבן",
+      "seed_months": [
+        2,
+        3,
+        5
+      ],
+      "transplant_months": [],
+      "notes": "variety: Parsnip"
+    },
+    {
+      "crop_he": "בוטנים",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Peanuts"
+    },
+    {
+      "crop_he": "אפונה",
+      "seed_months": [
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Peas"
+    },
+    {
+      "crop_he": "פלפל",
+      "seed_months": [
+        4,
+        5,
+        6
+      ],
+      "transplant_months": [
+        2,
+        3
+      ],
+      "notes": "variety: Pepper"
+    },
+    {
+      "crop_he": "מתוק",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Pepper.sweet"
+    },
+    {
+      "crop_he": "חריף",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Pepper.hot"
+    },
+    {
+      "crop_he": "תפוח אדמה",
+      "seed_months": [],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "notes": "variety: Potatoes"
+    },
+    {
+      "crop_he": "בטטה",
+      "seed_months": [],
+      "transplant_months": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "notes": "variety: Potatoes (sweet)"
+    },
+    {
+      "crop_he": "דלעת",
+      "seed_months": [
+        3,
+        4,
+        5
+      ],
+      "transplant_months": [
+        9
+      ],
+      "notes": "variety: Pumpkin"
+    },
+    {
+      "crop_he": "צנון",
+      "seed_months": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Radish"
+    },
+    {
+      "crop_he": "ריבס",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Rhubarb"
+    },
+    {
+      "crop_he": "שורש",
+      "seed_months": [],
+      "transplant_months": [],
+      "notes": "variety: Rutabaga"
+    },
+    {
+      "crop_he": "שומשום",
+      "seed_months": [
+        4,
+        5,
+        6
+      ],
+      "transplant_months": [],
+      "notes": "variety: Sesame"
+    },
+    {
+      "crop_he": "סויה",
+      "seed_months": [
+        3,
+        4,
+        5
+      ],
+      "transplant_months": [],
+      "notes": "variety: Soy"
+    },
+    {
+      "crop_he": "תרד",
+      "seed_months": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3
+      ],
+      "notes": "variety: Spinach"
+    },
+    {
+      "crop_he": "קישוא",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [
+        6,
+        7,
+        8
+      ],
+      "notes": "variety: Squash"
+    },
+    {
+      "crop_he": "זוקיני",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        12
+      ],
+      "transplant_months": [
+        5
+      ],
+      "notes": "variety: Squash.Zuchinni"
+    },
+    {
+      "crop_he": "תות שדה",
+      "seed_months": [
+        1,
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Strawberry"
+    },
+    {
+      "crop_he": "סלק עלים",
+      "seed_months": [],
+      "transplant_months": [
+        9
+      ],
+      "notes": "variety: swiss chard"
+    },
+    {
+      "crop_he": "עגבניה",
+      "seed_months": [],
+      "transplant_months": [
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "notes": "variety: Tomato"
+    },
+    {
+      "crop_he": "לפת",
+      "seed_months": [
+        1,
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "transplant_months": [],
+      "notes": "variety: Turnip"
+    },
+    {
+      "crop_he": "אבטיח",
+      "seed_months": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transplant_months": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "notes": "variety: Watermelon"
+    }
+  ]
+}

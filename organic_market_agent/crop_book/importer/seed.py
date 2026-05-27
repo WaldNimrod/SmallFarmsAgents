@@ -654,6 +654,14 @@ def main() -> None:
         help="Run WP-D importers only (Cursor web research — 16-crop expansion batches)",
     )
     mode.add_argument(
+        "--openai-only", action="store_true",
+        help="Run WP-E importer only (OpenAI Tier 1 university-extension research, 24 crops)",
+    )
+    mode.add_argument(
+        "--idan-only", action="store_true",
+        help="Run WP-F importer only (Idan farm seasonal planning records, L03/L04/L49)",
+    )
+    mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
         help="Import named crops (Tend English names, e.g. Arugula Broccoli)",
     )
@@ -745,10 +753,10 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only and not args.openai_only and not args.idan_only:
         parser.error(
-            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --wd-only, --jmf-only, --ni-only, "
-            "or --crops NAME [NAME ...]"
+            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --wd-only, --openai-only, --idan-only, "
+            "--jmf-only, --ni-only, or --crops NAME [NAME ...]"
         )
 
     # ── C4-only fast path (WP-C4 LOD400 §6) ──
@@ -810,6 +818,30 @@ def main() -> None:
             logger.info("Enrichment: %s", enrich_summary)
             session.commit()
         logger.info("WP-D complete: %s", summary)
+        return
+
+    # ── OpenAI-only fast path (WP-E: university-extension research, 24 crops) ──
+    if args.openai_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+        from organic_market_agent.crop_book.importer.ni.openai_tier1_research import ingest as _openai_ingest
+
+        with SessionFactory() as session:
+            summary = _openai_ingest(session)
+            session.commit()
+        logger.info("WP-E complete: %s", summary)
+        return
+
+    # ── Idan-only fast path (WP-F: Israeli operator farm planning L03/L04/L49) ──
+    if args.idan_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+        from organic_market_agent.crop_book.importer.ni.idan_planner import ingest as _idan_ingest
+
+        with SessionFactory() as session:
+            summary = _idan_ingest(session)
+            session.commit()
+        logger.info("WP-F complete: %s", summary)
         return
 
     # ── NI-only fast path (AC-13): runs BEFORE any JMF/Tend/Tend-overlay work ──
@@ -971,6 +1003,20 @@ def main() -> None:
                 ingest as _wd_ingest,
             )
             _wd_ingest(session)
+            session.flush()
+
+        if args.all and not getattr(args, "no_openai", False):
+            from organic_market_agent.crop_book.importer.ni.openai_tier1_research import (
+                ingest as _openai_ingest,
+            )
+            _openai_ingest(session)
+            session.flush()
+
+        if args.all and not getattr(args, "no_idan", False):
+            from organic_market_agent.crop_book.importer.ni.idan_planner import (
+                ingest as _idan_ingest,
+            )
+            _idan_ingest(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)
