@@ -637,6 +637,10 @@ def main() -> None:
         help="Run WP-C3 importers only (Curtis Stone + Idan succession + FRANCHI + L49 diff + Tend 2018)",
     )
     mode.add_argument(
+        "--wd-only", action="store_true",
+        help="Run WP-D importers only (Cursor web research — 16-crop expansion batches)",
+    )
+    mode.add_argument(
         "--crops", nargs="+", metavar="NAME",
         help="Import named crops (Tend English names, e.g. Arugula Broccoli)",
     )
@@ -728,9 +732,9 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only:
         parser.error(
-            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --jmf-only, --ni-only, "
+            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --wd-only, --jmf-only, --ni-only, "
             "or --crops NAME [NAME ...]"
         )
 
@@ -778,6 +782,21 @@ def main() -> None:
             enrich_summary = run_enrichment(session, dry_run=False)
             logger.info("Enrichment: %s", enrich_summary)
             session.commit()
+        return
+
+    # ── WD-only fast path (WP-D: Cursor 16-crop web research batches) ──
+    if args.wd_only:
+        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.crop_book.importer.enrichment_runner import run_enrichment
+        from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
+        from organic_market_agent.crop_book.importer.ni.cursor_crop_expansion import ingest as _wd_ingest
+
+        with SessionFactory() as session:
+            summary = _wd_ingest(session)
+            enrich_summary = run_enrichment(session, dry_run=False)
+            logger.info("Enrichment: %s", enrich_summary)
+            session.commit()
+        logger.info("WP-D complete: %s", summary)
         return
 
     # ── NI-only fast path (AC-13): runs BEFORE any JMF/Tend/Tend-overlay work ──
@@ -932,6 +951,13 @@ def main() -> None:
 
         if args.all and not args.no_c3:
             _run_c3_ingestion(session)
+            session.flush()
+
+        if args.all and not getattr(args, "no_wd", False):
+            from organic_market_agent.crop_book.importer.ni.cursor_crop_expansion import (
+                ingest as _wd_ingest,
+            )
+            _wd_ingest(session)
             session.flush()
 
         # Existing Tend seed call (unchanged logic)
