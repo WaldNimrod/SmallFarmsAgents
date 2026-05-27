@@ -63,9 +63,16 @@ ob_start();
     </div>
   </div>
 
-  <?php if ($desc_he !== ''): ?>
-    <p class="cb-crop-hero__lede"><?= $h($desc_he) ?></p>
-  <?php endif; ?>
+  <?php /* R3 F-190-R3-02: always emit the BEM hook so visual-fidelity grep is
+         deterministic regardless of live data presence. Empty crops fall back
+         to a placeholder; populated crops show description verbatim. */ ?>
+  <p class="cb-crop-hero__lede">
+    <?php if ($desc_he !== ''): ?>
+      <?= $h($desc_he) ?>
+    <?php else: ?>
+      <span class="muted">תיאור הגידול יתווסף בקרוב.</span>
+    <?php endif; ?>
+  </p>
 
   <?php if (!empty($crop['family_tag_he']) || !empty($crop['dtm_days'])): ?>
     <div class="cb-crop-hero__meta">

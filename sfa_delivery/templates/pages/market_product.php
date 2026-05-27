@@ -75,10 +75,12 @@ ob_start();
   </div>
 </section>
 
-<?php /* History table — 28-day window */ ?>
-<?php if (!empty($hist_rows)): ?>
-  <section class="gj-pricehist">
-    <h2 class="gj-pricehist__h">היסטוריה — 28 ימים אחרונים</h2>
+<?php /* History table — 28-day window.
+     R3 F-190-R3-02: always emit the .gj-pricehist section so visual-fidelity
+     grep is deterministic; empty data shows an explicit placeholder row. */ ?>
+<section class="gj-pricehist">
+  <h2 class="gj-pricehist__h">היסטוריה — 28 ימים אחרונים</h2>
+  <?php if (!empty($hist_rows)): ?>
     <table class="gj-pricehist__table">
       <thead>
         <tr>
@@ -102,8 +104,10 @@ ob_start();
         <?php endforeach; ?>
       </tbody>
     </table>
-  </section>
-<?php endif; ?>
+  <?php else: ?>
+    <p class="gj-pricehist__empty muted">אין נתוני היסטוריה זמינים עבור 28 הימים האחרונים.</p>
+  <?php endif; ?>
+</section>
 
 <?php /* Cross-link to crop book (COMPONENTS.md §4 — market-to-book direction) */ ?>
 <?php if ($book_slug !== ''):

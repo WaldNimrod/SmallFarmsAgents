@@ -15,7 +15,11 @@ final class HubController
      * Hub DB handle is optional — when null the search page degrades to an empty
      * result set (modules/tier pages still render without DB access).
      */
-    public function __construct(private ?PDO $pdo = null)
+    // R3 F-190-R3-01 fix: PDO required (was `?PDO $pdo = null` which made PHP-DI
+    // skip injection, leaving search() with null PDO and empty result sets even
+    // though /api/v1/search worked). Matches ProductsController/CropsController/
+    // SearchController pattern. Bootstrap registers \PDO::class singleton.
+    public function __construct(private PDO $pdo)
     {
     }
 
