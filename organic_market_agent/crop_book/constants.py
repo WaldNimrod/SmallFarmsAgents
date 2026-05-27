@@ -59,6 +59,13 @@ TEND_CROP_MAP: dict[str, str] = {
     "Turmeric": "כורכום",
     "Turnips": "לפת",
     "Winter Squash": "דלעת",
+    # ── New crops added 2026-05-27 (were in Tend CSVs but not mapped) ──
+    "Cauliflower": "כרובית",        # id=75 — 4 years of Tend data
+    "Okra": "במיה",                 # id=77 — 3 years of Tend data
+    "Corn": "תירס",                 # id=80 — 1 year of Tend data
+    "Soybeans": "סויה",             # id=86 — 3 years of Tend data
+    "Sunflower": "חמניה",           # id=84 — 2 years of Tend data
+    "Beans: Fava": "פול",           # id=78 — fava bean
 }
 
 TEND_FAMILY_MAP: dict[str, str] = {
