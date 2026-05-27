@@ -1958,11 +1958,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C3
   label: "ספר גידולים: Wave 3 — Secondary Sources + OCR + Backlog Sweep"
-  status: PROPOSED
+  status: DONE
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-27"
+  archive_ref: "_archive/SFA-S003-P002-WP-C3/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1988,8 +1990,56 @@ work_packages:
       + crop_knowledge_notes. Possible GCR-C3-1 if succession_interval_weeks
       field absent (builder verifies)."
     validator: team_10
-  notes: "WP-C3 depends on C1 (needs Tend baseline + Idan baseline). OCR
-    pipeline cost cap $5. Authorized 2026-05-26 by team_00."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-27"
+    commit: "99c1971"
+    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 10/10 ACs.
+      validate_aos.sh 29 PASS / 19 SKIP / 0 FAIL. 12/12 focused tests green.
+      Curtis Stone L40 XLSX + L41 OCR pipeline + Idan L05a/b + L06 FRANCHI
+      + L49 diff + Tend 2018 investigation — all merged into existing
+      tables (crop_variety_source_values + crop_knowledge_notes; no new
+      tables per spec). Handoff: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-C3/HANDOFF_TO_190_SFA-S003-P002-WP-C3_2026-05-27_v1.md"
+    validator: sfa_build
+  - gate: L-GATE_V
+    result: BLOCKED
+    round: 1
+    date: "2026-05-27"
+    reviewed_commit: "99c1971"
+    notes: "team_190 (GPT-5.5 / Cursor — non-Claude per IR#1) R1. BLOCKED.
+      1 BLOCKER (F-C3-LV-01: validate_enrichment.py returned MISALIGNED for
+      Curtis DTM rows — Israeli-context calibration harness shifted).
+      2 MAJOR evidence discrepancies (Curtis OCR count, FRANCHI mapping).
+      Verdict: _COMMUNICATION/TEAM_190/VERDICT_SFA-S003-P002-WP-C3_L-GATE_V_v1.0.0.md"
+    validator: team_190
+    findings:
+    - id: F-C3-LV-01
+      severity: BLOCKER
+      summary: "Curtis DTM rows shifted Israeli-context calibration harness — CALIBRATED!=5"
+      remediation: "Curtis DTM upsert with confidence_weight=0 (field-specific moderation)"
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-27"
+    reviewed_commit: "ffbc7fa"
+    notes: "team_190 (GPT-5.5 / Cursor) R2. PASS clean (no new findings).
+      F-C3-LV-01 RESOLVED via Curtis DTM upsert with confidence_weight=0
+      (curtis_profiles_importer.py:153,:160-161). validate_enrichment.py:
+      CALIBRATED=5 MARGINAL=0 MISALIGNED=0. Live DB query confirms 10/10
+      Curtis DTM rows at weight 0. 12/12 tests passed. validate_aos.sh 29
+      PASS / 19 SKIP / 0 FAIL. LOCKED_MATCH_COUNT:0 (no protected-file
+      violations). F-C3-LV-02 + F-C3-LV-03 sufficiently documented in
+      REMEDIATION_REPORT_v1.0.0.md. Verdict:
+      _COMMUNICATION/TEAM_190/VERDICT_SFA-S003-P002-WP-C3_L-GATE_V_v1.0.1.md.
+      Remediation: _COMMUNICATION/TEAM_10/SFA-S003-P002-WP-C3/REMEDIATION_REPORT_v1.0.0.md"
+    validator: team_190
+  notes: "COMPLETE 2026-05-27 at commit ffbc7fa. WP-C3 third wave of
+    external sources: Curtis Stone OCR + Idan L05 + FRANCHI L06 + L49 diff +
+    Tend 2018 — all merged into existing tables (no schema additions).
+    R1 BLOCKED by Curtis DTM calibration drift; R2 PASS via field-specific
+    confidence_weight=0 moderation. Closure: ADR042 3-step under team_00
+    Q2=A approval 2026-05-27 20:00 IDT (Decision Brief response). Archive
+    mandate routed to team_191 at MANDATE_SFA-S003-P002-WP-C3-ARCHIVE_v1.0.0.md."
   profile: L0
 
 - id: SFA-S003-P002-WP-C4
