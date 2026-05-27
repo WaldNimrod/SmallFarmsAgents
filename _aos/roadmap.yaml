@@ -2155,3 +2155,137 @@ work_packages:
     for crops/fields where team_00 has authoritative knowledge. Activation
     blocked on C2+C3 closure. Authorized 2026-05-26 by team_00."
   profile: L0
+
+# ============================================================================
+# S003-P002-WP-UI — UX shell + design adoption (Slim/PHP, uPress)
+# Opened 2026-05-24. RE-BUILD cycle 2026-05-27→2026-05-28 after team_00 audit
+# REVOKED the initial L-GATE_V R2 PASS (visual fidelity gap — ~91% dead CSS).
+# Cross-engine: builders + orchestrator Claude family; team_190 GPT-5.5 validator.
+# ============================================================================
+
+- id: SFA-S003-P002-WP-UI
+  label: "UX shell + design adoption (Slim/PHP, uPress) — team_35 LOD300 → live sfa.nimrod.bio"
+  status: DONE
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-28"
+  archive_ref: "_archive/SFA-S003-P002-WP-UI/ARCHIVE_MANIFEST.md"
+  assigned_builder: sfa_build_then_team_100_REBUILD
+  assigned_validator: external
+  created_at: "2026-05-24"
+  milestone_ref: "S003"
+  production_url: "https://sfa.nimrod.bio/"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-UI/LOD400_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-24"
+    notes: "team_00 in-session approval. Adopt team_35 LOD300 design (CSS, tokens,
+      components, modules registry, routes) onto already-deployed Slim/PHP/uPress
+      stack (NOT team_35's Flask spec — superseded per DECISION_SFA-S003-P003)."
+    validator: team_00
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    round: 1
+    date: "2026-05-27"
+    notes: "team_190 L-GATE_S R1. 5 findings (LV-S-1 BLOCKER community-writes,
+      LV-S-2 BLOCKER /book/* URL contract, LV-S-3 MAJOR AC coverage, LV-S-4 MAJOR
+      test env, LV-S-5 MINOR B.8 budget). LOD400 v1.0.1 amendment authored same
+      session resolving all five."
+    validator: team_190
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    round: 2
+    date: "2026-05-27"
+    notes: "team_190 L-GATE_S R2. PASS_WITH_FINDINGS (LV-S-6/7 stale text in §0/§3
+      cleaned post-verdict as LOD400 v1.0.2). LOD400_LOCKED."
+    validator: team_190
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-27"
+    commit: "740ea2c"
+    notes: "Original BUILD (team_10 Codex BUILD_PARTIAL 4d1888f → team_100 BUILD_COMPLETE
+      1fdd396 → BUILD_COMPLETE_CLEAN 740ea2c, F-BUILD-04 + F-BUILD-05 RESOLVED).
+      Stack: Slim/PHP/PHP-DI in sfa_delivery/."
+    validator: sfa_build_team_100
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 1
+    date: "2026-05-27"
+    reviewed_commit: "1fdd396"
+    status: STALE
+    notes: "team_190 R1 (GPT-5.5 Cursor) — STALE: reviewed commit superseded same
+      day by 740ea2c which fix-forwarded LV-V-1 (Hebrew variety slug) + LV-V-2
+      (raw JSON variety detail). Verdict: VERDICT_SFA-S003-P002-WP-UI_L-GATE_V_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-27"
+    reviewed_commit: "740ea2c"
+    status: REVOKED_BY_TEAM_00
+    notes: "team_190 R2 (GPT-5.5 Cursor) — TECHNICALLY PASS on the VCs checked but
+      REVOKED by team_00 personal audit. Live HTML did not match team_35 LOD300:
+      Codex used invented class names (e.g., .module-card vs COMPONENTS.md .mod-card)
+      leaving ~91% of 75KB design CSS as dead code. team_00 commit dfb8cf1 on
+      claude/gallant-elbakyan-727a60 issued MANDATE_WP-UI-RE-BUILD_v1.0.0.md."
+    validator: team_190
+    revoked_by: team_00
+    revoke_date: "2026-05-27"
+    revoke_mandate: "_COMMUNICATION/TEAM_100/MANDATE_WP-UI-RE-BUILD_v1.0.0.md"
+  - gate: L-GATE_B
+    result: PASS
+    round: RE-BUILD
+    date: "2026-05-28"
+    commit: "ea77818"
+    branch: "claude/sfa-ui-build-v2"
+    notes: "RE-BUILD by team_100 (Claude Opus 4.7 orchestrator) + 12 sub-agents
+      (B1 shells, B2 macros, B3 hub, B4 crop-book, B5 market, B6 community+search,
+      B7 sfa.js+icons, R-Controllers, R-CSS, D1 deploy, D2 Playwright, + 4 research
+      agents). LOD400 v1.0.3 §0.5 Q1=A team_00 approved BEM-SSoT: COMPONENTS.md
+      class names emitted verbatim. R1+R2+repair+5 visual-audit hotfixes. 14
+      page templates rewritten, 4 legacy templates deleted. AC-DB-1 variety-fields__extras
+      fallback for parallel-session schema. knowledge_notes is_internal_farm_use_only
+      gate. -32768 DTM sentinel at 4 touchpoints. Inline SVG sprite (Chrome external
+      <use> CORS workaround). asset_ver max(filemtime) cache-bust. BUILD_REPORT
+      v2.0.0 consolidates."
+    validator: team_100
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 3
+    date: "2026-05-28"
+    reviewed_commit: "e7e8bb7"
+    evidence_commit: "c898c0a"
+    notes: "team_190 R3 (GPT-5.5 non-Claude). PASS_WITH_FINDINGS. F-190-R3-01
+      MAJOR (HubController ?PDO=null skipped DI autowire → search empty) + F-190-R3-02
+      MINOR (cb-crop-hero__lede + gj-pricehist conditional). 2 INFO. Verdict:
+      VERDICT_WP-UI_L-GATE_V_R3_v1.0.0.md"
+    validator: team_190
+    findings:
+    - id: F-190-R3-01
+      severity: MAJOR
+      summary: "HubController PDO optional → DI skip → /search empty despite API hits"
+    - id: F-190-R3-02
+      severity: MINOR
+      summary: "cb-crop-hero__lede + gj-pricehist conditionally emitted (data-empty)"
+  - gate: L-GATE_V
+    result: PASS
+    round: 4
+    date: "2026-05-28"
+    reviewed_commit: "f2a761b"
+    notes: "team_190 R4 (GPT-5.5 non-Claude). PASS clean. All 3 narrow re-check
+      tasks confirmed: search-section count 12 for Hebrew עגבנייה (R3 was 0);
+      cb-crop-hero__lede count 2; gj-pricehist count 6; validate_aos 29/19/0;
+      diff scope matched exactly 3 mandated files. Verdict: VERDICT_WP-UI_L-GATE_V_R4_v1.0.0.md
+      (commit 4517010 main). LOD500_LOCKED authorized."
+    validator: team_190
+  notes: "COMPLETE 2026-05-28 at commit f2a761b. Production live https://sfa.nimrod.bio/
+    on uPress s1240. Full BEM contract per COMPONENTS.md (LOD400 v1.0.3 §0.5).
+    AC-DB-1 unknown-field fallback live. mk-disclaimer 4-bullets verbatim.
+    Community ZERO <form> (LV-S-1 binding). Lighthouse mobile P=87 A=95 BP=96
+    SEO=100. 42 Playwright screenshots × 3 viewports × 14 routes = 0 violations.
+    Closure: ADR042 3-step under team_190 R4 PASS. Archive mandate routed to
+    team_191. Merge claude/sfa-ui-build-v2 → main commit ae9284a."
+  profile: L0
