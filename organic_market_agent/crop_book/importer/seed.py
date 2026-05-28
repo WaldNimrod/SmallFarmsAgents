@@ -1065,6 +1065,14 @@ def main() -> None:
             _gemini_ingest(session)
             session.flush()
 
+        if args.all and not getattr(args, "no_claude_sparse", False):
+            # WP-C6: sparse-crop WR expansion (19 crops -> >=6 enriched fields).
+            from organic_market_agent.crop_book.importer.ni.claude_sparse_crops_research import (
+                ingest as _claude_sparse_ingest,
+            )
+            _claude_sparse_ingest(session)
+            session.flush()
+
         # Existing Tend seed call (unchanged logic)
         seed(
             session=session,
