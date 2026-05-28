@@ -1,9 +1,10 @@
 """FTPS upload to uPress — push local publish artifacts to the remote server.
 
-⚠️ DEPRECATED 2026-05-24 (SFA-S003-P003-WP-5 cutover) ⚠️
-Replaced by `sfa_ingest_push.py`. FTPS uploads of static HTML/JSON
-artifacts to /smallfarmsagent/ are no longer the user-facing path.
-Kept for archaeological reference only.
+⚠️ RETIRED 2026-05-28 (team_100 re-point, sever-www-legacy) ⚠️
+Superseded by `sfa_ingest_push.py` (DB→API push to sfa.nimrod.bio).
+FTPS uploads to /smallfarmsagents/ on www.nimrod.bio are no longer the
+user-facing path (target host DEAD). Kept for archaeological reference;
+do NOT invoke. Port 21 is also blocked on waldhomeserver (Bezeq egress).
 
 
 

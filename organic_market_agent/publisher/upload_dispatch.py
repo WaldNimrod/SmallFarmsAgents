@@ -1,10 +1,13 @@
 """Shared upload dispatch helper — static endpoint primary, optional FTPS fallback.
 
-⚠️ DEPRECATED 2026-05-24 (SFA-S003-P003-WP-5 cutover) ⚠️
-Replaced by `sfa_ingest_push.py`. The dispatch chain
-upload_dispatch → wp_upload / ftps_upload → www.nimrod.bio/smallfarmsagent/
-is no longer the user-facing path. Keep only for archaeological
-reference; do NOT add new callers.
+⚠️ RETIRED 2026-05-28 (team_100 re-point, sever-www-legacy) ⚠️
+Superseded by `sfa_ingest_push.py` (DB→API push to sfa.nimrod.bio).
+The entire legacy dispatch chain:
+  upload_dispatch → wp_upload / ftps_upload / static_upload → www.nimrod.bio
+targets a DEAD endpoint (404; REST namespace /wp-json/sfagent/v1/upload no longer
+registered). `dispatch_upload()` raises NoUploadConfigured immediately when the
+resolved WP-REST/public host is empty or matches nimrod.bio / www.nimrod.bio
+(but not sfa.nimrod.bio). Do NOT add new callers.
 
 
 
@@ -90,6 +93,17 @@ def dispatch_upload(
     Raises:
         NoUploadConfigured: When no upload method is configured.
     """
+    # --- Retirement guard: reject any call that would target the dead main domain ---
+    _rest_base = (Config.UPRESS_WP_REST_BASE or "").lower().rstrip("/")
+    _pub_base = (Config.UPRESS_PUBLIC_BASE or "").lower().rstrip("/")
+    _DEAD_HOSTS = ("nimrod.bio", "www.nimrod.bio", "https://nimrod.bio", "https://www.nimrod.bio")
+    for _target in (_rest_base, _pub_base):
+        if _target and any(_target == h or _target.startswith(h + "/") for h in _DEAD_HOSTS):
+            raise NoUploadConfigured(
+                "legacy www.nimrod.bio upload path is retired; "
+                "delivery is now sfa_ingest_push → sfa.nimrod.bio"
+            )
+
     # --- Crop book profile: WP REST only, no FTPS fallback ---
     if profile == "crop_book":
         if not Config.wp_rest_configured():

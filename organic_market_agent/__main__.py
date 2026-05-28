@@ -570,8 +570,9 @@ def crop_book_publish_cmd(output_dir: str, upload: bool, set_mou_url: bool) -> N
 
                 wp_user = os.environ.get("UPRESS_WP_APP_USER", "").strip()
                 wp_pass = os.environ.get("UPRESS_WP_APP_PASS", "").replace(" ", "")
+                # Legacy www.nimrod.bio REST fallback RETIRED (2026-05-28); empty default.
                 rest_base = os.environ.get(
-                    "UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json"
+                    "UPRESS_WP_REST_BASE", ""
                 ).rstrip("/")
 
                 if not (wp_user and wp_pass):

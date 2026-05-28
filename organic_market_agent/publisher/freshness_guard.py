@@ -1,26 +1,31 @@
-"""Upload freshness guard — resilience backstop for WP003 publish gap.
+"""Delivery-tier health guard — sfa.nimrod.bio liveness and repair backstop.
 
 PURPOSE
 -------
-A transient DNS / NAT64 / endpoint blip in the 06:00 daily cron can leave the
-public market manifest stale for a full day, even though the on-host artifact
-generated successfully. This module compares on-host artifact_version against
-the public manifest's artifact_version and re-attempts the upload pipeline
-when they diverge.
+Verifies that the new delivery tier (sfa.nimrod.bio) is healthy and, when it
+is not reachable or the last ingest push failed, re-runs `sfa_ingest_push` as
+the canonical repair path.
 
 DESIGN PRINCIPLES
 -----------------
-* **Additive only.** This module never modifies `upload_dispatch.py` or the
-  collector / scheduler / static_upload code paths. It calls `dispatch_upload`
-  as a black box (the same code path the daily cron uses).
-* **Idempotent.** Safe to run repeatedly: if versions already match, it's a
-  no-op.
-* **Structured status.** Writes a JSON status file (`data/freshness_guard_status.json`)
-  so external monitors / next-cron / on-call humans can read the verdict
-  without parsing log lines.
-* **Exit code as signal.** Exits 0 when the public manifest is fresh
-  (already-fresh OR repaired-fresh). Exits non-zero when the gap persists
-  after re-upload — this is the signal for human attention.
+* **Health-first.** Checks GET ${SFA_PUBLIC_BASE}/api/v1/health first; expects
+  JSON ``{"status": "ok", "db": "ok"}``. If the tier is unreachable or unhealthy,
+  writes state="error" and exits non-zero — no repair is attempted against a
+  degraded tier.
+* **Repair = new tier only.** Calls ``sfa_ingest_push.main()`` programmatically
+  (the same code path as ``python -m organic_market_agent.publisher.sfa_ingest_push``).
+  Never calls ``dispatch_upload`` or any legacy www.nimrod.bio path.
+* **Idempotent.** Safe to run repeatedly: if the tier is healthy, it's a no-op.
+* **Structured status.** Writes ``data/freshness_guard_status.json`` so external
+  monitors / next-cron / on-call humans can read the verdict without parsing logs.
+* **Exit code as signal.** Exits 0 when healthy (already-fresh or repaired-ok).
+  Exits non-zero when the tier is unhealthy or the push fails after retry.
+* **Offline-safe.** Degrades gracefully when SFA host is unreachable — writes
+  state="error", exits non-zero, no crash.
+
+ENV
+---
+* ``SFA_PUBLIC_BASE`` — base URL for the delivery tier, e.g. ``https://sfa.nimrod.bio``
 
 INVOCATION
 ----------
@@ -33,13 +38,14 @@ Suggested cron — 30 min after the daily 06:00 pipeline::
         .venv/bin/python -m organic_market_agent.publisher.freshness_guard \
         >> logs/freshness_guard.log 2>&1
 
-Author: team_99 (Home Server Team) — WP003 Pass-3 remediation, 2026-05-28.
+Author: team_100 re-point 2026-05-28, supersedes team_99 www version.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import logging
+import os
 import sys
 import urllib.request
 import urllib.error
@@ -50,182 +56,168 @@ from typing import Optional
 
 logger = logging.getLogger("freshness_guard")
 
-DEFAULT_OUTPUT_DIR = Path("output/public")
 DEFAULT_STATUS_FILE = Path("data/freshness_guard_status.json")
 FETCH_TIMEOUT_SECONDS = 15
 
-LEGACY_PUBLIC_MANIFEST_URL = (
-    "https://www.nimrod.bio/wp-content/uploads/market/manifest.json"
-)
+# Env var that carries the sfa.nimrod.bio base URL
+SFA_PUBLIC_BASE_ENV = "SFA_PUBLIC_BASE"
 
 
 @dataclass
 class GuardStatus:
     checked_at: str
-    on_host_version: Optional[str]
-    public_version: Optional[str]
-    public_url: Optional[str]
-    legacy_public_version: Optional[str]
-    state: str  # fresh | stale | repaired | repair_failed | missing_local | error
+    sfa_public_base: Optional[str]
+    health_url: Optional[str]
+    health_status: Optional[str]   # "ok" | "degraded" | "unreachable" | None
+    state: str  # healthy | repaired | repair_failed | tier_unhealthy | error
     repair_attempted: bool
-    repair_protocol_used: Optional[str]
     repair_errors: list[str]
     notes: list[str]
 
 
-def _read_local_manifest(output_dir: Path) -> dict:
-    path = output_dir / "manifest.json"
-    if not path.is_file():
-        raise FileNotFoundError(f"local manifest missing: {path}")
-    return json.loads(path.read_text(encoding="utf-8"))
+# ---------------------------------------------------------------------------
+# Health probe
+# ---------------------------------------------------------------------------
 
+def _probe_health(base_url: str) -> tuple[str, list[str]]:
+    """GET {base_url}/api/v1/health — returns (status_str, notes).
 
-def _fetch_remote_manifest(url: str) -> Optional[dict]:
+    status_str:
+      "ok"          — both ``status`` and ``db`` are "ok"
+      "degraded"    — reachable but health check returned unexpected values
+      "unreachable" — network error / timeout
+    """
+    url = base_url.rstrip("/") + "/api/v1/health"
     req = urllib.request.Request(
         url,
         headers={
-            "Cache-Control": "no-cache",
-            "User-Agent": "sfagent-freshness-guard/1.0 (+team_99 OPS)",
             "Accept": "application/json, */*;q=0.5",
+            "User-Agent": "sfagent-freshness-guard/2.0 (+team_100 OPS)",
+            "Cache-Control": "no-cache",
         },
     )
+    notes: list[str] = []
     try:
         with urllib.request.urlopen(req, timeout=FETCH_TIMEOUT_SECONDS) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+            body = json.loads(resp.read().decode("utf-8"))
+        s = body.get("status", "")
+        db = body.get("db", "")
+        if s == "ok" and db == "ok":
+            return "ok", notes
+        notes.append(f"health endpoint returned status={s!r} db={db!r}")
+        return "degraded", notes
     except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return None
-        logger.warning("HTTPError fetching %s: %s", url, exc)
-        return None
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-        logger.warning("Could not fetch %s: %s", url, exc)
-        return None
+        notes.append(f"HTTP {exc.code} from {url}")
+        return "unreachable", notes
+    except (urllib.error.URLError, TimeoutError) as exc:
+        notes.append(f"network error probing {url}: {exc}")
+        return "unreachable", notes
+    except json.JSONDecodeError as exc:
+        notes.append(f"non-JSON health response from {url}: {exc}")
+        return "degraded", notes
 
 
-def _public_manifest_url(local_manifest: dict) -> str:
-    base = (local_manifest.get("upload_base") or "").rstrip("/")
-    if not base:
-        return LEGACY_PUBLIC_MANIFEST_URL
-    return f"{base}/manifest.json"
+# ---------------------------------------------------------------------------
+# Repair: re-run sfa_ingest_push
+# ---------------------------------------------------------------------------
 
+def _attempt_repair() -> list[str]:
+    """Call sfa_ingest_push.main() programmatically.
 
-def _attempt_repair(output_dir: Path) -> tuple[Optional[str], list[str]]:
-    """Run the canonical dispatch_upload — same code path as daily cron."""
-    from organic_market_agent.publisher.upload_dispatch import (
-        NoUploadConfigured,
-        dispatch_upload,
-    )
-
+    Returns a list of error strings (empty = success).
+    """
     try:
-        result = dispatch_upload(output_dir=output_dir)
-        if result.success:
-            return result.protocol_used, []
-        return result.protocol_used, list(result.errors) or ["dispatch reported success=False with no errors"]
-    except NoUploadConfigured as exc:
-        return None, [f"NoUploadConfigured: {exc}"]
-    except Exception as exc:
-        return None, [f"{type(exc).__name__}: {exc}"]
+        from organic_market_agent.publisher import sfa_ingest_push
 
+        # sfa_ingest_push.main() reads sys.argv by default; pass empty list
+        # so it runs with defaults (--table all, no --dry-run).
+        exit_code = sfa_ingest_push.main()
+        if exit_code == 0:
+            return []
+        return [f"sfa_ingest_push.main() returned exit_code={exit_code}"]
+    except SystemExit as exc:
+        code = exc.code
+        if code == 0:
+            return []
+        return [f"sfa_ingest_push raised SystemExit({code})"]
+    except Exception as exc:
+        return [f"{type(exc).__name__}: {exc}"]
+
+
+# ---------------------------------------------------------------------------
+# Core guard logic
+# ---------------------------------------------------------------------------
 
 def run_guard(
-    output_dir: Path = DEFAULT_OUTPUT_DIR,
     status_file: Path = DEFAULT_STATUS_FILE,
     do_repair: bool = True,
+    sfa_public_base: Optional[str] = None,
 ) -> GuardStatus:
     notes: list[str] = []
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
-    try:
-        local = _read_local_manifest(output_dir)
-    except FileNotFoundError as exc:
+    if sfa_public_base is None:
+        sfa_public_base = os.environ.get(SFA_PUBLIC_BASE_ENV, "").strip()
+
+    if not sfa_public_base:
         status = GuardStatus(
             checked_at=now,
-            on_host_version=None,
-            public_version=None,
-            public_url=None,
-            legacy_public_version=None,
-            state="missing_local",
+            sfa_public_base=None,
+            health_url=None,
+            health_status=None,
+            state="error",
             repair_attempted=False,
-            repair_protocol_used=None,
-            repair_errors=[str(exc)],
-            notes=["no local manifest — pipeline never produced one"],
-        )
-        _write_status(status_file, status)
-        return status
-
-    on_host_version = local.get("artifact_version")
-    public_url = _public_manifest_url(local)
-
-    remote = _fetch_remote_manifest(public_url)
-    public_version = remote.get("artifact_version") if remote else None
-    if remote is None:
-        notes.append(f"public manifest absent or unparseable at {public_url}")
-
-    legacy = _fetch_remote_manifest(LEGACY_PUBLIC_MANIFEST_URL)
-    legacy_public_version = legacy.get("artifact_version") if legacy else None
-    if legacy and legacy_public_version != public_version:
-        notes.append(
-            f"legacy URL still serves a different version "
-            f"({legacy_public_version!r} at {LEGACY_PUBLIC_MANIFEST_URL})"
-        )
-
-    if public_version == on_host_version and public_version is not None:
-        status = GuardStatus(
-            checked_at=now,
-            on_host_version=on_host_version,
-            public_version=public_version,
-            public_url=public_url,
-            legacy_public_version=legacy_public_version,
-            state="fresh",
-            repair_attempted=False,
-            repair_protocol_used=None,
-            repair_errors=[],
+            repair_errors=[
+                f"{SFA_PUBLIC_BASE_ENV} env var not set; cannot probe delivery tier"
+            ],
             notes=notes,
         )
         _write_status(status_file, status)
         return status
 
-    if not do_repair:
+    health_url = sfa_public_base.rstrip("/") + "/api/v1/health"
+    health_status, health_notes = _probe_health(sfa_public_base)
+    notes.extend(health_notes)
+
+    if health_status != "ok":
         status = GuardStatus(
             checked_at=now,
-            on_host_version=on_host_version,
-            public_version=public_version,
-            public_url=public_url,
-            legacy_public_version=legacy_public_version,
-            state="stale",
+            sfa_public_base=sfa_public_base,
+            health_url=health_url,
+            health_status=health_status,
+            state="tier_unhealthy" if health_status == "degraded" else "error",
             repair_attempted=False,
-            repair_protocol_used=None,
-            repair_errors=[],
-            notes=notes + ["--no-repair flag set; skipping retry"],
+            repair_errors=[f"tier health={health_status}; skipping repair"],
+            notes=notes,
         )
         _write_status(status_file, status)
         return status
 
-    protocol, errors = _attempt_repair(output_dir)
-
-    # Re-probe to confirm
-    remote_after = _fetch_remote_manifest(public_url)
-    public_version_after = (
-        remote_after.get("artifact_version") if remote_after else None
-    )
-    if public_version_after == on_host_version and on_host_version is not None:
-        final_state = "repaired"
-    else:
-        final_state = "repair_failed"
-        notes.append(
-            f"post-repair public_version={public_version_after!r} != "
-            f"on_host_version={on_host_version!r}"
+    # Tier is healthy; optionally attempt repair (re-push)
+    if not do_repair:
+        status = GuardStatus(
+            checked_at=now,
+            sfa_public_base=sfa_public_base,
+            health_url=health_url,
+            health_status=health_status,
+            state="healthy",
+            repair_attempted=False,
+            repair_errors=[],
+            notes=notes + ["--no-repair flag set; skipping push"],
         )
+        _write_status(status_file, status)
+        return status
+
+    errors = _attempt_repair()
+    state = "repaired" if not errors else "repair_failed"
 
     status = GuardStatus(
         checked_at=now,
-        on_host_version=on_host_version,
-        public_version=public_version_after,
-        public_url=public_url,
-        legacy_public_version=legacy_public_version,
-        state=final_state,
+        sfa_public_base=sfa_public_base,
+        health_url=health_url,
+        health_status=health_status,
+        state=state,
         repair_attempted=True,
-        repair_protocol_used=protocol,
         repair_errors=errors,
         notes=notes,
     )
@@ -241,15 +233,16 @@ def _write_status(path: Path, status: GuardStatus) -> None:
         logger.warning("could not write status file %s: %s", path, exc)
 
 
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Compare on-host vs public manifest; re-upload if behind."
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=DEFAULT_OUTPUT_DIR,
-        help="Directory containing the local manifest.json (default: output/public)",
+        description=(
+            "Verify sfa.nimrod.bio delivery-tier health; "
+            "re-run sfa_ingest_push if needed."
+        )
     )
     parser.add_argument(
         "--status-file",
@@ -260,12 +253,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--no-repair",
         action="store_true",
-        help="Report state only; never call dispatch_upload",
+        help="Report health only; never call sfa_ingest_push",
     )
     parser.add_argument(
         "--json",
         action="store_true",
         help="Print full status JSON to stdout",
+    )
+    parser.add_argument(
+        "--sfa-public-base",
+        default=None,
+        help=(
+            f"Override {SFA_PUBLIC_BASE_ENV} env var "
+            "(e.g. https://sfa.nimrod.bio)"
+        ),
     )
     args = parser.parse_args(argv)
 
@@ -275,9 +276,9 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     status = run_guard(
-        output_dir=args.output_dir,
         status_file=args.status_file,
         do_repair=not args.no_repair,
+        sfa_public_base=args.sfa_public_base,
     )
 
     if args.json:
@@ -285,8 +286,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(
             f"freshness_guard: state={status.state} "
-            f"on_host={status.on_host_version} public={status.public_version} "
-            f"repaired={status.repair_attempted} protocol={status.repair_protocol_used}"
+            f"tier={status.sfa_public_base} "
+            f"health={status.health_status} "
+            f"repair_attempted={status.repair_attempted}"
         )
         if status.notes:
             for n in status.notes:
@@ -295,7 +297,7 @@ def main(argv: list[str] | None = None) -> int:
             for e in status.repair_errors:
                 print(f"  error: {e}")
 
-    return 0 if status.state in ("fresh", "repaired") else 1
+    return 0 if status.state in ("healthy", "repaired") else 1
 
 
 if __name__ == "__main__":

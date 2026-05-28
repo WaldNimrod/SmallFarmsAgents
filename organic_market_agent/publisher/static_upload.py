@@ -1,6 +1,12 @@
 """SFA static file upload — writes to canonical fixed path via custom REST endpoint.
 
-Replaces wp_upload.py (WordPress media library) with a direct write to:
+⚠️ RETIRED 2026-05-28 (team_100 re-point, sever-www-legacy) ⚠️
+Superseded by `sfa_ingest_push.py` (DB→API push to sfa.nimrod.bio).
+The target REST endpoint POST /wp-json/sfagent/v1/upload on www.nimrod.bio
+is DEAD (namespace not registered; page 404s). Do NOT invoke.
+Kept for archaeological reference; will be removed in S004 cleanup pass.
+
+Original design: wrote to canonical fixed path via custom REST endpoint.
   Agents/smallfarmsagents/{subdir}/{filename}
   Public URL: {UPRESS_PUBLIC_BASE}/smallfarmsagents/{subdir}/{filename}
 

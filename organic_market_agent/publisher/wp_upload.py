@@ -1,15 +1,11 @@
 """WordPress REST API media upload — SFA artifact publisher.
 
-⚠️ DEPRECATED 2026-05-24 (SFA-S003-P003-WP-5 cutover) ⚠️
-This module is superseded by `sfa_ingest_push.py`, which pushes deltas
-to the dedicated delivery tier at https://sfa.nimrod.bio via HMAC-
-authenticated `POST /api/v1/ingest`. The legacy page
-www.nimrod.bio/smallfarmsagent/ now client-side-redirects to
-https://sfa.nimrod.bio/market/, so any artifact this uploader would
-publish is no longer reachable by end users.
-
-Kept for archaeological reference only — do NOT invoke. Plan to remove
-in S004 cleanup pass.
+⚠️ RETIRED 2026-05-28 (team_100 re-point, sever-www-legacy) ⚠️
+Superseded by `sfa_ingest_push.py` (DB→API push to sfa.nimrod.bio via
+HMAC-signed POST /api/v1/ingest). The target endpoint
+www.nimrod.bio/wp-json/wp/v2/media (and the sfagent/v1/upload namespace)
+is DEAD — do NOT invoke. Kept for archaeological reference only; will be
+removed in S004 cleanup pass.
 
 Modeled after shaked-wg-agent/shaked_wg_agent/publisher/wp_upload.py (same uPress server).
 Replaces FTPS (port 21, blocked by Bezeq egress) with HTTPS (port 443) as primary upload path.

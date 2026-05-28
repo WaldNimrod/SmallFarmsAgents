@@ -29,16 +29,19 @@ class Config:
     UPRESS_SFTP_PORT: int = int(os.getenv("UPRESS_SFTP_PORT", "21"))
     UPRESS_SFTP_USER: str = os.getenv("UPRESS_SFTP_USER", "")
     UPRESS_SFTP_PASS: str = os.getenv("UPRESS_SFTP_PASS", "")
-    # Canonical public base — includes WordPress subdirectory (/Agents on uPress server)
-    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "https://nimrod.bio")
+    # Canonical public base — legacy www.nimrod.bio path RETIRED (2026-05-28).
+    # Must be set explicitly via env; empty default ensures upress_configured()
+    # returns False rather than silently targeting the dead main domain.
+    UPRESS_PUBLIC_BASE: str = os.getenv("UPRESS_PUBLIC_BASE", "")
     # Canonical static root for all SFA artifacts (relative to WordPress root / ABSPATH)
     # Structure: {UPRESS_PUBLIC_BASE}/{UPRESS_SFA_STATIC_ROOT}/{subdir}/filename
     UPRESS_SFA_STATIC_ROOT: str = os.getenv("UPRESS_SFA_STATIC_ROOT", "smallfarmsagents")
     # FTPS fallback upload path (kept in sync with static root; port 21 fallback only)
     UPRESS_UPLOAD_PATH: str = os.getenv("UPRESS_UPLOAD_PATH", "smallfarmsagents/market")
     UPRESS_PAGE_SLUG: str = os.getenv("UPRESS_PAGE_SLUG", "/SmallFarmsAgent")
-    # WordPress REST API — auth for static upload endpoint + page/shortcode management
-    UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "https://www.nimrod.bio/wp-json")
+    # WordPress REST API — legacy www.nimrod.bio REST namespace RETIRED (2026-05-28).
+    # Must be set explicitly; empty default prevents silent use of dead endpoint.
+    UPRESS_WP_REST_BASE: str = os.getenv("UPRESS_WP_REST_BASE", "")
     UPRESS_WP_APP_USER: str = os.getenv("UPRESS_WP_APP_USER", "")
     UPRESS_WP_APP_PASS: str = os.getenv("UPRESS_WP_APP_PASS", "")
 
