@@ -167,7 +167,8 @@ SET weight = 0.65,
     updated_at = NOW()
 WHERE source_label = 'WR:*';
 ```
-Then `python3 scripts/run_enrichment.py` re-runs blending with new weights.
+Then re-run blending with new weights via the enrichment runner
+(`organic_market_agent.crop_book.importer.enrichment_runner.run_enrichment(session, dry_run=False)`).
 **No code deployment needed.**
 
 ---
