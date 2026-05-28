@@ -42,21 +42,27 @@ def save(c, name, webp_q=80):
     rgb.save(os.path.join(OUT, name + ".preview.jpg"), quality=86)
 
 m = lambda f: os.path.join(WC, f)
-basket = os.path.join(LG, "logo_with_basket.png")
+basket = os.path.join(LG, "logo_with_basket.png")   # basket + wordmark (OG only)
+basket_mark = os.path.join(LG, "basket.png")          # basket alone, NO text (heroes/favicon)
 
-# ---- 8 SFA module heroes (800x800) : (master, h_frac, cx, cy, flip) ----
+# ---- 8 SFA module heroes (800x800) : each = list of layers (master, h_frac, cx, cy, flip) ----
+# Maximize distinctiveness: all 7 distinct masters + 2 combos. radishes = red pop.
 HEROES = {
-    "crop-book":   (m("bunch.png"),     0.80, 0.42, 0.58, False),
-    "market":      (m("radishes.png"),  0.74, 0.40, 0.60, False),
-    "calc":        (m("parsley_1.png"), 0.58, 0.46, 0.55, False),
-    "planner":     (m("dill.png"),      0.72, 0.56, 0.55, True),
-    "clients":     (m("lettuce.png"),   0.70, 0.44, 0.58, False),
-    "inventory":   (m("parsley_2.png"), 0.72, 0.44, 0.57, False),
-    "tend-bridge": (m("dill.png"),      0.60, 0.50, 0.55, False),
-    "field-log":   (m("bunch.png"),     0.66, 0.52, 0.58, True),
+    "crop-book":   [(m("bunch.png"),     0.80, 0.44, 0.58, False)],                 # leafy clump
+    "market":      [(m("radishes.png"),  0.74, 0.42, 0.60, False)],                 # red pop
+    "clients":     [(m("lettuce.png"),   0.74, 0.44, 0.57, False)],                 # lush head
+    "inventory":   [(basket_mark,        0.70, 0.50, 0.54, False)],                 # woven basket (object, no text)
+    "calc":        [(m("parsley_1.png"), 0.50, 0.50, 0.50, False)],                 # single flat sprig, airy
+    "planner":     [(m("dill.png"),      0.62, 0.50, 0.52, True)],                  # feathery, wide
+    "tend-bridge": [(m("parsley_2.png"), 0.46, 0.30, 0.46, False),                  # combo = "bridge"
+                    (m("radishes.png"),  0.38, 0.70, 0.62, True)],
+    "field-log":   [(m("bunch.png"),     0.55, 0.34, 0.56, True),                   # combo = mixed log
+                    (m("radishes.png"),  0.34, 0.68, 0.66, False)],
 }
-for slug,(asset,hf,cx,cy,fl) in HEROES.items():
-    c = canvas(800, 800); place(c, asset, hf, cx, cy, fl)
+for slug, layers in HEROES.items():
+    c = canvas(800, 800)
+    for asset, hf, cx, cy, fl in layers:
+        place(c, asset, hf, cx, cy, fl)
     save(c, os.path.join("heroes", slug))
 
 # ---- og-default 1200x630 : radishes lower-left, logo fully inside upper-right ----
@@ -66,10 +72,10 @@ lg = load(basket); th = int(630 * 0.34); lg = lg.resize((int(lg.width*th/lg.heig
 c.alpha_composite(lg, (1200 - lg.width - 60, int(630*0.5 - lg.height/2)))
 save(c, "og-default", 80)
 
-# ---- hub-hero 1600x900 : basket centre-left + radishes, quiet right ----
+# ---- hub-hero 1600x900 : basket centre-left + dill, quiet right (no text) ----
 c = canvas(1600, 900)
-place(c, basket, 0.62, 0.30, 0.52)
-place(c, m("dill.png"), 0.55, 0.62, 0.40, True)
+place(c, basket_mark, 0.66, 0.28, 0.54)
+place(c, m("dill.png"), 0.50, 0.60, 0.40, True)
 save(c, "hub-hero", 80)
 
 # ---- contact 1600x900 : lettuce + radishes cluster left, quiet right ----
@@ -79,7 +85,7 @@ place(c, m("radishes.png"), 0.50, 0.46, 0.66)
 save(c, "contact", 80)
 
 # ---- favicon set from basket mark ----
-fav = canvas(512, 512); place(fav, basket, 0.78, 0.5, 0.5)
+fav = canvas(512, 512); place(fav, basket_mark, 0.80, 0.5, 0.5)
 fav.convert("RGB").save(os.path.join(OUT, "apple-touch-icon.png"))
 for sz in (180, 32):
     fav.resize((sz, sz), Image.LANCZOS).convert("RGB").save(os.path.join(OUT, f"favicon-{sz}.png"))
