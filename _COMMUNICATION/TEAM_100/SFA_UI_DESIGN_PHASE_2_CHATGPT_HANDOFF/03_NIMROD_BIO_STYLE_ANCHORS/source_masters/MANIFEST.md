@@ -51,9 +51,13 @@ these for fidelity.
 `…/Google Drive/מהגינה/שיווק/תדמית/שוק הירוקה לוגואים/` — "שוק הירוקה" logos
 (related brand) — available if needed, not imported.
 
-## Provided by Nimrod (2026-05-28, in chat)
-Header banner (basket-house logo + wordmark + tagline "חקלאות אקולוגית טבעית
-מקומית" + NimrodGarden/www.nimrod.bio/054-7776770) and a watercolor border
-(parsley + radishes + dill). If you have the source files, drop them in
-`logos_png/` (banner) and `watercolor_illustrations/` (border) — otherwise they
-can be reconstructed from the masters above + Carmela font.
+## Provided by Nimrod (2026-05-28) — COLLECTED
+Located at `…/Downloads/Copy of קורות חיים - נימרוד/images/` (folder misnamed; an
+HTML/Docs export). Two brand assets collected:
+- `logos_png/banner_nimrod_garden_full.jpg` (1999×623) — the full header banner:
+  basket-house logo + wordmark "מהגינה של נימרוד" + tagline "חקלאות אקולוגית
+  טבעית מקומית" + NimrodGarden / www.nimrod.bio / 054-7776770.
+- `watercolor_illustrations/border_veg_radish_parsley_dill.jpg` (1999×495) — the
+  watercolor border (parsley + radishes + dill) — confirms the line + the
+  carrot-top/dill greens study.
+(The other images in that folder, image1-3/6-7, are genuine CV documents — not brand.)
