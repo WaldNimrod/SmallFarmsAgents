@@ -1,9 +1,10 @@
 """055: WP-C5 Phase A — data cleanup (basil + tomato + beans consolidation).
 
-Per DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0:
-  - Decision 1: Basil — MERGE crop 58 (בזיליקום) → crop 4 (בזיל)
+Per DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0 (Hebrew crop names retained
+only in the decision artifact; English used here per source policy):
+  - Decision 1: Basil — MERGE crop 58 (basil duplicate) -> crop 4 (basil)
   - Decision 2: Tomato — Option A (keep crops 49+73 separated; merge orphans)
-  - Decision 3: Beans — MERGE crops 59+60 → crop 6, default = מטפסת
+  - Decision 3: Beans — MERGE crops 59+60 -> crop 6, default = pole/climbing
 
 This migration is **NON-REVERSIBLE** (data merge). Downgrade is a no-op
 with a logged warning — restore from backup if rollback needed.
@@ -264,7 +265,7 @@ def upgrade() -> None:
     sa = __import__("sqlalchemy")
 
     # ---------------------------------------------------------------------
-    # DECISION #1 — Basil (crop 58 'בזיליקום' → crop 4 'בזיל')
+    # DECISION #1 — Basil (crop 58 basil-duplicate -> crop 4 basil)
     # ---------------------------------------------------------------------
     # Pre-snapshot 2026-05-28 against live DB (corrects DECISION_RECORD §1
     # ID typo — record said vid 461, actual single variety in crop 58 is
@@ -284,15 +285,15 @@ def upgrade() -> None:
 
     # ---------------------------------------------------------------------
     # DECISION #2 — Tomato Option A
-    # crop 49 (עגבנייה): merge anonymous + named-duplicate varieties → vid 233
-    # crop 73 (עגבניית שרי): merge anonymous variants → vid 460
+    # crop 49 (tomato): merge anonymous + named-duplicate varieties -> vid 233
+    # crop 73 (cherry tomato): merge anonymous variants -> vid 460
     # ---------------------------------------------------------------------
     # crop 49 merges (per DECISION_RECORD §Decision 2):
     for source_vid in (222, 403, 404, 405, 406):
         _merge_variety(bind, source_vid=source_vid, target_vid=233)
-    # named duplicates:
-    _merge_variety(bind, source_vid=227, target_vid=225)  # "montecarlo F.1" → "hyd. montecarlo F1"
-    _merge_variety(bind, source_vid=229, target_vid=226)  # "Lobelo - חישתיל מורכב" → "Lobelo hyd. מורכב"
+    # named duplicates (vid 227 -> 225 montecarlo; vid 229 -> 226 Lobelo grafted):
+    _merge_variety(bind, source_vid=227, target_vid=225)
+    _merge_variety(bind, source_vid=229, target_vid=226)
 
     # crop 73 merges → vid 460
     # NOTE: DECISION_RECORD §2 listed vid 477 here in error — that vid is
@@ -302,9 +303,9 @@ def upgrade() -> None:
         _merge_variety(bind, source_vid=source_vid, target_vid=460)
 
     # ---------------------------------------------------------------------
-    # DECISION #3 — Beans (default = מטפסת / Pole-Climbing)
-    # crop 6 'שעועית' KEEP as primary; merge crops 59 (שעועית שיחית) +
-    # 60 (שעועית מטפסת) into crop 6.
+    # DECISION #3 — Beans (default = pole/climbing)
+    # crop 6 (beans) KEEP as primary; merge crops 59 (bush beans) +
+    # 60 (pole beans) into crop 6.
     # ---------------------------------------------------------------------
     # 1. Rename crop 6.name_en for clarity (default semantic explicit).
     bind.execute(sa.text("""
@@ -313,7 +314,7 @@ def upgrade() -> None:
         WHERE id = 6 AND name_en = 'Beans: Bush & Pole'
     """))
 
-    # 2. crop 60 (שעועית מטפסת): the bulk of varieties are nonsense from a
+    # 2. crop 60 (pole beans): the bulk of varieties are nonsense from a
     #    bad import (names like '●', '1', 'marketgardenerinstitute.com',
     #    'Intensive Spacing'); only vid 479 (default, 1 sv) is real.
     #
@@ -371,7 +372,7 @@ def upgrade() -> None:
         WHERE crop_id = 60
     """))
 
-    # 5. crop 59 (שעועית שיחית): default = vid 476 (0 sv).  Re-parent
+    # 5. crop 59 (bush beans): default = vid 476 (0 sv).  Re-parent
     #    as a non-default 'Bush variant' under crop 6.
     bind.execute(sa.text("""
         UPDATE crop_varieties

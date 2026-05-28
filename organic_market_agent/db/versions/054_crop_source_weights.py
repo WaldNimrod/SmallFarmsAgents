@@ -5,15 +5,10 @@ DB-backed table so weights can be re-tuned system-wide via a single SQL
 UPDATE — no code deployment needed.
 
 Per DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0 §Decision 5 (team_00
-critical requirement, verbatim):
-
-  "זה חייב להיות שמור בבסיס הנתונים בצורה נפרדת כך שיתאפשר שינוי משקלים
-  באופן קל ופשוט לכלל המערכת בהמשך בהתאם לנסיון בשטח והתוצר הסופי שיתקבל
-  והמשוב שנקבל מהחקלאים."
-
-Translation: weights must be stored in the DB in a separate way that
-allows easy system-wide weight changes later based on field experience,
-final output, and farmer feedback.
+critical requirement): weights must be stored in the DB in a separate way
+that allows easy system-wide weight changes later based on field experience,
+final output, and farmer feedback. (The original verbatim Hebrew requirement
+is retained in the decision artifact, per the English-only source policy.)
 
 Revision ID: 054
 Revises: 053

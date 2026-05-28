@@ -4,11 +4,10 @@ Replaces Python-constant SOURCE_REGISTRY weights with rows in the
 ``crop_source_weights`` table (migration 054, seeded by migration 056).
 
 Per DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0 §Decision 5 (team_00
-critical requirement, verbatim):
-
-    "זה חייב להיות שמור בבסיס הנתונים בצורה נפרדת כך שיתאפשר שינוי משקלים
-    באופן קל ופשוט לכלל המערכת בהמשך בהתאם לנסיון בשטח והתוצר הסופי שיתקבל
-    והמשוב שנקבל מהחקלאים."
+critical requirement): weights must be DB-stored so they can be re-tuned
+system-wide based on field experience and farmer feedback, without a code
+deploy. (Original verbatim Hebrew is retained in the decision artifact, per
+the English-only source policy.)
 
 Lookup contract (mirrors ``source_registry.get_source_spec`` semantics):
     1. Exact-match in DB by ``source_label``
