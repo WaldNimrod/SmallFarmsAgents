@@ -1921,11 +1921,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C2
   label: "ספר גידולים: Wave 2 — Hebrew Narrative Extraction (NI tier)"
-  status: IN_REVIEW
+  status: DONE
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-28"
+  archive_ref: "_archive/SFA-S003-P002-WP-C2/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-26"
@@ -1972,11 +1974,25 @@ work_packages:
       (367 var / 5,291 rows / 811 high-conf). validate_aos.sh 29/19/0.
       Bodies bounded ≤2000 chars (fair-use). Commits 16ef37a, 338cd17, 4d79856."
     validator: team_10
-  notes: "WP-C2 Hebrew narrative NI ingestion BUILD COMPLETE at 4d79856 —
-    awaiting L-GATE_V cross-engine validation by team_190 (non-Claude per IR#1);
-    mandate at validation_mandate_ref. Depth-first closure done per team_00
-    2026-05-28: all 3 shallow sources deepened. LLM extraction with Hebrew RTL;
-    pre-extraction $20 budget cap (deepening used in-session vision = $0)."
+  - gate: L-GATE_V
+    result: PASS
+    round: 1
+    date: "2026-05-28"
+    reviewed_commit: "4d79856"
+    notes: "team_190 (validator engine GPT-5.5 / OpenAI-family non-Claude, IR#1
+      satisfied). 0 blockers / 0 major / 0 minor. AC-C2V-01..10 PASS: 17/17 C2
+      tests; 40 NI notes across 6 sources, all NI/internal-only, max body 829;
+      alembic 056; enrichment dry-run 367 var / 5,291 fields / 811 high-conf;
+      validate_aos 29/19/0; constitutional package linter PASS. The _aos/
+      authorship finding (same class as WP-C5 F-190-C5-LV-01) was pre-cleared by
+      the team_100 re-author 4c2ce3a (supplement filed). Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P002-WP-C2/L-GATE_V_VERDICT_v1.0.0.md."
+    validator: team_190
+  notes: "WP-C2 Hebrew narrative NI ingestion CLOSED — LOD500_LOCKED 2026-05-28
+    via team_100 ADR042 3-step closure after team_190 L-GATE_V PASS (non-Claude
+    GPT-5.5). Build 4d79856. Depth-first closure (team_00 2026-05-28): all 3
+    shallow sources deepened to 40 NI notes / 6 sources. Archive mandate routed
+    to team_191."
   profile: L0
 
 - id: SFA-S003-P002-WP-C3
