@@ -1,13 +1,22 @@
-"""Source registry — declarative 7-class taxonomy for crop-book data enrichment.
+"""Source registry — declarative 8-class taxonomy for crop-book data enrichment.
 
 Classes (trust order, highest first):
     EX  Expert override    — team_00 hardcoded overrides (hard override, always wins)
     NI  Nimrod-Input       — files/links supplied by team_00 (hard override over PR/OP)
-    PR  Prescriptive       — JMF MasterClass (curated agronomic benchmarks)
-    OP  Operational        — Tend farm records (actual observed data)
-    MK  Market index       — OMA community price (design-registered, importer in WP-B)
-    WB  Web / third-party  — external databases (design-registered, importer in WP-B)
+    PR  Prescriptive       — JMF MasterClass / university extension (curated)
+    WR  Web-Research       — AI-synthesized research (team_80 multi-engine scout)
+    OP  Operational        — Tend / farm-records (actual observed data)
+    MK  Market index       — OMA community price (design-registered)
+    WB  Web / third-party  — external databases (design-registered)
     UC  User-Community     — user-submitted data (moderation gate required)
+
+WP-C5 Phase A change (2026-05-28):
+    SOURCE_REGISTRY is now the **default seed** (consumed by migration 056
+    and used as the durable fallback when the DB is unavailable). The
+    canonical runtime resolver is :func:`get_source_spec`, which delegates
+    to :mod:`organic_market_agent.crop_book.source_weights_db` so weights
+    can be re-tuned via a single SQL UPDATE per team_00 critical
+    requirement in DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0 §Decision 5.
 """
 from __future__ import annotations
 
@@ -80,6 +89,13 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
     "OP:FRANCHI_catalog": SourceSpec("OP:FRANCHI_catalog", "OP", weight=0.55),
     "OP:Idan_2018": SourceSpec("OP:Idan_2018", "OP", weight=0.55),
 
+    # --- WP-C5 Phase A: WR (Web-Research / AI-synthesized) class sentinel ---
+    # team_00 Decision #5 — Option B (Moderate) weight 0.60.
+    # Tunable via UPDATE crop_source_weights SET weight = ... WHERE source_label = 'WR:*'
+    "_WR_CLASS_SENTINEL": SourceSpec(
+        "_WR_CLASS_SENTINEL", "WR", weight=0.60
+    ),
+
     # --- MK: Market index (design-registered; importer in WP-B) ---
     "_MK_CLASS_SENTINEL": SourceSpec("_MK_CLASS_SENTINEL", "MK", weight=0.40),
 
@@ -94,21 +110,60 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
 
 
 def get_source_spec(source_label: str) -> SourceSpec:
-    """Look up SourceSpec by label; detect class from prefix for dynamic labels.
+    """Look up SourceSpec by label.
 
-    Dynamic label conventions:
+    WP-C5 Phase A: delegates to :mod:`source_weights_db` (DB-backed) and
+    falls back to the constants below if the DB row is missing OR the DB
+    is unavailable.  Caller-facing signature is unchanged so existing
+    reconciler / enrichment-runner code is not affected.
+
+    Dynamic label conventions (in fallback):
         "NI:<name>"  → NI class  (Nimrod-provided file/link)
+        "WR:<name>"  → WR class  (AI-synthesized research, weight 0.60)
+        "OP:<name>"  → OP class  (operational farm data, weight 0.55)
+        "PR:<name>"  → PR class  (published research, weight 0.70)
         "OMA:<name>" → MK class  (OMA market index product)
         "WB:<name>"  → WB class  (web / third-party)
         "UC:<id>"    → UC class  (user-community; moderation required)
 
     Unknown labels fall back to WB with reduced weight (0.20).
     """
+    # Try DB-backed resolver first.  Returns a source_weights_db.SourceSpec
+    # which is field-compatible with this module's SourceSpec.
+    try:
+        from organic_market_agent.crop_book import source_weights_db
+        db_spec = source_weights_db.get_source_spec(source_label)
+        # Convert to local SourceSpec for identity-preserving callers.
+        return SourceSpec(
+            label=db_spec.label,
+            cls=db_spec.cls,
+            weight=db_spec.weight,
+            is_hard_override=db_spec.is_hard_override,
+            requires_moderation=db_spec.requires_moderation,
+        )
+    except Exception:
+        # Total-failure fallback: pure-Python resolution.
+        pass
+
+    return _resolve_constants(source_label)
+
+
+def _resolve_constants(source_label: str) -> SourceSpec:
+    """Pure-Python fallback resolver (no DB).  Also used by source_weights_db
+    as its last-resort fallback."""
     if source_label in SOURCE_REGISTRY:
         return SOURCE_REGISTRY[source_label]
     if source_label.startswith("NI:"):
         return SourceSpec(source_label, "NI", weight=None, is_hard_override=True)
+    if source_label.startswith("WR:"):
+        return SourceSpec(source_label, "WR", weight=0.60)
+    if source_label.startswith("OP:"):
+        return SourceSpec(source_label, "OP", weight=0.55)
+    if source_label.startswith("PR:"):
+        return SourceSpec(source_label, "PR", weight=0.70)
     if source_label.startswith("OMA:"):
+        return SourceSpec(source_label, "MK", weight=0.40)
+    if source_label.startswith("MK:"):
         return SourceSpec(source_label, "MK", weight=0.40)
     if source_label.startswith("WB:"):
         return SourceSpec(source_label, "WB", weight=0.30)
@@ -123,13 +178,17 @@ def is_hard_override(source_label: str) -> bool:
     return get_source_spec(source_label).is_hard_override
 
 
-# Trust-order rank: lower index = higher priority (for hard_winner selection)
+# Trust-order rank: lower index = higher priority (for hard_winner selection).
+# WP-C5 Phase A: WR slotted between PR and OP — Decision #5 rationale:
+# WR > OP because it draws on multiple published sources; WR < PR because
+# it is not first-party / peer-reviewed.
 CLASS_RANK: dict[str, int] = {
     "EX": 0,
     "NI": 1,
     "PR": 2,
-    "OP": 3,
-    "MK": 4,
-    "WB": 5,
-    "UC": 6,
+    "WR": 3,
+    "OP": 4,
+    "MK": 5,
+    "WB": 6,
+    "UC": 7,
 }

@@ -2150,10 +2150,53 @@ work_packages:
       crop name resolution, outlier flagging, knowledge note QA, gap-fill
       via team_00 expertise. Activation: when C2+C3 LOD500_LOCKED."
     validator: team_00
-  notes: "WP-C5 manual cleanup phase. Not a builder mandate — team_00 reviews
-    consolidated DB and applies targeted refinements. EX-tier hard overrides
-    for crops/fields where team_00 has authoritative knowledge. Activation
-    blocked on C2+C3 closure. Authorized 2026-05-26 by team_00."
+  notes: "WP-C5 now two-phase per team_00 2026-05-28 in-session approval
+    (DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0). Phase A = builder code+data
+    cleanup (crop consolidations basil/tomato/beans, DB-driven source weights
+    table for WR tier — critical user requirement: weights must live in DB
+    for easy system-wide tuning post farmer feedback). Phase B = original
+    team_00 manual refinement. Phase A authorized to start under team_00
+    grant. Spec v1.1.0 amended 2026-05-28."
+  profile: L0
+
+# ============================================================================
+# S003-P002-WP-C6 — Sparse Crops Future Expansion (PROPOSED 2026-05-28)
+# Registered per DECISION_RECORD_SFA-S003-P002-WP-C5_v1.0.0 §Decision 4.
+# Activation blocked on WP-C5 LOD500_LOCKED.
+# ============================================================================
+
+- id: SFA-S003-P002-WP-C6
+  label: "ספר גידולים: Wave 6 — Sparse Crops Future Expansion (~20 sparse crops)"
+  status: PROPOSED
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_LOCKED
+  assigned_builder: TBD
+  assigned_validator: TBD
+  created_at: "2026-05-28"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-C5"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-C6/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-28"
+    notes: "team_00 in-session approval 2026-05-28 (DECISION_RECORD
+      SFA-S003-P002-WP-C5 §Decision 4): 'מאשר - הרחבה עתידית - יש לתעד
+      ולהכין אפיון ברמת lod200'. WP-C6 captures ~20 sparse crops (≤2 enriched
+      fields) for future ingestion: ~12 Mediterranean herbs (מרווה, טימין,
+      טרגון, נענע, etc.), ~5 specialty (ג'ינג'ר, כורכום, פאק צ'וי, etc.),
+      and post-WP-C5 surfacing items. Sources to investigate: ICARDA, CIHEAM,
+      IL MoA specialty chapters, Shaham herb bulletins, Wikipedia HE,
+      JMF backlog, team_00 EX, WR:* via team_80 multi-engine. Registered
+      PROPOSED — not for execution; LOD400 spec deferred until WP-C5 closes."
+    validator: team_00
+  notes: "WP-C6 sparse crops future expansion. Goal: bring ~20 sparse crops to
+    ≥6 enriched fields parity. Activation blocked on WP-C5 LOD500_LOCKED.
+    Will leverage WR tier (weight 0.60) introduced in WP-C5 Phase A for
+    AI-synthesized research on crops lacking IL/PR sources. Authorized
+    2026-05-28 by team_00 (Decision #4)."
   profile: L0
 
 # ============================================================================
