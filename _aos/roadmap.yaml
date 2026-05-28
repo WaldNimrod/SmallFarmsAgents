@@ -1921,19 +1921,21 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C2
   label: "ספר גידולים: Wave 2 — Hebrew Narrative Extraction (NI tier)"
-  status: PROPOSED
+  status: IN_REVIEW
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
-  assigned_builder: sfa_build
-  assigned_validator: external
+  assigned_builder: team_10
+  assigned_validator: team_190
   created_at: "2026-05-26"
+  build_commit: "4d79856"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P002-WP-B"]
   parallel_eligible_with: SFA-S003-P002-WP-C1
   brief_ref: "data/external_sources/WAVE_PLAN_v1.0.0.md"
   spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-C2/LOD400_spec.md"
+  validation_mandate_ref: "_COMMUNICATION/team_10/SFA-S003-P002-WP-C2/L-GATE_V_MANDATE_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
@@ -1952,8 +1954,29 @@ work_packages:
       tests. Migration 049 (extend crop_knowledge_notes.note_type CHECK with
       6 new enum values). Eligible to run parallel with WP-C1."
     validator: team_10
-  notes: "WP-C2 parallel-eligible with C1. LLM extraction with Hebrew RTL
-    handling. Pre-extraction $20 budget cap. Authorized 2026-05-26 by team_00."
+  - gate: L-GATE_B
+    result: PASS
+    round: 1
+    date: "2026-05-28"
+    reviewed_commit: "4d79856"
+    notes: "team_10 builder. 6 NI importers built + loaded to live DB; 17/17
+      C2 tests pass. Initial build was shallow on 3 sources; team_00 directed
+      depth-first closure (2026-05-28) and team_10 deepened them via Claude
+      vision re-extraction ($0, in-session): AOSNOT 4→10 (single-crop אוסנה/
+      blackberry deep-dive — the '1.3MB' was cultivar photos), Zacks 0→6
+      (52-slide image deck text-extraction had failed entirely; recovered
+      lettuce DWC variety trial + NFT/DWC params + diseases), sham_variety_trials
+      1→5 (L11 lettuce NFT trial — recovered nutrient-solution chemistry +
+      22-variety weights + summer physiological disorders). C2 NI coverage
+      24→40 notes across 6 sources, all ≥3. Enrichment re-run stable
+      (367 var / 5,291 rows / 811 high-conf). validate_aos.sh 29/19/0.
+      Bodies bounded ≤2000 chars (fair-use). Commits 16ef37a, 338cd17, 4d79856."
+    validator: team_10
+  notes: "WP-C2 Hebrew narrative NI ingestion BUILD COMPLETE at 4d79856 —
+    awaiting L-GATE_V cross-engine validation by team_190 (non-Claude per IR#1);
+    mandate at validation_mandate_ref. Depth-first closure done per team_00
+    2026-05-28: all 3 shallow sources deepened. LLM extraction with Hebrew RTL;
+    pre-extraction $20 budget cap (deepening used in-session vision = $0)."
   profile: L0
 
 - id: SFA-S003-P002-WP-C3
