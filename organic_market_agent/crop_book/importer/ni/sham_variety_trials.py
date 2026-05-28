@@ -16,7 +16,17 @@ from organic_market_agent.crop_book.importer.ni_importer import NIImporter
 
 logger = logging.getLogger(__name__)
 
-_SOURCE_NOTE_TYPES = ("variety_trial_score",)
+# WP-C2 deepening (2026-05-28): the L11 PDF carries quantitative trial tables
+# (nutrient solution chemistry, per-variety weights, quality traits) the
+# original extraction reduced to a single score summary. Expanded to capture
+# the full agronomic depth. All within migration-053 note_type CHECK.
+_SOURCE_NOTE_TYPES = (
+    "variety_trial_score",
+    "cultivar_recommendation",
+    "hydro_suitability",
+    "pest_disease",
+    "harvest_marker",
+)
 
 
 class ShamVarietyTrialsImporter(NIImporter):
