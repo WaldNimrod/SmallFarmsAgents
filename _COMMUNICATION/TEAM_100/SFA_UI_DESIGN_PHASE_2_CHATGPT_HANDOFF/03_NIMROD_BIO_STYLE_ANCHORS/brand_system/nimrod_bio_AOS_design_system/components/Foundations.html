@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Foundations · Nimrod.bio / AOS</title>
+<link rel="stylesheet" href="brand/system.css">
+<style>
+  :root {
+    --gutter: clamp(20px, 4vw, 56px);
+    --col-max: 1280px;
+  }
+  body { padding-bottom: 120px; }
+
+  /* ───── Page chrome ───── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251,247,239,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px var(--gutter);
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  .topbar .crumb { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); letter-spacing: .04em; }
+  .topbar .crumb b { color: var(--ink); }
+  .topbar .status { display: flex; gap: 10px; align-items: center; font-family: "JetBrains Mono", monospace; font-size: 11px; }
+  .pill { padding: 4px 10px; border-radius: 100px; border: 1px solid var(--line); background: var(--paper-2); }
+  .pill-live { background: var(--leaf); color: #fff; border-color: transparent; }
+
+  /* ───── Layout ───── */
+  .page { max-width: var(--col-max); margin: 0 auto; padding: 56px var(--gutter) 0; }
+  section { margin-bottom: 96px; scroll-margin-top: 80px; }
+  .sec-head {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: baseline;
+    border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 36px;
+  }
+  .sec-head .num { font-family: "Frank Ruhl Libre", serif; font-size: 48px; line-height: 1; color: var(--terracotta); font-weight: 900; }
+  .sec-head h2 { font-family: "Frank Ruhl Libre", serif; font-size: 32px; line-height: 1.15; margin: 0; font-weight: 700; }
+  .sec-head .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+  .sec-intro { max-width: 720px; font-size: 16px; color: var(--ink-soft); margin-bottom: 36px; }
+
+  /* ───── Hero ───── */
+  .hero {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; padding: 40px 0 60px;
+    border-bottom: 2px solid var(--ink); margin-bottom: 80px;
+  }
+  .hero h1 { font-family: "Frank Ruhl Libre", serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.05; margin: 0 0 24px; font-weight: 900; }
+  .hero h1 em { font-style: italic; color: var(--terracotta); font-weight: 700; }
+  .hero p { font-size: 18px; line-height: 1.6; max-width: 540px; margin: 0 0 14px; }
+  .hero .label { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); margin-bottom: 18px; letter-spacing: .08em; text-transform: uppercase; }
+  .checklist { background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-l); padding: 24px; font-size: 14px; }
+  .checklist h3 { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 16px; color: var(--ink-soft); }
+  .checklist ol { margin: 0; padding-inline-start: 22px; display: grid; gap: 10px; }
+  .checklist li::marker { color: var(--terracotta); font-weight: 700; }
+  .checklist li b { display: block; }
+  .checklist li span { color: var(--ink-soft); font-size: 13px; }
+
+  /* ───── Option card (used everywhere) ───── */
+  .opts { display: grid; gap: 24px; }
+  .opts.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .opts.cols-2 { grid-template-columns: 1fr 1fr; }
+  .opt {
+    border: 1px solid var(--line); border-radius: var(--radius-l);
+    background: var(--paper);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .opt-head {
+    padding: 18px 22px 14px;
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline;
+    border-bottom: 1px dashed var(--line);
+  }
+  .opt-head .tag { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .08em; }
+  .opt-head h3 { font-family: "Frank Ruhl Libre", serif; font-size: 22px; margin: 0; font-weight: 700; }
+  .opt-body { padding: 24px 22px; flex: 1; }
+  .opt-foot { padding: 16px 22px; border-top: 1px solid var(--line); background: var(--paper-2); font-size: 13px; color: var(--ink-soft); }
+  .opt.recommended { border-color: var(--terracotta); box-shadow: 0 0 0 3px rgba(196,106,62,.12); }
+  .recommended-tag {
+    position: absolute; top: 12px; inset-inline-end: 12px;
+    background: var(--terracotta); color: #fff; font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: .1em; padding: 4px 10px; border-radius: 100px; text-transform: uppercase;
+  }
+  .opt { position: relative; }
+
+  /* ───── Direction previews ───── */
+  .dir-preview {
+    height: 280px; border-radius: var(--radius-m);
+    background: var(--paper); border: 1px solid var(--line);
+    position: relative; overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .dir-A {
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 30%, rgba(226,178,58,.25), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(106,138,58,.22), transparent 60%),
+      var(--paper);
+  }
+  .dir-A .badge {
+    position: absolute; top: 18px; inset-inline-start: 18px;
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 2px solid var(--soil);
+    display: grid; place-items: center;
+    font-family: "Frank Ruhl Libre", serif; font-size: 11px;
+    text-align: center; color: var(--soil); line-height: 1.1;
+    transform: rotate(-8deg);
+  }
+  .dir-A .h {
+    position: absolute; bottom: 24px; inset-inline-start: 24px; right: 24px;
+    font-family: "Frank Ruhl Libre", serif; font-weight: 700; font-size: 28px;
+    color: var(--ink); line-height: 1.1;
+  }
+  .dir-A .h em { color: var(--terracotta); font-style: italic; }
+
+  .dir-B {
+    background: var(--paper);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 14px;
+  }
+  .door {
+    border: 1.5px solid var(--ink); border-radius: 80px 80px 8px 8px;
+    background: var(--paper-2); position: relative;
+  }
+  .door::after {
+    content: ""; position: absolute; inset-inline-end: 8px; top: 50%;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--ink);
+  }
+  .door.spark { background: var(--seuss-red); border-color: var(--seuss-ink); }
+  .door.spark::after { background: var(--paper); }
+  .door:nth-child(3) { background: var(--terracotta); border-color: var(--seuss-ink); }
+  .door:nth-child(3)::after { background: var(--paper); }
+
+  .dir-Br {
+    background: var(--paper);
+    display: grid; grid-template-rows: 1fr auto; padding: 18px; gap: 14px;
+  }
+  .dir-Br .grid-doors {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+  }
+  .dir-Br .grid-doors .d {
+    aspect-ratio: 1/1.6; border: 1.2px solid var(--ink); border-radius: 40% 40% 6px 6px;
+    background: var(--paper-2);
+  }
+  .dir-Br .grid-doors .d.spark { background: var(--seuss-red); border-color: var(--seuss-ink); }
+  .dir-Br .strap {
+    display: flex; gap: 14px; align-items: center; padding: 8px 0;
+    border-top: 1px solid var(--line);
+    font-family: "Frank Ruhl Libre", serif; font-style: italic; font-size: 14px; color: var(--ink-soft);
+  }
+  .dir-Br .strap .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--seuss-red); }
+
+  .traits { display: grid; gap: 10px; font-size: 14px; }
+  .traits li { list-style: none; padding-inline-start: 24px; position: relative; }
+  .traits li::before {
+    content: ""; position: absolute; inset-inline-start: 4px; top: .55em;
+    width: 8px; height: 1.5px; background: var(--ink);
+  }
+  .traits.cons li::before { background: var(--seuss-red); }
+
+  /* ───── Palette ───── */
+  .palette-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 18px; }
+  .sw {
+    aspect-ratio: 1/1.3; border-radius: 8px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8px; font-family: "JetBrains Mono", monospace; font-size: 9px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  }
+  .sw .name { color: rgba(255,255,255,.95); }
+  .sw .hex { color: rgba(255,255,255,.7); font-size: 8px; }
+  .sw.light .name { color: rgba(0,0,0,.85); }
+  .sw.light .hex { color: rgba(0,0,0,.55); }
+
+  .palette-spec {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 12px;
+    font-family: "JetBrains Mono", monospace; color: var(--ink-soft);
+  }
+  .palette-spec b { color: var(--ink); }
+
+  /* Palette variant backgrounds */
+  .pal-warm { background: linear-gradient(180deg, #fbf7ef 0%, #f2ebdb 100%); }
+  .pal-cool { background: linear-gradient(180deg, #f5f3ec 0%, #e8e7df 100%); }
+  .pal-bright { background: linear-gradient(180deg, #fefcf7 0%, #f7f2e6 100%); }
+
+  /* ───── Type scale ───── */
+  .type-row {
+    display: grid; grid-template-columns: 120px 1fr auto; gap: 24px; align-items: baseline;
+    padding: 18px 0; border-bottom: 1px dashed var(--line);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-row .label { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .06em; }
+  .type-row .spec { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+  .type-row .sample { font-family: "Frank Ruhl Libre", serif; }
+  .type-row.body .sample, .type-row.bodysm .sample, .type-row.ui .sample { font-family: "Assistant", sans-serif; }
+  .type-row.display .sample { font-size: 64px; line-height: 1.05; font-weight: 900; }
+  .type-row.h1 .sample { font-size: 40px; line-height: 1.15; font-weight: 700; }
+  .type-row.h2 .sample { font-size: 28px; line-height: 1.25; font-weight: 600; }
+  .type-row.h3 .sample { font-size: 20px; line-height: 1.3; font-weight: 600; }
+  .type-row.quote .sample { font-size: 24px; line-height: 1.5; font-weight: 300; font-style: italic; }
+  .type-row.body .sample { font-size: 17px; line-height: 1.65; font-weight: 400; }
+  .type-row.bodysm .sample { font-size: 14px; line-height: 1.55; font-weight: 400; color: var(--ink-soft); }
+  .type-row.ui .sample { font-size: 15px; line-height: 1; font-weight: 600; }
+
+  /* ───── Grid + Spacing ───── */
+  .grid-demo {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px;
+    height: 200px; padding: 14px; background: var(--paper-2); border-radius: var(--radius-m);
+    border: 1px solid var(--line);
+  }
+  .grid-demo .col {
+    background: rgba(196,106,62,.18); border: 1px dashed var(--terracotta);
+    border-radius: 4px;
+  }
+
+  .space-stack { display: grid; gap: 12px; }
+  .space-row { display: grid; grid-template-columns: 80px 1fr 80px; gap: 16px; align-items: center; }
+  .space-row .name { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); }
+  .space-row .bar { height: 14px; background: var(--terracotta); border-radius: 3px; }
+  .space-row .px { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); text-align: end; }
+
+  /* ───── Radii + Shadows ───── */
+  .r-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .r-card {
+    aspect-ratio: 1.4/1; background: var(--paper-2); border: 1px solid var(--line);
+    display: grid; place-items: center;
+    font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft);
+  }
+  .r-card.s { border-radius: var(--radius-s); }
+  .r-card.m { border-radius: var(--radius-m); }
+  .r-card.l { border-radius: var(--radius-l); }
+  .r-card.xl { border-radius: var(--radius-xl); }
+
+  .sh-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 30px 0; }
+  .sh-card {
+    aspect-ratio: 1.6/1; background: var(--paper); border-radius: var(--radius-m);
+    display: grid; place-items: center;
+    font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft);
+  }
+  .sh-card.s { box-shadow: var(--shadow-s); }
+  .sh-card.m { box-shadow: var(--shadow-m); }
+  .sh-card.l { box-shadow: var(--shadow-l); }
+
+  /* ───── Sign-off ───── */
+  .signoff {
+    background: var(--ink); color: var(--paper); border-radius: var(--radius-xl);
+    padding: 48px var(--gutter); margin-top: 96px;
+  }
+  .signoff h2 { font-family: "Frank Ruhl Libre", serif; font-size: 36px; margin: 0 0 24px; color: var(--paper); }
+  .signoff p { color: rgba(251,247,239,.7); max-width: 600px; margin: 0 0 24px; }
+  .signoff-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .signoff-list li {
+    display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center;
+    padding: 14px 18px; border-radius: var(--radius-m);
+    background: rgba(251,247,239,.06); border: 1px solid rgba(251,247,239,.12);
+  }
+  .signoff-list .box {
+    width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid rgba(251,247,239,.4);
+  }
+  .signoff-list b { font-family: "Frank Ruhl Libre", serif; font-size: 18px; }
+  .signoff-list .hint { font-size: 13px; color: rgba(251,247,239,.55); }
+  .signoff-list .opt-pick { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--sun); letter-spacing: .08em; }
+
+  /* placeholder marker */
+  .placeholder {
+    background-image: repeating-linear-gradient(135deg, var(--paper-2) 0 10px, var(--paper-3) 10px 20px);
+    border: 1px dashed var(--soil);
+    color: var(--soil); padding: 12px; border-radius: 8px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px; text-align: center;
+  }
+
+  /* TOC sticky */
+  .toc {
+    position: fixed; inset-inline-end: 24px; top: 90px; z-index: 40;
+    background: rgba(251,247,239,.96); backdrop-filter: blur(10px);
+    border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 14px 18px; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    max-width: 200px;
+  }
+  .toc h4 { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; }
+  .toc ol { margin: 0; padding-inline-start: 18px; display: grid; gap: 6px; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--terracotta); }
+  @media (max-width: 1500px) { .toc { display: none; } }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .opts.cols-3, .opts.cols-2 { grid-template-columns: 1fr; }
+    .palette-row { grid-template-columns: repeat(4, 1fr); }
+    .r-row { grid-template-columns: repeat(2, 1fr); }
+    .sh-row { grid-template-columns: 1fr; }
+    .type-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="crumb"><b>STAGE 0</b> · FOUNDATIONS · 11.05.2026 · v3.1</div>
+  <div class="status">
+    <span class="pill pill-live">נעול · 11.05.2026</span>
+    <span class="pill">5 צירים סגורים</span>
+    <span class="pill" style="background:#e2b23a;color:#1f1e1c;">+ amendment 3-worlds</span>
+  </div>
+</div>
+
+<div style="max-width:980px;margin:24px auto 0;padding:18px 24px;background:#fff8e6;border:1px solid #e2b23a;border-right:6px solid #e2b23a;border-radius:14px;font-size:15px;line-height:1.6;">
+  <b style="font-family:'Frank Ruhl Libre',serif;font-size:18px;">תיקון v3.3 · 3 עולמות נעולים (אדמה · ידע · דיגיטל)</b><br>
+  הענפים אוחדו מ־6 ל־<b>3 עולמות</b>: <b style="color:#6a8a3a;">אדמה</b> (תוצרת, חממה, BCS, משתלה) · <b style="color:#9a4f2b;">ידע</b> (3 ערוצי ייעוץ + הוראה) · <b style="color:#1f5e60;">דיגיטל</b> (SFA, tiktrack).
+  הצבעים של 6 הענפים נשמרו כ־accents לסאב־ענפים — אין שבירה של ה־palette. ראו <code>--w-{soil,know,code}-{deep,light}</code> ב־<code>brand/system.css</code>.
+</div>
+
+<aside class="toc" aria-label="ניווט פנימי">
+  <h4>בעמוד הזה</h4>
+  <ol>
+    <li><a href="#dir">1 · כיוון</a></li>
+    <li><a href="#pal">2 · פלטה</a></li>
+    <li><a href="#type">3 · טיפוגרפיה</a></li>
+    <li><a href="#grid">4 · grid + spacing</a></li>
+    <li><a href="#radii">5 · radii + shadows</a></li>
+    <li><a href="#sign">סיכום</a></li>
+  </ol>
+</aside>
+
+<div class="page">
+
+  <!-- ─────── HERO ─────── -->
+  <header class="hero">
+    <div>
+      <div class="label">Stage 0 · Foundations</div>
+      <h1>חמישה צירים לנעול<br>לפני שמתחילים <em>לעצב</em>.</h1>
+      <p>הסשן הזה לא בונה מסכים. הוא בוחר את ה־DNA. כל החלטה כאן תחזור בכל עמוד באתר — אז עדיף לאיטו ולהחליט פעם אחת.</p>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink-soft);">
+        כיוון · פלטה · טיפוגרפיה · grid+spacing · radii+shadows
+      </p>
+    </div>
+    <div class="checklist">
+      <h3>איך לקרוא את המסמך</h3>
+      <ol>
+        <li><b>5 סקציות, 5 החלטות.</b><span>בכל סקציה — 2–3 אופציות + המלצה.</span></li>
+        <li><b>אופציה מסומנת RECOMMENDED.</b><span>זו ההמלצה שלי, לא ההחלטה שלך.</span></li>
+        <li><b>סיכום בתחתית.</b><span>checkbox לכל ציר. תאשר → ננעל ונעבור לשלב 1.</span></li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- ─────── 1 · DIRECTION ─────── -->
+  <section id="dir">
+    <div class="sec-head">
+      <div class="num">01</div>
+      <h2>כיוון ויזואלי</h2>
+      <div class="meta">3 אופציות · קריטי</div>
+    </div>
+    <p class="sec-intro">
+      v2 השאיר שתי אפשרויות פתוחות: <b>A</b> עוגן עבר נועז, <b>B</b> מבנה רקורסיבי עם ניצוץ נדיר. אני מציע גם <b>B-עם-רסן</b> — אותו DNA רקורסיבי, אבל עם פלטה ארצית והניצוץ כתבלין בלבד. שימו לב: השפה הוויזואלית של "B" היא <b>שלנו</b> — דלתות, ספים, רקורסיה מבנית — לא ציטוט מספרי ילדים מוגנים בזכויות יוצרים.
+    </p>
+
+    <div class="opts cols-3">
+
+      <!-- A -->
+      <article class="opt">
+        <div class="opt-head">
+          <h3>A · עוגן עבר נועז</h3>
+          <span class="tag">SAFE</span>
+        </div>
+        <div class="opt-body">
+          <div class="dir-preview dir-A">
+            <div class="badge">סטמפ<br>2009</div>
+            <div class="h">קטן זה יפה.<br><em>אלא אם כן.</em></div>
+          </div>
+          <ul class="traits">
+            <li>פלטה ארצית מלאה: terracotta, leaf, soil.</li>
+            <li>Unless כנראטיב פנימי בתוך הטקסט — לא ציר ויזואלי.</li>
+            <li>סטמפים, נוסטלגיה, מרקם נייר.</li>
+          </ul>
+          <ul class="traits cons" style="margin-top: 14px;">
+            <li>פחות בידול — נראה כמו "עוד אתר חוות בוטיק".</li>
+            <li>קשה לבדל את ענף ה־AOS / קוד.</li>
+          </ul>
+        </div>
+        <div class="opt-foot">מתאים אם הקהל הראשוני הוא לקוחות חקלאות בלבד.</div>
+      </article>
+
+      <!-- B -->
+      <article class="opt">
+        <div class="opt-head">
+          <h3>B · רקורסיה מלאה</h3>
+          <span class="tag">BOLD</span>
+        </div>
+        <div class="opt-body">
+          <div class="dir-preview dir-B">
+            <div class="door"></div>
+            <div class="door"></div>
+            <div class="door"></div>
+            <div class="door spark"></div>
+            <div class="door"></div>
+            <div class="door"></div>
+            <div class="door"></div>
+            <div class="door"></div>
+          </div>
+          <ul class="traits">
+            <li>דלתות / ספים / רקורסיה כעמוד שדרה ויזואלי.</li>
+            <li>ספארק (אדום עז) ככלי דרמטי קבוע.</li>
+            <li>מבדל באופן חד מכל מתחרה.</li>
+          </ul>
+          <ul class="traits cons" style="margin-top: 14px;">
+            <li>סיכון להיראות "אילוסטרטיבי" / לא רציני.</li>
+            <li>קשה לשמור על קונסיסטנטיות בקני מידה שונים.</li>
+          </ul>
+        </div>
+        <div class="opt-foot">מתאים אם הקהל הוא קהילת permaculture + tech.</div>
+      </article>
+
+      <!-- B-restraint -->
+      <article class="opt recommended">
+        <span class="recommended-tag">המלצה</span>
+        <div class="opt-head">
+          <h3>B · עם רסן</h3>
+          <span class="tag">SIGNAL</span>
+        </div>
+        <div class="opt-body">
+          <div class="dir-preview dir-Br">
+            <div class="grid-doors">
+              <div class="d"></div><div class="d"></div><div class="d"></div>
+              <div class="d spark"></div><div class="d"></div><div class="d"></div>
+            </div>
+            <div class="strap">
+              <span class="dot"></span>
+              <span>אחת מתוך שש. הרגע ה־BOOM.</span>
+            </div>
+          </div>
+          <ul class="traits">
+            <li>מבנה רקורסיבי (דלתות, ספים) כשלד.</li>
+            <li>פלטת בסיס ארצית מלאה — שולטת ב־95% מהדף.</li>
+            <li>ספארק אדום ב־3–5 מקומות בלבד באתר כולו: BOOM, CTA ראשי, שגיאה.</li>
+            <li>רקורסיה ויזואלית: ענף-בתוך-ענף, סל-בתוך-סל, אגרגציה.</li>
+          </ul>
+        </div>
+        <div class="opt-foot">המבנה מבדל. הספארק חי דווקא בגלל שהוא נדיר.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ─────── 2 · PALETTE ─────── -->
+  <section id="pal">
+    <div class="sec-head">
+      <div class="num">02</div>
+      <h2>פלטה</h2>
+      <div class="meta">3 וריאציות על אותה משפחה</div>
+    </div>
+    <p class="sec-intro">
+      שלוש הוריאציות חולקות את אותם <b>צבעי ענפים</b> (6 ענפים, צבע לכל ענף). מה שמשתנה זה <b>הנייר</b> — הרקע ששולט בכל דף. בחירה אחת כאן קובעת איך האתר ירגיש בלי שום תוכן.
+    </p>
+
+    <div class="opts cols-3">
+
+      <!-- Warm Paper -->
+      <article class="opt">
+        <div class="opt-head">
+          <h3>Warm Paper</h3>
+          <span class="tag">v2-CURRENT</span>
+        </div>
+        <div class="opt-body pal-warm" style="padding: 28px 22px;">
+          <div class="palette-row" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="sw light" style="background: #fbf7ef;"><span class="name">paper</span><span class="hex">#fbf7ef</span></div>
+            <div class="sw light" style="background: #f2ebdb;"><span class="name">paper-2</span><span class="hex">#f2ebdb</span></div>
+            <div class="sw" style="background: #2b2b29;"><span class="name">ink</span><span class="hex">#2b2b29</span></div>
+            <div class="sw" style="background: #6d4a2a;"><span class="name">soil</span><span class="hex">#6d4a2a</span></div>
+          </div>
+          <div class="palette-row" style="grid-template-columns: repeat(6, 1fr);">
+            <div class="sw" style="background: #6a8a3a;" title="garden"></div>
+            <div class="sw" style="background: #6d4a2a;" title="bcs"></div>
+            <div class="sw" style="background: #c46a3e;" title="table"></div>
+            <div class="sw" style="background: #e2b23a;" title="teach"></div>
+            <div class="sw" style="background: #2d8a8c;" title="aos"></div>
+            <div class="sw" style="background: #8c3a4a;" title="ai"></div>
+          </div>
+          <div class="palette-spec" style="margin-top: 14px;">
+            <div>נייר: <b>warm cream</b></div>
+            <div>טמפרטורה: <b>חם</b></div>
+            <div>chroma: <b>0.04</b></div>
+            <div>תחושה: <b>נוסטלגי, אדמתי</b></div>
+          </div>
+        </div>
+        <div class="opt-foot">הפלטה של v2. בטוחה. שמרנית. מתאימה ל"חוות בוטיק".</div>
+      </article>
+
+      <!-- Cool Stone — RECOMMENDED -->
+      <article class="opt recommended">
+        <span class="recommended-tag">המלצה</span>
+        <div class="opt-head">
+          <h3>Cool Stone</h3>
+          <span class="tag">MODERN</span>
+        </div>
+        <div class="opt-body pal-cool" style="padding: 28px 22px;">
+          <div class="palette-row" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="sw light" style="background: #f5f3ec;"><span class="name">paper</span><span class="hex">#f5f3ec</span></div>
+            <div class="sw light" style="background: #e8e7df;"><span class="name">paper-2</span><span class="hex">#e8e7df</span></div>
+            <div class="sw" style="background: #1f1e1c;"><span class="name">ink</span><span class="hex">#1f1e1c</span></div>
+            <div class="sw" style="background: #5b483a;"><span class="name">soil</span><span class="hex">#5b483a</span></div>
+          </div>
+          <div class="palette-row" style="grid-template-columns: repeat(6, 1fr);">
+            <div class="sw" style="background: #6a8a3a;" title="garden"></div>
+            <div class="sw" style="background: #6d4a2a;" title="bcs"></div>
+            <div class="sw" style="background: #c46a3e;" title="table"></div>
+            <div class="sw" style="background: #e2b23a;" title="teach"></div>
+            <div class="sw" style="background: #2d8a8c;" title="aos"></div>
+            <div class="sw" style="background: #8c3a4a;" title="ai"></div>
+          </div>
+          <div class="palette-spec" style="margin-top: 14px;">
+            <div>נייר: <b>stone-warm</b></div>
+            <div>טמפרטורה: <b>ניטרלי</b></div>
+            <div>chroma: <b>0.015</b></div>
+            <div>תחושה: <b>בוגר, מערכתי</b></div>
+          </div>
+        </div>
+        <div class="opt-foot">נייר רגוע יותר → ענפים צבעוניים בולטים יותר. מאזן בין חקלאות וקוד.</div>
+      </article>
+
+      <!-- Bright Ivory -->
+      <article class="opt">
+        <div class="opt-head">
+          <h3>Bright Ivory</h3>
+          <span class="tag">CLEAN</span>
+        </div>
+        <div class="opt-body pal-bright" style="padding: 28px 22px;">
+          <div class="palette-row" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="sw light" style="background: #fefcf7;"><span class="name">paper</span><span class="hex">#fefcf7</span></div>
+            <div class="sw light" style="background: #f7f2e6;"><span class="name">paper-2</span><span class="hex">#f7f2e6</span></div>
+            <div class="sw" style="background: #1c1b18;"><span class="name">ink</span><span class="hex">#1c1b18</span></div>
+            <div class="sw" style="background: #6d4a2a;"><span class="name">soil</span><span class="hex">#6d4a2a</span></div>
+          </div>
+          <div class="palette-row" style="grid-template-columns: repeat(6, 1fr);">
+            <div class="sw" style="background: #6a8a3a;" title="garden"></div>
+            <div class="sw" style="background: #6d4a2a;" title="bcs"></div>
+            <div class="sw" style="background: #c46a3e;" title="table"></div>
+            <div class="sw" style="background: #e2b23a;" title="teach"></div>
+            <div class="sw" style="background: #2d8a8c;" title="aos"></div>
+            <div class="sw" style="background: #8c3a4a;" title="ai"></div>
+          </div>
+          <div class="palette-spec" style="margin-top: 14px;">
+            <div>נייר: <b>bright ivory</b></div>
+            <div>טמפרטורה: <b>חם־בהיר</b></div>
+            <div>chroma: <b>0.025</b></div>
+            <div>תחושה: <b>טרי, נקי</b></div>
+          </div>
+        </div>
+        <div class="opt-foot">בהיר יותר, אבסטרקטי יותר. מתאים אם הענף הדומיננטי יהיה AOS.</div>
+      </article>
+
+    </div>
+
+    <div style="margin-top: 36px; padding: 20px 24px; background: var(--paper-2); border-radius: var(--radius-m); border: 1px solid var(--line); font-size: 14px;">
+      <b>הספארק (ציר נפרד):</b> אדום סייגנל #d23a2e — שמור ל־BOOM / CTA ראשי / שגיאה בלבד. מופיע פחות מ־5 פעמים באתר.
+      בכל אחת מהוריאציות הספארק נשאר זהה.
+    </div>
+  </section>
+
+  <!-- ─────── 3 · TYPOGRAPHY ─────── -->
+  <section id="type">
+    <div class="sec-head">
+      <div class="num">03</div>
+      <h2>טיפוגרפיה</h2>
+      <div class="meta">סקאלה — לאישור סופי</div>
+    </div>
+    <p class="sec-intro">
+      Pairing נשאר זהה: <b>Frank Ruhl Libre</b> לכותרות ותצוגה, <b>Assistant</b> לגוף וממשק, <b>JetBrains Mono</b> לקוד ומטא־דאטה. הסקאלה למטה היא הסקאלה הסופית — אנא ודא שכל גודל סביר מבחינה תפקודית.
+    </p>
+
+    <div class="opt" style="padding: 24px 32px;">
+      <div class="type-row display">
+        <div class="label">Display</div>
+        <div class="sample">אלא אם כן.</div>
+        <div class="spec">FRL · 64 / 1.05 / 900</div>
+      </div>
+      <div class="type-row h1">
+        <div class="label">H1 · עמוד</div>
+        <div class="sample">חקלאות אקולוגית וחשיבה מערכתית</div>
+        <div class="spec">FRL · 40 / 1.15 / 700</div>
+      </div>
+      <div class="type-row h2">
+        <div class="label">H2 · סקציה</div>
+        <div class="sample">ארבעת הענפים</div>
+        <div class="spec">FRL · 28 / 1.25 / 600</div>
+      </div>
+      <div class="type-row h3">
+        <div class="label">H3 · כרטיס</div>
+        <div class="sample">Small Farm Agents</div>
+        <div class="spec">FRL · 20 / 1.30 / 600</div>
+      </div>
+      <div class="type-row quote">
+        <div class="label">Quote</div>
+        <div class="sample">"קטן זה יפה, לאט זה שפוי" — היא לא רק סיסמה.</div>
+        <div class="spec">FRL italic · 24 / 1.5 / 300</div>
+      </div>
+      <div class="type-row body">
+        <div class="label">Body</div>
+        <div class="sample">הגינה לא נסגרה — היא הפכה לשורש. הענפים: ייעוץ אקולוגי, סדנאות, תוצרת למסעדות, שירותי שטח BCS, פיתוח AI ו־Small Farm Agents. כל אחד מהם הוא ביטוי שונה של אותו דפוס.</div>
+        <div class="spec">Assistant · 17 / 1.65 / 400</div>
+      </div>
+      <div class="type-row bodysm">
+        <div class="label">Body small</div>
+        <div class="sample">פורסם 12.04.2026 · מדריך שתילה · קריאה: 4 דקות</div>
+        <div class="spec">Assistant · 14 / 1.55 / 400</div>
+      </div>
+      <div class="type-row ui">
+        <div class="label">UI / Button</div>
+        <div class="sample">הזמן ייעוץ ראשוני</div>
+        <div class="spec">Assistant · 15 / 1.0 / 600</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── 4 · GRID + SPACING ─────── -->
+  <section id="grid">
+    <div class="sec-head">
+      <div class="num">04</div>
+      <h2>Grid + Spacing</h2>
+      <div class="meta">12-col · 8px base</div>
+    </div>
+    <p class="sec-intro">
+      12 עמודות עם gap אחיד. כל המידות במכפלות של 8px (חוץ מ־4 ו־2 לפנים־אובייקטים). זה מבטיח שכל רכיב יוכל לחלוק קצב עם כל רכיב אחר.
+    </p>
+
+    <div class="opts cols-2">
+      <article class="opt">
+        <div class="opt-head"><h3>12-Column Grid</h3><span class="tag">DESKTOP</span></div>
+        <div class="opt-body">
+          <div class="grid-demo">
+            <div class="col"></div><div class="col"></div><div class="col"></div>
+            <div class="col"></div><div class="col"></div><div class="col"></div>
+            <div class="col"></div><div class="col"></div><div class="col"></div>
+            <div class="col"></div><div class="col"></div><div class="col"></div>
+          </div>
+          <div class="palette-spec" style="margin-top: 14px;">
+            <div>max-width: <b>1280px</b></div>
+            <div>columns: <b>12</b></div>
+            <div>gutter: <b>24px</b></div>
+            <div>margin: <b>clamp(20, 4vw, 56)</b></div>
+          </div>
+        </div>
+        <div class="opt-foot">מובייל: עובר ל־4 עמודות עם gutter 16px.</div>
+      </article>
+
+      <article class="opt">
+        <div class="opt-head"><h3>Spacing Scale</h3><span class="tag">8PX BASE</span></div>
+        <div class="opt-body">
+          <div class="space-stack">
+            <div class="space-row"><span class="name">--s-1</span><div class="bar" style="width: 4px;"></div><span class="px">4px</span></div>
+            <div class="space-row"><span class="name">--s-2</span><div class="bar" style="width: 8px;"></div><span class="px">8px</span></div>
+            <div class="space-row"><span class="name">--s-3</span><div class="bar" style="width: 16px;"></div><span class="px">16px</span></div>
+            <div class="space-row"><span class="name">--s-4</span><div class="bar" style="width: 24px;"></div><span class="px">24px</span></div>
+            <div class="space-row"><span class="name">--s-5</span><div class="bar" style="width: 32px;"></div><span class="px">32px</span></div>
+            <div class="space-row"><span class="name">--s-6</span><div class="bar" style="width: 48px;"></div><span class="px">48px</span></div>
+            <div class="space-row"><span class="name">--s-7</span><div class="bar" style="width: 64px;"></div><span class="px">64px</span></div>
+            <div class="space-row"><span class="name">--s-8</span><div class="bar" style="width: 96px;"></div><span class="px">96px</span></div>
+          </div>
+        </div>
+        <div class="opt-foot">פנים־אובייקט: 1–3. בין־אובייקטים: 4–6. בין־סקציות: 7–8.</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─────── 5 · RADII + SHADOWS ─────── -->
+  <section id="radii">
+    <div class="sec-head">
+      <div class="num">05</div>
+      <h2>Radii + Shadows</h2>
+      <div class="meta">4 רדיוסים · 3 צללים</div>
+    </div>
+    <p class="sec-intro">
+      רדיוסים: ההצעה היא מערכת "מעורבת" — רדיוס בינוני־גדול לקלפים (מרגיש אורגני), רדיוס קטן לכפתורים סקוורים, רדיוס pill ל־CTAים. הצללים — רכים, חמים, עם hint של soil בהצללה.
+    </p>
+
+    <div class="opt" style="padding: 28px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-bottom: 14px;">RADII</div>
+      <div class="r-row">
+        <div class="r-card s">radius-s · 6px</div>
+        <div class="r-card m">radius-m · 14px</div>
+        <div class="r-card l">radius-l · 22px</div>
+        <div class="r-card xl">radius-xl · 36px</div>
+      </div>
+
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); margin: 32px 0 14px;">SHADOWS</div>
+      <div class="sh-row">
+        <div class="sh-card s">shadow-s · subtle</div>
+        <div class="sh-card m">shadow-m · card lift</div>
+        <div class="sh-card l">shadow-l · floating</div>
+      </div>
+
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); margin: 32px 0 14px;">USAGE</div>
+      <div class="palette-spec" style="grid-template-columns: repeat(3, 1fr);">
+        <div>כפתור · <b>radius-s</b></div>
+        <div>צ'יפ · <b>pill (100px)</b></div>
+        <div>שדה טופס · <b>radius-s</b></div>
+        <div>כרטיס · <b>radius-l</b></div>
+        <div>מודאל · <b>radius-xl</b></div>
+        <div>CTA ראשי · <b>pill</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── SIGN-OFF ─────── -->
+  <section id="sign" class="signoff">
+    <h2>Stage 0 · נעול ✓</h2>
+    <p>חמשת הצירים אושרו ב־11.05.2026. ה־tokens יושבים ב־<code style="background: rgba(251,247,239,.1); padding: 2px 6px; border-radius: 4px;">brand/system.css</code> v3. הסשן הבא מתחיל מ־Stage 1 · Components.</p>
+    <ul class="signoff-list">
+      <li>
+        <div class="box" style="background: var(--sun); border-color: var(--sun);"></div>
+        <div><b>01 · כיוון</b><div class="hint">B · עם רסן — מבנה רקורסיבי, ספארק נדיר (≤5 מקומות)</div></div>
+        <div class="opt-pick">נעול</div>
+      </li>
+      <li>
+        <div class="box" style="background: var(--sun); border-color: var(--sun);"></div>
+        <div><b>02 · פלטה</b><div class="hint">Cool Stone — paper #f5f3ec · ink #1f1e1c</div></div>
+        <div class="opt-pick">נעול</div>
+      </li>
+      <li>
+        <div class="box" style="background: var(--sun); border-color: var(--sun);"></div>
+        <div><b>03 · טיפוגרפיה</b><div class="hint">Frank Ruhl Libre × Assistant × JetBrains Mono — שני פונטים מנוגדים שעובדים</div></div>
+        <div class="opt-pick">נעול</div>
+      </li>
+      <li>
+        <div class="box" style="background: var(--sun); border-color: var(--sun);"></div>
+        <div><b>04 · Grid + Spacing</b><div class="hint">6 עמודות · 1200 max · spacing מ־16: 16/24/32/48/64/96/128/160</div></div>
+        <div class="opt-pick">נעול</div>
+      </li>
+      <li>
+        <div class="box" style="background: var(--sun); border-color: var(--sun);"></div>
+        <div><b>05 · Radii + Shadows</b><div class="hint">ברירת מחדל: radius-m (14px) + shadow-m (card lift)</div></div>
+        <div class="opt-pick">נעול</div>
+      </li>
+    </ul>
+    <p style="margin-top: 28px; font-size: 13px;">
+      הסשן הבא: פתח <code style="background: rgba(251,247,239,.1); padding: 2px 6px; border-radius: 4px;">SESSION_HANDOFF.md</code> → סדר עבודה ל־Stage 1 · Components.
+    </p>
+  </section>
+
+</div>
+
+</body>
+</html>

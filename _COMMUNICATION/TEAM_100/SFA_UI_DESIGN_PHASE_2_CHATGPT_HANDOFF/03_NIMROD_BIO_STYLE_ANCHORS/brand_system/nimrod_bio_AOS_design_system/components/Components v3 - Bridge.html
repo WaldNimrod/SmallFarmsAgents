@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Components v3 · Bridge card · Nimrod.bio / AOS</title>
+<link rel="stylesheet" href="brand/system.css">
+<link rel="stylesheet" href="T1-styles.css">
+<style>
+  :root {
+    --gutter: clamp(20px, 4vw, 56px);
+    --col-max: 1280px;
+  }
+  body { padding-bottom: 120px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(245,243,236,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px var(--gutter);
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  .topbar .crumb { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); letter-spacing: .04em; }
+  .topbar .crumb b { color: var(--ink); }
+  .topbar .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .topbar .crumb a:hover { color: var(--ink); }
+  .topbar .status { display: flex; gap: 10px; align-items: center; font-family: "JetBrains Mono", monospace; font-size: 11px; }
+  .pill-tb { padding: 4px 10px; border-radius: 100px; border: 1px solid var(--line); background: var(--paper-2); }
+  .pill-new { background: var(--spark); color: #fff; border-color: transparent; font-weight: 600; }
+
+  .page { max-width: var(--col-max); margin: 0 auto; padding: 56px var(--gutter) 0; }
+  section.sec { margin-bottom: 112px; scroll-margin-top: 80px; }
+  .sec-head {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: baseline;
+    border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 36px;
+  }
+  .sec-head .num { font-family: "Frank Ruhl Libre", serif; font-size: 48px; line-height: 1; color: var(--w-soil-deep); font-weight: 900; }
+  .sec-head h2 { font-family: "Frank Ruhl Libre", serif; font-size: 32px; line-height: 1.15; margin: 0; font-weight: 700; }
+  .sec-head .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+  .sec-intro { max-width: 760px; font-size: 16px; color: var(--ink-soft); margin-bottom: 36px; line-height: 1.6; }
+  .sec-intro b { color: var(--ink); }
+  .sec-intro em { color: var(--ink); font-style: italic; }
+
+  /* Hero */
+  .hero {
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; padding: 40px 0 60px;
+    border-bottom: 2px solid var(--ink); margin-bottom: 80px;
+  }
+  .hero h1 { font-family: "Frank Ruhl Libre", serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.05; margin: 0 0 24px; font-weight: 900; letter-spacing: -.02em; }
+  .hero h1 em { font-style: italic; color: var(--w-soil-deep); font-weight: 700; }
+  .hero p { font-size: 18px; line-height: 1.6; max-width: 540px; margin: 0 0 14px; color: var(--ink-soft); }
+  .hero .label { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); margin-bottom: 18px; letter-spacing: .08em; text-transform: uppercase; }
+  .legend { background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-l); padding: 22px; font-size: 13px; }
+  .legend h3 { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 14px; color: var(--ink-soft); }
+  .legend ul { margin: 0; padding-inline-start: 18px; display: grid; gap: 8px; }
+  .legend li::marker { color: var(--w-soil-deep); font-weight: 700; }
+  .legend code { background: rgba(31,30,28,.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; font-family: "JetBrains Mono", monospace; }
+
+  /* Demo frame */
+  .demo {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .demo-head {
+    display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline;
+    padding: 18px 24px; background: var(--paper-2); border-bottom: 1px solid var(--line);
+  }
+  .demo-head h3 { font-family: "Frank Ruhl Libre", serif; font-size: 22px; margin: 0; font-weight: 700; }
+  .demo-head .demo-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+  .demo-body { padding: 32px 24px; background: var(--paper); }
+  .demo-foot {
+    padding: 14px 24px; background: var(--paper-2);
+    font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+  }
+  .demo-foot code { background: rgba(31,30,28,.06); padding: 1px 6px; border-radius: 4px; }
+
+  /* Variant grid for showcasing 3 signals × 3 world pairs */
+  .signal-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+
+  /* Signal selector pills */
+  .signal-pills { display: inline-flex; gap: 6px; padding: 4px; background: var(--paper-2); border-radius: 100px; border: 1px solid var(--line); }
+  .signal-pills button {
+    padding: 6px 14px; border-radius: 100px; border: none; background: transparent;
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .04em;
+    cursor: pointer; color: var(--ink-soft);
+  }
+  .signal-pills button.is-on { background: var(--ink); color: var(--paper); }
+
+  /* Tokens table */
+  .tokens-table {
+    width: 100%; border-collapse: collapse;
+    font-family: "JetBrains Mono", monospace; font-size: 13px;
+  }
+  .tokens-table th {
+    text-align: start; padding: 12px 16px; background: var(--paper-2);
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-soft); border-bottom: 1px solid var(--line);
+  }
+  .tokens-table td {
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .tokens-table td.swatch-cell { width: 80px; }
+  .tokens-table td.swatch-cell span {
+    display: block; width: 56px; height: 28px; border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .tokens-table code { font-size: 12px; }
+
+  /* API table */
+  .api {
+    border-collapse: collapse; width: 100%;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+  }
+  .api th { text-align: start; padding: 10px 14px; background: var(--paper-2); font-weight: 600; }
+  .api td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .api code { background: rgba(31,30,28,.06); padding: 1px 5px; border-radius: 3px; }
+
+  /* Code block */
+  pre.code {
+    background: var(--ink); color: var(--paper);
+    padding: 20px 24px; border-radius: var(--radius-m);
+    font-family: "JetBrains Mono", monospace; font-size: 12.5px; line-height: 1.65;
+    overflow-x: auto; direction: ltr; text-align: start;
+  }
+  pre.code .c { color: #7a8b6c; }
+  pre.code .k { color: #c46a3e; }
+  pre.code .s { color: #6fcdcf; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="crumb">
+    <a href="Components.html">Components v2</a> ›
+    <b>Bridge card · v3 addendum</b>
+  </div>
+  <div class="status">
+    <span class="pill-tb pill-new">NEW · v3</span>
+    <span class="pill-tb">23.05.2026</span>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <div class="label">Components v3 · addendum</div>
+      <h1>Bridge card — <em>הכרטיס שמסמן גשר.</em></h1>
+      <p>קומפוננטה חדשה ש-לא הייתה ב-v2. נדרשה כי <b>הייחוד שלנו הוא בקישוריות בין העולמות, לא בעולמות עצמם</b> — וכרטיס שירות/פעילות שתויג ב-2 עולמות צריך לסמן את זה ויזואלית.</p>
+      <p>הכרטיס תומך ב-3 סיגנלים ויזואליים שונים שניתן להחליף ביניהם דרך attribute. <b>הסיגנל הנעול לאחר Stage 3 הוא "תפר".</b></p>
+    </div>
+    <div class="legend">
+      <h3>איך לקרוא</h3>
+      <ul>
+        <li>"גשר" = פעילות שתויגה ב-<b>2 עולמות שונים</b></li>
+        <li>הסיגנל נשלט דרך <code>body[data-bridge="seam|diag|stripe"]</code></li>
+        <li>צבעי הגשר מוגדרים ב-CSS vars: <code>--bridge-a</code> · <code>--bridge-b</code></li>
+        <li>גשר בעל יותר מ-2 עולמות (תיאורטי) — כרגע לא מטופל; <em>פתח ticket אם תידרש</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="anatomy">
+    <header class="sec-head">
+      <span class="num">01</span>
+      <h2>אנטומיה</h2>
+      <span class="meta">5 חלקים</span>
+    </header>
+    <p class="sec-intro">
+      Bridge card הוא כרטיס סטנדרטי עם <b>שכבת סימון</b> שמשתנה לפי בחירה. החלקים הקבועים: tag-row (2 chips של עולמות עם <code>×</code> ביניהם), כותרת, lede, link-to-more, וסימן ויזואלי שהוא <em>גשר</em>.
+    </p>
+
+    <div class="demo">
+      <div class="demo-head">
+        <h3>הרכיב הבסיסי · ללא סימן גשר</h3>
+        <span class="demo-meta">בסיס משותף לכל הסיגנלים</span>
+      </div>
+      <div class="demo-body" style="max-width: 380px; margin: 0 auto;">
+        <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-know);">
+          <div class="tag-row">
+            <span class="wc">אדמה</span>
+            <span class="conn"><span class="x">×</span></span>
+            <span class="wc know">ייעוץ</span>
+          </div>
+          <h3>ייעוץ · תכנון חממה</h3>
+          <p class="lede">החממה שלי + חממות של אחרים. ידע שעבר בוץ — לא רק PDF.</p>
+          <span class="more">לעמוד הפעילות</span>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <code>&lt;div class="bridge-card"&gt; … &lt;/div&gt;</code> — בלי <code>body[data-bridge]</code> = ללא סימן
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="signals">
+    <header class="sec-head">
+      <span class="num">02</span>
+      <h2>3 סיגנלים</h2>
+      <span class="meta">data-bridge="seam | diag | stripe"</span>
+    </header>
+    <p class="sec-intro">
+      שלוש דרכים לסמן את הגשר. <b>seam (תפר)</b> נעול כברירת המחדל בכל האתר אחרי החלטת מנהל בסשן 23.05.2026. שני האחרים נשמרים כאופציה — לעמודים מיוחדים, או לבחינה עתידית.
+    </p>
+
+    <div id="signal-demo">
+      <!-- SEAM -->
+      <div class="demo">
+        <div class="demo-head">
+          <h3>seam · תפר (★ default)</h3>
+          <span class="demo-meta">משולש בפינה + border בצבע עולם A</span>
+        </div>
+        <div class="demo-body" data-bridge-demo="seam">
+          <div class="signal-grid">
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-know);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc know">ייעוץ</span></div>
+              <h3>ייעוץ · תכנון חממה</h3>
+              <p class="lede">ידע שעבר בוץ.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>SFA · Small Farm Agents</h3>
+              <p class="lede">סוכן AI מבוסס שטח.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-know); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc know">ייעוץ</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>סדנת ארכיטקטורת ידע</h3>
+              <p class="lede">איך לבנות בסיס ידע מעשי.</p>
+              <span class="more">לעמוד</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-foot">
+          <code>body[data-bridge="seam"]</code> — סימן עדין, מתאים לדנסיטי גבוהה. הנבחר.
+        </div>
+      </div>
+
+      <!-- DIAG -->
+      <div class="demo">
+        <div class="demo-head">
+          <h3>diag · אלכסון</h3>
+          <span class="demo-meta">2 קווים אלכסוניים בפינות מנוגדות</span>
+        </div>
+        <div class="demo-body" data-bridge-demo="diag">
+          <div class="signal-grid">
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-know);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc know">ייעוץ</span></div>
+              <h3>ייעוץ · תכנון חממה</h3>
+              <p class="lede">ידע שעבר בוץ.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>SFA</h3>
+              <p class="lede">סוכן AI מבוסס שטח.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-know); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc know">ייעוץ</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>סדנת ארכיטקטורת ידע</h3>
+              <p class="lede">בסיס ידע מעשי.</p>
+              <span class="more">לעמוד</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-foot">
+          <code>body[data-bridge="diag"]</code> — סימן בולט בפינות. שימוש: עמודים שיש להם פוקוס על הגשר.
+        </div>
+      </div>
+
+      <!-- STRIPE -->
+      <div class="demo">
+        <div class="demo-head">
+          <h3>stripe · פס דו-צבעי</h3>
+          <span class="demo-meta">פסים אופקיים למעלה ולמטה</span>
+        </div>
+        <div class="demo-body" data-bridge-demo="stripe">
+          <div class="signal-grid">
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-know);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc know">ייעוץ</span></div>
+              <h3>ייעוץ · תכנון חממה</h3>
+              <p class="lede">ידע שעבר בוץ.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-soil); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc">אדמה</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>SFA</h3>
+              <p class="lede">סוכן AI מבוסס שטח.</p>
+              <span class="more">לעמוד</span>
+            </div>
+            <div class="bridge-card" style="--bridge-a: var(--w-know); --bridge-b: var(--w-code);">
+              <div class="tag-row"><span class="wc know">ייעוץ</span><span class="conn"><span class="x">×</span></span><span class="wc code">דיגיטל</span></div>
+              <h3>סדנת ידע</h3>
+              <p class="lede">בסיס ידע מעשי.</p>
+              <span class="more">לעמוד</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-foot">
+          <code>body[data-bridge="stripe"]</code> — סימן הכי בולט. שימוש: סיכומים, מסירת רעיון, hero של גשר.
+        </div>
+      </div>
+    </div>
+
+    <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-soft); margin-top: 20px; text-align: center;">
+      בחירה: <span class="signal-pills" id="signal-pills">
+        <button data-sig="seam" class="is-on">seam</button>
+        <button data-sig="diag">diag</button>
+        <button data-sig="stripe">stripe</button>
+      </span>
+      — מחליף את כל הדמואים למעלה בו-זמנית
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="tokens">
+    <header class="sec-head">
+      <span class="num">03</span>
+      <h2>טוקנים</h2>
+      <span class="meta">CSS vars</span>
+    </header>
+    <p class="sec-intro">המשתנים שמגדירים גשר. <b>נדרש</b> להגדיר <code>--bridge-a</code> ו-<code>--bridge-b</code> על אלמנט <code>.bridge-card</code> — אחרת ייפול ל-default (soil×know).</p>
+
+    <table class="tokens-table">
+      <thead>
+        <tr><th></th><th>token</th><th>value</th><th>תפקיד</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="swatch-cell"><span style="background: var(--w-soil);"></span></td>
+          <td><code>--w-soil</code></td>
+          <td><code>#6a8a3a</code></td>
+          <td>גשר עם אדמה — צבע ראשי</td>
+        </tr>
+        <tr>
+          <td class="swatch-cell"><span style="background: var(--w-know);"></span></td>
+          <td><code>--w-know</code></td>
+          <td><code>#c46a3e</code></td>
+          <td>גשר עם ייעוץ — צבע ראשי</td>
+        </tr>
+        <tr>
+          <td class="swatch-cell"><span style="background: var(--w-code);"></span></td>
+          <td><code>--w-code</code></td>
+          <td><code>#2d8a8c</code></td>
+          <td>גשר עם דיגיטל — צבע ראשי</td>
+        </tr>
+        <tr>
+          <td class="swatch-cell"><span style="background: linear-gradient(to left, var(--w-soil) 0 50%, var(--w-know) 50% 100%);"></span></td>
+          <td><code>--bridge-a</code> · <code>--bridge-b</code></td>
+          <td>scoped</td>
+          <td>נקבעים על-פי הכרטיס — סדר חשוב (a = עולם ראשון בכותרת)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="api">
+    <header class="sec-head">
+      <span class="num">04</span>
+      <h2>שימוש (API)</h2>
+      <span class="meta">HTML + CSS</span>
+    </header>
+    <p class="sec-intro">דוגמת קוד מינימלית. את הסיגנל בוחרים גלובלית, ולא לכל כרטיס בנפרד — זה ויברציה רוחבית של האתר.</p>
+
+    <pre class="code">
+<span class="c">/* 1. בחר סיגנל גלובלית על body (פעם אחת באתר) */</span>
+&lt;body data-bridge=<span class="s">"seam"</span>&gt;
+
+<span class="c">/* 2. כל כרטיס-גשר מקבל את צבעי 2 העולמות שלו */</span>
+&lt;a class=<span class="s">"bridge-card"</span> style=<span class="s">"--bridge-a: var(--w-soil); --bridge-b: var(--w-know);"</span>&gt;
+  &lt;div class=<span class="s">"tag-row"</span>&gt;
+    &lt;span class=<span class="s">"wc"</span>&gt;אדמה&lt;/span&gt;
+    &lt;span class=<span class="s">"conn"</span>&gt;&lt;span class=<span class="s">"x"</span>&gt;×&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=<span class="s">"wc know"</span>&gt;ייעוץ&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;h3&gt;ייעוץ · תכנון חממה&lt;/h3&gt;
+  &lt;p class=<span class="s">"lede"</span>&gt;ידע שעבר בוץ.&lt;/p&gt;
+  &lt;span class=<span class="s">"more"</span>&gt;לעמוד&lt;/span&gt;
+&lt;/a&gt;
+</pre>
+
+    <h3 style="font-family: 'Frank Ruhl Libre', serif; font-size: 22px; margin: 36px 0 16px; font-weight: 700;">חתימה</h3>
+    <table class="api">
+      <thead>
+        <tr><th>אלמנט</th><th>נדרש?</th><th>הערה</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>.bridge-card</code></td><td>✓</td><td>הקלאס הראשי</td></tr>
+        <tr><td><code>--bridge-a</code></td><td>✓</td><td>צבע עולם ראשון (כפי שהוא בכותרת)</td></tr>
+        <tr><td><code>--bridge-b</code></td><td>✓</td><td>צבע עולם שני</td></tr>
+        <tr><td><code>.tag-row</code> + 2× <code>.wc</code> + <code>.conn</code></td><td>✓</td><td>לתאר את הגשר טקסטואלית גם</td></tr>
+        <tr><td><code>h3</code></td><td>✓</td><td>שם הפעילות</td></tr>
+        <tr><td><code>.lede</code></td><td>✓</td><td>1-2 שורות</td></tr>
+        <tr><td><code>.more</code></td><td>✓</td><td>טקסט הקישור — חץ אוטומטי דרך <code>::after</code></td></tr>
+        <tr><td><code>.stretch-stamp</code></td><td>×</td><td>'PROPOSAL · T-06' — נשלף לאחר אישור הקומפוננטה</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="usage">
+    <header class="sec-head">
+      <span class="num">05</span>
+      <h2>היכן להשתמש</h2>
+      <span class="meta">3 מקומות</span>
+    </header>
+    <ul style="font-family: 'Frank Ruhl Libre', serif; font-size: 17px; line-height: 1.75; max-width: 700px; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 14px;">
+      <li style="padding-inline-start: 22px; position: relative;">
+        <b style="position: absolute; inset-inline-start: 0; color: var(--w-soil-deep);">→</b>
+        <a href="T1 World - אדמה.html" style="color: var(--ink); border-bottom: 1.5px solid var(--w-soil); padding-bottom: 1px; text-decoration: none;">T1 · עולם אדמה</a> — בסקציית "גשרים", להפנות מאדמה לעולם נוסף
+      </li>
+      <li style="padding-inline-start: 22px; position: relative;">
+        <b style="position: absolute; inset-inline-start: 0; color: var(--w-soil-deep);">→</b>
+        <a href="T3 Project.html" style="color: var(--ink); border-bottom: 1.5px solid var(--w-soil); padding-bottom: 1px; text-decoration: none;">T3 · עמוד פרויקט</a> — בסקציית "פעילויות שהפעילו" (כשהפעילות היא גשר)
+      </li>
+      <li style="padding-inline-start: 22px; position: relative;">
+        <b style="position: absolute; inset-inline-start: 0; color: var(--w-soil-deep);">→</b>
+        <a href="T7 Home.html" style="color: var(--ink); border-bottom: 1.5px solid var(--w-soil); padding-bottom: 1px; text-decoration: none;">T7 · דף הבית</a> — אופציונלית בסקציית פעילויות נבחרות (לא בשימוש כרגע)
+      </li>
+    </ul>
+
+    <p style="font-family: 'Frank Ruhl Libre', serif; font-style: italic; font-size: 16px; color: var(--ink-soft); margin-top: 36px; max-width: 700px;">
+      <b style="font-style: normal; color: var(--ink);">לא להשתמש:</b> בעמוד T2 (Service) — שם הגשר מסומן דרך ה-hero של העמוד עצמו, לא בכרטיס. אם מציגים גשר ב-hero של עמוד שירות, לא תוסיף עוד bridge-card עם אותם 2 עולמות.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="sec" id="approval">
+    <header class="sec-head">
+      <span class="num">06</span>
+      <h2>סטטוס אישור</h2>
+      <span class="meta">T-06</span>
+    </header>
+    <div style="background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-l); padding: 28px; max-width: 720px;">
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--w-soil-deep); margin-bottom: 12px;">
+        ✓ APPROVED · 23.05.2026
+      </div>
+      <h3 style="font-family: 'Frank Ruhl Libre', serif; font-size: 24px; margin: 0 0 14px; font-weight: 700;">
+        T-06 נסגר — הקומפוננטה ניתנת לשימוש רוחבי באתר.
+      </h3>
+      <p style="font-family: 'Frank Ruhl Libre', serif; font-size: 16px; line-height: 1.65; color: var(--ink); margin: 0 0 18px;">
+        ההצעה הוצגה לראשונה ב-T1 (Stage 3) עם stamp <code style="font-family: 'JetBrains Mono', monospace; background: rgba(31,30,28,.06); padding: 1px 5px; border-radius: 3px; font-size: 13px;">PROPOSAL · T-06</code>. אחרי שימוש מוצלח ב-T1, T3 ובדף הבית, הקומפוננטה מאושרת ל-Components v3. הסיגנל הנעול הוא <b>seam</b>.
+      </p>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-soft); margin: 0; letter-spacing: .03em;">
+        קוד CSS המלא: <code style="background: rgba(31,30,28,.06); padding: 1px 5px; border-radius: 3px;">T1-styles.css</code> · search ל-<code style="background: rgba(31,30,28,.06); padding: 1px 5px; border-radius: 3px;">.bridge-card</code> ו-<code style="background: rgba(31,30,28,.06); padding: 1px 5px; border-radius: 3px;">data-bridge</code>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Hide the PROPOSAL stamps in this doc (component is now approved)
+  const style = document.createElement('style');
+  style.textContent = '.bridge-card .stretch-stamp { display: none; }';
+  document.head.appendChild(style);
+
+  // Signal pills control the demo
+  const pills = document.querySelectorAll('#signal-pills button');
+  pills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sig = btn.dataset.sig;
+      pills.forEach(b => b.classList.toggle('is-on', b === btn));
+      document.body.dataset.bridge = sig;
+    });
+  });
+  document.body.dataset.bridge = 'seam';
+</script>
+
+</body>
+</html>

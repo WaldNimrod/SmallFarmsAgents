@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Components · Nimrod.bio / AOS · Stage 1 · v2</title>
+<link rel="stylesheet" href="brand/system.css">
+<style>
+  :root {
+    --gutter: clamp(20px, 4vw, 56px);
+    --col-max: 1280px;
+  }
+  body { padding-bottom: 120px; }
+
+  /* ───── Page chrome (mirrors Foundations.html) ───── */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(245,243,236,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px var(--gutter);
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  .topbar .crumb { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); letter-spacing: .04em; }
+  .topbar .crumb b { color: var(--ink); }
+  .topbar .status { display: flex; gap: 10px; align-items: center; font-family: "JetBrains Mono", monospace; font-size: 11px; }
+  .pill-tb { padding: 4px 10px; border-radius: 100px; border: 1px solid var(--line); background: var(--paper-2); }
+  .pill-draft { background: var(--b-teach); color: var(--ink); border-color: transparent; }
+
+  .page { max-width: var(--col-max); margin: 0 auto; padding: 56px var(--gutter) 0; }
+  section.sec { margin-bottom: 112px; scroll-margin-top: 80px; }
+  .sec-head {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: baseline;
+    border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 36px;
+  }
+  .sec-head .num { font-family: "Frank Ruhl Libre", serif; font-size: 48px; line-height: 1; color: var(--b-table); font-weight: 900; }
+  .sec-head h2 { font-family: "Frank Ruhl Libre", serif; font-size: 32px; line-height: 1.15; margin: 0; font-weight: 700; }
+  .sec-head .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+  .sec-intro { max-width: 760px; font-size: 16px; color: var(--ink-soft); margin-bottom: 36px; line-height: 1.6; }
+  .sec-intro b { color: var(--ink); }
+
+  /* ───── Hero ───── */
+  .hero {
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; padding: 40px 0 60px;
+    border-bottom: 2px solid var(--ink); margin-bottom: 80px;
+  }
+  .hero h1 { font-family: "Frank Ruhl Libre", serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.05; margin: 0 0 24px; font-weight: 900; }
+  .hero h1 em { font-style: italic; color: var(--b-table); font-weight: 700; }
+  .hero p { font-size: 18px; line-height: 1.6; max-width: 540px; margin: 0 0 14px; color: var(--ink-soft); }
+  .hero .label { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft); margin-bottom: 18px; letter-spacing: .08em; text-transform: uppercase; }
+  .legend { background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-l); padding: 22px; font-size: 13px; }
+  .legend h3 { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 14px; color: var(--ink-soft); }
+  .legend ul { margin: 0; padding-inline-start: 18px; display: grid; gap: 8px; }
+  .legend li::marker { color: var(--b-table); font-weight: 700; }
+  .legend code { background: rgba(31,30,28,.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+
+  /* ───── TOC (sticky right) ───── */
+  .toc {
+    position: fixed; inset-inline-end: 24px; top: 90px; z-index: 40;
+    background: rgba(245,243,236,.96); backdrop-filter: blur(10px);
+    border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 14px 18px; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    max-width: 220px;
+  }
+  .toc h4 { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; }
+  .toc ol { margin: 0; padding-inline-start: 20px; display: grid; gap: 6px; }
+  .toc a { color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--b-table); }
+  @media (max-width: 1500px) { .toc { display: none; } }
+
+  /* ───── Demo frame shared by every component ───── */
+  .demo {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .demo-head {
+    display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline;
+    padding: 18px 24px 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .demo-head h3 { font-family: "Frank Ruhl Libre", serif; font-size: 20px; margin: 0; font-weight: 700; }
+  .demo-head .tag { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .06em; }
+  .demo-body { padding: 28px 24px; }
+  .demo-foot {
+    padding: 12px 24px; background: var(--paper-2);
+    border-top: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft);
+    display: flex; flex-wrap: wrap; gap: 18px;
+  }
+  .demo-foot b { color: var(--ink); font-weight: 600; }
+  .demo-foot code { background: rgba(31,30,28,.06); padding: 1px 6px; border-radius: 4px; }
+
+  /* state grids */
+  .grid-states {
+    display: grid; grid-template-columns: 90px repeat(4, 1fr); gap: 18px 22px;
+    align-items: center;
+  }
+  .grid-states .row-label { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .06em; }
+  .grid-states .col-label { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; text-align: start; }
+  .grid-states .col-label.first { grid-column: 2; }
+
+  /* ============================================================
+     01 · Buttons
+     ============================================================ */
+  /* base */
+  .nbtn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: "Assistant", sans-serif; font-weight: 600;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    cursor: pointer; text-decoration: none;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+    white-space: nowrap;
+  }
+  /* sizes */
+  .nbtn.sm { font-size: 13px; padding: 8px 16px; }
+  .nbtn.md { font-size: 15px; padding: 12px 22px; }
+  .nbtn.lg { font-size: 17px; padding: 16px 30px; }
+
+  /* primary — terracotta (b-table) */
+  .nbtn.primary               { background: var(--b-table); color: #fff; }
+  .nbtn.primary.is-hover,
+  .nbtn.primary:hover         { background: #b15c33; transform: translateY(-1px); }
+  .nbtn.primary.is-active     { background: #9a4f2b; transform: translateY(1px); }
+  .nbtn.primary.is-disabled,
+  .nbtn.primary[disabled]     { background: var(--paper-3); color: var(--ink-soft); cursor: not-allowed; transform: none; }
+
+  /* secondary — leaf-deep */
+  .nbtn.secondary             { background: var(--leaf-deep); color: #fff; }
+  .nbtn.secondary.is-hover,
+  .nbtn.secondary:hover       { background: #32491a; transform: translateY(-1px); }
+  .nbtn.secondary.is-active   { background: #29380f; transform: translateY(1px); }
+  .nbtn.secondary.is-disabled { background: var(--paper-3); color: var(--ink-soft); cursor: not-allowed; transform: none; }
+
+  /* ghost */
+  .nbtn.ghost                 { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .nbtn.ghost.is-hover,
+  .nbtn.ghost:hover           { background: var(--ink); color: var(--paper); }
+  .nbtn.ghost.is-active       { background: var(--ink-soft); color: var(--paper); border-color: var(--ink-soft); }
+  .nbtn.ghost.is-disabled     { color: var(--ink-soft); border-color: var(--line); cursor: not-allowed; background: transparent; }
+
+  /* spark — rare, ≤5 site-wide */
+  .nbtn.spark                 { background: var(--spark); color: #fff; font-weight: 700; box-shadow: 3px 3px 0 var(--spark-ink); }
+  .nbtn.spark.is-hover,
+  .nbtn.spark:hover           { transform: translateY(-2px); box-shadow: 5px 5px 0 var(--spark-ink); }
+  .nbtn.spark.is-active       { transform: translateY(2px); box-shadow: 1px 1px 0 var(--spark-ink); }
+  .nbtn.spark.is-disabled     { background: var(--paper-3); color: var(--ink-soft); box-shadow: none; cursor: not-allowed; }
+
+  .nbtn .arrow { font-family: "JetBrains Mono", monospace; font-weight: 400; opacity: .9; }
+
+  .size-row {
+    display: flex; gap: 18px; flex-wrap: wrap; align-items: center;
+    padding: 12px 0;
+  }
+  .size-row .row-label { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); width: 60px; }
+
+  /* ============================================================
+     02 · Links · Chips · Branch tags
+     ============================================================ */
+  .link-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; padding: 8px 0; }
+
+  .nlink {
+    color: var(--b-table); text-decoration: none; font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .nlink:hover { border-bottom-color: currentColor; }
+
+  .nlink-quiet { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .nlink-quiet:hover { border-bottom-color: var(--ink); }
+
+  .nlink-mono {
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase;
+    text-decoration: none; padding-bottom: 2px; border-bottom: 1px dashed var(--ink-soft);
+  }
+  .nlink-mono:hover { color: var(--b-table); border-color: var(--b-table); }
+
+  .nlink-back::before { content: "←"; margin-inline-end: 8px; font-weight: 400; }
+
+  /* hand-drawn underline (kept from v2/v3) */
+  .nlink-under {
+    color: var(--ink); text-decoration: none; font-weight: 600;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23c46a3e' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat; background-position: bottom right; background-size: 100% 8px;
+    padding-bottom: 6px;
+  }
+  .nlink-under:hover { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%231f1e1c' stroke-width='2' fill='none' stroke-linecap='round'/></svg>"); }
+
+  /* Chips (generic, neutral) */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "Assistant", sans-serif; font-size: 13px; font-weight: 500;
+    padding: 6px 14px; border-radius: var(--radius-pill);
+    background: var(--paper-2); border: 1px solid var(--line); color: var(--ink);
+    cursor: pointer; transition: background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .chip:hover { background: var(--paper-3); }
+  .chip.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip .x { font-family: "JetBrains Mono", monospace; opacity: .6; font-size: 11px; }
+  .chip.is-removable .x:hover { opacity: 1; }
+
+  /* Branch tags — one per branch, fixed color */
+  .btag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "Assistant", sans-serif; font-size: 13px; font-weight: 600;
+    padding: 4px 12px 4px 8px; border-radius: var(--radius-pill);
+    color: #fff;
+  }
+  .btag::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.7);
+  }
+  .btag-garden { background: var(--b-garden); }
+  .btag-bcs    { background: var(--b-bcs); }
+  .btag-table  { background: var(--b-table); }
+  .btag-teach  { background: var(--b-teach); color: var(--ink); }
+  .btag-teach::before { background: rgba(31,30,28,.4); }
+  .btag-aos    { background: var(--b-aos); }
+  .btag-ai     { background: var(--b-ai); }
+
+  /* Outlined branch tag — for use ON a colored card */
+  .btag-out {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "Assistant", sans-serif; font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: var(--radius-pill);
+    background: transparent; color: var(--ink); border: 1.2px solid currentColor;
+  }
+  .btag-out .swatch { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ============================================================
+     03 · Cards
+     ============================================================ */
+  .card-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* Branch card — square-ish */
+  .card-branch {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m); padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: transform .2s ease, box-shadow .2s ease;
+    cursor: pointer;
+  }
+  .card-branch:hover { transform: translateY(-2px); box-shadow: var(--shadow-l); }
+  .card-branch .basket-slot {
+    aspect-ratio: 1/1; background: var(--paper-2); border-radius: var(--radius-s);
+    display: grid; place-items: center; position: relative;
+    background-image: repeating-linear-gradient(135deg, var(--paper-2) 0 12px, var(--paper-3) 12px 24px);
+  }
+  .card-branch .basket-slot .ph-svg { width: 56%; opacity: .85; }
+  .card-branch h3 { font-family: "Frank Ruhl Libre", serif; font-size: 22px; margin: 0; font-weight: 700; line-height: 1.2; }
+  .card-branch p  { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .card-branch .more {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase;
+    margin-top: auto; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .card-branch .more::after { content: "←"; }
+
+  /* Service card — hero strip */
+  .card-svc {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-m);
+    box-shadow: var(--shadow-m); overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .card-svc .strip {
+    height: 88px; background: var(--b-aos);
+    display: flex; align-items: flex-end; padding: 12px 18px;
+    color: rgba(255,255,255,.85);
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .08em;
+    position: relative; overflow: hidden;
+  }
+  .card-svc .strip::after {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 80% 30%, rgba(255,255,255,.15) 0 18%, transparent 22%),
+      radial-gradient(circle at 20% 70%, rgba(0,0,0,.12) 0 22%, transparent 26%);
+    pointer-events: none;
+  }
+  .card-svc .body { padding: 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .card-svc h3 { font-family: "Frank Ruhl Libre", serif; font-size: 22px; margin: 0; font-weight: 700; }
+  .card-svc .lede { font-size: 15px; color: var(--ink-soft); margin: 0; line-height: 1.55; }
+  .card-svc ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+  .card-svc ul li { padding-inline-start: 16px; position: relative; }
+  .card-svc ul li::before { content: ""; position: absolute; inset-inline-start: 0; top: .7em; width: 8px; height: 1.5px; background: var(--b-table); }
+  .card-svc .cta-row { display: flex; gap: 8px; margin-top: auto; padding-top: 8px; }
+
+  /* Archive post card — compact */
+  .card-post {
+    background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 20px 22px;
+    display: grid; grid-template-columns: 56px 1fr; gap: 18px;
+    transition: background .15s ease;
+    cursor: pointer;
+  }
+  .card-post:hover { background: var(--paper-3); }
+  .card-post .year {
+    font-family: "Frank Ruhl Libre", serif; font-size: 28px; font-weight: 900; line-height: 1;
+    color: var(--soil); padding-top: 4px;
+  }
+  .card-post .year small {
+    display: block; font-family: "JetBrains Mono", monospace; font-size: 10px;
+    font-weight: 400; color: var(--ink-soft); letter-spacing: .08em; margin-top: 4px;
+  }
+  .card-post h3 { font-family: "Frank Ruhl Libre", serif; font-size: 18px; margin: 0 0 6px; font-weight: 700; line-height: 1.25; }
+  .card-post .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; display: flex; gap: 10px; flex-wrap: wrap; }
+  .card-post .meta::before { content: ""; }
+
+  /* ============================================================
+     04 · Hero blocks
+     ============================================================ */
+  .hero-block {
+    border-radius: var(--radius-l); overflow: hidden;
+    border: 1px solid var(--line); margin-bottom: 24px;
+    background: var(--paper);
+  }
+
+  /* Hero A — Manifesto */
+  .hero-mani {
+    padding: 64px 56px;
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px;
+    align-items: center;
+  }
+  .hero-mani .eyebrow {
+    font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .12em;
+    color: var(--soil); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .hero-mani h1 {
+    font-family: "Frank Ruhl Libre", serif; font-weight: 900; line-height: 1.02;
+    font-size: clamp(40px, 5.5vw, 72px); margin: 0 0 22px; letter-spacing: -.015em;
+  }
+  .hero-mani h1 em { color: var(--b-table); font-style: italic; font-weight: 700; }
+  .hero-mani .lede { font-family: "Frank Ruhl Libre", serif; font-size: 20px; line-height: 1.5; color: var(--ink-soft); font-style: italic; max-width: 56ch; margin: 0 0 28px; font-weight: 500; }
+  .hero-mani .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-mani .side {
+    background: var(--paper-2); border-radius: var(--radius-m);
+    padding: 24px; align-self: stretch;
+    display: grid; gap: 14px; align-content: center;
+    border: 1px solid var(--line);
+  }
+  .hero-mani .side .row {
+    display: grid; grid-template-columns: 90px 1fr; gap: 14px; align-items: baseline;
+    padding-bottom: 12px; border-bottom: 1px dashed var(--line);
+    font-size: 14px;
+  }
+  .hero-mani .side .row:last-child { border-bottom: none; padding-bottom: 0; }
+  .hero-mani .side .k { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+  .hero-mani .side .v { color: var(--ink); }
+
+  /* Hero B — Door grid */
+  .hero-doors {
+    padding: 56px 56px 48px;
+    background: var(--paper);
+    position: relative; overflow: hidden;
+  }
+  .hero-doors .micro {
+    font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .12em;
+    color: var(--spark); text-transform: uppercase; margin-bottom: 14px;
+  }
+  .hero-doors h1 {
+    font-family: "Frank Ruhl Libre", serif; font-size: clamp(48px, 6vw, 84px);
+    font-weight: 900; line-height: .98; margin: 0 0 18px; max-width: 14ch;
+    letter-spacing: -.02em;
+  }
+  .hero-doors h1 .accent { color: var(--b-table); font-style: italic; font-weight: 700; }
+  .hero-doors .sub { font-size: 18px; color: var(--ink-soft); max-width: 50ch; margin: 0 0 32px; line-height: 1.55; }
+  .hero-doors .door-strip {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px;
+    padding: 24px 0 0; border-top: 1px solid var(--line);
+  }
+  .hero-doors .door-strip .d {
+    aspect-ratio: 1/1.4; border: 1.4px solid var(--ink); border-radius: 40% 40% 6px 6px;
+    background: var(--paper-2);
+    position: relative;
+  }
+  .hero-doors .door-strip .d::after {
+    content: ""; position: absolute; inset-inline-end: 6px; top: 56%;
+    width: 3px; height: 3px; border-radius: 50%; background: var(--ink);
+  }
+  .hero-doors .door-strip .d.spark { background: var(--spark); border-color: var(--spark-ink); }
+  .hero-doors .door-strip .d.spark::after { background: var(--paper); }
+  .hero-doors .door-strip .d.b1 { background: var(--b-garden); border-color: var(--ink); }
+  .hero-doors .door-strip .d.b2 { background: var(--b-aos); }
+  .hero-doors .door-strip .d.b3 { background: var(--b-teach); }
+  .hero-doors .strap {
+    margin-top: 18px; font-family: "Frank Ruhl Libre", serif; font-style: italic;
+    font-size: 16px; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-doors .strap .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--spark); }
+
+  /* Hero C — Service hero (single branch) */
+  .hero-svc {
+    padding: 56px;
+    display: grid; grid-template-columns: 1fr 320px; gap: 40px;
+    align-items: start;
+    background: var(--paper);
+  }
+  .hero-svc .crumb {
+    font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-soft);
+    margin-bottom: 16px; letter-spacing: .04em;
+  }
+  .hero-svc .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .hero-svc .crumb .sep { margin: 0 8px; opacity: .5; }
+  .hero-svc h1 {
+    font-family: "Frank Ruhl Libre", serif; font-size: 52px; font-weight: 700;
+    line-height: 1.05; margin: 12px 0 18px; letter-spacing: -.015em;
+  }
+  .hero-svc .lede { font-size: 19px; color: var(--ink-soft); line-height: 1.55; max-width: 56ch; margin: 0 0 24px; }
+  .hero-svc .quick {
+    background: var(--paper-2); border-radius: var(--radius-m); padding: 22px;
+    border: 1px solid var(--line);
+  }
+  .hero-svc .quick h4 {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-soft); margin: 0 0 14px;
+  }
+  .hero-svc .quick .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+  .hero-svc .quick .row:last-child { border-bottom: none; }
+  .hero-svc .quick .row span:first-child { color: var(--ink-soft); }
+  .hero-svc .quick .row b { color: var(--ink); }
+
+  /* ============================================================
+     05 · Section dividers + Stamps
+     ============================================================ */
+  .div-row { padding: 28px 0; }
+
+  /* Divider 1 — rule */
+  .div-rule { border-top: 1px solid var(--line); }
+
+  /* Divider 2 — door band (recursive motif) */
+  .div-doors {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 6px;
+    padding: 18px 0;
+    border-block: 1px solid var(--line);
+  }
+  .div-doors .d {
+    aspect-ratio: 1/1.6; border: 1.2px solid var(--ink); border-radius: 50% 50% 4px 4px;
+    background: var(--paper-2);
+  }
+  .div-doors .d.accent { background: var(--b-table); }
+
+  /* Divider 3 — labeled */
+  .div-label {
+    display: flex; align-items: center; gap: 18px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-soft); letter-spacing: .12em; text-transform: uppercase;
+  }
+  .div-label::before, .div-label::after {
+    content: ""; flex: 1; height: 1px; background: var(--line);
+  }
+
+  /* Stamps */
+  .stamp-row { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; padding: 18px 0; }
+
+  /* Stamp — Archive (round, ink) */
+  .st-archive {
+    width: 96px; height: 96px; border-radius: 50%;
+    border: 2px solid var(--soil); color: var(--soil);
+    display: grid; place-items: center; text-align: center;
+    font-family: "Frank Ruhl Libre", serif; font-size: 11px; line-height: 1.15;
+    font-weight: 700; letter-spacing: .04em;
+    transform: rotate(-6deg);
+    background: var(--paper);
+  }
+  .st-archive b { display: block; font-size: 18px; letter-spacing: 0; font-weight: 900; }
+  .st-archive small { display: block; font-family: "JetBrains Mono", monospace; font-size: 8px; font-weight: 400; letter-spacing: .12em; margin-top: 2px; }
+
+  /* Stamp — Since 2019 (pill, mono) */
+  .st-since {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "JetBrains Mono", monospace; font-size: 12px;
+    background: var(--paper-2); border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: var(--radius-pill);
+    color: var(--soil); letter-spacing: .04em;
+  }
+  .st-since .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--spark); box-shadow: 0 0 0 3px rgba(210,58,46,.12); }
+
+  /* Stamp — Certified Organic (rectangular w/ corner cut) */
+  .st-cert {
+    background: var(--leaf-deep); color: var(--paper);
+    padding: 8px 14px; font-family: "Frank Ruhl Libre", serif; font-weight: 700;
+    font-size: 13px; line-height: 1.1;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%);
+    padding-inline-end: 28px;
+    display: inline-block;
+  }
+  .st-cert small { display: block; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 400; letter-spacing: .1em; opacity: .8; margin-top: 2px; }
+
+  /* Stamp — BOOM marker (spark, rare) */
+  .st-boom {
+    display: inline-flex; align-items: center;
+    background: var(--spark); color: #fff;
+    font-family: "Frank Ruhl Libre", serif; font-weight: 900;
+    font-size: 18px; line-height: 1;
+    padding: 10px 18px; border-radius: 6px;
+    transform: rotate(-3deg);
+    box-shadow: 3px 3px 0 var(--spark-ink);
+    letter-spacing: .04em;
+  }
+
+  /* Stamp — Branch lock (small ribbon under a branch card) */
+  .st-branch {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 10px; border-radius: 4px; letter-spacing: .08em;
+  }
+  .st-branch .swatch { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ============================================================
+     06 · Form elements
+     ============================================================ */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 32px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-family: "Assistant", sans-serif; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .field .hint { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--ink-soft); letter-spacing: .04em; }
+  .field .err  { font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--spark); letter-spacing: .04em; }
+
+  .ninput, .ntextarea, .nselect {
+    font-family: "Assistant", sans-serif; font-size: 15px;
+    padding: 10px 14px; border-radius: var(--radius-s);
+    border: 1px solid var(--line); background: var(--paper);
+    color: var(--ink); width: 100%;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .ninput::placeholder, .ntextarea::placeholder { color: var(--ink-soft); }
+  .ninput:focus, .ntextarea:focus, .nselect:focus {
+    outline: none; border-color: var(--b-table);
+    box-shadow: 0 0 0 3px rgba(196,106,62,.15);
+  }
+  .ninput.is-error, .ntextarea.is-error { border-color: var(--spark); box-shadow: 0 0 0 3px rgba(210,58,46,.12); }
+  .ninput.is-disabled, .ntextarea.is-disabled, .nselect.is-disabled,
+  .ninput[disabled], .ntextarea[disabled], .nselect[disabled] {
+    background: var(--paper-2); color: var(--ink-soft); cursor: not-allowed;
+  }
+  .ntextarea { min-height: 96px; resize: vertical; line-height: 1.55; }
+  .nselect { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'><path d='M1 1 L 6 6 L 11 1' stroke='%231f1e1c' stroke-width='1.5' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: left 14px center; background-size: 12px; padding-inline-start: 36px; }
+
+  /* Checkbox / radio */
+  .check-row, .radio-row {
+    display: flex; align-items: center; gap: 10px;
+    font-family: "Assistant", sans-serif; font-size: 15px;
+    cursor: pointer; padding: 6px 0;
+  }
+  .check-row .box, .radio-row .box {
+    width: 22px; height: 22px; border: 1.5px solid var(--ink-soft);
+    background: var(--paper); flex-shrink: 0;
+    display: grid; place-items: center;
+    transition: background .12s ease, border-color .12s ease;
+  }
+  .check-row .box { border-radius: 4px; }
+  .radio-row .box { border-radius: 50%; }
+  .check-row.is-checked .box { background: var(--b-table); border-color: var(--b-table); }
+  .check-row.is-checked .box::after {
+    content: ""; width: 10px; height: 6px; border: 2px solid var(--paper);
+    border-top: 0; border-inline-end: 0; transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .radio-row.is-checked .box { border-color: var(--b-table); }
+  .radio-row.is-checked .box::after {
+    content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--b-table);
+  }
+  .check-row.is-disabled, .radio-row.is-disabled { color: var(--ink-soft); cursor: not-allowed; }
+  .check-row.is-disabled .box, .radio-row.is-disabled .box { background: var(--paper-2); border-color: var(--line); }
+
+  /* ============================================================
+     07 · Basket System
+     ============================================================ */
+  .basket-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .basket-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 22px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .basket-frame {
+    aspect-ratio: 1/1; border-radius: var(--radius-s);
+    background-image: repeating-linear-gradient(135deg, var(--paper-2) 0 14px, var(--paper-3) 14px 28px);
+    display: grid; place-items: center; position: relative; overflow: hidden;
+    border: 1px dashed var(--soil);
+  }
+  .basket-frame .ph-svg { width: 64%; height: auto; }
+  .basket-frame .ph-label {
+    position: absolute; bottom: 10px; inset-inline-start: 10px;
+    font-family: "JetBrains Mono", monospace; font-size: 9px;
+    color: var(--soil); letter-spacing: .08em; text-transform: uppercase;
+    background: var(--paper); padding: 3px 8px; border-radius: 100px;
+  }
+  .basket-frame .ph-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(91,72,58,.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(91,72,58,.08) 1px, transparent 1px);
+    background-size: 12.5% 12.5%;
+    pointer-events: none;
+  }
+
+  .basket-card .head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  }
+  .basket-card .head h4 { font-family: "Frank Ruhl Libre", serif; font-size: 18px; margin: 0; font-weight: 700; }
+  .basket-card .head .swatch {
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    border: 1px solid var(--line);
+  }
+  .basket-card .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); display: grid; gap: 4px; }
+  .basket-card .meta b { color: var(--ink); }
+
+  .spec-box {
+    background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-m);
+    padding: 24px 28px; margin-top: 28px;
+  }
+  .spec-box h4 { font-family: "Frank Ruhl Libre", serif; font-size: 20px; margin: 0 0 14px; font-weight: 700; }
+  .spec-box .spec-grid {
+    display: grid; grid-template-columns: 180px 1fr; gap: 10px 24px;
+    font-size: 14px;
+  }
+  .spec-box .k { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; padding-top: 2px; }
+  .spec-box .v { color: var(--ink); line-height: 1.55; }
+
+  /* ───── Sign-off ───── */
+  .signoff {
+    background: var(--ink); color: var(--paper); border-radius: var(--radius-xl);
+    padding: 48px var(--gutter); margin-top: 96px;
+  }
+  .signoff h2 { font-family: "Frank Ruhl Libre", serif; font-size: 36px; margin: 0 0 18px; color: var(--paper); }
+  .signoff p { color: rgba(245,243,236,.7); max-width: 640px; margin: 0 0 24px; line-height: 1.6; }
+  .signoff-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .signoff-list li {
+    display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center;
+    padding: 14px 18px; border-radius: var(--radius-m);
+    background: rgba(245,243,236,.06); border: 1px solid rgba(245,243,236,.12);
+  }
+  .signoff-list .box { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid rgba(245,243,236,.4); }
+  .signoff-list b { font-family: "Frank Ruhl Libre", serif; font-size: 17px; }
+  .signoff-list .hint { font-size: 13px; color: rgba(245,243,236,.55); }
+  .signoff-list .opt-pick { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--b-teach); letter-spacing: .08em; }
+
+  /* responsive */
+  @media (max-width: 1100px) {
+    .form-grid, .hero-mani, .hero-svc { grid-template-columns: 1fr; }
+    .card-row-3, .basket-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 700px) {
+    .card-row-3, .card-row-2, .basket-grid { grid-template-columns: 1fr; }
+    .grid-states { grid-template-columns: 1fr; }
+    .hero { grid-template-columns: 1fr; }
+    .div-doors { grid-template-columns: repeat(6, 1fr); }
+    .hero-doors .door-strip { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="crumb"><b>STAGE 1</b> · COMPONENTS · v2 · 3-worlds amendment</div>
+  <div class="status">
+    <span class="pill-tb pill-draft">DRAFT · ממתין לאישור</span>
+    <span class="pill-tb">7 קבוצות רכיבים</span>
+  </div>
+</div>
+
+<aside class="toc" aria-label="ניווט פנימי">
+  <h4>בעמוד הזה</h4>
+  <ol>
+    <li><a href="#btn">01 · Buttons</a></li>
+    <li><a href="#chips">02 · Chips + Tags</a></li>
+    <li><a href="#cards">03 · Cards</a></li>
+    <li><a href="#heroes">04 · Hero blocks</a></li>
+    <li><a href="#div">05 · Dividers + Stamps</a></li>
+    <li><a href="#form">06 · Forms</a></li>
+    <li><a href="#basket">07 · Basket system</a></li>
+    <li><a href="#sign">סיכום</a></li>
+  </ol>
+</aside>
+
+<div class="page">
+
+  <!-- ─────── HERO ─────── -->
+  <header class="hero">
+    <div>
+      <div class="label">Stage 1 · Components</div>
+      <h1>אוצר מילים <em>ויזואלי</em>.<br>הלבני בניין של האתר.</h1>
+      <p>על הסכֶמה של Stage 0 — מתחילים להרכיב. כל רכיב כאן יופיע במסכי הליבה ב־Stage 3. אם משהו לא נכון פה, הוא יחזור 40 פעם באתר.</p>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink-soft);">
+        buttons · chips · cards · heroes · stamps · forms · baskets
+      </p>
+    </div>
+    <div class="legend">
+      <h3>איך לקרוא את המסמך</h3>
+      <ul>
+        <li><b>כל רכיב = מסגרת דמו אחת.</b> בראש — שם וטאג, באמצע — הרכיב חי, בתחתית — <code>tokens</code> שהוא משתמש בהם.</li>
+        <li><b>States מסומנים בטור.</b> default / hover / active / disabled — כדי לוודא שכל ה־4 קיימים.</li>
+        <li><b>סיכום בתחתית.</b> 7 checkbox־ים. תאשר → ננעל ונעבור ל־Stage 2 (Shell + ניווט).</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ═════════ 01 · BUTTONS ═════════ -->
+  <section class="sec" id="btn">
+    <div class="sec-head">
+      <div class="num">01</div>
+      <h2>כפתורים</h2>
+      <div class="meta">4 variants · 3 גדלים · 4 states</div>
+    </div>
+    <p class="sec-intro">
+      ארבעה סוגי כפתורים בלבד. <b>Primary</b> — פעולה ראשית בעמוד (טרקוטה). <b>Secondary</b> — פעולה משנית (leaf-deep). <b>Ghost</b> — פעולת מערכת (טקסט עם מסגרת). <b>Spark</b> — הופעה נדירה בלבד; CTA דרמטי / רגע BOOM. ≤5 הופעות באתר כולו.
+    </p>
+
+    <!-- 4 variants × 4 states grid -->
+    <div class="demo">
+      <div class="demo-head">
+        <h3>Variants × States</h3>
+        <span class="tag">size: md · radius: pill · weight: 600</span>
+      </div>
+      <div class="demo-body">
+        <div class="grid-states">
+          <div></div>
+          <div class="col-label first">default</div>
+          <div class="col-label">hover</div>
+          <div class="col-label">active</div>
+          <div class="col-label">disabled</div>
+
+          <div class="row-label">primary</div>
+          <button class="nbtn md primary">הזמן ייעוץ</button>
+          <button class="nbtn md primary is-hover">הזמן ייעוץ</button>
+          <button class="nbtn md primary is-active">הזמן ייעוץ</button>
+          <button class="nbtn md primary is-disabled" disabled>הזמן ייעוץ</button>
+
+          <div class="row-label">secondary</div>
+          <button class="nbtn md secondary">קרא עוד</button>
+          <button class="nbtn md secondary is-hover">קרא עוד</button>
+          <button class="nbtn md secondary is-active">קרא עוד</button>
+          <button class="nbtn md secondary is-disabled" disabled>קרא עוד</button>
+
+          <div class="row-label">ghost</div>
+          <button class="nbtn md ghost">חזור</button>
+          <button class="nbtn md ghost is-hover">חזור</button>
+          <button class="nbtn md ghost is-active">חזור</button>
+          <button class="nbtn md ghost is-disabled" disabled>חזור</button>
+
+          <div class="row-label">spark</div>
+          <button class="nbtn md spark">BOOM</button>
+          <button class="nbtn md spark is-hover">BOOM</button>
+          <button class="nbtn md spark is-active">BOOM</button>
+          <button class="nbtn md spark is-disabled" disabled>BOOM</button>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>radius:</b> <code>--radius-pill</code></span>
+        <span><b>colors:</b> <code>--b-table</code> · <code>--leaf-deep</code> · <code>--ink</code> · <code>--spark</code></span>
+        <span><b>font:</b> Assistant 600</span>
+      </div>
+    </div>
+
+    <!-- sizes -->
+    <div class="demo">
+      <div class="demo-head">
+        <h3>Sizes</h3>
+        <span class="tag">sm 8/16 · md 12/22 · lg 16/30</span>
+      </div>
+      <div class="demo-body">
+        <div class="size-row">
+          <span class="row-label">sm · 13px</span>
+          <button class="nbtn sm primary">הזמן</button>
+          <button class="nbtn sm secondary">קרא</button>
+          <button class="nbtn sm ghost">חזור</button>
+          <button class="nbtn sm spark">BOOM</button>
+        </div>
+        <div class="size-row">
+          <span class="row-label">md · 15px</span>
+          <button class="nbtn md primary">הזמן ייעוץ ראשוני</button>
+          <button class="nbtn md secondary">קרא עוד</button>
+          <button class="nbtn md ghost">חזור</button>
+          <button class="nbtn md spark">BOOM</button>
+        </div>
+        <div class="size-row">
+          <span class="row-label">lg · 17px</span>
+          <button class="nbtn lg primary">הזמן ייעוץ ראשוני <span class="arrow">←</span></button>
+          <button class="nbtn lg secondary">קרא עוד</button>
+          <button class="nbtn lg ghost">חזור</button>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> <code>lg</code> ב־Hero בלבד · <code>md</code> בכרטיסים וטפסים · <code>sm</code> בתוך תפריטים ופילטרים</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 02 · LINKS · CHIPS · BRANCH TAGS ═════════ -->
+  <section class="sec" id="chips">
+    <div class="sec-head">
+      <div class="num">02</div>
+      <h2>קישורים · צ׳יפים · תגיות־ענף</h2>
+      <div class="meta">inline atoms</div>
+    </div>
+    <p class="sec-intro">
+      <b>קישורים</b> מגיעים בארבעה טעמים — מ"שקט" (פנים־פסקה) ועד "ידני" (הקו המצויר־ביד הקיים מ־v2). <b>צ'יפים</b> ניטרליים — לפילטרים ולטאגים גנריים. <b>תגיות־ענף</b> מבנה קבוע: צבע הענף שלו מ־<code>--b-*</code>. אין לערבב.
+    </p>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Links</h3><span class="tag">inline</span></div>
+      <div class="demo-body">
+        <div class="link-row">
+          <a href="#" class="nlink">קישור רגיל לתוך הטקסט</a>
+          <a href="#" class="nlink-quiet">קישור שקט (תפריט)</a>
+          <a href="#" class="nlink-mono">META · ARCHIVE</a>
+          <a href="#" class="nlink-under">הדגשה ידנית</a>
+          <a href="#" class="nlink-mono nlink-back">חזור לארכיון</a>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>נלינק רגיל:</b> <code>--b-table</code> · קו תחתי בהובר</span>
+        <span><b>שקט:</b> <code>--ink</code> · קו דק קבוע</span>
+        <span><b>mono:</b> meta-data · תאריכים · breadcrumbs</span>
+        <span><b>under:</b> רק להדגשה רגשית בטקסט פיוטי. נדיר.</span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Chips</h3><span class="tag">neutral, filterable</span></div>
+      <div class="demo-body">
+        <div class="link-row">
+          <span class="chip">פרמקלצר</span>
+          <span class="chip is-active">פרמקלצר</span>
+          <span class="chip">קרקע <span class="x">×</span></span>
+          <span class="chip is-removable">הדרכות <span class="x">×</span></span>
+          <span class="chip">2019</span>
+          <span class="chip">2020</span>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> פילטר ארכיון · טאגים בפוסט · קטגוריות</span>
+        <span><b>active:</b> נבחר כעת (הופך לאינק מלא)</span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>World tags + sub-branches</h3><span class="tag">3 עולמות · sub אקסנטים</span></div>
+      <div class="demo-body">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:8px;">PRIMARY · 3 worlds</div>
+        <div class="link-row" style="margin-bottom: 22px;">
+          <span class="btag btag-garden" style="font-size:16px;padding:8px 18px;">גינה</span>
+          <span class="btag btag-bcs" style="font-size:16px;padding:8px 18px;">אדמה</span>
+          <span class="btag btag-table" style="font-size:16px;padding:8px 18px;">שולחן</span>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:8px;">SUB · sub-branch accents (under each world)</div>
+        <div class="link-row" style="margin-bottom: 14px;">
+          <span class="btag-out"><span class="swatch" style="background: var(--b-garden);"></span>גינה ביתית</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-garden);"></span>קומפוסט</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-garden);"></span>שתילים</span>
+          <span style="color:var(--ink-soft);font-size:12px;font-family:'JetBrains Mono',monospace;">→ גינה</span>
+        </div>
+        <div class="link-row" style="margin-bottom: 14px;">
+          <span class="btag-out"><span class="swatch" style="background: var(--b-bcs);"></span>BCS שדה</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-aos);"></span>AOS · agents</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-bcs);"></span>אבחון מערכת</span>
+          <span style="color:var(--ink-soft);font-size:12px;font-family:'JetBrains Mono',monospace;">→ אדמה</span>
+        </div>
+        <div class="link-row">
+          <span class="btag-out"><span class="swatch" style="background: var(--b-table);"></span>מסעדות</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-teach);"></span>סדנאות</span>
+          <span class="btag-out"><span class="swatch" style="background: var(--b-ai);"></span>AI · מיזו</span>
+          <span style="color:var(--ink-soft);font-size:12px;font-family:'JetBrains Mono',monospace;">→ שולחן</span>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>היררכיה:</b> world = primary · sub = accent בתוך world</span>
+        <span><b>צבע:</b> sub יורש את ה־world OR משתמש ב־accent (teach/aos/ai)</span>
+        <span><b>כלל:</b> חיתוך תמיד דרך world. אסור לקפוץ ישר ל־sub.</span>
+        <span style="color:var(--spark);"><b>ממתין לאישור:</b> שמות sub יוחלפו לפי אפיון סופי</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 03 · CARDS ═════════ -->
+  <section class="sec" id="cards">
+    <div class="sec-head">
+      <div class="num">03</div>
+      <h2>כרטיסים</h2>
+      <div class="meta">branch · service · archive-post</div>
+    </div>
+    <p class="sec-intro">
+      שלושה סוגי כרטיסים מכסים את כל הצרכים: <b>Branch card</b> (overview של ענף — סל + שם + תיאור), <b>Service card</b> (שירות בודד — hero strip צבעוני + bullets + CTA), <b>Archive post card</b> (פוסט מהארכיון — תאריך + כותרת + meta). כולם משתמשים ב־<code>radius-m</code> + <code>shadow-m</code> כברירת מחדל.
+    </p>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Branch card</h3><span class="tag">overview · 1-of-3</span></div>
+      <div class="demo-body">
+        <div class="card-row-3">
+          <article class="card-branch">
+            <div class="basket-slot">
+              <svg class="ph-svg" viewBox="0 0 100 100" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <path d="M20 40 L 80 40 L 72 80 L 28 80 Z" fill="#dedccf"/>
+                <path d="M20 40 Q 50 22 80 40" />
+                <line x1="32" y1="40" x2="36" y2="80"/>
+                <line x1="50" y1="40" x2="50" y2="80"/>
+                <line x1="68" y1="40" x2="64" y2="80"/>
+                <line x1="20" y1="55" x2="80" y2="55"/>
+              </svg>
+            </div>
+            <span class="btag btag-garden" style="align-self: flex-start;">אדמה</span>
+            <h3>הבית, החצר, הירקות.</h3>
+            <p>תוצרת מקצועית למסעדות מהחממה ההידרופונית. שירותי BCS בתשלום. משתלה כתחביב, כמקור ידע.</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><span style="font-size:12px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;">sub:</span><span style="font-size:12px;color:var(--ink-soft);">תוצרת מקצועית · BCS · הידרופוניקה · משתלה</span></div>
+            <span class="more">היכנס</span>
+          </article>
+
+          <article class="card-branch">
+            <div class="basket-slot">
+              <svg class="ph-svg" viewBox="0 0 100 100" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <rect x="20" y="40" width="60" height="40" fill="#dedccf"/>
+                <path d="M50 40 L 50 18 L 80 18" />
+                <circle cx="50" cy="58" r="6" fill="#5b483a"/>
+                <line x1="20" y1="60" x2="80" y2="60"/>
+              </svg>
+            </div>
+            <span class="btag btag-bcs" style="align-self: flex-start;">ידע</span>
+            <h3>מה שגדל באדמה — הופך לכלי.</h3>
+            <p>שלושה ערוצי ייעוץ שהתחילו בידיים: הידרופוניקה · אגרו+market garden · תכנון גידול. והוראה — לא סדנאות, הרצאות בקורסים ובמוסדות.</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><span style="font-size:12px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;">sub:</span><span style="font-size:12px;color:var(--ink-soft);">ייעוץ הידרופוניקה · ייעוץ אגרו+MG · תכנון גידול · הוראה</span></div>
+            <span class="more">היכנס</span>
+          </article>
+
+          <article class="card-branch">
+            <div class="basket-slot">
+              <svg class="ph-svg" viewBox="0 0 100 100" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <path d="M30 30 L 70 30 L 78 75 L 22 75 Z" fill="#dedccf"/>
+                <circle cx="50" cy="50" r="14" fill="none"/>
+                <line x1="30" y1="42" x2="70" y2="42"/>
+                <line x1="42" y1="30" x2="40" y2="75"/>
+                <line x1="58" y1="30" x2="60" y2="75"/>
+              </svg>
+            </div>
+            <span class="btag btag-table" style="align-self: flex-start;">דיגיטל</span>
+            <h3>ידע מקודד שחוזר לקהילה.</h3>
+            <p>SFA — סוכני AI לחווה קטנה, חינם לקהילת החקלאים האורגניים. tiktrack בפיתוח. גם מיזו, גם הגלגול הבא של מה שעשיתי מז 1999.</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><span style="font-size:12px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;">sub:</span><span style="font-size:12px;color:var(--ink-soft);">SFA · tiktrack · פיתוח ממשקים</span></div>
+            <span class="more">היכנס</span>
+          </article>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> Branches.html · overview של 6 הענפים</span>
+        <span><b>radius:</b> <code>--radius-m</code></span>
+        <span><b>shadow:</b> <code>--shadow-m</code> · עולה ל־l ב־hover</span>
+        <span><b>basket:</b> placeholder שייכנס לאיירת ב־Stage 6</span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Service card</h3><span class="tag">single service</span></div>
+      <div class="demo-body">
+        <div class="card-row-2">
+          <article class="card-svc">
+            <div class="strip" style="background: var(--b-aos);">AOS · Small Farm Agents</div>
+            <div class="body">
+              <h3>סוכן חווה — פיילוט 90 יום</h3>
+              <p class="lede">אבחון בסיסי של החווה, התקנת סוכן AOS, ליווי שבועי, וסיכום מלא בסוף 90 יום.</p>
+              <ul>
+                <li>אבחון מערכת (1 ביקור)</li>
+                <li>סוכן AOS מותאם — תכנון רוטציה ויבול</li>
+                <li>3 פגישות סקירה</li>
+                <li>סיכום + המלצות המשך</li>
+              </ul>
+              <div class="cta-row">
+                <button class="nbtn md primary">הזמן פיילוט</button>
+                <button class="nbtn md ghost">פרטים נוספים</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card-svc">
+            <div class="strip" style="background: var(--b-bcs);">BCS · שירותי שטח</div>
+            <div class="body">
+              <h3>הכנת שטח לעונה</h3>
+              <p class="lede">חריש, איוורור, פיזור קומפוסט וזריעת כיסוי — לחקלאים שכבר יודעים מה הם רוצים, אבל צריכים את המכונה ואת הידיים.</p>
+              <ul>
+                <li>BCS 853 + סטים תפעוליים</li>
+                <li>הערכה ראשונית בשטח (חינם)</li>
+                <li>תיעוד מלא של הפעולה</li>
+                <li>אזורי שירות: עמק חפר, השרון</li>
+              </ul>
+              <div class="cta-row">
+                <button class="nbtn md primary">בקש הצעה</button>
+                <button class="nbtn md ghost">לוח זמינות</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> דפי ענף · עמודי שירות בודדים</span>
+        <span><b>strip:</b> צבע ענף · 88px · רעש עדין</span>
+        <span><b>bullets:</b> dash מ־<code>--b-table</code></span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Archive post card</h3><span class="tag">~480 פוסטים</span></div>
+      <div class="demo-body">
+        <div class="card-row-2">
+          <article class="card-post">
+            <div class="year">2020<small>אפר׳</small></div>
+            <div>
+              <h3>איך לבחור שתילי עגבניות לקיץ בעמק</h3>
+              <div class="meta">
+                <span>מדריך שתילה</span>
+                <span>· קריאה: 4 דק׳</span>
+                <span>· 12.04.2020</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card-post">
+            <div class="year">2021<small>נוב׳</small></div>
+            <div>
+              <h3>מה למדנו אחרי שלוש שנים של גידול ללא הדברה</h3>
+              <div class="meta">
+                <span>תובנות</span>
+                <span>· קריאה: 7 דק׳</span>
+                <span>· 03.11.2021</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card-post">
+            <div class="year">2019<small>מאי</small></div>
+            <div>
+              <h3>פתיחה: מה זו "הגינה של נמרוד" ולמה היא חשובה לקהילה</h3>
+              <div class="meta">
+                <span>מניפסט</span>
+                <span>· קריאה: 3 דק׳</span>
+                <span>· 22.05.2019</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card-post">
+            <div class="year">2023<small>פבר׳</small></div>
+            <div>
+              <h3>סיום הפעילות: מכתב פתוח ללקוחות ולקהילה</h3>
+              <div class="meta">
+                <span>הודעה</span>
+                <span>· קריאה: 5 דק׳</span>
+                <span>· 14.02.2023</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> Archive.html · "מהארכיון" בדפי בית/ענף</span>
+        <span><b>year:</b> serif 900 · חודש קצר ב־mono · ויזואל "כתם דיו"</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 04 · HEROES ═════════ -->
+  <section class="sec" id="heroes">
+    <div class="sec-head">
+      <div class="num">04</div>
+      <h2>Hero blocks</h2>
+      <div class="meta">3 וריאציות · אחת לסוג עמוד</div>
+    </div>
+    <p class="sec-intro">
+      שלושה הירואים — כל אחד מכוון לסוג עמוד אחר. <b>Manifesto</b> לבית/אודות (טקסט גדול + lede פיוטי + שני CTAים). <b>Doors</b> לעמוד "ענפים" (door-grid כעמוד שדרה ויזואלי). <b>Service</b> לעמוד שירות בודד (crumb + h1 + ledeyle + quick-facts).
+    </p>
+
+    <!-- Hero A — Manifesto -->
+    <div class="demo">
+      <div class="demo-head"><h3>A · Manifesto</h3><span class="tag">Home / About</span></div>
+      <div class="demo-body" style="padding: 0;">
+        <div class="hero-block">
+          <div class="hero-mani">
+            <div>
+              <div class="eyebrow">נמרוד ולד · 2026</div>
+              <h1>הגינה הפכה <em>לשורש</em>.<br>הענפים — מתחילים לצמוח.</h1>
+              <p class="lede">חקלאות אקולוגית. חשיבה מערכתית. סוכני AI לחווה קטנה. כל אחד מהם הוא ביטוי אחר של אותו דפוס — הזרקת אנרגיה מודעת כדי לייצר סדר מקומי.</p>
+              <div class="ctas">
+                <button class="nbtn lg primary">ראה את הענפים <span class="arrow">←</span></button>
+                <button class="nbtn lg ghost">קרא את הסיפור</button>
+              </div>
+            </div>
+            <div class="side">
+              <div class="row"><span class="k">ENTITY</span><span class="v">נמרוד ולד</span></div>
+              <div class="row"><span class="k">ROOT</span><span class="v">הגינה של נמרוד · 2019–2023</span></div>
+              <div class="row"><span class="k">WORLDS</span><span class="v">3 עולמות · אדמה · ידע · דיגיטל</span></div>
+              <div class="row"><span class="k">SITE</span><span class="v">פרדס חנה־כרכור</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> Home.html · About.html</span>
+        <span><b>side panel:</b> meta-data · 4 שורות מקסימום</span>
+      </div>
+    </div>
+
+    <!-- Hero B — Door grid -->
+    <div class="demo">
+      <div class="demo-head"><h3>B · Doors</h3><span class="tag">Branches overview</span></div>
+      <div class="demo-body" style="padding: 0;">
+        <div class="hero-block">
+          <div class="hero-doors">
+            <div class="micro">UNLESS · אלא אם כן</div>
+            <h1>שש דלתות.<br>שורש <span class="accent">אחד</span>.</h1>
+            <p class="sub">כל ענף הוא חדר נפרד, אבל החדרים בנויים מאותה אדמה. בחר בדלת — או עיין בכולן.</p>
+            <div class="door-strip">
+              <div class="d b1"></div>
+              <div class="d"></div>
+              <div class="d b2"></div>
+              <div class="d"></div>
+              <div class="d b3"></div>
+              <div class="d"></div>
+              <div class="d spark"></div>
+              <div class="d"></div>
+            </div>
+            <div class="strap"><span class="dot"></span><span>אחת מתוך שמונה. הרגע ה־BOOM — נדיר.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> Branches.html</span>
+        <span><b>spark door:</b> רגע ה־BOOM · אחד בכל דף</span>
+        <span><b>door-strip:</b> אחת לענף + ספארק</span>
+      </div>
+    </div>
+
+    <!-- Hero C — Service -->
+    <div class="demo">
+      <div class="demo-head"><h3>C · Service</h3><span class="tag">single service page</span></div>
+      <div class="demo-body" style="padding: 0;">
+        <div class="hero-block">
+          <div class="hero-svc">
+            <div>
+              <div class="crumb">
+                <a href="#">בית</a><span class="sep">›</span><a href="#">ענפים</a><span class="sep">›</span><span>Small Farm Agents</span>
+              </div>
+              <span class="btag btag-aos">AOS</span>
+              <h1>סוכן חווה שמדבר את השפה שלך.</h1>
+              <p class="lede">סוכן AOS הוא לא חליפה מוכנה. הוא מותאם לחווה הספציפית — לקרקע, לרוטציה, לעובדים, ולקצב שלכם. הסוכן לומד ומציע — אבל ההחלטה תמיד שלך.</p>
+              <div class="ctas">
+                <button class="nbtn lg primary">הזמן פיילוט</button>
+                <button class="nbtn lg ghost">איך זה עובד</button>
+              </div>
+            </div>
+            <div class="quick">
+              <h4>בקצרה</h4>
+              <div class="row"><span>משך פיילוט</span><b>90 יום</b></div>
+              <div class="row"><span>היקף ליווי</span><b>3 פגישות + שוטף</b></div>
+              <div class="row"><span>פתיחת תור</span><b>יוני 2026</b></div>
+              <div class="row"><span>מספר חוות</span><b>6 בלבד</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>שימוש:</b> Service-AOS.html · Service-BCS.html · ...</span>
+        <span><b>quick-facts:</b> 4 שורות מקסימום</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 05 · DIVIDERS + STAMPS ═════════ -->
+  <section class="sec" id="div">
+    <div class="sec-head">
+      <div class="num">05</div>
+      <h2>חוצצים · סטמפים</h2>
+      <div class="meta">3 dividers · 5 stamps</div>
+    </div>
+    <p class="sec-intro">
+      <b>חוצצים</b> — שלוש דרגות חוזק. רוב הזמן נשתמש בקו הדק; את ה־door-band נשמור לנקודות מעבר אמיתיות (סקציה→סקציה). <b>סטמפים</b> — אובייקטים מבודדים שמספרים סיפור: ארכיון, מאז 2019, אורגני, BOOM, ענף־נעול. כולם ניתנים לסיבוב קל (rotate -3°…-6°) שמרגיש "ידני".
+    </p>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Dividers</h3><span class="tag">3 levels</span></div>
+      <div class="demo-body">
+        <div class="div-row">
+          <span class="row-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); display: block; margin-bottom: 8px;">1 · rule (default)</span>
+          <div class="div-rule"></div>
+        </div>
+        <div class="div-row">
+          <span class="row-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); display: block; margin-bottom: 8px;">2 · labeled</span>
+          <div class="div-label"><span>סקציה הבאה</span></div>
+        </div>
+        <div class="div-row">
+          <span class="row-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); display: block; margin-bottom: 8px;">3 · door-band — for major transitions only</span>
+          <div class="div-doors">
+            <div class="d"></div><div class="d"></div><div class="d"></div>
+            <div class="d accent"></div><div class="d"></div><div class="d"></div>
+            <div class="d"></div><div class="d"></div><div class="d"></div>
+            <div class="d"></div><div class="d"></div><div class="d"></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>rule:</b> בין אובייקטים באותו סוג</span>
+        <span><b>labeled:</b> חוצץ "אבל יש שם משהו"</span>
+        <span><b>door-band:</b> רק כשעוברים מקטגוריית תוכן אחת לאחרת. 2–3 הופעות בעמוד מקסימום.</span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Stamps</h3><span class="tag">5 markers</span></div>
+      <div class="demo-body">
+        <div class="stamp-row">
+          <div class="st-archive">
+            <div>
+              <b>2019</b>
+              ארכיון
+              <small>SINCE</small>
+            </div>
+          </div>
+          <span class="st-since"><span class="dot"></span>מאז 2019 · 480+ פוסטים</span>
+          <span class="st-cert">אורגני<small>תקן ישראלי</small></span>
+          <span class="st-boom">BOOM</span>
+          <span class="st-branch"><span class="swatch" style="background: var(--b-aos);"></span>AOS · ענף פעיל</span>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>ארכיון:</b> ראש עמוד הארכיון · רוטציה -6°</span>
+        <span><b>מאז 2019:</b> ב־hero בלבד</span>
+        <span><b>אורגני:</b> בכרטיסי תוצרת/מסעדות</span>
+        <span><b>BOOM:</b> ספארק — ≤2 הופעות באתר</span>
+        <span><b>ענף־נעול:</b> פוטר של כרטיס ענף · "עוד פעיל" / "ארכיון"</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 06 · FORMS ═════════ -->
+  <section class="sec" id="form">
+    <div class="sec-head">
+      <div class="num">06</div>
+      <h2>Forms</h2>
+      <div class="meta">inputs · check · radio · states</div>
+    </div>
+    <p class="sec-intro">
+      טפסים יופיעו בעיקר ב־"צור קשר" וב־"הזמנת ייעוץ". המינימליזם כאן חשוב כפליים — שדה אחד בכל שורה, label קצר, hint רק כשצריך, error רק אם באמת שגוי. הפוקוס מסומן ב־ring טרקוטה (מתחבר ל־primary).
+    </p>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Inputs · select · textarea</h3><span class="tag">4 states each</span></div>
+      <div class="demo-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>שם מלא</label>
+            <input class="ninput" placeholder="נמרוד ולד">
+            <span class="hint">איך לפנות אליך</span>
+          </div>
+          <div class="field">
+            <label>אימייל · focus</label>
+            <input class="ninput" value="nimrod@nimrod.bio" style="border-color: var(--b-table); box-shadow: 0 0 0 3px rgba(196,106,62,.15); outline: none;">
+            <span class="hint">לא נשלח דבר ללא רשותך</span>
+          </div>
+          <div class="field">
+            <label>טלפון · error</label>
+            <input class="ninput is-error" value="052-0">
+            <span class="err">מספר טלפון חסר — נדרשות 10 ספרות</span>
+          </div>
+          <div class="field">
+            <label>הערות · disabled</label>
+            <input class="ninput is-disabled" value="נשלח כבר" disabled>
+            <span class="hint">השדה נעול אחרי השליחה</span>
+          </div>
+
+          <div class="field">
+            <label>ענף רלוונטי</label>
+            <select class="nselect">
+              <option>בחר ענף…</option>
+              <option>הגינה — תוצרת</option>
+              <option>BCS — שירותי שטח</option>
+              <option>סדנאות</option>
+              <option>מסעדות</option>
+              <option>AOS — סוכנים</option>
+              <option>AI — מיזו</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>תקציב משוער</label>
+            <select class="nselect">
+              <option>פחות מ־5,000 ₪</option>
+              <option>5,000–15,000 ₪</option>
+              <option>15,000–50,000 ₪</option>
+              <option>מעל 50,000 ₪</option>
+            </select>
+          </div>
+
+          <div class="field" style="grid-column: 1 / -1;">
+            <label>ספר לי על הפרויקט</label>
+            <textarea class="ntextarea" placeholder="חווה משפחתית, 4 דונם, רוצים להתחיל פיילוט סוכן..."></textarea>
+            <span class="hint">קצר זה מספיק. נחזור אליך בטלפון.</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>focus ring:</b> 3px · <code>rgba(--b-table, .15)</code></span>
+        <span><b>radius:</b> <code>--radius-s</code> (6px) — שונה מהכפתורים בכוונה</span>
+        <span><b>error:</b> <code>--spark</code> · רק כשהמשתמש כבר ניסה לשלוח</span>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-head"><h3>Checkbox · Radio</h3><span class="tag">selection</span></div>
+      <div class="demo-body">
+        <div class="form-grid">
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: .06em;">CHECKBOX — multi select</div>
+            <div class="check-row"><span class="box"></span>אני מעוניין/ת בעדכונים על סדנאות</div>
+            <div class="check-row is-checked"><span class="box"></span>קראתי את מדיניות הפרטיות</div>
+            <div class="check-row is-disabled"><span class="box"></span>הסכמה לדיוור (לא רלוונטי כעת)</div>
+          </div>
+          <div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: .06em;">RADIO — single select</div>
+            <div class="radio-row"><span class="box"></span>אני חקלאי/ת פעיל/ה</div>
+            <div class="radio-row is-checked"><span class="box"></span>חולם/ת על חווה — עוד לא התחלתי</div>
+            <div class="radio-row"><span class="box"></span>מסעדה / מועדון / אחר</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>checked color:</b> <code>--b-table</code> — מתחבר לפעולת ה־primary</span>
+        <span><b>סדר:</b> כל פעולה ב־form עם submit ב־primary</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 07 · BASKETS ═════════ -->
+  <section class="sec" id="basket">
+    <div class="sec-head">
+      <div class="num">07</div>
+      <h2>מערכת הסלים</h2>
+      <div class="meta">6 placeholders · מפרט לאיירת</div>
+    </div>
+    <p class="sec-intro">
+      "סל" הוא ה־<b>אבטיפוס הוויזואלי</b> של ענף. בכל כרטיס־ענף, בכל hero, ובארטוורק של ה־logo family — נשתמש בסל לזיהוי מיידי. שש סלים, אחד לכל ענף. הפלייסהולדרים פה הם <b>זמניים</b>; ב־Stage 6 יוחלפו בציורי מים מהאיירת. תפקיד הסקציה הזו — לנעול את ה־<b>מפרט</b>: מידות, פרופורציות, קונבנציה.
+    </p>
+
+    <div class="demo">
+      <div class="demo-head"><h3>שש הסלים</h3><span class="tag">placeholders — לציור</span></div>
+      <div class="demo-body">
+        <div class="basket-grid">
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <path d="M22 50 L 98 50 L 88 95 L 32 95 Z" fill="#dedccf"/>
+                <path d="M22 50 Q 60 28 98 50"/>
+                <line x1="38" y1="50" x2="42" y2="95"/>
+                <line x1="60" y1="50" x2="60" y2="95"/>
+                <line x1="82" y1="50" x2="78" y2="95"/>
+                <line x1="22" y1="68" x2="98" y2="68"/>
+                <circle cx="60" cy="42" r="4" fill="#6a8a3a" stroke="none"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל הגינה</h4><span class="swatch" style="background: var(--b-garden);"></span></div>
+            <div class="meta">
+              <span><b>basket-garden</b> · branch: <code>--b-garden</code></span>
+              <span>סל קלוע · בתוכו ירקות עונה · עלים על הקצוות</span>
+            </div>
+          </div>
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <rect x="22" y="46" width="76" height="50" rx="2" fill="#dedccf"/>
+                <line x1="22" y1="62" x2="98" y2="62"/>
+                <line x1="22" y1="78" x2="98" y2="78"/>
+                <circle cx="40" cy="42" r="3" fill="#6d4a2a" stroke="none"/>
+                <circle cx="80" cy="42" r="3" fill="#6d4a2a" stroke="none"/>
+                <path d="M40 42 L 40 32 L 80 32 L 80 42"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל ה־BCS</h4><span class="swatch" style="background: var(--b-bcs);"></span></div>
+            <div class="meta">
+              <span><b>basket-bcs</b> · branch: <code>--b-bcs</code></span>
+              <span>ארגז עץ / ארגז כלים · גוונים של אדמה</span>
+            </div>
+          </div>
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <path d="M30 50 Q 60 30 90 50 L 88 95 L 32 95 Z" fill="#dedccf"/>
+                <path d="M30 50 L 90 50"/>
+                <path d="M44 60 Q 60 50 76 60" stroke="#c46a3e"/>
+                <path d="M44 75 Q 60 65 76 75" stroke="#c46a3e"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל המסעדות</h4><span class="swatch" style="background: var(--b-table);"></span></div>
+            <div class="meta">
+              <span><b>basket-table</b> · branch: <code>--b-table</code></span>
+              <span>קערה רחבה · תוצרת מסודרת · גוון טרקוטה</span>
+            </div>
+          </div>
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <circle cx="60" cy="68" r="34" fill="#dedccf"/>
+                <path d="M30 68 L 90 68"/>
+                <path d="M60 38 L 60 98"/>
+                <path d="M40 48 L 80 88" opacity=".4"/>
+                <path d="M80 48 L 40 88" opacity=".4"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל הסדנאות</h4><span class="swatch" style="background: var(--b-teach);"></span></div>
+            <div class="meta">
+              <span><b>basket-teach</b> · branch: <code>--b-teach</code></span>
+              <span>חישוק / מעגל · כלי לימוד · שמש</span>
+            </div>
+          </div>
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <rect x="28" y="48" width="64" height="46" rx="6" fill="#dedccf"/>
+                <circle cx="44" cy="68" r="3" fill="#2d8a8c" stroke="none"/>
+                <circle cx="60" cy="68" r="3" fill="#2d8a8c" stroke="none"/>
+                <circle cx="76" cy="68" r="3" fill="#2d8a8c" stroke="none"/>
+                <line x1="44" y1="78" x2="76" y2="78"/>
+                <line x1="44" y1="86" x2="68" y2="86"/>
+                <line x1="48" y1="48" x2="48" y2="38" stroke="#2d8a8c"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל ה־AOS</h4><span class="swatch" style="background: var(--b-aos);"></span></div>
+            <div class="meta">
+              <span><b>basket-aos</b> · branch: <code>--b-aos</code></span>
+              <span>קופסה / מסוף · אינדיקטורים · קווי חיבור</span>
+            </div>
+          </div>
+
+          <div class="basket-card">
+            <div class="basket-frame">
+              <svg class="ph-svg" viewBox="0 0 120 120" fill="none" stroke="#5b483a" stroke-width="1.6">
+                <path d="M40 40 L 80 40 L 88 58 L 32 58 Z" fill="#dedccf"/>
+                <path d="M32 58 L 38 95 L 82 95 L 88 58 Z" fill="#dedccf"/>
+                <circle cx="60" cy="76" r="10" fill="none" stroke="#8c3a4a" stroke-width="2"/>
+                <path d="M55 71 L 65 81 M65 71 L 55 81" stroke="#8c3a4a" stroke-width="2"/>
+              </svg>
+              <span class="ph-grid"></span>
+              <span class="ph-label">פלייסהולדר</span>
+            </div>
+            <div class="head"><h4>סל ה־AI</h4><span class="swatch" style="background: var(--b-ai);"></span></div>
+            <div class="meta">
+              <span><b>basket-ai</b> · branch: <code>--b-ai</code></span>
+              <span>קופסה־דו־קומתית · סמל פנים · גוון סלק</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="demo-foot">
+        <span><b>סטטוס:</b> placeholders — לפלייסהולדר עזרי בלבד</span>
+        <span><b>handoff:</b> Stage 6 → איירת ציירת ציורי מים</span>
+      </div>
+    </div>
+
+    <!-- spec to illustrator -->
+    <div class="spec-box">
+      <h4>מפרט לאיירת — ציורי הסלים</h4>
+      <div class="spec-grid">
+        <div class="k">מספר סלים</div>
+        <div class="v">6 — אחד לכל ענף. <b>אסור פחות, אסור יותר</b>. כל סל = ענף בלוגו, בכרטיס, ובאיורי תוכן.</div>
+
+        <div class="k">פורמט עבודה</div>
+        <div class="v">ציור מים על נייר. סריקה ב־600dpi. רקע לבן, לא לוקח את צבע הנייר.</div>
+
+        <div class="k">מידות בסיס</div>
+        <div class="v">1200 × 1200 px (1:1). יידע — בכרטיס יוצג כ־280×280 בערך; ב־logo גרסה רחבה — עד 480×480.</div>
+
+        <div class="k">פרופורציה בתוך הריבוע</div>
+        <div class="v">הסל יושב בריבוע פנימי של ~70% (840×840). margin של 15% מכל הצדדים. <b>לא לגעת בקצוות</b>.</div>
+
+        <div class="k">קווי מתאר</div>
+        <div class="v">קו עט/דיו דק (~1.5pt) בגוון <code>--soil</code> (#5b483a). הצביעה מבפנים — ציור מים חופשי שיוצא מעבר לקו במקומות, כמו ב־v2.</div>
+
+        <div class="k">פלטה בתוך הסל</div>
+        <div class="v">ה־70% הם גווני בז'/חום (משפחת הנייר). ה־30% המייחדים = <b>צבע הענף בלבד</b> מ־<code>--b-*</code>. אסור להכניס צבעי ענפים אחרים לסל.</div>
+
+        <div class="k">קונבנציה של תוכן</div>
+        <div class="v">בכל סל יש (א) הצורה ה"מיכל" — קלוע / ארגז / קופסה / חישוק / קופסה־טכנית; (ב) "תוכן" — מה הסל מכיל. ר' הפלייסהולדרים מעל ל־briefs פר־ענף.</div>
+
+        <div class="k">סגנון</div>
+        <div class="v">ציור מים אנכי, לא מפורט מדי, לא ארכי־מינימליסטי. נטייה ל"שרטוט יומן שטח" — כן/כתם מים/קו דיו עליו.</div>
+
+        <div class="k">קונבנציית שמות קבצים</div>
+        <div class="v"><code>basket-garden.png</code> · <code>basket-bcs.png</code> · <code>basket-table.png</code> · <code>basket-teach.png</code> · <code>basket-aos.png</code> · <code>basket-ai.png</code> — וגם <code>.svg</code> מותאם ל־1200.</div>
+
+        <div class="k">לוח זמנים</div>
+        <div class="v">Brief נשלח באישור Stage 1. ספרינט 1: 2 סלים לאישור (garden + aos). ספרינט 2: שאר ה־4. סה"כ ~3 שבועות.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────── SIGN-OFF ─────── -->
+  <section id="sign" class="signoff">
+    <h2>Stage 1 · לאישור</h2>
+    <p>אם השבע סקציות מאושרות — Stage 1 ננעל, וגרסת ה־HTML הזו נשמרת כ־v1 מאושר. הסשן הבא: <b>Stage 2 · Shell + ניווט</b>. עד אז — Tickets פתוחים נרשמים ב־HANDOFF.</p>
+      <ul class="signoff-list">
+        <li>
+          <div class="box"></div>
+          <div><b>01 · כפתורים</b><div class="hint">primary / secondary / ghost / spark · 3 גדלים · 4 states</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>02 · קישורים · צ׳יפים · תגיות־ענף</b><div class="hint">4 סוגי קישורים · chips ניטרליים · 6 תגיות־ענף</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>03 · כרטיסים</b><div class="hint">branch · service · archive-post — שלוש משפחות</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>04 · Hero blocks</b><div class="hint">Manifesto · Doors · Service — שלוש וריאציות</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>05 · חוצצים + סטמפים</b><div class="hint">3 רמות חוצצים · 5 סטמפים (ארכיון, since, אורגני, BOOM, ענף־נעול)</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>06 · Forms</b><div class="hint">inputs · select · textarea · check · radio — עם states</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+        <li>
+          <div class="box"></div>
+          <div><b>07 · מערכת הסלים</b><div class="hint">6 placeholders + מפרט מלא לאיירת</div></div>
+          <div class="opt-pick">לאישור</div>
+        </li>
+      </ul>
+      <p style="margin-top: 28px; font-size: 13px;">
+        אחרי אישור — לעדכן <code style="background: rgba(245,243,236,.1); padding: 2px 6px; border-radius: 4px;">SESSION_HANDOFF.md</code> ולפתוח <code style="background: rgba(245,243,236,.1); padding: 2px 6px; border-radius: 4px;">Shell.html</code> ל־Stage 2.
+      </p>
+  </section>
+
+</div>
+
+</body>
+</html>
