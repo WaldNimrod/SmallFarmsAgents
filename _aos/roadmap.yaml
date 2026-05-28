@@ -2287,11 +2287,12 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C6
   label: "ספר גידולים: Wave 6 — Sparse Crops Expansion (19 sparse crops → ≥6 fields)"
-  status: BUILDING
+  status: IN_REVIEW
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
+  build_commit: "d20769a"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-28"
@@ -2329,11 +2330,33 @@ work_packages:
       Target ≥6 enriched fields/crop from the existing field vocabulary; data-only,
       no engine/schema change. LOD400_LOCKED for build."
     validator: team_100
-  notes: "WP-C6 sparse crops expansion — IN BUILD 2026-05-28. 19 crops (10 herbs,
-    7 vegetables, 2 fruit_trees) to ≥6 enriched fields via WR:claude_sparse_crops_v1
-    (tier WR, weight 0.60, in-session $0 synthesis, web-grounded). Orchestration:
-    team_10 Sonnet build → team_50 Haiku QA → team_190 non-Claude L-GATE_V.
-    Spec: LOD400_spec.md. Evidence: COVERAGE_SNAPSHOT_v1.0.0."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-29"
+    reviewed_commit: "d20769a"
+    notes: "Build (Sonnet model; executed by team_100 orchestrator after the
+      background sub-agent was killed mid-run). WR pack (19 crops, $0 in-session)
+      + ni/claude_sparse_crops_research.py importer (mirror of gemini_il_research,
+      WR:claude_sparse_crops_v1 @0.60, idempotent) wired into seed --all. Ran
+      import + run_enrichment on oma-postgres: 180 source values, 19/19 crops
+      processed, 0 skipped; ALL 19 now ≥6 enriched fields (range 9-13); global
+      enrichment 5291→5780. 6/6 tests pass; validate_aos 29/19/0. Data-only
+      (no migration/engine/schema). BUILD_REPORT filed."
+    validator: team_10
+  - gate: QA
+    result: QA_PASS
+    date: "2026-05-29"
+    notes: "team_50 (Claude Haiku) independent acceptance: 7/7 ACs PASS, min
+      enriched fields = 9 across all 19, 180 WR rows / 19 varieties, idempotent,
+      data plausible (WR tier 0.60), no model/migration drift, validate_aos 0 FAIL.
+      QA_REPORT filed."
+    validator: team_50
+  notes: "WP-C6 BUILD+QA COMPLETE 2026-05-29 (build d20769a) — awaiting team_190
+    non-Claude L-GATE_V (IR#1). 19 crops to ≥6 enriched fields via
+    WR:claude_sparse_crops_v1 (tier WR 0.60, in-session $0 synthesis — NO external
+    API). AC-C6-06 adjusted: values AI-synthesized with _basis (no fabricated
+    URLs); PR-tier cross-check recommended. Spec LOD400_spec.md; evidence
+    COVERAGE_SNAPSHOT + BUILD_REPORT + QA_REPORT."
   profile: L0
 
 # ============================================================================
