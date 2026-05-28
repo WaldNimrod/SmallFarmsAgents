@@ -4,9 +4,16 @@
 - Description ← `01_PROJECT_DESCRIPTION.md`
 - Instructions ← `02_PROJECT_INSTRUCTIONS.md`
 
+## 0. Dedicated brand-graphics pack (one zip — easiest path)
+`UPLOAD_ASSETS/brand_graphics_examples_v1.zip` (30MB, 36 files, web-res) bundles the
+whole style basis: watercolor masters + logos + brand examples ("מה בסל היום", motto,
+sheets) + Carmela. Unzip it and upload the **watercolor masters as images** to the
+project (ChatGPT generates against attached images, not zipped ones); keep the rest as
+reference. (Individual files also live unzipped under `…/source_masters/` — see below.)
+
 ## 2. Upload to Project files (knowledge) — in this order
 **A. Reference images (mandatory — the style IS the images):**
-from `…/SFA_UI_DESIGN_PHASE_2_CHATGPT_HANDOFF/03_NIMROD_BIO_STYLE_ANCHORS/source_masters/`
+from the zip above, or `…/SFA_UI_DESIGN_PHASE_2_CHATGPT_HANDOFF/03_NIMROD_BIO_STYLE_ANCHORS/source_masters/`
 1. `watercolor_illustrations/radishes.png` (primary), `lettuce.png`, `dill.png`,
    `parsley_1.png`, `parsley_2.png`, `bunch.png`
 2. `logos_png/logo_with_basket.png`, `basket.png`; `logos_vector/illustration_vector_2.pdf`
