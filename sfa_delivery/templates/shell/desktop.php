@@ -74,6 +74,21 @@ $source_count  = (int)($stats['source_count']  ?? 25);
           <a class="dt-side__crow" href="https://wa.me/972547776770?text=דיווח+שגיאה">◐ דווחו על שגיאה</a>
           <a class="dt-side__crow" href="https://wa.me/972547776770?text=הצעת+פיצ׳ר">💡 הציעו פיצ׳ר</a>
         </div>
+        <?php $feed_items = \SFA\Lib\CommunityFeed::recent(3); ?>
+        <?php if (!empty($feed_items)): ?>
+          <div class="dt-side__feed">
+            <?php foreach ($feed_items as $item):
+              $kind      = (string)($item['kind']      ?? 'data');
+              $author_he = (string)($item['author_he'] ?? '');
+              $region_he = (string)($item['region_he'] ?? '');
+              $date_he   = (string)($item['date_he']   ?? '');
+              $text_he   = (string)($item['text_he']   ?? '');
+              $tag_he    = (string)($item['tag_he']    ?? '');
+              $upvotes   = (int)($item['upvotes']      ?? 0);
+              include __DIR__ . '/../macros/feed_item.php';
+            endforeach; ?>
+          </div>
+        <?php endif; ?>
         <a class="dt-side__wa" href="https://wa.me/972547776770">💬 WhatsApp · ‎צ׳אט פתוח</a>
       </details>
 

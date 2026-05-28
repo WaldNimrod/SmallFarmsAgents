@@ -116,6 +116,15 @@
   aspect-ratio: 1/1;
   background: var(--gj-paper-2);
 }
+.mod-card__hero {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+}
 .mod-card__icon {
   position: absolute;
   inset-inline-end: 8px;

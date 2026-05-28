@@ -25,6 +25,7 @@ $stat_he    = (string)($module['stat_he']    ?? '');
 $href       = (string)($module['href']       ?? '#');
 $icon_svg   = (string)($module['icon_svg']   ?? '');
 $icon_id    = (string)($module['icon_id']    ?? '');
+$hero_url   = (string)($module['hero_url']   ?? '');
 $data_tier  = (string)($module['data_tier']  ?? $tier);
 
 // Fallback: if icon_svg not provided but icon_id is, build a <use> ref to icons.svg sprite.
@@ -36,6 +37,9 @@ if ($icon_svg === '' && $icon_id !== '') {
 ?>
 <a class="mod-card mod-card--<?= htmlspecialchars($color, ENT_QUOTES, 'UTF-8') ?> mod-card--<?= htmlspecialchars($tier, ENT_QUOTES, 'UTF-8') ?>" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" data-tier="<?= htmlspecialchars($data_tier, ENT_QUOTES, 'UTF-8') ?>">
   <div class="mod-card__art">
+    <?php if ($hero_url !== ''): ?>
+      <img class="mod-card__hero" src="<?= htmlspecialchars($hero_url, ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy" decoding="async">
+    <?php endif; ?>
     <div class="mod-card__icon">
       <?= $icon_svg /* trusted */ ?>
     </div>
