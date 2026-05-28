@@ -14,7 +14,7 @@ DESIGN PRINCIPLES
   degraded tier.
 * **Repair = new tier only.** Calls ``sfa_ingest_push.main()`` programmatically
   (the same code path as ``python -m organic_market_agent.publisher.sfa_ingest_push``).
-  Never calls ``dispatch_upload`` or any legacy www.nimrod.bio path.
+  Never calls ``dispatch_upload`` or any retired legacy upload path.
 * **Idempotent.** Safe to run repeatedly: if the tier is healthy, it's a no-op.
 * **Structured status.** Writes ``data/freshness_guard_status.json`` so external
   monitors / next-cron / on-call humans can read the verdict without parsing logs.
