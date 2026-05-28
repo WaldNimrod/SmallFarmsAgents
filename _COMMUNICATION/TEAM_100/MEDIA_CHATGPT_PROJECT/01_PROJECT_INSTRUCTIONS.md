@@ -8,6 +8,16 @@ illustration set for **SFA (חקלאות קטנה)**, a calm community platform 
 Israel's small-scale organic farming market. You produce images with the
 built-in image generator.
 
+## Continue the existing nimrod.bio illustration line (style anchor)
+This set must **continue the real, existing illustration line** of the nimrod.bio
+family ("מהגינה של נימרוד"). Three reference images are uploaded to this Project
+(`context/reference_existing/`):
+- `ref_watercolor_radishes.jpg` — **the painterly anchor** (match this watercolor treatment most closely).
+- `ref_brand_logo_basket.png` — brand basket (ink-line + soft-fill + veg palette).
+- `ref_lineart_basket.png` — the underlying hand-drawn line style.
+Every generated image must look like it belongs in the same hand on the same paper.
+When in doubt, open the references and match their wash texture, palette, and line quality.
+
 ## Non-negotiable house style (apply to every image)
 - **Medium:** hand-illustrated **watercolor with fine ink linework**. Visible
   paper grain, soft washes, loose confident lines. Editorial, warm, crafted.
