@@ -206,11 +206,13 @@ work_packages:
 
 - id: SFA-S002-P001-WP003
   label: "Server Scraping Verification (waldhomeserver)"
-  status: BUILDING
+  status: DONE
   track: A
   effort: NORMAL
   current_lean_gate: L-GATE_B
   lod_status: LOD500_LOCKED
+  closed_at: "2026-05-28"
+  archive_ref: "_archive/SFA-S002-P001-WP003/ARCHIVE_MANIFEST.md"
   assigned_builder: team_99
   assigned_validator: external
   created_at: "2026-05-07"
@@ -245,7 +247,32 @@ work_packages:
     notes: "Pass-2 verification COMPLETE. Self-attested by team_99 (ADR044 §1). After WP007 deploy: 5/5 artifacts uploaded via WP REST API; manifest.artifact_version=20260506_233451 (fresh, was 20260417 stale); product_count=32 (was 1); report_date=2026-05-06 (was placeholder 2099-08-12); community_sources=4. AC-04 lifted FAIL→PASS. F-01 CLOSED. All 7 ACs PASS. Reports: _COMMUNICATION/team_99/SFA-S002-P001-WP003/VERIFICATION_REPORT_PASS2_v1.0.0.md."
     validator: team_99
     pass: 2
-  notes: "Pass-2 PASS — F-01 closed via WP007 (WP REST API upload). Site shows fresh data publicly. Phase 1 complete. F-190-02 drift fix applied 2026-05-07 (was BUILDING despite Pass-2 COMPLETE in notes)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-28"
+    pass: 3
+    notes: "Pass-3 (team_100 live re-attestation + domain migration). DISCOVERED:
+      the original ACs targeted the now-DEAD www.nimrod.bio static-artifact tier
+      (page 404, REST namespace gone) — the public manifest had been frozen since
+      April because the 06:00 cron's LEGACY www upload was failing daily. ROOT
+      CAUSE: market delivery had migrated to the new dynamic tier sfa.nimrod.bio
+      (sfa_ingest_push → /api/v1/ingest) but the legacy www upload path was never
+      removed. REMEDIATION (team_100, per team_00 directive 'no connection to main
+      domain'): (1) all UPRESS_* legacy vars retired in server .env → upress_configured
+      False → 06:00 legacy upload auto-skipped; (2) code severed www defaults +
+      retired wp_upload/ftps_upload/static_upload/upload_dispatch with a dead-host
+      guard; (3) freshness_guard.py repointed to verify sfa tier health + re-run
+      sfa_ingest_push (anti-drift backstop, cron 06:45); (4) verified end-to-end:
+      sfa.nimrod.bio/market 200, /api/v1/health ok, push 65 products HTTP 200
+      accepted=65. Commits incl. dfbd347. ACs retargeted to sfa.nimrod.bio."
+    validator: team_100
+  notes: "DONE 2026-05-28 — system verified against the NEW delivery tier
+    sfa.nimrod.bio and the legacy www.nimrod.bio coupling fully severed
+    (env + code + cron). Anti-drift guard added (06:45 freshness_guard). Original
+    Pass-1/Pass-2 verified the (now-retired) www tier; Pass-3 migrates + closes
+    against sfa. Supersedes team_99's www-based Pass-3 veto (that diagnosis
+    targeted the wrong, dead domain). Reports: _COMMUNICATION/team_100/
+    SFA-S002-P001-WP003/. F-190-02 drift fully resolved."
   profile: L0
 
 - id: SFA-S002-P001-WP006
