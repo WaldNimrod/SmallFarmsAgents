@@ -1,5 +1,11 @@
 # Decisions for Nimrod — SFA Visual System Phase 2
 
+> **STATUS: DECIDED 2026-05-28 (team_00).** All recommendations accepted.
+> Ruling: D01=C · D02=B · **D03=C** · D04=C · D05=6 · D06=C · D07=C · D08=C · D09=B · D10=B.
+> Record: `_COMMUNICATION/team_00/DECISION_SFA_VISUAL_SYSTEM_2026-05-28_v1.md`.
+> **Note D03=C** inserts a "reference board (15–30 refs)" phase BEFORE calibration —
+> see the revised sequence in the DECISION record §2.
+
 team_100 recommendations are pre-filled. "Default" applies if Nimrod does not decide.
 
 | ID | Topic | Options | Recommendation | Impact | Urgency | Default |
