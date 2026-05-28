@@ -2287,11 +2287,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C6
   label: "ספר גידולים: Wave 6 — Sparse Crops Expansion (19 sparse crops → ≥6 fields)"
-  status: IN_REVIEW
+  status: DONE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-29"
+  archive_ref: "_archive/SFA-S003-P002-WP-C6/ARCHIVE_MANIFEST.md"
   build_commit: "d20769a"
   assigned_builder: team_10
   assigned_validator: team_190
@@ -2351,12 +2353,25 @@ work_packages:
       data plausible (WR tier 0.60), no model/migration drift, validate_aos 0 FAIL.
       QA_REPORT filed."
     validator: team_50
-  notes: "WP-C6 BUILD+QA COMPLETE 2026-05-29 (build d20769a) — awaiting team_190
-    non-Claude L-GATE_V (IR#1). 19 crops to ≥6 enriched fields via
-    WR:claude_sparse_crops_v1 (tier WR 0.60, in-session $0 synthesis — NO external
-    API). AC-C6-06 adjusted: values AI-synthesized with _basis (no fabricated
-    URLs); PR-tier cross-check recommended. Spec LOD400_spec.md; evidence
-    COVERAGE_SNAPSHOT + BUILD_REPORT + QA_REPORT."
+  - gate: L-GATE_V
+    result: PASS
+    round: 1
+    date: "2026-05-29"
+    reviewed_commit: "d20769a"
+    notes: "team_190 (validator engine Composer 2.5 / Cursor, non-Claude — IR#1
+      satisfied: builder Sonnet ≠ QA Haiku ≠ validator Composer). 8/8 ACs PASS,
+      0 blockers/major/minor. Independent: coverage 19/19 ≥6 (min 9 max 13), 180
+      WR rows / 19 varieties tier=WR, data-only (5 files, no migrations), tests
+      6/6, validate_aos 29/19/0, plausibility OK. Advisory (non-blocking): WR@0.60
+      PR cross-check recommended; MSG naming (ADR043). Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P002-WP-C6/L-GATE_V_VERDICT_v1.0.0.md."
+    validator: team_190
+  notes: "WP-C6 CLOSED — LOD500_LOCKED 2026-05-29 via team_100 ADR042 closure
+    after team_190 L-GATE_V PASS (non-Claude Composer 2.5). 19 sparse crops →
+    ≥6 enriched fields via WR:claude_sparse_crops_v1 (tier WR 0.60, in-session $0
+    synthesis — NO external API). Completes the S003 ספר גידולים C-wave (C1–C6).
+    Advisory: PR-tier cross-check of WR values recommended in a future wave.
+    Archive mandate routed to team_191."
   profile: L0
 
 # ============================================================================
