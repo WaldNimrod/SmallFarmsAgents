@@ -126,9 +126,9 @@ signature.
 4. `python -m pytest tests/crop_book/test_source_weights_db.py -v` 100% pass
 5. `python -m pytest tests/crop_book/ -k "reconciler or source_registry"`
    no regressions (engine v1.1 inheritance still produces CALIBRATED=5/5)
-6. `python scripts/run_enrichment.py` re-runs end-to-end with new DB weights;
-   enrichment row counts within ±5% of pre-cleanup baseline (gain expected
-   from merge consolidation, not loss)
+6. `enrichment_runner.run_enrichment(session, dry_run=False)` re-runs
+   end-to-end with new DB weights; enrichment row counts within ±5% of
+   pre-cleanup baseline (gain expected from merge consolidation, not loss)
 7. `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .`
    = 29 PASS / 19 SKIP / 0 FAIL
 
