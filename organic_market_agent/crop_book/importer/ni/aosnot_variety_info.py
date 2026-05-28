@@ -17,11 +17,21 @@ from organic_market_agent.crop_book.importer.ni_importer import NIImporter
 
 logger = logging.getLogger(__name__)
 
+# WP-C2 deepening (2026-05-28): expanded from the original 4 types to capture
+# the full agronomic depth of the source (pruning, trellising, irrigation,
+# pests, harvest windows, cultivar comparisons). All values are within the
+# crop_knowledge_notes.note_type CHECK constraint (migration 053).
 _SOURCE_NOTE_TYPES = (
     "frost_tolerance",
     "flowering_date",
     "pollination_mechanism",
     "israeli_regions",
+    "growing_tip",
+    "irrigation",
+    "pest_disease",
+    "harvest_marker",
+    "cultivar_recommendation",
+    "storage_handling",
 )
 
 
