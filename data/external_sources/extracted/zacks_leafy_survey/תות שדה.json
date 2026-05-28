@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:zacks_leafy_survey_v1",
+  "crop_he": "תות שדה",
+  "provenance": {
+    "pdf": "L10_DR_ZACKS_leafy_hydro_survey.pdf",
+    "pages": "p50 (52-slide deck)",
+    "extraction_model": "claude-sonnet-4.7 (vision)",
+    "extracted_at": "2026-05-28T00:00:00+00:00"
+  },
+  "notes": {
+    "hydro_suitability": "תות שדה ניתן לגידול הידרופוני אנכי (vertical farming) — מוצג במצגת שה\"מ (ד\"ר מולי זק\"ס) מערך אנכי של חברת growin עם בקרת EC ו-pH אוטומטית ותאורת LED. שיטה זו מנצלת גובה לצפיפות נטיעה גבוהה בשטח קטן. (תוכן מקור תמציתי — מומלץ להשלים מנתוני PR/WR ייעודיים לתות הידרופוני בעת הרחבת הגידול.)"
+  }
+}

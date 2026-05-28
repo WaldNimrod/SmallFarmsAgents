@@ -16,7 +16,18 @@ from organic_market_agent.crop_book.importer.ni_importer import NIImporter
 
 logger = logging.getLogger(__name__)
 
-_SOURCE_NOTE_TYPES = ("hydro_suitability",)
+# WP-C2 deepening (2026-05-28): the L10 source is a 52-slide image deck that
+# the original text-extraction missed entirely (0 notes). Re-extracted via
+# vision by Claude; expanded beyond hydro_suitability to capture the deck's
+# disease, variety-trial, cultivar and harvest data. All within the
+# crop_knowledge_notes.note_type CHECK constraint (migration 053).
+_SOURCE_NOTE_TYPES = (
+    "hydro_suitability",
+    "pest_disease",
+    "variety_trial_score",
+    "cultivar_recommendation",
+    "harvest_marker",
+)
 
 
 class ZacksLeafySurveyImporter(NIImporter):
