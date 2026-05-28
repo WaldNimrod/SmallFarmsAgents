@@ -126,18 +126,27 @@ def _attempt_repair() -> list[str]:
 
     Returns a list of error strings (empty = success).
     """
+    import sys
+
     try:
         from organic_market_agent.publisher import sfa_ingest_push
 
-        # sfa_ingest_push.main() reads sys.argv by default; pass empty list
-        # so it runs with defaults (--table all, no --dry-run).
-        exit_code = sfa_ingest_push.main()
-        if exit_code == 0:
+        # sfa_ingest_push.main() parses sys.argv directly (no argv param), so we
+        # MUST isolate argv — otherwise the guard's own flags (e.g. --no-repair,
+        # --json) leak in and trip its argparse (SystemExit(2)). Force defaults
+        # (--table all, real push).
+        saved_argv = sys.argv
+        try:
+            sys.argv = ["sfa_ingest_push"]
+            exit_code = sfa_ingest_push.main()
+        finally:
+            sys.argv = saved_argv
+        if exit_code in (0, None):
             return []
         return [f"sfa_ingest_push.main() returned exit_code={exit_code}"]
     except SystemExit as exc:
         code = exc.code
-        if code == 0:
+        if code in (0, None):
             return []
         return [f"sfa_ingest_push raised SystemExit({code})"]
     except Exception as exc:
