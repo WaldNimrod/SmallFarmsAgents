@@ -59,6 +59,7 @@ return array (
       'shortcode' => '[sfagent_crop_book]',
       'status' => 'live',
       'route_runtime' => '/crop-book/',
+      'hero_url' => '/public_assets/img/heroes/crop-book.webp',
     ),
     1 => 
     array (
@@ -76,6 +77,7 @@ return array (
       'shortcode' => '[sfagent_market_report]',
       'status' => 'live',
       'route_runtime' => '/market/',
+      'hero_url' => '/public_assets/img/heroes/market.webp',
     ),
     2 => 
     array (
@@ -93,6 +95,7 @@ return array (
       'shortcode' => '[sfagent_app view="calc"]',
       'status' => 'beta',
       'route_runtime' => '/calc/',
+      'hero_url' => '/public_assets/img/heroes/calc.webp',
     ),
     3 => 
     array (
@@ -109,6 +112,7 @@ return array (
       'shortcode' => '',
       'status' => 'planned',
       'route_runtime' => '/planner/',
+      'hero_url' => '/public_assets/img/heroes/planner.webp',
     ),
     4 => 
     array (
@@ -125,6 +129,7 @@ return array (
       'shortcode' => '',
       'status' => 'planned',
       'route_runtime' => '/clients/',
+      'hero_url' => '/public_assets/img/heroes/clients.webp',
     ),
     5 => 
     array (
@@ -141,6 +146,7 @@ return array (
       'shortcode' => '',
       'status' => 'planned',
       'route_runtime' => '/inventory/',
+      'hero_url' => '/public_assets/img/heroes/inventory.webp',
     ),
     6 => 
     array (
@@ -157,6 +163,7 @@ return array (
       'shortcode' => '',
       'status' => 'custom',
       'route_runtime' => '/integrations/tend/',
+      'hero_url' => '/public_assets/img/heroes/tend-bridge.webp',
     ),
     7 => 
     array (
@@ -173,6 +180,7 @@ return array (
       'shortcode' => '',
       'status' => 'custom',
       'route_runtime' => '/field-log/',
+      'hero_url' => '/public_assets/img/heroes/field-log.webp',
     ),
   ),
   'pages' => 

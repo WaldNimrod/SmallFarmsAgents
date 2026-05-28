@@ -47,6 +47,8 @@ if (!isset($asset_ver)) {
 <meta property="og:locale" content="he_IL">
 <meta property="og:image" content="<?= $h($og_image_url) ?>">
 <link rel="canonical" href="https://sfa.nimrod.bio<?= $h($canonical_path) ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="/public_assets/img/favicon-32.png?v=<?= $h($asset_ver) ?>">
+<link rel="apple-touch-icon" sizes="180x180" href="/public_assets/img/apple-touch-icon.png?v=<?= $h($asset_ver) ?>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
