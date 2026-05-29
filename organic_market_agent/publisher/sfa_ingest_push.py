@@ -78,6 +78,7 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
     sql = """
         SELECT c.id, c.name_he, c.name_en, c.scientific_name,
                c.family_id, f.name_he AS family_name_he,
+               f.scientific_name AS family_scientific_name,
                c.category, c.growth_cycle, c.harvest_unit_default,
                c.first_fruit_year, c.description, c.oma_product_id
         FROM crops c
@@ -100,12 +101,182 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
     cur.execute(var_sql)
     dtm_by_crop = {r["crop_id"]: r for r in cur.fetchall()}
 
+    # --- bulk enrichment queries (one per table, grouped by crop_id) ---
+
+    # planting calendar
+    cur.execute("""
+        SELECT crop_id, activity_type, season, region,
+               month_jan, month_feb, month_mar, month_apr,
+               month_may, month_jun, month_jul, month_aug,
+               month_sep, month_oct, month_nov, month_dec, notes
+        FROM crop_planting_calendar
+        ORDER BY crop_id, id
+    """)
+    calendar_by_crop: dict[int, list[dict[str, Any]]] = {}
+    for row in cur.fetchall():
+        cid = row["crop_id"]
+        calendar_by_crop.setdefault(cid, []).append({
+            "activity_type": row["activity_type"],
+            "season": row["season"],
+            "region": row["region"],
+            "months": [
+                bool(row["month_jan"]), bool(row["month_feb"]), bool(row["month_mar"]),
+                bool(row["month_apr"]), bool(row["month_may"]), bool(row["month_jun"]),
+                bool(row["month_jul"]), bool(row["month_aug"]), bool(row["month_sep"]),
+                bool(row["month_oct"]), bool(row["month_nov"]), bool(row["month_dec"]),
+            ],
+            "notes": row["notes"],
+        })
+
+    # agronomy: crop-level median via PERCENTILE_CONT (one query for all crops)
+    agronomy_whitelist_sql = ",".join(f"'{f}'" for f in _AGRONOMY_FIELD_WHITELIST)
+    cur.execute(f"""
+        SELECT cv.crop_id,
+               cfe.field_name,
+               PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY cfe.value_best) AS median_val
+        FROM crop_varieties cv
+        JOIN crop_field_enrichment cfe ON cfe.variety_id = cv.id
+        WHERE cfe.field_name IN ({agronomy_whitelist_sql})
+          AND cfe.value_best IS NOT NULL
+        GROUP BY cv.crop_id, cfe.field_name
+    """)
+    agronomy_by_crop: dict[int, dict[str, float]] = {}
+    for row in cur.fetchall():
+        cid = row["crop_id"]
+        agronomy_by_crop.setdefault(cid, {})[row["field_name"]] = float(row["median_val"])
+
+    # harvest stats
+    cur.execute("""
+        SELECT crop_id, season, year,
+               first_harvest_week, peak_harvest_week, last_harvest_week,
+               yield_per_bed_min, yield_per_bed_median, yield_per_bed_max,
+               yield_unit
+        FROM crop_harvest_stats
+        ORDER BY crop_id, year, season
+    """)
+    harvest_by_crop: dict[int, list[dict[str, Any]]] = {}
+    for row in cur.fetchall():
+        cid = row["crop_id"]
+        entry: dict[str, Any] = {
+            "season": row["season"],
+            "year": row["year"],
+            "weeks": {
+                "first": row["first_harvest_week"],
+                "peak": row["peak_harvest_week"],
+                "last": row["last_harvest_week"],
+            },
+            "yield_per_bed": {
+                "min": float(row["yield_per_bed_min"]) if row["yield_per_bed_min"] is not None else None,
+                "median": float(row["yield_per_bed_median"]) if row["yield_per_bed_median"] is not None else None,
+                "max": float(row["yield_per_bed_max"]) if row["yield_per_bed_max"] is not None else None,
+            },
+            "unit": row["yield_unit"],
+        }
+        harvest_by_crop.setdefault(cid, []).append(entry)
+
+    # postharvest storage (one representative row per crop — first by id)
+    cur.execute("""
+        SELECT DISTINCT ON (crop_id)
+               crop_id,
+               storage_temp_c_min, storage_temp_c_max,
+               rh_pct_min, rh_pct_max,
+               ethylene_production, ethylene_sensitivity,
+               storage_life_days_min, storage_life_days_max,
+               notes
+        FROM crop_postharvest_storage
+        ORDER BY crop_id, id
+    """)
+    storage_by_crop: dict[int, dict[str, Any]] = {}
+    for row in cur.fetchall():
+        storage_by_crop[row["crop_id"]] = {
+            "temp": {
+                "min": float(row["storage_temp_c_min"]) if row["storage_temp_c_min"] is not None else None,
+                "max": float(row["storage_temp_c_max"]) if row["storage_temp_c_max"] is not None else None,
+            },
+            "rh": {
+                "min": row["rh_pct_min"],
+                "max": row["rh_pct_max"],
+            },
+            "ethylene_production": row["ethylene_production"],
+            "ethylene_sensitivity": row["ethylene_sensitivity"],
+            "life_days": {
+                "min": row["storage_life_days_min"],
+                "max": row["storage_life_days_max"],
+            },
+            "notes": row["notes"],
+        }
+
+    # companion matrix — fetch all pairs + resolve names in one join
+    cur.execute("""
+        SELECT cm.crop_a_id, cm.crop_b_id, cm.compatibility, cm.notes,
+               ca.name_he AS a_name_he, ca.name_en AS a_name_en,
+               cb.name_he AS b_name_he, cb.name_en AS b_name_en
+        FROM crop_companion_matrix cm
+        JOIN crops ca ON ca.id = cm.crop_a_id
+        JOIN crops cb ON cb.id = cm.crop_b_id
+    """)
+    companions_by_crop: dict[int, list[dict[str, Any]]] = {}
+    for row in cur.fetchall():
+        aid, bid = row["crop_a_id"], row["crop_b_id"]
+        # for crop_a: partner is b
+        partner_b = {
+            "slug": _slugify(row["b_name_en"] or row["b_name_he"], fallback=f"crop-{bid}"),
+            "name_he": row["b_name_he"],
+            "compatibility": row["compatibility"],
+            "notes": row["notes"],
+        }
+        companions_by_crop.setdefault(aid, []).append(partner_b)
+        # for crop_b: partner is a
+        partner_a = {
+            "slug": _slugify(row["a_name_en"] or row["a_name_he"], fallback=f"crop-{aid}"),
+            "name_he": row["a_name_he"],
+            "compatibility": row["compatibility"],
+            "notes": row["notes"],
+        }
+        companions_by_crop.setdefault(bid, []).append(partner_a)
+
+    # knowledge notes — public only (is_internal_farm_use_only = FALSE), HARD GATE
+    cur.execute("""
+        SELECT crop_id, note_type, body_text, trust_tier
+        FROM crop_knowledge_notes
+        WHERE is_internal_farm_use_only = FALSE
+        ORDER BY crop_id, id
+    """)
+    notes_by_crop: dict[int, list[dict[str, Any]]] = {}
+    for row in cur.fetchall():
+        cid = row["crop_id"]
+        notes_by_crop.setdefault(cid, []).append({
+            "note_type": row["note_type"],
+            "body_text": row["body_text"],
+            "trust_tier": row["trust_tier"],
+        })
+
     now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     out = []
     for c in crops:
-        dtm = dtm_by_crop.get(c["id"], {})
+        cid = c["id"]
+        dtm = dtm_by_crop.get(cid, {})
         season = _season_from_growth_cycle(c.get("growth_cycle"))
-        payload_extras = {
+
+        # build identity block
+        identity: dict[str, Any] = {}
+        if c.get("category"):
+            identity["category"] = c["category"]
+        if c.get("growth_cycle"):
+            identity["growth_cycle"] = c["growth_cycle"]
+        if c.get("harvest_unit_default"):
+            identity["harvest_unit_default"] = c["harvest_unit_default"]
+        if c.get("first_fruit_year") is not None:
+            identity["first_fruit_year"] = c["first_fruit_year"]
+        family_block: dict[str, Any] = {}
+        if c.get("family_name_he"):
+            family_block["name_he"] = c["family_name_he"]
+        if c.get("family_scientific_name"):
+            family_block["scientific_name"] = c["family_scientific_name"]
+        if family_block:
+            identity["family"] = family_block
+
+        payload_extras: dict[str, Any] = {
             "schema_version": 1,
             "name_en": c.get("name_en"),
             "growth_cycle": c.get("growth_cycle"),
@@ -114,10 +285,17 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
             "description_md": c.get("description") or "",
             "oma_product_id": c.get("oma_product_id"),
             "variety_count": dtm.get("variety_count") or 0,
+            "identity": identity,
+            "calendar": calendar_by_crop.get(cid, []),
+            "agronomy": agronomy_by_crop.get(cid, {}),
+            "harvest": harvest_by_crop.get(cid, []),
+            "storage": storage_by_crop.get(cid),
+            "companions": companions_by_crop.get(cid, []),
+            "notes": notes_by_crop.get(cid, []),  # public-only; empty until public notes exist
         }
         out.append({
-            "id": c["id"],
-            "slug": _slugify(c["name_en"] or c["name_he"], fallback=f"crop-{c['id']}"),
+            "id": cid,
+            "slug": _slugify(c["name_en"] or c["name_he"], fallback=f"crop-{cid}"),
             "hebrew_name": c["name_he"],
             "scientific_name": c.get("scientific_name"),
             "family_id": c.get("family_id"),
@@ -272,6 +450,49 @@ def _fetch_products(conn) -> list[dict[str, Any]]:
     return out
 
 
+def _fetch_cover_crops(conn) -> list[dict[str, Any]]:
+    """One row per cover crop. Global reference list (no crop_id FK)."""
+    sql = """
+        SELECT id, name_he, name_en, category,
+               sow_window, total_days_garden, germination_temp_c_min,
+               survives_winter, hardiness_zone, inoculum, notes
+        FROM crop_cover_crops
+        ORDER BY id
+    """
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql)
+    rows = cur.fetchall()
+
+    now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    out = []
+    for r in rows:
+        payload: dict[str, Any] = {"schema_version": 1}
+        if r.get("sow_window"):
+            payload["sow_window"] = r["sow_window"]
+        if r.get("inoculum"):
+            payload["inoculum"] = r["inoculum"]
+        if r.get("notes"):
+            payload["notes"] = r["notes"]
+        if r.get("total_days_garden") is not None:
+            payload["total_days_garden"] = r["total_days_garden"]
+        if r.get("germination_temp_c_min") is not None:
+            payload["germination_temp_c_min"] = float(r["germination_temp_c_min"])
+        if r.get("survives_winter") is not None:
+            payload["survives_winter"] = bool(r["survives_winter"])
+        if r.get("hardiness_zone") is not None:
+            payload["hardiness_zone"] = r["hardiness_zone"]
+        out.append({
+            "id": r["id"],
+            "slug": _slugify(r.get("name_en") or r.get("name_he"), fallback=f"cover-crop-{r['id']}"),
+            "name_he": r.get("name_he"),
+            "name_en": r.get("name_en"),
+            "category": r.get("category"),
+            "last_pushed_at": now,
+            "payload_json": payload,
+        })
+    return out
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -352,6 +573,7 @@ def _push_table(
         "crops": _fetch_crops,
         "crop_varieties": _fetch_crop_varieties,
         "products": _fetch_products,
+        "cover_crops": _fetch_cover_crops,
     }
     if table not in fetchers:
         raise SystemExit(f"Unknown table: {table}")
@@ -384,7 +606,7 @@ def _push_table(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Push canonical data to sfa.nimrod.bio ingest API")
-    parser.add_argument("--table", choices=("crops", "crop_varieties", "products", "all"),
+    parser.add_argument("--table", choices=("crops", "crop_varieties", "products", "cover_crops", "all"),
                         default="all", help="Which table to push")
     parser.add_argument("--limit", type=int, default=None,
                         help="Limit rows per table (for testing)")
@@ -403,7 +625,7 @@ def main() -> int:
 
     conn = psycopg2.connect(cfg.db_url)
     try:
-        tables = ["crops", "crop_varieties", "products"] if args.table == "all" else [args.table]
+        tables = ["crops", "crop_varieties", "products", "cover_crops"] if args.table == "all" else [args.table]
         for tbl in tables:
             res = _push_table(cfg, conn, tbl, limit=args.limit, dry_run=args.dry_run)
             print(json.dumps(res, ensure_ascii=False, default=str, indent=2))

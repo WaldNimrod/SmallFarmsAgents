@@ -302,6 +302,67 @@ final class CropBookViewController
             }
         }
 
+        // ── WP-UI-patch04: map payload sections (§3.4) ──────────────────
+        // Each section is already merged into $crop from payload_json above.
+        // Ensure canonical keys exist as arrays so template can test with !empty().
+
+        // (a) identity — scalar fields from crops table + family sub-object
+        if (!isset($crop['identity']) || !is_array($crop['identity'])) {
+            $identityFamily = [];
+            if (!empty($crop['family']) && is_array($crop['family'])) {
+                $identityFamily = [
+                    'name_he'       => (string)($crop['family']['name_he'] ?? ''),
+                    'scientific_name' => (string)($crop['name_lat'] ?? ''),
+                ];
+            }
+            $crop['identity'] = array_filter([
+                'category'             => (string)($crop['category']             ?? ''),
+                'growth_cycle'         => (string)($crop['growth_cycle']         ?? ''),
+                'harvest_unit_default' => (string)($crop['harvest_unit_default'] ?? ''),
+                'first_fruit_year'     => $crop['first_fruit_year'] ?? null,
+                'description'          => (string)($crop['description_he']       ?? ($crop['description'] ?? '')),
+                'dtm_min'              => $crop['dtm_min'] ?? null,
+                'dtm_max'              => $crop['dtm_max'] ?? null,
+                'family'               => $identityFamily ?: null,
+            ], static fn ($v) => $v !== null && $v !== '' && $v !== []);
+        }
+
+        // (b) calendar — already an array or empty; normalise.
+        if (!isset($crop['calendar']) || !is_array($crop['calendar'])) {
+            $crop['calendar'] = [];
+        }
+
+        // (c) agronomy — crop-level rollup; already merged or empty.
+        if (!isset($crop['agronomy']) || !is_array($crop['agronomy'])) {
+            $crop['agronomy'] = [];
+        }
+
+        // (d) harvest — list; already merged or empty.
+        if (!isset($crop['harvest']) || !is_array($crop['harvest'])) {
+            $crop['harvest'] = [];
+        }
+
+        // (e) storage — object; already merged or empty.
+        if (!isset($crop['storage']) || !is_array($crop['storage'])) {
+            $crop['storage'] = [];
+        }
+
+        // (f) companions — list; already merged or empty.
+        if (!isset($crop['companions']) || !is_array($crop['companions'])) {
+            $crop['companions'] = [];
+        }
+
+        // (g) notes — public-only list.  payload key is 'notes'.
+        // knowledge_notes (legacy) is handled by template's own filter loop.
+        if (!isset($crop['notes']) || !is_array($crop['notes'])) {
+            $crop['notes'] = [];
+        }
+        // Hard-gate: strip any inadvertent internal note that somehow made it in.
+        $crop['notes'] = array_values(array_filter(
+            $crop['notes'],
+            static fn ($n) => is_array($n) && empty($n['is_internal_farm_use_only'])
+        ));
+
         // Best-effort market_link: only attach when a matching product exists.
         $marketStmt = $this->pdo->prepare('SELECT slug, hebrew_name, last_price FROM products WHERE slug = ? LIMIT 1');
         $marketStmt->execute([$slug]);
@@ -323,6 +384,43 @@ final class CropBookViewController
         return $this->html($response, Template::render('pages/book_crop', [
             'crop' => $crop,
             'varieties' => $varieties, // legacy top-level for any template that reads it
+        ]));
+    }
+
+    public function coverCrops(Request $request, Response $response): Response
+    {
+        // Query the cover_crops table populated by sub-agent A.
+        // Tolerate the table not yet existing (returns empty list gracefully).
+        $rows = [];
+        try {
+            $stmt = $this->pdo->query(
+                'SELECT name_he, name_en, category, sow_window, total_days_garden,
+                        survives_winter, notes
+                 FROM cover_crops ORDER BY category, name_he'
+            );
+            if ($stmt) {
+                $rows = $stmt->fetchAll();
+            }
+        } catch (\Throwable $e) {
+            // Table may not exist yet — render empty-state without fatal.
+            $rows = [];
+        }
+
+        $cover_crops = [];
+        foreach ($rows as $row) {
+            $cover_crops[] = [
+                'name_he'           => (string)($row['name_he'] ?? ''),
+                'name_en'           => (string)($row['name_en'] ?? ''),
+                'category'          => (string)($row['category'] ?? ''),
+                'sow_window'        => (string)($row['sow_window'] ?? ''),
+                'total_days_garden' => $row['total_days_garden'] !== null ? (int)$row['total_days_garden'] : null,
+                'survives_winter'   => !empty($row['survives_winter']),
+                'notes'             => (string)($row['notes'] ?? ''),
+            ];
+        }
+
+        return $this->html($response, Template::render('pages/book_cover_crops', [
+            'cover_crops' => $cover_crops,
         ]));
     }
 

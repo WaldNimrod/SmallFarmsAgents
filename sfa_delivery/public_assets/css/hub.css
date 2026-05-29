@@ -373,3 +373,618 @@
   gap: 10px;
   margin-top: 12px;
 }
+
+/* ─── WP-UI-patch04: global persistent nav (AC-U4-06) ──────────────── */
+/* The nav sits above both shells in the DOM and is sticky/fixed so it
+   remains visible on scroll. Both .gj-shell and .dt-shell get top
+   padding to avoid content hiding behind the nav bar. */
+
+.sfa-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--gj-paper);
+  border-bottom: 1px solid var(--gj-line);
+  direction: rtl;
+  font-family: var(--gj-font-body);
+}
+
+.sfa-nav__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 48px;
+}
+
+.sfa-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--gj-ink);
+  flex-shrink: 0;
+}
+.sfa-nav__brand-mark { width: 28px; height: 28px; display: block; }
+.sfa-nav__brand-mark svg { width: 100%; height: 100%; display: block; }
+.sfa-nav__brand-name {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Hamburger toggle — visible on narrow screens (<640px) */
+.sfa-nav__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid var(--gj-line);
+  border-radius: 8px;
+  cursor: pointer;
+  margin-inline-start: auto;
+}
+.sfa-nav__toggle-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--gj-ink);
+  border-radius: 2px;
+}
+
+.sfa-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.sfa-nav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.sfa-nav__link:hover { background: var(--gj-paper-2); color: var(--gj-ink); }
+.sfa-nav__link.is-active {
+  background: color-mix(in oklch, var(--gj-leaf) 18%, var(--gj-paper));
+  color: var(--gj-leaf-deep);
+  font-weight: 700;
+}
+.sfa-nav__link--disabled {
+  opacity: .45;
+  cursor: default;
+  pointer-events: none;
+}
+.sfa-nav__coming {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  letter-spacing: .04em;
+  background: var(--gj-paper-2);
+  color: var(--gj-ink-soft);
+  padding: 1px 5px;
+  border-radius: 99px;
+  margin-inline-start: 4px;
+}
+
+/* Secondary sub-nav row (crop-book context) */
+.sfa-nav__sub {
+  border-top: 1px solid var(--gj-line);
+  background: var(--gj-paper-2);
+  padding: 0 14px;
+}
+.sfa-nav__sublinks {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sfa-nav__sublinks::-webkit-scrollbar { display: none; }
+
+.sfa-nav__sublink {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.sfa-nav__sublink:hover { color: var(--gj-leaf-deep); border-bottom-color: var(--gj-leaf-soft); }
+
+/* Adjust top padding on shells to avoid content hiding under sticky nav */
+.gj-shell { padding-top: 0; }  /* nav is outside the shell */
+/* dt-shell is already a separate grid column; no top padding needed there */
+
+/* Mobile: collapse links to a dropdown at <640px */
+@media (max-width: 639px) {
+  .sfa-nav__toggle { display: flex; }
+
+  .sfa-nav__links {
+    display: none;
+    position: absolute;
+    top: 48px;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--gj-paper);
+    border-bottom: 1px solid var(--gj-line);
+    padding: 8px 14px 12px;
+    gap: 2px;
+    z-index: 199;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  }
+  .sfa-nav__links.is-open { display: flex; }
+
+  .sfa-nav__link {
+    padding: 8px 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+}
+
+/* On the desktop shell (≥900px) the nav sits on top — the dt-shell
+   uses a sidebar layout so the full-width nav is a bit unusual but still
+   informative. Keep it visible and compact. */
+@media (min-width: 900px) {
+  .sfa-nav__bar { height: 44px; }
+  .sfa-nav__link { font-size: 13px; padding: 4px 10px; }
+}
+
+/* ─── WP-UI-patch04: landing card size fix (AC-U4-09) ───────────────── */
+/* Reduce .gj-cropgrid from 2-col to a responsive multi-col grid so cards
+   are not oversized on wide screens. On mobile keep 2-col but smaller cards. */
+.gj-cropgrid {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+/* Tighten the crop card art area to a sensible height */
+.cb-entry-crops .gj-cropcard__art {
+  height: 66px;
+}
+.cb-entry-crops .gj-cropcard__name { font-size: 13px; }
+.cb-entry-crops .gj-cropcard__en   { font-size: 10px; }
+.cb-entry-crops .gj-cropcard__body { padding: 7px 9px 9px; }
+.cb-entry-crops .gj-cropcard__dtm  { font-size: 14px; }
+
+/* Nav-path cards (module_card) — reasonable sizing in the entry layout */
+.cb-paths { gap: 6px; }
+
+/* ─── WP-UI-patch04: cover-crops page (AC-U4-02) ────────────────────── */
+.cb-cover-header { padding: 4px 0 10px; }
+.cb-cover-intro {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--gj-ink-soft);
+  margin: 4px 0 0;
+  max-width: 54ch;
+}
+
+.cb-cover-group { margin-bottom: 24px; }
+.cb-cover-group__title {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 14px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--gj-line);
+  color: var(--gj-leaf-deep);
+}
+
+.cb-cover-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--gj-line);
+}
+.cb-cover-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.4;
+  min-width: 520px;
+}
+.cb-cover-table thead th {
+  background: var(--gj-paper-2);
+  padding: 8px 10px;
+  text-align: right;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  border-bottom: 1px solid var(--gj-line);
+  white-space: nowrap;
+}
+.cb-cover-table tbody tr { border-bottom: 1px solid var(--gj-line); }
+.cb-cover-table tbody tr:last-child { border-bottom: none; }
+.cb-cover-table tbody tr:nth-child(even) { background: color-mix(in oklch, var(--gj-paper-2) 40%, transparent); }
+.cb-cover-table tbody td { padding: 8px 10px; vertical-align: top; }
+
+.cb-cover-table__name-he { font-weight: 600; color: var(--gj-ink); }
+.cb-cover-table__name-en { font-style: italic; color: var(--gj-ink-soft); font-size: 12px; }
+.cb-cover-table__days    { font-family: "JetBrains Mono", monospace; text-align: center; }
+.cb-cover-table__winter  { text-align: center; color: var(--gj-leaf-deep); font-weight: 700; }
+.cb-cover-table__notes   { font-size: 12px; color: var(--gj-ink-soft); }
+
+.cb-empty-state {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--gj-ink-soft);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ─── WP-UI-patch04: crop detail sections (AC-U4-03/04/08) ─────────── */
+
+/* Generic section wrapper */
+.cb-section {
+  padding: 18px 0 14px;
+  border-bottom: 1px dashed var(--gj-line);
+}
+.cb-section:last-of-type { border-bottom: 0; }
+.cb-section__head { margin-bottom: 12px; }
+.cb-section__title {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 20px;
+  margin: 0 0 4px;
+  line-height: 1.15;
+  color: var(--gj-ink);
+}
+.cb-section__icon {
+  margin-inline-end: 6px;
+  font-style: normal;
+}
+.cb-section__body { }
+
+/* Sticky in-page section anchor nav */
+.cb-section-nav {
+  position: sticky;
+  top: 48px; /* below sfa-nav bar */
+  z-index: 100;
+  background: var(--gj-paper);
+  border-bottom: 1px solid var(--gj-line);
+  margin: 0 0 6px;
+}
+.cb-section-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.cb-section-nav__list::-webkit-scrollbar { display: none; }
+.cb-section-nav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.cb-section-nav__link:hover {
+  color: var(--gj-leaf-deep);
+  border-bottom-color: var(--gj-leaf-soft);
+}
+
+/* Identity fact grid */
+.cb-identity__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--gj-ink);
+  margin: 0 0 14px;
+  max-width: 62ch;
+}
+.cb-identity__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  font-size: 13px;
+  margin: 0;
+}
+.cb-identity__grid dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.cb-identity__grid dd {
+  margin: 0;
+  color: var(--gj-ink);
+  font-weight: 500;
+}
+.cb-identity__family-link {
+  color: var(--gj-leaf-deep);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, var(--gj-leaf) 50%, transparent);
+}
+
+/* Planting calendar */
+.cb-calendar { display: flex; flex-direction: column; gap: 14px; }
+.cb-calendar__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cb-calendar__label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gj-leaf-deep);
+  font-weight: 600;
+}
+.cb-calendar__region {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  margin-bottom: 3px;
+  display: block;
+}
+.cb-calendar__strip-wrap { }
+.cb-calendar__strip {
+  display: flex;
+  flex-direction: row-reverse; /* RTL: Jan on right, Dec on left in visual */
+  gap: 2px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cb-calendar__strip::-webkit-scrollbar { display: none; }
+.cb-calendar__month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gj-ink-soft);
+  background: var(--gj-paper-2);
+  border: 1px solid var(--gj-line);
+  flex-shrink: 0;
+  transition: background .1s, color .1s;
+}
+.cb-calendar__month--active {
+  background: color-mix(in oklch, var(--gj-leaf) 28%, var(--gj-paper));
+  color: var(--gj-leaf-deep);
+  border-color: var(--gj-leaf-soft);
+  font-weight: 700;
+}
+.cb-calendar__notes {
+  font-size: 12px;
+  color: var(--gj-ink-soft);
+  margin: 6px 0 0;
+}
+.cb-calendar__empty { font-style: italic; }
+
+/* Agronomy rollup */
+.cb-agronomy__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.cb-agronomy__grid dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.cb-agronomy__grid dd {
+  margin: 0;
+  color: var(--gj-ink);
+  font-weight: 500;
+}
+.cb-agronomy__unit {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  margin-inline-start: 3px;
+}
+.cb-agronomy__note {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Harvest & yield */
+.cb-harvest { display: flex; flex-direction: column; gap: 10px; }
+.cb-harvest__card {
+  background: var(--gj-paper-2);
+  border: 1px solid var(--gj-line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.cb-harvest__season {
+  font-family: var(--gj-font-head);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--gj-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cb-harvest__year {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  font-weight: 400;
+}
+.cb-harvest__stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 14px;
+  font-size: 13px;
+  margin: 0;
+}
+.cb-harvest__stats dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.cb-harvest__stats dd { margin: 0; color: var(--gj-ink); font-weight: 500; }
+.cb-harvest__unit {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  margin-inline-start: 3px;
+}
+
+/* Storage */
+.cb-storage {  }
+.cb-storage__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.cb-storage__grid dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gj-ink-soft);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+.cb-storage__grid dd { margin: 0; color: var(--gj-ink); font-weight: 500; }
+.cb-storage__notes {
+  font-size: 12px;
+  color: var(--gj-ink-soft);
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+/* Companions */
+.cb-companions { display: flex; flex-direction: column; gap: 16px; }
+.cb-companions__group { }
+.cb-companions__group-title {
+  font-family: var(--gj-font-head);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.cb-companions__dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cb-companions__dot--good  { background: var(--gj-leaf); }
+.cb-companions__dot--avoid { background: var(--gj-tomato); }
+.cb-companions__group--good  .cb-companions__group-title { color: var(--gj-leaf-deep); }
+.cb-companions__group--avoid .cb-companions__group-title { color: var(--gj-tomato-deep); }
+.cb-companions__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cb-companions__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.cb-companions__crop-link {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  background: var(--gj-paper-2);
+  border: 1px solid var(--gj-line);
+  color: var(--gj-ink);
+  transition: background .15s, border-color .15s;
+}
+.cb-companions__group--good  .cb-companions__crop-link:hover {
+  background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper));
+  border-color: var(--gj-leaf-soft);
+  color: var(--gj-leaf-deep);
+}
+.cb-companions__group--avoid .cb-companions__crop-link:hover {
+  background: color-mix(in oklch, var(--gj-tomato) 12%, var(--gj-paper));
+  border-color: color-mix(in oklch, var(--gj-tomato) 40%, var(--gj-line));
+  color: var(--gj-tomato-deep);
+}
+.cb-companions__notes {
+  font-size: 11px;
+  color: var(--gj-ink-soft);
+  font-style: italic;
+}
+
+/* Notes section */
+.cb-notes__empty {
+  font-style: italic;
+  color: var(--gj-ink-soft);
+  font-size: 13px;
+  margin: 0;
+}
+.cb-notes__list { display: flex; flex-direction: column; gap: 10px; }
+.cb-note {
+  background: var(--gj-paper-2);
+  border: 1px solid var(--gj-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.cb-note__type { margin-bottom: 6px; display: inline-block; }
+.cb-note__body { margin: 0; font-size: 13px; line-height: 1.65; color: var(--gj-ink); }
+.cb-note__tier { display: block; margin-top: 6px; font-style: italic; }
+
+/* Varieties section header (patch04: use cb-section__title for consistency) */
+.cb-vars .cb-section__title { margin-bottom: 10px; }
+.cb-vars { padding: 18px 0 14px; }

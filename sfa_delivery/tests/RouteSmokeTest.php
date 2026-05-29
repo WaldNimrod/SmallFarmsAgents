@@ -21,6 +21,8 @@ final class RouteSmokeTest extends TestCase
 
         $this->pdo->exec('CREATE TABLE crops (id INTEGER PRIMARY KEY, slug TEXT UNIQUE, hebrew_name TEXT, scientific_name TEXT, family_name_he TEXT, category TEXT, season TEXT, dtm_min INTEGER, dtm_max INTEGER, payload_json TEXT, last_pushed_at TEXT)');
         $this->pdo->exec('CREATE TABLE crop_varieties (id INTEGER PRIMARY KEY, crop_id INTEGER, name TEXT, payload_json TEXT)');
+        // cover_crops table — AC-U4-02; controller tolerates its absence, but smoke test creates it.
+        $this->pdo->exec('CREATE TABLE IF NOT EXISTS cover_crops (id INTEGER PRIMARY KEY, name_he TEXT, name_en TEXT, category TEXT, sow_window TEXT, total_days_garden INTEGER, survives_winter INTEGER, notes TEXT)');
         $this->pdo->exec('CREATE TABLE products (id INTEGER PRIMARY KEY, slug TEXT UNIQUE, hebrew_name TEXT, category TEXT, unit TEXT, last_price REAL, last_price_date TEXT, freshness_days INTEGER, payload_json TEXT, last_pushed_at TEXT)');
         $this->pdo->exec('CREATE TABLE product_prices (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER, price_date TEXT, price REAL, source TEXT)');
         $this->pdo->exec('CREATE TABLE ingest_log (idempotency_key TEXT PRIMARY KEY, table_name TEXT, applied_at TEXT, row_count INTEGER, status TEXT)');
@@ -58,6 +60,7 @@ final class RouteSmokeTest extends TestCase
             ['/crop-book/search/?q=עגב'],
             ['/crop-book/anise-hyssop/'],
             ['/crop-book/anise-hyssop/variety/variety-11/'],
+            ['/crop-book/cover-crops/'],
             ['/market/'],
             ['/market/onion-dry/'],
             ['/community/'],

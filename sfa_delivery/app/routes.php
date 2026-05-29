@@ -25,6 +25,12 @@ return function (App $app): void {
     $app->get('/crop-book/family[/]', [CropBookViewController::class, 'family']);
     $app->get('/crop-book/table[/]', [CropBookViewController::class, 'tableView']);
     $app->get('/crop-book/search[/]', [CropBookViewController::class, 'search']);
+    $app->get('/crop-book/cover-crops[/]', [CropBookViewController::class, 'coverCrops']);
+    // AC-U4-07: /crop-book/family/{slug} links in book_family.php point to a family-detail
+    // page that does not exist yet — redirect to the family list to avoid 404.
+    $app->get('/crop-book/family/{slug}[/]', function ($req, $res) {
+        return $res->withHeader('Location', '/crop-book/family/')->withStatus(302);
+    });
     $app->get('/crop-book/{slug}[/]', [CropBookViewController::class, 'detail']);
     $app->get('/crop-book/{slug}/variety/{vslug}[/]', [CropBookViewController::class, 'variety']);
 
@@ -32,6 +38,12 @@ return function (App $app): void {
     $app->get('/market/{slug}[/]', [MarketViewController::class, 'detail']);
 
     $app->get('/community[/]', [HubController::class, 'community']);
+
+    // AC-U4-07: redirect planned/future modules so they don't 404.
+    // /clients/ is linked from the home page module grid (tier=paid, status=planned).
+    $app->get('/clients[/]', function ($req, $res) {
+        return $res->withHeader('Location', '/')->withStatus(302);
+    });
 
     $app->group('/api/v1', function (RouteCollectorProxy $g): void {
         $g->get('/health', [HealthController::class, 'health']);

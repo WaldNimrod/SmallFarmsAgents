@@ -77,6 +77,11 @@ final class MarketViewController
 
         $product = $this->mapProductRow($row, $agg);
 
+        // Resolve crop slug: look up crops whose payload_json.oma_product_id matches
+        // this product's code or slug so the cross-link goes to the right /crop-book/{slug}.
+        $product['book_slug']     = $this->resolveCropSlug($row);
+        $product['book_label_he'] = (string)($row['hebrew_name'] ?? '');
+
         // Expose 28-day history under both shape conventions for template defensiveness.
         $product['history'] = $this->mapHistoryRows($history);
 
@@ -102,6 +107,62 @@ final class MarketViewController
         $history = $this->fetchHistory((int)$product['id'], $days);
         $response->getBody()->write(json_encode($history, JSON_UNESCAPED_UNICODE));
         return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
+    }
+
+    /**
+     * Resolve the correct crop slug for a product row (AC-U4-07 cross-link fix).
+     *
+     * Strategy (in order):
+     *   1. Look up crops whose payload_json.oma_product_id equals this product's
+     *      payload_json.code (the canonical OMA product code).
+     *   2. Fall back to matching crops.slug = product.slug (same-slug assumption
+     *      that was used before — still valid when slugs were aligned).
+     *   3. If neither matches, return '' so the template omits the cross-link
+     *      rather than emitting a 404 URL.
+     *
+     * @param array<string,mixed> $productRow Raw DB row including payload_json.
+     */
+    private function resolveCropSlug(array $productRow): string
+    {
+        // Extract the OMA product code from the product's payload_json.
+        $payload = json_decode((string)($productRow['payload_json'] ?? '{}'), true);
+        $code    = is_array($payload) ? (string)($payload['code'] ?? '') : '';
+        $prodSlug = (string)($productRow['slug'] ?? '');
+
+        // 1. Match via oma_product_id in crops.payload_json.
+        if ($code !== '') {
+            try {
+                $driver = (string)$this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+                // MySQL supports JSON_EXTRACT; SQLite uses json_extract (same syntax).
+                $stmt = $this->pdo->prepare(
+                    "SELECT slug FROM crops WHERE JSON_EXTRACT(payload_json, '$.oma_product_id') = ? LIMIT 1"
+                );
+                $stmt->execute([$code]);
+                $row = $stmt->fetch();
+                if ($row && (string)($row['slug'] ?? '') !== '') {
+                    return (string)$row['slug'];
+                }
+            } catch (\Throwable $e) {
+                // json_extract may not be available in all SQLite builds; fall through.
+            }
+        }
+
+        // 2. Direct slug match (e.g., product slug 'tomato' aligns with crop slug 'tomato').
+        if ($prodSlug !== '') {
+            try {
+                $stmt = $this->pdo->prepare('SELECT slug FROM crops WHERE slug = ? LIMIT 1');
+                $stmt->execute([$prodSlug]);
+                $row = $stmt->fetch();
+                if ($row && (string)($row['slug'] ?? '') !== '') {
+                    return (string)$row['slug'];
+                }
+            } catch (\Throwable $e) {
+                // Ignore — crop table may be missing in test fixture.
+            }
+        }
+
+        // 3. No match — suppress cross-link to avoid 404.
+        return '';
     }
 
     private function fetchHistory(int $productId, int $days): array

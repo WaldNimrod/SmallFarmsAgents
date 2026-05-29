@@ -72,6 +72,7 @@ if (!isset($asset_ver)) {
        href="#icon-X"> in macros/templates resolve synchronously. */
 @readfile(__DIR__ . '/../public_assets/img/icons.svg');
 ?>
+<?php include __DIR__ . '/partials/nav.php'; ?>
 <?php include __DIR__ . '/shell/mobile.php'; ?>
 <?php include __DIR__ . '/shell/desktop.php'; ?>
 </body>
