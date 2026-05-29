@@ -20,5 +20,4 @@
     <li><strong>למה:</strong> כלי שיווקי קהילתי. הוכחה שאפשר ידע פתוח גם בשוק החקלאי הקטן.</li>
     <li><strong>לא:</strong> לא הצעה מסחרית, לא קביעת מחיר, לא חוות-דעת. הקשר אינדיקטיבי בלבד.</li>
   </ul>
-  <a href="/market/methodology" class="mk-disclaimer__cta">קראו עוד על המתודולוגיה →</a>
 </aside>

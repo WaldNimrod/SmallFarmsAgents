@@ -89,6 +89,10 @@ ob_start();
   <?php foreach ($modules_in as $m):
       $icon_key = (string)($m['icon'] ?? '');
       $icon_id  = $icon_sprite_map[$icon_key] ?? 'icon-leaf';
+      // Only live/beta modules are navigable; planned/coming/custom render as
+      // disabled "בקרוב" cards (AC-U4-07: no 404s to unbuilt modules).
+      $m_status = (string)($m['status'] ?? 'planned');
+      $m_live   = in_array($m_status, ['live', 'beta'], true);
       $module = [
           'slug'       => (string)($m['id']      ?? ''),
           'name_he'    => (string)($m['name_he'] ?? ''),
@@ -98,7 +102,8 @@ ob_start();
           'stat_he'    => (string)($m['stat']    ?? ''),
           // Strip legacy /sfa/ URL prefix (MODULES_REGISTRY.yaml predates subdomain split — DECISION_SFA-S003-P003)
           // + remap /book/ → /crop-book/ (LOD400 LV-S-2: canonical URL contract is /crop-book/*)
-          'href'       => str_replace('/book/', '/crop-book/', preg_replace('#^/sfa/#', '/', (string)($m['route'] ?? '#'))),
+          'href'       => $m_live ? str_replace('/book/', '/crop-book/', preg_replace('#^/sfa/#', '/', (string)($m['route'] ?? '#'))) : '',
+          'disabled'   => !$m_live,
           'icon_id'    => $icon_id,
       ];
       include __DIR__ . '/../macros/module_card.php';

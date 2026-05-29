@@ -988,3 +988,7 @@
 /* Varieties section header (patch04: use cb-section__title for consistency) */
 .cb-vars .cb-section__title { margin-bottom: 10px; }
 .cb-vars { padding: 18px 0 14px; }
+
+/* Disabled module cards (planned/coming — non-navigable, no 404) */
+.mod-card.is-disabled { opacity: .55; cursor: default; pointer-events: none; filter: grayscale(.3); }
+.mod-card.is-disabled .mod-card__stat { font-weight: 600; }
