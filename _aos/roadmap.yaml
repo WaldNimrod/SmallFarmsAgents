@@ -2617,12 +2617,14 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch02
   label: "Media Integration Completion — brand media deploy + per-crop watercolor icons (70 crops)"
-  status: IN_REVIEW
+  status: DONE
   phase: 2_followup
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-29"
+  archive_ref: "_archive/SFA-S003-P002-WP-UI-patch02/ARCHIVE_MANIFEST.md"
   build_commit: "08a0f9e"
   assigned_builder: team_10
   assigned_validator: team_190
@@ -2676,12 +2678,26 @@ work_packages:
       present+wired; 70 prompts; validate_aos 29/19/0; data/UI-only scope.
       QA_REPORT filed."
     validator: team_50
-  notes: "WP-UI-patch02 BUILD+QA COMPLETE 2026-05-29 (build 08a0f9e) — awaiting
-    team_190 non-Claude L-GATE_V (folds in the WP-UI-patch01 media R2). Phase 1 =
-    full icon system + brand media on main; crops.icon_url null for all 70 → SVG
-    fallback renders (watercolors are Phase 2 external art backfill). DEPLOY to
-    sfa.nimrod.bio is mandated to team_99 (uPress FTPS IP-allowlist blocks this
-    machine; see deploy mandate). Phase-2 follow-ups: (a) icon_url in sfa ingest
-    contract + uPress MySQL schema; (b) generate 70 watercolors → backfill icon_url.
-    Evidence: MEDIA_COMPLETION_MAP, BUILD_REPORT_iconsys, QA_REPORT, MEDIA_PROMPT_crop_icons."
+  - gate: L-GATE_V
+    result: PASS
+    round: 1
+    date: "2026-05-29"
+    reviewed_commit: "08a0f9e"
+    notes: "team_190 (validator engine Composer 2.5 / Cursor, non-Claude — IR#1
+      satisfied: builder Sonnet ≠ QA Haiku ≠ validator Composer). 8/8 ACs PASS:
+      migration 057 present/nullable/reversible; composer test 53/0-fail (isolation
+      fix holds); pytest 7 passed; fallback chain correct; 12 brand assets + 8
+      hero_url + og/favicon wired; 70/70 prompts; validate_aos 29/19/0; data/UI-only.
+      Disclosed non-defects honored (icon_url null→SVG fallback; AC-U2-06 live-curl
+      folds into team_99 deploy report). WP-UI-patch01 media R2 folded in (already
+      PASS). Verdict: _COMMUNICATION/team_190/SFA-S003-P002-WP-UI-patch02/L-GATE_V_VERDICT_v1.0.0.md."
+    validator: team_190
+  notes: "WP-UI-patch02 Phase 1 CLOSED — LOD500_LOCKED 2026-05-29 via team_100
+    ADR042 closure after team_190 L-GATE_V PASS (non-Claude Composer 2.5). Per-crop
+    icon system (crops.icon_url + SVG fallback) + brand media (8 heroes+hub+og+
+    favicon, wired) + 70 watercolor prompts. DEPLOY to sfa.nimrod.bio IN PROGRESS by
+    team_99 (uPress FTPS IP-allowlist; AC-U2-06 live-curl confirmed on their report).
+    Phase-2 follow-ups (separate, non-blocking): (a) icon_url in sfa ingest contract
+    + uPress MySQL schema; (b) external image-gen of 70 watercolors → backfill
+    icon_url → deploy. Until then UI renders SVG fallback 70/70. Archive mandate to team_191."
   profile: L0
