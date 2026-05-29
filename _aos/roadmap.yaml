@@ -2617,12 +2617,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch02
   label: "Media Integration Completion — brand media deploy + per-crop watercolor icons (70 crops)"
-  status: BUILDING
+  status: IN_REVIEW
   phase: 2_followup
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
+  build_commit: "08a0f9e"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-29"
@@ -2653,9 +2654,34 @@ work_packages:
       Phase 1 (in-session) = full system + brand media deployed; Phase 2 = art
       backfill. LOD400_LOCKED for build."
     validator: team_100
-  notes: "WP-UI-patch02 IN BUILD 2026-05-29. Orchestration: Sonnet sub-agent A
-    (crops.icon_url migration + UI render + fallback + tests), Sonnet sub-agent B
-    (70 watercolor crop-art prompts); team_100 consolidates+deploys brand media +
-    applies migration; team_50 Haiku QA; team_190 non-Claude L-GATE_V (folds in the
-    WP-UI-patch01 media R2). Evidence: MEDIA_COMPLETION_MAP_v1.0.0; spec LOD400."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-29"
+    reviewed_commit: "08a0f9e"
+    notes: "Orchestrated build (team_10 Sonnet sub-agents + team_100 integration).
+      Sub-agent A: migration 057 crops.icon_url + Crop model + crop-card/detail
+      render (watercolor img → SVG sprite → leaf fallback) + tests. Sub-agent B:
+      70 slug-exact watercolor crop-art prompts (MEDIA_PROMPT_crop_icons_v1.0.0).
+      Brand media (8 heroes+hub+og+favicon) consolidated to main (e8cd4ce) + wired
+      modules.php (8 hero_url) + _layout og/favicon. team_100 caught + fixed a
+      sub-agent test-isolation bug (CropCardIconTest eval-stub leaked, spurious
+      /crop-book/ 500); full suite now 53 tests / 0 failures. migration 057 applied
+      to oma-postgres. Data/UI only; no engine change; no www.nimrod.bio reintroduced."
+    validator: team_10
+  - gate: QA
+    result: QA_PASS
+    date: "2026-05-29"
+    notes: "team_50 (Claude Haiku) independent: 10/10 ACs (AC-U2-06 live-deploy
+      deferred to team_99). composer test 53/0-fail; 12/12 brand-media assets
+      present+wired; 70 prompts; validate_aos 29/19/0; data/UI-only scope.
+      QA_REPORT filed."
+    validator: team_50
+  notes: "WP-UI-patch02 BUILD+QA COMPLETE 2026-05-29 (build 08a0f9e) — awaiting
+    team_190 non-Claude L-GATE_V (folds in the WP-UI-patch01 media R2). Phase 1 =
+    full icon system + brand media on main; crops.icon_url null for all 70 → SVG
+    fallback renders (watercolors are Phase 2 external art backfill). DEPLOY to
+    sfa.nimrod.bio is mandated to team_99 (uPress FTPS IP-allowlist blocks this
+    machine; see deploy mandate). Phase-2 follow-ups: (a) icon_url in sfa ingest
+    contract + uPress MySQL schema; (b) generate 70 watercolors → backfill icon_url.
+    Evidence: MEDIA_COMPLETION_MAP, BUILD_REPORT_iconsys, QA_REPORT, MEDIA_PROMPT_crop_icons."
   profile: L0
