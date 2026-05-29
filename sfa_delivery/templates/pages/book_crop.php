@@ -15,6 +15,7 @@
  *   $crop array — keys:
  *     'slug', 'name_he', 'name_lat' (or 'scientific_name' fallback), 'en_name' (optional),
  *     'icon_slug' (sprite id without `icon-` prefix; defaults to 'leaf'),
+ *     'icon_url' (optional — watercolor art URL; renders <img> when set, else SVG sprite),
  *     'description_he' (lede),
  *     'family' (optional ['slug','name_he']),
  *     'timeline' (optional ['prep_pct','grow_pct','harv_pct','harv_days','week_labels'?]),
@@ -34,6 +35,7 @@ $back_url   = '/crop-book/';
 
 $slug      = (string)($crop['slug']      ?? '');
 $icon_slug = (string)($crop['icon_slug'] ?? 'leaf');
+$icon_url  = (string)($crop['icon_url']  ?? '');
 $name_he   = (string)($crop['name_he']   ?? '');
 $name_lat  = (string)($crop['name_lat']  ?? ($crop['scientific_name'] ?? ''));
 $desc_he   = (string)($crop['description_he'] ?? '');
@@ -52,9 +54,15 @@ ob_start();
   </nav>
 
   <div class="cb-crop-hero__head">
-    <span class="cb-crop-hero__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><use href="#icon-<?= $h($icon_slug) ?>"></use></svg>
-    </span>
+    <?php if ($icon_url !== ''): ?>
+      <img class="crop-card__art cb-crop-hero__art" src="<?= $h($icon_url) ?>"
+           loading="lazy" decoding="async"
+           alt="<?= $h($name_he) ?>">
+    <?php else: ?>
+      <span class="cb-crop-hero__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><use href="#icon-<?= $h($icon_slug) ?>"></use></svg>
+      </span>
+    <?php endif; ?>
     <div>
       <h1 class="cb-crop-hero__h"><?= $h($name_he) ?></h1>
       <?php if ($name_lat !== ''): ?>

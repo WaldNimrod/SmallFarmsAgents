@@ -91,6 +91,8 @@ class Crop(Base):
     )
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     oma_product_id: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
+    # WP-UI-patch02: nullable watercolor art URL; UI falls back to SVG sprite when NULL.
+    icon_url: Mapped[Optional[str]] = mapped_column(VARCHAR(255), nullable=True)
 
     family: Mapped["CropFamily"] = relationship("CropFamily", back_populates="crops")
     conversion_group: Mapped[Optional["CropConversionGroup"]] = relationship(
