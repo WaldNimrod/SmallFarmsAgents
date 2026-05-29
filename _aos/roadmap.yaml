@@ -2603,6 +2603,8 @@ work_packages:
   notes: "COMPLETE — LOD500_LOCKED. Code closed 2026-05-28 (Sonnet 865db37 → Haiku
     6372834 → GPT-5.5 ef4ba06). Items A+D MEDIA FULFILLED 2026-05-29: full watercolor
     visual system composed from Devora masters (8 heroes + og + hub + contact +
-    favicon), L-GATE_V R2 PASS (non-Claude), merged to main (22c052d), deployed to
-    sfa.nimrod.bio. Archive mandate routed to team_191."
+    favicon), L-GATE_V R2 PASS (non-Claude), merged to main (22c052d). DEPLOY PENDING:
+    FTPS port 21 egress blocked on dev network (S002 F-01 condition) — composer install
+    + assets ready; routed to team_99 / allowed-network to run scripts/ftp_deploy_sfa_ui.sh.
+    Archive mandate routed to team_191."
   profile: L0

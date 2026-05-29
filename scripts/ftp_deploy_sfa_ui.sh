@@ -18,7 +18,8 @@ if [ ! -f "$ENV_FILE" ]; then
   echo "ERROR: env file '$ENV_FILE' not found (set ENV_FILE=...)." >&2
   exit 1
 fi
-set -a; source "$ENV_FILE"; set +a
+# nounset relaxed only around sourcing — .env files often reference unset vars
+set -a; set +u; source "$ENV_FILE"; set -u; set +a
 
 SRC="${SFA_DELIVERY_SRC:-./sfa_delivery}"
 REMOTE_ROOT="${SFA_FTP_ROOT:-/}"
