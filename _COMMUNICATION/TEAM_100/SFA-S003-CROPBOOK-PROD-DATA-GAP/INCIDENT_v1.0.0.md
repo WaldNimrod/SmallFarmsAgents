@@ -54,3 +54,15 @@ The crop-book is **NOT fixed**. The media (heroes/og/favicon) IS live. team_100
 stopped further blind prod writes pending live-DB visibility.
 
 — team_100 (Claude Opus 4.7) 2026-05-29
+
+---
+## RESOLUTION 2026-05-29 — data IS live; my intermediate "still empty" was a diagnostic error
+In-app diagnostic (read-only script via FTPS, using the app's own Db::create()):
+- Live MySQL `sfanms2u_SFAUserUiDB`: **crops=70, crop_varieties=367** (correct slugs+Hebrew names); `ingest_log` shows my pushes `status: ok`.
+- The app's EXACT listing query returns 70 rows; search for עגבנייה returns tomatoes; all columns present.
+- Server-side render of `book_table` with live rows == the LIVE `/crop-book/table/` page: arugula ×6, **142 `<tr>` rows, ~140KB** — identical.
+
+**Conclusion: the Mac→ingest push WORKED. The crop-book is populated** (`/crop-book/table/`, `/family/`, `/search/` show all 70 crops). My earlier "still empty" calls were a **diagnostic error** — my `grep` markers (`gj-cropcard`, a slug-link regex) didn't match the table view's row markup, so I misread populated pages as empty. The `/crop-book/` LANDING (`entry` → `book_entry`) is an intentional **hub** (no crop grid) — that's the "empty" appearance.
+
+## STILL OPEN (durability — root cause #1 stands)
+This was a **manual one-off push from the Mac**. The production server oma-postgres is still at head 034 with **no crop schema**, so the daily 06:30 cron **cannot maintain/refresh** crop-book data. If the MySQL is reset or a cron does a replace, it empties again. Canonical fix still required: align the server DB (migrate + load crop data) OR schedule the Mac push.
