@@ -16,6 +16,7 @@
  */
 $product = $product ?? [];
 $slug              = (string)($product['slug']              ?? '');
+$book_slug         = (string)($product['book_slug']         ?? '');
 $name_he           = (string)($product['name_he']           ?? '');
 $en_name           = (string)($product['en_name']           ?? '');
 $unit_he           = (string)($product['unit_he']           ?? '');
@@ -59,6 +60,6 @@ $fill_size      = max(0.0, min(100.0, (($price_max - $price_min) / $global_span)
   <div class="pcard__meta">
     <span><span class="sources"><span></span><span></span><span></span></span> <?= (int)$source_count ?></span>
     <span><?= (int)$observation_count ?> תצפיות</span>
-    <a href="/crop-book/<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>" class="pcard__bookcta">↗ ספר</a>
+    <?php if ($book_slug !== ''): ?><a href="/crop-book/<?= htmlspecialchars($book_slug, ENT_QUOTES, 'UTF-8') ?>" class="pcard__bookcta">↗ ספר</a><?php endif; ?>
   </div>
 </div>

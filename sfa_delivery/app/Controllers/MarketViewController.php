@@ -161,7 +161,23 @@ final class MarketViewController
             }
         }
 
-        // 3. No match — suppress cross-link to avoid 404.
+        // 3. Match by Hebrew name (product canonical_name_he ↔ crops.hebrew_name) —
+        // the only reliable linkage today (crops.oma_product_id is unpopulated).
+        $hebrewName = (string)($productRow['hebrew_name'] ?? '');
+        if ($hebrewName !== '') {
+            try {
+                $stmt = $this->pdo->prepare('SELECT slug FROM crops WHERE hebrew_name = ? LIMIT 1');
+                $stmt->execute([$hebrewName]);
+                $row = $stmt->fetch();
+                if ($row && (string)($row['slug'] ?? '') !== '') {
+                    return (string)$row['slug'];
+                }
+            } catch (\Throwable $e) {
+                // Ignore — crop table may be missing in test fixture.
+            }
+        }
+
+        // 4. No match — suppress cross-link to avoid 404.
         return '';
     }
 
@@ -228,7 +244,7 @@ final class MarketViewController
         $product['source_count']      = $sourceCount;
         $product['observation_count'] = $obsCount;
         $product['icon_slug']         = $iconSlug;
-        $product['book_slug']         = $slug; // assume crop slug aligns with product slug
+        $product['book_slug']         = $this->resolveCropSlug($row); // resolved crop slug ('' when none — no 404)
         $product['book_label_he']     = $hebrewName;
         $product['updated_he']        = $this->formatHebrewDate((string)($row['last_price_date'] ?? ''));
 
