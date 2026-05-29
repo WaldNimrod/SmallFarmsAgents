@@ -2833,12 +2833,14 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch04
   label: "Crop-book completeness (all crop data) + global nav + broken-link + layout/ordering"
-  status: BUILDING
+  status: IN_REVIEW
   phase: 2_followup
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
+  build_commit: "c7dc779"
+  production_url: "https://sfa.nimrod.bio/crop-book/"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-29"
@@ -2872,7 +2874,45 @@ work_packages:
       migration — delivery MySQL stays faithful Postgres mirror); cover_crops as a
       general reference page. 12 ACs. LOD400_LOCKED for build."
     validator: team_100
-  notes: "WP-UI-patch04 IN BUILD 2026-05-29. Orchestration: Sonnet A (ingest _fetch_crops
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-29"
+    commit: "70dc728"
+    notes: "Orchestrated build via Workflow (team_10 Sonnet A=ingest ∥ B=nav/links/landing
+      → C=detail), integrated by team_100. A: _fetch_crops embeds 7 payload sections
+      (identity/calendar/agronomy/harvest/storage/companions/notes public-only) + cover_crops
+      fetcher. B: persistent top-bar+sub-nav in _layout; broken-link slug fixes; landing grid;
+      cover-crops page. C: sectioned species-first detail (8 sections, varieties LAST) + macros.
+      team_100 re-verify: php -l clean, composer test 63/0-fail, validate_aos 29/19/0."
+    validator: team_10
+  - gate: QA
+    result: QA_PASS
+    date: "2026-05-29"
+    notes: "team_50 (Haiku) PASS_WITH_FINDINGS — all code ACs PASS; AC-U4-02/12 (live cover/deploy)
+      deferred. IR#1: builder Sonnet ≠ QA Haiku ≠ validator (non-Claude pending)."
+    validator: team_50
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-05-29"
+    commit: "c7dc779"
+    notes: "team_100: re-pushed rich crops payload (70 crops → uPress MySQL, all 200; identity/
+      calendar/harvest/storage/companions/agronomy live). UI deployed via waldhomeserver FTPS
+      relay → uPress (build 70dc728 + 3 post-QA fixes). Post-QA fixes during smoke: (a) market→
+      crop-book /crop-book/prdNNN 404s — name-resolve crop slug + gate price-card link (eef88b4);
+      (b) planned-module links disabled (non-navigable 'בקרוב' cards) + dead /market/methodology
+      CTA removed (c7dc779). FINAL CRAWL: broken links 72→0 (AC-U4-07 ✓). Detail sections live
+      species-first/varieties-last, full-width. NOT pushed: cover_crops (source data is PDF-parse
+      junk → page empty-state, re-seed follow-up). Open P2: market→crop-book cross-links resolve
+      0 live despite 26 name matches in canonical DB (suppressed, no 404 — follow-up)."
+    validator: team_100
+  notes: "WP-UI-patch04 BUILT + QA + DEPLOYED LIVE 2026-05-29 (build_commit c7dc779), pending
+    non-Claude L-GATE_V (team_190, IR#1). 6 defects addressed: broken links 72→0; persistent
+    global nav; full crop data (identity/calendar/agronomy/harvest/storage/companions) on a
+    sectioned species-first detail (varieties last); full-width layout; landing grid + disabled
+    planned modules. P2 follow-ups: re-seed crop_cover_crops (junk source); market→crop-book
+    cross-link live name-match (0 hits — suppressed, no 404); knowledge_notes all internal-gated
+    (§Notes empty by design). Hosting canon: documentation/02-architecture/sfa-delivery-tier.md.
+    Original build narrative: Sonnet A (ingest _fetch_crops
     rich embed + cover_crops), Sonnet B (global nav in _layout + broken-link slug fixes +
     landing card sizing + cover-crops page), Sonnet C (sectioned species-first crop detail
     + section macros + CSS); team_100 integrate + re-push (Mac→ingest) + deploy (waldhomeserver
