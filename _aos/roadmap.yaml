@@ -2713,12 +2713,14 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch03
   label: "Crop-book detail UX + agronomic data surfacing (layout/typography/variety-delta/landing)"
-  status: IN_REVIEW
+  status: DONE
   phase: 2_followup
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-29"
+  archive_ref: "_archive/SFA-S003-P002-WP-UI-patch03/ARCHIVE_MANIFEST.md"
   build_commit: "509c5f5"
   production_url: "https://sfa.nimrod.bio/crop-book/"
   assigned_builder: team_10
@@ -2789,7 +2791,30 @@ work_packages:
       render (arugula default חלון קטיף=45 computed; Arugula 80Δ / hyd.Rocket 38Δ /
       Wild Rocket 45 no-Δ); landing crop cards present; lettuce 20 deltas. AC-U3-11 met."
     validator: team_100
-  notes: "WP-UI-patch03 BUILT + QA PASS + DEPLOYED LIVE 2026-05-29 (build_commit 509c5f5),
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-05-29"
+    commit: "509c5f5"
+    notes: "team_190 (Composer 2.5 / Cursor — non-Claude, IR#1 satisfied: builder Sonnet
+      ≠ QA Haiku ≠ validator Composer). 11/11 ACs independently dispositioned PASS:
+      364/364 varieties carry agronomy; arugula default ≥4 values, DTM=21, deltas on 80
+      and 38 harvest windows; .cb-crop-detail full-width + .cb-var__grid 13px; 1030
+      gj-cropcard on /crop-book/; agronomic grid only (no color/taste/shape); 57 tests
+      0 fail + php -l clean; validate_aos 29/19/0, no reconciler/schema/www.nimrod.bio;
+      all URLs 200 via Cloudflare TLV (uPress, NOT waldhomeserver). Corroborated live
+      arugula delta check incl. computed median baseline. Verdict:
+      _archive/SFA-S003-P002-WP-UI-patch03/team_190/L-GATE_V_VERDICT_v1.0.0.md."
+    validator: team_190
+  notes: "WP-UI-patch03 COMPLETE — LOD500_LOCKED 2026-05-29 via team_100 ADR042 closure
+    after team_190 L-GATE_V PASS (non-Claude Composer 2.5, build 509c5f5). DEPLOYED LIVE
+    to uPress https://sfa.nimrod.bio/crop-book/ (NOT the home server). Crop-book detail
+    surfaces agronomic data (16-field set from crop_field_enrichment) with delta-vs-default
+    highlight (default backfilled from sibling median per team_00 ruling), central-panel
+    layout, readable typography, and a landing crop-card grid. Archive: team_191 manifest
+    at _archive/SFA-S003-P002-WP-UI-patch03/. Step 3 (multi-engine propagation) verified
+    EXEMPT (no core/governance/ change). Durability caveat carried (server DB at head 034;
+    crop data re-pushed manually from Mac — separate follow-up). Original build narrative:
+    Sonnet A (ingest
     integrated by team_100. NOT YET DEPLOYED — live re-push (Mac→ingest API) +
     deploy (waldhomeserver FTPS relay→uPress sfa.nimrod.bio, never the home server)
     gated on team_00 go-ahead; non-Claude L-GATE_V (team_190) pending (IR#1 — Claude
