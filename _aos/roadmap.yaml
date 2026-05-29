@@ -2695,8 +2695,11 @@ work_packages:
   notes: "WP-UI-patch02 Phase 1 CLOSED — LOD500_LOCKED 2026-05-29 via team_100
     ADR042 closure after team_190 L-GATE_V PASS (non-Claude Composer 2.5). Per-crop
     icon system (crops.icon_url + SVG fallback) + brand media (8 heroes+hub+og+
-    favicon, wired) + 70 watercolor prompts. DEPLOY to sfa.nimrod.bio IN PROGRESS by
-    team_99 (uPress FTPS IP-allowlist; AC-U2-06 live-curl confirmed on their report).
+    favicon, wired) + 70 watercolor prompts. DEPLOYED LIVE to sfa.nimrod.bio
+    2026-05-29 by team_99 from waldhomeserver (s1240 allowlisted egress 46.235.231.114;
+    deploy commit 2d5cbbb, 97 files). AC-U2-06 CLOSED — team_99 smoke + team_100
+    independent verify: 6/6 media URLs 200 with correct MIME (image/webp heroes/og/hub,
+    image/png favicons), /crop-book/ 200. (Deploy host was corrected s887→s1240.)
     Phase-2 follow-ups (separate, non-blocking): (a) icon_url in sfa ingest contract
     + uPress MySQL schema; (b) external image-gen of 70 watercolors → backfill
     icon_url → deploy. Until then UI renders SVG fallback 70/70. Archive mandate to team_191."
