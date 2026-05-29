@@ -2608,3 +2608,54 @@ work_packages:
     + assets ready; routed to team_99 / allowed-network to run scripts/ftp_deploy_sfa_ui.sh.
     Archive mandate routed to team_191."
   profile: L0
+
+# ----------------------------------------------------------------------------
+# WP-UI-patch02 — Media Integration Completion (brand media deploy + per-crop
+# watercolor icon system for all 70 crops). Opened 2026-05-29 (team_00 grant).
+# Orchestration: team_10 (Sonnet) sub-agents → team_50 (Haiku) QA → team_190 (non-Claude).
+# ----------------------------------------------------------------------------
+
+- id: SFA-S003-P002-WP-UI-patch02
+  label: "Media Integration Completion — brand media deploy + per-crop watercolor icons (70 crops)"
+  status: BUILDING
+  phase: 2_followup
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-29"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-UI-patch01"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P002-WP-UI-patch02/LOD400_spec.md"
+  orchestration:
+    build: "team_10 (Claude Sonnet sub-agents)"
+    qa: "team_50 (Claude Haiku)"
+    validation: "team_190 (non-Claude — IR#1 cross-engine)"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-29"
+    notes: "team_00 grant 2026-05-29: 'לסיים את נושא שילוב המדיה ... כולל פריסה
+      ומיפוי השלמות דרושות כולל איקונים לכלל הירקות' + 'אורקסטרציה של סוכני
+      מישנה ... כולל בדיקות ופריסה'. Scope: consolidate+deploy brand media
+      (8 heroes+hub+og+favicon, from WP-UI-patch01 branch) + per-crop watercolor
+      icon system for all 70 crops (crops.icon_url + SVG fallback) + 70 gen prompts."
+    validator: team_00
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-05-29"
+    notes: "team_100 authored LOD400 v1.0.0 grounded in MEDIA_COMPLETION_MAP_v1.0.0
+      (70 crops: 8 dedicated SVG, 62 fallback; brand media on branch not yet on
+      main). Decisions: watercolor raster per crop; mapping = DB column
+      crops.icon_url (additive migration); external image-gen for rasters.
+      Phase 1 (in-session) = full system + brand media deployed; Phase 2 = art
+      backfill. LOD400_LOCKED for build."
+    validator: team_100
+  notes: "WP-UI-patch02 IN BUILD 2026-05-29. Orchestration: Sonnet sub-agent A
+    (crops.icon_url migration + UI render + fallback + tests), Sonnet sub-agent B
+    (70 watercolor crop-art prompts); team_100 consolidates+deploys brand media +
+    applies migration; team_50 Haiku QA; team_190 non-Claude L-GATE_V (folds in the
+    WP-UI-patch01 media R2). Evidence: MEDIA_COMPLETION_MAP_v1.0.0; spec LOD400."
+  profile: L0
