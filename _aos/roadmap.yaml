@@ -2719,7 +2719,8 @@ work_packages:
   effort: MEDIUM
   current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
-  build_commit: "1e98c1a"
+  build_commit: "509c5f5"
+  production_url: "https://sfa.nimrod.bio/crop-book/"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-29"
@@ -2771,7 +2772,24 @@ work_packages:
       AC-U3-11 (live deploy) DEFERRED to gated deploy step. IR#1 chain so far:
       builder Sonnet ≠ QA Haiku; final L-GATE_V must be non-Claude (team_190)."
     validator: team_50
-  notes: "WP-UI-patch03 L-GATE_B + QA PASS 2026-05-29 (build_commit 1e98c1a),
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-05-29"
+    commit: "509c5f5"
+    notes: "team_00 go-ahead → team_100 executed: (1) live data re-push Mac →
+      https://sfa.nimrod.bio/api/v1/ingest (crop_varieties, 364 rows, 8 batches, all
+      HTTP 200, 0 rejected; agronomy now in uPress MySQL); (2) UI deploy via
+      waldhomeserver FTPS relay → uPress (ftp.s1240.upress.link) — NOTE: server
+      origin is a stale local mirror; deployed from the `github` remote (HEAD 509c5f5).
+      Two team_00-directed follow-up fixes during smoke: (a) default-variety agronomy
+      backfill from sibling median ('the default becomes the datum we have' — commit
+      2e381d7); (b) type-safe delta compare to kill spurious int-vs-float deltas
+      (509c5f5). Live smoke: served from uPress/Cloudflare (NOT home server); /,
+      /crop-book/, /crop-book/arugula, /crop-book/table all 200; agronomic values
+      render (arugula default חלון קטיף=45 computed; Arugula 80Δ / hyd.Rocket 38Δ /
+      Wild Rocket 45 no-Δ); landing crop cards present; lettuce 20 deltas. AC-U3-11 met."
+    validator: team_100
+  notes: "WP-UI-patch03 BUILT + QA PASS + DEPLOYED LIVE 2026-05-29 (build_commit 509c5f5),
     integrated by team_100. NOT YET DEPLOYED — live re-push (Mac→ingest API) +
     deploy (waldhomeserver FTPS relay→uPress sfa.nimrod.bio, never the home server)
     gated on team_00 go-ahead; non-Claude L-GATE_V (team_190) pending (IR#1 — Claude
