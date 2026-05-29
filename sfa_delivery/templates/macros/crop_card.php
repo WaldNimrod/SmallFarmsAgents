@@ -4,11 +4,15 @@
  *
  * Required vars (passed in via include scope):
  *   $crop — array with keys:
- *     slug, name_he, en_name, family_tag_he, dtm_days, icon_svg (trusted)
+ *     slug, name_he, en_name, family_tag_he, dtm_days, icon_svg (trusted),
+ *     icon_url (optional — watercolor art URL; falls back to icon_svg then leaf)
  *
  * BEM contract: .gj-cropcard, .gj-cropcard__art, .gj-cropcard__icon,
  *   .gj-cropcard__body, .gj-cropcard__name, .gj-cropcard__en,
  *   .gj-cropcard__meta, .gj-tag, .gj-cropcard__dtm
+ *
+ * WP-UI-patch02: when icon_url is set → render watercolor <img class="crop-card__art">;
+ *   else render SVG sprite (icon_svg); else generic icon-leaf fallback.
  */
 $crop = $crop ?? [];
 $slug          = (string)($crop['slug']          ?? '');
@@ -17,10 +21,17 @@ $en_name       = (string)($crop['en_name']       ?? '');
 $family_tag_he = (string)($crop['family_tag_he'] ?? '');
 $dtm_days      = $crop['dtm_days'] ?? null;
 $icon_svg      = (string)($crop['icon_svg']      ?? '');
+$icon_url      = (string)($crop['icon_url']      ?? '');
 ?>
 <a class="gj-cropcard" href="/crop-book/<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
   <div class="gj-cropcard__art">
-    <div class="gj-cropcard__icon"><?= $icon_svg /* trusted */ ?></div>
+    <?php if ($icon_url !== ''): ?>
+      <img class="crop-card__art" src="<?= htmlspecialchars($icon_url, ENT_QUOTES, 'UTF-8') ?>"
+           loading="lazy" decoding="async"
+           alt="<?= htmlspecialchars($name_he, ENT_QUOTES, 'UTF-8') ?>">
+    <?php else: ?>
+      <div class="gj-cropcard__icon"><?= $icon_svg !== '' ? $icon_svg /* trusted */ : '<svg viewBox="0 0 24 24"><use href="#icon-leaf"></use></svg>' ?></div>
+    <?php endif; ?>
   </div>
   <div class="gj-cropcard__body">
     <div class="gj-cropcard__name"><?= htmlspecialchars($name_he, ENT_QUOTES, 'UTF-8') ?></div>
