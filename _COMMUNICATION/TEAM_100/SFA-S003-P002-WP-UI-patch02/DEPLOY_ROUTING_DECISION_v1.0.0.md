@@ -42,3 +42,17 @@ Phase-1 closure stands (build/validation); only the operational delivery is
 pending. Until deployed, the UI renders the SVG fallback (no broken images).
 
 — team_100 (Claude Opus 4.7) 2026-05-29
+
+---
+## CORRECTION 2026-05-29 — host is s1240, not s887
+Deploy attempt from waldhomeserver (egress 46.235.231.114) FAILED `max-retries
+exceeded`. Root cause: `SFA_FTP_HOST=ftp.s1240.upress.link` (sfa.nimrod.bio is on
+uPress **s1240**), but `s1240:21` is TCP-BLOCKED from the server while `s887:21`
+(old market host) is OPEN. So outbound 21 works generally — **s1240 drops
+46.235.231.114 at the network layer (not on s1240's FTPS allowlist)**. team_100's
+earlier connectivity test/mandate referenced s887 (from the retired UPRESS_SFTP_*
+market creds) — corrected here.
+
+ACTION (team_00): allowlist **46.235.231.114** on the **s1240** server's FTPS for
+sfa.nimrod.bio (NOT s887). Then re-run the deploy from waldhomeserver. All else
+(lftp, vendor, creds, repo) staged.
