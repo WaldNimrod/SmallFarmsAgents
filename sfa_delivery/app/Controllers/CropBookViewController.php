@@ -216,6 +216,51 @@ final class CropBookViewController
             $defaultVariety = $varieties[0];
         }
 
+        // Backfill the default variety's agronomy from the other varieties
+        // (team_00 ruling 2026-05-29): the default MUST carry a value wherever any
+        // variety has one — "the default becomes the datum we have". For each field
+        // the default lacks, use the median of the sibling varieties that report it.
+        // Render-time only: the uPress MySQL stays a faithful mirror of Postgres
+        // (these computed baselines are presentation, never pushed back).
+        if ($defaultVariety !== null) {
+            $fieldValues = []; // field => list of numeric values across all varieties
+            foreach ($varieties as $v) {
+                foreach (($v['agronomy'] ?? []) as $f => $val) {
+                    if ($val !== null && $val !== '') {
+                        $fieldValues[$f][] = (float)$val;
+                    }
+                }
+            }
+            $median = static function (array $a) {
+                sort($a);
+                $n = count($a);
+                if ($n === 0) {
+                    return null;
+                }
+                $mid = intdiv($n, 2);
+                return $n % 2 ? $a[$mid] : ($a[$mid - 1] + $a[$mid]) / 2.0;
+            };
+            $defaultSlug = $defaultVariety['vslug'];
+            foreach ($varieties as &$variety) {
+                if ($variety['vslug'] !== $defaultSlug) {
+                    continue;
+                }
+                foreach ($fieldValues as $f => $vals) {
+                    $cur = $variety['agronomy'][$f] ?? null;
+                    if ($cur === null || $cur === '') {
+                        $variety['agronomy'][$f] = $median($vals); // computed baseline
+                    }
+                }
+                if (($variety['dtm_days'] ?? null) === null
+                    && isset($variety['agronomy']['days_to_maturity'])) {
+                    $variety['dtm_days'] = $variety['agronomy']['days_to_maturity'];
+                }
+                $defaultVariety = $variety; // refresh baseline used by the delta loop
+                break;
+            }
+            unset($variety);
+        }
+
         foreach ($varieties as &$variety) {
             $isDefault = ($defaultVariety !== null && $variety['vslug'] === $defaultVariety['vslug']);
             $agro_delta = [];
