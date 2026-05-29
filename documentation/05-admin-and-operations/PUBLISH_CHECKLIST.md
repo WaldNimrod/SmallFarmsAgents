@@ -1,5 +1,7 @@
 # Pre-publish review checklist (OrganicMarketAgent)
 
+> **⛔ SUPERSEDED for delivery/publish steps — historical record only.** The WordPress/`www.nimrod.bio` publish path described here was retired 2026-05-28. The live site is the Slim/PHP delivery tier on **uPress `sfa.nimrod.bio`** (canon: [`../02-architecture/sfa-delivery-tier.md`](../02-architecture/sfa-delivery-tier.md) · deploy: [`UI_DEPLOY_RUNBOOK.md`](UI_DEPLOY_RUNBOOK.md) · data: `organic_market_agent/publisher/sfa_ingest_push.py`). The upstream **data-quality** checks below may still be useful, but ignore all WP/upload steps.
+
 Run this after **material** changes: new or changed `product_aliases`, parser / selector fixes, new `catalog_scope_skip_rules`, or maintenance replays (`full_data_refresh`, `catalog_renormalize`) that affect community observations.
 
 ## 1. Local artifacts

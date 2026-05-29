@@ -7,6 +7,22 @@ This document is the SSoT for the user-facing delivery layer of the SmallFarmsAg
 
 ---
 
+## 0. Terminology — "host" disambiguation (anti-drift, binding)
+
+The word **"host"** has caused recurring drift (agents concluding the site is served from the home server). It is **three distinct roles** — never conflate them:
+
+| Role | Machine | What it does | What it does NOT do |
+|------|---------|--------------|---------------------|
+| **Web host** (the live site) | **uPress** shared LAMP — `sfa.nimrod.bio` (Cloudflare edge) | Serves ALL end-user HTTP; hosts the live **MySQL** read-mirror | — |
+| **Backend / pipeline host** | **waldhomeserver** | Canonical **Postgres** SSoT, scrapers, normalizer, agents, cron | **NEVER** serves end-user HTTP |
+| **Deploy / push origin** (relay) | **waldhomeserver** (egress IP uPress-allowlisted; Mac's Bezeq IP is not) | Runs `lftp mirror` (code) and/or `sfa_ingest_push.py` (data) **toward** uPress | Does **not** host or serve anything |
+
+**Therefore:** "waldhomeserver is the canonical OPS **deploy host**" (as written in deploy reports) means *the machine deploys are launched **from***. It does **NOT** mean the site runs there. **The live site MUST be served from the uPress subdomain `sfa.nimrod.bio`, never from waldhomeserver.** Code is deployed via [`../05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`](../05-admin-and-operations/UI_DEPLOY_RUNBOOK.md); data via the HMAC ingest API (§2b).
+
+> **Superseded:** any doc describing delivery as a WordPress shortcode/mu-plugin on `www.nimrod.bio` or upload via WP REST API is the **pre-P003 (S002/M10) tier**, retired 2026-05-28. It is historical record only — this file + `02-architecture/README.md` are the binding canon.
+
+---
+
 ## 1. Two-tier architecture (binding)
 
 ```

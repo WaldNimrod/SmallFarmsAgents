@@ -1,6 +1,8 @@
 # uPress WordPress Publish Pipeline — Operational Runbook
 
-**Status:** Authoritative for all SFA publishing operations after **2026-05-07**.
+> **⛔ SUPERSEDED — historical record only (do not follow as current).** Covers the retired **`www.nimrod.bio` WordPress / WP-REST / mu-plugin** delivery tier (S002 / M10 era), **severed 2026-05-28**. The live public site is now the Slim/PHP delivery tier on **uPress `sfa.nimrod.bio`**. Current canon: [`../02-architecture/sfa-delivery-tier.md`](../02-architecture/sfa-delivery-tier.md) · current deploy: [`UI_DEPLOY_RUNBOOK.md`](UI_DEPLOY_RUNBOOK.md) · current data push: `organic_market_agent/publisher/sfa_ingest_push.py`. Reviving the www path requires a new DECISION.
+
+**Status:** ~~Authoritative for all SFA publishing operations after **2026-05-07**~~ — **superseded 2026-05-28** (see banner).
 **Owner:** team_100 (architecture) + team_99 (operations, waldhomeserver).
 **Replaces:** Previous FTPS-primary publish flow (retained only as defensive fallback).
 

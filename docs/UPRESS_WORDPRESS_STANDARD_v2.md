@@ -1,5 +1,7 @@
 # uPress + WordPress Development Standard
 
+> **⛔ SUPERSEDED for SFA delivery — historical record only.** This standard describes the **WordPress on `www.nimrod.bio`** approach (server `s887`), retired for SFA on 2026-05-28. The SFA live site is now a pure Slim/PHP app on **uPress `sfa.nimrod.bio`** (no WordPress) — canon: [`../documentation/02-architecture/sfa-delivery-tier.md`](../documentation/02-architecture/sfa-delivery-tier.md) · deploy: [`../documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`](../documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md). Retained for uPress account/credential/FTPS reference and other projects on this host.
+
 **Version:** 2.0
 **Date:** 2026-04-08
 **Scope:** WordPress development, hosting, file/DB access, automation, and deployment on uPress — applicable to **all projects** in this environment.

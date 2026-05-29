@@ -67,10 +67,14 @@ You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0
 
 ## Domain rules
 
-- **SFA product + ops context:** `_aos/context/PROJECT_CONTEXT.md` — `validate_aos.sh` result expectations (0 FAIL; PASS/SKIP drift), WordPress/FTPS publish tree and runbook links, 2026-04 production parity sign-offs. Complements `AGENTS.md` and `documentation/README.md`.
-- **Stack:** Python 3.11, Flask, PostgreSQL 15, Docker, SQLAlchemy 2.x + Alembic, httpx; WordPress presentation layer (uPress hosting, nimrod.bio). Playwright used for M10.4+ mypips SPA collectors (headless Chromium).
+- **SFA product + ops context:** `_aos/context/PROJECT_CONTEXT.md` — `validate_aos.sh` result expectations (0 FAIL; PASS/SKIP drift), delivery-tier publish tree and runbook links, 2026-04 production parity sign-offs. Complements `AGENTS.md` and `documentation/README.md`.
+- **Stack:** Python 3.11, Flask, PostgreSQL 15, Docker, SQLAlchemy 2.x + Alembic, httpx (backend/pipeline); **Slim 4 / PHP 8 + PDO/MySQL** for the public delivery tier. Playwright used for M10.4+ mypips SPA collectors (headless Chromium).
+- **⚠ Delivery & hosting canon (anti-drift — SSoT: `documentation/02-architecture/sfa-delivery-tier.md`):** Three distinct roles, never conflate them:
+  - **Web host** = **uPress** (shared LAMP, `sfa.nimrod.bio`, Cloudflare edge). This is the **only** machine that serves end-user HTTP and hosts the live MySQL. The site MUST live here — never on the home server.
+  - **Backend / pipeline host** = **waldhomeserver** (canonical Postgres SSoT, scrapers, agents, cron). **NEVER serves end users** — outbound HTTPS to the delivery tier only.
+  - **Deploy / push origin** = **waldhomeserver** acts as the FTPS upload *relay* (its egress IP is uPress-allowlisted; the Mac's Bezeq IP is not). "deploy host" / "OPS deploy host" means *the machine you deploy **from***, NOT the machine that serves. Code → `lftp mirror` to uPress (`UI_DEPLOY_RUNBOOK.md`); data → `POST https://sfa.nimrod.bio/api/v1/ingest` (HMAC).
 - **Docker port canon:** PG=5433 (`oma-postgres`), Admin=5001, Viewer=8081. Never use 8080 (TikTrack frontend) or 5432 (other projects). See `documentation/08-troubleshooting/DOCKER_SHARED_WORKSTATION.md`.
-- **Upload path (WP008):** Primary upload via WP REST API (HTTPS port 443). FTPS (port 21) is fallback gated on `UPRESS_FALLBACK_FTPS=1`. `publisher/upload_dispatch.py` is LIVE PRODUCTION — do not touch without team_100 mandate.
+- **Deploy paths (current):** UI code → `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md` (`scripts/ftp_deploy_sfa_ui.sh`, FTPS→uPress). Data → `organic_market_agent/publisher/sfa_ingest_push.py` (HMAC ingest API). **SUPERSEDED:** the WP-REST/FTPS/mu-plugin upload to `www.nimrod.bio` (S002/WP008 era, `publisher/upload_dispatch.py`/`wp_upload.py`) — www tier retired 2026-05-28; do not revive without a new DECISION.
 - **Language policy:** English in all source code, documentation, and inter-team communication. Hebrew only in direct conversation with Nimrod (and in DB seed data for product names).
 
 <!-- Project-specific rules, commands, paths, and conventions go here.

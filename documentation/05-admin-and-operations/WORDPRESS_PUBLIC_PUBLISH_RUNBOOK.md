@@ -1,5 +1,7 @@
 # WordPress public page (nimrod.bio) — publish runbook
 
+> **⛔ SUPERSEDED — historical record only.** Describes the retired WordPress page on **`www.nimrod.bio`** (S002 / M10 era), **severed 2026-05-28**. The live public site is the Slim/PHP delivery tier on **uPress `sfa.nimrod.bio`** — see [`../02-architecture/sfa-delivery-tier.md`](../02-architecture/sfa-delivery-tier.md) and [`UI_DEPLOY_RUNBOOK.md`](UI_DEPLOY_RUNBOOK.md).
+
 **Goal:** Put the OrganicMarketAgent **public report** on the existing WordPress site as a **new page** (initially **not** in the menu), with a process that is **simple, stable, accurate**, and **fully automatable** after one-time setup.
 
 **Architecture (locked):** Local hub builds **static artifacts** → upload to hosting → WordPress **reads files only** (no live DB to WordPress). See [`PROJECT_VISION_AND_SYSTEM_MAP.md`](../01-overview/PROJECT_VISION_AND_SYSTEM_MAP.md).
