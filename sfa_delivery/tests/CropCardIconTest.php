@@ -13,6 +13,15 @@ use PHPUnit\Framework\TestCase;
  *   - templates/pages/book_crop.php   (detail page hero)
  *
  * Mirrors the pattern established by ModuleCardHeroTest.php.
+ *
+ * Runs in separate processes: this test eval-defines a stub SFA\Lib\Template
+ * to let the page templates render in isolation. Without process isolation that
+ * stub would shadow the real Template class for any later test in the same
+ * process (e.g. RouteSmokeTest), causing spurious 500s. @preserveGlobalState
+ * disabled avoids serializing the stubbed class back into child processes.
+ *
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 final class CropCardIconTest extends TestCase
 {
@@ -179,7 +188,7 @@ final class CropCardIconTest extends TestCase
             // phpcs:ignore
             eval('namespace SFA\\Lib; class Template { '
                 . 'public static function h(string $s): string { return htmlspecialchars($s, ENT_QUOTES, "UTF-8"); } '
-                . 'public static function render(string $tpl, array $vars): string { return $vars["content"] ?? ""; } '
+                . 'public static function render(string $tpl, array $vars = []): string { return $vars["content"] ?? ""; } '
                 . '}');
         }
 
