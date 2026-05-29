@@ -2584,10 +2584,25 @@ work_packages:
       builder). Verdict LGATEV-VERDICT_v1.0.0.md. Orig de275ac (co-authored Cursor),
       cherry-picked to main ef4ba06."
     validator: team_190
-  notes: "COMPLETE 2026-05-28 — LOD500_LOCKED via team_100 ADR042 3-step closure
-    after team_190 L-GATE_V PASS (non-Claude GPT-5.5). Build→QA→V chain:
-    Sonnet (865db37) → Haiku 19/19 (6372834) → GPT-5.5 PASS (ef4ba06), all on
-    main. Items A (og-default.webp) + D (8 module hero WebPs) image placement
-    remain DEFERRED sub-items gated on team_00 external media delivery — to be
-    re-validated on eventual asset deploy. Archive mandate routed to team_191."
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-29"
+    reviewed_commit: "e8cd4ce"
+    main_commit: "22c052d"
+    notes: "team_190 (non-Claude, IR#1) R2 re-check of the DEFERRED media sub-items,
+      now FULFILLED: 8 watercolor module heroes + og-default + hub-hero + contact +
+      favicon (composed DETERMINISTICALLY from the authentic Devora brand masters via
+      compose_brand_assets.py — NOT AI-generated → perfect series consistency) +
+      modules.php hero_url (8) + _layout favicon links. R2-1..R2-10 PASS: php -l clean,
+      assets present + under budget, 8/8 hero_url maps to existing files, NO text in
+      heroes (inventory = basket motif), composer 48/48, validate_aos 0 FAIL, scope =
+      media delta only (e8cd4ce). team_00 approved the series + diversification.
+      Verdict LGATEV-VERDICT_R2_v1.0.0.md. Media cherry-picked to main (22c052d)."
+    validator: team_190
+  notes: "COMPLETE — LOD500_LOCKED. Code closed 2026-05-28 (Sonnet 865db37 → Haiku
+    6372834 → GPT-5.5 ef4ba06). Items A+D MEDIA FULFILLED 2026-05-29: full watercolor
+    visual system composed from Devora masters (8 heroes + og + hub + contact +
+    favicon), L-GATE_V R2 PASS (non-Claude), merged to main (22c052d), deployed to
+    sfa.nimrod.bio. Archive mandate routed to team_191."
   profile: L0
