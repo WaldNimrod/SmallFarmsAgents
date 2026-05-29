@@ -6,11 +6,16 @@
  * Per LOD400 v1.0.3 §0.5: COMPONENTS.md class names verbatim.
  * Uses `.cb-paths` wrapper (crop-book-deep.css L13) for layout per spec.
  *
+ * WP-UI-patch03 (AC-U3-07): when controller passes $crops, renders a crop-card
+ * grid using the existing crop_card.php macro below the nav cards.
+ *
  * Variables expected from controller (all optional, defaults render):
- *   $crop_total      int — total crop count (defaults to 66)
- *   $family_total    int — total family count (defaults to 8)
- *   $variety_total   int — total variety count (defaults to 242)
- *   $question_total  int — total question count (defaults to 12)
+ *   $crop_total      int   — total crop count (defaults to 66)
+ *   $family_total    int   — total family count (defaults to 8)
+ *   $variety_total   int   — total variety count (defaults to 242)
+ *   $question_total  int   — total question count (defaults to 12)
+ *   $crops           array — normalized crop list (each: slug, name_he, en_name,
+ *                            icon_svg, icon_url, family_tag_he, dtm_days, category)
  */
 use SFA\Lib\Template;
 
@@ -66,6 +71,8 @@ $paths = [
   ],
 ];
 
+$crops = is_array($crops ?? null) ? $crops : [];
+
 ob_start();
 ?>
 <section class="cb-entry">
@@ -76,6 +83,16 @@ ob_start();
     <?php endforeach; ?>
   </div>
 </section>
+<?php if (!empty($crops)): ?>
+<section class="cb-entry-crops">
+  <h2 class="cb-section-h">כל הגידולים</h2>
+  <div class="gj-cropgrid">
+    <?php foreach ($crops as $crop): ?>
+      <?php include __DIR__ . '/../macros/crop_card.php'; ?>
+    <?php endforeach; ?>
+  </div>
+</section>
+<?php endif; ?>
 <?php
 $content = ob_get_clean();
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active'));

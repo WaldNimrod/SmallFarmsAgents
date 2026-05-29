@@ -327,3 +327,49 @@
   gap: 10px;
   margin-top: 14px;
 }
+
+/* ─── WP-UI-patch03: crop-book detail full-width layout ────────────── */
+/* (a) Remove empty left column — detail main content spans full width  */
+.cb-crop-detail {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Override the 2-column grid set on .cb-crop-hero in crop-book-deep.css.
+   The hero now uses a simpler flex layout (icon + text side-by-side in
+   __head) so the page-level grid-template-columns is no longer needed. */
+.cb-crop-detail .cb-crop-hero {
+  display: block;
+  padding: 16px 0 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px dashed var(--gj-line);
+}
+
+/* (b) Variety-grid typography — bump to clearly readable sizes */
+.cb-var__grid {
+  font-size: 13px !important; /* was 11px — bump per LOD400 review */
+}
+.cb-var__grid small {
+  font-size: 10px !important; /* was 9px */
+}
+.cb-var__head h4 {
+  font-size: 16px !important; /* was 15px */
+}
+
+/* (c) Delta highlight: a differing variety value vs the default */
+.cb-var__val--delta {
+  color: var(--gj-tomato-deep);
+  font-weight: 700;
+}
+
+/* ─── WP-UI-patch03: crop-entry crop-card grid ──────────────────────── */
+.cb-entry-crops {
+  margin-top: 4px;
+  padding-bottom: 80px;
+}
+.gj-cropgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}

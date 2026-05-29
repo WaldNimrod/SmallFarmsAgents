@@ -33,7 +33,36 @@ final class CropBookViewController
 
     public function entry(Request $request, Response $response): Response
     {
-        return $this->html($response, Template::render('pages/book_entry'));
+        // AC-U3-07: query crop list for the landing crop-card grid.
+        $stmt = $this->pdo->query(
+            'SELECT slug, hebrew_name, scientific_name, category, dtm_min, dtm_max, payload_json FROM crops ORDER BY hebrew_name'
+        );
+        $rows = $stmt ? $stmt->fetchAll() : [];
+
+        $crops = [];
+        foreach ($rows as $row) {
+            $slug    = (string)($row['slug'] ?? '');
+            $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
+            $payload = is_array($payload) ? $payload : [];
+
+            $dtm = isset($row['dtm_max']) && $row['dtm_max'] !== null
+                ? (int)$row['dtm_max']
+                : (isset($row['dtm_min']) && $row['dtm_min'] !== null ? (int)$row['dtm_min'] : null);
+
+            $crops[] = [
+                'slug'          => $slug,
+                'name_he'       => (string)($row['hebrew_name'] ?? ''),
+                'en_name'       => (string)($payload['name_en'] ?? ($row['scientific_name'] ?? '')),
+                'icon_slug'     => self::ICON_MAP[$slug] ?? 'leaf',
+                'icon_svg'      => '<svg viewBox="0 0 24 24"><use href="#icon-' . htmlspecialchars(self::ICON_MAP[$slug] ?? 'leaf', ENT_QUOTES, 'UTF-8') . '"></use></svg>',
+                'icon_url'      => (string)($payload['icon_url'] ?? ''),
+                'family_tag_he' => (string)($payload['family_tag_he'] ?? ''),
+                'category'      => (string)($row['category'] ?? ''),
+                'dtm_days'      => $dtm,
+            ];
+        }
+
+        return $this->html($response, Template::render('pages/book_entry', ['crops' => $crops]));
     }
 
     public function questions(Request $request, Response $response): Response
@@ -162,6 +191,48 @@ final class CropBookViewController
             $variety['slug']    = $variety['vslug']; // back-compat
             $variety['name_he'] = (string)($variety['name_he'] ?? ($variety['name'] ?? ''));
             unset($variety['payload_json']);
+
+            // Ensure agronomy is always an array.
+            if (!isset($variety['agronomy']) || !is_array($variety['agronomy'])) {
+                $variety['agronomy'] = [];
+            }
+
+            // Alias days_to_maturity → dtm_days (payload key mismatch fix).
+            $variety['dtm_days'] = $variety['dtm_days']
+                ?? ($variety['agronomy']['days_to_maturity'] ?? null);
+        }
+        unset($variety);
+
+        // Identify the default variety and build per-variety agro_delta maps.
+        $defaultVariety = null;
+        foreach ($varieties as $v) {
+            if (!empty($v['is_default'])) {
+                $defaultVariety = $v;
+                break;
+            }
+        }
+        // Fall back to the first variety if none is explicitly marked default.
+        if ($defaultVariety === null && !empty($varieties)) {
+            $defaultVariety = $varieties[0];
+        }
+
+        foreach ($varieties as &$variety) {
+            $isDefault = ($defaultVariety !== null && $variety['vslug'] === $defaultVariety['vslug']);
+            $agro_delta = [];
+            if (!$isDefault && $defaultVariety !== null) {
+                $agronomy        = $variety['agronomy'];
+                $defaultAgronomy = $defaultVariety['agronomy'] ?? [];
+                foreach ($agronomy as $field => $value) {
+                    $defaultValue      = $defaultAgronomy[$field] ?? null;
+                    $agro_delta[$field] = ($defaultValue !== null && $value !== $defaultValue);
+                }
+            } else {
+                // Default variety itself: all-false deltas.
+                foreach (($variety['agronomy'] ?? []) as $field => $_) {
+                    $agro_delta[$field] = false;
+                }
+            }
+            $variety['agro_delta'] = $agro_delta;
         }
         unset($variety);
 

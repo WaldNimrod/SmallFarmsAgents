@@ -8,6 +8,9 @@
  * Per LOD400 v1.0.3 §0.5: COMPONENTS.md class names verbatim — `.cb-crop-hero`
  *   / `.cb-var` BEM family is the SSoT. Mapping documented in BUILD_REPORT §7.
  *
+ * WP-UI-patch03: layout uses `.cb-crop-detail` full-width wrapper — no empty
+ *   left column. Central panel spans full content width for readability.
+ *
  * SECURITY: knowledge_notes filtered through is_internal_farm_use_only=TRUE
  *   (data_layer_inventory §E.5) — internal notes MUST NOT render on public site.
  *
@@ -20,7 +23,8 @@
  *     'family' (optional ['slug','name_he']),
  *     'timeline' (optional ['prep_pct','grow_pct','harv_pct','harv_days','week_labels'?]),
  *     'market_link' (optional ['slug','price_current','source_count']),
- *     'varieties' (array — items conform to variety_row macro contract),
+ *     'varieties' (array — items conform to variety_row macro contract; each has
+ *                  agronomy array and agro_delta array from controller),
  *     'knowledge_notes' (optional array — each ['title_he','text_he','kind'?,'source_label_he'?,'is_internal_farm_use_only'?])
  */
 use SFA\Lib\Template;
@@ -44,6 +48,7 @@ $varieties = is_array($crop['varieties'] ?? null) ? $crop['varieties'] : [];
 
 ob_start();
 ?>
+<div class="cb-crop-detail">
 <section class="cb-crop-hero">
   <nav class="cb-crop-hero__breadcrumb">
     <a href="/crop-book/">ספר גידולים</a><span>›</span>
@@ -170,6 +175,7 @@ $context          = 'book.' . $slug;
 $context_label_he = 'ספר · ' . $name_he;
 include __DIR__ . '/../macros/contrib_strip.php';
 ?>
+</div><!-- /.cb-crop-detail -->
 <?php
 $content = ob_get_clean();
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active', 'back_url'));

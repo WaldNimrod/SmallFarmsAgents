@@ -132,6 +132,26 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
     return out
 
 
+_AGRONOMY_FIELD_WHITELIST = (
+    "days_to_maturity",
+    "germination_temp_c_min",
+    "germination_temp_c_opt",
+    "germination_temp_c_max",
+    "in_row_spacing_cm",
+    "rows_per_bed",
+    "soil_ph_target",
+    "storage_temp_c_min",
+    "storage_temp_c_max",
+    "storage_life_days",
+    "yield_per_m2_kg",
+    "nutrient_removal_n_kg_ha",
+    "nutrient_removal_p_kg_ha",
+    "nutrient_removal_k_kg_ha",
+    "harvest_window_max_days",
+    "seeds_per_gram",
+)
+
+
 def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
     sql = """
         SELECT id, crop_id, name_he, name_en, is_default,
@@ -146,28 +166,49 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute(sql)
     rows = cur.fetchall()
+
+    # Fetch enrichment data for all varieties in one query (LOD400 §2)
+    placeholders = ",".join(["%s"] * len(_AGRONOMY_FIELD_WHITELIST))
+    enrich_sql = f"""
+        SELECT variety_id, field_name, value_best
+        FROM crop_field_enrichment
+        WHERE field_name IN ({placeholders})
+    """
+    cur.execute(enrich_sql, _AGRONOMY_FIELD_WHITELIST)
+    agronomy_by_variety: dict[int, dict[str, float]] = {}
+    for er in cur.fetchall():
+        vid = er["variety_id"]
+        if vid not in agronomy_by_variety:
+            agronomy_by_variety[vid] = {}
+        if er["value_best"] is not None:
+            agronomy_by_variety[vid][er["field_name"]] = float(er["value_best"])
+
     out = []
     for v in rows:
+        agronomy = agronomy_by_variety.get(v["id"], {})
+        payload: dict[str, Any] = {
+            "schema_version": 1,
+            "name_en": v.get("name_en"),
+            "is_default": bool(v.get("is_default")),
+            "days_to_maturity": v.get("days_to_maturity"),
+            "harvest_window_min_days": v.get("harvest_window_min_days"),
+            "harvest_window_max_days": v.get("harvest_window_max_days"),
+            "in_row_spacing_cm": v.get("in_row_spacing_cm"),
+            "planting_method": v.get("planting_method"),
+            "planting_season": v.get("planting_season"),
+            "harvest_unit": v.get("harvest_unit"),
+            "documented_price": float(v["documented_price"]) if v.get("documented_price") is not None else None,
+            "documented_price_unit": v.get("documented_price_unit"),
+            "documented_price_source": v.get("documented_price_source"),
+            "notes": v.get("notes"),
+        }
+        if agronomy:
+            payload["agronomy"] = agronomy
         out.append({
             "id": v["id"],
             "crop_id": v["crop_id"],
             "name": v["name_he"] or v["name_en"] or f"variety-{v['id']}",
-            "payload_json": {
-                "schema_version": 1,
-                "name_en": v.get("name_en"),
-                "is_default": bool(v.get("is_default")),
-                "days_to_maturity": v.get("days_to_maturity"),
-                "harvest_window_min_days": v.get("harvest_window_min_days"),
-                "harvest_window_max_days": v.get("harvest_window_max_days"),
-                "in_row_spacing_cm": v.get("in_row_spacing_cm"),
-                "planting_method": v.get("planting_method"),
-                "planting_season": v.get("planting_season"),
-                "harvest_unit": v.get("harvest_unit"),
-                "documented_price": float(v["documented_price"]) if v.get("documented_price") is not None else None,
-                "documented_price_unit": v.get("documented_price_unit"),
-                "documented_price_source": v.get("documented_price_source"),
-                "notes": v.get("notes"),
-            },
+            "payload_json": payload,
         })
     return out
 
