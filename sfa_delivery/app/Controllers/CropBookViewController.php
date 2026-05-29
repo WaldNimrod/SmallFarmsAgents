@@ -268,8 +268,11 @@ final class CropBookViewController
                 $agronomy        = $variety['agronomy'];
                 $defaultAgronomy = $defaultVariety['agronomy'] ?? [];
                 foreach ($agronomy as $field => $value) {
-                    $defaultValue      = $defaultAgronomy[$field] ?? null;
-                    $agro_delta[$field] = ($defaultValue !== null && $value !== $defaultValue);
+                    $defaultValue = $defaultAgronomy[$field] ?? null;
+                    // Numeric compare (cast both): avoids spurious int-vs-float
+                    // deltas, e.g. 45 (int) !== 45.0 (computed median) in strict PHP.
+                    $agro_delta[$field] = ($defaultValue !== null
+                        && abs((float)$value - (float)$defaultValue) > 1e-9);
                 }
             } else {
                 // Default variety itself: all-false deltas.
