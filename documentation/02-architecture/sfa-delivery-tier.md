@@ -82,6 +82,50 @@ The word **"host"** has caused recurring drift (agents concluding the site is se
 
 ---
 
+## 1A. Three environments & per-dataset SSoT (binding — amended 2026-05-30)
+
+> **Amendment authority:** team_00 in-session directive 2026-05-30 (SFA-S003-P004 session). Clarifies — does not contradict — §0/§1. The §0 two-tier table describes the **production serving path**; this section adds the **development environment** and resolves *which dataset is canonical where*.
+
+### 1A.1 Three environments (never conflate)
+
+| Environment | Machine | Role | Explicitly NOT |
+|-------------|---------|------|----------------|
+| **Development** | **Mac** (`oma-postgres` Docker, port 5433) | Build + curate + enrich the crop book; author code; run the full Alembic head; generate ingest payloads | not production; not a server; not always-on |
+| **Background / pipeline** | **waldhomeserver** (`oma-postgres` Docker) | Runs **only** the background jobs uPress cannot: daily **price-index** scraping/normalization, ingest-push cron, freshness guard | **NOT a staging mirror of the live site**; never serves end users |
+| **Production** | **uPress** `sfa.nimrod.bio` (Slim/PHP/MySQL) | Serves all end-user HTTP; live MySQL read-mirror | not a place where data is authored |
+
+**The home server is not staging.** It exists to run processes that cannot run on uPress shared hosting (long scrapers, Playwright, cron, agents). It does **not** need to mirror everything the production site shows.
+
+### 1A.2 Per-dataset SSoT — the two datasets flow differently
+
+The product surfaces **two datasets** with **different lifecycles**, so they have **different canonical sources and publish paths**:
+
+| Dataset | Lifecycle | Canonical SSoT | Working store | Publish path to uPress |
+|---------|-----------|----------------|---------------|------------------------|
+| **Price index** (OMA market) | **Dynamic** — scraped daily | **waldhomeserver Postgres** (only place the scrape runs) | same | **server cron** `sfa_ingest_push` (06:30) → HTTPS ingest API |
+| **Crop book** (agronomic knowledge) | **Curated / near-static** — changes when Nimrod/agents enrich it, not daily | **the git repo** (source files + importers + committed WR packs) — reproducible by `seed`/`enrich` | **Mac** `oma-postgres` (dev materialization, current Alembic head) | **Mac → HTTPS ingest API on change** (not a daily cron) |
+
+**Consequence (resolves the "durability caveat"):** the home server Postgres being at an older Alembic head **without** the crop-book schema is **by design, not a defect**. The crop book is a *dev→production publish*, not a server-cron responsibility. There is **no requirement** to install the crop-book schema or data on the home server; doing so would make it a redundant staging mirror, which §1A.1 forbids. (Supersedes the PROJECT_CONTEXT "durability caveat" framing: manual Mac re-push of crop data is the *intended* pipeline, not a workaround.)
+
+### 1A.3 Why data publishes from the Mac but code deploys from the server
+
+Two different transports with two different network constraints — do not conflate:
+
+| Artifact | Transport | Origin that works | Why |
+|----------|-----------|-------------------|-----|
+| **Data** (crop book + price index) | **HTTPS POST** `/api/v1/ingest` (HMAC) via Cloudflare | **Mac OR server** | HTTPS to Cloudflare needs no IP allowlist → the Mac can push crop-book data directly |
+| **Code** (PHP/CSS/JS) | **FTPS port 21** + `lftp mirror` | **waldhomeserver only** (relay) | uPress allowlists egress IPs on port 21; the Mac's Bezeq IP is port-21-blocked → must relay through the server |
+
+So: **crop-book data → Mac → uPress** (HTTPS, fine). **UI code → waldhomeserver relay → uPress** (FTPS). The server's relay role for *code* does not imply it owns crop-book *data*.
+
+### 1A.4 Backup posture (risk — team_00 flagged 2026-05-30)
+
+- The home server takes **daily local `pg_dump`s** to `/data/backups/` (30-day retention) — but these are **same-disk, not offsite, not restore-verified**. Treat the home server as **having no organized backup** for disaster purposes.
+- **Blast-radius mitigation (already true by design):** the **price index** is reconstructible by re-scraping; the **crop book** canonical source is the **git repo** (re-seedable). So a home-server loss does not lose authored data — only running state.
+- **Recommendation (follow-up, not blocking):** add an **offsite copy** of the price-index DB dump + a periodic **restore test**. Tracked as a server-infra follow-up, not part of SFA-S003-P004.
+
+---
+
 ## 2. Data flow
 
 ### 2a. Read (user → page render)
@@ -252,3 +296,5 @@ No uPress-specific bindings exist. No proprietary file formats. No closed-source
 ---
 
 *Locked 2026-05-23 by team_100. Changes require team_00 approval via new DECISION artifact.*
+
+*Amended 2026-05-30 by team_100 (§1A — three environments + per-dataset SSoT + backup posture), under team_00 in-session directive (SFA-S003-P004). The home server is background/price-index only — not a staging mirror; the crop book is a dev(Mac)→production(uPress) publish whose canonical source is the git repo.*
