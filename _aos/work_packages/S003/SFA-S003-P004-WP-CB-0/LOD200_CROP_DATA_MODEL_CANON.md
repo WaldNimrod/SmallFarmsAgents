@@ -5,7 +5,8 @@ gate: L-GATE_S (LOD200 — architecture/design)
 status: DRAFT — for team_00 review
 author: team_100 (Claude Code, Chief Architect)
 date: 2026-05-30
-version: v0.1.0
+version: v1.0.0
+status_note: "§13 open questions RESOLVED by team_00 in-session 2026-05-30 — see §13. Ready for team_190 L-GATE_S."
 supersedes_field_layer_of: SFA-S003-P004-WP-CB-1 (LOD400 field mapping will be corrected to this canon)
 grounded_in: live oma-postgres inventory 2026-05-30 (head 057; 70 crops / 368 varieties / 2061 source_values / 5780 enrichment)
 team_00_decisions:
@@ -133,7 +134,7 @@ A field's unit lives in a **units registry** keyed by canonical field name — u
 | month-lists (`sowing_months`, `transplant_months`) | array of ints 1–12 | CSV `"2,3,5"`→`[2,3,5]` |
 
 ### 6.4 Yield & nutrients (team_00 decisions)
-- **Yield canonical = `yield_per_bed_m`** (kg per linear bed-meter; JM/farm-native). `yield_per_m2` is **derived** (`= yield_per_bed_m / bed_width_m`, bed_width=0.8). Drop `yield_per_m2_kg` as a stored fact.
+- **Yield canonical = `yield_per_bed_m`** (kg per linear bed-meter; JM/farm-native). `yield_per_m2` is **derived** (`= yield_per_bed_m / bed_width_m`) using the **`bed_width` AssumptionField (0.8 m, user-adjustable)** as the single bed-width source system-wide (team_00, 2026-05-30). Drop `yield_per_m2_kg` as a stored fact.
 - **Nutrients canonical = elemental** `nutrient_removal_{n,p,k,ca,mg}_kg_per_ha`. Oxide forms `p2o5`/`k2o` are **derived** (×2.29 / ×1.205). Drop oxide stored facts.
 
 ---
@@ -158,7 +159,7 @@ Disposition: **KEEP** · **RENAME** · **DERIVE** (compute, stop storing) · **�
 | germination_temp_c_{min,opt,max} | germination_temp_{min,opt,max}_c | KEEP (unit-normalize °C) |
 | soil_ph_target, soil_ph_liming_threshold | KEEP | unit `pH` |
 | storage_temp_c_{min,max}, storage_rh_pct_{min,max}, storage_life_days | KEEP | unit-normalize |
-| days_in_gh_total | **days_in_nursery** | RENAME (this is the nursery-duration field; calculators use it) |
+| days_in_gh_total | **days_in_nursery** | RENAME — **semantics confirmed (team_00):** sow → field-transplant total; the value calcs #3/#4/#5 use |
 | days_to_first_potting, days_to_germinate_gh | nursery_days_to_potting, nursery_days_to_germinate | KEEP (define the nursery phase trio relationship) |
 | succession_interval_weeks | succession_interval_weeks | KEEP |
 | plants_per_m2 | — | DERIVE (drop stored — function of rows/spacing/bed_width) |
@@ -181,8 +182,8 @@ Disposition: **KEEP** · **RENAME** · **DERIVE** (compute, stop storing) · **�
 ### 7.3 Identity (T5 → columns, KEEP)
 `name_he`, `name_en`, `scientific_name`, `family_id`, `category`, `growth_cycle`, `harvest_unit_default`, `first_fruit_year`, `is_grafted`, `oma_product_id`, `icon_url`, variety `name_he/name_en/is_default`. **DQ:** purge duration text leaked into variety `name_he` (D8).
 
-### 7.4 Deprecated as SSoT (T1/T2 facts duplicated on columns)
-`crop_varieties` columns that now defer to enrichment/attributes: `days_to_maturity`, `in_row_spacing_cm`, `rows_per_bed`, `avg_yield_per_bed_m`, `documented_price*`, `planting_method`, `planting_season`, `succession_interval_weeks`, `days_in_gh_total`, etc. → **DEPRECATE-COL** (kept as nullable read-cache, clearly flagged; never written as authority). Seeder fields (`seeder*`) → identity/ops, keep.
+### 7.4 Dropped as SSoT (T1/T2 facts duplicated on columns) — team_00: physically DROP
+`crop_varieties` columns that duplicate enrichment/attribute facts: `days_to_maturity`, `in_row_spacing_cm`, `rows_per_bed`, `avg_yield_per_bed_m`, `documented_price*`, `planting_method`, `planting_season`, `succession_interval_weeks`, `days_in_gh_total`, `harvest_window_*`, `plants_per_m2`(if column), `avg_revenue_per_bed_m` → **DROP-COL** (physically removed via Alembic migration; team_00 chose the clean end-state, accepting the schema migration). The enrichment/attribute layers become the unambiguous, only home. Seeder fields (`seeder*`) + identity (`name_*`, `is_default`, `is_grafted`, `harvest_unit_default`, `icon_url`, etc.) → KEEP. **Sequencing:** drop only AFTER all consumers read from enrichment/attributes (alias cycle §8.5), so no consumer breaks.
 
 ---
 
@@ -193,7 +194,7 @@ Disposition: **KEEP** · **RENAME** · **DERIVE** (compute, stop storing) · **�
 3. **Attributes layer** — add `crop_attribute` table (1 migration) + an attribute resolver (mirrors enrichment_runner, `hard_winner`) + ingest of the §7.2 categoricals.
 4. **Dedup → derive** — stop storing `yield_per_m2_kg`, oxide nutrients, `plants_per_m2`, `avg_revenue_per_bed_m`; provide computed accessors.
 5. **Rename + alias** — apply §6.2 names; keep read aliases for one cycle so consumers migrate without breakage.
-6. **Deprecate columns** — flag duplicated `crop_varieties` columns as read-cache only.
+6. **Drop columns (Alembic migration)** — after consumers cut over to enrichment/attributes (alias cycle, phase 5), physically drop the duplicated `crop_varieties` columns (§7.4). This is the one true schema migration of the canon; it runs last so nothing reads a dropped column.
 7. **Data-quality pass** — purge identity pollution (D8); validate nursery-phase trio consistency; outlier re-check.
 8. **Re-enrich + snapshot** — run enrichment + attribute resolver; regenerate the coverage snapshot (Gap-Fill §4) against the canonical vocabulary.
 
@@ -248,10 +249,12 @@ This contract is what WP-CB-1's LOD400 field layer will be corrected to, and wha
 
 ---
 
-## 13. Open questions for team_00
-1. **Bed width** for yield_per_m2 derivation confirmed **0.8 m** (matches AssumptionField) — OK to hard-link the derivation to that AssumptionField?
-2. **Column deprecation** — OK to treat duplicated `crop_varieties` columns as read-cache (not drop them physically this round) to minimize risk?
-3. **Nursery phase trio** — confirm semantics so calculators use the right one: `days_to_germinate` (sow→emerge) → `days_to_potting` (→ pot-up) → `days_in_nursery` total (sow→field). Is `days_in_nursery` = sow→field-transplant the value calculators #3/#4/#5 should use? (We mapped it to the renamed `days_in_gh_total`.)
+## 13. Decisions RESOLVED by team_00 (in-session 2026-05-30)
+1. **Bed width** — `yield_per_m2` derivation is **linked to the `bed_width` AssumptionField (0.8 m, user-adjustable)** — one bed-width source system-wide. (§6.4)
+2. **Duplicated columns** — **physically DROP** (clean end-state), via an Alembic migration that runs *last* (after consumers cut over). Accepted the migration over a read-cache. (§7.4, §8.6)
+3. **Nursery semantics** — `days_in_nursery` = **sow → field-transplant total** (the renamed `days_in_gh_total`); this is the value calculators #3/#4/#5 consume. The phase trio is `days_to_germinate` (sow→emerge) → `days_to_potting` (→pot-up) → `days_in_nursery` (sow→field, total). (§7.1)
+
+**Canon is finalized (v1.0.0). Ready for team_190 L-GATE_S, then a Migration WP executes §8.**
 
 ---
 
