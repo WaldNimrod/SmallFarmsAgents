@@ -139,6 +139,16 @@ FIELD_POLICY: dict[str, FieldPolicy] = {
         trust_order=("EX", "NI", "OP", "PR"),
         blend_strategy="weighted_mean",
     ),
+    # --- WP-CB-1 calculator fields ---
+    "days_in_nursery_cell": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+        outlier=OutlierConfig(z_threshold=3.5),
+    ),
+    "succession_interval_weeks": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="hard_winner",
+    ),
 }
 
 # Default policy for fields not in the table

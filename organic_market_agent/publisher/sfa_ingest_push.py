@@ -327,7 +327,17 @@ _AGRONOMY_FIELD_WHITELIST = (
     "nutrient_removal_k_kg_ha",
     "harvest_window_max_days",
     "seeds_per_gram",
+    # WP-CB-1 additions (LOD400 §3.3 / Schema §3.1–§3.2)
+    "days_in_nursery_cell",
+    "succession_interval_weeks",
 )
+
+# Confidence threshold τ for field_state classification (Gap-Fill Plan §2).
+# VALIDATED: winning_source_class in {EX, NI} OR confidence_score >= τ
+# UNVALIDATED: row exists but below threshold or low-trust source class
+# MISSING: no crop_field_enrichment row for the field
+_FIELD_STATE_TAU = 0.40
+_HIGH_TRUST_CLASSES = {"EX", "NI"}
 
 
 def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
@@ -345,25 +355,68 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
     cur.execute(sql)
     rows = cur.fetchall()
 
-    # Fetch enrichment data for all varieties in one query (LOD400 §2)
+    # Fetch enrichment data for all varieties in one query (LOD400 §2 / WP-CB-1 §3.3)
+    # Include confidence_score and winning_source_class for field_state computation.
     placeholders = ",".join(["%s"] * len(_AGRONOMY_FIELD_WHITELIST))
     enrich_sql = f"""
-        SELECT variety_id, field_name, value_best
+        SELECT variety_id, field_name, value_best, confidence_score, winning_source_class
         FROM crop_field_enrichment
         WHERE field_name IN ({placeholders})
     """
     cur.execute(enrich_sql, _AGRONOMY_FIELD_WHITELIST)
+
+    # enrichment_meta: variety_id -> field_name -> {value, confidence, source_class}
+    enrichment_meta: dict[int, dict[str, dict[str, Any]]] = {}
     agronomy_by_variety: dict[int, dict[str, float]] = {}
     for er in cur.fetchall():
         vid = er["variety_id"]
+        fname = er["field_name"]
+        if vid not in enrichment_meta:
+            enrichment_meta[vid] = {}
+        enrichment_meta[vid][fname] = {
+            "value_best": er["value_best"],
+            "confidence_score": er["confidence_score"],
+            "winning_source_class": er["winning_source_class"],
+        }
         if vid not in agronomy_by_variety:
             agronomy_by_variety[vid] = {}
         if er["value_best"] is not None:
-            agronomy_by_variety[vid][er["field_name"]] = float(er["value_best"])
+            agronomy_by_variety[vid][fname] = float(er["value_best"])
+
+    # Serialize ASSUMPTIONS registry once for embedding in each variety payload.
+    # WP-CB-1 AC-09: deliver the ASSUMPTIONS registry to the delivery tier.
+    from organic_market_agent.crop_book.assumptions import ASSUMPTIONS as _ASSUMPTIONS_REGISTRY
+    assumptions_payload = {
+        k: {
+            "key": a.key,
+            "default": a.default,
+            "unit": a.unit,
+            "explainer_he": a.explainer_he,
+            "post_url": a.post_url,
+        }
+        for k, a in _ASSUMPTIONS_REGISTRY.items()
+    }
 
     out = []
     for v in rows:
-        agronomy = agronomy_by_variety.get(v["id"], {})
+        vid = v["id"]
+        agronomy = agronomy_by_variety.get(vid, {})
+
+        # Compute per-field field_state for the whitelist fields (Gap-Fill Plan §2).
+        meta_for_variety = enrichment_meta.get(vid, {})
+        field_state: dict[str, str] = {}
+        for fname in _AGRONOMY_FIELD_WHITELIST:
+            if fname not in meta_for_variety:
+                field_state[fname] = "MISSING"
+            else:
+                em = meta_for_variety[fname]
+                src_class = em["winning_source_class"] or ""
+                score = float(em["confidence_score"]) if em["confidence_score"] is not None else 0.0
+                if src_class in _HIGH_TRUST_CLASSES or score >= _FIELD_STATE_TAU:
+                    field_state[fname] = "VALIDATED"
+                else:
+                    field_state[fname] = "UNVALIDATED"
+
         payload: dict[str, Any] = {
             "schema_version": 1,
             "name_en": v.get("name_en"),
@@ -382,10 +435,13 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
         }
         if agronomy:
             payload["agronomy"] = agronomy
+        # WP-CB-1 AC-09: embed field_state map and ASSUMPTIONS registry (additive)
+        payload["field_state"] = field_state
+        payload["assumptions"] = assumptions_payload
         out.append({
-            "id": v["id"],
+            "id": vid,
             "crop_id": v["crop_id"],
-            "name": v["name_he"] or v["name_en"] or f"variety-{v['id']}",
+            "name": v["name_he"] or v["name_en"] or f"variety-{vid}",
             "payload_json": payload,
         })
     return out

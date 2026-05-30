@@ -65,3 +65,50 @@ def test_rows_per_bed_no_multi_year() -> None:
 
     policy = get_field_policy("rows_per_bed")
     assert policy.multi_year_op_mean is False
+
+
+# ---------------------------------------------------------------------------
+# WP-CB-1: new fields (LOD400 §3.1)
+# ---------------------------------------------------------------------------
+
+def test_days_in_nursery_cell_present_in_field_policy() -> None:
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+
+    assert "days_in_nursery_cell" in FIELD_POLICY, "days_in_nursery_cell missing from FIELD_POLICY"
+
+
+def test_days_in_nursery_cell_weighted_mean_z35() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy
+
+    policy = get_field_policy("days_in_nursery_cell")
+    assert policy.blend_strategy == "weighted_mean"
+    assert policy.trust_order == ("EX", "NI", "PR", "OP")
+    assert policy.outlier.z_threshold == 3.5
+
+
+def test_succession_interval_weeks_present_in_field_policy() -> None:
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+
+    assert "succession_interval_weeks" in FIELD_POLICY, "succession_interval_weeks missing from FIELD_POLICY"
+
+
+def test_succession_interval_weeks_hard_winner() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy
+
+    policy = get_field_policy("succession_interval_weeks")
+    assert policy.blend_strategy == "hard_winner"
+    assert policy.trust_order == ("EX", "NI", "PR", "OP")
+
+
+def test_get_field_policy_returns_days_in_nursery_cell() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy, FIELD_POLICY
+
+    policy = get_field_policy("days_in_nursery_cell")
+    assert policy is FIELD_POLICY["days_in_nursery_cell"]
+
+
+def test_get_field_policy_returns_succession_interval_weeks() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy, FIELD_POLICY
+
+    policy = get_field_policy("succession_interval_weeks")
+    assert policy is FIELD_POLICY["succession_interval_weeks"]

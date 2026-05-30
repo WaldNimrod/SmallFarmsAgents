@@ -3036,12 +3036,33 @@ work_packages:
       Server DB alignment (waldhomeserver Postgres 034→head) folded into this infra push
       per team_00."
     validator: team_100
+  - gate: L-GATE_B
+    result: PASS
+    scope: backend
+    date: "2026-05-30"
+    notes: "team_10 (sfa_build, Claude Sonnet — IR#1: builder Sonnet ≠ team_100 Opus architect
+      ≠ team_190 non-Claude L-GATE_V) built the backend slice. NEW: assumptions.py (8 keys +
+      tray_cells + hardiness_offset; germination_rate 0.90 + bed_width 0.80 carry provisional
+      final nimrod.bio post_urls), calculators.py (14 pure fns + CalcUnavailable), calculator_meta.py
+      (+ calc_enabled disabled-state). MODIFIED additive: field_policy.py (+days_in_nursery_cell
+      weighted_mean z=3.5, +succession_interval_weeks hard_winner), sfa_ingest_push.py (whitelist
+      +2 fields, per-field field_state tau=0.40, ASSUMPTIONS embed). 92 new tests (calculators 43 /
+      assumptions 25 / field_policy 14 / calc_meta 10). team_100 independent verify: 92/92 new pass;
+      full crop_book suite 548 passed / 2 failed (both PRE-EXISTING — confirmed via stash, tied to a
+      concurrent data-ingestion run, NOT this slice: test_ni_publisher_isolation::test_ac21b,
+      test_source_registry::test_uc_prefix); validate_aos 29/19/0; NO LOD500_LOCKED file touched;
+      NO migration (head 057). AC-01,03,05,06,07,08,09,12 PASS. AC-02/04 (enrichment rows for the
+      2 new fields) DEFERRED to server-DB-alignment step. AC-10/11/13 DEFERRED to UI slice (team_35).
+      BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-1/BUILD_REPORT_v1.0.0.md."
+    validator: team_100
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
-    approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. Services layer already
-    exists (crop_field_enrichment.value_best = one winning value) — no new resolution
-    engine. Hosting canon: uPress serves, never the home server. NEXT: team_35 LOD300
-    → embed section 10 → team_00 approve → team_190 L-GATE_S → build (team_10)."
+    approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified
+    2026-05-30 (scoped L-GATE_S + L-GATE_B PASS): calculators.py (14) + assumptions.py +
+    calculator_meta.py + 2 field_policy wirings + ingest contract; 92 new tests. Services layer
+    reused (crop_field_enrichment.value_best = one winning value) — no new resolution engine.
+    Hosting canon: uPress serves, never the home server. NEXT: server DB align (034→head, AC-02/04)
+    ∥ team_35 LOD300 → embed section 10 → team_00 approve → team_190 L-GATE_V (non-Claude)."
   profile: L0
 
 # ----------------------------------------------------------------------------
