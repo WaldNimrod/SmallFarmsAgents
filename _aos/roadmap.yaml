@@ -2946,3 +2946,176 @@ work_packages:
     Knowledge notes 100% internal-gated → §Notes empty-state until public notes exist (flag
     not overridden). Spec LOD400_spec.md."
   profile: L0
+
+# ============================================================================
+# S003-P004 — ספר גידולים: Crop Book v1 (Calculator-Driven Planning Tool)
+# Opened 2026-05-30. team_00 in-session authorization (SPEC-mode session, team_100).
+# Turns the LIVE read-only crop book into a planning tool: 14 calculators consuming
+# crop_field_enrichment.value_best + user-adjustable AssumptionFields. Two-audience UX
+# (Cards gardener / Table farmer), per-crop Simple/Full/Drill-down, complete/partial states.
+# Catalog APPROVED by team_00 2026-05-30 (14 calcs). Schema additions reduced to 2 enrichment
+# wirings (germination_rate became an AssumptionField default 90%, not a column).
+# Module boundary: agronomic knowledge + calculators ONLY — CB-2..CB-5 are FUTURE consumers.
+# ============================================================================
+
+- id: SFA-S003-P004-WP-CB-1
+  label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
+  status: ACTIVE
+  phase: spec
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1/LOD400_spec.md"
+  catalog_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/CALCULATOR_CATALOG_v1.0.0.md"
+  schema_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/MANDATORY_FIELD_SCHEMA_v1.0.0.md"
+  gapfill_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/GAP_FILL_PLAN_v1.0.0.md"
+  design_activation_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/ACTIVATION_PROMPT_v1.0.0.md"
+  orchestration:
+    design: "team_35 (LOD300 mockups → embedded in LOD400 §10)"
+    build: "team_10 (Claude Sonnet)"
+    qa: "team_50 (Claude Haiku)"
+    validation: "team_190 (non-Claude — IR#1 cross-engine)"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-30"
+    notes: "team_00 in-session authorization (SPEC-mode session). Scope rule LOCKED:
+      a field is mandatory iff JMF carries it OR a calculator needs it. Calculator
+      catalog v0.1 → v1.0.0 APPROVED by team_00 (11 + 3 additions = 14 calcs;
+      Fertilizer/compost, Crop-profit-comparison, Seed/input-cost added; Soil/liming
+      excluded). Decisions: germination_rate = AssumptionField default 90% (NOT a
+      schema column) + explainer + nimrod.bio link; bed_width = 80cm AssumptionField
+      (+ link); companions = family-based rotation hint (informational); AssumptionField
+      locked as a first-class UI component pattern. Net schema work = 2 enrichment
+      wirings (days_in_nursery_cell + succession_interval_weeks); 0 new columns."
+    validator: team_00
+  - gate: L-GATE_S
+    result: IN_PROGRESS
+    date: "2026-05-30"
+    notes: "team_100 authored LOD400 v0.9.0 DRAFT (sections 1–9, 11–13 complete:
+      calculator pure-function contracts x14, field_policy wirings, AssumptionField
+      registry, complete/partial state machine tau=0.40, future-module API contracts,
+      AC matrix x13). Section 10 (UI mockups) PENDING team_35 LOD300 — activation prompt
+      issued with approved catalog attached. LOD400 locks to v1.0.0 and routes to
+      team_190 L-GATE_S once team_35 mockups are embedded + team_00 approves. SPEC-mode
+      session: no build/deploy/governance edits."
+    validator: team_100
+  notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
+    planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
+    approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. Services layer already
+    exists (crop_field_enrichment.value_best = one winning value) — no new resolution
+    engine. Hosting canon: uPress serves, never the home server. NEXT: team_35 LOD300
+    → embed section 10 → team_00 approve → team_190 L-GATE_S → build (team_10)."
+  profile: L0
+
+# ----------------------------------------------------------------------------
+# S003-P004 LOD100 PLACEHOLDERS — FUTURE modules (brief direction only).
+# Consume WP-CB-1 calculator outputs via stable API contracts (LOD400 section 12).
+# NOT for execution — LOD200+ deferred until WP-CB-1 closes and team_00 prioritizes.
+# ----------------------------------------------------------------------------
+
+- id: SFA-S003-P004-WP-CB-2
+  label: "ספר גידולים: Planner v0 (bed-map / season plan)"
+  status: PLACEHOLDER
+  track: A
+  effort: TBD
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: TBD
+  assigned_validator: team_190
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004/LOD100_DOWNSTREAM_MODULES_v1.0.0.md"
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  gate_history:
+  - gate: L-GATE_E
+    result: PLACEHOLDER
+    date: "2026-05-30"
+    notes: "LOD100 direction only (team_100, SPEC session). Planner v0: assign crops to
+      beds across a season. Consumes WP-CB-1 outputs — beds_for_target_yield (#7),
+      plant_population (#10), succession_schedule (#6) — plus sow/harvest dates (#4/#5).
+      Owns scheduling/layout; reads agronomic truth from Crop Book. LOD200+ deferred."
+    validator: team_100
+  notes: "PLACEHOLDER — not for execution. Activates after WP-CB-1 LOD500_LOCKED + team_00 priority."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-3
+  label: "ספר גידולים: Tasks (crop task scheduling)"
+  status: PLACEHOLDER
+  track: A
+  effort: TBD
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: TBD
+  assigned_validator: team_190
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004/LOD100_DOWNSTREAM_MODULES_v1.0.0.md"
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  gate_history:
+  - gate: L-GATE_E
+    result: PLACEHOLDER
+    date: "2026-05-30"
+    notes: "LOD100 direction only. Tasks: generate dated field tasks from crop_task_templates
+      (already seeded, JMF) anchored on sow/transplant/harvest dates from WP-CB-1 calcs
+      #4/#5, plus seed/tray procurement from #1/#3. Owns task timeline; reads anchors
+      from Crop Book + Planner. LOD200+ deferred."
+    validator: team_100
+  notes: "PLACEHOLDER — not for execution. Consumes crop_task_templates + CB-1 date calcs."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-4
+  label: "ספר גידולים: Sales / POS"
+  status: PLACEHOLDER
+  track: A
+  effort: TBD
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: TBD
+  assigned_validator: team_190
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004/LOD100_DOWNSTREAM_MODULES_v1.0.0.md"
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  gate_history:
+  - gate: L-GATE_E
+    result: PLACEHOLDER
+    date: "2026-05-30"
+    notes: "LOD100 direction only. Sales/POS: revenue planning + point-of-sale. Consumes
+      expected_revenue (#9), crop_profit_comparison (#13), seed_input_cost (#14) from
+      WP-CB-1, plus documented_price + OMA market index (MK class). Owns transactions;
+      reads economics from Crop Book. LOD200+ deferred."
+    validator: team_100
+  notes: "PLACEHOLDER — not for execution. Consumes CB-1 economics calcs + OMA market."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-5
+  label: "ספר גידולים: Tend integration (operational write-back loop)"
+  status: PLACEHOLDER
+  track: A
+  effort: TBD
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: TBD
+  assigned_validator: team_190
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004/LOD100_DOWNSTREAM_MODULES_v1.0.0.md"
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  gate_history:
+  - gate: L-GATE_E
+    result: PLACEHOLDER
+    date: "2026-05-30"
+    notes: "LOD100 direction only. Tend integration: feed real farm operational data
+      (Tend exports — already an OP-class source) back into the enrichment loop, closing
+      book-vs-reality. Consumes crop_field_enrichment + provenance from WP-CB-1; writes
+      OP-class source_values that re-reconcile. Owns the ops feedback loop. LOD200+ deferred."
+    validator: team_100
+  notes: "PLACEHOLDER — not for execution. OP-class operational feedback into enrichment."
+  profile: L0
