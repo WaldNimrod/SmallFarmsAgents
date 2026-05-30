@@ -2833,12 +2833,14 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch04
   label: "Crop-book completeness (all crop data) + global nav + broken-link + layout/ordering"
-  status: IN_REVIEW
+  status: DONE
   phase: 2_followup
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-05-30"
+  archive_ref: "_archive/SFA-S003-P002-WP-UI-patch04/ARCHIVE_MANIFEST.md"
   build_commit: "a7a787a"
   production_url: "https://sfa.nimrod.bio/crop-book/"
   assigned_builder: team_10
@@ -2930,9 +2932,22 @@ work_packages:
       sub-nav links (questions/family/table/cover-crops); /market/ correctly shows none.
       composer test 63/0-fail. Routed to team_190 for R2 re-check (AC-U4-06 only)."
     validator: team_100
-  notes: "WP-UI-patch04 BUILT + QA + DEPLOYED LIVE; L-GATE_V R1 FAIL (AC-U4-06 nav clobber)
-    REMEDIATED 2026-05-30 (build a7a787a, live-verified) → R2 re-check routed to team_190
-    (non-Claude, IR#1). 6 defects addressed: broken links 72→0; persistent 6 defects addressed: broken links 72→0; persistent
+  - gate: L-GATE_V
+    result: PASS
+    round: 2
+    date: "2026-05-30"
+    reviewed_commit: "a7a787a"
+    validated_head: "6e2c654"
+    notes: "team_190 (non-Claude) L-GATE_V R2 PASS. Narrow re-check: a7a787a touches only
+      crop_calendar.php + book_crop.php; live /crop-book/arugula + /crop-book/lettuce show
+      crop-book nav active-state + secondary sub-nav; /market/ correctly omits the crop-book
+      sub-nav; arugula species-first with varieties last; live crawl 102 internal links 0 404s;
+      composer test 63/63; php -l clean both files. AC-U4-06 RESOLVED. Verdict:
+      _archive/SFA-S003-P002-WP-UI-patch04/team_190/L-GATE_V_VERDICT_R2_v1.0.0.md."
+    validator: team_190
+  notes: "WP-UI-patch04 COMPLETE — LOD500_LOCKED 2026-05-30 via team_100 ADR042 closure after
+    team_190 L-GATE_V R2 PASS (non-Claude; R1 FAIL on AC-U4-06 nav clobber remediated at a7a787a).
+    DEPLOYED LIVE to uPress https://sfa.nimrod.bio/crop-book/. 6 defects addressed: broken links 72→0; persistent 6 defects addressed: broken links 72→0; persistent
     global nav; full crop data (identity/calendar/agronomy/harvest/storage/companions) on a
     sectioned species-first detail (varieties last); full-width layout; landing grid + disabled
     planned modules. P2 follow-ups: re-seed crop_cover_crops (junk source); market→crop-book
@@ -3005,6 +3020,21 @@ work_packages:
       issued with approved catalog attached. LOD400 locks to v1.0.0 and routes to
       team_190 L-GATE_S once team_35 mockups are embedded + team_00 approves. SPEC-mode
       session: no build/deploy/governance edits."
+    validator: team_100
+  - gate: L-GATE_S
+    result: PASS
+    scope: backend
+    date: "2026-05-30"
+    notes: "team_00 directive 2026-05-30: progress server-side infrastructure in parallel
+      with team_35's UI design. team_100 (delegated L-GATE_S) issues a SCOPED PASS for the
+      UI-INDEPENDENT backend sections of LOD400 (§2-§6, §9 steps 1-6, AC-01..09 + AC-12):
+      field_policy wirings (days_in_nursery_cell + succession_interval_weeks), assumptions.py
+      registry, calculators.py (14 pure fns) + tests, calculator_meta.py, ingest contract.
+      Precision gate satisfied for these sections (exact signatures/formulas/ACs). UI sections
+      (§7/§10, AC-10/11/13) REMAIN at full-L-GATE_S IN_PROGRESS pending team_35 mockups.
+      Build dispatched to team_10 (Sonnet, IR#1): DISPATCH_sfa_build_BACKEND_2026-05-30_v1.0.0.md.
+      Server DB alignment (waldhomeserver Postgres 034→head) folded into this infra push
+      per team_00."
     validator: team_100
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
