@@ -3013,9 +3013,13 @@ work_packages:
       canonical unit registry + naming convention + canonical enums; per-bed-m yield + elemental
       nutrients canonical (oxide/per-m² derived); compute-don't-store (plants_per_m2, avg_revenue);
       full current→canonical field registry (KEEP/RENAME/DERIVE/→ATTR/DEPRECATE-COL/DQ); future-vision
-      namespace (plan_/task_/sale_/op_); 8-phase migration plan; 3 open questions for team_00.
-      Awaiting team_00 review → then Migration WP + corrected WP-CB-1 LOD400 field layer."
+      namespace (plan_/task_/sale_/op_); 8-phase migration plan. team_00 resolved the 3 open
+      questions in-session (canon v1.0.0: nursery=sow→field total; physical column DROP; per-m²
+      linked to bed_width AssumptionField). L-GATE_S mandate issued to team_190 (non-Claude, IR#1):
+      _COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_2026-05-30_v1.0.0.md
+      (Target A = Canon L-GATE_S; Target B = WP-CB-1 backend independent build verification)."
     validator: team_100
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_2026-05-30_v1.0.0.md"
   notes: "OPENED 2026-05-30. Foundational data-model architecture — SSoT for how crop knowledge is
     named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
     by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model
