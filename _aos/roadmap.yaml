@@ -2971,11 +2971,60 @@ work_packages:
 # Catalog APPROVED by team_00 2026-05-30 (14 calcs). Schema additions reduced to 2 enrichment
 # wirings (germination_rate became an AssumptionField default 90%, not a column).
 # Module boundary: agronomic knowledge + calculators ONLY — CB-2..CB-5 are FUTURE consumers.
+# WP-CB-0 (Data Model Canon) added 2026-05-30 as a PREREQUISITE — team_00 directive
+# "data structure must be precise/intuitive/future-proof"; CB-1 build PAUSED pending it.
 # ============================================================================
+
+- id: SFA-S003-P004-WP-CB-0
+  label: "ספר גידולים: Crop Data Model Canon (field taxonomy, attributes layer, units/enums, migration)"
+  status: ACTIVE
+  phase: design
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_S
+  lod_status: LOD200_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-30"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P002-WP-A"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-30"
+    notes: "team_00 directive 2026-05-30 (in-session): 'the crop data structure must be precise,
+      smart, intuitive — otherwise huge technical debt; examine the long range and prepare the
+      data to serve the big future vision.' Triggered by team_100 field-mapping findings (live DB
+      cross-check) exposing accreted debt: unit chaos (°C/celsius/C), duplicate-concept fields
+      (yield per-bed-m vs per-m²; nutrient elemental vs oxide), computed-as-stored (plants_per_m2),
+      no layer-ownership rule, categoricals stranded unreconciled, enum chaos (direct_seed/direct_sow,
+      half-hardy/semi_hardy), identity pollution. team_00 decisions: (1) full Canon FIRST — pause
+      calculator/UI build; (2) per-bed-meter canonical yield (derive per-m²); (3) uniform attributes
+      layer for categoricals (single-best + provenance + confidence)."
+    validator: team_00
+  - gate: L-GATE_S
+    result: IN_PROGRESS
+    date: "2026-05-30"
+    notes: "team_100 authored LOD200 Crop Data Model Canon v0.1.0 (DRAFT) grounded in live DB
+      inventory (head 057): 6-type field taxonomy (T1 reconciled-numeric / T2 categorical / T3 list
+      / T4 computed / T5 identity / T6 provenance) + binding layer-ownership rule; NEW crop_attribute
+      table (uniform single-best+provenance for categoricals); crop-baseline+variety-override;
+      canonical unit registry + naming convention + canonical enums; per-bed-m yield + elemental
+      nutrients canonical (oxide/per-m² derived); compute-don't-store (plants_per_m2, avg_revenue);
+      full current→canonical field registry (KEEP/RENAME/DERIVE/→ATTR/DEPRECATE-COL/DQ); future-vision
+      namespace (plan_/task_/sale_/op_); 8-phase migration plan; 3 open questions for team_00.
+      Awaiting team_00 review → then Migration WP + corrected WP-CB-1 LOD400 field layer."
+    validator: team_100
+  notes: "OPENED 2026-05-30. Foundational data-model architecture — SSoT for how crop knowledge is
+    named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
+    by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model
+    change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400."
+  profile: L0
 
 - id: SFA-S003-P004-WP-CB-1
   label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
-  status: ACTIVE
+  status: BUILD_PAUSED
   phase: spec
   track: A
   effort: LARGE
@@ -2985,7 +3034,10 @@ work_packages:
   assigned_validator: team_190
   created_at: "2026-05-30"
   milestone_ref: "S003"
-  depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04"]
+  build_paused_note: "Backend slice (calculators math) BUILT + committed fd7dfba (92 tests). Further
+    build (field-mapping correction + UI) PAUSED 2026-05-30 per team_00 pending WP-CB-0 (Crop Data
+    Model Canon) approval — the field layer will be corrected to the canon, not patched."
+  depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04", "SFA-S003-P004-WP-CB-0"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1/LOD400_spec.md"
   catalog_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/CALCULATOR_CATALOG_v1.0.0.md"
   schema_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/MANDATORY_FIELD_SCHEMA_v1.0.0.md"
