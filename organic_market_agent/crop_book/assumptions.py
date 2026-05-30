@@ -35,7 +35,7 @@ ASSUMPTIONS: dict[str, Assumption] = {
             "זרעים ישנים או שנשמרו בתנאים לא אידיאליים עשויים לנבוט פחות — "
             "הגבה את כמות הזריעה בהתאם."
         ),
-        post_url="https://nimrod.bio/seed-germination-rate/",
+        post_url="https://nimrod.bio/blog/seed-germination-rate/",  # nimrod-bio post 1051 (slug permanent)
     ),
     "bed_width": Assumption(
         key="bed_width",
@@ -46,7 +46,7 @@ ASSUMPTIONS: dict[str, Assumption] = {
             "תקן JM Fortier מתורגם לסנטימטרים שלמים. "
             "שנה אם הערוגות שלך רחבות יותר או פחות."
         ),
-        post_url="https://nimrod.bio/garden-bed-width-80cm/",
+        post_url="https://nimrod.bio/blog/garden-bed-width-80cm/",  # nimrod-bio post 1052 (slug permanent)
     ),
     "oversow": Assumption(
         key="oversow",
