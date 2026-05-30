@@ -2839,7 +2839,7 @@ work_packages:
   effort: LARGE
   current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
-  build_commit: "c7dc779"
+  build_commit: "a7a787a"
   production_url: "https://sfa.nimrod.bio/crop-book/"
   assigned_builder: team_10
   assigned_validator: team_190
@@ -2905,8 +2905,34 @@ work_packages:
       junk → page empty-state, re-seed follow-up). Open P2: market→crop-book cross-links resolve
       0 live despite 26 name matches in canonical DB (suppressed, no 404 — follow-up)."
     validator: team_100
-  notes: "WP-UI-patch04 BUILT + QA + DEPLOYED LIVE 2026-05-29 (build_commit c7dc779), pending
-    non-Claude L-GATE_V (team_190, IR#1). 6 defects addressed: broken links 72→0; persistent
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-05-29"
+    reviewed_commit: "c7dc779"
+    notes: "team_190 (non-Claude) L-GATE_V R1 FAIL — 1 blocker: AC-U4-06 fails live on
+      /crop-book/{slug} — crop-book nav active-state + secondary sub-nav missing on the
+      detail page. Root cause: crop_calendar.php reused $active for its month loop; included
+      into book_crop's scope inside the output buffer, it clobbered page-level $active='crop-book'
+      that compact() passes to _layout/nav. All else PASS/deferred: php -l clean, composer test
+      63/63, validate_aos 29/19/0, live crawl 102 links 0 internal 404s, arugula species-first
+      sections render varieties-last. Verdict: _COMMUNICATION/team_190/SFA-S003-P002-WP-UI-patch04/L-GATE_V_VERDICT_v1.0.0.md"
+    validator: team_190
+  - gate: L-GATE_V
+    result: REMEDIATED
+    round: "1.5"
+    date: "2026-05-30"
+    commit: "a7a787a"
+    notes: "team_100 remediation (Phase 3.5: 1 FIXED, 0 WAIVED, 0 OPEN). crop_calendar.php
+      month loop var renamed $active→$month_active; book_crop.php re-asserts $active='crop-book'
+      immediately before the layout render (defensive guard vs future macro shadowing). Deployed
+      a7a787a to uPress. Live verify: /crop-book/arugula shows crop-book active-state + all 4
+      sub-nav links (questions/family/table/cover-crops); /market/ correctly shows none.
+      composer test 63/0-fail. Routed to team_190 for R2 re-check (AC-U4-06 only)."
+    validator: team_100
+  notes: "WP-UI-patch04 BUILT + QA + DEPLOYED LIVE; L-GATE_V R1 FAIL (AC-U4-06 nav clobber)
+    REMEDIATED 2026-05-30 (build a7a787a, live-verified) → R2 re-check routed to team_190
+    (non-Claude, IR#1). 6 defects addressed: broken links 72→0; persistent 6 defects addressed: broken links 72→0; persistent
     global nav; full crop data (identity/calendar/agronomy/harvest/storage/companions) on a
     sectioned species-first detail (varieties last); full-width layout; landing grid + disabled
     planned modules. P2 follow-ups: re-seed crop_cover_crops (junk source); market→crop-book
