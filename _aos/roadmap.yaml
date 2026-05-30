@@ -2982,7 +2982,7 @@ work_packages:
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_S
-  lod_status: LOD200_DRAFT
+  lod_status: LOD200_APPROVED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-30"
@@ -3020,6 +3020,19 @@ work_packages:
       (Target A = Canon L-GATE_S; Target B = WP-CB-1 backend independent build verification)."
     validator: team_100
     mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_2026-05-30_v1.0.0.md"
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-05-30"
+    commit: "1222fe5"
+    notes: "team_190 (Codex/GPT-5, non-Claude — IR#1/#5 satisfied: builder Sonnet + architect
+      Opus ≠ validator Codex) L-GATE_S. 11/11 checks PASS. No blocker/contradiction/registry-gap/
+      unsafe-migration. 3 precision findings ADDRESSED INLINE (Phase 3.5, all FIXED, 0 OPEN/WAIVED;
+      validator pre-authorized advance — no R2): F-190-CB0-01 MAJOR (T2 enum/open-vocab policy →
+      canon §6.3a), F-190-CB0-02 MINOR (seeder_roller_plate explicit row → §7.3a), F-190-CB0-03
+      MINOR (live unit-variant normalization map → §6.1). Canon → v1.1.0, LOD200_APPROVED. Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_VERDICT_v1.0.0.md. NEXT: open
+      Migration WP (§8 phases) + correct WP-CB-1 LOD400 field layer to the canon."
+    validator: team_190
   notes: "OPENED 2026-05-30. Foundational data-model architecture — SSoT for how crop knowledge is
     named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
     by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model
@@ -3111,6 +3124,21 @@ work_packages:
       2 new fields) DEFERRED to server-DB-alignment step. AC-10/11/13 DEFERRED to UI slice (team_35).
       BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-1/BUILD_REPORT_v1.0.0.md."
     validator: team_100
+  - gate: L-GATE_B
+    result: PASS
+    scope: backend
+    pass: cross-engine-verification
+    date: "2026-05-30"
+    commit: "fd7dfba"
+    notes: "team_190 (Codex/GPT-5, non-Claude — IR#1) INDEPENDENT build verification of the backend
+      slice (Target B of the validation mandate). 5/5 checks PASS, 0 findings. Independent: focused
+      tests 92 passed; full crop_book suite 548 passed / 2 failed (matched expected pre-existing);
+      validate_aos 29/19/0; calculator math 14/14 recomputed PASS vs LOD400 §5; fd7dfba touches no
+      locked reconciler/model/migration file; constitutional package linter PASS. Field-mapping + UI
+      were OUT OF SCOPE (canon-deferred) per mandate. Cross-engine confirms the team_100-self-attested
+      L-GATE_B. Full WP-CB-1 L-GATE_V deferred until after the canon migration + UI. Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P004/TARGET_B_BACKEND_BUILD_VERIFICATION_VERDICT_v1.0.0.md."
+    validator: team_190
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
     approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified

@@ -5,8 +5,9 @@ gate: L-GATE_S (LOD200 — architecture/design)
 status: DRAFT — for team_00 review
 author: team_100 (Claude Code, Chief Architect)
 date: 2026-05-30
-version: v1.0.0
-status_note: "§13 open questions RESOLVED by team_00 in-session 2026-05-30 — see §13. Ready for team_190 L-GATE_S."
+version: v1.1.0
+status_note: "§13 open questions RESOLVED by team_00. team_190 L-GATE_S verdict PASS_WITH_FINDINGS (Codex/GPT-5, non-Claude, 11/11 checks) — 3 precision findings ADDRESSED INLINE (see §14 remediation matrix); no R2 (validator pre-authorized advance). Canon design APPROVED — ready for the Migration WP."
+lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_VERDICT_v1.0.0.md
 supersedes_field_layer_of: SFA-S003-P004-WP-CB-1 (LOD400 field mapping will be corrected to this canon)
 grounded_in: live oma-postgres inventory 2026-05-30 (head 057; 70 crops / 368 varieties / 2061 source_values / 5780 enrichment)
 team_00_decisions:
@@ -117,9 +118,26 @@ crop_attribute
 | ratio/percent | `pct` | `%` |
 | acidity | `pH` | — |
 | seed density | `seeds_per_g` | `seeds/g` |
-| count | `count` | — |
+| count | `count` | `rows`, *(blank)* |
+| yield (per m²) — **derived only** | `kg_per_m2` | `kg/m2`, `kg/m²` (live `yield_per_m2_kg` is DERIVE/drop — see §6.4) |
 
 A field's unit lives in a **units registry** keyed by canonical field name — units are **not** re-spelled per row. `source_values.unit` free-text is normalized to the registry on import.
+
+**Explicit live unit-variant normalization map (F-190-CB0-03 — every variant observed in the live DB must resolve):**
+
+| Field | Live `source_values.unit` variants | Canonical |
+|-------|-------------------------------------|-----------|
+| temperature (germination/storage) | `°C`, `celsius`, `C` | `°C` |
+| `rows_per_bed` | `rows`, *(blank/NULL)* | `count` |
+| `soil_ph_target` / `soil_ph_liming_threshold` | `pH`, *(blank/NULL)* | `pH` |
+| `yield_per_bed_m` (from `avg_yield_per_bed_m`) | `kg/m` | `kg_per_bed_m` |
+| `yield_per_m2_kg` (→ DERIVE/drop) | `kg/m2` | not stored; if a crop has ONLY per-m² data, convert **×0.8 → `kg_per_bed_m`** at migration |
+| nutrients | `kg/ha` | `kg_per_ha` |
+| seed density | `seeds/g` | `seeds_per_g` |
+| price | `ILS/kg`, `ILS/bunch`, `ILS/unit` | `ILS_per_<unit>` (qualifier preserved) |
+| ratio | `%` | `pct` |
+
+**Rule:** the migration's unit-normalize phase (§8.1) MUST leave **zero** `source_values.unit` values outside the canonical column; a blank/NULL unit is resolved by the field's registry default, not left blank.
 
 ### 6.2 Naming convention
 `<concept>[_<qualifier>][_<unit-suffix-only-when-it-disambiguates>]`, snake_case, no `avg_`/`default_` prefixes (averaging is a reconciliation detail, not part of the name). Examples: `yield_per_bed_m`, `spacing_in_row_cm`, `days_to_maturity`, `days_in_nursery`. Renames are aliased during migration to avoid breaking consumers (§8).
@@ -132,6 +150,25 @@ A field's unit lives in a **units registry** keyed by canonical field name — u
 | `growth_cycle` | `annual`, `biennial`, `perennial` | (null allowed) |
 | `category` | `vegetables`, `herbs`, `fruits`, `fruit_trees` | — |
 | month-lists (`sowing_months`, `transplant_months`) | array of ints 1–12 | CSV `"2,3,5"`→`[2,3,5]` |
+
+### 6.3a T2/T3 vocabulary policy — closed-enum vs open-vocab (F-190-CB0-01)
+
+Every T2/T3 attribute is **explicitly** one of two kinds. A builder never guesses:
+
+| Attribute | Kind | Canonical tokens / rule |
+|-----------|------|--------------------------|
+| `planting_method` | **CLOSED-ENUM** | `direct_seed`, `transplant`, `seed_tuber`, `slip`, `cutting` (§6.3) |
+| `frost_tolerance_class` | **CLOSED-ENUM** | `hardy`, `half_hardy`, `tender`, `very_tender` (§6.3) |
+| `growth_cycle` | **CLOSED-ENUM** | `annual`, `biennial`, `perennial` |
+| `category` | **CLOSED-ENUM** | `vegetables`, `herbs`, `fruits`, `fruit_trees` |
+| `harvest_unit` | **CLOSED-ENUM** | `kg`, `bunch`, `head`, `case`, `unit`, `seedling` |
+| `harvest_stage` | **CLOSED-ENUM** | `full_size`, `baby_leaf`, `head`, `plant_sale`, `seed` |
+| `storage_ethylene_sensitivity` | **CLOSED-ENUM** | `none`, `low`, `medium`, `high` (normalize free text → these 4) |
+| `sowing_months` / `transplant_months` | **LIST(int 1–12)** | CSV → int array (§6.3) |
+| `variety_provider` | **OPEN-VOCAB** | free text (seed-company names); normalize = trim + collapse whitespace + case-fold for dedup; **no closed set**; provenance still applies |
+| `rootstock_variety` | **OPEN-VOCAB** | free text (rootstock cultivar names); same normalization as above |
+
+**Rule:** CLOSED-ENUM attributes reject any token outside the set at import (log + route to DQ); OPEN-VOCAB attributes accept free text but apply the trim/case/dedup normalization and still carry full provenance in `crop_attribute.candidates`. The closed sets are versioned with the canon; adding a token is a canon revision, not an ad-hoc insert.
 
 ### 6.4 Yield & nutrients (team_00 decisions)
 - **Yield canonical = `yield_per_bed_m`** (kg per linear bed-meter; JM/farm-native). `yield_per_m2` is **derived** (`= yield_per_bed_m / bed_width_m`) using the **`bed_width` AssumptionField (0.8 m, user-adjustable)** as the single bed-width source system-wide (team_00, 2026-05-30). Drop `yield_per_m2_kg` as a stored fact.
@@ -181,6 +218,18 @@ Disposition: **KEEP** · **RENAME** · **DERIVE** (compute, stop storing) · **�
 
 ### 7.3 Identity (T5 → columns, KEEP)
 `name_he`, `name_en`, `scientific_name`, `family_id`, `category`, `growth_cycle`, `harvest_unit_default`, `first_fruit_year`, `is_grafted`, `oma_product_id`, `icon_url`, variety `name_he/name_en/is_default`. **DQ:** purge duration text leaked into variety `name_he` (D8).
+
+### 7.3a Operational / seeder config (T5 → `crop_varieties` columns, KEEP — explicit, F-190-CB0-02)
+Single-source operational machine settings — NOT multi-source facts, NOT attributes; they stay as identity/ops columns (never enriched/reconciled). Explicit rows so no field is inferred from a `seeder*` wildcard:
+
+| Current field | Canonical | Type | Disposition |
+|---|---|---|---|
+| seeder | seeder | T5 | KEEP (column) |
+| seeder_front_gear | seeder_front_gear | T5 | KEEP (column) |
+| seeder_rear_gear | seeder_rear_gear | T5 | KEEP (column) |
+| **seeder_roller_plate** | seeder_roller_plate | T5 | **KEEP (column)** — also appears in `source_values` (7 rows); the **column is SSoT**, the source_values rows are import residue → DQ-drop during migration |
+
+(The earlier `seeder*` wildcard note in §7.4 is now superseded by these explicit rows.)
 
 ### 7.4 Dropped as SSoT (T1/T2 facts duplicated on columns) — team_00: physically DROP
 `crop_varieties` columns that duplicate enrichment/attribute facts: `days_to_maturity`, `in_row_spacing_cm`, `rows_per_bed`, `avg_yield_per_bed_m`, `documented_price*`, `planting_method`, `planting_season`, `succession_interval_weeks`, `days_in_gh_total`, `harvest_window_*`, `plants_per_m2`(if column), `avg_revenue_per_bed_m` → **DROP-COL** (physically removed via Alembic migration; team_00 chose the clean end-state, accepting the schema migration). The enrichment/attribute layers become the unambiguous, only home. Seeder fields (`seeder*`) + identity (`name_*`, `is_default`, `is_grafted`, `harvest_unit_default`, `icon_url`, etc.) → KEEP. **Sequencing:** drop only AFTER all consumers read from enrichment/attributes (alias cycle §8.5), so no consumer breaks.
@@ -254,7 +303,21 @@ This contract is what WP-CB-1's LOD400 field layer will be corrected to, and wha
 2. **Duplicated columns** — **physically DROP** (clean end-state), via an Alembic migration that runs *last* (after consumers cut over). Accepted the migration over a read-cache. (§7.4, §8.6)
 3. **Nursery semantics** — `days_in_nursery` = **sow → field-transplant total** (the renamed `days_in_gh_total`); this is the value calculators #3/#4/#5 consume. The phase trio is `days_to_germinate` (sow→emerge) → `days_to_potting` (→pot-up) → `days_in_nursery` (sow→field, total). (§7.1)
 
-**Canon is finalized (v1.0.0). Ready for team_190 L-GATE_S, then a Migration WP executes §8.**
+**Canon is finalized. Ready for the Migration WP executes §8.**
+
+---
+
+## 14. L-GATE_S remediation matrix (Phase 3.5) — team_190 verdict addressed inline
+
+team_190 (Codex/GPT-5, non-Claude) issued **PASS_WITH_FINDINGS** (11/11 checks; no blocker/contradiction/registry-gap/unsafe-migration). Verdict: `_COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_VERDICT_v1.0.0.md`. All 3 precision findings **FIXED inline** (validator pre-authorized advancing — no R2):
+
+| Finding | Sev | Disposition | Fix |
+|---------|-----|-------------|-----|
+| **F-190-CB0-01** — incomplete enum/open-vocab policy for some T2 attributes | MAJOR | **FIXED** | §6.3a added: explicit CLOSED-ENUM vs OPEN-VOCAB policy for every T2/T3 attribute (incl. `storage_ethylene_sensitivity` closed set; `variety_provider`/`rootstock_variety` open-vocab with normalization) + reject/normalize rules |
+| **F-190-CB0-02** — `seeder_roller_plate` only via `seeder*` wildcard | MINOR | **FIXED** | §7.3a added: explicit ops/seeder registry rows incl. `seeder_roller_plate` (KEEP column = SSoT; source_values residue DQ-dropped) |
+| **F-190-CB0-03** — unit normalization needs explicit live variants | MINOR | **FIXED** | §6.1 extended: explicit live-variant map (`rows`/blank→`count`, pH blank→`pH`, `kg/m2`→derived) + "zero residual units" migration rule |
+
+**OPEN: none. WAIVED: none.** Canon advances to APPROVED; the Migration WP (§8) incorporates these refinements before any schema/data change (as the validator required).
 
 ---
 
