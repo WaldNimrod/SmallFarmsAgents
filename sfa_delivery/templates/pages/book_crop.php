@@ -288,4 +288,8 @@ ob_start();
 </div><!-- /.cb-crop-detail -->
 <?php
 $content = ob_get_clean();
+// Re-assert nav key: section macros are include'd into this scope inside the ob_*
+// buffer above and could shadow page-level vars (e.g. crop_calendar's month loop).
+// Guarantee _layout/nav receives the correct active section regardless.
+$active = 'crop-book';
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active', 'back_url'));

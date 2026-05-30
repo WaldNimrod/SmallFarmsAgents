@@ -54,11 +54,14 @@ if (empty($grouped)): ?>
             <?php endif; ?>
             <div class="cb-calendar__strip" dir="rtl" role="list" aria-label="לוח שנה <?= $h($ACTIVITY_LABELS[$type] ?? $type) ?>">
               <?php foreach ($MONTH_HE as $i => $mon):
-                  $active = !empty($months[$i]);
+                  // NOTE: must NOT be $active — that is the page-level nav key in book_crop's
+                  // scope (this macro is include'd, sharing scope). Clobbering it broke the
+                  // crop-book nav active-state + sub-nav on the detail page (AC-U4-06 / L-GATE_V).
+                  $month_active = !empty($months[$i]);
                   ?>
-                <span class="cb-calendar__month<?= $active ? ' cb-calendar__month--active' : '' ?>"
+                <span class="cb-calendar__month<?= $month_active ? ' cb-calendar__month--active' : '' ?>"
                       role="listitem"
-                      aria-label="<?= $h($mon) ?><?= $active ? ' — פעיל' : '' ?>"><?= $h($mon) ?></span>
+                      aria-label="<?= $h($mon) ?><?= $month_active ? ' — פעיל' : '' ?>"><?= $h($mon) ?></span>
               <?php endforeach; ?>
             </div>
             <?php if ($notes !== ''): ?>
