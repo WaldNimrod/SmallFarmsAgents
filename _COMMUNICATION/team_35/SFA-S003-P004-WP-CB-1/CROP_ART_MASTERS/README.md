@@ -34,13 +34,19 @@ Parked in `incoming/`: `beet_ALT_b2` + `cucumber_ALT_b2` (masters already exist)
 `DECOR_module_icons_calc_price_book` (3-icon module graphic — Calculator / Price-List / Crops-Book; candidate for
 the hub module grid, not a crop master).
 
-> **Correction note:** an interim commit (`ada847d`) was authored from mis-identified filenames and listed crops
-> with no actual master (basil/cauliflower/carrot/onion/leek/spinach/pea). It was corrected the same session — the
-> maps now list **only the 17 slugs that have a real served PNG** (every WC_ART/$wc_art_map ref verified to resolve).
+## Batch 3 — 2026-06-01 (5 files) → 4 new crop masters
+onion (969g1k) → wc-onion · leek (n8ahgv (1)) → wc-leek · basil (Gemini_Generated_Image_.png) → wc-basil ·
+carrot ((1)) → wc-carrot. Parked in `incoming/`: `melon_cantaloupe_ALT_b3` (sn0n49 — have wc-melon),
+`cabbage_ALT_b3` ((2) — have wc-cabbage; removed as exact dup).
+
+> **Correction note:** interim commits `ada847d` (mis-identified filenames; nonexistent masters) and a later
+> attempt where the **PHP map edits silently failed** (stale Edit match → maps stayed at the original 4 even though
+> PNGs were served) were both corrected by an authoritative Python rewrite of both maps. The maps now contain
+> EXACTLY the 21 served crop slugs — verified `served == mapped` with zero dangling refs and zero unmapped PNGs.
 
 ## Wiring status — APPLIED (WP-CB-1-patch01, team_00-directed, 2026-06-01)
-- 720px served derivatives in `sfa_delivery/public_assets/img/crops/` for all 17 crops + hero (`scripts/wc_derivatives.sh`).
-- `CropBookViewController::WC_ART` (crop hero) + `book_entry.php $wc_art_map` (crop cards) list exactly the 17 served slugs.
+- 720px served derivatives in `sfa_delivery/public_assets/img/crops/` for all 21 crops + hero (`scripts/wc_derivatives.sh`).
+- `CropBookViewController::WC_ART` (crop hero) + `book_entry.php $wc_art_map` (crop cards) list exactly the 21 served slugs.
 - `wc-cropbook-hero.png` placed for the crop-book central logo.
 - ICON_MAP unchanged — watercolor preferred when present; the 10-glyph sprite stays the fallback (no broken `<use>`).
 - ⚠ Touches WP-CB-1 LOD500_LOCKED files (WC_ART/$wc_art_map) — chartered **WP-CB-1-patch01** scope, flagged for

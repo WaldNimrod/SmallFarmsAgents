@@ -171,12 +171,29 @@ final class CropBookViewController
         ]));
     }
 
-    /** WP-CB-1: watercolor art mapping (crop slug → wc-*.png) */
+    /** WP-CB-1-patch01: watercolor art mapping (crop slug -> wc-*.png). Only slugs with a real served PNG; others fall back to the icon sprite. */
     private const WC_ART = [
-        'lettuce'  => 'wc-lettuce.png',
-        'radish'   => 'wc-radish.png',
-        'parsley'  => 'wc-parsley.png',
-        'dill'     => 'wc-dill.png',
+        'lettuce' => 'wc-lettuce.png',
+        'radish' => 'wc-radish.png',
+        'parsley' => 'wc-parsley.png',
+        'dill' => 'wc-dill.png',
+        'tomato' => 'wc-tomato.png',
+        'cucumber' => 'wc-cucumber.png',
+        'beet' => 'wc-beet.png',
+        'pepper' => 'wc-pepper.png',
+        'broccoli' => 'wc-broccoli.png',
+        'cabbage' => 'wc-cabbage.png',
+        'chard' => 'wc-chard.png',
+        'eggplant' => 'wc-eggplant.png',
+        'fennel' => 'wc-fennel.png',
+        'garlic' => 'wc-garlic.png',
+        'kale' => 'wc-kale.png',
+        'scallion' => 'wc-scallion.png',
+        'leek' => 'wc-leek.png',
+        'melon' => 'wc-melon.png',
+        'onion' => 'wc-onion.png',
+        'basil' => 'wc-basil.png',
+        'carrot' => 'wc-carrot.png',
     ];
 
     public function detail(Request $request, Response $response, array $args): Response

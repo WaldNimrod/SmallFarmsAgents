@@ -76,7 +76,7 @@ $view  = (string)($view  ?? 'cards');
 $total = (int)($total ?? count($crops));
 
 // Watercolor art mapping
-$wc_art_map = ['lettuce'=>'wc-lettuce.png','radish'=>'wc-radish.png','parsley'=>'wc-parsley.png','dill'=>'wc-dill.png'];
+$wc_art_map = ['lettuce'=>'wc-lettuce.png', 'radish'=>'wc-radish.png', 'parsley'=>'wc-parsley.png', 'dill'=>'wc-dill.png', 'tomato'=>'wc-tomato.png', 'cucumber'=>'wc-cucumber.png', 'beet'=>'wc-beet.png', 'pepper'=>'wc-pepper.png', 'broccoli'=>'wc-broccoli.png', 'cabbage'=>'wc-cabbage.png', 'chard'=>'wc-chard.png', 'eggplant'=>'wc-eggplant.png', 'fennel'=>'wc-fennel.png', 'garlic'=>'wc-garlic.png', 'kale'=>'wc-kale.png', 'scallion'=>'wc-scallion.png', 'leek'=>'wc-leek.png', 'melon'=>'wc-melon.png', 'onion'=>'wc-onion.png', 'basil'=>'wc-basil.png', 'carrot'=>'wc-carrot.png'];
 
 ob_start();
 ?>
