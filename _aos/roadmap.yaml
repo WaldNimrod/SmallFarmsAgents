@@ -3091,11 +3091,12 @@ work_packages:
 - id: SFA-S003-P004-WP-CB-MIG
   label: "ספר גידולים: Crop Data Model Migration (execute the LOCKED Canon — 8 phases)"
   status: ACTIVE
-  phase: spec
+  phase: build
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
+  build_commit: "0247a95"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
@@ -3178,11 +3179,19 @@ work_packages:
       dropped, crop_attribute populated (9 attrs), 0 stored derived, head 059, pytest 631 pass / 2 fail
       (genuine long-standing pre-existing) / validate_aos 0 FAIL, no dropped-col refs in consumers,
       reconciler/enrichment_runner untouched. BUILD_REPORT (+ AC-05 + TEST-FIXTURE correctives):
-      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/BUILD_REPORT_v1.0.0.md. DATA GAPS for team_00
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/BUILD_REPORT_v1.0.0.md. Two DATA GAPS logged
       (not defects): season_window 0 rows (planting_season NULL for all 368 varieties); 50 nursery-trio
-      violations (JMF vs Tend semantic mismatch). Coverage: COMPLETE 2/70, PARTIAL 68/70. NEXT: team_190
-      L-GATE_V (non-Claude, final) — thorough review warranted given the build defects caught."
+      violations (JMF vs Tend semantic mismatch). Coverage: COMPLETE 2/70, PARTIAL 68/70."
     validator: team_100
+  - gate: L-GATE_V
+    result: IN_PROGRESS
+    date: "2026-05-31"
+    notes: "L-GATE_V mandate issued to team_190 (non-Claude, IR#1). Thorough independent re-verification
+      warranted (build self-misreported 2 defects). Mandate:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-V_2026-05-31_v1.0.0.md.
+      On PASS: LOD500_LOCKED; WP-CB-1 unpauses (field layer corrected)."
+    validator: team_100
+    lgate_v_mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-V_2026-05-31_v1.0.0.md"
   notes: "OPENED 2026-05-31. LOD400_LOCKED 2026-05-31 (L-GATE_S R2 PASS); BUILT + verified 2026-05-31
     (L-GATE_B, 2 team_100-caught correctives). Executes the LOCKED Crop Data
     Model Canon against live data (dev oma-postgres
