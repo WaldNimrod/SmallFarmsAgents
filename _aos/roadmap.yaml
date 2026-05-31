@@ -3130,6 +3130,30 @@ work_packages:
       design, WP-CB-1 field-layer correction, derive math, constraints, precision, ACs, risks)."
     validator: team_100
     mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_2026-05-31_v1.0.0.md"
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    round: 1
+    date: "2026-05-31"
+    notes: "team_190 (Codex/GPT-5, non-Claude — IR#1) L-GATE_S R1. 10/10 checks. Canon faithfulness,
+      phase-order safety, crop_attribute design, WP-CB-1 field-layer correction, constraints, risk
+      coverage all PASS. No canon re-decision / production touch / ungated drop / loss transform.
+      5 findings ADDRESSED INLINE (LOD400 v0.2.0, all FIXED, 0 OPEN/WAIVED): F-190-MIG-01 MAJOR
+      (column-origin attrs + harvest_unit/stage → Phase 3/AC-04); F-190-MIG-02 MAJOR (storage_life_text
+      DROP → Phase 7/AC-09); F-190-MIG-03 MAJOR (nursery companion renames → Phase 5 + canonical trio
+      Phase 7); F-190-MIG-04 MINOR (AC-03 closed-enum/open-vocab scoping); F-190-MIG-05 INFO ('last
+      destructive phase' wording). Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG/WP-CB-MIG_LGATE-S_VERDICT_v1.0.0.md."
+    validator: team_190
+  - gate: L-GATE_S
+    result: IN_PROGRESS
+    round: 2
+    date: "2026-05-31"
+    notes: "Per Canon precedent (team_00: cross-engine-confirm fixes, no self-certify), R2 re-check
+      issued to team_190 (non-Claude, NARROW: confirm the 5 v0.2.0 remediations only). LOD400 held
+      LOD400_DRAFT (NOT locked) until R2 PASS. Mandate:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_R2_2026-05-31_v1.0.0.md."
+    validator: team_100
+    r2_mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_R2_2026-05-31_v1.0.0.md"
   notes: "OPENED 2026-05-31. Executes the LOCKED Crop Data Model Canon against live data (dev oma-postgres
     head 057). On completion: live data ⟶ canonical taxonomy/names/units/enums/layers; crop_attribute
     layer live; derived/duplicate fields removed; WP-CB-1 field layer corrected (Phase 5). Independent of
