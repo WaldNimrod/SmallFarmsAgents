@@ -3219,12 +3219,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-1
   label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
-  status: BUILD_PAUSED
+  status: BUILDING
   phase: spec
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_S
-  lod_status: LOD400_DRAFT
+  lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-30"
@@ -3318,6 +3318,29 @@ work_packages:
       L-GATE_B. Full WP-CB-1 L-GATE_V deferred until after the canon migration + UI. Verdict:
       _COMMUNICATION/team_190/SFA-S003-P004/TARGET_B_BACKEND_BUILD_VERIFICATION_VERDICT_v1.0.0.md."
     validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    scope: full
+    date: "2026-05-31"
+    notes: "team_100 (delegated L-GATE_S) lifts the UI sections to PASS. Both unblockers met:
+      (a) WP-CB-MIG corrected the field layer (LOD500_LOCKED 053313a); (b) team_35 LOD300 landed.
+      Intake: HANDOFF_PACKAGE v1.0.0 extracted + checksummed + indexed (documentation/09-design-system/),
+      embedded into LOD400 §10; LOD400 locked v0.9.0 → v1.0.0 (3ca6980). Field binding authored:
+      FIELD_INTERFACE_MAP v1.0.0 (39dabfa) — design keys → migrated data model + defensive alias resolver;
+      tau=0.40 ships v1 (design Q4 tau=0.50 = fast-follow). F-CB1-UI-01 (field_policy old-name drift on 4
+      fields) logged → routed to WP-CB-MIG2; UI made drift-immune via resolver. UI sections §7/§10 +
+      AC-10/11/13 now PASS at spec. Build dispatched to the UI build slice (team_10 stand-in, IR#1)."
+    validator: team_100
+  - gate: L-GATE_B
+    result: IN_PROGRESS
+    scope: ui
+    date: "2026-05-31"
+    notes: "UI slice dispatched (DISPATCH_sfa_build_UI_2026-05-31_v1.0.0.md): port tokens/cropbook CSS+JS
+      into sfa_delivery/public_assets; new macros (assumption_field, calc_panel, prov_value, depth_tabs,
+      audience_switch, rotation_hint); pages book_index (Cards/Table+filters), book_crop (3 depths,
+      13-topic order), /calc dashboard; endpoints GET /api/v1/assumptions + POST /api/v1/contribute
+      (request-info); JS↔Python calc parity (#1,7,8,9,10,12). Branch claude/wp-cb-1-ui-2026-05-31."
+    validator: team_100
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
     approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified
@@ -3326,6 +3349,42 @@ work_packages:
     reused (crop_field_enrichment.value_best = one winning value) — no new resolution engine.
     Hosting canon: uPress serves, never the home server. NEXT: server DB align (034→head, AC-02/04)
     ∥ team_35 LOD300 → embed section 10 → team_00 approve → team_190 L-GATE_V (non-Claude)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-MIG2
+  label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
+  status: ELIGIBLE
+  phase: spec
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-31"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-MIG"]
+  canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
+  origin_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/spec/OPEN_ISSUES.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-31"
+    notes: "team_00 directive (this session): adopt FULL the team_35 OPEN_ISSUES gap-analysis —
+      the 13-topic taxonomy (CROP_TOPICS) as canonical ordering + 7 field groups (seeder_model/
+      seeder_settings [mostly existing identity cols — formalize], irrigation_type + drip_lines_per_bed,
+      root_depth_class, common_pests + foliar_feeding_program [new topic מזיקים], sale_unit + unit_size
+      [also resolves design Q7 price-unit], labor_rate_harvest/wash, plantings_per_season +
+      harvest_weeks_span) + ratify needs_summer_shade (3 levels). Opened as a SEPARATE gated WP because
+      the data layer is LOCKED (WP-CB-0 Canon + WP-CB-MIG LOD500). UI (WP-CB-1) is NOT blocked: it renders
+      these as 'מוצע/proposed' until this migration lands, then lights them up. Also folds the F-CB1-UI-01
+      field_policy old-name drift (avg_yield_per_bed_m/documented_price/in_row_spacing_cm/planting_season)
+      into the canon-alignment scope. Effort LARGE: Canon amendment v1.3.0 + Alembic head→next + crop_attribute/
+      enrichment wiring + field_policy entries + sfa_ingest_push whitelist + PR backfill from 37 MasterClass MDs."
+    validator: team_00
+  notes: "OPENED 2026-05-31. Schema-expansion follow-on to WP-CB-MIG. NEXT: team_100 authors Canon
+    amendment (v1.3.0) + LOD400 migration spec → team_190 L-GATE_S (non-Claude, IR#1). Also closes the
+    season_window data gap (0 rows — planting_season NULL) flagged in WP-CB-MIG L-GATE_V."
   profile: L0
 
 # ----------------------------------------------------------------------------
