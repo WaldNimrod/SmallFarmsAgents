@@ -195,6 +195,13 @@ final class CropBookV1MacroTest extends TestCase
         $this->assertStringContainsString('is-disabled', $out);
         $this->assertStringContainsString('reqinfo', $out, 'Disabled calc must have request-info CTA');
         $this->assertStringContainsString('🔒', $out);
+        // C6 / FIM §4 (F-190-CB1-V-01): disabled copy must show the resolved Hebrew label,
+        // never the raw DB key and never the literal "Array" from passing label()'s tuple to $h().
+        [$expectedLabel] = FieldRegistry::label('yield_per_bed_m');
+        $this->assertStringContainsString($expectedLabel, $out, 'Disabled copy must show resolved Hebrew label');
+        $this->assertStringNotContainsString('>Array<', $out, 'Must not render literal "Array"');
+        // The raw key may appear only inside the data-field machine hook, never in visible <b> copy.
+        $this->assertStringNotContainsString('<b>yield_per_bed_m', $out, 'Raw key must not appear in visible copy');
     }
 
     public function testCalcPanelNotDisabledForUnvalidated(): void

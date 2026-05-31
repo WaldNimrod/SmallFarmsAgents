@@ -78,7 +78,8 @@ $aud_cls    = $aud_class[$audience]  ?? 'tier--leaf';
       <span class="ic">🔒</span>
       <div>
         <h5>חסר שדה נדרש</h5>
-        <p>המחשבון יידלק כש<b><?= $h(FieldRegistry::label((string)($disabled_field['field_name'] ?? ''))) ?></b> יתמלא.</p>
+        <?php [$disabled_label_he] = FieldRegistry::label((string)($disabled_field['field_name'] ?? '')); ?>
+        <p>המחשבון יידלק כש<b><?= $h($disabled_label_he) ?></b> יתמלא.</p>
         <a class="reqinfo" href="#"
            data-field="<?= $h((string)($disabled_field['field_name'] ?? '')) ?>"
            data-crop="<?= $h($crop_slug) ?>"
