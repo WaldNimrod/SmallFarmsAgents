@@ -159,6 +159,84 @@ body {
 }
 
 /* ============================================================
+   WP-CB-1 additions — Crop Book v1 (additive, 2026-05-31)
+   --gj-* v2 white-green palette + --cb-* provenance tokens + Carmela font.
+   These extend the existing Cool Stone token set without breaking other pages.
+   ============================================================ */
+
+@font-face {
+  font-family: "Carmela";
+  src: url("/public_assets/fonts/Carmela.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+:root {
+  /* ── Crop Book v1 — white-green paper (v2 palette, used only by .cb-* / crop-book pages) ── */
+  --gj-paper:     #f8fbf8;
+  --gj-paper-2:   #eef4ee;
+  --gj-paper-3:   #dde8dd;
+  --gj-ink:       #1f2a22;
+  --gj-ink-soft:  #5d6b5e;
+  --gj-line:      #dce6dc;
+
+  /* ── Crop Book world accents (gj- namespace, v3.4) ── */
+  --gj-leaf:        #6f8a45;
+  --gj-leaf-deep:   #4d6a2c;
+  --gj-leaf-soft:   #9bb172;
+  --gj-tomato:      #c24f2c;
+  --gj-tomato-deep: #8e3018;
+  --gj-sun:         #d39a32;
+  --gj-sun-deep:    #a4711a;
+  --gj-soil:        #8b5d2f;
+  --gj-soil-deep:   #5a3c1a;
+  --gj-code:        #2d8a8c;
+  --gj-code-deep:   #1f5e60;
+
+  /* ── Provenance / complete-partial tokens (§4 FIM rule) ── */
+  --cb-validated:   var(--gj-leaf-deep);
+  --cb-unvalidated: var(--gj-sun-deep);
+  --cb-missing:     var(--gj-tomato-deep);
+  --cb-assume:      var(--gj-code);
+  --cb-assume-wash: #e3eeee;
+
+  /* ── Topic colors (13-topic taxonomy) ── */
+  --t-nursery: var(--gj-code-deep);
+  --t-grow:    var(--gj-leaf-deep);
+  --t-harvest: var(--gj-sun-deep);
+  --t-yield:   var(--gj-tomato-deep);
+  --t-inputs:  var(--gj-soil-deep);
+  --t-pest:    #7a3b6b;
+
+  /* ── Crop Book typography ── */
+  --gj-font-body:  "Assistant", "Heebo", system-ui, sans-serif;
+  --gj-font-head:  "Frank Ruhl Libre", "David Libre", "Times New Roman", serif;
+  --gj-font-mono:  "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --gj-font-brand: "Carmela", "Frank Ruhl Libre", serif;
+
+  /* ── Crop Book radii ── */
+  --gj-r-s:    8px;
+  --gj-r-m:    12px;
+  --gj-r-l:    14px;
+  --gj-r-xl:   18px;
+  --gj-r-pill: 99px;
+
+  /* ── Crop Book shadows (green-neutral) ── */
+  --gj-shadow-s: 0 1px 3px rgba(30, 50, 35, .05);
+  --gj-shadow-m: 0 4px 14px rgba(30, 55, 38, .07);
+  --gj-shadow-l: 0 8px 28px rgba(28, 55, 38, .11);
+
+  /* ── Crop Book spacing (4-pt) ── */
+  --gj-sp-1: 4px;
+  --gj-sp-2: 8px;
+  --gj-sp-3: 12px;
+  --gj-sp-4: 16px;
+  --gj-sp-5: 24px;
+  --gj-sp-6: 32px;
+  --gj-sp-7: 48px;
+}
+
+/* ============================================================
    CHANGELOG
    v3.3 · 22.05.2026 · world rename: שטח → אדמה (אקולוגי, חקלאי)
         - tokens identical (--w-soil-* retained semantic alignment)
