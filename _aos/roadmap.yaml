@@ -3162,7 +3162,29 @@ work_packages:
       **LOD400 LOCKED (LOD400_LOCKED, v1.0.0).** team_10 may begin the phase-by-phase build. Verdict:
       _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG/WP-CB-MIG_LGATE-S_R2_VERDICT_v1.0.0.md."
     validator: team_190
-  notes: "OPENED 2026-05-31. LOD400_LOCKED 2026-05-31 (L-GATE_S R2 PASS). Executes the LOCKED Crop Data
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-05-31"
+    commit: "0247a95"
+    notes: "team_10 (Sonnet) built + ran all 8 phases (oma-postgres head 057→059). team_100 (Opus)
+      INDEPENDENT verification caught 2 defects the build self-attested PASS/pre-existing — BOTH FIXED
+      via correctives: (1) AC-05 FAIL — derived fields (yield_per_m2_kg/p2o5/k2o/plants_per_m2)
+      regenerated because Phase 4 deleted enrichment but not source_values → Phase 8 re-enrich recreated
+      them; corrective: oxide→elemental safety + delete from both tables + fix migrate.py Phase 4 (a
+      `pass` stub); derived now 0/0, coverage preserved. (2) 19 'pre-existing' failures were NEW + hid
+      CRITICAL bugs: views.py read DROPPED columns → would AttributeError-crash every live HTTP request;
+      engine.py dropped days_to_maturity/planting_season from data.json → broke SPA filters. Both fixed
+      (read crop_attribute/crop_field_enrichment). VERIFIED END-STATE: units/enums canonical, 17 columns
+      dropped, crop_attribute populated (9 attrs), 0 stored derived, head 059, pytest 631 pass / 2 fail
+      (genuine long-standing pre-existing) / validate_aos 0 FAIL, no dropped-col refs in consumers,
+      reconciler/enrichment_runner untouched. BUILD_REPORT (+ AC-05 + TEST-FIXTURE correctives):
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/BUILD_REPORT_v1.0.0.md. DATA GAPS for team_00
+      (not defects): season_window 0 rows (planting_season NULL for all 368 varieties); 50 nursery-trio
+      violations (JMF vs Tend semantic mismatch). Coverage: COMPLETE 2/70, PARTIAL 68/70. NEXT: team_190
+      L-GATE_V (non-Claude, final) — thorough review warranted given the build defects caught."
+    validator: team_100
+  notes: "OPENED 2026-05-31. LOD400_LOCKED 2026-05-31 (L-GATE_S R2 PASS); BUILT + verified 2026-05-31
+    (L-GATE_B, 2 team_100-caught correctives). Executes the LOCKED Crop Data
     Model Canon against live data (dev oma-postgres
     head 057). On completion: live data ⟶ canonical taxonomy/names/units/enums/layers; crop_attribute
     layer live; derived/duplicate fields removed; WP-CB-1 field layer corrected (Phase 5). Independent of
