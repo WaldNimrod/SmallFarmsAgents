@@ -3124,8 +3124,12 @@ work_packages:
       (units/enums/field_registry/derive) + attribute_models + attribute_resolver (mirrors
       enrichment_runner, NOT modified). 12 ACs; per-phase dry-run+rollback; DB dump before rewriting
       phases. Dev-only (Mac oma-postgres); no production/server action. SPEC ONLY — routes to team_190
-      L-GATE_S (non-Claude) before any build."
+      L-GATE_S (non-Claude) before any build. L-GATE_S mandate issued to team_190:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_2026-05-31_v1.0.0.md
+      (10-check: canon faithfulness, completeness, phase-order safety/drop-last-gated, crop_attribute
+      design, WP-CB-1 field-layer correction, derive math, constraints, precision, ACs, risks)."
     validator: team_100
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_2026-05-31_v1.0.0.md"
   notes: "OPENED 2026-05-31. Executes the LOCKED Crop Data Model Canon against live data (dev oma-postgres
     head 057). On completion: live data ⟶ canonical taxonomy/names/units/enums/layers; crop_attribute
     layer live; derived/duplicate fields removed; WP-CB-1 field layer corrected (Phase 5). Independent of
