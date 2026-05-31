@@ -3044,6 +3044,30 @@ work_packages:
       Canon held at LOD200_R2_PENDING (NOT locked) until R2 PASS. Supersedes the R1 'no R2' note."
     validator: team_100
     r2_mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_R2_2026-05-30_v1.0.0.md"
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    round: 2
+    date: "2026-05-31"
+    notes: "team_190 (Cursor Composer, non-Claude — IR#1) R2 re-check of the 3 inline fixes.
+      F-190-CB0-02 RESOLVED. F-190-CB0-01 + F-190-CB0-03 INSUFFICIENT — the R1 POLICY fixes held,
+      but the independent LIVE-DATA gate caught 2 stranded variants the fixes didn't enumerate:
+      frost_tolerance_class live value 'half-hardy' (hyphen, 1 row) absent from the collapse map;
+      avg_yield_per_bed_m live unit bare 'kg' (63 rows) absent from the §6.1 map. ERRATA APPLIED
+      inline (Canon v1.2.0): §6.3 += half-hardy→half_hardy; §6.1 += kg→kg_per_bed_m; §12 zero-assertions
+      updated. team_100 ran the EXHAUSTIVE live gate (all closed-enum values + all units) → confirmed
+      these are the ONLY 2 stranded variants. Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_R2_VERDICT_v1.0.0.md."
+    validator: team_190
+  - gate: L-GATE_S
+    result: IN_PROGRESS
+    round: 3
+    date: "2026-05-31"
+    notes: "R3 re-check issued to team_190 (non-Claude) — ultra-narrow: confirm the 2 errata close
+      the live gate (half-hardy collapse + kg→kg_per_bed_m). Canon stays LOD200_R2_PENDING (NOT
+      locked) until R3 PASS. Mandate:
+      _COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_R3_2026-05-31_v1.0.0.md."
+    validator: team_100
+    r3_mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004/VALIDATION_MANDATE_team190_R3_2026-05-31_v1.0.0.md"
   notes: "OPENED 2026-05-30. Foundational data-model architecture — SSoT for how crop knowledge is
     named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
     by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model

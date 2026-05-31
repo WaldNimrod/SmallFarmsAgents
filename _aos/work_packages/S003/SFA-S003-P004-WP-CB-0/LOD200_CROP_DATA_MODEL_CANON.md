@@ -5,9 +5,9 @@ gate: L-GATE_S (LOD200 — architecture/design)
 status: DRAFT — for team_00 review
 author: team_100 (Claude Code, Chief Architect)
 date: 2026-05-30
-version: v1.1.0
-status_note: "§13 open questions RESOLVED by team_00. team_190 L-GATE_S verdict PASS_WITH_FINDINGS (Codex/GPT-5, non-Claude, 11/11 checks) — 3 precision findings ADDRESSED INLINE (see §14 remediation matrix); no R2 (validator pre-authorized advance). Canon design APPROVED — ready for the Migration WP."
-lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_VERDICT_v1.0.0.md
+version: v1.2.0
+status_note: "§13 open questions RESOLVED by team_00. L-GATE_S R1 PASS_WITH_FINDINGS (3 fixed inline). R2 PASS_WITH_FINDINGS (Cursor Composer, non-Claude): F-190-CB0-02 RESOLVED; F-190-CB0-01 + F-190-CB0-03 INSUFFICIENT (live-data variants half-hardy + bare kg) — ERRATA APPLIED in v1.2.0 (§6.1/§6.3/§12, see §14). Canon held LOD200_R2_PENDING → R3 re-check issued. Not locked until R3 PASS."
+lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_R2_VERDICT_v1.0.0.md
 supersedes_field_layer_of: SFA-S003-P004-WP-CB-1 (LOD400 field mapping will be corrected to this canon)
 grounded_in: live oma-postgres inventory 2026-05-30 (head 057; 70 crops / 368 varieties / 2061 source_values / 5780 enrichment)
 team_00_decisions:
@@ -130,7 +130,7 @@ A field's unit lives in a **units registry** keyed by canonical field name — u
 | temperature (germination/storage) | `°C`, `celsius`, `C` | `°C` |
 | `rows_per_bed` | `rows`, *(blank/NULL)* | `count` |
 | `soil_ph_target` / `soil_ph_liming_threshold` | `pH`, *(blank/NULL)* | `pH` |
-| `yield_per_bed_m` (from `avg_yield_per_bed_m`) | `kg/m` | `kg_per_bed_m` |
+| `yield_per_bed_m` (from `avg_yield_per_bed_m`) | `kg` (live, 63 rows), `kg/m` | `kg_per_bed_m` (value is already per-bed-m; bare `kg` is a sloppy unit string, not a re-scale) |
 | `yield_per_m2_kg` (→ DERIVE/drop) | `kg/m2` | not stored; if a crop has ONLY per-m² data, convert **×0.8 → `kg_per_bed_m`** at migration |
 | nutrients | `kg/ha` | `kg_per_ha` |
 | seed density | `seeds/g` | `seeds_per_g` |
@@ -146,7 +146,7 @@ A field's unit lives in a **units registry** keyed by canonical field name — u
 | Attribute | Canonical tokens | Collapse (from) |
 |-----------|------------------|-----------------|
 | `planting_method` | `direct_seed`, `transplant`, `seed_tuber`, `slip`, `cutting` | `direct_sow`→`direct_seed` |
-| `frost_tolerance_class` | `hardy`, `half_hardy`, `tender`, `very_tender` | `semi_hardy`→`half_hardy` |
+| `frost_tolerance_class` | `hardy`, `half_hardy`, `tender`, `very_tender` | `semi_hardy`→`half_hardy`, `half-hardy`→`half_hardy` |
 | `growth_cycle` | `annual`, `biennial`, `perennial` | (null allowed) |
 | `category` | `vegetables`, `herbs`, `fruits`, `fruit_trees` | — |
 | month-lists (`sowing_months`, `transplant_months`) | array of ints 1–12 | CSV `"2,3,5"`→`[2,3,5]` |
@@ -288,8 +288,8 @@ This contract is what WP-CB-1's LOD400 field layer will be corrected to, and wha
 ---
 
 ## 12. Acceptance (for the canon's migration WP, after approval)
-- All `source_values.unit` ∈ the unit registry; zero `celsius`/`C` rows.
-- All T2 values ∈ canonical enums; zero `direct_sow`/`semi_hardy`.
+- All `source_values.unit` ∈ the unit registry; zero `celsius`/`C` rows; zero bare `kg` on `avg_yield_per_bed_m` (→ `kg_per_bed_m`).
+- All T2 values ∈ canonical enums; zero `direct_sow`, `semi_hardy`, `half-hardy`.
 - `crop_attribute` populated for the §7.2 set with provenance; calculators #4/#5/#6/#11 enable on crops that have the data.
 - No stored `yield_per_m2_kg` / oxide / `plants_per_m2` / `avg_revenue` (computed accessors instead).
 - Variety `name_he` free of duration pollution.
@@ -317,7 +317,18 @@ team_190 (Codex/GPT-5, non-Claude) issued **PASS_WITH_FINDINGS** (11/11 checks; 
 | **F-190-CB0-02** — `seeder_roller_plate` only via `seeder*` wildcard | MINOR | **FIXED** | §7.3a added: explicit ops/seeder registry rows incl. `seeder_roller_plate` (KEEP column = SSoT; source_values residue DQ-dropped) |
 | **F-190-CB0-03** — unit normalization needs explicit live variants | MINOR | **FIXED** | §6.1 extended: explicit live-variant map (`rows`/blank→`count`, pH blank→`pH`, `kg/m2`→derived) + "zero residual units" migration rule |
 
-**OPEN: none. WAIVED: none.** Canon advances to APPROVED; the Migration WP (§8) incorporates these refinements before any schema/data change (as the validator required).
+**OPEN: none. WAIVED: none.** (R1 disposition.)
+
+### 14.1 R2 re-check + errata (Cursor Composer, non-Claude — `..._R2_VERDICT_v1.0.0.md`)
+team_00 directed a formal R2 (no self-certify). R2 = **PASS_WITH_FINDINGS** — the R1 *policy* fixes hold, but the independent **live-data gate** caught two stranded variants the R1 fixes didn't enumerate:
+
+| Finding | R2 status | Live gap | Errata (v1.2.0) |
+|---------|-----------|----------|------------------|
+| F-190-CB0-02 (seeder_roller_plate) | **RESOLVED** | — | — |
+| F-190-CB0-01 (enums) | **INSUFFICIENT → FIXED** | `frost_tolerance_class` live value `half-hardy` (hyphen, 1 row) not in collapse map | §6.3 collapse += `half-hardy→half_hardy`; §12 zero-assertion updated |
+| F-190-CB0-03 (units) | **INSUFFICIENT → FIXED** | `avg_yield_per_bed_m` live unit bare `kg` (63 rows) not in §6.1 map | §6.1 += `kg→kg_per_bed_m`; §12 zero-assertion updated |
+
+team_100 ran the **exhaustive** live gate (all closed-enum values + all units) to confirm these are the **only** two stranded variants — no others. **R3 re-check issued** to team_190 to confirm the errata; Canon stays `LOD200_R2_PENDING` (not locked) until R3 PASS.
 
 ---
 
