@@ -3366,7 +3366,7 @@ work_packages:
       pre-existing. C1-C5,C7 PASS. V-03 (parity #7/#9/#12) MINOR non-blocking. Verdict:
       _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_v1.0.0.md.
   - gate: L-GATE_V
-    result: PENDING
+    result: FAIL
     round: 2
     date: "2026-06-01"
     commit: "6b4a819"
@@ -3379,6 +3379,21 @@ work_packages:
       prov_table.php tau=0.40 bar threshold (now backend-stamped is_low) + a leaked fence. composer 96/96; validate_aos 0 FAIL;
       constitutional CLEAN. Re-mandate to team_190 R2:
       _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-01_v1.0.0.md.
+  - gate: L-GATE_V
+    result: PENDING
+    round: 3
+    date: "2026-06-01"
+    commit: "b81fe09"
+    validator: team_190
+    notes: >
+      R2 (verdict ad2b180) = FAIL: F-190-CB1-V-02 RESOLVED but F-190-CB1-V-01 still broken —
+      calc_panel.php passed FieldRegistry::label()'s [label_he,explainer_he] tuple to \$h(),
+      rendering literal 'Array' instead of the Hebrew label. R3 fix (b81fe09): destructure the
+      tuple before escaping (pattern from book_crop.php:284) + PHPUnit now asserts the resolved
+      Hebrew label present / no 'Array' / no raw key in visible copy. Render smoke confirms;
+      composer 96/96 (281 assert; prior PHP warning gone); validate_aos 0 FAIL. Narrow 1-file
+      remediation. Re-mandate R3:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/VALIDATION_MANDATE_team190_LGATE-V_R3_2026-06-01_v1.0.0.md.
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
     approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified
