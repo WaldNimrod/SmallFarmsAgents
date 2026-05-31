@@ -1,32 +1,42 @@
 #!/usr/bin/env bash
 # wc_derivatives.sh — build 720px web derivatives of the watercolor crop masters.
-# Recipe verified byte-for-byte against the shipped wc-radish.png derivative:
-#   `sips -Z 720` (long-edge clamp, alpha preserved). No magick/pngquant needed.
+# Recipe: `sips -Z 720` (long-edge clamp, alpha preserved). No magick/pngquant needed.
 #
+# Master source order: CROP_ART_MASTERS/masters/ (new art) → HANDOFF_PACKAGE assets (original 4).
 # Usage: scripts/wc_derivatives.sh [slug ...]
-#   no args → rebuild all known masters
+#   no args → rebuild all masters found in masters/ + the original 4
 #   args    → rebuild only the named slugs (e.g. `tomato cucumber`)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SRC="$ROOT/_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/design/assets"
+SRC_NEW="$ROOT/_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/CROP_ART_MASTERS/masters"
+SRC_ORIG="$ROOT/_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/design/assets"
 DST="$ROOT/sfa_delivery/public_assets/img/crops"
 
 slugs=("$@")
 if [ ${#slugs[@]} -eq 0 ]; then
-  slugs=(lettuce radish parsley dill tomato cucumber)
+  # all masters present in either source (basename wc-<slug>.png → slug)
+  slugs=()
+  for d in "$SRC_NEW" "$SRC_ORIG"; do
+    [ -d "$d" ] || continue
+    for f in "$d"/wc-*.png; do
+      [ -f "$f" ] || continue
+      b="$(basename "$f")"; s="${b#wc-}"; s="${s%.png}"
+      case " ${slugs[*]:-} " in *" $s "*) ;; *) slugs+=("$s") ;; esac
+    done
+  done
 fi
 
 mkdir -p "$DST"
 for slug in "${slugs[@]}"; do
-  master="$SRC/wc-$slug.png"
+  master="$SRC_NEW/wc-$slug.png"
+  [ -f "$master" ] || master="$SRC_ORIG/wc-$slug.png"
   out="$DST/wc-$slug.png"
   if [ ! -f "$master" ]; then
-    echo "SKIP  wc-$slug — master missing ($master)"
+    echo "SKIP  wc-$slug — master not found in masters/ or handoff"
     continue
   fi
   sips -Z 720 "$master" --out "$out" >/dev/null
   sz=$(stat -f%z "$out")
-  dims=$(sips -g pixelWidth -g pixelHeight "$out" | awk '/pixelWidth|pixelHeight/{printf "%s ",$2}')
-  echo "OK    wc-$slug.png → ${dims}(${sz} bytes)"
+  echo "OK    wc-$slug.png (${sz} bytes)"
 done

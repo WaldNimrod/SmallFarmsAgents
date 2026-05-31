@@ -3484,17 +3484,18 @@ work_packages:
     scope: art-wiring
     date: "2026-06-01"
     notes: >
-      team_00-directed immediate art integration. Intake of nano-banana batches 1+2 (30 raw →
-      CROP_ART_MASTERS/incoming/; 20 crop masters + 1 book-hero promoted to masters/). 720px derivatives
-      built for 24 crops + wc-cropbook-hero (scripts/wc_derivatives.sh). WC_ART + book_entry $wc_art_map
-      extended with 20 new slugs (tomato/cucumber/beet/pepper + basil/cabbage/broccoli/cauliflower/eggplant/
-      carrot/garlic/onion/scallion/kale/chard/leek/spinach/pea/melon/fennel). wc-cropbook-hero promoted as
-      the book's central watercolor logo (team_00 style-consistency request). ICON_MAP unchanged (watercolor
-      preferred; sprite stays glyph fallback). composer 96/96; php -l clean; validate_aos 0 FAIL. NOTE: this
-      edits WP-CB-1 LOD500_LOCKED files (WC_ART/$wc_art_map) — chartered patch01 scope, flagged for team_190
-      patch01 L-GATE_V; ahead of patch01 formal L-GATE_S per team_00 directive. Parked: pepper alts +
-      ambiguous bulb (team_00 to ID). Remaining patch01 scope (V-03 parity, server-side filters, /calc export,
-      F-UI-01) NOT in this step.
+      team_00-directed immediate art integration. Intake of nano-banana batches 1+2 (22 raw →
+      CROP_ART_MASTERS/incoming/; 13 crop masters + 1 book-hero promoted). 720px derivatives built for 17
+      crops + wc-cropbook-hero (scripts/wc_derivatives.sh). WC_ART + book_entry $wc_art_map list exactly the
+      17 served slugs: tomato/cucumber/beet/pepper (batch1) + broccoli/cabbage/chard/eggplant/fennel/garlic/
+      kale/scallion/melon (batch2) + original lettuce/radish/parsley/dill. EVERY map ref verified to resolve
+      to a real PNG (a self-correction of interim commit ada847d, which listed crops with no master).
+      wc-cropbook-hero promoted as the book's central watercolor logo. ICON_MAP unchanged (watercolor
+      preferred; sprite = glyph fallback for crops without a master). composer 96/96; php -l clean;
+      validate_aos 0 FAIL. NOTE: edits WP-CB-1 LOD500_LOCKED files (WC_ART/$wc_art_map) — chartered patch01
+      scope, flagged for team_190 patch01 L-GATE_V; ahead of patch01 formal L-GATE_S per team_00 directive.
+      Parked: pepper/beet/cucumber alts + ambiguous bulb + module-icons graphic. Remaining patch01 scope
+      (V-03 parity, server-side filters, /calc export, F-UI-01) NOT in this step.
     validator: team_100
   notes: "OPENED 2026-06-01. Non-blocking UI follow-ups from WP-CB-1 R3 verdict + watercolor art
     wiring. NEXT: team_100 LOD400 → team_190 L-GATE_S (non-Claude, IR#1)."
