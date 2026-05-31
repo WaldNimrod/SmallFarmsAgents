@@ -6,8 +6,9 @@ status: DRAFT — for team_00 review
 author: team_100 (Claude Code, Chief Architect)
 date: 2026-05-30
 version: v1.2.0
-status_note: "§13 open questions RESOLVED by team_00. L-GATE_S R1 PASS_WITH_FINDINGS (3 fixed inline). R2 PASS_WITH_FINDINGS (Cursor Composer, non-Claude): F-190-CB0-02 RESOLVED; F-190-CB0-01 + F-190-CB0-03 INSUFFICIENT (live-data variants half-hardy + bare kg) — ERRATA APPLIED in v1.2.0 (§6.1/§6.3/§12, see §14). Canon held LOD200_R2_PENDING → R3 re-check issued. Not locked until R3 PASS."
-lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_R2_VERDICT_v1.0.0.md
+status: LOD200_LOCKED
+status_note: "L-GATE_S PASSED across 3 cross-engine rounds (non-Claude). R1 PASS_WITH_FINDINGS (3 fixed inline) → R2 PASS_WITH_FINDINGS (2 live-data errata: half-hardy, bare kg → v1.2.0) → R3 PASS (both RESOLVED, no other stranded variants; full unit+enum sweep clean). Canon LOCKED @ d16a611. Migration WP authorized."
+lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/TARGET_A_CANON_L-GATE_S_R3_VERDICT_v1.0.0.md
 supersedes_field_layer_of: SFA-S003-P004-WP-CB-1 (LOD400 field mapping will be corrected to this canon)
 grounded_in: live oma-postgres inventory 2026-05-30 (head 057; 70 crops / 368 varieties / 2061 source_values / 5780 enrichment)
 team_00_decisions:
