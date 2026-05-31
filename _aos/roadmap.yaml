@@ -3088,6 +3088,50 @@ work_packages:
     change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-MIG
+  label: "ספר גידולים: Crop Data Model Migration (execute the LOCKED Canon — 8 phases)"
+  status: ACTIVE
+  phase: spec
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-31"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-0"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG/LOD400_spec.md"
+  canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
+  orchestration:
+    build: "team_10 (Claude Sonnet, phase-by-phase)"
+    qa: "team_50 (Claude Haiku)"
+    validation: "team_190 (non-Claude — IR#1 cross-engine)"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-31"
+    notes: "Eligibility: Canon WP-CB-0 LOD200_LOCKED (team_190 R3 PASS, d16a611). team_00 directed
+      authoring the Migration LOD400 now (spec only). team_00 pre-authorized the physical column
+      DROP (Canon §13) — this WP may modify models.py + add migrations for the §7.4 drops."
+    validator: team_00
+  - gate: L-GATE_S
+    result: IN_PROGRESS
+    date: "2026-05-31"
+    notes: "team_100 authored LOD400 v0.1.0 DRAFT: 8 phases (1 unit-normalize, 2 enum-canonicalize,
+      3 crop_attribute table[058]+resolver, 4 derive/dedup, 5 rename+alias[corrects WP-CB-1 field
+      layer], 6 drop-columns[059, LAST/gated], 7 DQ pass, 8 re-enrich+snapshot). New canon/ package
+      (units/enums/field_registry/derive) + attribute_models + attribute_resolver (mirrors
+      enrichment_runner, NOT modified). 12 ACs; per-phase dry-run+rollback; DB dump before rewriting
+      phases. Dev-only (Mac oma-postgres); no production/server action. SPEC ONLY — routes to team_190
+      L-GATE_S (non-Claude) before any build."
+    validator: team_100
+  notes: "OPENED 2026-05-31. Executes the LOCKED Crop Data Model Canon against live data (dev oma-postgres
+    head 057). On completion: live data ⟶ canonical taxonomy/names/units/enums/layers; crop_attribute
+    layer live; derived/duplicate fields removed; WP-CB-1 field layer corrected (Phase 5). Independent of
+    team_35 (UI). NEXT: team_190 L-GATE_S → team_10 phase-by-phase build → team_50 QA → team_190 L-GATE_V."
+  profile: L0
+
 - id: SFA-S003-P004-WP-CB-1
   label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
   status: BUILD_PAUSED
@@ -3100,10 +3144,11 @@ work_packages:
   assigned_validator: team_190
   created_at: "2026-05-30"
   milestone_ref: "S003"
-  build_paused_note: "Backend slice (calculators math) BUILT + committed fd7dfba (92 tests). Further
-    build (field-mapping correction + UI) PAUSED 2026-05-30 per team_00 pending WP-CB-0 (Crop Data
-    Model Canon) approval — the field layer will be corrected to the canon, not patched."
-  depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04", "SFA-S003-P004-WP-CB-0"]
+  build_paused_note: "Backend slice (calculators math) BUILT + committed fd7dfba (92 tests; team_190
+    cross-engine build verification PASS). Canon LOCKED (WP-CB-0). The field-mapping correction is now
+    folded into WP-CB-MIG Phase 5 (rename+alias + categorical/days_in_nursery read paths). WP-CB-1
+    resumes for the UI slice once WP-CB-MIG corrects the field layer AND team_35 mockups land."
+  depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04", "SFA-S003-P004-WP-CB-0", "SFA-S003-P004-WP-CB-MIG"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1/LOD400_spec.md"
   catalog_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/CALCULATOR_CATALOG_v1.0.0.md"
   schema_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/MANDATORY_FIELD_SCHEMA_v1.0.0.md"
