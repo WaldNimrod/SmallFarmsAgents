@@ -383,6 +383,10 @@ def seed(
 
             unified = reconcile_variety(source_value_rows)
 
+            # WP-CB-MIG (Canon §7.4): dropped columns removed from CropVariety.
+            # Facts (days_to_maturity, in_row_spacing_cm, etc.) → enrichment layer.
+            # Categoricals (planting_method, harvest_unit, etc.) → crop_attribute layer.
+            # Only identity + seeder + harvest_stage columns remain on CropVariety.
             variety = _get_or_create_variety(
                 session,
                 crop_id,
@@ -391,24 +395,16 @@ def seed(
                 {
                     "is_grafted": unified.get("is_grafted", vfirst.get("is_grafted", False)),
                     "rootstock_variety": unified.get("rootstock_variety", vfirst.get("rootstock_variety")),
-                    "planting_method": vfirst.get("planting_method"),
-                    "days_to_maturity": unified_dtm,
-                    "harvest_window_max_days": vfirst.get("harvest_window_max_days"),
-                    "in_row_spacing_cm": unified.get("in_row_spacing_cm", vfirst.get("in_row_spacing_cm")),
-                    "rows_per_bed": unified.get("rows_per_bed", vfirst.get("rows_per_bed")),
-                    "harvest_unit": vfirst.get("harvest_unit"),
-                    "avg_yield_per_bed_m": unified.get("avg_yield_per_bed_m"),
-                    "yield_source": unified.get("yield_source"),
-                    "documented_price": unified.get("documented_price", doc_price),
-                    "documented_price_unit": unified.get("documented_price_unit"),
-                    "documented_price_source": unified.get("documented_price_source", vfirst.get("source")),
-                    "days_in_gh_total": vfirst.get("days_in_gh_total"),
+                    # Seeder ops columns (T5 — KEEP per Canon §7.3a)
                     "seeder": unified.get("seeder", vfirst.get("seeder")),
                     "seeder_front_gear": unified.get("seeder_front_gear", vfirst.get("seeder_front_gear")),
                     "seeder_rear_gear": unified.get("seeder_rear_gear", vfirst.get("seeder_rear_gear")),
                     "seeder_roller_plate": unified.get("seeder_roller_plate", vfirst.get("seeder_roller_plate")),
+                    # harvest_stage kept as T5 identity (Canon §7.3)
                     "harvest_stage": vfirst.get("harvest_stage"),
                     "notes": None,
+                    # nursery_days_to_germinate: renamed from days_to_germinate_gh (Canon §7.1)
+                    "nursery_days_to_germinate": vfirst.get("days_to_germinate_gh"),
                 },
             )
 

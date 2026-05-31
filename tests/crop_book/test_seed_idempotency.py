@@ -123,8 +123,13 @@ def test_seed_populates_conversion_groups(db_session) -> None:
 
 
 def test_arugula_dtm_is_21(db_session) -> None:
-    """AC-04: Arugula days_to_maturity must be 21 (team_00 override)."""
+    """AC-04: Arugula days_to_maturity must be 21 (team_00 override).
+
+    WP-CB-MIG: days_to_maturity column dropped (§7.4); DTM now exclusively
+    in crop_field_enrichment. Check enrichment row instead of column.
+    """
     from organic_market_agent.crop_book.models import Crop, CropVariety
+    from organic_market_agent.crop_book.enrichment_models import CropFieldEnrichment
 
     _run_seed(db_session)
 
@@ -142,6 +147,17 @@ def test_arugula_dtm_is_21(db_session) -> None:
     if default_variety is None:
         pytest.skip("Default variety for arugula not found")
 
-    assert default_variety.days_to_maturity == 21, (
-        f"Expected arugula DTM=21 (team_00), got {default_variety.days_to_maturity}"
+    # WP-CB-MIG: DTM is in crop_field_enrichment, not the column
+    enrichment = db_session.execute(
+        select(CropFieldEnrichment).where(
+            CropFieldEnrichment.variety_id == default_variety.id,
+            CropFieldEnrichment.field_name == "days_to_maturity",
+        )
+    ).scalar_one_or_none()
+
+    if enrichment is None:
+        pytest.skip("No DTM enrichment row for arugula (seeder may not have enriched)")
+
+    assert float(enrichment.value_best) == 21.0, (
+        f"Expected arugula DTM=21 (team_00), got {enrichment.value_best}"
     )

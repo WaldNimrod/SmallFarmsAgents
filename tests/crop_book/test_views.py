@@ -50,6 +50,23 @@ def _make_source_value(field_name, source, value_text=None, value_numeric=None, 
     return sv
 
 
+def _make_attr(attribute_name, value_canonical):
+    """Mock CropAttribute row."""
+    a = MagicMock()
+    a.attribute_name = attribute_name
+    a.value_canonical = value_canonical
+    return a
+
+
+def _make_enrichment(field_name, value_best):
+    """Mock CropFieldEnrichment row."""
+    from decimal import Decimal as _Dec
+    e = MagicMock()
+    e.field_name = field_name
+    e.value_best = _Dec(str(value_best)) if value_best is not None else None
+    return e
+
+
 def _make_variety(
     id_=1,
     name_he="ברירת מחדל",
@@ -89,6 +106,9 @@ def _make_variety(
     v.is_default = is_default
     v.is_grafted = is_grafted
     v.rootstock_variety = rootstock_variety
+    # WP-CB-MIG: these columns were dropped from CropVariety; kept on mock for template
+    # compatibility (templates still reference them via Jinja). The views.py backend code
+    # now reads from v.attributes / v.enrichments via helper functions.
     v.days_to_maturity = days_to_maturity
     v.harvest_window_max_days = harvest_window_max_days
     v.harvest_window_min_days = harvest_window_min_days
@@ -114,6 +134,19 @@ def _make_variety(
     v.notes = notes
     v.source_values = source_values or []
     v.crop_id = crop_id
+    # WP-CB-MIG: attributes + enrichments — canonical sources for views.py helper functions
+    attrs = []
+    if planting_season is not None:
+        attrs.append(_make_attr("planting_season", planting_season))
+    v.attributes = attrs
+    enrichments = []
+    if days_to_maturity is not None:
+        enrichments.append(_make_enrichment("days_to_maturity", days_to_maturity))
+    if harvest_window_max_days is not None:
+        enrichments.append(_make_enrichment("harvest_window_max_days", harvest_window_max_days))
+    if days_in_gh_total is not None:
+        enrichments.append(_make_enrichment("days_in_nursery", days_in_gh_total))
+    v.enrichments = enrichments
     return v
 
 

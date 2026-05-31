@@ -62,14 +62,47 @@ def _detect_seasons(planting_season: str | None) -> dict[str, bool]:
     return result
 
 
+def _variety_attr(variety: CropVariety | None, attribute_name: str) -> str | None:
+    """Read value_canonical from crop_attribute for a given attribute_name.
+
+    WP-CB-MIG: categoricals (planting_season, etc.) moved from CropVariety columns
+    to the crop_attribute table. Returns None gracefully if absent.
+    """
+    if variety is None:
+        return None
+    for attr in (variety.attributes or []):
+        if attr.attribute_name == attribute_name:
+            return attr.value_canonical
+    return None
+
+
+def _variety_enrichment(variety: CropVariety | None, field_name: str) -> int | None:
+    """Read value_best (as int) from crop_field_enrichment for a given field_name.
+
+    WP-CB-MIG: numeric facts (days_to_maturity, harvest_window_max_days, etc.) moved
+    from CropVariety columns to crop_field_enrichment. Returns None gracefully if absent.
+    """
+    if variety is None:
+        return None
+    for enr in (variety.enrichments or []):
+        if enr.field_name == field_name:
+            return int(enr.value_best) if enr.value_best is not None else None
+    return None
+
+
 def _crop_to_dict(crop: Crop) -> dict:
     """Serialize a Crop (with default_variety) to JSON-safe dict for /api/crops."""
     default_var: CropVariety | None = next(
         (v for v in (crop.varieties or []) if v.is_default), None
     ) or (crop.varieties[0] if crop.varieties else None)
 
-    seasons_active = _detect_seasons(default_var.planting_season if default_var else None)
+    # WP-CB-MIG: planting_season moved to crop_attribute table
+    planting_season = _variety_attr(default_var, "planting_season")
+    seasons_active = _detect_seasons(planting_season)
     active_season_keys = [k for k, v in seasons_active.items() if v]
+
+    # WP-CB-MIG: days_to_maturity moved to crop_field_enrichment table
+    dtm_min = _variety_enrichment(default_var, "days_to_maturity")
 
     return {
         "id": crop.id,
@@ -83,7 +116,7 @@ def _crop_to_dict(crop: Crop) -> dict:
         "harvest_unit_default": crop.harvest_unit_default or "",
         "variety_count": len(crop.varieties) if crop.varieties else 0,
         "seasons": active_season_keys,
-        "dtm_min": default_var.days_to_maturity if default_var else None,
+        "dtm_min": dtm_min,
     }
 
 
@@ -185,14 +218,19 @@ def crop_detail(crop_id: int):
     sorted_sources = sorted(all_sources)
 
     # Season detection for default variety
-    seasons = _detect_seasons(default_var.planting_season if default_var else None)
+    # WP-CB-MIG: planting_season moved to crop_attribute table
+    planting_season = _variety_attr(default_var, "planting_season")
+    seasons = _detect_seasons(planting_season)
 
     # Timeline calculations
+    # WP-CB-MIG: days_to_maturity, harvest_window_max_days, days_in_gh_total moved
+    # to crop_field_enrichment (canonical field names: days_to_maturity,
+    # harvest_window_max_days, days_in_nursery)
+    dtm = _variety_enrichment(default_var, "days_to_maturity") or 0
+    hw_max = _variety_enrichment(default_var, "harvest_window_max_days") or 0
+    gh_total = _variety_enrichment(default_var, "days_in_nursery") or 0
     timeline_data = None
-    if default_var and (default_var.days_to_maturity or default_var.harvest_window_max_days):
-        dtm = default_var.days_to_maturity or 0
-        hw_max = default_var.harvest_window_max_days or 0
-        gh_total = default_var.days_in_gh_total or 0
+    if default_var and (dtm or hw_max):
         total_days = dtm + hw_max
         total_weeks = max(1, -(-hw_max // 7))  # ruler: harvest_window only (LOD400 §3.9)
 
@@ -241,11 +279,17 @@ def api_crops():
     seasons = request.args.getlist("season")
     dtm_max_str = request.args.get("dtm_max", "").strip()
 
+    from organic_market_agent.crop_book.enrichment_models import CropFieldEnrichment
+    from organic_market_agent.crop_book.attribute_models import CropAttribute as _CropAttr
+
     query = (
         session.query(Crop)
         .options(
             joinedload(Crop.family),
-            joinedload(Crop.varieties),
+            # WP-CB-MIG: load attributes + enrichments (categoricals + numeric facts
+            # moved out of CropVariety columns into these tables)
+            joinedload(Crop.varieties).joinedload(CropVariety.attributes),
+            joinedload(Crop.varieties).joinedload(CropVariety.enrichments),
         )
     )
 
@@ -270,16 +314,18 @@ def api_crops():
         ) or (crop.varieties[0] if crop.varieties else None)
 
         # DTM filter
+        # WP-CB-MIG: days_to_maturity moved to crop_field_enrichment
         if dtm_max_str:
             try:
                 dtm_max = int(dtm_max_str)
-                dtm = default_var.days_to_maturity if default_var else None
+                dtm = _variety_enrichment(default_var, "days_to_maturity")
                 if dtm is None or dtm > dtm_max:
                     continue
             except ValueError:
                 pass
 
         # Season filter — OR logic: crop must match at least one selected season
+        # WP-CB-MIG: planting_season moved to crop_attribute table
         if seasons:
             season_map = {
                 "summer": ["קיץ", "summer"],
@@ -287,7 +333,7 @@ def api_crops():
                 "winter": ["חורף", "winter"],
                 "fall": ["סתיו", "fall", "autumn"],
             }
-            planting = (default_var.planting_season or "") if default_var else ""
+            planting = (_variety_attr(default_var, "planting_season") or "")
 
             def _matches_any_season(sel_seasons: list[str]) -> bool:
                 for s in sel_seasons:

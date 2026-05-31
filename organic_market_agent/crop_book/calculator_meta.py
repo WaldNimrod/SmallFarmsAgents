@@ -20,32 +20,38 @@ from __future__ import annotations
 CALCULATOR_META: dict[int, dict] = {
     1: {
         "audience": "B",
-        "required_book_fields": ["rows_per_bed", "in_row_spacing_cm", "seeds_per_gram"],
+        # AC-06/AC-07: seeds_per_gram→seeds_per_g, in_row_spacing_cm→spacing_in_row_cm
+        "required_book_fields": ["rows_per_bed", "spacing_in_row_cm", "seeds_per_g"],
         "assumption_keys": ["germination_rate", "oversow"],
         "user_inputs": ["bed_length_m", "seeds_per_hole"],
     },
     2: {
         "audience": "B",
-        "required_book_fields": ["rows_per_bed", "in_row_spacing_cm"],
+        # AC-06/AC-07: in_row_spacing_cm→spacing_in_row_cm
+        "required_book_fields": ["rows_per_bed", "spacing_in_row_cm"],
         "assumption_keys": [],
         "user_inputs": ["bed_length_m"],
     },
     3: {
         "audience": "F",
+        # AC-07: days_in_nursery_cell kept (calc-specific WP-CB-1 field, not Canon §7.1 rename)
         "required_book_fields": ["days_in_nursery_cell"],
         "assumption_keys": ["tray_cells", "oversow"],
         "user_inputs": ["plants", "field_set_date"],
     },
     4: {
         "audience": "B",
+        # AC-07: planting_method now from crop_attribute; yield=yield_per_bed_m
+        # days_in_nursery replaces days_in_nursery_cell for nursery duration (AC-07)
         "required_book_fields": ["days_to_maturity", "planting_method"],
         "assumption_keys": [],
         "user_inputs": ["target_harvest_date"],
-        # days_in_nursery_cell is conditionally required (transplant only);
-        # included for completeness — UI checks planting_method first
+        # planting_method read from crop_attribute (categorical); days_in_nursery
+        # conditionally required (transplant only) — UI checks planting_method first
     },
     5: {
         "audience": "B",
+        # AC-07: planting_method from crop_attribute
         "required_book_fields": [
             "days_to_maturity",
             "harvest_window_max_days",
@@ -62,47 +68,54 @@ CALCULATOR_META: dict[int, dict] = {
     },
     7: {
         "audience": "F",
-        "required_book_fields": ["avg_yield_per_bed_m"],
+        # AC-06/AC-07: avg_yield_per_bed_m→yield_per_bed_m
+        "required_book_fields": ["yield_per_bed_m"],
         "assumption_keys": ["std_bed_length_m"],
         "user_inputs": ["target_kg"],
     },
     8: {
         "audience": "B",
-        "required_book_fields": ["avg_yield_per_bed_m"],
+        # AC-06/AC-07: avg_yield_per_bed_m→yield_per_bed_m
+        "required_book_fields": ["yield_per_bed_m"],
         "assumption_keys": [],
         "user_inputs": ["bed_length_m"],
     },
     9: {
         "audience": "F",
+        # AC-06/AC-07: avg_yield_per_bed_m→yield_per_bed_m, documented_price→price_documented
         "required_book_fields": [
-            "avg_yield_per_bed_m",
-            "documented_price",
-            "documented_price_unit",
+            "yield_per_bed_m",
+            "price_documented",
+            "price_documented_unit",
         ],
         "assumption_keys": [],
         "user_inputs": ["bed_length_m"],
     },
     10: {
         "audience": "B",
-        "required_book_fields": ["rows_per_bed", "in_row_spacing_cm"],
+        # AC-06/AC-07: in_row_spacing_cm→spacing_in_row_cm
+        "required_book_fields": ["rows_per_bed", "spacing_in_row_cm"],
         "assumption_keys": ["bed_width"],
         "user_inputs": [],
     },
     11: {
         "audience": "B",
+        # AC-07: frost_tolerance_class now from crop_attribute (categorical)
         "required_book_fields": ["days_to_maturity", "frost_tolerance_class"],
         "assumption_keys": ["hardiness_offset"],
         "user_inputs": ["last_frost_date", "first_frost_date"],
     },
     12: {
         "audience": "F",
-        "required_book_fields": ["nutrient_removal_n_kg_ha"],
+        # AC-06/AC-07: nutrient_removal_n_kg_ha→nutrient_removal_n_kg_per_ha
+        "required_book_fields": ["nutrient_removal_n_kg_per_ha"],
         "assumption_keys": ["compost_N_pct", "application_efficiency"],
         "user_inputs": ["area_m2"],
     },
     13: {
         "audience": "F",
-        "required_book_fields": ["avg_yield_per_bed_m", "documented_price"],
+        # AC-06/AC-07: canonical names
+        "required_book_fields": ["yield_per_bed_m", "price_documented"],
         "assumption_keys": [],
         "user_inputs": ["bed_meters"],
     },
@@ -112,6 +125,24 @@ CALCULATOR_META: dict[int, dict] = {
         "assumption_keys": [],
         "user_inputs": ["grams_needed", "seed_price_per_g_or_pack_price"],
     },
+}
+
+# Alias map for one-cycle backwards compatibility: old_name → canonical_name
+# Consumers may still use old names for one release cycle.
+FIELD_ALIAS_MAP: dict[str, str] = {
+    "avg_yield_per_bed_m":      "yield_per_bed_m",
+    "in_row_spacing_cm":        "spacing_in_row_cm",
+    "seeds_per_gram":           "seeds_per_g",
+    "days_in_gh_total":         "days_in_nursery",
+    "documented_price":         "price_documented",
+    "documented_price_unit":    "price_documented_unit",
+    "nutrient_removal_n_kg_ha": "nutrient_removal_n_kg_per_ha",
+    "nutrient_removal_p_kg_ha": "nutrient_removal_p_kg_per_ha",
+    "nutrient_removal_k_kg_ha": "nutrient_removal_k_kg_per_ha",
+    "nutrient_removal_ca_kg_ha": "nutrient_removal_ca_kg_per_ha",
+    "nutrient_removal_mg_kg_ha": "nutrient_removal_mg_kg_per_ha",
+    "days_to_first_potting":    "nursery_days_to_potting",
+    "days_to_germinate_gh":     "nursery_days_to_germinate",
 }
 
 # Sentinel for field states — mirrors Gap-Fill Plan §2

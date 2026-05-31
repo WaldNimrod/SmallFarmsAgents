@@ -1,6 +1,7 @@
 """Tests for calculator_meta.py — WP-CB-1 AC-07/AC-08 / LOD400 §5.
 
-AC-07: required_book_fields map equals Catalog §6.
+WP-CB-MIG AC-06/AC-07: field names updated to canonical (Canon §7.1 renames).
+AC-07: required_book_fields map equals Catalog §6 (canonical names).
 AC-08: calc_enabled correctly reflects MISSING vs UNVALIDATED/VALIDATED.
 """
 from __future__ import annotations
@@ -9,23 +10,24 @@ import pytest
 
 
 # ---------------------------------------------------------------------------
-# Hard-coded expected map from Calculator Catalog §6
+# Hard-coded expected map from Calculator Catalog §6 — CANONICAL field names
+# WP-CB-MIG AC-06/AC-07: updated from old names to canonical names.
 # ---------------------------------------------------------------------------
 
 _EXPECTED_REQUIRED_BOOK_FIELDS: dict[int, list[str]] = {
-    1: ["rows_per_bed", "in_row_spacing_cm", "seeds_per_gram"],
-    2: ["rows_per_bed", "in_row_spacing_cm"],
+    1: ["rows_per_bed", "spacing_in_row_cm", "seeds_per_g"],           # was: in_row_spacing_cm, seeds_per_gram
+    2: ["rows_per_bed", "spacing_in_row_cm"],                           # was: in_row_spacing_cm
     3: ["days_in_nursery_cell"],
     4: ["days_to_maturity", "planting_method"],
     5: ["days_to_maturity", "harvest_window_max_days", "planting_method"],
     6: ["succession_interval_weeks"],
-    7: ["avg_yield_per_bed_m"],
-    8: ["avg_yield_per_bed_m"],
-    9: ["avg_yield_per_bed_m", "documented_price", "documented_price_unit"],
-    10: ["rows_per_bed", "in_row_spacing_cm"],
+    7: ["yield_per_bed_m"],                                              # was: avg_yield_per_bed_m
+    8: ["yield_per_bed_m"],                                              # was: avg_yield_per_bed_m
+    9: ["yield_per_bed_m", "price_documented", "price_documented_unit"], # was: avg_yield_per_bed_m, documented_price*
+    10: ["rows_per_bed", "spacing_in_row_cm"],                          # was: in_row_spacing_cm
     11: ["days_to_maturity", "frost_tolerance_class"],
-    12: ["nutrient_removal_n_kg_ha"],
-    13: ["avg_yield_per_bed_m", "documented_price"],
+    12: ["nutrient_removal_n_kg_per_ha"],                               # was: nutrient_removal_n_kg_ha
+    13: ["yield_per_bed_m", "price_documented"],                        # was: avg_yield_per_bed_m, documented_price
     14: [],
 }
 
@@ -64,13 +66,14 @@ def test_audience_values_valid() -> None:
 # ---------------------------------------------------------------------------
 
 def test_calc_enabled_all_validated() -> None:
-    """Calc is enabled when all required book fields are VALIDATED."""
+    """Calc is enabled when all required book fields are VALIDATED (canonical names)."""
     from organic_market_agent.crop_book.calculator_meta import calc_enabled
 
+    # WP-CB-MIG AC-06: canonical field names
     field_state = {
         "rows_per_bed": "VALIDATED",
-        "in_row_spacing_cm": "VALIDATED",
-        "seeds_per_gram": "VALIDATED",
+        "spacing_in_row_cm": "VALIDATED",   # was: in_row_spacing_cm
+        "seeds_per_g": "VALIDATED",          # was: seeds_per_gram
     }
     assert calc_enabled(1, field_state) is True
 
@@ -79,10 +82,11 @@ def test_calc_enabled_all_unvalidated() -> None:
     """Calc is enabled (flagged) when fields are UNVALIDATED — not disabled."""
     from organic_market_agent.crop_book.calculator_meta import calc_enabled
 
+    # WP-CB-MIG AC-06: canonical field names
     field_state = {
         "rows_per_bed": "UNVALIDATED",
-        "in_row_spacing_cm": "UNVALIDATED",
-        "seeds_per_gram": "UNVALIDATED",
+        "spacing_in_row_cm": "UNVALIDATED",  # was: in_row_spacing_cm
+        "seeds_per_g": "UNVALIDATED",         # was: seeds_per_gram
     }
     assert calc_enabled(1, field_state) is True
 
@@ -91,10 +95,11 @@ def test_calc_disabled_when_required_field_missing() -> None:
     """AC-08: Calc is disabled iff a required book field is MISSING."""
     from organic_market_agent.crop_book.calculator_meta import calc_enabled
 
+    # WP-CB-MIG AC-06: canonical field names
     field_state = {
         "rows_per_bed": "VALIDATED",
-        "in_row_spacing_cm": "VALIDATED",
-        "seeds_per_gram": "MISSING",  # ← makes calc #1 disabled
+        "spacing_in_row_cm": "VALIDATED",    # was: in_row_spacing_cm
+        "seeds_per_g": "MISSING",             # was: seeds_per_gram; makes calc #1 disabled
     }
     assert calc_enabled(1, field_state) is False
 
@@ -105,7 +110,7 @@ def test_calc_disabled_when_field_absent_from_state() -> None:
 
     field_state = {
         "rows_per_bed": "VALIDATED",
-        # in_row_spacing_cm not present → treated as MISSING
+        # spacing_in_row_cm not present → treated as MISSING (was: in_row_spacing_cm)
     }
     assert calc_enabled(2, field_state) is False
 

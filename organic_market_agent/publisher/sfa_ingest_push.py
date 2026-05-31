@@ -310,26 +310,35 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
     return out
 
 
+# WP-CB-MIG AC-06/AC-07: canonical field names (Phase 5 renames applied).
+# Old names → canonical:
+#   in_row_spacing_cm    → spacing_in_row_cm
+#   yield_per_m2_kg      → removed (T4 derived, not stored)
+#   nutrient_removal_*_kg_ha → *_kg_per_ha
+#   seeds_per_gram       → seeds_per_g
+#   days_in_gh_total     → days_in_nursery
 _AGRONOMY_FIELD_WHITELIST = (
     "days_to_maturity",
     "germination_temp_c_min",
     "germination_temp_c_opt",
     "germination_temp_c_max",
-    "in_row_spacing_cm",
+    "spacing_in_row_cm",          # was: in_row_spacing_cm
     "rows_per_bed",
     "soil_ph_target",
     "storage_temp_c_min",
     "storage_temp_c_max",
     "storage_life_days",
-    "yield_per_m2_kg",
-    "nutrient_removal_n_kg_ha",
-    "nutrient_removal_p_kg_ha",
-    "nutrient_removal_k_kg_ha",
+    "yield_per_bed_m",            # was: avg_yield_per_bed_m (canonical yield)
+    "nutrient_removal_n_kg_per_ha",  # was: nutrient_removal_n_kg_ha
+    "nutrient_removal_p_kg_per_ha",  # was: nutrient_removal_p_kg_ha
+    "nutrient_removal_k_kg_per_ha",  # was: nutrient_removal_k_kg_ha
     "harvest_window_max_days",
-    "seeds_per_gram",
+    "seeds_per_g",                # was: seeds_per_gram
     # WP-CB-1 additions (LOD400 §3.3 / Schema §3.1–§3.2)
     "days_in_nursery_cell",
     "succession_interval_weeks",
+    "days_in_nursery",            # was: days_in_gh_total (AC-07 / Canon §7.1)
+    "price_documented",           # was: documented_price
 )
 
 # Confidence threshold τ for field_state classification (Gap-Fill Plan §2).
@@ -341,12 +350,12 @@ _HIGH_TRUST_CLASSES = {"EX", "NI"}
 
 
 def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
+    # WP-CB-MIG AC-06/AC-07: identity columns only (T1/T2 facts read from enrichment/crop_attribute).
+    # Dropped columns (§7.4): days_to_maturity, in_row_spacing_cm, planting_method,
+    # planting_season, harvest_unit, documented_price*, harvest_window_*.
+    # After migration 059 these are gone; use enrichment + crop_attribute read path.
     sql = """
-        SELECT id, crop_id, name_he, name_en, is_default,
-               days_to_maturity, harvest_window_min_days, harvest_window_max_days,
-               in_row_spacing_cm, planting_method, planting_season,
-               harvest_unit, documented_price, documented_price_unit,
-               documented_price_source, notes
+        SELECT id, crop_id, name_he, name_en, is_default, notes
         FROM crop_varieties
         WHERE name_he IS NOT NULL OR name_en IS NOT NULL
         ORDER BY id
@@ -417,21 +426,17 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
                 else:
                     field_state[fname] = "UNVALIDATED"
 
+        # WP-CB-MIG AC-06/AC-07: identity columns only; numeric facts from enrichment,
+        # categoricals from crop_attribute (via agronomy_by_variety + field_state).
         payload: dict[str, Any] = {
             "schema_version": 1,
             "name_en": v.get("name_en"),
             "is_default": bool(v.get("is_default")),
-            "days_to_maturity": v.get("days_to_maturity"),
-            "harvest_window_min_days": v.get("harvest_window_min_days"),
-            "harvest_window_max_days": v.get("harvest_window_max_days"),
-            "in_row_spacing_cm": v.get("in_row_spacing_cm"),
-            "planting_method": v.get("planting_method"),
-            "planting_season": v.get("planting_season"),
-            "harvest_unit": v.get("harvest_unit"),
-            "documented_price": float(v["documented_price"]) if v.get("documented_price") is not None else None,
-            "documented_price_unit": v.get("documented_price_unit"),
-            "documented_price_source": v.get("documented_price_source"),
             "notes": v.get("notes"),
+            # Numeric facts (read from enrichment via agronomy dict):
+            # days_to_maturity, harvest_window_max_days, spacing_in_row_cm,
+            # yield_per_bed_m, price_documented, days_in_nursery, etc.
+            # All delivered via agronomy block below.
         }
         if agronomy:
             payload["agronomy"] = agronomy

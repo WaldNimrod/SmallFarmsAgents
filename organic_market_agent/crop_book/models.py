@@ -16,14 +16,21 @@ from sqlalchemy import (
     UniqueConstraint,
     VARCHAR,
 )
+# Note: Decimal imported for CropUnitConversion.conversion_factor; Numeric for same.
 
 _PK_TYPE = BigInteger().with_variant(Integer(), "sqlite")
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from organic_market_agent.db.base import Base
 
+# Import sibling ORM modules to ensure SQLAlchemy mapper resolves all relationships.
+# These must be importable at module load time (not just TYPE_CHECKING).
+import organic_market_agent.crop_book.enrichment_models as _em  # noqa: F401
+import organic_market_agent.crop_book.attribute_models as _am   # noqa: F401
+
 if TYPE_CHECKING:
     from organic_market_agent.crop_book.enrichment_models import CropFieldEnrichment
+    from organic_market_agent.crop_book.attribute_models import CropAttribute
 
 
 class CropFamily(Base):
@@ -116,19 +123,18 @@ class Crop(Base):
 
 
 class CropVariety(Base):
+    """crop_varieties — identity + seeder columns only (Canon §7.3 / §7.3a).
+
+    WP-CB-MIG (team_00-authorized, Canon §authorization_note):
+        - Dropped §7.4 columns (duplicated facts now in enrichment/crop_attribute).
+        - Renamed days_to_germinate_gh → nursery_days_to_germinate (Canon §7.1 / F-190-MIG-03).
+        - Added attributes back-reference (migration 058).
+    """
     __tablename__ = "crop_varieties"
     __table_args__ = (
         CheckConstraint(
-            "planting_method IS NULL OR planting_method IN ('direct_sow','transplant','greenhouse_transplant','cutting','purchase')",
-            name="chk_cv_planting_method",
-        ),
-        CheckConstraint(
             "harvest_stage IS NULL OR harvest_stage IN ('full_size','baby_leaf','head','plant_sale','seed')",
             name="chk_cv_harvest_stage",
-        ),
-        CheckConstraint(
-            "harvest_unit IS NULL OR harvest_unit IN ('kg','bunch','head','case','unit','seedling')",
-            name="chk_cv_harvest_unit",
         ),
         UniqueConstraint("crop_id", "name_en", name="uq_cv_crop_name_en"),
     )
@@ -142,28 +148,14 @@ class CropVariety(Base):
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     is_grafted: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="false")
     rootstock_variety: Mapped[Optional[str]] = mapped_column(VARCHAR(200), nullable=True)
-    planting_method: Mapped[Optional[str]] = mapped_column(VARCHAR(30), nullable=True)
-    days_to_maturity: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    harvest_window_min_days: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    harvest_window_max_days: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    in_row_spacing_cm: Mapped[Optional[Decimal]] = mapped_column(Numeric(6, 2), nullable=True)
-    rows_per_bed: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    planting_season: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
-    succession_interval_weeks: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    harvest_unit: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
-    avg_yield_per_bed_m: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 4), nullable=True)
-    yield_source: Mapped[Optional[str]] = mapped_column(VARCHAR(200), nullable=True)
-    documented_price: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)
-    documented_price_unit: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
-    documented_price_source: Mapped[Optional[str]] = mapped_column(VARCHAR(200), nullable=True)
-    pricebook_product_id: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
-    avg_revenue_per_bed_m: Mapped[Optional[Decimal]] = mapped_column(Numeric(10, 2), nullable=True)
-    days_to_germinate_gh: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    days_in_gh_total: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    # Nursery column: RENAMED from days_to_germinate_gh (Canon §7.1 / F-190-MIG-03)
+    nursery_days_to_germinate: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    # Seeder ops columns (T5 identity/ops — KEEP per Canon §7.3a)
     seeder: Mapped[Optional[str]] = mapped_column(VARCHAR(100), nullable=True)
     seeder_front_gear: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
     seeder_rear_gear: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
     seeder_roller_plate: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
+    # harvest_stage remains as identity (T5) — kept per Canon §7.3
     harvest_stage: Mapped[Optional[str]] = mapped_column(VARCHAR(30), nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
@@ -174,6 +166,10 @@ class CropVariety(Base):
     # GCR_1 — back-reference to enrichment consensus rows (migration 041)
     enrichments: Mapped[list["CropFieldEnrichment"]] = relationship(
         "CropFieldEnrichment", back_populates="variety", cascade="all, delete-orphan"
+    )
+    # WP-CB-MIG — back-reference to attribute rows (migration 058)
+    attributes: Mapped[list["CropAttribute"]] = relationship(
+        "CropAttribute", back_populates="variety", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

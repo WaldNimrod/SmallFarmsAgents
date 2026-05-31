@@ -36,14 +36,18 @@ def test_crop_unit_conversion_has_mutual_exclusion_check() -> None:
 
 
 def test_crop_variety_check_constraints_defined() -> None:
+    """WP-CB-MIG: planting_method + harvest_unit columns dropped (§7.4);
+    their CHECK constraints are removed. Only harvest_stage remains."""
     from organic_market_agent.crop_book.models import CropVariety
 
     constraint_names = {
         getattr(arg, "name", None) for arg in CropVariety.__table_args__
     }
-    assert "chk_cv_planting_method" in constraint_names
+    # WP-CB-MIG: planting_method and harvest_unit columns dropped — constraints gone
+    assert "chk_cv_planting_method" not in constraint_names
+    assert "chk_cv_harvest_unit" not in constraint_names
+    # harvest_stage column kept (T5 identity) — constraint retained
     assert "chk_cv_harvest_stage" in constraint_names
-    assert "chk_cv_harvest_unit" in constraint_names
 
 
 def test_crops_check_constraints_defined() -> None:

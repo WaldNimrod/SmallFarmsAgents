@@ -71,6 +71,22 @@ def _source_value_to_dict(sv: Any) -> dict:
     }
 
 
+def _get_enrichment(v: CropVariety, field_name: str) -> int | None:
+    """Return value_best (as int) for a field from variety.enrichments, or None."""
+    for enr in (v.enrichments or []):
+        if enr.field_name == field_name:
+            return int(enr.value_best) if enr.value_best is not None else None
+    return None
+
+
+def _get_attribute(v: CropVariety, attribute_name: str) -> str | None:
+    """Return value_canonical for an attribute from variety.attributes, or None."""
+    for attr in (v.attributes or []):
+        if attr.attribute_name == attribute_name:
+            return attr.value_canonical
+    return None
+
+
 def _variety_to_dict(v: CropVariety) -> dict:
     return {
         "id":                          v.id,
@@ -79,31 +95,21 @@ def _variety_to_dict(v: CropVariety) -> dict:
         "is_default":                  bool(v.is_default),
         "is_grafted":                  bool(v.is_grafted) if v.is_grafted is not None else False,
         "rootstock_variety":           v.rootstock_variety,
-        "planting_method":             v.planting_method,
-        "days_to_maturity":            v.days_to_maturity,
-        "harvest_window_min_days":     v.harvest_window_min_days,
-        "harvest_window_max_days":     v.harvest_window_max_days,
-        "in_row_spacing_cm":           float(v.in_row_spacing_cm) if v.in_row_spacing_cm is not None else None,
-        "rows_per_bed":                v.rows_per_bed,
-        "planting_season":             v.planting_season,
-        "succession_interval_weeks":   v.succession_interval_weeks,
+        # WP-CB-MIG: §7.4 columns dropped; facts now in enrichment, categoricals in crop_attribute.
+        # Identity/seeder columns only remain on CropVariety.
         "harvest_stage":               v.harvest_stage,
-        "harvest_unit":                v.harvest_unit,
-        "avg_yield_per_bed_m":         float(v.avg_yield_per_bed_m) if v.avg_yield_per_bed_m is not None else None,
-        "yield_source":                v.yield_source,
-        "documented_price":            float(v.documented_price) if v.documented_price is not None else None,
-        "documented_price_unit":       v.documented_price_unit,
-        "documented_price_source":     v.documented_price_source,
-        "avg_revenue_per_bed_m":       float(v.avg_revenue_per_bed_m) if v.avg_revenue_per_bed_m is not None else None,
-        "pricebook_product_id":        v.pricebook_product_id,
-        "days_to_germinate_gh":        v.days_to_germinate_gh,
-        "days_in_gh_total":            v.days_in_gh_total,
+        # nursery_days_to_germinate: renamed from days_to_germinate_gh (Canon §7.1)
+        "nursery_days_to_germinate":   v.nursery_days_to_germinate,
         "seeder":                      v.seeder,
         "seeder_front_gear":           v.seeder_front_gear,
         "seeder_rear_gear":            v.seeder_rear_gear,
         "seeder_roller_plate":         v.seeder_roller_plate,
         "notes":                       v.notes,
         "source_values":               [_source_value_to_dict(sv) for sv in (v.source_values or [])],
+        # WP-CB-MIG: SPA filter fields — sourced from enrichment/attribute tables.
+        # days_to_maturity and planting_season are required for client-side DTM + season filters.
+        "days_to_maturity":            _get_enrichment(v, "days_to_maturity"),
+        "planting_season":             _get_attribute(v, "planting_season"),
     }
 
 
@@ -207,6 +213,10 @@ class CropBookPublisher:
             .options(
                 joinedload(Crop.family),
                 joinedload(Crop.varieties).joinedload(CropVariety.source_values),
+                # WP-CB-MIG: load enrichments + attributes for SPA filter fields
+                # (days_to_maturity, planting_season moved from CropVariety columns)
+                joinedload(Crop.varieties).joinedload(CropVariety.enrichments),
+                joinedload(Crop.varieties).joinedload(CropVariety.attributes),
                 joinedload(Crop.conversion_group).joinedload(CropConversionGroup.conversions),
             )
             .order_by(Crop.name_he)
