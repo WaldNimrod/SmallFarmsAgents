@@ -2,10 +2,11 @@
 id: SFA-S003-P004-WP-CB-MIG-LOD400
 wp: SFA-S003-P004-WP-CB-MIG — Crop Data Model Migration (execute the Canon)
 gate: L-GATE_S (LOD400 — implementation spec)
-status: DRAFT — for team_190 L-GATE_S (non-Claude) before any build
+status: LOD400_LOCKED — team_190 L-GATE_S R2 PASS (Codex/GPT-5, non-Claude); 5 R1 findings RESOLVED, no regression. Build authorized.
 author: team_100 (Claude Code, Chief Architect)
 date: 2026-05-31
-version: v0.2.0
+version: v1.0.0
+r2_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG/WP-CB-MIG_LGATE-S_R2_VERDICT_v1.0.0.md
 changelog: "v0.2.0 — team_190 L-GATE_S PASS_WITH_FINDINGS (Codex/GPT-5, 10/10): 5 findings ADDRESSED INLINE (§7 remediation matrix). F-190-MIG-01 column-origin attrs + harvest_unit/stage in Phase 3/AC-04; F-190-MIG-02 storage_life_text DROP in Phase 7/AC-09; F-190-MIG-03 nursery companion renames Phase 5 + canonical trio Phase 7; F-190-MIG-04 AC-03 closed-enum/open-vocab scoping; F-190-MIG-05 'last destructive phase' wording. R2 re-check requested."
 canon_ref: _aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md   # LOD200_LOCKED v1.2.0 @ d16a611
 lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG/WP-CB-MIG_LGATE-S_VERDICT_v1.0.0.md
