@@ -3223,7 +3223,7 @@ work_packages:
   phase: spec
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
@@ -3332,14 +3332,24 @@ work_packages:
       AC-10/11/13 now PASS at spec. Build dispatched to the UI build slice (team_10 stand-in, IR#1)."
     validator: team_100
   - gate: L-GATE_B
-    result: IN_PROGRESS
+    result: PASS
     scope: ui
     date: "2026-05-31"
-    notes: "UI slice dispatched (DISPATCH_sfa_build_UI_2026-05-31_v1.0.0.md): port tokens/cropbook CSS+JS
-      into sfa_delivery/public_assets; new macros (assumption_field, calc_panel, prov_value, depth_tabs,
-      audience_switch, rotation_hint); pages book_index (Cards/Table+filters), book_crop (3 depths,
-      13-topic order), /calc dashboard; endpoints GET /api/v1/assumptions + POST /api/v1/contribute
-      (request-info); JS↔Python calc parity (#1,7,8,9,10,12). Branch claude/wp-cb-1-ui-2026-05-31."
+    notes: >
+      UI slice built (commits 1456c48..7149ee4, branch claude/wp-cb-1-ui-2026-05-31) + team_100
+      independent L-GATE_B verification. Design system ported (tokens v2 white-green + cb tokens +
+      Carmela; crop-book-v1.css/js); 8 macros (prov_value cue authority, calc_panel disabled-on-MISSING,
+      assumption_field, calc_seq, depth_tabs, audience_switch, rotation_hint, prov_table); FieldRegistry
+      PHP alias resolver (drift-immune per FIELD_INTERFACE_MAP §1); book_crop 3 depths (13-topic order);
+      book_entry audience switch + filter bar; calc_dash; endpoints GET /api/v1/assumptions + POST
+      /api/v1/contribute; parity tests #1/#8/#10. VERIFY by team_100: composer test 96/96 (278 assert);
+      php -l clean; validate_aos 0 FAIL after MIG2 spec_ref stub; pytest crop_book 631 pass / 2
+      PRE-EXISTING fail (test_ni_publisher_isolation, test_source_registry::test_uc_prefix; NOT
+      UI-induced, no Python touched). Constitutional CLEAN: no _aos/, no LOCKED backend, no migration.
+      PARTIAL (deferred, non-blocking): server-side filter execution, /calc PDF/CSV export, tomato +
+      cucumber watercolors (glyph fallback; art task spawned). F-UI-01: live mirror lacks per-field
+      field_state until backend ingest deploys; UI degrades defensively. BUILD_REPORT:
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-1/BUILD_REPORT_UI_v1.0.0.md.
     validator: team_100
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
@@ -3366,6 +3376,7 @@ work_packages:
   depends_on: ["SFA-S003-P004-WP-CB-MIG"]
   canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
   origin_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/spec/OPEN_ISSUES.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
