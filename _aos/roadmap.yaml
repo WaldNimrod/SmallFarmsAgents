@@ -3383,12 +3383,12 @@ work_packages:
     result: PENDING
     round: 3
     date: "2026-06-01"
-    commit: "b81fe09"
+    commit: "9747152"
     validator: team_190
     notes: >
       R2 (verdict ad2b180) = FAIL: F-190-CB1-V-02 RESOLVED but F-190-CB1-V-01 still broken —
       calc_panel.php passed FieldRegistry::label()'s [label_he,explainer_he] tuple to \$h(),
-      rendering literal 'Array' instead of the Hebrew label. R3 fix (b81fe09): destructure the
+      rendering literal 'Array' instead of the Hebrew label. R3 fix (9747152): destructure the
       tuple before escaping (pattern from book_crop.php:284) + PHPUnit now asserts the resolved
       Hebrew label present / no 'Array' / no raw key in visible copy. Render smoke confirms;
       composer 96/96 (281 assert; prior PHP warning gone); validate_aos 0 FAIL. Narrow 1-file
