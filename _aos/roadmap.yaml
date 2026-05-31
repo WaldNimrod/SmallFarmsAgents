@@ -3369,13 +3369,14 @@ work_packages:
     result: PENDING
     round: 2
     date: "2026-06-01"
-    commit: "752e108"
+    commit: "30c9b06"
     validator: team_190
     notes: >
-      Round-2 remediation by team_100 (build patch 752e108): V-01 fixed — disabled-calc copy now
+      Round-2 remediation by team_100 (build patches f4e04f1 + 30c9b06): V-01 fixed — disabled-calc copy now
       renders FieldRegistry::label() (Hebrew), raw key only in data-field hook; V-02 fixed —
       prov_value.php renders backend-stamped field_state verbatim, no UI threshold math, neutral
-      UNKNOWN cue when unstamped (tau now backend-only). composer 96/96; validate_aos 0 FAIL;
+      UNKNOWN cue when unstamped (tau now backend-only). 2nd patch 30c9b06 also cleared the missed
+      prov_table.php tau=0.40 bar threshold (now backend-stamped is_low) + a leaked fence. composer 96/96; validate_aos 0 FAIL;
       constitutional CLEAN. Re-mandate to team_190 R2:
       _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-01_v1.0.0.md.
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
