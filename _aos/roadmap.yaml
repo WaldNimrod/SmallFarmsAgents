@@ -3351,6 +3351,33 @@ work_packages:
       field_state until backend ingest deploys; UI degrades defensively. BUILD_REPORT:
       _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-1/BUILD_REPORT_UI_v1.0.0.md.
     validator: team_100
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-06-01"
+    commit: "9f9d9d1"
+    verdict_commit: "6802edb"
+    validator: team_190
+    notes: >
+      team_190 (non-Claude, IR#1) L-GATE_V R1 = FAIL on C6 (field-contract fidelity). Two BLOCKERs:
+      F-190-CB1-V-01 calc_panel.php rendered the raw DB field key in disabled-calc user copy;
+      F-190-CB1-V-02 prov_value.php recomputed VALIDATED from a hard-coded tau=0.40 in the UI.
+      All else green: composer 96/96, php -l 19/19, validate_aos 0 FAIL, pytest 631 pass / 2
+      pre-existing. C1-C5,C7 PASS. V-03 (parity #7/#9/#12) MINOR non-blocking. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_v1.0.0.md.
+  - gate: L-GATE_V
+    result: PENDING
+    round: 2
+    date: "2026-06-01"
+    commit: "752e108"
+    validator: team_190
+    notes: >
+      Round-2 remediation by team_100 (build patch 752e108): V-01 fixed — disabled-calc copy now
+      renders FieldRegistry::label() (Hebrew), raw key only in data-field hook; V-02 fixed —
+      prov_value.php renders backend-stamped field_state verbatim, no UI threshold math, neutral
+      UNKNOWN cue when unstamped (tau now backend-only). composer 96/96; validate_aos 0 FAIL;
+      constitutional CLEAN. Re-mandate to team_190 R2:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-01_v1.0.0.md.
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
     approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified
