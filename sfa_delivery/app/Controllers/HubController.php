@@ -110,7 +110,8 @@ final class HubController
 
     public function calc(Request $request, Response $response): Response
     {
-        $html = Template::render('pages/hub_calc', [
+        // WP-CB-1: serve the new calculator dashboard; hub_calc.php is legacy backup.
+        $html = Template::render('pages/calc_dash', [
             'contact' => Modules::all()['contact'] ?? [],
         ]);
         return self::html($response, $html);
