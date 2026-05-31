@@ -7,8 +7,10 @@
  *   UNVALIDATED → value + .ast asterisk + tooltip
  *   MISSING     → "—" + .reqinfo request-info CTA
  *
- * Complies with FIM §4: no threshold math here — render the stamped field_state.
- * If field_state is absent, derive defensively from confidence_score (τ=0.40).
+ * Complies with FIM §4: NO threshold math here — render the backend-stamped field_state.
+ * If field_state is absent, render a neutral UNKNOWN cue. The UI never recomputes
+ * VALIDATED from a confidence threshold — τ lives in the backend reconciler only
+ * (F-190-CB1-V-02). This keeps the UI correct if τ changes (e.g. the 0.50 fast-follow).
  *
  * Variables (pass as an array or as extract()ed vars):
  *   $field        array — enrichment row: value_best, unit, field_state,
@@ -30,28 +32,24 @@ $field_name  = $field_name  ?? (string)($field['field_name'] ?? '');
 $crop_slug   = $crop_slug   ?? '';
 $show_tooltip = $show_tooltip ?? true;
 
-// Resolve state — backend stamps field_state when available; derive otherwise.
-$state = (string)($field['field_state'] ?? '');
-if ($state === '') {
-    // Defensive derivation: EX/NI → VALIDATED; confidence_score ≥ 0.40 → VALIDATED; else UNVALIDATED/MISSING
-    $src   = strtoupper((string)($field['winning_source_class'] ?? ''));
-    $conf  = isset($field['confidence_score']) ? (float)$field['confidence_score'] : null;
-    $val   = $field['value_best'] ?? null;
-    if ($val === null || $val === '') {
-        $state = 'MISSING';
-    } elseif (in_array($src, ['EX', 'NI'], true) || ($conf !== null && $conf >= 0.40)) {
-        $state = 'VALIDATED';
-    } else {
-        $state = 'UNVALIDATED';
-    }
-}
-
+// Render the backend-stamped field_state verbatim — NO threshold math in the UI (FIM §4).
+// The backend reconciler owns τ; the UI only displays VALIDATED / UNVALIDATED / MISSING.
+$state = strtoupper((string)($field['field_state'] ?? ''));
 $value = $field['value_best'] ?? null;
 $unit  = (string)($field['unit'] ?? '');
 $src   = strtoupper((string)($field['winning_source_class'] ?? ''));
 $conf  = isset($field['confidence_score']) ? (float)$field['confidence_score'] : null;
 
-if ($state === 'MISSING' || ($value === null || $value === '')) {
+// No value at all → MISSING regardless of (absent) state.
+if ($value === null || $value === '') {
+    $state = 'MISSING';
+} elseif (!in_array($state, ['VALIDATED', 'UNVALIDATED', 'MISSING'], true)) {
+    // Value present but the backend stamped no state (e.g. mirror predates the
+    // field_state ingest, F-UI-01) → neutral UNKNOWN cue. Never assume VALIDATED.
+    $state = 'UNKNOWN';
+}
+
+if ($state === 'MISSING') {
 ?>
 <span class="val--missing" data-field="<?= $h($field_name) ?>"
 >—<?php if ($field_name !== ''): ?> <a class="reqinfo"
@@ -74,6 +72,12 @@ if ($state === 'MISSING' || ($value === null || $value === '')) {
   </span>
   <?php endif; ?>
 </span>
+<?php
+} elseif ($state === 'UNKNOWN') {
+    // Value present, backend stamped no state — show it plainly with a neutral
+    // "not yet checked" cue. NOT styled as validated (no τ assumption). FIM §4.
+?>
+<span class="pv-unknown" data-field="<?= $h($field_name) ?>" title="טרם אומת מול הספר"><?= $h((string)$value) ?><?php if ($unit !== ''): ?><small> <?= $h($unit) ?></small><?php endif; ?></span>
 <?php
 } else { // VALIDATED
 ?>

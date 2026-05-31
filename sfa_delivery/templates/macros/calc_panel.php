@@ -28,6 +28,7 @@
  * @see COMPONENTS-delta.md §19
  */
 use SFA\Lib\Template;
+use SFA\Lib\FieldRegistry;
 $h = [Template::class, 'h'];
 
 $calc_no        = (int)($calc_no ?? 0);
@@ -77,7 +78,7 @@ $aud_cls    = $aud_class[$audience]  ?? 'tier--leaf';
       <span class="ic">🔒</span>
       <div>
         <h5>חסר שדה נדרש</h5>
-        <p>המחשבון יידלק כש<code><?= $h((string)($disabled_field['field_name'] ?? '')) ?></code> יתמלא.</p>
+        <p>המחשבון יידלק כש<b><?= $h(FieldRegistry::label((string)($disabled_field['field_name'] ?? ''))) ?></b> יתמלא.</p>
         <a class="reqinfo" href="#"
            data-field="<?= $h((string)($disabled_field['field_name'] ?? '')) ?>"
            data-crop="<?= $h($crop_slug) ?>"
