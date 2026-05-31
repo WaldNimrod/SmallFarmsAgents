@@ -3479,6 +3479,23 @@ work_packages:
       F-UI-01 (live mirror field_state) once the backend ingest deploys. None block the WP-CB-1
       LOD500 lock. Art batches still arriving — wiring lands as masters are confirmed.
     validator: team_100
+  - gate: L-GATE_B
+    result: IN_PROGRESS
+    scope: art-wiring
+    date: "2026-06-01"
+    notes: >
+      team_00-directed immediate art integration. Intake of nano-banana batches 1+2 (30 raw →
+      CROP_ART_MASTERS/incoming/; 20 crop masters + 1 book-hero promoted to masters/). 720px derivatives
+      built for 24 crops + wc-cropbook-hero (scripts/wc_derivatives.sh). WC_ART + book_entry $wc_art_map
+      extended with 20 new slugs (tomato/cucumber/beet/pepper + basil/cabbage/broccoli/cauliflower/eggplant/
+      carrot/garlic/onion/scallion/kale/chard/leek/spinach/pea/melon/fennel). wc-cropbook-hero promoted as
+      the book's central watercolor logo (team_00 style-consistency request). ICON_MAP unchanged (watercolor
+      preferred; sprite stays glyph fallback). composer 96/96; php -l clean; validate_aos 0 FAIL. NOTE: this
+      edits WP-CB-1 LOD500_LOCKED files (WC_ART/$wc_art_map) — chartered patch01 scope, flagged for team_190
+      patch01 L-GATE_V; ahead of patch01 formal L-GATE_S per team_00 directive. Parked: pepper alts +
+      ambiguous bulb (team_00 to ID). Remaining patch01 scope (V-03 parity, server-side filters, /calc export,
+      F-UI-01) NOT in this step.
+    validator: team_100
   notes: "OPENED 2026-06-01. Non-blocking UI follow-ups from WP-CB-1 R3 verdict + watercolor art
     wiring. NEXT: team_100 LOD400 → team_190 L-GATE_S (non-Claude, IR#1)."
   profile: L0
