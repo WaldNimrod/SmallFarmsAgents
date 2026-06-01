@@ -3497,11 +3497,31 @@ work_packages:
       _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG2/BUILD_REPORT_v1.0.0.md. Build deviations (non-blocking):
       seeder_settings ORM uses deferred() until 060 applied on live PG; NI re-resolve dry-run-tested (live-DB
       e2e pending). Canon frontmatter → v1.3.0 LOD200_LOCKED."
-  notes: "L-GATE_B PASS 2026-06-01 (team_10 build, team_100 independently verified; commit dded7b1).
-    Canon v1.3.0 LOD200_LOCKED. NEXT: team_50 QA (Claude sub-agent, functional) → then team_190 NON-CLAUDE
-    L-GATE_V (constitutional, IR#1/#5 — VALIDATION_MANDATE prepared by team_100, handed to Nimrod; never
-    self-issued). On L-GATE_V PASS → ADR042 archive (team_191). Open data items carried to L-GATE_V: PR backfill
-    + the manual-validation console (NI) populate the new fields; UI lights 'מוצע' slots as data lands."
+  - gate: QA
+    result: PASS_WITH_CONCERNS
+    date: "2026-06-01"
+    validator: team_50
+    report_ref: "_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-MIG2/QA_REPORT_v1.0.0.md"
+    notes: "team_50 (Claude, read-only) functional QA. PASS_WITH_CONCERNS. C-1 MODERATE: test_php_parity was
+      dead code (REPO_ROOT parents[3] → silent skip; regex would also capture the quick-facts field array) so
+      AC-02 was unguarded — team_100 FIXED inline (parents[2] + 'icon'-anchored ordered parity); test now runs +
+      passes (suite 720 pass / 1 skip / 2 pre-existing). C-3 LOW: _extract_mig2_attrs docstring over-claimed
+      unit_size — FIXED. C-2 LOW: NI write path dry-run-tested only — carried as L-GATE_V NOTE N-1. Correctives
+      commit c083cc3. Layer ownership / IR#4 / enrichment-engine-untouched all CLEAN per QA."
+  - gate: L-GATE_V
+    result: ROUTED
+    date: "2026-06-01"
+    validator: team_190
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/VALIDATION_MANDATE_team190_LGATE-V_2026-06-01_v1.0.0.md"
+    notes: "team_100 prepared the L-GATE_V VALIDATION_MANDATE (constitutional + AC fidelity + the data-application
+      boundary: live 060 apply + PR backfill + console NI cycle are post-gate operational steps). ROUTED to
+      team_190 NON-CLAUDE (IR#1/#5) — team_00 to route to a non-Claude validator. team_100 NEVER self-issues."
+  notes: "L-GATE_V ROUTED 2026-06-01. L-GATE_B PASS (team_10 build, team_100 verified, commit dded7b1);
+    team_50 QA PASS_WITH_CONCERNS (C-1/C-3 fixed inline c083cc3); Canon v1.3.0 LOD200_LOCKED. VALIDATION_MANDATE
+    prepared + handed to Nimrod for a non-Claude L-GATE_V. On PASS → LOD500_LOCKED + ADR042 archive (team_191) +
+    the operational data-application cycle (060 apply, PR backfill, manual-validation console → NI ingest). All
+    MIG2 work isolated on branch claude/wp-cb-mig2-2026-06-01 @ c083cc3; main = origin/main (9867d4d), not yet
+    merged (merge is a team_00 call after L-GATE_V PASS)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01
