@@ -49,6 +49,10 @@ fi
 
 echo "[deploy] mirroring $SRC -> ${SFA_FTP_HOST}:${REMOTE_ROOT}"
 cd "$SRC"
+# SECURITY: lftp's verbose transfer log prints resolved ftp://user:pass@host URLs,
+# which would leak the FTP password into logs. Pipe ALL lftp output through a redactor
+# that strips user:pass from any ftp:// URL before it is printed. `pipefail` (set at the
+# top of this script) ensures lftp's exit code still propagates through the pipe.
 lftp -c "
 set ftp:ssl-allow yes
 set ssl:verify-certificate no
@@ -68,6 +72,6 @@ mirror -R --delete --verbose=1 --parallel=3 \
   --exclude-glob '*.pyc' \
   --exclude '^__pycache__/' \
   ./ ${REMOTE_ROOT}
-bye"
+bye" 2>&1 | sed -E 's#(ftps?://)[^@[:space:]]*@#\1***:***@#g'
 
 echo "[deploy] complete — smoke https://sfa.nimrod.bio/ next"
