@@ -3415,20 +3415,22 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
-  status: ELIGIBLE
+  status: IN_PROGRESS
   phase: spec
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_DRAFT
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_DRAFT
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-MIG"]
+  branch: "claude/wp-cb-mig2-2026-06-01"
   canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
   origin_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/spec/OPEN_ISSUES.md"
-  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
+  lod200_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
@@ -3445,9 +3447,25 @@ work_packages:
       into the canon-alignment scope. Effort LARGE: Canon amendment v1.3.0 + Alembic head→next + crop_attribute/
       enrichment wiring + field_policy entries + sfa_ingest_push whitelist + PR backfill from 37 MasterClass MDs."
     validator: team_00
-  notes: "OPENED 2026-05-31. Schema-expansion follow-on to WP-CB-MIG. NEXT: team_100 authors Canon
-    amendment (v1.3.0) + LOD400 migration spec → team_190 L-GATE_S (non-Claude, IR#1). Also closes the
-    season_window data gap (0 rows — planting_season NULL) flagged in WP-CB-MIG L-GATE_V."
+  - gate: L-GATE_S
+    result: ROUTED
+    date: "2026-06-01"
+    notes: "team_00 FINAL SPEC APPROVAL of the characterization (אפיון) in-session 2026-06-01. Four
+      decisions recorded (Canon §16 D-MIG2-1..4): sale_unit→harvest_unit alias + unit_size only;
+      seeder_model→seeder alias + seeder_settings new col; pests BOTH structured attrs AND knowledge_notes
+      drill-down; needs_summer_shade {none/shade_30/shade_40/shade_50}. Backfill = PR-parseable groups +
+      a NEW manual-validation HTML console (gap-scan, best-effort defaults, clipboard-JSON export → NI-class
+      ingest) for narrative-only/Israel-specific groups. team_100 authored: Canon amendment v1.3.0 (additive
+      §15–§20, DRAFT pending PASS) + LOD400_spec.md v1.0.0 (12 WIs, 16 ACs). Branch claude/wp-cb-mig2-2026-06-01
+      off main (previous session merged S003-P004 to main @ 8795b8a, verified). ROUTED to team_190 (NON-CLAUDE,
+      IR#1) for L-GATE_S spec review. Mandate: _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/
+      VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md. team_00 to route to a non-Claude validator."
+    validator: team_190
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md"
+  notes: "L-GATE_S ROUTED 2026-06-01. Schema-expansion follow-on to WP-CB-MIG. team_100 authored Canon
+    amendment v1.3.0 + LOD400. Awaiting team_190 (non-Claude) L-GATE_S spec verdict. On PASS → dispatch
+    team_10 L-GATE_B build (the only DDL is the seeder_settings column; everything else is Python-config +
+    data). Folds F-CB1-UI-01 field_policy renames + the season_window data gap (0 rows — planting_season NULL)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01

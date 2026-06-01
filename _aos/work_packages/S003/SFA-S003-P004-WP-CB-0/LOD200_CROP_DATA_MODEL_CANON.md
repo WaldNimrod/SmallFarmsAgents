@@ -334,3 +334,120 @@ team_100 ran the **exhaustive** live gate (all closed-enum values + all units) t
 ---
 
 *Author team_100. On approval: open a Migration WP (the §8 phases) and correct WP-CB-1's LOD400 field layer to this canon. Build of new calculators/UI stays PAUSED until the canon is approved (team_00 directive).*
+
+---
+
+# AMENDMENT v1.3.0 — Crop Data Model Expansion (WP-CB-MIG2)
+
+> **Status: DRAFT — pending team_190 L-GATE_S (non-Claude, IR#1).** Authored by team_100 2026-06-01 after
+> team_00 FINAL SPEC APPROVAL of the WP-CB-MIG2 characterization (אפיון). The locked v1.2.0 body above is
+> **unchanged**; this amendment is additive (new fields + the 13-topic taxonomy). The frontmatter lock status
+> bumps to `v1.3.0 LOD200_LOCKED` only on L-GATE_S PASS. Executable detail lives in
+> `_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD400_spec.md`.
+
+## 15. The 13-topic taxonomy (`CROP_TOPICS`) — canonical ordering (NEW)
+
+Every JMF MasterClass sheet follows one canonical topic order. This amendment ratifies it as the canonical
+ordering for **both** the schema (field grouping) and the UI (section order, all depths). It is the structure
+growers already know — it makes every depth read as a plan.
+
+| # | key | Hebrew | Topic |
+|---|-----|--------|-------|
+| 1 | `varieties` | זנים | Varieties |
+| 2 | `spacing` | מרווח ופריסה | Spacing & layout |
+| 3 | `equipment` | ציוד וכיוונון | Equipment & tuning |
+| 4 | `soil` | קרקע ודישון | Soil & fertilization |
+| 5 | `bedprep` | הכנת ערוגה | Bed preparation |
+| 6 | `sowing` | זריעה/שתילה | Sowing / transplanting |
+| 7 | `irrigation` | השקיה | Irrigation |
+| 8 | `care` | טיפוח ועישוב | Care & weeding |
+| 9 | `pest` | מזיקים ומחלות | **Pests & diseases (NEW topic)** |
+| 10 | `harvest` | קציר | Harvest |
+| 11 | `storage` | שטיפה ואחסון | Washing & storage |
+| 12 | `succession` | רצף וחברה | Succession & companions |
+| 13 | `yield_inc` | יבול/הכנסה | Yield / revenue (calc-facing) |
+
+The taxonomy already exists in the delivery UI (`sfa_delivery/templates/pages/book_crop.php`). The LOD400
+formalizes it as a canonical constant (`organic_market_agent/crop_book/canon/` — `CROP_TOPICS`) that the
+schema field-registry and the UI both read, so ordering has one SSoT.
+
+## 16. New field groups (7) + `needs_summer_shade` — registry additions
+
+These extend §7 under the same type taxonomy (T1–T6) and the same layer-ownership rule. **No new tables, no new
+storage shapes** (Canon principle #6) — every field slots into the existing `crop_field_enrichment` (T1),
+`crop_attribute` (T2/T3), or `crop_varieties` columns (T5).
+
+| Canonical field | Topic | Type | Layer | Enum / unit | Disposition |
+|---|---|---|---|---|---|
+| `seeder_model` | equipment | T5 | column | text | **ALIAS → existing `seeder` column** (no new col) |
+| `seeder_settings` | equipment | T5 | column (NEW) | text | new free-text col on `crop_varieties` (summary of front/rear gear + roller plate) |
+| `irrigation_type` | irrigation | T2 | `crop_attribute` | CLOSED-ENUM `{drip, sprinkler, mixed}` | →ATTR |
+| `drip_lines_per_bed` | irrigation | T1 | enrichment | `count` | →FACT |
+| `root_depth_class` | irrigation | T2 | `crop_attribute` | CLOSED-ENUM `{shallow, medium, deep}` | →ATTR |
+| `common_pests` | pest | T3 | `crop_attribute` (list) **+ `crop_knowledge_notes` drill-down** | OPEN-VOCAB | →ATTR + notes |
+| `foliar_feeding_program` | pest | T2 | `crop_attribute` **+ `crop_knowledge_notes` drill-down** | OPEN-VOCAB | →ATTR + notes |
+| `sale_unit` | harvest | T2 | `crop_attribute` | **ALIAS → existing `harvest_unit` enum** (no new attr) | alias |
+| `unit_size` | harvest | T2 | `crop_attribute` | OPEN-VOCAB spec (e.g. `"6-7 stems"`, `"13-18cm"`) | →ATTR |
+| `labor_rate_harvest` | harvest | T1 | enrichment | `units_per_hr` | →FACT |
+| `labor_rate_wash` | storage | T1 | enrichment | `units_per_hr` | →FACT |
+| `plantings_per_season` | succession | T1 | enrichment | `count` | →FACT (complements `succession_interval_weeks`) |
+| `harvest_weeks_span` | succession | T1 | enrichment | `weeks` | →FACT |
+| `needs_summer_shade` | soil/irrigation | T2 | `crop_attribute` | CLOSED-ENUM `{none, shade_30, shade_40, shade_50}` | →ATTR (Israel-specific; ratified team_00) |
+
+**Decisions recorded (team_00, 2026-06-01):**
+- **D-MIG2-1 — sale_unit reuses harvest_unit.** `sale_unit` is an *alias* to the existing `harvest_unit` T2
+  attribute (§6.3a CLOSED-ENUM `kg/bunch/head/case/unit/seedling`). Only `unit_size` is genuinely new. This
+  avoids re-introducing duplicate-concept debt (D2). The per-bed-meter price columns convert via `unit_size`'s
+  `kg_per_unit` where applicable.
+- **D-MIG2-2 — seeder_model reuses the `seeder` column.** The existing T5 `seeder` column already holds the
+  model string (e.g. `"JANG 3X"`); `seeder_model` is an alias. Only `seeder_settings` (one free-text summary
+  column) is new. The existing granular `seeder_front_gear`/`seeder_rear_gear`/`seeder_roller_plate` columns
+  (§7.3a) are unchanged.
+- **D-MIG2-3 — pests are BOTH structured and notes.** `common_pests`/`foliar_feeding_program` are reconciled
+  attributes (provenance) **and** the מזיקים topic renders the existing `crop_knowledge_notes`
+  (`pest_disease`/`irrigation` note types already ingested by `load_masterclass_sheets.py`) for drill-down.
+- **D-MIG2-4 — needs_summer_shade** ratified: 4-token closed enum `{none, shade_30, shade_40, shade_50}`,
+  Israel-specific, NI-sourced (Nimrod's domain knowledge via the validation console).
+
+## 17. Backfill provenance (NEW)
+
+- **PR (parseable from the 37 MasterClass MDs):** `irrigation_type`, `drip_lines_per_bed`, `root_depth_class`,
+  `harvest_weeks_span`, partial `common_pests`/`foliar_feeding_program`/`unit_size`. Imported via
+  `load_masterclass_sheets.py` extension (PR class, weight 0.70).
+- **NI (Nimrod validation, via the §18 console):** `needs_summer_shade`, `labor_rate_harvest`,
+  `labor_rate_wash`, `plantings_per_season`, and any field a PR parse leaves empty. NI class is a hard override
+  (above PR), so validated values win.
+- **season_window data gap fold-in:** `crop_attribute.season_window` is currently 0 rows (the source
+  `planting_season` was NULL for all varieties). Backfilled from JMF/PR during this migration.
+
+## 18. Manual-validation console (NEW deliverable — team_00 Q3)
+
+A self-contained static HTML page (generated by `scripts/build_crop_gap_console.py` from a live DB gap-scan):
+one record per `(crop × missing field)` gap, grouped by the 13 topics, **pre-filled with best-effort defaults**
+(PR parse where available, else a clearly-marked agronomic default). Nimrod confirms/edits/skips each, then
+exports a JSON to clipboard. The returned JSON is ingested as **NI class** by
+`scripts/ingest_nimrod_validation.py` into `crop_attribute`/enrichment. This is the bridge for the narrative-only
+and Israel-specific groups that the MDs cannot supply.
+
+## 19. Carried-finding fold-ins (NEW)
+
+- **F-CB1-UI-01** — `field_policy.py` keys aligned to canon: `avg_yield_per_bed_m`→`yield_per_bed_m`,
+  `documented_price`→`price_documented`, `in_row_spacing_cm`→`spacing_in_row_cm`,
+  `planting_season`→`season_window`/`sowing_months`, so the reconciler writes enrichment under canonical keys
+  (resolves the active drift vs `calculator_meta.py`).
+- **F-50-patch01-01** (LOW, latent) — the JS `crop-book-v1.js CALC.revenue` does no non-kg conversion (the
+  Python `calculators.py` does, via `kg_per_unit`). **Out of MIG2 build scope**; becomes a UI follow-up once
+  `unit_size` supplies `kg_per_unit`. Logged here so it is not lost.
+
+## 20. Amendment acceptance (additive to §12)
+- New enum domains created; all new T2 values ∈ their closed sets; OPEN-VOCAB attrs normalized + provenance-carried.
+- `crop_attribute` populated for the new T2/T3 set; new T1 facts in enrichment with provenance.
+- `seeder_settings` column added; `seeder_model`/`sale_unit` resolve via FieldRegistry alias (no duplicate storage).
+- `CROP_TOPICS` is the single ordering SSoT (schema + UI read it).
+- PR backfill run from the 37 MDs; validation console generated; NI importer round-trips a sample JSON.
+- `sfa_ingest_push` whitelist extended; new fields delivered to the tier.
+- `field_policy.py` 4 renames applied; no orphaned old keys.
+- `validate_aos.sh` 0 FAIL; full `tests/crop_book/` suite green; no new pytest failures.
+
+*Amendment author: team_100, 2026-06-01. Pending team_190 L-GATE_S (non-Claude). On PASS → bump frontmatter to
+v1.3.0 LOD200_LOCKED and dispatch team_10 build per the LOD400.*
