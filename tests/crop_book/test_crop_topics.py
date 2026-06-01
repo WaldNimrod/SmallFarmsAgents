@@ -10,7 +10,7 @@ from organic_market_agent.crop_book.canon.topics import (
     TOPIC_BY_KEY,
 )
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 BOOK_CROP_PHP = REPO_ROOT / "sfa_delivery" / "templates" / "pages" / "book_crop.php"
 
 
@@ -43,17 +43,19 @@ class TestCropTopics:
 
         php_text = BOOK_CROP_PHP.read_text(encoding="utf-8")
 
-        # Extract all topic keys from the PHP $topics array
-        # Pattern: ['key'=>'<key>',
-        php_keys = re.findall(r"\['key'\s*=>\s*'([^']+)'", php_text)
+        # Extract ONLY the 13-topic $topics array keys. Topic entries are uniquely
+        # identified by a following 'icon' key — this excludes other arrays in the
+        # template that also use 'key'=> (e.g. the quick-facts field array L185-188,
+        # which has no 'icon'). Order is preserved (re.findall is left-to-right).
+        php_keys = re.findall(r"\['key'\s*=>\s*'([^']+)'\s*,\s*'icon'", php_text)
 
         if not php_keys:
             pytest.fail("Could not extract topic keys from book_crop.php $topics array")
 
-        # PHP may have duplicates or other arrays — match against the unique ordered set
-        # The canonical section is the 13-topic $topics array in the full depth block
-        assert set(TOPIC_KEYS) == set(php_keys), (
-            f"PHP topic keys do not match CROP_TOPICS.\n"
+        # Strict ordered parity — the schema SSoT (CROP_TOPICS) and the UI must agree
+        # on both membership AND order.
+        assert TOPIC_KEYS == php_keys, (
+            f"PHP topic keys do not match CROP_TOPICS (ordered).\n"
             f"  Python: {TOPIC_KEYS}\n"
             f"  PHP:    {php_keys}"
         )

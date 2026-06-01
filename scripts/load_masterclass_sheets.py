@@ -268,8 +268,12 @@ def _extract_mig2_attrs(sections: dict[str, list[str]]) -> dict[str, str | float
     """Extract MIG2 structured attributes from parsed MD sections.
 
     Returns dict with keys: irrigation_type, root_depth_class, drip_lines_per_bed,
-    harvest_weeks_span, common_pests, foliar_feeding_program, unit_size, season_window.
+    harvest_weeks_span, common_pests, foliar_feeding_program, season_window.
     Values are None where not found.
+
+    Note: unit_size is NOT extracted here — the MD sheets do not carry it in a
+    parseable structure (Canon §17: "partial unit_size"). It is supplied via the
+    NI manual-validation console, not PR backfill.
     """
     full_text = " ".join(
         line for lines in sections.values() for line in lines
