@@ -538,3 +538,29 @@
   .cards-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
   .headvals { grid-template-columns: 1fr 1fr; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   N · CROP-BOOK HERO  (WP-CB-1-patch01 — team_35 watercolor book)
+   ════════════════════════════════════════════════════════════ */
+.cb-hero {
+  display: flex; align-items: center; gap: var(--gj-sp-5, 24px);
+  background: color-mix(in oklch, var(--gj-leaf) 8%, var(--gj-paper));
+  border: 1px solid var(--gj-line); border-radius: var(--gj-r-xl, 18px);
+  padding: var(--gj-sp-4, 16px) var(--gj-sp-5, 24px);
+  margin-bottom: var(--gj-sp-5, 24px);
+}
+.cb-hero__art {
+  width: clamp(160px, 34vw, 320px); height: auto;
+  mix-blend-mode: multiply; flex: 0 0 auto;
+}
+.cb-hero__txt { flex: 1 1 auto; }
+.cb-hero__title {
+  font-family: var(--gj-font-brand, "Frank Ruhl Libre", serif);
+  font-size: clamp(24px, 5vw, 36px); color: var(--gj-leaf-deep);
+  margin: 0 0 6px; letter-spacing: -.01em;
+}
+.cb-hero__sub { color: var(--gj-ink-soft); font-size: 15px; margin: 0; max-width: 46ch; }
+@media (max-width: 640px) {
+  .cb-hero { flex-direction: column; text-align: center; }
+  .cb-hero__art { width: clamp(140px, 60vw, 220px); }
+}

@@ -93,6 +93,14 @@ ob_start();
       // disabled "בקרוב" cards (AC-U4-07: no 404s to unbuilt modules).
       $m_status = (string)($m['status'] ?? 'planned');
       $m_live   = in_array($m_status, ['live', 'beta'], true);
+      // WP-CB-1-patch01: watercolor module heroes (team_35 nano-banana art, cut from the 3-icon sheet).
+      // Keyed by module id; only these three have art today — others keep the sprite glyph.
+      $module_hero_map = [
+          'crop-book' => '/public_assets/img/modules/module-crop-book.png',
+          'market'    => '/public_assets/img/modules/module-market.png',
+          'calc'      => '/public_assets/img/modules/module-calc.png',
+      ];
+      $hero_url = $module_hero_map[(string)($m['id'] ?? '')] ?? '';
       $module = [
           'slug'       => (string)($m['id']      ?? ''),
           'name_he'    => (string)($m['name_he'] ?? ''),
@@ -105,6 +113,7 @@ ob_start();
           'href'       => $m_live ? str_replace('/book/', '/crop-book/', preg_replace('#^/sfa/#', '/', (string)($m['route'] ?? '#'))) : '',
           'disabled'   => !$m_live,
           'icon_id'    => $icon_id,
+          'hero_url'   => $hero_url,
       ];
       include __DIR__ . '/../macros/module_card.php';
   endforeach; ?>
