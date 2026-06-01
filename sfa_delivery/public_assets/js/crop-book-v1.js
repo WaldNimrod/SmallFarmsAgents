@@ -452,6 +452,40 @@
     window.SFA_ASSUMPTIONS = A;
   }
 
+  /* WP-CB-1-patch01: calculator-plan export — append the live plan (context strip +
+     summary rows) to /calc/export.{csv,pdf} as query params so the server renders it. */
+  function wireCalcExport() {
+    var btns = document.querySelectorAll('[data-calc-export]');
+    if (!btns.length) return;
+    function planQuery() {
+      var p = [];
+      function add(k, v) { if (v !== null && v !== undefined && String(v) !== '' && String(v) !== '—') p.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)); }
+      var cropSel = document.querySelector('[data-k="crop_slug"]');
+      if (cropSel) {
+        var opt = cropSel.options ? cropSel.options[cropSel.selectedIndex] : null;
+        add('crop', opt ? (opt.text || cropSel.value) : cropSel.value);
+      }
+      var beds = document.querySelector('[data-k="num_beds"]');
+      if (beds) add('beds', beds.value);
+      var td = document.querySelector('[data-k="target_date"]');
+      if (td) add('target_date', td.value);
+      var sum = { 'יבול כולל': '[data-summary-yield]', 'הכנסה כוללת': '[data-summary-revenue]', 'קומפוסט': '[data-summary-compost]' };
+      Object.keys(sum).forEach(function (label) {
+        var el = document.querySelector(sum[label]);
+        if (el) add('rows[' + label + ']', (el.textContent || '').trim());
+      });
+      return p.join('&');
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        var base = b.getAttribute('href');
+        var q = planQuery();
+        b.setAttribute('href', q ? base + '?' + q : base);
+        // let the browser follow the (now param-laden) href; CSV downloads, PDF opens print view
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     wireAssumptions();
     wireCalcs();
@@ -465,5 +499,6 @@
     wireTopics();
     wireCalcModals();
     wireReqInfo();
+    wireCalcExport();
   });
 })();

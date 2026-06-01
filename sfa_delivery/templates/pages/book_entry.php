@@ -96,7 +96,12 @@ ob_start();
     <?php endforeach; ?>
   </div>
 </section>
-<?php if (!empty($crops)): ?>
+<?php
+  // WP-CB-1-patch01: render the crops section (incl. filter bar) whenever there are
+  // results OR an active filter — so a 0-result filter still shows the bar to recover.
+  $has_active_filter = is_array($filters ?? null) && implode('', array_map(fn($v) => (string)$v, $filters)) !== '';
+?>
+<?php if (!empty($crops) || $has_active_filter): ?>
 <section class="cb-entry-crops">
   <!-- WP-CB-1: Audience switch + filter bar + results -->
   <div class="aud-head">
@@ -109,49 +114,87 @@ ob_start();
     <span class="aud-head__sub"><?= $h((string)$total) ?> גידולים</span>
   </div>
 
-  <!-- Top filter bar -->
-  <div class="ftop">
+  <!-- Top filter bar — WP-CB-1-patch01: real server-side GET form -->
+  <?php
+    $families = is_array($families ?? null) ? $families : [];
+    $flt      = is_array($filters  ?? null) ? $filters  : [];
+    $fq       = (string)($flt['q']      ?? '');
+    $ffam     = (string)($flt['family'] ?? '');
+    $fseason  = (string)($flt['season'] ?? '');
+    $fdtm     = $flt['dtm_max'] ?? null;
+    $fsow     = (string)($flt['sow']    ?? '');
+    $ffrost   = (string)($flt['frost']  ?? '');
+    $advOpen  = ($ffam !== '' || $fseason !== '' || $fdtm !== null || $fsow !== '' || $ffrost !== '');
+    $sel      = fn($a, $b) => $a === $b ? ' selected' : '';
+  ?>
+  <form class="ftop" method="get" action="/crop-book/">
+    <input type="hidden" name="view" value="<?= $h($view) ?>">
     <div class="ftop__top">
       <div class="filters__search">
         <span class="ic">🔍</span>
-        <input type="text" placeholder="חיפוש גידולים..." aria-label="חיפוש"/>
+        <input type="text" name="q" value="<?= $h($fq) ?>" placeholder="חיפוש גידולים..." aria-label="חיפוש"/>
       </div>
       <button class="ftop__advbtn" type="button"
               data-filter-toggle="adv-filters"
-              aria-expanded="false">
+              aria-expanded="<?= $advOpen ? 'true' : 'false' ?>">
         סינון מתקדם <span class="chev">▾</span>
       </button>
+      <button class="filters__apply" type="submit">חיפוש</button>
       <span class="ftop__count"><b><?= $h((string)$total) ?></b> גידולים</span>
     </div>
-    <div id="adv-filters" class="ftop__adv">
+    <div id="adv-filters" class="ftop__adv"<?= $advOpen ? ' style="display:block"' : '' ?>>
       <div class="ftop__row">
         <div class="fset">
-          <span class="fset__lbl" data-field="planting_method">שיטת שתילה</span>
-          <div class="fchips">
-            <button class="fchip" data-single data-default-on type="button">הכל</button>
-            <button class="fchip" data-single type="button">זריעה ישירה</button>
-            <button class="fchip" data-single type="button">שתיל</button>
-          </div>
+          <label class="fset__lbl" for="f-family">משפחה בוטנית</label>
+          <select id="f-family" name="family">
+            <option value="">הכל</option>
+            <?php foreach ($families as $fam): ?>
+            <option value="<?= $h($fam) ?>"<?= $sel($ffam, (string)$fam) ?>><?= $h($fam) ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
         <div class="fset">
-          <span class="fset__lbl" data-field="frost_tolerance_class">עמידות לקרה</span>
-          <div class="fchips">
-            <button class="fchip" data-single data-default-on type="button">הכל</button>
-            <button class="fchip" data-single type="button">עמיד</button>
-            <button class="fchip" data-single type="button">חצי-עמיד</button>
-            <button class="fchip" data-single type="button">רגיש</button>
-          </div>
+          <label class="fset__lbl" for="f-season">עונה</label>
+          <input id="f-season" type="text" name="season" value="<?= $h($fseason) ?>" placeholder="קיץ / חורף / אביב…">
+        </div>
+        <div class="fset">
+          <label class="fset__lbl" for="f-dtm">ימים להבשלה (עד)</label>
+          <input id="f-dtm" type="number" min="0" name="dtm_max" value="<?= $fdtm !== null ? $h((string)$fdtm) : '' ?>" placeholder="למשל 60">
+        </div>
+        <div class="fset">
+          <label class="fset__lbl" for="f-sow">שיטת שתילה</label>
+          <select id="f-sow" name="sow">
+            <option value="">הכל</option>
+            <option value="direct_seed"<?= $sel($fsow, 'direct_seed') ?>>זריעה ישירה</option>
+            <option value="transplant"<?= $sel($fsow, 'transplant') ?>>שתיל</option>
+          </select>
+        </div>
+        <div class="fset">
+          <label class="fset__lbl" for="f-frost">עמידות לקרה</label>
+          <select id="f-frost" name="frost">
+            <option value="">הכל</option>
+            <option value="hardy"<?= $sel($ffrost, 'hardy') ?>>עמיד</option>
+            <option value="half_hardy"<?= $sel($ffrost, 'half_hardy') ?>>חצי-עמיד</option>
+            <option value="tender"<?= $sel($ffrost, 'tender') ?>>רגיש</option>
+            <option value="very_tender"<?= $sel($ffrost, 'very_tender') ?>>רגיש מאוד</option>
+          </select>
         </div>
       </div>
       <div class="ftop__advfoot">
         <span class="ftop__count"><b><?= $h((string)$total) ?></b> גידולים</span>
-        <button class="filters__clear" data-filter-reset type="button">↺ איפוס</button>
-        <button class="filters__apply" type="button">החל סינון</button>
+        <a class="filters__clear" href="/crop-book/?view=<?= $h($view) ?>">↺ איפוס</a>
+        <button class="filters__apply" type="submit">החל סינון</button>
       </div>
     </div>
-  </div>
+  </form>
 
   <div id="crop-list-scope">
+    <?php if (empty($crops)): ?>
+    <div class="cb-empty">
+      <p>לא נמצאו גידולים התואמים את הסינון.</p>
+      <a class="filters__clear" href="/crop-book/?view=<?= $h($view) ?>">↺ נקו סינון</a>
+    </div>
+    <?php else: ?>
     <!-- Cards view -->
     <div data-aud-view="cards" style="<?= $view !== 'cards' ? 'display:none' : '' ?>">
       <div class="cards-grid">
@@ -220,8 +263,10 @@ ob_start();
         </table>
       </div>
     </div>
+    <?php endif; /* crops empty/non-empty */ ?>
   </div>
 
+  <?php if (!empty($crops)): ?>
   <!-- Pagination -->
   <div class="pager" data-pager>
     <div class="pager__info">עמוד <b>1</b> מתוך <?= (int)ceil($total / 25) ?></div>
@@ -236,6 +281,7 @@ ob_start();
       <select aria-label="שורות לעמוד"><option>25</option><option>50</option><option>100</option></select>
     </div>
   </div>
+  <?php endif; /* pager only when crops present */ ?>
 </section>
 <?php endif; ?>
 <?php

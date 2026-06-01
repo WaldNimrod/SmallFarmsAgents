@@ -132,6 +132,76 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringContainsString('ptable', $html, 'Table view must include .ptable');
     }
 
+    // ── server-side filters (WP-CB-1-patch01) ─────────────────────
+
+    public function testBookIndexFilterByFamily(): void
+    {
+        // Seed: lettuce=חסתיים, radish=מצליבים. Filter family=מצליבים → only radish.
+        $res  = $this->get('/crop-book/?family=' . rawurlencode('מצליבים'));
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('צנונית', $html, 'family filter must keep radish');
+        $this->assertStringNotContainsString('/crop-book/lettuce/', $html, 'family filter must drop lettuce');
+    }
+
+    public function testBookIndexFilterByDtmMax(): void
+    {
+        // lettuce dtm_max=60, radish dtm_max=35. dtm_max=40 → only radish.
+        $res  = $this->get('/crop-book/?dtm_max=40');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('/crop-book/radish/', $html, 'dtm_max=40 keeps radish (35)');
+        $this->assertStringNotContainsString('/crop-book/lettuce/', $html, 'dtm_max=40 drops lettuce (60)');
+    }
+
+    public function testBookIndexFilterByText(): void
+    {
+        $res  = $this->get('/crop-book/?q=' . rawurlencode('חסה'));
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('/crop-book/lettuce/', $html, 'q=חסה keeps lettuce');
+        $this->assertStringNotContainsString('/crop-book/radish/', $html, 'q=חסה drops radish');
+    }
+
+    public function testBookIndexFilterEmptyStateStillShowsForm(): void
+    {
+        // No crop matches → empty-state + the filter form must still render (recoverable).
+        $res  = $this->get('/crop-book/?q=' . rawurlencode('zzzznomatch'));
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('cb-empty', $html, '0-result must show empty-state');
+        $this->assertStringContainsString('method="get"', $html, '0-result must still show filter form');
+    }
+
+    // ── /calc export (WP-CB-1-patch01) ────────────────────────────
+
+    public function testCalcExportCsvReturnsCsv(): void
+    {
+        $res = $this->get('/calc/export.csv?crop=' . rawurlencode('עגבנייה') . '&beds=10&rows[' . rawurlencode('יבול כולל') . ']=' . rawurlencode('105 ק"ג'));
+        $this->assertSame(200, $res->getStatusCode());
+        $this->assertStringContainsString('text/csv', $res->getHeaderLine('Content-Type'));
+        $this->assertStringContainsString('attachment', $res->getHeaderLine('Content-Disposition'));
+        $body = (string)$res->getBody();
+        $this->assertStringContainsString('עגבנייה', $body, 'CSV must include the crop');
+        $this->assertStringContainsString('יבול כולל', $body, 'CSV must include summary rows');
+    }
+
+    public function testCalcExportCsvEmptyPlanStillValid(): void
+    {
+        $res = $this->get('/calc/export.csv');
+        $this->assertSame(200, $res->getStatusCode(), 'empty plan still returns a valid CSV');
+        $this->assertStringContainsString('text/csv', $res->getHeaderLine('Content-Type'));
+    }
+
+    public function testCalcExportPdfReturnsPrintHtml(): void
+    {
+        $res = $this->get('/calc/export.pdf?crop=' . rawurlencode('חסה') . '&beds=5');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('window.print', $html, 'PDF route returns a print-friendly auto-print page');
+        $this->assertStringContainsString('חסה', $html, 'print sheet includes the crop');
+    }
+
     // ── crop page depths ──────────────────────────────────────────
 
     public function testBookCropSimpleDepth(): void
@@ -149,6 +219,28 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
         $this->assertStringContainsString('topic', $html, 'Full depth must include topic sections');
+    }
+
+    public function testFieldStateLightsUpFromVarietyPayload(): void
+    {
+        // F-UI-01: with NO crop_field_enrichment table (mirror reality), prov cues must
+        // still light up from the default variety payload (agronomy + field_state).
+        $this->pdo->exec("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES
+            (9,'fui-crop','בדיקה','Test sp.','חסתיים','vegetables','winter',40,55,'{}','2026-06-01')");
+        // default variety carries agronomy value + VALIDATED state for yield_per_bed_m.
+        $payload = json_encode([
+            'is_default'  => true,
+            'agronomy'    => ['yield_per_bed_m' => 4.2, 'days_to_maturity' => 55],
+            'field_state' => ['yield_per_bed_m' => 'VALIDATED', 'days_to_maturity' => 'VALIDATED'],
+        ], JSON_UNESCAPED_UNICODE);
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES (901,9,'def'," . $this->pdo->quote($payload) . ")");
+
+        $res  = $this->get('/crop-book/fui-crop/?depth=simple');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // 4.2 yield must surface as a validated value (not "—" missing) in the headline values.
+        $this->assertStringContainsString('4.2', $html, 'yield value from variety payload must render');
+        $this->assertStringContainsString('pv-validated', $html, 'VALIDATED state from payload must drive the cue');
     }
 
     public function testBookCropDrillDepth(): void

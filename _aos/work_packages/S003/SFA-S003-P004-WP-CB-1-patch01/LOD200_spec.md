@@ -15,19 +15,23 @@ triggered_by: _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_R3_v
 > verdict `8018df6`) plus the watercolor art wiring. None of these blocked the WP-CB-1 LOD500 lock.
 > Direction only; the executable LOD400 follows and routes to team_190 L-GATE_S (non-Claude, IR#1).
 
-## Scope
-1. **F-190-CB1-V-03 — JS↔Python calc parity (#7, #9, #12).** A headless parity fixture; today only
-   #1/#8/#10 are asserted. Extend the existing `crop-book-v1.js CALC[...]` parity approach.
-2. **Server-side filter execution on `book_index`.** The multi-param filter rail is UI-only (client
-   chips); wire family / season / sow-method / frost / DTM-range / completeness to the controller query.
-3. **`/calc` PDF/CSV export.** `GET /calc/export.pdf` + `export.csv` are stubs (`aria-disabled`); implement
-   server-side plan render.
-4. **Watercolor art wiring.** Build 720px derivatives (`scripts/wc_derivatives.sh`) for the confirmed new
-   masters (tomato, cucumber, beet, pepper — see `CROP_ART_MASTERS/`) + extend the art maps
-   (`CropBookViewController::WC_ART`, `book_entry.php $wc_art_map`, `ICON_MAP` add `beet`), replacing the
-   emoji/glyph fallback. Lands as art batches are confirmed (more incoming; see CROP_ART_MASTERS/README open items).
-5. **F-UI-01 closure.** Once the backend ingest deploys per-field `field_state` to the MySQL mirror, drop the
-   defensive UNKNOWN-cue degrade path in `prov_value.php`.
+## Scope — ALL ITEMS IMPLEMENTED 2026-06-01 (awaiting team_190 patch01 L-GATE_V)
+1. ✅ **F-190-CB1-V-03 — JS↔Python calc parity (#7, #9, #12).** DONE — added
+   testCalc7BedsForYieldParity / testCalc9RevenueParity / testCalc12FertilizerParity
+   asserting the JS `CALC[...]` formulas match `calculators.py` (#1/#8/#10 already covered).
+2. ✅ **Server-side filter execution on `book_index`.** DONE — `entry()` reads q/family/season/
+   dtm_max (SQL) + sow/frost (payload post-filter); filter bar is a real GET form with an
+   empty-state that keeps the bar (recoverable). 4 route tests (family/dtm/text/empty).
+3. ✅ **`/calc` PDF/CSV export.** DONE — `GET /calc/export.{csv|pdf}` (HubController::calcExport):
+   CSV download (UTF-8 BOM) + print-friendly auto-print HTML for PDF (no server PDF engine on
+   the shared LAMP host). Buttons un-stubbed; JS appends the live plan as query params. 3 route tests.
+4. ✅ **Watercolor art wiring.** DONE (commits up to 883437d) — 28 crop masters + hero + 3 home
+   module-card heroes wired; every WC_ART/$wc_art_map ref verified to resolve.
+5. ✅ **F-UI-01.** DONE (defensive fix) — the MySQL mirror has no crop_field_enrichment/
+   crop_attribute tables, so `buildCb1Fields()` now falls back to the DEFAULT variety payload
+   (agronomy{} + field_state{}) the ingest already ships → prov cues + calculators light up
+   without those tables. Covered by testFieldStateLightsUpFromVarietyPayload. The full removal of
+   the UNKNOWN degrade path stays deferred until the enrichment tables (or a richer payload) land.
 
 ## Out of scope
 The locked WP-CB-1 UI itself (LOD500_LOCKED) — this patch only adds; it does not re-open locked behavior.

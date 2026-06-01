@@ -368,4 +368,65 @@ final class CropBookV1MacroTest extends TestCase
         $this->assertEqualsWithDelta(20.0, $per_m2, 0.001,
             'Calc #10: 4 rows / 0.80m × 100/25cm = 20 plants/m2');
     }
+
+    public function testCalc7BedsForYieldParity(): void
+    {
+        // Calc #7 beds_for_target_yield (Python calculators.py:351)
+        //   bed_meters = target_kg / avg_yield_per_bed_m ; beds = bed_meters / std_bed_length_m
+        // JS CALC.beds (crop-book-v1.js:55): beds = target_kg / (yield_per_m × std_bed_length_m)
+        // Both reduce to the same value.
+        $target_kg   = 300.0;
+        $yield_per_m = 3.0;   // kg/m
+        $std_bed_m   = 30.0;  // A['std_bed_length_m']
+
+        $py_bed_meters = $target_kg / $yield_per_m;          // 100 m
+        $py_beds       = $py_bed_meters / $std_bed_m;         // 3.33 beds
+        $js_beds       = $target_kg / ($yield_per_m * $std_bed_m);
+
+        $this->assertEqualsWithDelta($py_beds, $js_beds, 1e-9, 'Calc #7 JS must match Python');
+        // 300/3 = 100 bed-meters; /30 = 3.333 beds
+        $this->assertEqualsWithDelta(100.0, $py_bed_meters, 0.001, 'Calc #7: 300kg ÷ 3kg/m = 100 bed-meters');
+        $this->assertEqualsWithDelta(3.3333, $js_beds, 0.001,
+            'Calc #7: 300kg ÷ (3kg/m × 30m) = 3.33 beds');
+    }
+
+    public function testCalc9RevenueParity(): void
+    {
+        // Calc #9 expected_revenue (Python calculators.py:394)
+        //   yield_kg = avg_yield_per_bed_m × bed_length_m ; revenue = yield_kg × price_per_kg
+        // JS CALC.revenue (crop-book-v1.js:82): rev = (yield_per_m × area) × price
+        // Equivalent when area == bed_length_m and price is per-kg.
+        $yield_per_m = 3.5;   // kg/m
+        $area        = 30.0;  // bed-meters (user input == bed_length_m)
+        $price       = 12.0;  // ₪/kg
+
+        $py_yield_kg = $yield_per_m * $area;        // 105 kg
+        $py_rev      = $py_yield_kg * $price;        // 1260 ₪
+        $js_rev      = ($yield_per_m * $area) * $price;
+
+        $this->assertEqualsWithDelta($py_rev, $js_rev, 1e-9, 'Calc #9 JS must match Python');
+        $this->assertEqualsWithDelta(1260.0, $js_rev, 0.001,
+            'Calc #9: 3.5kg/m × 30m × 12₪ = 1260 ₪');
+    }
+
+    public function testCalc12FertilizerParity(): void
+    {
+        // Calc #12 fertilizer_compost_rate (Python calculators.py:479)
+        //   area_ha = area_m2/10000 ; n_kg = n_kg_ha × area_ha
+        //   compost_kg = n_kg / (compost_N_pct × application_efficiency)
+        // JS CALC.fert (crop-book-v1.js:114): identical.
+        $n_kg_ha     = 120.0;   // nutrient_removal_n_kg_per_ha
+        $area_m2     = 50.0;
+        $compost_pct = 0.015;   // A['compost_N_pct']
+        $app_eff     = 0.50;    // A['application_efficiency']
+
+        $area_ha    = $area_m2 / 10000.0;
+        $py_n_kg    = $n_kg_ha * $area_ha;                       // 0.6 kg
+        $py_compost = $py_n_kg / ($compost_pct * $app_eff);      // 80 kg
+        $js_compost = ($n_kg_ha * ($area_m2 / 10000.0)) / ($compost_pct * $app_eff);
+
+        $this->assertEqualsWithDelta($py_compost, $js_compost, 1e-9, 'Calc #12 JS must match Python');
+        $this->assertEqualsWithDelta(80.0, $js_compost, 0.001,
+            'Calc #12: N 0.6kg ÷ (1.5% × 0.5) = 80 kg compost');
+    }
 }

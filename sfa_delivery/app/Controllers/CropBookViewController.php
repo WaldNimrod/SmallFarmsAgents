@@ -35,17 +35,46 @@ final class CropBookViewController
 
     public function entry(Request $request, Response $response): Response
     {
-        // AC-U3-07: query crop list for the landing crop-card grid.
-        $stmt = $this->pdo->query(
-            'SELECT slug, hebrew_name, scientific_name, category, dtm_min, dtm_max, payload_json FROM crops ORDER BY hebrew_name'
-        );
-        $rows = $stmt ? $stmt->fetchAll() : [];
+        // WP-CB-1-patch01: server-side filtering. Column-backed filters run in SQL;
+        // payload-backed filters (planting_method, frost) run as a PHP post-filter
+        // because the MySQL mirror stores them in payload_json, not as columns.
+        $qp        = $request->getQueryParams();
+        $q         = trim((string)($qp['q']      ?? ''));   // free-text (hebrew_name / scientific_name)
+        $family    = trim((string)($qp['family'] ?? ''));   // family_name_he exact
+        $season    = trim((string)($qp['season'] ?? ''));   // season LIKE
+        $dtmMax    = (string)($qp['dtm_max'] ?? '') !== '' ? (int)$qp['dtm_max'] : null; // DTM ≤ N
+        $sow       = trim((string)($qp['sow']    ?? ''));   // planting_method (payload)
+        $frost     = trim((string)($qp['frost']  ?? ''));   // frost_tolerance_class (payload)
+
+        $sql    = 'SELECT slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
+        $where  = [];
+        $params = [];
+        if ($q !== '')      { $where[] = '(hebrew_name LIKE ? OR scientific_name LIKE ?)'; $params[] = "%$q%"; $params[] = "%$q%"; }
+        if ($family !== '') { $where[] = 'family_name_he = ?'; $params[] = $family; }
+        if ($season !== '') { $where[] = 'season LIKE ?';      $params[] = "%$season%"; }
+        if ($dtmMax !== null) { $where[] = '(dtm_max IS NULL OR dtm_max <= ?)'; $params[] = $dtmMax; }
+        if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
+        $sql .= ' ORDER BY hebrew_name';
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        $rows = $stmt->fetchAll() ?: [];
 
         $crops = [];
         foreach ($rows as $row) {
             $slug    = (string)($row['slug'] ?? '');
             $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
             $payload = is_array($payload) ? $payload : [];
+
+            // Payload-backed filters (post-fetch): planting_method + frost_tolerance_class.
+            if ($sow !== '') {
+                $pm = (string)($payload['planting_method'] ?? ($payload['agronomy']['planting_method'] ?? ''));
+                if ($pm !== $sow) { continue; }
+            }
+            if ($frost !== '') {
+                $ft = (string)($payload['frost_tolerance_class'] ?? ($payload['agronomy']['frost_tolerance_class'] ?? ''));
+                if ($ft !== $frost) { continue; }
+            }
 
             $dtm = isset($row['dtm_max']) && $row['dtm_max'] !== null
                 ? (int)$row['dtm_max']
@@ -65,13 +94,26 @@ final class CropBookViewController
         }
 
         // WP-CB-1: pass view param (cards|table) and total count
-        $view = trim((string)($request->getQueryParams()['view'] ?? 'cards'));
+        $view = trim((string)($qp['view'] ?? 'cards'));
         if (!in_array($view, ['cards', 'table'], true)) $view = 'cards';
 
+        // Distinct family list for the filter dropdown (column-backed, cheap).
+        $famRows = $this->pdo->query("SELECT DISTINCT family_name_he FROM crops WHERE family_name_he IS NOT NULL AND family_name_he <> '' ORDER BY family_name_he");
+        $families = $famRows ? array_column($famRows->fetchAll(), 'family_name_he') : [];
+
         return $this->html($response, Template::render('pages/book_entry', [
-            'crops' => $crops,
-            'view'  => $view,
-            'total' => count($crops),
+            'crops'    => $crops,
+            'view'     => $view,
+            'total'    => count($crops),
+            'families' => $families,
+            'filters'  => [
+                'q'      => $q,
+                'family' => $family,
+                'season' => $season,
+                'dtm_max'=> $dtmMax,
+                'sow'    => $sow,
+                'frost'  => $frost,
+            ],
         ]));
     }
 
@@ -458,8 +500,12 @@ final class CropBookViewController
             $attributes = [];
         }
 
-        // Build a unified CB1 fields array resolving through FIM §1 alias map.
-        $cb1_fields = self::buildCb1Fields($enrichment, $attributes, $crop);
+        // F-UI-01: the MySQL mirror has no crop_field_enrichment / crop_attribute tables;
+        // the ingest instead delivers per-field value + field_state inside the DEFAULT
+        // variety payload (agronomy{} + field_state{}). Pass it as a fallback so prov
+        // cues + calculators light up from the payload the ingest already ships.
+        $defaultPayload = is_array($defaultVariety ?? null) ? $defaultVariety : [];
+        $cb1_fields = self::buildCb1Fields($enrichment, $attributes, $crop, $defaultPayload);
 
         // Determine crop state: COMPLETE iff all MANDATORY fields are VALIDATED.
         $mandatory_fields = [
@@ -579,9 +625,14 @@ final class CropBookViewController
      * @param array<string,mixed>               $crop        crop row (for identity columns)
      * @return array<string,array<string,mixed>>
      */
-    private static function buildCb1Fields(array $enrichment, array $attributes, array $crop): array
+    private static function buildCb1Fields(array $enrichment, array $attributes, array $crop, array $variety = []): array
     {
         $out = [];
+
+        // F-UI-01 fallback: per-field value + state from the default variety payload
+        // (the ingest ships these even when the enrichment tables are absent in the mirror).
+        $vAgro  = is_array($variety['agronomy'] ?? null)    ? $variety['agronomy']    : [];
+        $vState = is_array($variety['field_state'] ?? null) ? $variety['field_state'] : [];
 
         // EN fields — read via FieldRegistry::read (canonical → old → alias siblings)
         $en_fields = [
@@ -609,6 +660,21 @@ final class CropBookViewController
                 }
             }
             if ($row === null) {
+                // Fallback to the default-variety payload (F-UI-01).
+                $pv = FieldRegistry::read($vAgro, $field);
+                if ($pv !== null) {
+                    // field_state keyed by canonical or alias in the payload.
+                    $st = (string)($vState[$canonical] ?? $vState[$field] ?? '');
+                    $out[$canonical] = [
+                        'value_best'           => $pv,
+                        'unit'                 => '',
+                        'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
+                        'winning_source_class' => '',
+                        'confidence_score'     => null,
+                        'field_name'           => $canonical,
+                    ];
+                    continue;
+                }
                 $out[$canonical] = [
                     'value_best' => null, 'unit' => '', 'field_state' => 'MISSING',
                     'winning_source_class' => '', 'confidence_score' => null, 'field_name' => $canonical,
@@ -628,6 +694,20 @@ final class CropBookViewController
         foreach ($at_map as $atKey => $col) {
             $row = $attributes[$atKey] ?? null;
             if ($row === null) {
+                // F-UI-01 fallback: categorical value from the variety payload (agronomy or field_state).
+                $pv = FieldRegistry::read($vAgro, $atKey);
+                if ($pv !== null && $pv !== '' && $pv !== []) {
+                    $st = (string)($vState[$atKey] ?? '');
+                    $out[$atKey] = [
+                        'value_best'           => $pv,
+                        'unit'                 => '',
+                        'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
+                        'winning_source_class' => '',
+                        'confidence_score'     => null,
+                        'field_name'           => $atKey,
+                    ];
+                    continue;
+                }
                 $out[$atKey] = ['value_best' => null, 'field_state' => 'MISSING', 'field_name' => $atKey, 'unit' => ''];
             } else {
                 $val = $col === 'value_list'

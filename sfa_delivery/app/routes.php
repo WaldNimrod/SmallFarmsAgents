@@ -20,6 +20,8 @@ return function (App $app): void {
     $app->get('/about[/]', [HubController::class, 'tiers']);
     $app->get('/search[/]', [HubController::class, 'search']);
     $app->get('/calc[/]', [HubController::class, 'calc']);
+    // WP-CB-1-patch01: calculator-plan export (csv | pdf-print)
+    $app->get('/calc/export.{fmt:csv|pdf}', [HubController::class, 'calcExport']);
 
     $app->get('/crop-book[/]', [CropBookViewController::class, 'entry']);
     $app->get('/crop-book/questions[/]', [CropBookViewController::class, 'questions']);

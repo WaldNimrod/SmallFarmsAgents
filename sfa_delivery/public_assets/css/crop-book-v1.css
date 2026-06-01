@@ -564,3 +564,16 @@
   .cb-hero { flex-direction: column; text-align: center; }
   .cb-hero__art { width: clamp(140px, 60vw, 220px); }
 }
+
+/* book_index empty-state (WP-CB-1-patch01 server-side filter) */
+.cb-empty {
+  text-align: center; padding: var(--gj-sp-6, 32px) var(--gj-sp-4, 16px);
+  color: var(--gj-ink-soft);
+}
+.cb-empty p { margin: 0 0 var(--gj-sp-3, 12px); font-size: 15px; }
+.ftop .fset select, .ftop .fset input[type="text"], .ftop .fset input[type="number"] {
+  font-family: var(--gj-font-body); font-size: 14px;
+  padding: 6px 10px; border: 1px solid var(--gj-line); border-radius: var(--gj-r-s, 8px);
+  background: var(--gj-paper); color: var(--gj-ink); min-width: 140px;
+}
+.ftop .fset__lbl { display: block; font-size: 12px; font-weight: 700; color: var(--gj-ink-soft); margin-bottom: 4px; }
