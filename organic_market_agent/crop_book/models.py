@@ -201,6 +201,14 @@ class CropVarietySourceValue(Base):
         Boolean, nullable=False, server_default="false"
     )
 
+    # Mirrors migration 038's uq_cvsv_variety_field_source so Base.metadata matches
+    # the real table (the importer's ON CONFLICT depends on this unique constraint).
+    __table_args__ = (
+        UniqueConstraint(
+            "variety_id", "field_name", "source", name="uq_cvsv_variety_field_source"
+        ),
+    )
+
     variety: Mapped["CropVariety"] = relationship("CropVariety", back_populates="source_values")
 
     def __repr__(self) -> str:

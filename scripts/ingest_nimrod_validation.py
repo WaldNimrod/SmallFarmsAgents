@@ -81,8 +81,6 @@ def ingest_validation_json(
     varieties_resolved = set()
 
     with Session() as session:
-        now = datetime.now(timezone.utc).isoformat()
-
         for item in items:
             variety_id = int(item["variety_id"])
             field_name = str(item["field_name"]).strip()
@@ -108,16 +106,19 @@ def ingest_validation_json(
                 continue
 
             if not dry_run:
+                # NOTE: crop_variety_source_values (migration 038) has NO created_at/
+                # updated_at columns — do not write them. The unique constraint is
+                # uq_cvsv_variety_field_source(variety_id, field_name, source); ON CONFLICT
+                # matches by column set (order-independent).
                 session.execute(
                     text(
                         "INSERT INTO crop_variety_source_values "
                         "(variety_id, source, field_name, value_text, value_numeric, "
-                        " trust_tier, confidence_weight, created_at, updated_at) "
-                        "VALUES (:vid, :src, :fn, :vt, :vn, :tier, :weight, :now, :now) "
+                        " trust_tier, confidence_weight) "
+                        "VALUES (:vid, :src, :fn, :vt, :vn, :tier, :weight) "
                         "ON CONFLICT (variety_id, source, field_name) DO UPDATE SET "
                         "  value_text = EXCLUDED.value_text, "
-                        "  value_numeric = EXCLUDED.value_numeric, "
-                        "  updated_at = EXCLUDED.updated_at"
+                        "  value_numeric = EXCLUDED.value_numeric"
                     ),
                     {
                         "vid": variety_id,
@@ -127,7 +128,6 @@ def ingest_validation_json(
                         "vn": value_numeric,
                         "tier": NI_TRUST_TIER,
                         "weight": NI_WEIGHT,
-                        "now": now,
                     },
                 )
             rows_upserted += 1

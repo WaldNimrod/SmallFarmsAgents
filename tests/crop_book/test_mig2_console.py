@@ -350,32 +350,10 @@ class TestNiImporterIdempotency:
         db_file = tmp_path / "real_orm.db"
         db_url = f"sqlite:///{db_file}"
         engine = sa.create_engine(db_url)
+        # Base.metadata now matches the real schema (CropVarietySourceValue declares
+        # uq_cvsv_variety_field_source) and the importer no longer writes phantom
+        # created_at/updated_at columns — so create_all alone is sufficient.
         m.Base.metadata.create_all(engine)
-        # The live crop_variety_source_values table (via migrations) carries
-        # created_at/updated_at columns and a UNIQUE(variety_id, source, field_name)
-        # constraint that the ORM model does not declare. Recreate it to mirror the
-        # real schema the importer targets (ON CONFLICT needs the unique constraint).
-        with engine.connect() as conn:
-            with conn.begin():
-                conn.execute(sa.text("DROP TABLE crop_variety_source_values"))
-                conn.execute(sa.text("""
-                    CREATE TABLE crop_variety_source_values (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        variety_id INTEGER NOT NULL,
-                        field_name TEXT NOT NULL,
-                        source TEXT NOT NULL,
-                        value_text TEXT,
-                        value_numeric REAL,
-                        unit TEXT,
-                        note TEXT,
-                        trust_tier TEXT,
-                        confidence_weight REAL,
-                        is_outlier_rejected INTEGER DEFAULT 0,
-                        created_at TEXT,
-                        updated_at TEXT,
-                        UNIQUE(variety_id, source, field_name)
-                    )
-                """))
 
         with Session(engine) as s:
             fam = m.CropFamily(scientific_name="Solanaceae", name_he="סולניים")
