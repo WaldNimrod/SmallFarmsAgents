@@ -97,4 +97,4 @@ the WP-CB-UI-CLASSB LOD400 → team_190 L-GATE_S → team_10 build (reusing the 
 QA (design-vs-live per screen) → team_190 L-GATE_V (non-Claude). WP-CB-UI-CLASSB is currently **BLOCKED on this
 delivery** + team_00 approval.
 
-*Issued by team_100 · 2026-06-02 · supersedes the 2026-06-02 draft design-request (now `DESIGN_REQUEST_draft_superseded.md`).*
+*Issued by team_100 · 2026-06-02*

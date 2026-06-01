@@ -5,7 +5,7 @@ gate: L-GATE_E (BLOCKED on team_35)
 status: BLOCKED — opened 2026-06-02
 author: team_100
 depends_on: SFA-S003-P004-WP-CB-UI-ALIGN
-design_request: _COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-ALIGN/DESIGN_REQUEST_v2-shell-and-hub-surfaces_2026-06-02_v1.0.0.md
+design_mandate: _COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-CLASSB/DESIGN_MANDATE_team35_v2-surfaces_2026-06-02_v1.0.0.md
 ---
 
 # LOD100 — WP-CB-UI-CLASSB (direction only; BLOCKED on team_35)
