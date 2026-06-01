@@ -339,11 +339,14 @@ team_100 ran the **exhaustive** live gate (all closed-enum values + all units) t
 
 # AMENDMENT v1.3.0 — Crop Data Model Expansion (WP-CB-MIG2)
 
-> **Status: DRAFT — pending team_190 L-GATE_S (non-Claude, IR#1).** Authored by team_100 2026-06-01 after
-> team_00 FINAL SPEC APPROVAL of the WP-CB-MIG2 characterization (אפיון). The locked v1.2.0 body above is
-> **unchanged**; this amendment is additive (new fields + the 13-topic taxonomy). The frontmatter lock status
-> bumps to `v1.3.0 LOD200_LOCKED` only on L-GATE_S PASS. Executable detail lives in
-> `_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD400_spec.md`.
+> **Status: v1.3.0 LOD200_LOCKED.** team_190 L-GATE_S **PASS_WITH_FINDINGS** (Cursor Composer, non-Claude, IR#1;
+> verdict `_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG2/WP-CB-MIG2_LGATE-S_VERDICT_v1.0.0.md`); 4 MAJOR fixed
+> inline (LOD400 v1.0.1 + §16a). team_10 L-GATE_B build PASS (team_100 independently verified: 719 pass / 2
+> pre-existing / 0 new; migration 060 5/5; validate_aos 0 FAIL). Authored by team_100 2026-06-01 after team_00
+> FINAL SPEC APPROVAL of the WP-CB-MIG2 characterization (אפיון). The locked v1.2.0 body above is **unchanged**;
+> this amendment is additive (new fields + the 13-topic taxonomy + §16a vocab). Executable detail:
+> `_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD400_spec.md`. **Remaining:** team_50 QA + team_190
+> non-Claude L-GATE_V (constitutional, IR#1/#5 — prepared by team_100, handed to team_00).
 
 ## 15. The 13-topic taxonomy (`CROP_TOPICS`) — canonical ordering (NEW)
 

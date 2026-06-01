@@ -3416,10 +3416,10 @@ work_packages:
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
   status: IN_PROGRESS
-  phase: build
+  phase: validation
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
@@ -3477,12 +3477,31 @@ work_packages:
       WI-7/AC-08b. S-05 WI-8 count 5→7. S-06 §6.3a mirrored additively via new Canon §16a (locked §6.3a
       untouched). S-07 §19 wording aligned. LOD400 bumped v1.0.0→v1.0.1; Canon §16a added. LOD400_LOCKED;
       team_10 L-GATE_B build authorized."
-  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-01 (team_190 Cursor Composer, non-Claude; verdict in
-    _COMMUNICATION/team_190/...). All 4 MAJOR + MINOR/INFO fixed inline (LOD400 v1.0.1, Canon §16a). LOD400_LOCKED,
-    build authorized. NEXT: team_100 dispatches team_10 (Claude Sonnet) L-GATE_B build. Only DDL = seeder_settings
-    column; rest is Python-config + data + PR backfill + the manual-validation console. Folds F-CB1-UI-01 +
-    season_window data gap (0 rows — planting_season NULL). On L-GATE_B PASS → Canon frontmatter → v1.3.0
-    LOD200_LOCKED; then team_50 QA + team_190 non-Claude L-GATE_V (prepared + handed to Nimrod, IR#1/#5)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-01"
+    builder: team_10
+    validator: team_100
+    commit: "dded7b1"
+    builder_commit: "f4bee60"
+    notes: "team_10 (Claude Sonnet) build self-attested 17/17 ACs; team_100 INDEPENDENTLY VERIFIED → PASS.
+      Evidence: pytest tests/crop_book/ 719 passed / 2 pre-existing fails (test_uc_prefix, ni_publisher_isolation)
+      / 0 new / 2 skipped; migration 060 SQLite up+down 5/5; CROP_TOPICS↔PHP parity 5/5; validate_aos 29P/19S/0F.
+      v1.0.1 remediation confirmed IN CODE: S-01 planting_season REMOVED from FIELD_POLICY (not aliased);
+      S-02 labor_rate→units_per_hr (canon/units.py); S-03 sale_unit/seeder_model aliases (field_registry);
+      S-04 _CATEGORICAL_ATTRS_WHITELIST wired into the agronomy payload (sfa_ingest_push). IR#1 OK (builder
+      Claude Sonnet ≠ validator team_190 non-Claude at L-GATE_V). PROCESS NOTE: the build sub-agent committed
+      off main (8795b8a) and the branch ref followed its line, orphaning team_100's L-GATE_S commits (recovered
+      — both reachable); team_100 reset the branch to the governance base (b601f93) and grafted only the
+      builder's code/tests/BUILD_REPORT (f4bee60). No work lost; governance docs are team_100's. BUILD_REPORT:
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG2/BUILD_REPORT_v1.0.0.md. Build deviations (non-blocking):
+      seeder_settings ORM uses deferred() until 060 applied on live PG; NI re-resolve dry-run-tested (live-DB
+      e2e pending). Canon frontmatter → v1.3.0 LOD200_LOCKED."
+  notes: "L-GATE_B PASS 2026-06-01 (team_10 build, team_100 independently verified; commit dded7b1).
+    Canon v1.3.0 LOD200_LOCKED. NEXT: team_50 QA (Claude sub-agent, functional) → then team_190 NON-CLAUDE
+    L-GATE_V (constitutional, IR#1/#5 — VALIDATION_MANDATE prepared by team_100, handed to Nimrod; never
+    self-issued). On L-GATE_V PASS → ADR042 archive (team_191). Open data items carried to L-GATE_V: PR backfill
+    + the manual-validation console (NI) populate the new fields; UI lights 'מוצע' slots as data lands."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01
