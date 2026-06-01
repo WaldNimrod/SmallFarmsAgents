@@ -3632,6 +3632,41 @@ work_packages:
     wiring. NEXT: team_100 LOD400 → team_190 L-GATE_S (non-Claude, IR#1)."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-UI-ALIGN
+  label: "ספר גידולים: יישור עיצוב מלא של שכבת ההגשה ל-LOD300 של צוות 35 (פלטה אחידה + app-shell + /calc)"
+  status: ELIGIBLE
+  phase: ui_align
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-02"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-ALIGN/LOD200_spec.md"
+  design_ssot: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/design/"
+  gate_history:
+  - gate: L-GATE_E
+    result: PENDING
+    date: "2026-06-02"
+    notes: >
+      team_00 flagged: the live UI (sfa.nimrod.bio) does not match the team_35 design package. team_100
+      root-caused (code + live screenshots + design-board render): (1) two competing palettes in tokens.css
+      — legacy cream --paper #f5f3ec drives body background while v2 --gj-paper #f8fbf8 white is the design
+      contract; (2) the team_35 .sh/.sh__nav app-shell was NEVER built — all pages still use the legacy
+      .gj-shell/.dt-shell chrome; (3) /calc inert (crop-book-v1.js not loaded there; 5 modcards vs 14) +
+      export.pdf 404 (team_50 F-CALC-002/003, F-EXPORT-001). ROOT PROCESS CAUSE: WP-CB-1 was accepted on
+      functional ACs only, never on pixel/visual fidelity to the LOD300. Decision (team_00): open a full
+      WP for delivery-tier visual alignment with normal orchestration + a NEW mandatory VISUAL QA standard
+      (design-vs-live per screen). AWAITING team_00 final characterization (אפיון) approval before build.
+    validator: team_00
+  notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
+    (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
+    export. Delivery-tier only; no backend/migration. NEXT: team_00 LOD200 approval → LOD400 → team_190 L-GATE_S."
+  profile: L0
+
 # ----------------------------------------------------------------------------
 # S003-P004 LOD100 PLACEHOLDERS — FUTURE modules (brief direction only).
 # Consume WP-CB-1 calculator outputs via stable API contracts (LOD400 section 12).
