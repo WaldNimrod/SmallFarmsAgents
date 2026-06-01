@@ -113,7 +113,7 @@
 
 .mod-card__art {
   position: relative;
-  aspect-ratio: 1/1;
+  aspect-ratio: 2/1;            /* half-height hero (was 1/1) — half-size cards */
   background: var(--gj-paper-2);
 }
 .mod-card__hero {
