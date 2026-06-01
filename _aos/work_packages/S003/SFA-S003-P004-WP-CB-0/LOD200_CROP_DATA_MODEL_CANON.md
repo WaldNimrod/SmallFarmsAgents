@@ -394,6 +394,23 @@ storage shapes** (Canon principle #6) — every field slots into the existing `c
 | `harvest_weeks_span` | succession | T1 | enrichment | `weeks` | →FACT |
 | `needs_summer_shade` | soil/irrigation | T2 | `crop_attribute` | CLOSED-ENUM `{none, shade_30, shade_40, shade_50}` | →ATTR (Israel-specific; ratified team_00) |
 
+### 16a. Vocabulary policy — extends §6.3a (additive; locked §6.3a untouched) — (F-190-MIG2-S-06)
+
+The §6.3a CLOSED-ENUM vs OPEN-VOCAB discipline (F-190-CB0-01) applies to the MIG2 attributes. Mirrored here
+additively (the locked §6.3a table in the v1.2.0 body is **not** edited — C1):
+
+| Attribute | Kind | Canonical tokens / rule |
+|-----------|------|--------------------------|
+| `irrigation_type` | **CLOSED-ENUM** | `drip`, `sprinkler`, `mixed` |
+| `root_depth_class` | **CLOSED-ENUM** | `shallow`, `medium`, `deep` |
+| `needs_summer_shade` | **CLOSED-ENUM** | `none`, `shade_30`, `shade_40`, `shade_50` |
+| `unit_size` | **OPEN-VOCAB** | free spec text (e.g. `"6-7 stems"`, `"13-18cm"`); trim + collapse whitespace + case-fold for dedup; provenance carried |
+| `common_pests` | **OPEN-VOCAB (list)** | free-text pest tokens; same normalization; provenance carried |
+| `foliar_feeding_program` | **OPEN-VOCAB** | free-text program description; same normalization |
+
+CLOSED-ENUM attributes reject out-of-set tokens at import (log + DQ route); OPEN-VOCAB normalize + keep
+provenance in `crop_attribute.candidates`. These closed sets are versioned with this amendment.
+
 **Decisions recorded (team_00, 2026-06-01):**
 - **D-MIG2-1 — sale_unit reuses harvest_unit.** `sale_unit` is an *alias* to the existing `harvest_unit` T2
   attribute (§6.3a CLOSED-ENUM `kg/bunch/head/case/unit/seedling`). Only `unit_size` is genuinely new. This
@@ -431,10 +448,13 @@ and Israel-specific groups that the MDs cannot supply.
 
 ## 19. Carried-finding fold-ins (NEW)
 
-- **F-CB1-UI-01** — `field_policy.py` keys aligned to canon: `avg_yield_per_bed_m`→`yield_per_bed_m`,
-  `documented_price`→`price_documented`, `in_row_spacing_cm`→`spacing_in_row_cm`,
-  `planting_season`→`season_window`/`sowing_months`, so the reconciler writes enrichment under canonical keys
-  (resolves the active drift vs `calculator_meta.py`).
+- **F-CB1-UI-01** — `field_policy.py` corrections (L-GATE_S F-190-MIG2-S-01): three **enrichment** keys renamed
+  to canon — `avg_yield_per_bed_m`→`yield_per_bed_m`, `documented_price`→`price_documented`,
+  `in_row_spacing_cm`→`spacing_in_row_cm` — so the reconciler writes enrichment under canonical keys (resolves
+  the active drift vs `calculator_meta.py`). The fourth key, **`planting_season`, is REMOVED from `FIELD_POLICY`**
+  (not renamed): `season_window` is a **T2 attribute** resolved by `attribute_resolver`
+  (`_COLUMN_ORIGIN_ATTRS: season_window→planting_season` → `crop_attribute`), so it must not exist in the
+  enrichment policy dict. No `sowing_months` split — `season_window` is the single canonical attribute here.
 - **F-50-patch01-01** (LOW, latent) — the JS `crop-book-v1.js CALC.revenue` does no non-kg conversion (the
   Python `calculators.py` does, via `kg_per_unit`). **Out of MIG2 build scope**; becomes a UI follow-up once
   `unit_size` supplies `kg_per_unit`. Logged here so it is not lost.

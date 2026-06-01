@@ -3416,11 +3416,11 @@ work_packages:
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
   status: IN_PROGRESS
-  phase: spec
+  phase: build
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
@@ -3462,10 +3462,27 @@ work_packages:
       VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md. team_00 to route to a non-Claude validator."
     validator: team_190
     mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md"
-  notes: "L-GATE_S ROUTED 2026-06-01. Schema-expansion follow-on to WP-CB-MIG. team_100 authored Canon
-    amendment v1.3.0 + LOD400. Awaiting team_190 (non-Claude) L-GATE_S spec verdict. On PASS → dispatch
-    team_10 L-GATE_B build (the only DDL is the seeder_settings column; everything else is Python-config +
-    data). Folds F-CB1-UI-01 field_policy renames + the season_window data gap (0 rows — planting_season NULL)."
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-01"
+    validator: team_190
+    validator_engine: "Cursor Composer (non-Claude, IR#1)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG2/WP-CB-MIG2_LGATE-S_VERDICT_v1.0.0.md"
+    notes: "team_190 (Cursor Composer, non-Claude) L-GATE_S. PASS_WITH_FINDINGS — constitutional 6/6,
+      precision 5/6, scope 3/3, authorize_build TRUE. 4 MAJOR + 2 MINOR + 1 INFO, all ADDRESSED INLINE by
+      team_100 (validator: no R2 on inline fix). F-190-MIG2-S-01: remove planting_season from FIELD_POLICY
+      (T2/attribute, not enrichment rename) → WI-6/AC-07. S-02: add units_per_hr to canon/units.py + §6.1 →
+      WI-5b/AC-06b. S-03: register §16 fields in canon/field_registry.py FIELD_REGISTRY → WI-8b/AC-17. S-04:
+      explicit T2 delivery via the agronomy payload block (crop_attribute path, mirrors planting_method) →
+      WI-7/AC-08b. S-05 WI-8 count 5→7. S-06 §6.3a mirrored additively via new Canon §16a (locked §6.3a
+      untouched). S-07 §19 wording aligned. LOD400 bumped v1.0.0→v1.0.1; Canon §16a added. LOD400_LOCKED;
+      team_10 L-GATE_B build authorized."
+  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-01 (team_190 Cursor Composer, non-Claude; verdict in
+    _COMMUNICATION/team_190/...). All 4 MAJOR + MINOR/INFO fixed inline (LOD400 v1.0.1, Canon §16a). LOD400_LOCKED,
+    build authorized. NEXT: team_100 dispatches team_10 (Claude Sonnet) L-GATE_B build. Only DDL = seeder_settings
+    column; rest is Python-config + data + PR backfill + the manual-validation console. Folds F-CB1-UI-01 +
+    season_window data gap (0 rows — planting_season NULL). On L-GATE_B PASS → Canon frontmatter → v1.3.0
+    LOD200_LOCKED; then team_50 QA + team_190 non-Claude L-GATE_V (prepared + handed to Nimrod, IR#1/#5)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01
