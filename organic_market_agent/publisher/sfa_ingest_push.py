@@ -89,14 +89,18 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
     cur.execute(sql)
     crops = cur.fetchall()
 
-    # Aggregate variety DTM ranges to populate dtm_min/dtm_max on crops
+    # Aggregate variety DTM ranges to populate dtm_min/dtm_max on crops.
+    # days_to_maturity was DROPPED from crop_varieties by migration 059 — it is now a
+    # T1 reconciled fact in crop_field_enrichment (Canon §7.1). Read it from there.
     var_sql = """
-        SELECT crop_id,
-               MIN(NULLIF(days_to_maturity,0)) AS dtm_min,
-               MAX(NULLIF(days_to_maturity,0)) AS dtm_max,
-               COUNT(*) AS variety_count
-        FROM crop_varieties
-        GROUP BY crop_id
+        SELECT cv.crop_id,
+               MIN(NULLIF(cfe.value_best, 0))::int AS dtm_min,
+               MAX(NULLIF(cfe.value_best, 0))::int AS dtm_max,
+               COUNT(DISTINCT cv.id) AS variety_count
+        FROM crop_varieties cv
+        LEFT JOIN crop_field_enrichment cfe
+          ON cfe.variety_id = cv.id AND cfe.field_name = 'days_to_maturity'
+        GROUP BY cv.crop_id
     """
     cur.execute(var_sql)
     dtm_by_crop = {r["crop_id"]: r for r in cur.fetchall()}
