@@ -1,0 +1,119 @@
+{
+  "rows": [
+    {
+      "crop_en": "Tomato",
+      "frost_tolerance_class": "tender",
+      "reconcile_note": "consensus_tender_3_of_3"
+    },
+    {
+      "crop_en": "Pepper",
+      "frost_tolerance_class": "tender",
+      "reconcile_note": "consensus_tender_3_of_3"
+    },
+    {
+      "crop_en": "Eggplant",
+      "frost_tolerance_class": "very_tender",
+      "reconcile_note": "consensus_very_tender_3_of_3"
+    },
+    {
+      "crop_en": "Cucumber",
+      "frost_tolerance_class": "very_tender",
+      "reconcile_note": "consensus_very_tender_3_of_3"
+    },
+    {
+      "crop_en": "Squash",
+      "frost_tolerance_class": "tender",
+      "reconcile_note": "consensus_tender_3_of_3"
+    },
+    {
+      "crop_en": "Melon",
+      "frost_tolerance_class": "very_tender",
+      "reconcile_note": "consensus_very_tender_3_of_3"
+    },
+    {
+      "crop_en": "Bean",
+      "frost_tolerance_class": "tender",
+      "reconcile_note": "consensus_tender_3_of_3"
+    },
+    {
+      "crop_en": "Pea",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Broccoli",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Cabbage",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Kale",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Lettuce",
+      "frost_tolerance_class": "semi_hardy",
+      "reconcile_note": "consensus_semi_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Spinach",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Carrot",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Beet",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Onion",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Garlic",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Radish",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Potato",
+      "frost_tolerance_class": "semi_hardy",
+      "reconcile_note": "consensus_semi_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Parsley",
+      "frost_tolerance_class": "hardy",
+      "reconcile_note": "consensus_hardy_3_of_3"
+    },
+    {
+      "crop_en": "Basil",
+      "frost_tolerance_class": "very_tender",
+      "reconcile_note": "consensus_very_tender_3_of_3"
+    },
+    {
+      "crop_en": "Corn",
+      "frost_tolerance_class": "tender",
+      "reconcile_note": "consensus_tender_3_of_3"
+    },
+    {
+      "crop_en": "Celery",
+      "frost_tolerance_class": "semi_hardy",
+      "reconcile_note": "consensus_semi_hardy_3_of_3"
+    }
+  ]
+}

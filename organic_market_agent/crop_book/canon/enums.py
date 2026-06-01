@@ -45,6 +45,16 @@ ENUM_TOKENS: dict[str, frozenset[str]] = {
     "storage_ethylene_sensitivity": frozenset({
         "none", "low", "medium", "high",
     }),
+    # Canon §16a — MIG2 additions (Amendment v1.3.0)
+    "irrigation_type": frozenset({
+        "drip", "sprinkler", "mixed",
+    }),
+    "root_depth_class": frozenset({
+        "shallow", "medium", "deep",
+    }),
+    "needs_summer_shade": frozenset({
+        "none", "shade_30", "shade_40", "shade_50",
+    }),
     # sowing_months / transplant_months are LIST(int) — handled separately
 }
 
@@ -94,12 +104,35 @@ ENUM_COLLAPSE: dict[str, dict[str, str]] = {
         "full_size": "full_size", "baby_leaf": "baby_leaf",
         "head": "head", "plant_sale": "plant_sale", "seed": "seed",
     },
+    # Canon §16a — MIG2 closed enums
+    "irrigation_type": {
+        "drip": "drip", "sprinkler": "sprinkler", "mixed": "mixed",
+        # common variant aliases
+        "drip_irrigation": "drip",
+        "sprinkler_irrigation": "sprinkler",
+    },
+    "root_depth_class": {
+        "shallow": "shallow", "medium": "medium", "deep": "deep",
+    },
+    "needs_summer_shade": {
+        "none": "none",
+        "shade_30": "shade_30", "30%": "shade_30", "30": "shade_30",
+        "shade_40": "shade_40", "40%": "shade_40", "40": "shade_40",
+        "shade_50": "shade_50", "50%": "shade_50", "50": "shade_50",
+    },
 }
 
 # ---------------------------------------------------------------------------
 # Open-vocab attributes: free text, normalize but do NOT restrict to a set
 # ---------------------------------------------------------------------------
-OPEN_VOCAB_ATTRS: set[str] = {"variety_provider", "rootstock_variety"}
+OPEN_VOCAB_ATTRS: set[str] = {
+    "variety_provider",
+    "rootstock_variety",
+    # Canon §16a — MIG2 additions (Amendment v1.3.0)
+    "common_pests",
+    "foliar_feeding_program",
+    "unit_size",
+}
 
 
 def _normalize_open_vocab(value: str) -> str:
@@ -140,6 +173,11 @@ def canonicalize_enum(field_name: str, raw_value: str | None) -> str | None:
                       "seed_months_list", "transplant_months_list"):
         return None  # use parse_month_list() instead
 
+    # Open-vocab list attrs (T3) — normalize each token
+    if field_name == "common_pests":
+        # common_pests: parse as comma-delimited list of open-vocab tokens
+        return None  # use parse_list_attr() instead; canonicalize_enum returns None
+
     # Closed-enum
     collapse = ENUM_COLLAPSE.get(field_name, {})
     lower = stripped.lower()
@@ -161,6 +199,26 @@ def canonicalize_enum(field_name: str, raw_value: str | None) -> str | None:
         )
 
     return canonical
+
+
+def parse_list_attr(csv_value: str | None, field_name: str) -> list[str] | None:
+    """Parse a comma-delimited string of open-vocab tokens into a normalized list.
+
+    Used for T3 open-vocab attributes like `common_pests`.
+    Each token is trimmed, whitespace-collapsed, and lower-cased for dedup.
+    Returns None if input is None or blank.
+    Silently drops empty tokens.
+    """
+    if not csv_value:
+        return None
+    result: list[str] = []
+    seen: set[str] = set()
+    for part in csv_value.split(","):
+        normalized = _normalize_open_vocab(part)
+        if normalized and normalized not in seen:
+            result.append(normalized)
+            seen.add(normalized)
+    return result if result else None
 
 
 def parse_month_list(csv_value: str | None) -> list[int] | None:

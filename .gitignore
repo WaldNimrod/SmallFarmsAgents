@@ -50,3 +50,4 @@ data/external_sources/**/*.csv
 !data/external_sources/tend_multi_year/Tend_2019_*.csv
 !data/external_sources/tend_multi_year/Tend_2020_*.csv
 !data/external_sources/tend_multi_year/Tend_2021_*.csv
+.claude/worktrees/

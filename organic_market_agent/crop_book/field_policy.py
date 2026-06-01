@@ -54,18 +54,21 @@ FIELD_POLICY: dict[str, FieldPolicy] = {
         blend_strategy="weighted_mean",
         outlier=OutlierConfig(domain_fn=_dtm_leaf_crop_check, z_threshold=3.5),
     ),
-    "avg_yield_per_bed_m": FieldPolicy(
+    # WI-6 / AC-07 / F-CB1-UI-01: renamed avg_yield_per_bed_m → yield_per_bed_m
+    "yield_per_bed_m": FieldPolicy(
         trust_order=("EX", "NI", "OP", "PR", "WB"),
         blend_strategy="weighted_mean",
         outlier=OutlierConfig(z_threshold=3.0),
         multi_year_op_mean=True,
     ),
-    "documented_price": FieldPolicy(
+    # WI-6 / AC-07 / F-CB1-UI-01: renamed documented_price → price_documented
+    "price_documented": FieldPolicy(
         trust_order=("EX", "NI", "OP", "MK", "WB"),
         blend_strategy="latest_op",
         outlier=OutlierConfig(z_threshold=3.0),
     ),
-    "in_row_spacing_cm": FieldPolicy(
+    # WI-6 / AC-07 / F-CB1-UI-01: renamed in_row_spacing_cm → spacing_in_row_cm
+    "spacing_in_row_cm": FieldPolicy(
         trust_order=("EX", "NI", "PR", "OP", "WB"),
         blend_strategy="hard_winner",
         outlier=OutlierConfig(z_threshold=3.5),
@@ -74,10 +77,10 @@ FIELD_POLICY: dict[str, FieldPolicy] = {
         trust_order=("EX", "NI", "PR", "OP"),
         blend_strategy="hard_winner",
     ),
-    "planting_season": FieldPolicy(
-        trust_order=("EX", "NI", "PR", "OP", "WB"),
-        blend_strategy="hard_winner",
-    ),
+    # WI-6 / AC-07: planting_season REMOVED from FIELD_POLICY.
+    # season_window is a T2 attribute (resolved by attribute_resolver via
+    # _COLUMN_ORIGIN_ATTRS: season_window→planting_season → crop_attribute).
+    # It must NOT exist in the enrichment policy dict (layer-ownership violation).
     "harvest_window_max_days": FieldPolicy(
         trust_order=("EX", "NI", "PR", "OP"),
         blend_strategy="hard_winner",
@@ -149,6 +152,32 @@ FIELD_POLICY: dict[str, FieldPolicy] = {
         trust_order=("EX", "NI", "PR", "OP"),
         blend_strategy="hard_winner",
     ),
+    # --- WP-CB-MIG2 T1 facts (Canon §16, Amendment v1.3.0) ---
+    # Irrigation
+    "drip_lines_per_bed": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="hard_winner",  # discrete count, hard winner appropriate
+    ),
+    # Harvest labor rates (units_per_hr)
+    "labor_rate_harvest": FieldPolicy(
+        trust_order=("EX", "NI", "OP", "PR"),
+        blend_strategy="weighted_mean",  # rate — average multi-source
+        multi_year_op_mean=True,
+    ),
+    "labor_rate_wash": FieldPolicy(
+        trust_order=("EX", "NI", "OP", "PR"),
+        blend_strategy="weighted_mean",
+        multi_year_op_mean=True,
+    ),
+    # Succession
+    "plantings_per_season": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="hard_winner",  # discrete count
+    ),
+    "harvest_weeks_span": FieldPolicy(
+        trust_order=("EX", "NI", "PR", "OP"),
+        blend_strategy="weighted_mean",
+    ),
 }
 
 # Default policy for fields not in the table
@@ -158,6 +187,30 @@ _DEFAULT_POLICY = FieldPolicy(
 )
 
 
+# Backward-compat aliases for locked consumers (reconciler.py, legacy importers).
+# These old keys still appear in source_values and reconcile_variety() but are
+# remapped to their canonical name's policy so behavior stays consistent.
+# The *FIELD_POLICY dict itself* does NOT contain the old names (WI-6 / AC-07).
+_FIELD_POLICY_ALIASES: dict[str, str] = {
+    "avg_yield_per_bed_m":  "yield_per_bed_m",
+    "documented_price":     "price_documented",
+    "in_row_spacing_cm":    "spacing_in_row_cm",
+    # planting_season is intentionally NOT aliased — it is T2/attribute; if old code
+    # looks it up it gets the _DEFAULT_POLICY (hard_winner), which is safe.
+}
+
+
 def get_field_policy(field_name: str) -> FieldPolicy:
-    """Return the policy for a field, falling back to default."""
-    return FIELD_POLICY.get(field_name, _DEFAULT_POLICY)
+    """Return the policy for a field, falling back to default.
+
+    WI-6 / AC-07: the canonical names are the primary keys. Old names are resolved
+    via _FIELD_POLICY_ALIASES to keep locked consumer code (reconciler.py) consistent.
+    """
+    policy = FIELD_POLICY.get(field_name)
+    if policy is not None:
+        return policy
+    # Try canonical alias
+    canonical = _FIELD_POLICY_ALIASES.get(field_name)
+    if canonical is not None:
+        return FIELD_POLICY.get(canonical, _DEFAULT_POLICY)
+    return _DEFAULT_POLICY

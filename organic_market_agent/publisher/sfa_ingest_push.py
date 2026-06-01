@@ -339,6 +339,33 @@ _AGRONOMY_FIELD_WHITELIST = (
     "succession_interval_weeks",
     "days_in_nursery",            # was: days_in_gh_total (AC-07 / Canon §7.1)
     "price_documented",           # was: documented_price
+    # WP-CB-MIG2 T1 additions (AC-08 / Canon §16, Amendment v1.3.0)
+    "drip_lines_per_bed",         # irrigation count
+    "labor_rate_harvest",         # harvest labor rate (units_per_hr)
+    "labor_rate_wash",            # wash labor rate (units_per_hr)
+    "plantings_per_season",       # succession count
+    "harvest_weeks_span",         # succession weeks
+)
+
+# WP-CB-MIG2 T2/T3 attributes to emit in the agronomy payload block (AC-08b).
+# These are read from crop_attribute (not crop_field_enrichment) and mirrored
+# into payload["agronomy"] alongside the T1 numeric facts.
+# sale_unit rides on harvest_unit (alias D-MIG2-1 — no separate attr entry).
+_CATEGORICAL_ATTRS_WHITELIST = (
+    "planting_method",
+    "harvest_unit",
+    "harvest_stage",
+    "frost_tolerance_class",
+    "sowing_months",
+    "transplant_months",
+    "season_window",
+    # WP-CB-MIG2 additions
+    "irrigation_type",
+    "root_depth_class",
+    "needs_summer_shade",
+    "unit_size",
+    "common_pests",
+    "foliar_feeding_program",
 )
 
 # Confidence threshold τ for field_state classification (Gap-Fill Plan §2).
@@ -392,6 +419,26 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
         if er["value_best"] is not None:
             agronomy_by_variety[vid][fname] = float(er["value_best"])
 
+    # WP-CB-MIG2 AC-08b: fetch T2/T3 attributes from crop_attribute.
+    # These mirror how planting_method / harvest_unit are already delivered.
+    cat_attr_placeholders = ",".join(["%s"] * len(_CATEGORICAL_ATTRS_WHITELIST))
+    cat_attr_sql = f"""
+        SELECT variety_id, attribute_name, value_canonical, value_list
+        FROM crop_attribute
+        WHERE attribute_name IN ({cat_attr_placeholders})
+    """
+    cur.execute(cat_attr_sql, _CATEGORICAL_ATTRS_WHITELIST)
+    categorical_by_variety: dict[int, dict[str, Any]] = {}
+    for ca in cur.fetchall():
+        vid = ca["variety_id"]
+        aname = ca["attribute_name"]
+        if vid not in categorical_by_variety:
+            categorical_by_variety[vid] = {}
+        # value_list (jsonb) takes precedence for T3 attrs; otherwise use value_canonical
+        val = ca["value_list"] if ca["value_list"] is not None else ca["value_canonical"]
+        if val is not None:
+            categorical_by_variety[vid][aname] = val
+
     # Serialize ASSUMPTIONS registry once for embedding in each variety payload.
     # WP-CB-1 AC-09: deliver the ASSUMPTIONS registry to the delivery tier.
     from organic_market_agent.crop_book.assumptions import ASSUMPTIONS as _ASSUMPTIONS_REGISTRY
@@ -409,7 +456,14 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
     out = []
     for v in rows:
         vid = v["id"]
-        agronomy = agronomy_by_variety.get(vid, {})
+        # T1 numeric agronomy
+        agronomy: dict[str, Any] = dict(agronomy_by_variety.get(vid, {}))
+
+        # WP-CB-MIG2 AC-08b: merge T2/T3 categoricals into the agronomy block.
+        # Mirrors how planting_method / harvest_unit already delivered.
+        cat_attrs = categorical_by_variety.get(vid, {})
+        if cat_attrs:
+            agronomy.update(cat_attrs)
 
         # Compute per-field field_state for the whitelist fields (Gap-Fill Plan §2).
         meta_for_variety = enrichment_meta.get(vid, {})
@@ -425,18 +479,22 @@ def _fetch_crop_varieties(conn) -> list[dict[str, Any]]:
                     field_state[fname] = "VALIDATED"
                 else:
                     field_state[fname] = "UNVALIDATED"
+        # Add field_state for categorical attrs
+        for aname in _CATEGORICAL_ATTRS_WHITELIST:
+            val = cat_attrs.get(aname)
+            if val is not None and val != "" and val != []:
+                field_state[aname] = "VALIDATED"
+            else:
+                field_state[aname] = "MISSING"
 
         # WP-CB-MIG AC-06/AC-07: identity columns only; numeric facts from enrichment,
-        # categoricals from crop_attribute (via agronomy_by_variety + field_state).
+        # categoricals from crop_attribute (via agronomy block — AC-08b).
         payload: dict[str, Any] = {
             "schema_version": 1,
             "name_en": v.get("name_en"),
             "is_default": bool(v.get("is_default")),
             "notes": v.get("notes"),
-            # Numeric facts (read from enrichment via agronomy dict):
-            # days_to_maturity, harvest_window_max_days, spacing_in_row_cm,
-            # yield_per_bed_m, price_documented, days_in_nursery, etc.
-            # All delivered via agronomy block below.
+            # T1 numeric facts + T2/T3 categoricals all in agronomy block.
         }
         if agronomy:
             payload["agronomy"] = agronomy

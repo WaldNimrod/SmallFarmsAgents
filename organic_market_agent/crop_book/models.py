@@ -19,7 +19,7 @@ from sqlalchemy import (
 # Note: Decimal imported for CropUnitConversion.conversion_factor; Numeric for same.
 
 _PK_TYPE = BigInteger().with_variant(Integer(), "sqlite")
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, deferred, mapped_column, relationship
 
 from organic_market_agent.db.base import Base
 
@@ -157,6 +157,10 @@ class CropVariety(Base):
     seeder_roller_plate: Mapped[Optional[str]] = mapped_column(VARCHAR(20), nullable=True)
     # harvest_stage remains as identity (T5) — kept per Canon §7.3
     harvest_stage: Mapped[Optional[str]] = mapped_column(VARCHAR(30), nullable=True)
+    # WP-CB-MIG2: seeder_settings — free-text summary of front/rear gear + roller plate (Canon §16 T5).
+    # Deferred: not included in standard SELECT until migration 060 is run on the live PG.
+    # After migration 060 is applied, remove `deferred()` wrapper.
+    seeder_settings: Mapped[Optional[str]] = deferred(mapped_column(Text, nullable=True))
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     crop: Mapped["Crop"] = relationship("Crop", back_populates="varieties")

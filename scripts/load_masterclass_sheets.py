@@ -37,6 +37,11 @@ SOURCE_LABEL = "NI:jmf_masterclass"
 TRUST_TIER = "NI"
 BODY_TEXT_MAX = 2000  # chars — fair-use bound (WP-B2 §3.1)
 
+# WP-CB-MIG2 WI-10: PR backfill source label + weight (Canon §17)
+PR_SOURCE_LABEL = "PR:jmf_masterclass"
+PR_TRUST_TIER = "PR"
+PR_WEIGHT = 0.70
+
 # ---------------------------------------------------------------------------
 # Section keywords → note_type mapping
 # ---------------------------------------------------------------------------
@@ -226,6 +231,127 @@ def _extract_cultivar_names(sections: dict[str, list[str]]) -> list[str]:
     return filtered
 
 
+# ---------------------------------------------------------------------------
+# WP-CB-MIG2 WI-10: Structured attribute extraction from MD sections
+# ---------------------------------------------------------------------------
+
+# Regex patterns for extracting structured MIG2 attrs from MD content
+_IRRIGATION_TYPE_PATTERNS: list[tuple[re.Pattern, str]] = [
+    (re.compile(r'\bdrip\b', re.IGNORECASE), "drip"),
+    (re.compile(r'\bsprinkler\b', re.IGNORECASE), "sprinkler"),
+    (re.compile(r'\bmixed\b.{0,30}irrigation|irrigation.{0,30}\bmixed\b', re.IGNORECASE), "mixed"),
+]
+
+_ROOT_DEPTH_PATTERNS: list[tuple[re.Pattern, str]] = [
+    (re.compile(r'\bshallow\b.{0,20}root|\broot.{0,20}\bshallow\b', re.IGNORECASE), "shallow"),
+    (re.compile(r'\bdeep\b.{0,20}root|\broot.{0,20}\bdeep\b', re.IGNORECASE), "deep"),
+    (re.compile(r'\bmedium\b.{0,20}root|\broot.{0,20}\bmedium\b', re.IGNORECASE), "medium"),
+]
+
+_DRIP_LINES_PATTERN = re.compile(
+    r'(\d+)\s+drip\s+lines?\s+per\s+bed|drip\s+lines?\s+per\s+bed\s*[:=]\s*(\d+)',
+    re.IGNORECASE
+)
+
+_HARVEST_WEEKS_PATTERN = re.compile(
+    r'harvest.{0,30}(\d+)\s+weeks?|(\d+)\s+weeks?.{0,30}harvest',
+    re.IGNORECASE
+)
+
+_SEASON_WINDOW_PATTERN = re.compile(
+    r'\b(spring|summer|fall|autumn|winter|year.?round)\b',
+    re.IGNORECASE
+)
+
+
+def _extract_mig2_attrs(sections: dict[str, list[str]]) -> dict[str, str | float | None]:
+    """Extract MIG2 structured attributes from parsed MD sections.
+
+    Returns dict with keys: irrigation_type, root_depth_class, drip_lines_per_bed,
+    harvest_weeks_span, common_pests, foliar_feeding_program, unit_size, season_window.
+    Values are None where not found.
+    """
+    full_text = " ".join(
+        line for lines in sections.values() for line in lines
+    )
+
+    # irrigation_type
+    irrigation_type: str | None = None
+    for pat, val in _IRRIGATION_TYPE_PATTERNS:
+        if pat.search(full_text):
+            irrigation_type = val
+            break
+
+    # root_depth_class (check deep before medium for specificity)
+    root_depth_class: str | None = None
+    for pat, val in _ROOT_DEPTH_PATTERNS:
+        if pat.search(full_text):
+            root_depth_class = val
+            break
+
+    # drip_lines_per_bed (numeric)
+    drip_lines_per_bed: float | None = None
+    m = _DRIP_LINES_PATTERN.search(full_text)
+    if m:
+        raw_n = m.group(1) or m.group(2)
+        if raw_n and raw_n.isdigit():
+            drip_lines_per_bed = float(raw_n)
+
+    # harvest_weeks_span (numeric)
+    harvest_weeks_span: float | None = None
+    m = _HARVEST_WEEKS_PATTERN.search(full_text)
+    if m:
+        raw_n = m.group(1) or m.group(2)
+        if raw_n and raw_n.isdigit():
+            harvest_weeks_span = float(raw_n)
+
+    # common_pests — extract from pest/disease sections
+    common_pests: str | None = None
+    pest_lines: list[str] = []
+    for key, lines in sections.items():
+        if any(kw in key.lower() for kw in ("pest", "disease")):
+            pest_lines.extend(lines)
+    if pest_lines:
+        # Normalize: first 3 lines as pest names (comma-separated)
+        pest_tokens = [re.sub(r'^[→•\-\*]+\s*', '', line).strip()
+                       for line in pest_lines[:5] if line.strip()]
+        pest_tokens = [t for t in pest_tokens if t and len(t) < 80]
+        if pest_tokens:
+            common_pests = ", ".join(pest_tokens[:5])
+
+    # foliar_feeding_program — extract from fertilization/amendment sections
+    foliar_feeding_program: str | None = None
+    for key, lines in sections.items():
+        if any(kw in key.lower() for kw in ("fertiliz", "amendment", "foliar")):
+            body = " ".join(lines[:3])
+            if body.strip():
+                foliar_feeding_program, _ = _truncate(body, 500)
+                break
+
+    # season_window — extract from JMF where present
+    season_window: str | None = None
+    season_matches = []
+    for key, lines in sections.items():
+        if any(kw in key.lower() for kw in ("sow", "planting", "transplant", "season")):
+            text = " ".join(lines)
+            found = _SEASON_WINDOW_PATTERN.findall(text)
+            season_matches.extend([s.lower() for s in found])
+    if season_matches:
+        # Normalize: deduplicated, sorted
+        unique_seasons = list(dict.fromkeys(season_matches))
+        season_window = ",".join(unique_seasons[:4])
+
+    return {
+        "irrigation_type": irrigation_type,
+        "root_depth_class": root_depth_class,
+        "drip_lines_per_bed": drip_lines_per_bed,
+        "harvest_weeks_span": harvest_weeks_span,
+        "common_pests": common_pests,
+        "foliar_feeding_program": foliar_feeding_program,
+        "season_window": season_window,
+    }
+
+
 def parse_md_sheet(md_path: Path) -> dict:
     """Parse a single MD sheet and return structured data.
 
@@ -233,6 +359,7 @@ def parse_md_sheet(md_path: Path) -> dict:
         {
           'cultivars': [str, ...],
           'notes': {note_type: body_text, ...}  # at most 1 per type
+          'mig2_attrs': {attr_name: value, ...}  # WP-CB-MIG2 WI-10 structured attrs
           'warnings': [str, ...]
         }
     """
@@ -265,9 +392,13 @@ def parse_md_sheet(md_path: Path) -> dict:
         else:
             notes[note_type] = body
 
+    # WP-CB-MIG2 WI-10: extract structured attrs for PR backfill
+    mig2_attrs = _extract_mig2_attrs(sections)
+
     return {
         "cultivars": cultivars,
         "notes": notes,
+        "mig2_attrs": mig2_attrs,
         "warnings": parse_warnings,
     }
 
@@ -319,6 +450,8 @@ def md_to_cache_json(
         },
         "cultivars": parsed["cultivars"],
         "notes": notes_structured,
+        # WP-CB-MIG2 WI-10: structured MIG2 attrs (PR backfill)
+        "mig2_attrs": parsed.get("mig2_attrs", {}),
     }
 
 
@@ -421,6 +554,64 @@ def _upsert_knowledge_note(session, crop_id: int, note_type: str, body_text: str
     )
 
 
+def _upsert_source_value(
+    session,
+    variety_id: int,
+    field_name: str,
+    value_text: str | None,
+    value_numeric: float | None,
+    source: str = PR_SOURCE_LABEL,
+    trust_tier: str = PR_TRUST_TIER,
+    weight: float = PR_WEIGHT,
+) -> None:
+    """Upsert a crop_variety_source_values row (PR class, idempotent).
+
+    WP-CB-MIG2 WI-10: emit PR rows for MIG2 parseable groups.
+    ON CONFLICT (variety_id, source, field_name) DO UPDATE.
+    """
+    from sqlalchemy import text
+    now = datetime.now(timezone.utc).isoformat()
+    session.execute(
+        text(
+            "INSERT INTO crop_variety_source_values "
+            "(variety_id, source, field_name, value_text, value_numeric, "
+            " trust_tier, confidence_weight, created_at, updated_at) "
+            "VALUES (:vid, :src, :fn, :vt, :vn, :tier, :weight, :now, :now) "
+            "ON CONFLICT (variety_id, source, field_name) DO UPDATE SET "
+            "  value_text = EXCLUDED.value_text, "
+            "  value_numeric = EXCLUDED.value_numeric, "
+            "  updated_at = EXCLUDED.updated_at"
+        ),
+        {
+            "vid": variety_id,
+            "src": source,
+            "fn": field_name,
+            "vt": value_text,
+            "vn": value_numeric,
+            "tier": trust_tier,
+            "weight": weight,
+            "now": now,
+        },
+    )
+
+
+def _get_default_variety_id(session, crop_id: int) -> int | None:
+    """Get the default variety ID for a crop."""
+    from sqlalchemy import text
+    result = session.execute(
+        text("SELECT id FROM crop_varieties WHERE crop_id = :cid AND is_default = TRUE LIMIT 1"),
+        {"cid": crop_id},
+    ).fetchone()
+    if result:
+        return result[0]
+    # Fallback: first variety
+    result = session.execute(
+        text("SELECT id FROM crop_varieties WHERE crop_id = :cid LIMIT 1"),
+        {"cid": crop_id},
+    ).fetchone()
+    return result[0] if result else None
+
+
 def _upsert_variety(session, crop_id: int, variety_name: str):
     """Insert a crop_varieties row if not exists.
 
@@ -445,7 +636,13 @@ def _upsert_variety(session, crop_id: int, variety_name: str):
 def load_to_db(cache_records: list[dict], db_url: str) -> dict[str, int]:
     """Insert all cache records into the database.
 
-    Returns summary: {'notes_inserted': N, 'varieties_inserted': N, 'crops_created': N}
+    WP-CB-MIG2 WI-10: also emits crop_variety_source_values PR rows for
+    the parseable MIG2 groups (irrigation_type, drip_lines_per_bed,
+    root_depth_class, harvest_weeks_span, common_pests, foliar_feeding_program,
+    season_window). Idempotent (ON CONFLICT DO UPDATE).
+
+    Returns summary: {'notes_inserted': N, 'varieties_inserted': N,
+                      'crops_created': N, 'source_values_upserted': N}
     """
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
@@ -455,6 +652,7 @@ def load_to_db(cache_records: list[dict], db_url: str) -> dict[str, int]:
     notes_inserted = 0
     varieties_inserted = 0
     crops_created = 0
+    source_values_upserted = 0
 
     with Session() as session:
         for rec in cache_records:
@@ -470,7 +668,7 @@ def load_to_db(cache_records: list[dict], db_url: str) -> dict[str, int]:
             if not existing:
                 crops_created += 1
 
-            # Insert knowledge notes
+            # Insert knowledge notes (unchanged)
             for note_type, note_list in rec["notes"].items():
                 for note in note_list:
                     _upsert_knowledge_note(session, crop_id, note_type, note["body_text"])
@@ -481,12 +679,44 @@ def load_to_db(cache_records: list[dict], db_url: str) -> dict[str, int]:
                 _upsert_variety(session, crop_id, variety_name)
                 varieties_inserted += 1
 
+            # WP-CB-MIG2 WI-10: PR backfill for parseable MIG2 attrs
+            # Target the default variety (crop baseline).
+            mig2_attrs = rec.get("mig2_attrs", {})
+            if any(v is not None for v in mig2_attrs.values()):
+                variety_id = _get_default_variety_id(session, crop_id)
+                if variety_id is not None:
+                    # Text-value attrs (T2/T3)
+                    text_attrs = [
+                        "irrigation_type", "root_depth_class",
+                        "common_pests", "foliar_feeding_program", "season_window",
+                    ]
+                    for attr_name in text_attrs:
+                        val = mig2_attrs.get(attr_name)
+                        if val is not None:
+                            _upsert_source_value(
+                                session, variety_id, attr_name,
+                                value_text=str(val), value_numeric=None,
+                            )
+                            source_values_upserted += 1
+
+                    # Numeric attrs (T1)
+                    numeric_attrs = ["drip_lines_per_bed", "harvest_weeks_span"]
+                    for attr_name in numeric_attrs:
+                        val = mig2_attrs.get(attr_name)
+                        if val is not None:
+                            _upsert_source_value(
+                                session, variety_id, attr_name,
+                                value_text=None, value_numeric=float(val),
+                            )
+                            source_values_upserted += 1
+
         session.commit()
 
     return {
         "notes_inserted": notes_inserted,
         "varieties_inserted": varieties_inserted,
         "crops_created": crops_created,
+        "source_values_upserted": source_values_upserted,
     }
 
 
@@ -634,7 +864,8 @@ def cli_main(argv: list[str] | None = None) -> int:
             print(
                 f"DB loaded: {summary['notes_inserted']} notes, "
                 f"{summary['varieties_inserted']} varieties, "
-                f"{summary['crops_created']} crops created."
+                f"{summary['crops_created']} crops created, "
+                f"{summary.get('source_values_upserted', 0)} MIG2 source_values upserted."
             )
         except Exception as exc:
             logger.error("DB load failed: %s", exc)

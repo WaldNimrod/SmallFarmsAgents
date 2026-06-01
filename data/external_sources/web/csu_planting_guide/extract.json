@@ -1,0 +1,96 @@
+{
+  "rows": [
+    {
+      "crop_en": "Tomato",
+      "frost_tolerance_class": "tender"
+    },
+    {
+      "crop_en": "Pepper",
+      "frost_tolerance_class": "tender"
+    },
+    {
+      "crop_en": "Eggplant",
+      "frost_tolerance_class": "very_tender"
+    },
+    {
+      "crop_en": "Cucumber",
+      "frost_tolerance_class": "very_tender"
+    },
+    {
+      "crop_en": "Squash",
+      "frost_tolerance_class": "tender"
+    },
+    {
+      "crop_en": "Melon",
+      "frost_tolerance_class": "very_tender"
+    },
+    {
+      "crop_en": "Bean",
+      "frost_tolerance_class": "tender"
+    },
+    {
+      "crop_en": "Pea",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Broccoli",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Cabbage",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Kale",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Lettuce",
+      "frost_tolerance_class": "semi_hardy"
+    },
+    {
+      "crop_en": "Spinach",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Carrot",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Beet",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Onion",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Garlic",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Radish",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Potato",
+      "frost_tolerance_class": "semi_hardy"
+    },
+    {
+      "crop_en": "Parsley",
+      "frost_tolerance_class": "hardy"
+    },
+    {
+      "crop_en": "Basil",
+      "frost_tolerance_class": "very_tender"
+    },
+    {
+      "crop_en": "Corn",
+      "frost_tolerance_class": "tender"
+    },
+    {
+      "crop_en": "Celery",
+      "frost_tolerance_class": "semi_hardy"
+    }
+  ]
+}

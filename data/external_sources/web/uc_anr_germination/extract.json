@@ -1,0 +1,124 @@
+{
+  "rows": [
+    {
+      "crop_en": "Tomato",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Pepper",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Lettuce",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Cabbage",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Broccoli",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Carrot",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Bean",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Cucumber",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 35.0
+    },
+    {
+      "crop_en": "Squash",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 35.0
+    },
+    {
+      "crop_en": "Melon",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 35.0
+    },
+    {
+      "crop_en": "Onion",
+      "germination_temp_c_min": 10.0,
+      "germination_temp_c_opt": 18.3,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Spinach",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Pea",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Beet",
+      "germination_temp_c_min": 10.0,
+      "germination_temp_c_opt": 18.3,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Eggplant",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Kale",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 23.9
+    },
+    {
+      "crop_en": "Radish",
+      "germination_temp_c_min": 4.4,
+      "germination_temp_c_opt": 15.6,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Corn",
+      "germination_temp_c_min": 10.0,
+      "germination_temp_c_opt": 18.3,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Basil",
+      "germination_temp_c_min": 15.6,
+      "germination_temp_c_opt": 23.9,
+      "germination_temp_c_max": 29.4
+    },
+    {
+      "crop_en": "Parsley",
+      "germination_temp_c_min": 10.0,
+      "germination_temp_c_opt": 18.3,
+      "germination_temp_c_max": 29.4
+    }
+  ]
+}

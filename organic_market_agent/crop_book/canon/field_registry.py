@@ -293,6 +293,78 @@ FIELD_REGISTRY: dict[str, FieldMeta] = {
         canonical="harvest_stage",
         field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
     ),
+
+    # -------------------------------------------------------------------------
+    # §16 — Canon Amendment v1.3.0 (WP-CB-MIG2 new fields)
+    # -------------------------------------------------------------------------
+
+    # T5 identity/ops columns
+    "seeder_model": FieldMeta(
+        canonical="seeder",
+        field_type="T5", layer="column", disposition="ALIAS", unit=None,
+    ),
+    "seeder": FieldMeta(
+        canonical="seeder",
+        field_type="T5", layer="column", disposition="KEEP", unit=None,
+    ),
+    "seeder_settings": FieldMeta(
+        canonical="seeder_settings",
+        field_type="T5", layer="column", disposition="KEEP", unit=None,
+    ),
+
+    # T1 enrichment facts (irrigation / harvest / succession)
+    "drip_lines_per_bed": FieldMeta(
+        canonical="drip_lines_per_bed",
+        field_type="T1", layer="enrichment", disposition="NEW", unit="count",
+    ),
+    "labor_rate_harvest": FieldMeta(
+        canonical="labor_rate_harvest",
+        field_type="T1", layer="enrichment", disposition="NEW", unit="units_per_hr",
+    ),
+    "labor_rate_wash": FieldMeta(
+        canonical="labor_rate_wash",
+        field_type="T1", layer="enrichment", disposition="NEW", unit="units_per_hr",
+    ),
+    "plantings_per_season": FieldMeta(
+        canonical="plantings_per_season",
+        field_type="T1", layer="enrichment", disposition="NEW", unit="count",
+    ),
+    "harvest_weeks_span": FieldMeta(
+        canonical="harvest_weeks_span",
+        field_type="T1", layer="enrichment", disposition="NEW", unit="weeks",
+    ),
+
+    # T2/T3 crop_attribute attributes (CLOSED-ENUM or OPEN-VOCAB)
+    "irrigation_type": FieldMeta(
+        canonical="irrigation_type",
+        field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+    "root_depth_class": FieldMeta(
+        canonical="root_depth_class",
+        field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+    "needs_summer_shade": FieldMeta(
+        canonical="needs_summer_shade",
+        field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+    "unit_size": FieldMeta(
+        canonical="unit_size",
+        field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+    "common_pests": FieldMeta(
+        canonical="common_pests",
+        field_type="T3", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+    "foliar_feeding_program": FieldMeta(
+        canonical="foliar_feeding_program",
+        field_type="T2", layer="crop_attribute", disposition="ATTR", unit=None,
+    ),
+
+    # Aliases: sale_unit → harvest_unit (D-MIG2-1); no duplicate storage
+    "sale_unit": FieldMeta(
+        canonical="harvest_unit",
+        field_type="T2", layer="crop_attribute", disposition="ALIAS", unit=None,
+    ),
 }
 
 # ---------------------------------------------------------------------------

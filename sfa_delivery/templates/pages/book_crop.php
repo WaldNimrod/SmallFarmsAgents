@@ -263,7 +263,7 @@ ob_start();
         ['key'=>'sowing',     'icon'=>'🌱', 'label'=>'זריעה/שתילה',     'class'=>'nursery', 'fields'=>['planting_method','days_in_nursery','seeds_per_g','sowing_months']],
         ['key'=>'irrigation', 'icon'=>'💧', 'label'=>'השקיה',            'class'=>'grow',    'fields'=>['irrigation_type','root_depth_class']],
         ['key'=>'care',       'icon'=>'✋', 'label'=>'טיפוח ועישוב',    'class'=>'grow',    'fields'=>[]],
-        ['key'=>'pest',       'icon'=>'🐛', 'label'=>'מזיקים ומחלות',   'class'=>'pest',    'fields'=>[]],
+        ['key'=>'pest',       'icon'=>'🐛', 'label'=>'מזיקים ומחלות',   'class'=>'pest',    'fields'=>['common_pests','foliar_feeding_program']],
         ['key'=>'harvest',    'icon'=>'🥬', 'label'=>'קציר',             'class'=>'harvest', 'fields'=>['days_to_maturity','harvest_window_max_days']],
         ['key'=>'storage',    'icon'=>'❄',  'label'=>'שטיפה ואחסון',    'class'=>'harvest', 'fields'=>[]],
         ['key'=>'succession', 'icon'=>'🔁', 'label'=>'רצף וחברה',       'class'=>'yield',   'fields'=>['succession_interval_weeks','frost_tolerance_class']],
@@ -301,6 +301,26 @@ ob_start();
             </div>
             <?php endforeach; ?>
           </dl>
+          <?php
+          // WI-9 / AC-10: מזיקים topic renders crop_knowledge_notes drill-down.
+          // Surfaces pest_disease + irrigation note types as a collapsible notes block.
+          if ($topic['key'] === 'pest'):
+            $pest_note_types = ['pest_disease', 'irrigation'];
+            $pest_notes = array_values(array_filter($notes, static function ($n) use ($pest_note_types) {
+                return in_array((string)($n['note_type'] ?? ''), $pest_note_types, true);
+            }));
+            if (!empty($pest_notes)):
+          ?>
+          <div class="pest-notes">
+            <h4 class="pest-notes__title">פירוט מזיקים ומחלות</h4>
+            <?php foreach ($pest_notes as $pn): ?>
+            <div class="pest-note">
+              <?php if (!empty($pn['title_he'])): ?><strong><?= $h((string)$pn['title_he']) ?></strong><?php endif; ?>
+              <p><?= $h((string)($pn['body_text'] ?? '')) ?></p>
+            </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endif; endif; ?>
         </div>
       </div>
       <?php endforeach; ?>

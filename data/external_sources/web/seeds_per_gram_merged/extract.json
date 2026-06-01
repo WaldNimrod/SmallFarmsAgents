@@ -1,0 +1,100 @@
+{
+  "rows": [
+    {
+      "crop_en": "Basil",
+      "seeds_per_gram": 615.0,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=600 osborne=630.0"
+    },
+    {
+      "crop_en": "Bean",
+      "seeds_per_gram": 4.1,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=4 osborne=4.2"
+    },
+    {
+      "crop_en": "Beet",
+      "seeds_per_gram": 51.25,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=50 osborne=52.5"
+    },
+    {
+      "crop_en": "Broccoli",
+      "seeds_per_gram": 307.5,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=300 osborne=315.0"
+    },
+    {
+      "crop_en": "Cabbage",
+      "seeds_per_gram": 256.25,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=250 osborne=262.5"
+    },
+    {
+      "crop_en": "Carrot",
+      "seeds_per_gram": 820.0,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=800 osborne=840.0"
+    },
+    {
+      "crop_en": "Cucumber",
+      "seeds_per_gram": 35.9,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=35 osborne=36.8"
+    },
+    {
+      "crop_en": "Eggplant",
+      "seeds_per_gram": 256.25,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=250 osborne=262.5"
+    },
+    {
+      "crop_en": "Lettuce",
+      "seeds_per_gram": 922.5,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=900 osborne=945.0"
+    },
+    {
+      "crop_en": "Onion",
+      "seeds_per_gram": 256.25,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=250 osborne=262.5"
+    },
+    {
+      "crop_en": "Parsley",
+      "seeds_per_gram": 768.75,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=750 osborne=787.5"
+    },
+    {
+      "crop_en": "Pea",
+      "seeds_per_gram": 5.1,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=5 osborne=5.2"
+    },
+    {
+      "crop_en": "Pepper",
+      "seeds_per_gram": 153.75,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=150 osborne=157.5"
+    },
+    {
+      "crop_en": "Radish",
+      "seeds_per_gram": 92.25,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=90 osborne=94.5"
+    },
+    {
+      "crop_en": "Spinach",
+      "seeds_per_gram": 87.1,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=85 osborne=89.2"
+    },
+    {
+      "crop_en": "Tomato",
+      "seeds_per_gram": 358.75,
+      "source": "OP:vital_seeds_count",
+      "note": "cross_val_mean vital=350 osborne=367.5"
+    }
+  ]
+}
