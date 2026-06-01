@@ -16,10 +16,11 @@ immutable). Art arrives in batches; this folder keeps growing.
 duplicate; `_AMBIGUOUS_…` = species unconfirmed; `DECOR_` = not a single-crop master.
 `masters/`: `wc-<slug>.png` (one canonical per crop) + `wc-cropbook-hero.png` (the book's central illustration).
 
-## Coverage — 17 crop masters + 1 book hero (verified, 2026-06-01)
-**Served (have wc-*.png + 720px derivative):**
-tomato · cucumber · beet · pepper · broccoli · cabbage · chard · eggplant · fennel · garlic · kale · scallion ·
-melon  + original lettuce · radish · parsley · dill = **17 crops** · plus **wc-cropbook-hero**.
+## Coverage — 28 crop masters + 1 book hero (verified, 2026-06-01)
+**Served (have wc-*.png + 720px derivative) — every one wired in WC_ART + $wc_art_map (exact 28=28 match):**
+basil · beet · broccoli · bush-bean · cabbage · carrot · chard · cucumber · dill · eggplant · fennel · garlic ·
+ginger · kale · leek · lettuce · melon · onion · parsley · pea · pepper · pole-bean · radish · scallion · spinach ·
+tomato · turmeric · zucchini = **28 crops** · plus **wc-cropbook-hero**.
 
 Any crop NOT in this list falls back to the icon-sprite glyph (graceful) until its master is created.
 
@@ -38,6 +39,12 @@ the hub module grid, not a crop master).
 onion (969g1k) → wc-onion · leek (n8ahgv (1)) → wc-leek · basil (Gemini_Generated_Image_.png) → wc-basil ·
 carrot ((1)) → wc-carrot. Parked in `incoming/`: `melon_cantaloupe_ALT_b3` (sn0n49 — have wc-melon),
 `cabbage_ALT_b3` ((2) — have wc-cabbage; removed as exact dup).
+
+## Batch 4 — 2026-06-01 (8 files) → 7 new crop masters
+turmeric (wpvj6h) → wc-turmeric · ginger (pisxgc) → wc-ginger · spinach (7lypiy) → wc-spinach ·
+pea (9yjuzf) → wc-pea · bush-bean (v6tcf0) → wc-bush-bean · pole-bean (5rqv0b) → wc-pole-bean ·
+zucchini (aiyp75) → wc-zucchini. Parked: `spinach_ALT_b4` (4nvzgk — have wc-spinach).
+This completes the full JMF MasterClass set (24/24) + turmeric/zucchini extras.
 
 > **Correction note:** interim commits `ada847d` (mis-identified filenames; nonexistent masters) and a later
 > attempt where the **PHP map edits silently failed** (stale Edit match → maps stayed at the original 4 even though
