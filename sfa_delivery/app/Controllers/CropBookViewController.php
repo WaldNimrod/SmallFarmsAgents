@@ -724,9 +724,20 @@ final class CropBookViewController
             }
         }
 
-        // Proposed fields — always MISSING until WP-CB-MIG2
-        foreach (['needs_summer_shade', 'irrigation_type', 'root_depth_class', 'unit_size'] as $proposed) {
-            $out[$proposed] = ['value_best' => null, 'field_state' => 'PROPOSED', 'field_name' => $proposed, 'unit' => ''];
+        // Proposed fields — PROPOSED until data lands from WP-CB-MIG2 validation pipeline.
+        // Covers the 6 pre-existing + 7 newly-wired fields (AC-09 / WI-8).
+        $proposedFields = [
+            // Pre-existing
+            'needs_summer_shade', 'irrigation_type', 'root_depth_class', 'unit_size',
+            // WP-CB-MIG2 newly-wired
+            'seeder_settings', 'common_pests', 'foliar_feeding_program',
+            'labor_rate_harvest', 'labor_rate_wash', 'plantings_per_season', 'harvest_weeks_span',
+        ];
+        foreach ($proposedFields as $proposed) {
+            // Only set PROPOSED if not already resolved from enrichment/attributes above
+            if (!isset($out[$proposed]) || ($out[$proposed]['value_best'] ?? null) === null) {
+                $out[$proposed] = ['value_best' => null, 'field_state' => 'PROPOSED', 'field_name' => $proposed, 'unit' => ''];
+            }
         }
 
         // Identity fields from crops row

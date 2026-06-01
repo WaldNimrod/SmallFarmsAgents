@@ -1,0 +1,68 @@
+{
+  "rows": [
+    {
+      "crop_en": "Tomato",
+      "seeds_per_gram": 367.5
+    },
+    {
+      "crop_en": "Pepper",
+      "seeds_per_gram": 157.5
+    },
+    {
+      "crop_en": "Eggplant",
+      "seeds_per_gram": 262.5
+    },
+    {
+      "crop_en": "Cucumber",
+      "seeds_per_gram": 36.8
+    },
+    {
+      "crop_en": "Lettuce",
+      "seeds_per_gram": 945.0
+    },
+    {
+      "crop_en": "Carrot",
+      "seeds_per_gram": 840.0
+    },
+    {
+      "crop_en": "Onion",
+      "seeds_per_gram": 262.5
+    },
+    {
+      "crop_en": "Bean",
+      "seeds_per_gram": 4.2
+    },
+    {
+      "crop_en": "Pea",
+      "seeds_per_gram": 5.2
+    },
+    {
+      "crop_en": "Basil",
+      "seeds_per_gram": 630.0
+    },
+    {
+      "crop_en": "Parsley",
+      "seeds_per_gram": 787.5
+    },
+    {
+      "crop_en": "Spinach",
+      "seeds_per_gram": 89.2
+    },
+    {
+      "crop_en": "Broccoli",
+      "seeds_per_gram": 315.0
+    },
+    {
+      "crop_en": "Cabbage",
+      "seeds_per_gram": 262.5
+    },
+    {
+      "crop_en": "Beet",
+      "seeds_per_gram": 52.5
+    },
+    {
+      "crop_en": "Radish",
+      "seeds_per_gram": 94.5
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "rows": [
+    {
+      "crop_en": "Asparagus",
+      "soil_ph_target": 6.8,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Beans - lima, snap",
+      "soil_ph_target": 6.2,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Beets",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Broccoli",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Brussels sprouts",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Cabbage",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Carrot",
+      "soil_ph_target": 6.0,
+      "soil_ph_liming_threshold": 5.5
+    },
+    {
+      "crop_en": "Cauliflower",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Collards",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Cantaloupes",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Celery",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Cucumber",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Eggplant",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Endive - escarole",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Horseradish",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 5.5
+    },
+    {
+      "crop_en": "Kale",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Kohlrabi",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Leeks",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Lettuce - leaf, iceberg",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Mixed vegetables",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Muskmelons",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Okra",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Onions - green, bulb, scallions",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Parsley",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Parsnips",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Peas",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Peppers",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Potatoes, sweet",
+      "soil_ph_target": 6.2,
+      "soil_ph_liming_threshold": 5.5
+    },
+    {
+      "crop_en": "Potatoes - white, scab susceptible",
+      "soil_ph_target": 5.2,
+      "soil_ph_liming_threshold": 5.0
+    },
+    {
+      "crop_en": "Potatoes - white, scab resistant",
+      "soil_ph_target": 6.2,
+      "soil_ph_liming_threshold": 5.5
+    },
+    {
+      "crop_en": "Pumpkins",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Radish",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Rhubarb",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 5.5
+    },
+    {
+      "crop_en": "Rutabaga",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.2
+    },
+    {
+      "crop_en": "Spinach",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Squash - winter, summer",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Sweet corn",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Strawberries",
+      "soil_ph_target": 6.2,
+      "soil_ph_liming_threshold": 5.8
+    },
+    {
+      "crop_en": "Tomatoes",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Turnips",
+      "soil_ph_target": 6.5,
+      "soil_ph_liming_threshold": 6.0
+    },
+    {
+      "crop_en": "Watermelon",
+      "soil_ph_target": 6.2,
+      "soil_ph_liming_threshold": 5.5
+    }
+  ]
+}

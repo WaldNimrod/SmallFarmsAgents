@@ -26,6 +26,8 @@ UNIT_REGISTRY: dict[str, str] = {
     "acidity":         "pH",
     "seed_density":    "seeds_per_g",
     "count":           "count",
+    # Canon §16 / WI-5b (Amendment v1.3.0) — new dimension for labor rates
+    "labor_rate":      "units_per_hr",
 }
 
 # ---------------------------------------------------------------------------
@@ -147,11 +149,50 @@ UNIT_VARIANT_MAP: dict[str, dict[str | None, str]] = {
     "storage_rh_pct_max": {"%": "pct", "pct": "pct", None: "pct", "": "pct"},
 }
 
+# WP-CB-MIG2 (WI-5b): per-field unit mappings for new T1 facts
+# drip_lines_per_bed → count (existing dimension)
+# plantings_per_season → count (existing dimension)
+# harvest_weeks_span → weeks (existing dimension)
+# labor_rate_harvest, labor_rate_wash → units_per_hr (new dimension)
+UNIT_VARIANT_MAP.update({
+    "drip_lines_per_bed": {
+        "count": "count",
+        None: "count",
+        "": "count",
+    },
+    "plantings_per_season": {
+        "count": "count",
+        None: "count",
+        "": "count",
+    },
+    "harvest_weeks_span": {
+        "weeks": "weeks",
+        None: "weeks",
+        "": "weeks",
+    },
+    "labor_rate_harvest": {
+        "units_per_hr": "units_per_hr",
+        "units/hr": "units_per_hr",
+        "units/hour": "units_per_hr",
+        None: "units_per_hr",
+        "": "units_per_hr",
+    },
+    "labor_rate_wash": {
+        "units_per_hr": "units_per_hr",
+        "units/hr": "units_per_hr",
+        "units/hour": "units_per_hr",
+        None: "units_per_hr",
+        "": "units_per_hr",
+    },
+})
+
 # All canonical unit strings — used for AC-02 post-check
 ALL_CANONICAL_UNITS: set[str] = {
     "°C", "days", "weeks", "cm", "kg_per_bed_m", "kg_per_m2",
     "kg_per_ha", "ILS_per_kg", "ILS_per_bunch", "ILS_per_unit",
     "pct", "pH", "seeds_per_g", "count",
+    # Canon §16 / WI-5b
+    "units_per_hr",
 }
 
 

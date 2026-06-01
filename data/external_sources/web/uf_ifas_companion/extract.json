@@ -1,0 +1,159 @@
+{
+  "rows": [
+    {
+      "crop_a_en": "Tomato",
+      "crop_b_en": "Basil",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Tomato",
+      "crop_b_en": "Carrot",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Tomato",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Pepper",
+      "crop_b_en": "Basil",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Pepper",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Cucumber",
+      "crop_b_en": "Bean",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Cucumber",
+      "crop_b_en": "Pea",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Lettuce",
+      "crop_b_en": "Carrot",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Lettuce",
+      "crop_b_en": "Radish",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Spinach",
+      "crop_b_en": "Strawberry",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Cabbage",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Cabbage",
+      "crop_b_en": "Garlic",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Broccoli",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Carrot",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Carrot",
+      "crop_b_en": "Leek",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Bean",
+      "crop_b_en": "Pea",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Pea",
+      "crop_b_en": "Carrot",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Squash",
+      "crop_b_en": "Bean",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Kale",
+      "crop_b_en": "Beet",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Arugula",
+      "crop_b_en": "Lettuce",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Cilantro",
+      "crop_b_en": "Dill",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Mint",
+      "crop_b_en": "Cabbage",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Thyme",
+      "crop_b_en": "Cabbage",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Chard",
+      "crop_b_en": "Onion",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Fennel",
+      "crop_b_en": "Lettuce",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Eggplant",
+      "crop_b_en": "Bean",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Melon",
+      "crop_b_en": "Corn",
+      "compatibility": "beneficial"
+    },
+    {
+      "crop_a_en": "Tomato",
+      "crop_b_en": "Cabbage",
+      "compatibility": "antagonistic"
+    },
+    {
+      "crop_a_en": "Tomato",
+      "crop_b_en": "Broccoli",
+      "compatibility": "antagonistic"
+    },
+    {
+      "crop_a_en": "Bean",
+      "crop_b_en": "Onion",
+      "compatibility": "antagonistic"
+    },
+    {
+      "crop_a_en": "Cucumber",
+      "crop_b_en": "Potato",
+      "compatibility": "antagonistic"
+    }
+  ]
+}

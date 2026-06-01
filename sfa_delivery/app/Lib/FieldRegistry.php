@@ -36,6 +36,9 @@ final class FieldRegistry
         'yield'                => 'yield_per_bed_m',
         'price'                => 'price_documented',
         'spacing'              => 'spacing_in_row_cm',
+        // WP-CB-MIG2 aliases (AC-05 / AC-09 / D-MIG2-1 / D-MIG2-2)
+        'sale_unit'            => 'harvest_unit',   // alias: sale_unit → existing harvest_unit attr
+        'seeder_model'         => 'seeder',          // alias: seeder_model → existing seeder column
     ];
 
     /**
@@ -71,10 +74,18 @@ final class FieldRegistry
         'family'                     => ['משפחה בוטנית', 'המשפחה הבוטנית — בסיס לרמז מחזור הגידולים.', 'ID'],
         'needs_summer_shade'         => ['הצללה בקיץ', 'גידולים מסוימים זקוקים לרשת צל בקיץ. שלוש רמות: 30%/40%/50%.', 'AT'],
         'irrigation_type'            => ['סוג השקיה', 'אופן ההשקיה — טפטוף או ממטרות. שדה מוצע.', 'AT'],
-        'drip_lines_per_bed'         => ['קווי טפטוף לערוגה', 'מספר קווי טפטוף לערוגה אחת.', 'AT'],
+        'drip_lines_per_bed'         => ['קווי טפטוף לערוגה', 'מספר קווי טפטוף לערוגה אחת.', 'EN'],
         'root_depth_class'           => ['עומק שורשים', 'עומק בית השורשים: רדוד/בינוני/עמוק. שדה מוצע.', 'AT'],
-        'sale_unit'                  => ['יחידת מכירה', 'היחידה הנמכרת: ראש/אגודה/ק״ג/יחידה. שדה מוצע.', 'ID'],
+        'sale_unit'                  => ['יחידת מכירה', 'היחידה הנמכרת: ראש/אגודה/ק״ג/יחידה. שדה מוצע.', 'AT'],
         'harvest_unit_default'       => ['יחידת קציר', 'יחידת הקציר/מכירה כברירת מחדל.', 'ID'],
+        // WP-CB-MIG2 — 7 newly-wired proposed fields (AC-09)
+        'seeder_settings'            => ['הגדרות זרעיה', 'תיאור כולל של הגדרות גלגל/גלגלון/הנעה לזרעיה.', 'ID'],
+        'common_pests'               => ['מזיקים נפוצים', 'רשימת המזיקים הנפוצים לגידול זה (מקור: JMF).', 'AT'],
+        'foliar_feeding_program'     => ['תוכנית דשון עלי', 'תיאור תוכנית הדשון העלי (ביופסטיצידים וכד׳).', 'AT'],
+        'labor_rate_harvest'         => ['קצב קציר', 'יחידות קציר לשעת עבודה (יח׳/שעה).', 'EN'],
+        'labor_rate_wash'            => ['קצב שטיפה', 'יחידות שטיפה לשעת עבודה (יח׳/שעה).', 'EN'],
+        'plantings_per_season'       => ['שתילות עונה', 'מספר מחזורי גידול בעונה אחת.', 'EN'],
+        'harvest_weeks_span'         => ['ספן קציר', 'משך תקופת הקציר בשבועות.', 'EN'],
     ];
 
     /**
@@ -138,10 +149,27 @@ final class FieldRegistry
 
     /**
      * Check if a field is a "proposed" (WP-CB-MIG2) field with no live data yet.
+     * Covers the 6 previously listed + 7 newly-wired fields (AC-09 / WI-8).
      */
     public static function isProposed(string $name): bool
     {
-        $proposed = ['needs_summer_shade', 'irrigation_type', 'root_depth_class', 'unit_size', 'sale_unit', 'drip_lines_per_bed'];
+        $proposed = [
+            // Pre-existing proposed fields (6)
+            'needs_summer_shade',
+            'irrigation_type',
+            'root_depth_class',
+            'unit_size',
+            'sale_unit',
+            'drip_lines_per_bed',
+            // WP-CB-MIG2 newly-wired proposed fields (7)
+            'seeder_settings',
+            'common_pests',
+            'foliar_feeding_program',
+            'labor_rate_harvest',
+            'labor_rate_wash',
+            'plantings_per_season',
+            'harvest_weeks_span',
+        ];
         return in_array(self::resolve($name), $proposed, true)
             || in_array($name, $proposed, true);
     }

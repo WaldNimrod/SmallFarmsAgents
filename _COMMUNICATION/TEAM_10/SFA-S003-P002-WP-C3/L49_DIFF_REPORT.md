@@ -8,8 +8,8 @@
 | Changed (L49 ≠ L03/L04) | 13 |
 | New (not in L03/L04) | 12 |
 | Identical (skipped) | 0 |
-| DB misses | 9 |
-| Total upserted | 16 |
+| DB misses | 0 |
+| Total upserted | 25 |
 
 ## Changed rows (L49 supersedes L03/L04)
 
@@ -45,11 +45,3 @@
 | במיה | yield_per_m2_kg | 0.30 |
 | אבטיח | yield_per_m2_kg | 4.00 |
 | מלון | yield_per_m2_kg | 4.20 |
-
-## DB misses (crop not in DB)
-
-- `אבטיח`
-- `במיה`
-- `דלעות`
-- `עגבנית צ'רי`
-- `תירס`

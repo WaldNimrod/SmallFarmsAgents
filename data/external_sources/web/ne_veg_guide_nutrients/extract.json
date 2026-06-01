@@ -1,0 +1,139 @@
+{
+  "rows": [
+    {
+      "crop_en": "Tomato",
+      "assumed_yield_t_ha": 0.03,
+      "nutrient_removal_n_kg_ha": 134.5,
+      "nutrient_removal_p_kg_ha": 19.563812,
+      "nutrient_removal_k_kg_ha": 139.564713,
+      "nutrient_removal_ca_kg_ha": 89.67,
+      "nutrient_removal_mg_kg_ha": 33.63
+    },
+    {
+      "crop_en": "Pepper",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 112.08,
+      "nutrient_removal_p_kg_ha": 17.119972,
+      "nutrient_removal_k_kg_ha": 120.953871,
+      "nutrient_removal_ca_kg_ha": 78.46,
+      "nutrient_removal_mg_kg_ha": 28.02
+    },
+    {
+      "crop_en": "Cucumber",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 100.88,
+      "nutrient_removal_p_kg_ha": 14.676132,
+      "nutrient_removal_k_kg_ha": 111.64845,
+      "nutrient_removal_ca_kg_ha": 67.25,
+      "nutrient_removal_mg_kg_ha": 22.42
+    },
+    {
+      "crop_en": "Squash",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 89.67,
+      "nutrient_removal_p_kg_ha": 13.694232,
+      "nutrient_removal_k_kg_ha": 102.343029,
+      "nutrient_removal_ca_kg_ha": 61.65,
+      "nutrient_removal_mg_kg_ha": 20.18
+    },
+    {
+      "crop_en": "Bean",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 78.46,
+      "nutrient_removal_p_kg_ha": 12.227928,
+      "nutrient_removal_k_kg_ha": 93.037608,
+      "nutrient_removal_ca_kg_ha": 56.04,
+      "nutrient_removal_mg_kg_ha": 16.81
+    },
+    {
+      "crop_en": "Broccoli",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 123.29,
+      "nutrient_removal_p_kg_ha": 18.586276,
+      "nutrient_removal_k_kg_ha": 130.259292,
+      "nutrient_removal_ca_kg_ha": 84.06,
+      "nutrient_removal_mg_kg_ha": 31.38
+    },
+    {
+      "crop_en": "Cabbage",
+      "assumed_yield_t_ha": 0.03,
+      "nutrient_removal_n_kg_ha": 112.08,
+      "nutrient_removal_p_kg_ha": 17.119972,
+      "nutrient_removal_k_kg_ha": 120.953871,
+      "nutrient_removal_ca_kg_ha": 78.46,
+      "nutrient_removal_mg_kg_ha": 28.02
+    },
+    {
+      "crop_en": "Lettuce",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 67.25,
+      "nutrient_removal_p_kg_ha": 9.784088,
+      "nutrient_removal_k_kg_ha": 83.740488,
+      "nutrient_removal_ca_kg_ha": 50.44,
+      "nutrient_removal_mg_kg_ha": 13.45
+    },
+    {
+      "crop_en": "Spinach",
+      "assumed_yield_t_ha": 0.01,
+      "nutrient_removal_n_kg_ha": 61.65,
+      "nutrient_removal_p_kg_ha": 8.806552,
+      "nutrient_removal_k_kg_ha": 79.083627,
+      "nutrient_removal_ca_kg_ha": 44.83,
+      "nutrient_removal_mg_kg_ha": 11.21
+    },
+    {
+      "crop_en": "Carrot",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 78.46,
+      "nutrient_removal_p_kg_ha": 12.227928,
+      "nutrient_removal_k_kg_ha": 93.037608,
+      "nutrient_removal_ca_kg_ha": 56.04,
+      "nutrient_removal_mg_kg_ha": 16.81
+    },
+    {
+      "crop_en": "Onion",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 89.67,
+      "nutrient_removal_p_kg_ha": 13.694232,
+      "nutrient_removal_k_kg_ha": 102.343029,
+      "nutrient_removal_ca_kg_ha": 61.65,
+      "nutrient_removal_mg_kg_ha": 20.18
+    },
+    {
+      "crop_en": "Potato",
+      "assumed_yield_t_ha": 0.03,
+      "nutrient_removal_n_kg_ha": 112.08,
+      "nutrient_removal_p_kg_ha": 17.119972,
+      "nutrient_removal_k_kg_ha": 120.953871,
+      "nutrient_removal_ca_kg_ha": 78.46,
+      "nutrient_removal_mg_kg_ha": 28.02
+    },
+    {
+      "crop_en": "Corn",
+      "assumed_yield_t_ha": 0.03,
+      "nutrient_removal_n_kg_ha": 134.5,
+      "nutrient_removal_p_kg_ha": 19.563812,
+      "nutrient_removal_k_kg_ha": 139.564713,
+      "nutrient_removal_ca_kg_ha": 89.67,
+      "nutrient_removal_mg_kg_ha": 33.63
+    },
+    {
+      "crop_en": "Pea",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 72.86,
+      "nutrient_removal_p_kg_ha": 10.761624,
+      "nutrient_removal_k_kg_ha": 88.389048,
+      "nutrient_removal_ca_kg_ha": 53.8,
+      "nutrient_removal_mg_kg_ha": 15.69
+    },
+    {
+      "crop_en": "Beet",
+      "assumed_yield_t_ha": 0.02,
+      "nutrient_removal_n_kg_ha": 84.06,
+      "nutrient_removal_p_kg_ha": 12.716696,
+      "nutrient_removal_k_kg_ha": 97.694469,
+      "nutrient_removal_ca_kg_ha": 58.28,
+      "nutrient_removal_mg_kg_ha": 17.93
+    }
+  ]
+}

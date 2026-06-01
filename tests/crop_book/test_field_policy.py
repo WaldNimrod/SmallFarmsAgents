@@ -24,24 +24,27 @@ def test_days_to_maturity_has_dtm_domain_fn() -> None:
 
 
 def test_avg_yield_uses_weighted_mean_and_multi_year_op() -> None:
+    # WI-6 / AC-07: key renamed avg_yield_per_bed_m → yield_per_bed_m
     from organic_market_agent.crop_book.field_policy import get_field_policy
 
-    policy = get_field_policy("avg_yield_per_bed_m")
+    policy = get_field_policy("yield_per_bed_m")
     assert policy.blend_strategy == "weighted_mean"
     assert policy.multi_year_op_mean is True
 
 
 def test_documented_price_uses_latest_op() -> None:
+    # WI-6 / AC-07: key renamed documented_price → price_documented
     from organic_market_agent.crop_book.field_policy import get_field_policy
 
-    policy = get_field_policy("documented_price")
+    policy = get_field_policy("price_documented")
     assert policy.blend_strategy == "latest_op"
 
 
 def test_in_row_spacing_uses_hard_winner() -> None:
+    # WI-6 / AC-07: key renamed in_row_spacing_cm → spacing_in_row_cm
     from organic_market_agent.crop_book.field_policy import get_field_policy
 
-    policy = get_field_policy("in_row_spacing_cm")
+    policy = get_field_policy("spacing_in_row_cm")
     assert policy.blend_strategy == "hard_winner"
 
 
@@ -112,3 +115,60 @@ def test_get_field_policy_returns_succession_interval_weeks() -> None:
 
     policy = get_field_policy("succession_interval_weeks")
     assert policy is FIELD_POLICY["succession_interval_weeks"]
+
+
+# ---------------------------------------------------------------------------
+# WP-CB-MIG2 WI-6: renamed keys absent + new canonical keys present (AC-07)
+# ---------------------------------------------------------------------------
+
+def test_old_keys_removed_from_field_policy() -> None:
+    """WI-6 / AC-07: old keys must NOT exist in FIELD_POLICY after rename."""
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+    assert "avg_yield_per_bed_m" not in FIELD_POLICY, \
+        "avg_yield_per_bed_m should be removed (renamed to yield_per_bed_m)"
+    assert "documented_price" not in FIELD_POLICY, \
+        "documented_price should be removed (renamed to price_documented)"
+    assert "in_row_spacing_cm" not in FIELD_POLICY, \
+        "in_row_spacing_cm should be removed (renamed to spacing_in_row_cm)"
+    assert "planting_season" not in FIELD_POLICY, \
+        "planting_season must be REMOVED from FIELD_POLICY (T2 attribute, not T1)"
+
+
+def test_new_canonical_keys_in_field_policy() -> None:
+    """WI-6 / AC-07: canonical keys must be in FIELD_POLICY."""
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+    assert "yield_per_bed_m" in FIELD_POLICY
+    assert "price_documented" in FIELD_POLICY
+    assert "spacing_in_row_cm" in FIELD_POLICY
+
+
+# ---------------------------------------------------------------------------
+# WP-CB-MIG2 WI-5: new T1 fact policies (AC-06)
+# ---------------------------------------------------------------------------
+
+def test_drip_lines_per_bed_in_field_policy() -> None:
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+    assert "drip_lines_per_bed" in FIELD_POLICY
+
+
+def test_labor_rate_harvest_weighted_mean() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy
+    policy = get_field_policy("labor_rate_harvest")
+    assert policy.blend_strategy == "weighted_mean"
+
+
+def test_labor_rate_wash_weighted_mean() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy
+    policy = get_field_policy("labor_rate_wash")
+    assert policy.blend_strategy == "weighted_mean"
+
+
+def test_plantings_per_season_hard_winner() -> None:
+    from organic_market_agent.crop_book.field_policy import get_field_policy
+    policy = get_field_policy("plantings_per_season")
+    assert policy.blend_strategy == "hard_winner"
+
+
+def test_harvest_weeks_span_in_field_policy() -> None:
+    from organic_market_agent.crop_book.field_policy import FIELD_POLICY
+    assert "harvest_weeks_span" in FIELD_POLICY

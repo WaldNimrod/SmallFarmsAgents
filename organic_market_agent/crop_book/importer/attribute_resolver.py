@@ -25,6 +25,7 @@ from organic_market_agent.crop_book.attribute_models import CropAttribute
 from organic_market_agent.crop_book.canon.enums import (
     canonicalize_enum,
     parse_month_list,
+    parse_list_attr,
     OPEN_VOCAB_ATTRS,
     ENUM_TOKENS,
 )
@@ -48,6 +49,15 @@ _SOURCE_VALUES_ATTRS: dict[str, str] = {
     "storage_ethylene_sensitivity":  "storage_ethylene_sensitivity",
     "variety_provider":              "variety_provider",
     "rootstock_variety":             "rootstock_variety",
+    # Canon §16 — MIG2 additions (Amendment v1.3.0)
+    "irrigation_type":               "irrigation_type",       # T2 CLOSED-ENUM
+    "root_depth_class":              "root_depth_class",      # T2 CLOSED-ENUM
+    "needs_summer_shade":            "needs_summer_shade",    # T2 CLOSED-ENUM
+    "common_pests":                  "common_pests",          # T3 OPEN-VOCAB list
+    "foliar_feeding_program":        "foliar_feeding_program",# T2 OPEN-VOCAB
+    "unit_size":                     "unit_size",             # T2 OPEN-VOCAB
+    # NOTE: sale_unit → alias to harvest_unit (D-MIG2-1); NO resolver entry here.
+    # NOTE: seeder_model → alias to seeder column (D-MIG2-2); NO resolver entry here.
 }
 
 # Attributes sourced from crop_varieties columns (single value, column-origin)
@@ -135,11 +145,15 @@ def _canonicalize_value(
     if raw_value is None:
         return None
 
-    # Month lists (T3)
+    # Month lists (T3 int-list)
     if attr_name in ("sowing_months", "transplant_months"):
         return parse_month_list(raw_value)
 
-    # Open-vocab
+    # T3 open-vocab list (common_pests) — comma-delimited
+    if attr_name == "common_pests":
+        return parse_list_attr(raw_value, attr_name)
+
+    # Open-vocab (single-value)
     if attr_name in OPEN_VOCAB_ATTRS:
         from organic_market_agent.crop_book.canon.enums import _normalize_open_vocab
         return _normalize_open_vocab(raw_value)

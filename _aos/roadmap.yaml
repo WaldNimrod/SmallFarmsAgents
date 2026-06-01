@@ -3415,20 +3415,24 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
-  status: ELIGIBLE
-  phase: spec
+  status: DONE
+  phase: validation
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_DRAFT
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-06-02"
+  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-MIG2-ARCHIVE)"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-MIG"]
+  branch: "claude/wp-cb-mig2-2026-06-01"
   canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
   origin_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/spec/OPEN_ISSUES.md"
-  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
+  lod200_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD400_spec.md"
   gate_history:
   - gate: L-GATE_E
     result: PASS
@@ -3445,9 +3449,110 @@ work_packages:
       into the canon-alignment scope. Effort LARGE: Canon amendment v1.3.0 + Alembic head→next + crop_attribute/
       enrichment wiring + field_policy entries + sfa_ingest_push whitelist + PR backfill from 37 MasterClass MDs."
     validator: team_00
-  notes: "OPENED 2026-05-31. Schema-expansion follow-on to WP-CB-MIG. NEXT: team_100 authors Canon
-    amendment (v1.3.0) + LOD400 migration spec → team_190 L-GATE_S (non-Claude, IR#1). Also closes the
-    season_window data gap (0 rows — planting_season NULL) flagged in WP-CB-MIG L-GATE_V."
+  - gate: L-GATE_S
+    result: ROUTED
+    date: "2026-06-01"
+    notes: "team_00 FINAL SPEC APPROVAL of the characterization (אפיון) in-session 2026-06-01. Four
+      decisions recorded (Canon §16 D-MIG2-1..4): sale_unit→harvest_unit alias + unit_size only;
+      seeder_model→seeder alias + seeder_settings new col; pests BOTH structured attrs AND knowledge_notes
+      drill-down; needs_summer_shade {none/shade_30/shade_40/shade_50}. Backfill = PR-parseable groups +
+      a NEW manual-validation HTML console (gap-scan, best-effort defaults, clipboard-JSON export → NI-class
+      ingest) for narrative-only/Israel-specific groups. team_100 authored: Canon amendment v1.3.0 (additive
+      §15–§20, DRAFT pending PASS) + LOD400_spec.md v1.0.0 (12 WIs, 16 ACs). Branch claude/wp-cb-mig2-2026-06-01
+      off main (previous session merged S003-P004 to main @ 8795b8a, verified). ROUTED to team_190 (NON-CLAUDE,
+      IR#1) for L-GATE_S spec review. Mandate: _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/
+      VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md. team_00 to route to a non-Claude validator."
+    validator: team_190
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/VALIDATION_MANDATE_team190_LGATE-S_2026-06-01_v1.0.0.md"
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-01"
+    validator: team_190
+    validator_engine: "Cursor Composer (non-Claude, IR#1)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG2/WP-CB-MIG2_LGATE-S_VERDICT_v1.0.0.md"
+    notes: "team_190 (Cursor Composer, non-Claude) L-GATE_S. PASS_WITH_FINDINGS — constitutional 6/6,
+      precision 5/6, scope 3/3, authorize_build TRUE. 4 MAJOR + 2 MINOR + 1 INFO, all ADDRESSED INLINE by
+      team_100 (validator: no R2 on inline fix). F-190-MIG2-S-01: remove planting_season from FIELD_POLICY
+      (T2/attribute, not enrichment rename) → WI-6/AC-07. S-02: add units_per_hr to canon/units.py + §6.1 →
+      WI-5b/AC-06b. S-03: register §16 fields in canon/field_registry.py FIELD_REGISTRY → WI-8b/AC-17. S-04:
+      explicit T2 delivery via the agronomy payload block (crop_attribute path, mirrors planting_method) →
+      WI-7/AC-08b. S-05 WI-8 count 5→7. S-06 §6.3a mirrored additively via new Canon §16a (locked §6.3a
+      untouched). S-07 §19 wording aligned. LOD400 bumped v1.0.0→v1.0.1; Canon §16a added. LOD400_LOCKED;
+      team_10 L-GATE_B build authorized."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-01"
+    builder: team_10
+    validator: team_100
+    commit: "dded7b1"
+    builder_commit: "f4bee60"
+    notes: "team_10 (Claude Sonnet) build self-attested 17/17 ACs; team_100 INDEPENDENTLY VERIFIED → PASS.
+      Evidence: pytest tests/crop_book/ 719 passed / 2 pre-existing fails (test_uc_prefix, ni_publisher_isolation)
+      / 0 new / 2 skipped; migration 060 SQLite up+down 5/5; CROP_TOPICS↔PHP parity 5/5; validate_aos 29P/19S/0F.
+      v1.0.1 remediation confirmed IN CODE: S-01 planting_season REMOVED from FIELD_POLICY (not aliased);
+      S-02 labor_rate→units_per_hr (canon/units.py); S-03 sale_unit/seeder_model aliases (field_registry);
+      S-04 _CATEGORICAL_ATTRS_WHITELIST wired into the agronomy payload (sfa_ingest_push). IR#1 OK (builder
+      Claude Sonnet ≠ validator team_190 non-Claude at L-GATE_V). PROCESS NOTE: the build sub-agent committed
+      off main (8795b8a) and the branch ref followed its line, orphaning team_100's L-GATE_S commits (recovered
+      — both reachable); team_100 reset the branch to the governance base (b601f93) and grafted only the
+      builder's code/tests/BUILD_REPORT (f4bee60). No work lost; governance docs are team_100's. BUILD_REPORT:
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG2/BUILD_REPORT_v1.0.0.md. Build deviations (non-blocking):
+      seeder_settings ORM uses deferred() until 060 applied on live PG; NI re-resolve dry-run-tested (live-DB
+      e2e pending). Canon frontmatter → v1.3.0 LOD200_LOCKED."
+  - gate: QA
+    result: PASS_WITH_CONCERNS
+    date: "2026-06-01"
+    validator: team_50
+    report_ref: "_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-MIG2/QA_REPORT_v1.0.0.md"
+    notes: "team_50 (Claude, read-only) functional QA. PASS_WITH_CONCERNS. C-1 MODERATE: test_php_parity was
+      dead code (REPO_ROOT parents[3] → silent skip; regex would also capture the quick-facts field array) so
+      AC-02 was unguarded — team_100 FIXED inline (parents[2] + 'icon'-anchored ordered parity); test now runs +
+      passes (suite 720 pass / 1 skip / 2 pre-existing). C-3 LOW: _extract_mig2_attrs docstring over-claimed
+      unit_size — FIXED. C-2 LOW: NI write path dry-run-tested only — carried as L-GATE_V NOTE N-1. Correctives
+      commit c083cc3. Layer ownership / IR#4 / enrichment-engine-untouched all CLEAN per QA."
+  - gate: L-GATE_V
+    result: ROUTED
+    date: "2026-06-01"
+    validator: team_190
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MIG2/VALIDATION_MANDATE_team190_LGATE-V_2026-06-01_v1.0.0.md"
+    notes: "team_100 prepared the L-GATE_V VALIDATION_MANDATE (constitutional + AC fidelity + the data-application
+      boundary: live 060 apply + PR backfill + console NI cycle are post-gate operational steps). ROUTED to
+      team_190 NON-CLAUDE (IR#1/#5) — team_00 to route to a non-Claude validator. team_100 NEVER self-issues."
+  - gate: OPS
+    result: APPLIED
+    date: "2026-06-02"
+    actor: team_100
+    notes: "team_00 approved the operational application. (1) Migration 060 applied to live oma-postgres
+      (alembic 059→060; seeder_settings column present; alembic_version=060). (2) The F-DATA-001 crop→family
+      corrective (scripts/fix_crop_families.py --apply, on branch claude/fix-crop-families-2026-06-02) re-pointed
+      26 crops off the Aizoaceae .first() fallback to their canonical families (tomato→Solanaceae verified; only
+      New Zealand Spinach legitimately remains Aizoaceae; idempotent re-run = 0 changes). Public API/site reflects
+      the family fix after the next data push to the MySQL delivery tier (team_99 ingest cycle). PR backfill + the
+      manual-validation console→NI ingest remain as further ops steps."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor Composer (non-Claude, IR#1/#5)"
+    reviewed_head: "7bb0b44"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG2/WP-CB-MIG2_LGATE-V_VERDICT_v1.0.0.md"
+    notes: "team_190 (Cursor Composer, non-Claude) L-GATE_V. PASS_WITH_FINDINGS — constitutional 4/4, AC 17/17.
+      Verified: additive amendment, builder f4bee60 zero roadmap edits, only 060 DDL, enrichment_runner/reconciler
+      untouched, the 4 L-GATE_S remediations, D2 alias guard, AC-02 parity test runs post-c083cc3, AC-14 720/1/2/0.
+      1 INFO + 3 NOTES, all addressed inline by team_100 (commit d797200): F-190-MIG2-V-01 (downgrade test was a
+      stub) FIXED — tests now drive the migration's real upgrade()/downgrade() via a live Alembic Operations
+      context + a downgrade round-trip test. N-1 (NI write path dry-run-only) CLOSED — new test exercises real
+      dry_run=False commit + re-resolve→crop_attribute (surfaced a latent ORM drift: CropVarietySourceValue model
+      omits created_at/updated_at + the table's UNIQUE constraint; flagged for a follow-up, prod uses migrations).
+      N-2 (seeder_settings deferred() until live 060) + N-3 (live data-application) are by-design/operational.
+      Suite 722/1/2/0. LOD500_LOCKED."
+  notes: "L-GATE_V PASS_WITH_FINDINGS 2026-06-02 (team_190 Cursor Composer, non-Claude; verdict committed).
+    WP-CB-MIG2 LOD500_LOCKED. Full ladder: L-GATE_S PWF→fixed → L-GATE_B PASS (team_100 verified) → team_50 QA
+    PWF→fixed → L-GATE_V PWF (V-01 + N-1 fixed inline, d797200). ADR042 archive mandate → team_191. Operational
+    follow-on (NOT gated): live 060 apply + PR backfill + manual-validation console→NI ingest; UI lights 'מוצע'
+    fields as data lands. All MIG2 work on branch claude/wp-cb-mig2-2026-06-01; main = origin/main (9867d4d) —
+    merge is a team_00 call. Latent follow-up: CropVarietySourceValue ORM model drift (created_at/updated_at +
+    unique constraint) flagged for a separate fix."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01
