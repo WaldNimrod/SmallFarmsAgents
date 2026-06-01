@@ -3235,6 +3235,7 @@ work_packages:
     resumes for the UI slice once WP-CB-MIG corrects the field layer AND team_35 mockups land."
   depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04", "SFA-S003-P004-WP-CB-0", "SFA-S003-P004-WP-CB-MIG"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1/LOD400_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-1/ARCHIVE_MANIFEST.md"
   catalog_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/CALCULATOR_CATALOG_v1.0.0.md"
   schema_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/MANDATORY_FIELD_SCHEMA_v1.0.0.md"
   gapfill_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/GAP_FILL_PLAN_v1.0.0.md"
@@ -3463,6 +3464,7 @@ work_packages:
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-1"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1-patch01/LOD200_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-1-patch01/ARCHIVE_MANIFEST.md"
   triggered_by:
     verdict_ref: "_COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_R3_v1.0.0.md"
   gate_history:
