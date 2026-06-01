@@ -3518,6 +3518,17 @@ work_packages:
     notes: "team_100 prepared the L-GATE_V VALIDATION_MANDATE (constitutional + AC fidelity + the data-application
       boundary: live 060 apply + PR backfill + console NI cycle are post-gate operational steps). ROUTED to
       team_190 NON-CLAUDE (IR#1/#5) — team_00 to route to a non-Claude validator. team_100 NEVER self-issues."
+  - gate: OPS
+    result: APPLIED
+    date: "2026-06-02"
+    actor: team_100
+    notes: "team_00 approved the operational application. (1) Migration 060 applied to live oma-postgres
+      (alembic 059→060; seeder_settings column present; alembic_version=060). (2) The F-DATA-001 crop→family
+      corrective (scripts/fix_crop_families.py --apply, on branch claude/fix-crop-families-2026-06-02) re-pointed
+      26 crops off the Aizoaceae .first() fallback to their canonical families (tomato→Solanaceae verified; only
+      New Zealand Spinach legitimately remains Aizoaceae; idempotent re-run = 0 changes). Public API/site reflects
+      the family fix after the next data push to the MySQL delivery tier (team_99 ingest cycle). PR backfill + the
+      manual-validation console→NI ingest remain as further ops steps."
   - gate: L-GATE_V
     result: PASS_WITH_FINDINGS
     date: "2026-06-02"
