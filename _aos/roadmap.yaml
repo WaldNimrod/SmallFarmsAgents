@@ -3451,12 +3451,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-1-patch01
   label: "ספר גידולים v1: UI follow-ups (L-GATE_V findings + watercolor art wiring)"
-  status: ELIGIBLE
+  status: BUILDING
   phase: ui_followup
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_E
-  lod_status: LOD200_DRAFT
+  current_lean_gate: L-GATE_V
+  lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-01"
@@ -3479,24 +3479,34 @@ work_packages:
       F-UI-01 (live mirror field_state) once the backend ingest deploys. None block the WP-CB-1
       LOD500 lock. Art batches still arriving — wiring lands as masters are confirmed.
     validator: team_100
-  - gate: L-GATE_B
-    result: IN_PROGRESS
-    scope: art-wiring
+  - gate: L-GATE_S
+    result: PASS
     date: "2026-06-01"
-    notes: >
-      team_00-directed immediate art integration. Intake of nano-banana batches 1+2 (22 raw →
-      CROP_ART_MASTERS/incoming/; 13 crop masters + 1 book-hero promoted). 720px derivatives built for 17
-      crops + wc-cropbook-hero (scripts/wc_derivatives.sh). WC_ART + book_entry $wc_art_map list exactly the
-      17 served slugs: tomato/cucumber/beet/pepper (batch1) + broccoli/cabbage/chard/eggplant/fennel/garlic/
-      kale/scallion/melon (batch2) + original lettuce/radish/parsley/dill. EVERY map ref verified to resolve
-      to a real PNG (a self-correction of interim commit ada847d, which listed crops with no master).
-      wc-cropbook-hero promoted as the book's central watercolor logo. ICON_MAP unchanged (watercolor
-      preferred; sprite = glyph fallback for crops without a master). composer 96/96; php -l clean;
-      validate_aos 0 FAIL. NOTE: edits WP-CB-1 LOD500_LOCKED files (WC_ART/$wc_art_map) — chartered patch01
-      scope, flagged for team_190 patch01 L-GATE_V; ahead of patch01 formal L-GATE_S per team_00 directive.
-      Parked: pepper/beet/cucumber alts + ambiguous bulb + module-icons graphic. Remaining patch01 scope
-      (V-03 parity, server-side filters, /calc export, F-UI-01) NOT in this step.
     validator: team_100
+    notes: >
+      team_100 (delegated L-GATE_S) — LOD200 scope (5 items) is precise + delivery-tier only;
+      no LOCKED Python backend / migration. Authorized build. (Spoke-native fast-track per the
+      team_00 directive to finish open follow-ups before QA.)
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-01"
+    commit: "ba68b38"
+    validator: team_50
+    notes: >
+      Build complete + QA (team_50, independent). V-03 parity #7/#9/#12, server-side filters,
+      /calc CSV+print-PDF export, F-UI-01 variety-payload fallback. composer 107/107 (313 assert);
+      php -l clean x8; validate_aos 0 FAIL; pytest crop_book 631 pass / 2 pre-existing; constitutional
+      CLEAN (no locked backend/migration). QA verdict PASS_WITH_FINDINGS — 1 LOW latent: CALC.revenue
+      JS does no non-kg unit conversion (pre-existing, unreachable today, out of patch01 scope; flag to
+      team_190). BUILD covers all 5 LOD200 items.
+  - gate: L-GATE_V
+    result: PENDING
+    date: "2026-06-01"
+    commit: "ba68b38"
+    validator: team_190
+    notes: >
+      Mandate issued to team_190 (non-Claude, IR#1/#5):
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1-patch01/VALIDATION_MANDATE_team190_LGATE-V_2026-06-01_v1.0.0.md.
   notes: "OPENED 2026-06-01. Non-blocking UI follow-ups from WP-CB-1 R3 verdict + watercolor art
     wiring. NEXT: team_100 LOD400 → team_190 L-GATE_S (non-Claude, IR#1)."
   profile: L0
