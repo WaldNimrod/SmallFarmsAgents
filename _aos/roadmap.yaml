@@ -3526,9 +3526,17 @@ work_packages:
       (alembic 059→060; seeder_settings column present; alembic_version=060). (2) The F-DATA-001 crop→family
       corrective (scripts/fix_crop_families.py --apply, on branch claude/fix-crop-families-2026-06-02) re-pointed
       26 crops off the Aizoaceae .first() fallback to their canonical families (tomato→Solanaceae verified; only
-      New Zealand Spinach legitimately remains Aizoaceae; idempotent re-run = 0 changes). Public API/site reflects
-      the family fix after the next data push to the MySQL delivery tier (team_99 ingest cycle). PR backfill + the
-      manual-validation console→NI ingest remain as further ops steps."
+      New Zealand Spinach legitimately remains Aizoaceae; idempotent re-run = 0 changes).
+      (3) DEPLOYED to uPress production (team_00 approved full deploy 2026-06-02): both branches merged → main →
+      pushed to GitHub (fa802c3); fixed sfa_ingest_push._fetch_crops (queried days_to_maturity DROPPED by 059 →
+      now reads crop_field_enrichment — this bug had frozen all crop pushes since 059, explaining the stale live
+      data); ran sfa_ingest_push --table all from the Mac → crops/crop_varieties/products accepted HTTP 200 (live
+      API verified: tomato→Solanaceae, carrots→Apiaceae, lettuce→Asteraceae, cucumbers→Cucurbitaceae); deployed
+      sfa_delivery UI via FTPS to uPress (crop-book-v1.css/js + watercolor art now 200, was 404 — resolves the
+      E2E F-OPS-001 deploy drift). NOTE: crop-book is Mac-hosted (server oma-postgres has no crops table — alembic
+      034); crop data must be pushed from the Mac, the server cron only handles the market-index product.
+      cover_crops ingest returns 400 (pre-existing, non-crop-book; server cron skips it too). PR backfill + the
+      manual-validation console→NI ingest remain as optional further ops steps."
   - gate: L-GATE_V
     result: PASS_WITH_FINDINGS
     date: "2026-06-02"
