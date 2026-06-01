@@ -3219,12 +3219,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-1
   label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
-  status: BUILD_PAUSED
+  status: DONE
   phase: spec
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-30"
@@ -3235,6 +3235,7 @@ work_packages:
     resumes for the UI slice once WP-CB-MIG corrects the field layer AND team_35 mockups land."
   depends_on: ["SFA-S003-P002-WP-A", "SFA-S003-P002-WP-UI-patch04", "SFA-S003-P004-WP-CB-0", "SFA-S003-P004-WP-CB-MIG"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1/LOD400_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-1/ARCHIVE_MANIFEST.md"
   catalog_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/CALCULATOR_CATALOG_v1.0.0.md"
   schema_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/MANDATORY_FIELD_SCHEMA_v1.0.0.md"
   gapfill_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/GAP_FILL_PLAN_v1.0.0.md"
@@ -3318,6 +3319,82 @@ work_packages:
       L-GATE_B. Full WP-CB-1 L-GATE_V deferred until after the canon migration + UI. Verdict:
       _COMMUNICATION/team_190/SFA-S003-P004/TARGET_B_BACKEND_BUILD_VERIFICATION_VERDICT_v1.0.0.md."
     validator: team_190
+  - gate: L-GATE_S
+    result: PASS
+    scope: full
+    date: "2026-05-31"
+    notes: "team_100 (delegated L-GATE_S) lifts the UI sections to PASS. Both unblockers met:
+      (a) WP-CB-MIG corrected the field layer (LOD500_LOCKED 053313a); (b) team_35 LOD300 landed.
+      Intake: HANDOFF_PACKAGE v1.0.0 extracted + checksummed + indexed (documentation/09-design-system/),
+      embedded into LOD400 §10; LOD400 locked v0.9.0 → v1.0.0 (3ca6980). Field binding authored:
+      FIELD_INTERFACE_MAP v1.0.0 (39dabfa) — design keys → migrated data model + defensive alias resolver;
+      tau=0.40 ships v1 (design Q4 tau=0.50 = fast-follow). F-CB1-UI-01 (field_policy old-name drift on 4
+      fields) logged → routed to WP-CB-MIG2; UI made drift-immune via resolver. UI sections §7/§10 +
+      AC-10/11/13 now PASS at spec. Build dispatched to the UI build slice (team_10 stand-in, IR#1)."
+    validator: team_100
+  - gate: L-GATE_B
+    result: PASS
+    scope: ui
+    date: "2026-05-31"
+    notes: >
+      UI slice built (commits 1456c48..7149ee4, branch claude/wp-cb-1-ui-2026-05-31) + team_100
+      independent L-GATE_B verification. Design system ported (tokens v2 white-green + cb tokens +
+      Carmela; crop-book-v1.css/js); 8 macros (prov_value cue authority, calc_panel disabled-on-MISSING,
+      assumption_field, calc_seq, depth_tabs, audience_switch, rotation_hint, prov_table); FieldRegistry
+      PHP alias resolver (drift-immune per FIELD_INTERFACE_MAP §1); book_crop 3 depths (13-topic order);
+      book_entry audience switch + filter bar; calc_dash; endpoints GET /api/v1/assumptions + POST
+      /api/v1/contribute; parity tests #1/#8/#10. VERIFY by team_100: composer test 96/96 (278 assert);
+      php -l clean; validate_aos 0 FAIL after MIG2 spec_ref stub; pytest crop_book 631 pass / 2
+      PRE-EXISTING fail (test_ni_publisher_isolation, test_source_registry::test_uc_prefix; NOT
+      UI-induced, no Python touched). Constitutional CLEAN: no _aos/, no LOCKED backend, no migration.
+      PARTIAL (deferred, non-blocking): server-side filter execution, /calc PDF/CSV export, tomato +
+      cucumber watercolors (glyph fallback; art task spawned). F-UI-01: live mirror lacks per-field
+      field_state until backend ingest deploys; UI degrades defensively. BUILD_REPORT:
+      _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-1/BUILD_REPORT_UI_v1.0.0.md.
+    validator: team_100
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-06-01"
+    commit: "9f9d9d1"
+    verdict_commit: "6802edb"
+    validator: team_190
+    notes: >
+      team_190 (non-Claude, IR#1) L-GATE_V R1 = FAIL on C6 (field-contract fidelity). Two BLOCKERs:
+      F-190-CB1-V-01 calc_panel.php rendered the raw DB field key in disabled-calc user copy;
+      F-190-CB1-V-02 prov_value.php recomputed VALIDATED from a hard-coded tau=0.40 in the UI.
+      All else green: composer 96/96, php -l 19/19, validate_aos 0 FAIL, pytest 631 pass / 2
+      pre-existing. C1-C5,C7 PASS. V-03 (parity #7/#9/#12) MINOR non-blocking. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_v1.0.0.md.
+  - gate: L-GATE_V
+    result: FAIL
+    round: 2
+    date: "2026-06-01"
+    commit: "6b4a819"
+    validator: team_190
+    notes: >
+      Round-2 remediation by team_100 (build patches f4e04f1 + 6b4a819): V-01 fixed — disabled-calc copy now
+      renders FieldRegistry::label() (Hebrew), raw key only in data-field hook; V-02 fixed —
+      prov_value.php renders backend-stamped field_state verbatim, no UI threshold math, neutral
+      UNKNOWN cue when unstamped (tau now backend-only). 2nd patch 6b4a819 also cleared the missed
+      prov_table.php tau=0.40 bar threshold (now backend-stamped is_low) + a leaked fence. composer 96/96; validate_aos 0 FAIL;
+      constitutional CLEAN. Re-mandate to team_190 R2:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-1/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-01_v1.0.0.md.
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 3
+    date: "2026-06-01"
+    commit: "9747152"
+    verdict_commit: "8018df6"
+    validator: team_190
+    notes: >
+      R3 PASS_WITH_FINDINGS (team_190 Cursor Composer, non-Claude — IR#1; verdict commit 8018df6,
+      file LGATE-V_VERDICT_R3_v1.0.0.md). C6 PASS — both F-190-CB1-V-01 (label tuple destructured,
+      9747152) and F-190-CB1-V-02 (UI tau removed, f4e04f1/6b4a819) resolved. C1-C5/C7 reconfirmed.
+      Independent: composer 96/96 (281 assert, 0 warnings); php -l clean; validate_aos 0 FAIL;
+      pytest 631 pass / 2 pre-existing. AC-10 PASS; AC-11/AC-13-local PASS_WITH_FINDINGS;
+      AC-12 PASS w/ declared pre-existing. UI LOD500 lock AUTHORIZED. Findings → WP-CB-1-patch01:
+      V-03 (#7/#9/#12 JS parity), server-side filters, /calc PDF/CSV export, tomato/cucumber+ art wiring.
   notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
     planning tool. Foundation artifacts (Catalog/Schema/Gap-Fill) authored + team_00
     approved; LOD400 DRAFT v0.9.0 pending team_35 mockups. BACKEND SLICE BUILT + verified
@@ -3326,6 +3403,120 @@ work_packages:
     reused (crop_field_enrichment.value_best = one winning value) — no new resolution engine.
     Hosting canon: uPress serves, never the home server. NEXT: server DB align (034→head, AC-02/04)
     ∥ team_35 LOD300 → embed section 10 → team_00 approve → team_190 L-GATE_V (non-Claude)."
+  notes: "OPENED 2026-05-30 (S003-P004 program). Crop Book v1 = calculator-driven
+    planning tool. BACKEND SLICE built + verified 2026-05-30 (calculators.py 14 + assumptions.py +
+    calculator_meta.py + 2 field_policy wirings + ingest; 92 tests). UI SLICE built into sfa_delivery/
+    from the team_35 LOD300 (tokens/CSS/JS, 8 macros, FieldRegistry, book_crop 3 depths, book_entry
+    audience/filter, calc dashboard, /api/v1/assumptions + /api/v1/contribute). L-GATE_V traversal:
+    R1 FAIL (C6) → R2 FAIL (C6 V-01) → R3 PASS_WITH_FINDINGS (8018df6, team_190 non-Claude). UI
+    LOD500_LOCKED 2026-06-01. Hosting canon: uPress serves, never the home server. Follow-ups tracked
+    in WP-CB-1-patch01 (V-03 JS parity, server-side filters, /calc export, watercolor art wiring)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-MIG2
+  label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
+  status: ELIGIBLE
+  phase: spec
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-05-31"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-MIG"]
+  canon_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md"
+  origin_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/spec/OPEN_ISSUES.md"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-MIG2/LOD200_spec.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-05-31"
+    notes: "team_00 directive (this session): adopt FULL the team_35 OPEN_ISSUES gap-analysis —
+      the 13-topic taxonomy (CROP_TOPICS) as canonical ordering + 7 field groups (seeder_model/
+      seeder_settings [mostly existing identity cols — formalize], irrigation_type + drip_lines_per_bed,
+      root_depth_class, common_pests + foliar_feeding_program [new topic מזיקים], sale_unit + unit_size
+      [also resolves design Q7 price-unit], labor_rate_harvest/wash, plantings_per_season +
+      harvest_weeks_span) + ratify needs_summer_shade (3 levels). Opened as a SEPARATE gated WP because
+      the data layer is LOCKED (WP-CB-0 Canon + WP-CB-MIG LOD500). UI (WP-CB-1) is NOT blocked: it renders
+      these as 'מוצע/proposed' until this migration lands, then lights them up. Also folds the F-CB1-UI-01
+      field_policy old-name drift (avg_yield_per_bed_m/documented_price/in_row_spacing_cm/planting_season)
+      into the canon-alignment scope. Effort LARGE: Canon amendment v1.3.0 + Alembic head→next + crop_attribute/
+      enrichment wiring + field_policy entries + sfa_ingest_push whitelist + PR backfill from 37 MasterClass MDs."
+    validator: team_00
+  notes: "OPENED 2026-05-31. Schema-expansion follow-on to WP-CB-MIG. NEXT: team_100 authors Canon
+    amendment (v1.3.0) + LOD400 migration spec → team_190 L-GATE_S (non-Claude, IR#1). Also closes the
+    season_window data gap (0 rows — planting_season NULL) flagged in WP-CB-MIG L-GATE_V."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-1-patch01
+  label: "ספר גידולים v1: UI follow-ups (L-GATE_V findings + watercolor art wiring)"
+  status: DONE
+  phase: ui_followup
+  track: A
+  effort: NORMAL
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-01"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-1"]
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-1-patch01/LOD200_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-1-patch01/ARCHIVE_MANIFEST.md"
+  triggered_by:
+    verdict_ref: "_COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-1/LGATE-V_VERDICT_R3_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-01"
+    notes: >
+      Opened to carry the WP-CB-1 L-GATE_V PASS_WITH_FINDINGS follow-ups (team_190 R3, 8018df6) +
+      the watercolor art wiring. Scope: (1) F-190-CB1-V-03 — headless JS↔Python parity for calcs
+      #7/#9/#12 (currently #1/#8/#10 covered); (2) server-side filter execution on book_index
+      (filter rail is UI-only today); (3) /calc PDF/CSV export (stubs today); (4) wire the new
+      watercolor masters — build 720px derivatives (scripts/wc_derivatives.sh) for tomato/cucumber/
+      beet/pepper + extend WC_ART / $wc_art_map / ICON_MAP, replacing the glyph fallback; (5) carry
+      F-UI-01 (live mirror field_state) once the backend ingest deploys. None block the WP-CB-1
+      LOD500 lock. Art batches still arriving — wiring lands as masters are confirmed.
+    validator: team_100
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-06-01"
+    validator: team_100
+    notes: >
+      team_100 (delegated L-GATE_S) — LOD200 scope (5 items) is precise + delivery-tier only;
+      no LOCKED Python backend / migration. Authorized build. (Spoke-native fast-track per the
+      team_00 directive to finish open follow-ups before QA.)
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-01"
+    commit: "ba68b38"
+    validator: team_50
+    notes: >
+      Build complete + QA (team_50, independent). V-03 parity #7/#9/#12, server-side filters,
+      /calc CSV+print-PDF export, F-UI-01 variety-payload fallback. composer 107/107 (313 assert);
+      php -l clean x8; validate_aos 0 FAIL; pytest crop_book 631 pass / 2 pre-existing; constitutional
+      CLEAN (no locked backend/migration). QA verdict PASS_WITH_FINDINGS — 1 LOW latent: CALC.revenue
+      JS does no non-kg unit conversion (pre-existing, unreachable today, out of patch01 scope; flag to
+      team_190). BUILD covers all 5 LOD200 items.
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-01"
+    commit: "ba68b38"
+    verdict_commit: "c2dfa47"
+    validator: team_190
+    notes: >
+      team_190 (Cursor Composer, non-Claude — IR#1) L-GATE_V PASS_WITH_FINDINGS (verdict c2dfa47,
+      file LGATE-V_VERDICT_v1.0.0.md). 5/5 items PASS (V-03 parity #7/#9/#12, server-side filters,
+      /calc export, F-UI-01 payload fallback, watercolor art 28 crops + hero + 3 module heroes).
+      C1-C7 PASS. Independent: composer 107/107; php -l clean x8; validate_aos 0 FAIL; pytest 631
+      pass / 2 pre-existing; locked Python/migrations empty diff; 28/28 art refs resolve. 1 finding
+      F-50-patch01-01 LOW/latent (CALC.revenue non-kg conversion — unreachable today, track future).
+      Chartered LOD500_LOCKED-delivery edits accepted as additive patch layer. patch01 LOD500_LOCKED.
+  notes: "OPENED 2026-06-01. Non-blocking UI follow-ups from WP-CB-1 R3 verdict + watercolor art
+    wiring. NEXT: team_100 LOD400 → team_190 L-GATE_S (non-Claude, IR#1)."
   profile: L0
 
 # ----------------------------------------------------------------------------

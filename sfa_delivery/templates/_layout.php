@@ -24,11 +24,13 @@ if (!isset($asset_ver)) {
     $_css_dir = __DIR__ . '/../public_assets/css';
     $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
     $_mtimes  = [];
-    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'desktop', 'desktop-extras'] as $_n) {
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop', 'desktop-extras'] as $_n) {
         $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
         if ($_mt) { $_mtimes[] = $_mt; }
     }
     $_mt = @filemtime($_js_file);
+    if ($_mt) { $_mtimes[] = $_mt; }
+    $_mt = @filemtime(__DIR__ . '/../public_assets/js/crop-book-v1.js');
     if ($_mt) { $_mtimes[] = $_mt; }
     $asset_ver = $_mtimes ? max($_mtimes) : 'build';
 }
@@ -59,10 +61,14 @@ if (!isset($asset_ver)) {
 <link rel="stylesheet" href="/public_assets/css/hub.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/community.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/crop-book-deep.css?v=<?= $h($asset_ver) ?>">
+<link rel="stylesheet" href="/public_assets/css/crop-book-v1.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/desktop.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/desktop-extras.css?v=<?= $h($asset_ver) ?>">
 
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
+<?php if (isset($active) && $active === 'crop-book'): ?>
+<script defer src="/public_assets/js/crop-book-v1.js?v=<?= $h($asset_ver) ?>"></script>
+<?php endif; ?>
 </head>
 <body class="sfa-app">
 <?php /* Inline the SVG sprite once per page. Chrome (and others) do not resolve

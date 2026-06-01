@@ -110,8 +110,57 @@ final class HubController
 
     public function calc(Request $request, Response $response): Response
     {
-        $html = Template::render('pages/hub_calc', [
+        // WP-CB-1: serve the new calculator dashboard; hub_calc.php is legacy backup.
+        $html = Template::render('pages/calc_dash', [
             'contact' => Modules::all()['contact'] ?? [],
+        ]);
+        return self::html($response, $html);
+    }
+
+    /**
+     * WP-CB-1-patch01: calculator-plan export (CSV + print-friendly HTML for PDF).
+     * Plan state is ephemeral client-side; the dashboard JS appends it as query
+     * params (crop, beds, target_date, and any rows[label]=value pairs). With no
+     * params the export still returns a valid (header-only) document.
+     */
+    public function calcExport(Request $request, Response $response, array $args): Response
+    {
+        $fmt = strtolower((string)($args['fmt'] ?? 'csv'));
+        $qp  = $request->getQueryParams();
+        $crop   = trim((string)($qp['crop']        ?? ''));
+        $beds   = trim((string)($qp['beds']        ?? ''));
+        $target = trim((string)($qp['target_date'] ?? ''));
+        // rows: arbitrary label=>value summary lines (e.g. ?rows[seeds]=12g&rows[yield]=105kg)
+        $rows = [];
+        if (isset($qp['rows']) && is_array($qp['rows'])) {
+            foreach ($qp['rows'] as $label => $val) {
+                $rows[(string)$label] = (string)$val;
+            }
+        }
+        $context = array_filter([
+            'גידול'      => $crop,
+            'מס׳ ערוגות' => $beds,
+            'תאריך יעד'  => $target,
+        ], static fn ($v) => $v !== '');
+
+        if ($fmt === 'csv') {
+            $out = "\xEF\xBB\xBF"; // UTF-8 BOM so Excel reads Hebrew
+            $esc = static fn (string $s): string => '"' . str_replace('"', '""', $s) . '"';
+            $out .= $esc('שדה') . ',' . $esc('ערך') . "\r\n";
+            foreach ($context as $k => $v) { $out .= $esc((string)$k) . ',' . $esc((string)$v) . "\r\n"; }
+            foreach ($rows as $k => $v)    { $out .= $esc((string)$k) . ',' . $esc((string)$v) . "\r\n"; }
+            $response->getBody()->write($out);
+            return $response
+                ->withHeader('Content-Type', 'text/csv; charset=utf-8')
+                ->withHeader('Content-Disposition', 'attachment; filename="sfa-calc-plan.csv"')
+                ->withStatus(200);
+        }
+
+        // PDF path → print-friendly HTML (the browser's "Save as PDF" produces the PDF;
+        // no server-side PDF engine dependency on the shared LAMP host).
+        $html = Template::render('pages/calc_export_print', [
+            'context' => $context,
+            'rows'    => $rows,
         ]);
         return self::html($response, $html);
     }

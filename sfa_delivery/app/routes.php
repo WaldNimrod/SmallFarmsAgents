@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use SFA\Controllers\AssumptionsController;
 use SFA\Controllers\CropBookViewController;
 use SFA\Controllers\CropsController;
 use SFA\Controllers\HealthController;
@@ -19,6 +20,8 @@ return function (App $app): void {
     $app->get('/about[/]', [HubController::class, 'tiers']);
     $app->get('/search[/]', [HubController::class, 'search']);
     $app->get('/calc[/]', [HubController::class, 'calc']);
+    // WP-CB-1-patch01: calculator-plan export (csv | pdf-print)
+    $app->get('/calc/export.{fmt:csv|pdf}', [HubController::class, 'calcExport']);
 
     $app->get('/crop-book[/]', [CropBookViewController::class, 'entry']);
     $app->get('/crop-book/questions[/]', [CropBookViewController::class, 'questions']);
@@ -55,6 +58,9 @@ return function (App $app): void {
         $g->get('/products/{slug}', [ProductsController::class, 'detail']);
         $g->get('/market/{slug}/history', [MarketViewController::class, 'productHistoryApi']);
         $g->post('/ingest', [IngestController::class, 'receive'])->add(HmacAuthMiddleware::class);
+        // WP-CB-1 endpoints
+        $g->get('/assumptions', [AssumptionsController::class, 'list']);
+        $g->post('/contribute', [AssumptionsController::class, 'contribute']);
     });
 
     $app->get('/admin/migrate', [HealthController::class, 'migrate']);

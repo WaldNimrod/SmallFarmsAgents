@@ -6,6 +6,8 @@ namespace SFA\Controllers;
 use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use SFA\Controllers\AssumptionsController;
+use SFA\Lib\FieldRegistry;
 use SFA\Lib\Template;
 
 final class CropBookViewController
@@ -33,17 +35,46 @@ final class CropBookViewController
 
     public function entry(Request $request, Response $response): Response
     {
-        // AC-U3-07: query crop list for the landing crop-card grid.
-        $stmt = $this->pdo->query(
-            'SELECT slug, hebrew_name, scientific_name, category, dtm_min, dtm_max, payload_json FROM crops ORDER BY hebrew_name'
-        );
-        $rows = $stmt ? $stmt->fetchAll() : [];
+        // WP-CB-1-patch01: server-side filtering. Column-backed filters run in SQL;
+        // payload-backed filters (planting_method, frost) run as a PHP post-filter
+        // because the MySQL mirror stores them in payload_json, not as columns.
+        $qp        = $request->getQueryParams();
+        $q         = trim((string)($qp['q']      ?? ''));   // free-text (hebrew_name / scientific_name)
+        $family    = trim((string)($qp['family'] ?? ''));   // family_name_he exact
+        $season    = trim((string)($qp['season'] ?? ''));   // season LIKE
+        $dtmMax    = (string)($qp['dtm_max'] ?? '') !== '' ? (int)$qp['dtm_max'] : null; // DTM ≤ N
+        $sow       = trim((string)($qp['sow']    ?? ''));   // planting_method (payload)
+        $frost     = trim((string)($qp['frost']  ?? ''));   // frost_tolerance_class (payload)
+
+        $sql    = 'SELECT slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
+        $where  = [];
+        $params = [];
+        if ($q !== '')      { $where[] = '(hebrew_name LIKE ? OR scientific_name LIKE ?)'; $params[] = "%$q%"; $params[] = "%$q%"; }
+        if ($family !== '') { $where[] = 'family_name_he = ?'; $params[] = $family; }
+        if ($season !== '') { $where[] = 'season LIKE ?';      $params[] = "%$season%"; }
+        if ($dtmMax !== null) { $where[] = '(dtm_max IS NULL OR dtm_max <= ?)'; $params[] = $dtmMax; }
+        if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
+        $sql .= ' ORDER BY hebrew_name';
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        $rows = $stmt->fetchAll() ?: [];
 
         $crops = [];
         foreach ($rows as $row) {
             $slug    = (string)($row['slug'] ?? '');
             $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
             $payload = is_array($payload) ? $payload : [];
+
+            // Payload-backed filters (post-fetch): planting_method + frost_tolerance_class.
+            if ($sow !== '') {
+                $pm = (string)($payload['planting_method'] ?? ($payload['agronomy']['planting_method'] ?? ''));
+                if ($pm !== $sow) { continue; }
+            }
+            if ($frost !== '') {
+                $ft = (string)($payload['frost_tolerance_class'] ?? ($payload['agronomy']['frost_tolerance_class'] ?? ''));
+                if ($ft !== $frost) { continue; }
+            }
 
             $dtm = isset($row['dtm_max']) && $row['dtm_max'] !== null
                 ? (int)$row['dtm_max']
@@ -62,7 +93,28 @@ final class CropBookViewController
             ];
         }
 
-        return $this->html($response, Template::render('pages/book_entry', ['crops' => $crops]));
+        // WP-CB-1: pass view param (cards|table) and total count
+        $view = trim((string)($qp['view'] ?? 'cards'));
+        if (!in_array($view, ['cards', 'table'], true)) $view = 'cards';
+
+        // Distinct family list for the filter dropdown (column-backed, cheap).
+        $famRows = $this->pdo->query("SELECT DISTINCT family_name_he FROM crops WHERE family_name_he IS NOT NULL AND family_name_he <> '' ORDER BY family_name_he");
+        $families = $famRows ? array_column($famRows->fetchAll(), 'family_name_he') : [];
+
+        return $this->html($response, Template::render('pages/book_entry', [
+            'crops'    => $crops,
+            'view'     => $view,
+            'total'    => count($crops),
+            'families' => $families,
+            'filters'  => [
+                'q'      => $q,
+                'family' => $family,
+                'season' => $season,
+                'dtm_max'=> $dtmMax,
+                'sow'    => $sow,
+                'frost'  => $frost,
+            ],
+        ]));
     }
 
     public function questions(Request $request, Response $response): Response
@@ -160,6 +212,37 @@ final class CropBookViewController
             'items'   => $items,  // back-compat alias
         ]));
     }
+    /** WP-CB-1-patch01: watercolor art mapping (crop slug -> wc-*.png). Only slugs with a real served PNG; others fall back to the icon sprite. */
+    private const WC_ART = [
+        'basil' => 'wc-basil.png',
+        'beet' => 'wc-beet.png',
+        'broccoli' => 'wc-broccoli.png',
+        'bush-bean' => 'wc-bush-bean.png',
+        'cabbage' => 'wc-cabbage.png',
+        'carrot' => 'wc-carrot.png',
+        'chard' => 'wc-chard.png',
+        'cucumber' => 'wc-cucumber.png',
+        'dill' => 'wc-dill.png',
+        'eggplant' => 'wc-eggplant.png',
+        'fennel' => 'wc-fennel.png',
+        'garlic' => 'wc-garlic.png',
+        'ginger' => 'wc-ginger.png',
+        'kale' => 'wc-kale.png',
+        'leek' => 'wc-leek.png',
+        'lettuce' => 'wc-lettuce.png',
+        'melon' => 'wc-melon.png',
+        'onion' => 'wc-onion.png',
+        'parsley' => 'wc-parsley.png',
+        'pea' => 'wc-pea.png',
+        'pepper' => 'wc-pepper.png',
+        'pole-bean' => 'wc-pole-bean.png',
+        'radish' => 'wc-radish.png',
+        'scallion' => 'wc-scallion.png',
+        'spinach' => 'wc-spinach.png',
+        'tomato' => 'wc-tomato.png',
+        'turmeric' => 'wc-turmeric.png',
+        'zucchini' => 'wc-zucchini.png',
+    ];
 
     public function detail(Request $request, Response $response, array $args): Response
     {
@@ -381,9 +464,80 @@ final class CropBookViewController
             $crop['knowledge_notes'] = [];
         }
 
+        // ── WP-CB-1: depth param + enrichment + assumptions ──────────
+        $depth = trim((string)($request->getQueryParams()['depth'] ?? 'simple'));
+        if (!in_array($depth, ['simple', 'full', 'drill'], true)) {
+            $depth = 'simple';
+        }
+
+        // Read crop_field_enrichment rows (if table exists — tolerates absence).
+        $enrichment = [];
+        try {
+            $enStmt = $this->pdo->prepare(
+                'SELECT field_name, value_best, unit, field_state, winning_source_class, confidence_score
+                 FROM crop_field_enrichment WHERE crop_id = ?'
+            );
+            $enStmt->execute([$crop['id']]);
+            foreach ($enStmt->fetchAll() as $row) {
+                $enrichment[(string)$row['field_name']] = $row;
+            }
+        } catch (\Throwable) {
+            $enrichment = []; // table not yet migrated
+        }
+
+        // Read crop_attribute rows (if table exists).
+        $attributes = [];
+        try {
+            $atStmt = $this->pdo->prepare(
+                'SELECT attribute_key, value_canonical, value_list
+                 FROM crop_attribute WHERE crop_id = ?'
+            );
+            $atStmt->execute([$crop['id']]);
+            foreach ($atStmt->fetchAll() as $row) {
+                $attributes[(string)$row['attribute_key']] = $row;
+            }
+        } catch (\Throwable) {
+            $attributes = [];
+        }
+
+        // F-UI-01: the MySQL mirror has no crop_field_enrichment / crop_attribute tables;
+        // the ingest instead delivers per-field value + field_state inside the DEFAULT
+        // variety payload (agronomy{} + field_state{}). Pass it as a fallback so prov
+        // cues + calculators light up from the payload the ingest already ships.
+        $defaultPayload = is_array($defaultVariety ?? null) ? $defaultVariety : [];
+        $cb1_fields = self::buildCb1Fields($enrichment, $attributes, $crop, $defaultPayload);
+
+        // Determine crop state: COMPLETE iff all MANDATORY fields are VALIDATED.
+        $mandatory_fields = [
+            'days_to_maturity', 'harvest_window_max_days', 'spacing_in_row_cm', 'rows_per_bed',
+            'seeds_per_g', 'yield_per_bed_m', 'price_documented', 'sowing_months',
+            'planting_method', 'frost_tolerance_class', 'days_in_nursery',
+            'succession_interval_weeks', 'nutrient_removal_n_kg_per_ha',
+        ];
+        $is_complete = true;
+        foreach ($mandatory_fields as $mf) {
+            $state = strtoupper((string)($cb1_fields[$mf]['field_state'] ?? 'MISSING'));
+            if ($state !== 'VALIDATED') { $is_complete = false; break; }
+        }
+
+        // Watercolor art for this crop
+        $wc_art = self::WC_ART[$slug] ?? null;
+
+        // Family for rotation hint
+        $family_name_he = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
+
         return $this->html($response, Template::render('pages/book_crop', [
-            'crop' => $crop,
-            'varieties' => $varieties, // legacy top-level for any template that reads it
+            'crop'             => $crop,
+            'varieties'        => $varieties,
+            // WP-CB-1 additions
+            'depth'            => $depth,
+            'cb1_fields'       => $cb1_fields,
+            'attributes'       => $attributes,
+            'enrichment'       => $enrichment,
+            'is_complete'      => $is_complete,
+            'wc_art'           => $wc_art,
+            'family_name_he'   => $family_name_he,
+            'assumptions'      => AssumptionsController::getAssumptions(),
         ]));
     }
 
@@ -460,6 +614,133 @@ final class CropBookViewController
             'crop' => $crop,
             'variety' => $variety,
         ]));
+    }
+
+    /**
+     * Build the unified CB1 field array, resolving all names through FIM §1.
+     * Returns [canonical_name => {value_best, unit, field_state, winning_source_class, confidence_score, field_name}]
+     *
+     * @param array<string,array<string,mixed>> $enrichment  crop_field_enrichment rows
+     * @param array<string,array<string,mixed>> $attributes  crop_attribute rows
+     * @param array<string,mixed>               $crop        crop row (for identity columns)
+     * @return array<string,array<string,mixed>>
+     */
+    private static function buildCb1Fields(array $enrichment, array $attributes, array $crop, array $variety = []): array
+    {
+        $out = [];
+
+        // F-UI-01 fallback: per-field value + state from the default variety payload
+        // (the ingest ships these even when the enrichment tables are absent in the mirror).
+        $vAgro  = is_array($variety['agronomy'] ?? null)    ? $variety['agronomy']    : [];
+        $vState = is_array($variety['field_state'] ?? null) ? $variety['field_state'] : [];
+
+        // EN fields — read via FieldRegistry::read (canonical → old → alias siblings)
+        $en_fields = [
+            'days_to_maturity', 'harvest_window_max_days', 'spacing_in_row_cm',
+            'rows_per_bed', 'seeds_per_g', 'yield_per_bed_m', 'price_documented',
+            'days_in_nursery', 'succession_interval_weeks', 'nutrient_removal_n_kg_per_ha',
+            'harvest_window_min_days',
+        ];
+        foreach ($en_fields as $field) {
+            // Try canonical key first, then aliases
+            $row = null;
+            $canonical = FieldRegistry::resolve($field);
+            if (isset($enrichment[$canonical])) {
+                $row = $enrichment[$canonical];
+            } else {
+                // Try alias siblings
+                $val = FieldRegistry::read($enrichment, $field);
+                if ($val !== null) {
+                    // Find which stored key matched
+                    foreach ($enrichment as $k => $r) {
+                        if ((string)($r['value_best'] ?? '') === (string)$val) {
+                            $row = $r; break;
+                        }
+                    }
+                }
+            }
+            if ($row === null) {
+                // Fallback to the default-variety payload (F-UI-01).
+                $pv = FieldRegistry::read($vAgro, $field);
+                if ($pv !== null) {
+                    // field_state keyed by canonical or alias in the payload.
+                    $st = (string)($vState[$canonical] ?? $vState[$field] ?? '');
+                    $out[$canonical] = [
+                        'value_best'           => $pv,
+                        'unit'                 => '',
+                        'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
+                        'winning_source_class' => '',
+                        'confidence_score'     => null,
+                        'field_name'           => $canonical,
+                    ];
+                    continue;
+                }
+                $out[$canonical] = [
+                    'value_best' => null, 'unit' => '', 'field_state' => 'MISSING',
+                    'winning_source_class' => '', 'confidence_score' => null, 'field_name' => $canonical,
+                ];
+            } else {
+                $out[$canonical] = array_merge($row, ['field_name' => $canonical]);
+            }
+        }
+
+        // AT fields — from crop_attribute
+        $at_map = [
+            'sowing_months'         => 'value_list',
+            'transplant_months'     => 'value_list',
+            'planting_method'       => 'value_canonical',
+            'frost_tolerance_class' => 'value_canonical',
+        ];
+        foreach ($at_map as $atKey => $col) {
+            $row = $attributes[$atKey] ?? null;
+            if ($row === null) {
+                // F-UI-01 fallback: categorical value from the variety payload (agronomy or field_state).
+                $pv = FieldRegistry::read($vAgro, $atKey);
+                if ($pv !== null && $pv !== '' && $pv !== []) {
+                    $st = (string)($vState[$atKey] ?? '');
+                    $out[$atKey] = [
+                        'value_best'           => $pv,
+                        'unit'                 => '',
+                        'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
+                        'winning_source_class' => '',
+                        'confidence_score'     => null,
+                        'field_name'           => $atKey,
+                    ];
+                    continue;
+                }
+                $out[$atKey] = ['value_best' => null, 'field_state' => 'MISSING', 'field_name' => $atKey, 'unit' => ''];
+            } else {
+                $val = $col === 'value_list'
+                    ? json_decode((string)($row[$col] ?? '[]'), true)
+                    : (string)($row[$col] ?? '');
+                $out[$atKey] = [
+                    'value_best'          => $val,
+                    'unit'                => '',
+                    'field_state'         => ($val !== null && $val !== '' && $val !== []) ? 'VALIDATED' : 'MISSING',
+                    'winning_source_class' => 'NI',
+                    'confidence_score'    => 1.0,
+                    'field_name'          => $atKey,
+                ];
+            }
+        }
+
+        // Proposed fields — always MISSING until WP-CB-MIG2
+        foreach (['needs_summer_shade', 'irrigation_type', 'root_depth_class', 'unit_size'] as $proposed) {
+            $out[$proposed] = ['value_best' => null, 'field_state' => 'PROPOSED', 'field_name' => $proposed, 'unit' => ''];
+        }
+
+        // Identity fields from crops row
+        if (!empty($crop['dtm_days'])) {
+            $dtm = (int)$crop['dtm_days'];
+            if (!isset($out['days_to_maturity']) || ($out['days_to_maturity']['value_best'] ?? null) === null) {
+                $out['days_to_maturity'] = [
+                    'value_best' => $dtm, 'unit' => 'ימים', 'field_state' => 'UNVALIDATED',
+                    'winning_source_class' => 'PR', 'confidence_score' => 0.3, 'field_name' => 'days_to_maturity',
+                ];
+            }
+        }
+
+        return $out;
     }
 
     private function html(Response $response, string $body, int $status = 200): Response
