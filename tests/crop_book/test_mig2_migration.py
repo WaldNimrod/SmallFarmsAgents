@@ -13,23 +13,43 @@ from alembic import op
 from sqlalchemy import Column, Text, inspect
 
 
-def _run_migration_060_upgrade(engine) -> None:
-    """Run the 060 upgrade on the given engine."""
+def _load_m060():
+    """Import the 060 migration module (leading-digit name → importlib)."""
+    import importlib
+    return importlib.import_module("organic_market_agent.db.versions.060_seeder_settings")
+
+
+def _drive_migration(engine, direction: str) -> None:
+    """Drive the REAL 060 upgrade()/downgrade() against `engine` via a live
+    Alembic Operations context (F-190-MIG2-V-01: exercise the migration's own
+    code, incl. batch_alter_table table-recreate on SQLite — not a hand-written
+    DDL simulation)."""
+    from alembic.migration import MigrationContext
+    from alembic.operations import Operations
+
+    m060 = _load_m060()
     with engine.connect() as conn:
         with conn.begin():
-            # Use raw SQL equivalent of what Alembic does (batch for SQLite)
-            # Since we can't use Alembic's op.batch_alter_table directly in tests,
-            # we apply the DDL manually.
-            try:
-                conn.execute(sa.text("ALTER TABLE crop_varieties ADD COLUMN seeder_settings TEXT"))
-            except Exception:
-                pass  # Column may already exist (idempotency)
+            ctx = MigrationContext.configure(conn)
+            ops = Operations(ctx)
+            # Bind the module-level `op` proxy the migration uses, then run it.
+            with Operations.context(ctx):
+                if direction == "upgrade":
+                    m060.upgrade()
+                elif direction == "downgrade":
+                    m060.downgrade()
+                else:  # pragma: no cover
+                    raise ValueError(direction)
+
+
+def _run_migration_060_upgrade(engine) -> None:
+    """Run the REAL 060 upgrade on the given engine."""
+    _drive_migration(engine, "upgrade")
 
 
 def _run_migration_060_downgrade(engine) -> None:
-    """Simulate the 060 downgrade on SQLite (recreate table without column)."""
-    # SQLite doesn't support DROP COLUMN directly in older versions; we verify via inspect
-    pass
+    """Run the REAL 060 downgrade on the given engine."""
+    _drive_migration(engine, "downgrade")
 
 
 def _create_minimal_schema(engine) -> None:
@@ -123,6 +143,28 @@ class TestMigration060:
             )).fetchone()
         assert row is not None
         assert row[0] is None
+
+    def test_downgrade_removes_seeder_settings(self):
+        """AC-01 / F-190-MIG2-V-01: after the REAL 060 downgrade, the column is gone.
+
+        Drives the migration's own downgrade() (batch_alter_table.drop_column),
+        not a simulation — closing the prior stub-helper gap.
+        """
+        engine = sa.create_engine("sqlite:///:memory:")
+        _create_minimal_schema(engine)
+
+        _run_migration_060_upgrade(engine)
+        cols_up = [c["name"] for c in sa.inspect(engine).get_columns("crop_varieties")]
+        assert "seeder_settings" in cols_up, "column must exist after upgrade"
+
+        _run_migration_060_downgrade(engine)
+        cols_down = [c["name"] for c in sa.inspect(engine).get_columns("crop_varieties")]
+        assert "seeder_settings" not in cols_down, \
+            "seeder_settings must be removed after downgrade"
+
+        # Pre-existing identity columns survive the batch table-recreate.
+        for keep in ("id", "crop_id", "name_en", "seeder", "notes"):
+            assert keep in cols_down, f"{keep} must survive downgrade"
 
     def test_migration_module_structure(self):
         """Migration file has correct revision IDs."""

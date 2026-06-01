@@ -335,3 +335,74 @@ class TestNiImporterIdempotency:
         from scripts.ingest_nimrod_validation import NI_WEIGHT, NI_TRUST_TIER
         assert NI_WEIGHT == 1.0
         assert NI_TRUST_TIER == "NI"
+
+    def test_dry_run_false_commits_and_reresolves(self, tmp_path):
+        """N-1 closure: the dry_run=False path actually COMMITS the NI source row
+        AND runs the re-resolve to produce a crop_attribute — exercised end-to-end
+        against the real ORM schema (not the prior dry-run-only coverage)."""
+        import sqlalchemy as sa
+        from sqlalchemy.orm import Session
+
+        from organic_market_agent.crop_book import models as m
+        from organic_market_agent.crop_book import attribute_models  # noqa: F401 (register crop_attribute)
+        from scripts.ingest_nimrod_validation import ingest_validation_json, NI_SOURCE_LABEL
+
+        db_file = tmp_path / "real_orm.db"
+        db_url = f"sqlite:///{db_file}"
+        engine = sa.create_engine(db_url)
+        m.Base.metadata.create_all(engine)
+        # The live crop_variety_source_values table (via migrations) carries
+        # created_at/updated_at columns and a UNIQUE(variety_id, source, field_name)
+        # constraint that the ORM model does not declare. Recreate it to mirror the
+        # real schema the importer targets (ON CONFLICT needs the unique constraint).
+        with engine.connect() as conn:
+            with conn.begin():
+                conn.execute(sa.text("DROP TABLE crop_variety_source_values"))
+                conn.execute(sa.text("""
+                    CREATE TABLE crop_variety_source_values (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        variety_id INTEGER NOT NULL,
+                        field_name TEXT NOT NULL,
+                        source TEXT NOT NULL,
+                        value_text TEXT,
+                        value_numeric REAL,
+                        unit TEXT,
+                        note TEXT,
+                        trust_tier TEXT,
+                        confidence_weight REAL,
+                        is_outlier_rejected INTEGER DEFAULT 0,
+                        created_at TEXT,
+                        updated_at TEXT,
+                        UNIQUE(variety_id, source, field_name)
+                    )
+                """))
+
+        with Session(engine) as s:
+            fam = m.CropFamily(scientific_name="Solanaceae", name_he="סולניים")
+            s.add(fam); s.flush()
+            crop = m.Crop(name_he="עגבניה", name_en="Tomato", family_id=fam.id,
+                          category="vegetables")
+            s.add(crop); s.flush()
+            var = m.CropVariety(crop_id=crop.id, name_en="Default", is_default=True)
+            s.add(var); s.flush()
+            vid = var.id
+            s.commit()
+        engine.dispose()
+
+        items = [{"variety_id": vid, "field_name": "irrigation_type", "value": "drip",
+                  "is_numeric": False, "crop_name_he": "עגבניה", "topic": "irrigation"}]
+        summary = ingest_validation_json(items, db_url, dry_run=False)
+        assert summary["dry_run"] is False
+
+        eng2 = sa.create_engine(db_url)
+        with eng2.connect() as conn:
+            n_src = conn.execute(sa.text(
+                "SELECT COUNT(*) FROM crop_variety_source_values WHERE source = :s"),
+                {"s": NI_SOURCE_LABEL}).scalar()
+            attr = conn.execute(sa.text(
+                "SELECT value_canonical FROM crop_attribute "
+                "WHERE variety_id = :v AND attribute_name = 'irrigation_type'"),
+                {"v": vid}).scalar()
+        eng2.dispose()
+        assert n_src == 1, "NI source row must be COMMITTED (dry_run=False)"
+        assert attr == "drip", "re-resolve must produce the crop_attribute value"
