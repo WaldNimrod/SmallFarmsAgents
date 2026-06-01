@@ -3415,12 +3415,14 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
-  status: IN_PROGRESS
+  status: DONE
   phase: validation
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_LOCKED
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-06-02"
+  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-MIG2-ARCHIVE)"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
@@ -3516,12 +3518,30 @@ work_packages:
     notes: "team_100 prepared the L-GATE_V VALIDATION_MANDATE (constitutional + AC fidelity + the data-application
       boundary: live 060 apply + PR backfill + console NI cycle are post-gate operational steps). ROUTED to
       team_190 NON-CLAUDE (IR#1/#5) — team_00 to route to a non-Claude validator. team_100 NEVER self-issues."
-  notes: "L-GATE_V ROUTED 2026-06-01. L-GATE_B PASS (team_10 build, team_100 verified, commit dded7b1);
-    team_50 QA PASS_WITH_CONCERNS (C-1/C-3 fixed inline c083cc3); Canon v1.3.0 LOD200_LOCKED. VALIDATION_MANDATE
-    prepared + handed to Nimrod for a non-Claude L-GATE_V. On PASS → LOD500_LOCKED + ADR042 archive (team_191) +
-    the operational data-application cycle (060 apply, PR backfill, manual-validation console → NI ingest). All
-    MIG2 work isolated on branch claude/wp-cb-mig2-2026-06-01 @ c083cc3; main = origin/main (9867d4d), not yet
-    merged (merge is a team_00 call after L-GATE_V PASS)."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor Composer (non-Claude, IR#1/#5)"
+    reviewed_head: "7bb0b44"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-MIG2/WP-CB-MIG2_LGATE-V_VERDICT_v1.0.0.md"
+    notes: "team_190 (Cursor Composer, non-Claude) L-GATE_V. PASS_WITH_FINDINGS — constitutional 4/4, AC 17/17.
+      Verified: additive amendment, builder f4bee60 zero roadmap edits, only 060 DDL, enrichment_runner/reconciler
+      untouched, the 4 L-GATE_S remediations, D2 alias guard, AC-02 parity test runs post-c083cc3, AC-14 720/1/2/0.
+      1 INFO + 3 NOTES, all addressed inline by team_100 (commit d797200): F-190-MIG2-V-01 (downgrade test was a
+      stub) FIXED — tests now drive the migration's real upgrade()/downgrade() via a live Alembic Operations
+      context + a downgrade round-trip test. N-1 (NI write path dry-run-only) CLOSED — new test exercises real
+      dry_run=False commit + re-resolve→crop_attribute (surfaced a latent ORM drift: CropVarietySourceValue model
+      omits created_at/updated_at + the table's UNIQUE constraint; flagged for a follow-up, prod uses migrations).
+      N-2 (seeder_settings deferred() until live 060) + N-3 (live data-application) are by-design/operational.
+      Suite 722/1/2/0. LOD500_LOCKED."
+  notes: "L-GATE_V PASS_WITH_FINDINGS 2026-06-02 (team_190 Cursor Composer, non-Claude; verdict committed).
+    WP-CB-MIG2 LOD500_LOCKED. Full ladder: L-GATE_S PWF→fixed → L-GATE_B PASS (team_100 verified) → team_50 QA
+    PWF→fixed → L-GATE_V PWF (V-01 + N-1 fixed inline, d797200). ADR042 archive mandate → team_191. Operational
+    follow-on (NOT gated): live 060 apply + PR backfill + manual-validation console→NI ingest; UI lights 'מוצע'
+    fields as data lands. All MIG2 work on branch claude/wp-cb-mig2-2026-06-01; main = origin/main (9867d4d) —
+    merge is a team_00 call. Latent follow-up: CropVarietySourceValue ORM model drift (created_at/updated_at +
+    unique constraint) flagged for a separate fix."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-1-patch01
