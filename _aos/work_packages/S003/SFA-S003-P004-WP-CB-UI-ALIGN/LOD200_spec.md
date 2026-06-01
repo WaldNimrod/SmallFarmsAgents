@@ -54,6 +54,21 @@ design system, the design app-shell + nav, and the interactive calculator surfac
 6. **Hero + art** already shipped — verify they render on the unified shell (crop-book hero, 28 watercolors,
    3 module heroes).
 
+## 3a. Design-coverage gap (team_00 directive: structure/style EXACT per team_35; content/fields from code)
+team_35's LOD300 designed **only 2 surfaces** in v2 (crop-book + calculator) — their README says the others are
+"stable nav hooks for future modules." The live hub/market/search/community/about are still in the **earlier
+cream WP-UI style**. So this WP splits into two implementation classes:
+
+- **Class A — IMPLEMENT (design exists):** crop-book + calculator + the `.sh` app-shell contract. Build exactly
+  to the team_35 v2 templates we already hold.
+- **Class B — AWAIT team_35 templates (design missing):** hub/home, market list+detail, search, community,
+  about, account. We MUST NOT guess these (guessing is what caused the drift). A detailed design request was
+  issued: `_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-ALIGN/DESIGN_REQUEST_v2-shell-and-hub-surfaces_2026-06-02_v1.0.0.md`.
+  Class B build is **blocked on team_35 delivery + team_00 approval**; the WP may proceed on Class A first.
+
+Binding rule (team_00): **interface, style, page structure = EXACT to team_35; content + exact fields = from the
+code.** Where a v2 template is missing, request it from team_35 — never improvise.
+
 ## 4. Out of scope
 - New features / data-model changes (that's WP-CB-MIG2).
 - The `/calc` revenue non-kg unit conversion (F-50-patch01-01) — separate, latent.
