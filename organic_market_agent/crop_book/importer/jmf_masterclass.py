@@ -193,6 +193,38 @@ def _safe_int(value: object) -> Optional[int]:
         return None
 
 
+_UNKNOWN_FAMILY_SCIENTIFIC = "Unknown"
+_UNKNOWN_FAMILY_NAME_HE = "לא ידוע"
+
+
+def _get_or_create_placeholder_family(session):
+    """Return a neutral 'Unknown' placeholder family for JMF-only crops that have
+    no resolvable botanical family.
+
+    Root cause of F-DATA-001: the previous code used
+    ``session.query(CropFamily).first()`` as the fallback, which returns the FIRST
+    row in the table (Aizoaceae) and silently stamped it onto every JMF-created
+    crop (tomato, carrots, lettuce, …). A dedicated sentinel family never corrupts
+    a real botanical family; a later Tend baseline / the family corrective then
+    re-points the crop to its true family.
+    """
+    from organic_market_agent.crop_book.models import CropFamily
+
+    fam = (
+        session.query(CropFamily)
+        .filter_by(scientific_name=_UNKNOWN_FAMILY_SCIENTIFIC)
+        .one_or_none()
+    )
+    if fam is None:
+        fam = CropFamily(
+            scientific_name=_UNKNOWN_FAMILY_SCIENTIFIC,
+            name_he=_UNKNOWN_FAMILY_NAME_HE,
+        )
+        session.add(fam)
+        session.flush()
+    return fam
+
+
 def _safe_decimal(value: object) -> Optional[Decimal]:
     """Safely convert a cell value to Decimal. Returns None on failure."""
     if value is None:
@@ -943,17 +975,9 @@ def import_jmf_masterclass(
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
             # For JMF-only crops not in the DB: create with minimal fields.
-            # `family_id` is NOT NULL in the schema — use the first available family
-            # as a placeholder, or skip if none exists.
-            from organic_market_agent.crop_book.models import CropFamily
-            family = session.query(CropFamily).first()
-            if family is None:
-                logger.warning(
-                    "Cannot create new crop %r — no family exists in DB. Skipping.", name_he
-                )
-                if name_he not in map_misses:
-                    map_misses.append(f"[no_family]:{name_he}")
-                continue
+            # `family_id` is NOT NULL — use the neutral 'Unknown' placeholder family
+            # (NOT the first row, which is Aizoaceae — root cause of F-DATA-001).
+            family = _get_or_create_placeholder_family(session)
             crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
             session.add(crop_obj)
             session.flush()
@@ -1050,10 +1074,8 @@ def import_jmf_masterclass(
 
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
-            from organic_market_agent.crop_book.models import CropFamily
-            family = session.query(CropFamily).first()
-            if family is None:
-                continue
+            # Neutral placeholder family — never the first row (Aizoaceae) — F-DATA-001.
+            family = _get_or_create_placeholder_family(session)
             crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
             session.add(crop_obj)
             session.flush()
