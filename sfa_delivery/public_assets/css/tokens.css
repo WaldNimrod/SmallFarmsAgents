@@ -7,7 +7,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* ─── Foundation tokens — legacy cream palette removed; use --gj-* below ─── */
+  /* ─── Foundation tokens — white-green system; use --gj-* below ─── */
 
   /* ─── 3 Worlds (v3.3 — LOCKED · אדמה · ידע · דיגיטל · approved 22.05.2026) ───
      Soil · Know · Code — deep + light per world  */
