@@ -84,6 +84,30 @@ The 5-tier explainer (open · beta · coming · paid · custom) with your tier b
 At minimum a v2 placeholder/landing for the 4th nav item (login/profile shell + empty state) so it isn't a dead
 end. Full account flows can be a later module.
 
+## 3.8 Reference patterns (Mobbin) — borrow the UX PATTERN, not the skin
+team_00 asked which existing apps to use as references while you design. Use **Mobbin** to study the
+**interaction/layout pattern** of each surface — then dress it in **our locked v2 system** (`tokens.css`,
+white-green, Carmela, watercolor). ⚠ Reference = pattern/structure/flow only. Do NOT borrow another app's
+palette, type, or chrome — that would re-introduce the exact drift this WP exists to fix.
+
+**Primary whole-product anchor: Planta** (plant-care app) — closest DNA to SFA: light/white ground, botanical
+illustration, a plant **library (cards → detail → depth)** + **planning** surfaces. One app that mirrors most of
+our structure. Secondary: **Greg** (plant hub + per-item state, ~ our complete/partial cues).
+
+| Surface | Mobbin reference pattern | What to take (pattern only) |
+|---|---|---|
+| 3.1 App-shell | Planta / Notion / Arc — top bar + section nav; mobile bottom tab bar | nav composition, active-state, RTL bottom-tab ergonomics |
+| 3.2 Hub / Home | Notion / Arc / Flighty home launchers; Planta home | module-card grid, hero+badge+stat, coming-soon (disabled) card |
+| 3.3 Market list+detail | Copilot Money / Delta (price + history) ; Blinkit/Zepto price views | big current price, range, history table, source breakdown |
+| 3.4 Search | Planta / NYT Cooking unified search | result cards across types, empty + no-match states |
+| 3.5 Community | Strava/Duolingo light feed + a simple "suggest" CTA | low-friction feed + capture (NOT a management console) |
+| 3.6 About / Tiers | Pricing/tier screens (Notion, Linear) | 5-tier explainer cards + badges |
+| 3.7 Account | Any settings/profile shell (Planta, Wolt) | login/profile shell + empty state |
+| **RTL anchor (all)** | **Wolt · Bit (בנק הפועלים) · Riseup** — native Hebrew RTL | correct RTL nav, bottom-tab, forms, number/price direction |
+
+Rule of thumb to give the team: *"Take the **UX pattern** from {Planta / Notion / YNAB / Copilot / Wolt-RTL},
+apply **our v2 tokens** to it."* If a pattern conflicts with the v2 token system, the token system wins.
+
 ## 4. Constraints / out of scope
 - Do NOT redesign the crop-book/calculator screens you already delivered, nor the data/fields (we wire content).
 - No backend/calculator math.
