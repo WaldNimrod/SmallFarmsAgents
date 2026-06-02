@@ -24,6 +24,7 @@ trigger: "team_00 condition on WP-CB-UI-CLASSB Q4 — UI/client-side only; any s
 | SRV-2 | Market graph 90-day / yearly aggregates | team_35 §3.3 `.rangesel` | History API serves ≤28d; 90/year need pre-computed aggregates | ingest/aggregation + history endpoint | PROPOSED — unapproved (UI shows disabled per LOD400 §9 #3) |
 | SRV-3 | Account auth backend (login/profile/subscriptions) | team_35 §3.7 account | Real account flows behind the v1 UI shell | new auth subsystem | PROPOSED — unapproved (UI shell only + "בקרוב" per §9 #2) |
 | SRV-4 | Market price DATA freshness (mirror has no priced rows) | team_50 F-MKT-002 | Ingest not currently populating `last_price`/`product_prices` on the mirror | OMA ingest / sfa_ingest_push | PROPOSED — unapproved (data/OPS, not UI) |
+| SRV-5 | Live hub stats (real DB counts on `/` tiles) | team_50 VISUAL_QA MINOR-2 (2026-06-02) | Hub tiles show static counts from `MODULES_REGISTRY.yaml` (e.g. 66 גידולים / 30 מוצרים). Board-B intends static, but live counts would track real DB state | hub controller + a counts query/endpoint | PROPOSED — unapproved (Class B keeps the design-intended static per team_00 Q4) |
 
 ## Rule for the build (team_10) + QA (team_50)
 If during WP-CB-UI-CLASSB build a server-side change seems necessary: do NOT implement it. Append a row here
