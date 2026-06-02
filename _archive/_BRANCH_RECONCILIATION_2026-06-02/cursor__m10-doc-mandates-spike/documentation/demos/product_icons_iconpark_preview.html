@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>אישור ויזואלי — אייקוני מוצרים (IconPark Outline)</title>
+  <style>
+    :root {
+      --sfa-green-dark: #1b4332;
+      --sfa-green-mid: #2d6a4f;
+      --sfa-green-light: #52b788;
+      --sfa-muted: #6b7280;
+      --sfa-bg: #f6f7f4;
+      --sfa-card: #fff;
+      --sfa-text: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, "Segoe UI", "Heebo", sans-serif;
+      background: var(--sfa-bg);
+      color: var(--sfa-text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    h1 {
+      font-size: 1.35rem;
+      color: var(--sfa-green-dark);
+      margin: 0 0 0.35rem;
+      font-weight: 700;
+    }
+    .lead {
+      color: var(--sfa-muted);
+      font-size: 0.92rem;
+      margin: 0 0 1.25rem;
+      max-width: 52rem;
+    }
+    .pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: #e8f4ec;
+      color: var(--sfa-green-dark);
+      margin-bottom: 1rem;
+    }
+    .card {
+      background: var(--sfa-card);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td { padding: 0.65rem 0.85rem; text-align: start; vertical-align: middle; }
+    thead tr { background: var(--sfa-green-dark); color: #fff; }
+    th { font-weight: 600; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid #eef0eb; }
+    tbody tr:nth-child(even) { background: #fafaf8; }
+    tbody tr:hover { background: #f0faf4; }
+    tbody tr.inactive { opacity: 0.45; }
+    .ic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+    }
+    .ic img { vertical-align: middle; }
+    .mono { font-family: ui-monospace, monospace; font-size: 0.78rem; direction: ltr; text-align: left; display: inline-block; }
+    .cat { font-size: 0.8rem; color: var(--sfa-muted); }
+    h2 {
+      font-size: 1.05rem;
+      color: var(--sfa-green-dark);
+      margin: 0 0 0.75rem;
+      font-weight: 700;
+    }
+    .mini-table thead tr { background: var(--sfa-green-mid); }
+    .mini-table .product-name { font-weight: 600; }
+    .note {
+      font-size: 0.82rem;
+      color: var(--sfa-muted);
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: #fff;
+      border-radius: 8px;
+      border-inline-start: 4px solid var(--sfa-green-light);
+    }
+    .note strong { color: var(--sfa-green-dark); }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: var(--sfa-muted);
+      line-height: 1.6;
+    }
+    footer a { color: var(--sfa-green-mid); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="pill">דף אישור — לא מחובר לפרודקשן</span>
+    <h1>אייקוני מוצרים — סט אחיד ומקצועי</h1>
+    <p class="lead">
+      כל השורות משתמשות ב־<strong>IconPark Outline</strong> (אותו משפחה, אותו משקל קו).
+      הקבצים <strong>מאוחסנים ברפו</strong> תחת
+      <span class="mono">organic_market_agent/publisher/static/icons/iconpark/</span>
+      (נמשכו פעם אחת דרך Iconify API — ראו <span class="mono">scripts/fetch_iconpark_outline_icons.py</span>).
+      רישיון: <span class="mono">Apache-2.0</span>.
+    </p>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:3rem"></th>
+            <th>מוצר</th>
+            <th>קטגוריה</th>
+            <th>שם קובץ (slug)</th>
+          </tr>
+        </thead>
+        <tbody id="catalog-body"></tbody>
+      </table>
+    </div>
+
+    <h2>דימוי שורה בטבלת המדד (כמו בדוח הציבורי)</h2>
+    <div class="card mini-table">
+      <table>
+        <thead>
+          <tr>
+            <th>מוצר</th>
+            <th style="text-align:center">ממוצע ₪</th>
+            <th style="text-align:center">תצפיות</th>
+          </tr>
+        </thead>
+        <tbody id="sample-rows"></tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>מטאפורות (מכוונות):</strong>
+      חלק מהירקות אין להם גליף ייעודי בסט — נבחרה אלטרנטיבה קרובה באותו סגנון (למשל
+      <span class="mono">radish</span> לפלפל אדום עגול, <span class="mono">vegetables</span> למלפפון).
+      אפשר לכוונן מיפוי אחרי אישור ויזואלי.
+    </div>
+
+    <footer>
+      <p>
+        <strong>English (attribution):</strong> Icons from the IconPark “Outline” set (vendored SVGs;
+        fetched via <a href="https://iconify.design/" rel="noopener noreferrer">Iconify</a>) —
+        <a href="https://iconpark.oceanengine.com/official" rel="noopener noreferrer">IconPark</a> (Apache-2.0).
+      </p>
+      <p>Normative doc: <span class="mono">documentation/02-architecture/PRODUCT_ICONS_STANDARD.md</span></p>
+      <p>Open this demo from disk — icons resolve relative to <span class="mono">documentation/demos/</span> (no network).</p>
+    </footer>
+  </div>
+
+  <script>
+    /** Relative to this demo file — same SVGs as publisher static pack */
+    var ICON_BASE = '../../organic_market_agent/publisher/static/icons/iconpark/';
+    var PRODUCT_ICONS = [
+      { id: 'PRD001', name: 'עגבנייה', cat: 'fruiting_vegetables', slug: 'tomato' },
+      { id: 'PRD002', name: 'עגבנייה שרי', cat: 'fruiting_vegetables', slug: 'cherry' },
+      { id: 'PRD003', name: 'פלפל אדום', cat: 'fruiting_vegetables', slug: 'radish' },
+      { id: 'PRD004', name: 'פלפל ירוק', cat: 'fruiting_vegetables', slug: 'peas' },
+      { id: 'PRD005', name: 'מלפפון', cat: 'fruiting_vegetables', slug: 'vegetables' },
+      { id: 'PRD006', name: 'חציל', cat: 'fruiting_vegetables', slug: 'eggplant' },
+      { id: 'PRD007', name: 'קישוא', cat: 'fruiting_vegetables', slug: 'pumpkin' },
+      { id: 'PRD031', name: 'פלפל סוויט בייט', cat: 'fruiting_vegetables', slug: 'cherry' },
+      { id: 'PRD032', name: 'פלפל חריף', cat: 'fruiting_vegetables', slug: 'chili' },
+      { id: 'PRD008', name: 'חסה', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD030', name: 'חסה זן מובחר', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD009', name: 'עלי תרד', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD010', name: 'רוקט', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD011', name: 'כוסברה', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD012', name: 'פטרוזיליה', cat: 'leafy_greens', slug: 'leaf' },
+      { id: 'PRD013', name: 'גזר', cat: 'root_vegetables', slug: 'carrot' },
+      { id: 'PRD014', name: 'סלק', cat: 'root_vegetables', slug: 'radish-one' },
+      { id: 'PRD015', name: 'לפת', cat: 'root_vegetables', slug: 'pumpkin' },
+      { id: 'PRD016', name: 'צנון', cat: 'root_vegetables', slug: 'radish' },
+      { id: 'PRD017', name: 'בצל יבש', cat: 'alliums', slug: 'garlic' },
+      { id: 'PRD018', name: 'בצל ירוק', cat: 'alliums', slug: 'scallion' },
+      { id: 'PRD019', name: 'שום', cat: 'alliums', slug: 'garlic' },
+      { id: 'PRD020', name: 'כרישה', cat: 'alliums', slug: 'scallion' },
+      { id: 'PRD021', name: 'כרוב לבן', cat: 'brassicas', slug: 'pumpkin' },
+      { id: 'PRD022', name: 'כרובית', cat: 'brassicas', slug: 'pear' },
+      { id: 'PRD023', name: 'ברוקולי', cat: 'brassicas', slug: 'peas' },
+      { id: 'PRD024', name: 'שעועית ירוקה', cat: 'legumes_fresh', slug: 'vicia-faba' },
+      { id: 'PRD025', name: 'סל ירקות קטן', cat: 'baskets', slug: 'bowl-one' },
+      { id: 'PRD026', name: 'סל ירקות בינוני', cat: 'baskets', slug: 'vegetable-basket' },
+      { id: 'PRD027', name: 'סל ירקות גדול', cat: 'baskets', slug: 'tray' },
+      { id: 'PRD028', name: 'סל ירקות משפחתי', cat: 'baskets (inactive)', slug: 'vegetable-basket', inactive: true },
+      { id: 'PRD029', name: 'ארגז CSA שבועי', cat: 'baskets (inactive)', slug: 'vegetable-basket', inactive: true }
+    ];
+
+    var ICON_SIZE = 28;
+
+    function srcFor(slug) {
+      return ICON_BASE + slug + '.svg';
+    }
+
+    function rowCatalog(p) {
+      var tr = document.createElement('tr');
+      if (p.inactive) tr.className = 'inactive';
+      tr.innerHTML =
+        '<td class="ic"><img src="' + srcFor(p.slug) + '" alt="" width="' + ICON_SIZE + '" height="' + ICON_SIZE + '" decoding="async" loading="lazy" /></td>' +
+        '<td><span class="mono" style="margin-left:0.35rem">' + p.id + '</span> — ' + p.name + '</td>' +
+        '<td class="cat">' + p.cat.replace(/_/g, ' ') + '</td>' +
+        '<td class="mono">' + p.slug + '.svg</td>';
+      return tr;
+    }
+
+    function rowSample(name, slug, avg, n) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><img src="' + srcFor(slug) + '" alt="" width="' + ICON_SIZE + '" height="' + ICON_SIZE + '" style="margin-left:0.35rem" decoding="async" loading="lazy" /> <span class="product-name">' + name + '</span></td>' +
+        '<td style="text-align:center;font-weight:700;color:var(--sfa-green-dark)">' + avg + '</td>' +
+        '<td style="text-align:center">' + n + '</td>';
+      return tr;
+    }
+
+    var tbody = document.getElementById('catalog-body');
+    PRODUCT_ICONS.forEach(function (p) { tbody.appendChild(rowCatalog(p)); });
+
+    var sample = document.getElementById('sample-rows');
+    [
+      ['עגבנייה', 'tomato', '12.50', '14'],
+      ['גזר', 'carrot', '8.20', '9'],
+      ['חסה', 'leaf', '6.00', '11'],
+      ['סל ירקות בינוני', 'vegetable-basket', '189', '5'],
+      ['פלפל חריף', 'chili', '18.90', '6']
+    ].forEach(function (s) {
+      sample.appendChild(rowSample(s[0], s[1], s[2], s[3]));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "collected_at_utc": "2026-04-05T09:16:52.066815+00:00",
+  "alembic_version": "071",
+  "raw_extracted_items_by_status": {
+    "extracted": 2532,
+    "ignored": 3089,
+    "normalized": 2394
+  },
+  "unresolvable_rows_non_quarantined": 0,
+  "distinct_unresolvable_raw_product_names": 0,
+  "unresolvable_by_source": []
+}

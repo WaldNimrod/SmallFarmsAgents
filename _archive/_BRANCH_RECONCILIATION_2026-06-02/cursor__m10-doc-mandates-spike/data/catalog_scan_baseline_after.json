@@ -1,0 +1,12 @@
+{
+  "schema": "normalizer_baseline_snapshot_v1",
+  "captured_at": "2026-04-05T09:17:28.098830+00:00",
+  "raw_extracted_items": {
+    "normalized": 3231,
+    "unresolvable": 95,
+    "extracted": 31,
+    "ignored": 4658
+  },
+  "resolution_pct_norm_vs_unres": 97.14,
+  "distinct_unresolved_raw_names": 92
+}

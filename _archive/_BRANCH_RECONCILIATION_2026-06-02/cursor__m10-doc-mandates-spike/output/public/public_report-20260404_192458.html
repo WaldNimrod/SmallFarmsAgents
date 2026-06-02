@@ -1,0 +1,3665 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מחירי ירקות אורגניים — 2026-04-04</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1b4332;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --sand:        #f5f0e8;
+      --sand-dark:   #e8dfc8;
+      --gold:        #c9a84c;
+      --text:        #1a1a1a;
+      --muted:       #6b7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header .brand {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-block-end: 0.25rem;
+    }
+    .site-header .sub {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .report-meta {
+      background: var(--green-mid);
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .report-meta span { direction: ltr; }
+
+    /* Stale banner */
+    .stale-banner {
+      background: #fef3c7;
+      border-inline-start: 4px solid var(--gold);
+      padding: 0.75rem 1.25rem;
+      margin: 1rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #92400e;
+    }
+
+    /* Data-quality transparency (matches public_report.json → data_quality) */
+    .dq-box {
+      background: #fff;
+      border-radius: 12px;
+      border-inline-start: 4px solid var(--green-mid);
+      padding: 1rem 1.25rem;
+      margin-block-end: 1.25rem;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    }
+    .dq-title {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+      color: var(--green-dark);
+    }
+    .dq-lead {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      line-height: 1.45;
+    }
+    .dq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+      gap: 0.5rem 1rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.88rem;
+    }
+    .dq-grid li span.ltr { font-weight: 600; }
+
+    /* Main content */
+    .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
+
+    /* Table */
+    .price-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    thead tr {
+      background: var(--green-dark);
+      color: #fff;
+    }
+    thead th {
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      text-align: start;
+      white-space: nowrap;
+    }
+    thead th.num { text-align: end; }
+    tbody tr { border-block-end: 1px solid #f0ede6; }
+    tbody tr:last-child { border-block-end: none; }
+    tbody tr:nth-child(even) { background: #fafaf8; }
+    tbody tr:hover { background: #f0faf4; }
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+    td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
+    .product-name { font-weight: 600; font-size: 1rem; }
+    .product-emoji { font-size: 1.3rem; margin-inline-end: 0.4rem; }
+    .unit-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      background: var(--sand-dark);
+      color: var(--green-dark);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-weight: 500;
+      margin-inline-start: 4px;
+      direction: rtl;
+    }
+    .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
+    .price-secondary { color: var(--muted); font-size: 0.88rem; }
+    /* range bar */
+    .range-bar-wrap {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      min-inline-size: 80px;
+      margin-block: 4px;
+    }
+    .range-bar-fill {
+      position: absolute;
+      inset-block: 0;
+      background: linear-gradient(to left, var(--green-light), var(--green-dark));
+      border-radius: 3px;
+    }
+    .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
+    .stddev-text { font-size: 0.78rem; color: var(--muted); }
+    .sources-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .site-footer a { color: var(--green-mid); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      thead th, td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">🌿 מחירי ירקות אורגניים</div>
+  <div class="sub">נתוני מחיר מקהילת המגדלים האורגנית</div>
+</header>
+
+<div class="report-meta">
+  <span>תאריך דוח: 2026-04-04</span>
+  <span>עודכן: 2026-04-04 19:24</span>
+  <span>79 מוצרים</span>
+</div>
+
+
+
+<div class="container">
+
+
+<div class="dq-box" aria-label="שקיפות צינור נירמול">
+  <h2 class="dq-title">שקיפות — מצב צינור הנירמול</h2>
+  <p class="dq-lead">
+    ספירות לפי מסד הנתונים המקומי (<span class="ltr">raw_extracted_items</span>).
+    אותם ערכים מופיעים בקובץ <span class="ltr">public_report.json</span> תחת <span class="ltr">data_quality</span>.
+    לא משמשים לחישוב המחירים בטבלה למטה.
+  </p>
+  <ul class="dq-grid">
+    <li>מנורמל: <span class="ltr">1966</span></li>
+    <li>לא ניתן לזיהוי: <span class="ltr">0</span></li>
+    <li>ממתין לעיבוד: <span class="ltr">3</span></li>
+    <li>דולג (<span class="ltr">ignored</span>): <span class="ltr">2841</span></li>
+    <li>דילוג מאושר (סקופ): <span class="ltr">2841</span></li>
+    <li>כללי סקופ פעילים: <span class="ltr">908</span></li>
+    <li>אחוז פתרון (מנורמל מול מנורמל+לא ניתן): <span class="ltr">100.0%</span></li>
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="price-table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>מוצר</th>
+        <th class="num">ממוצע ₪</th>
+        <th class="num">חציון ₪</th>
+        <th>טווח מחירים</th>
+        <th class="num hide-mobile">סטיית תקן</th>
+        <th class="num">תצפיות</th>
+        <th class="num">מקורות</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+      <tr data-source-types="grower" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אבוקדו</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 19.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אגס</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">20.48</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">25.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 11.1%;"></div>
+            </div>
+            <div class="range-text">5.00 – 38.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">14.68</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אוכמניות</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">25.67</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">36.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 10.4%;"></div>
+            </div>
+            <div class="range-text">5.00 – 36.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">17.90</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אורגנו</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">29.36</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 30.3%;"></div>
+            </div>
+            <div class="range-text">8.90 – 99.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">38.99</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אזוב</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">19.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 12.6%;"></div>
+            </div>
+            <div class="range-text">6.00 – 43.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">17.21</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אספרגוס</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">29.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">29.75</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 8.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">27.50 – 32.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.18</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="legumes_fresh">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אפונה טריה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">23.78</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">20.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 10.8%;"></div>
+            </div>
+            <div class="range-text">12.90 – 45.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">13.39</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">26.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">23.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.7%; inline-size: 11.7%;"></div>
+            </div>
+            <div class="range-text">12.50 – 47.20</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">14.73</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק ירושלמי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">37.12</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">30.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 7.4%; inline-size: 13.9%;"></div>
+            </div>
+            <div class="range-text">23.50 – 65.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">18.90</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק ירושלמי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">25.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">25.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.2%; inline-size: 4.0%;"></div>
+            </div>
+            <div class="range-text">19.90 – 31.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">8.49</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אשכולית</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.81</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.9%; inline-size: 7.0%;"></div>
+            </div>
+            <div class="range-text">4.17 – 25.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">8.27</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אשכולית אדומה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.50</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בוקצ&#39;וי</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.97</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.5%; inline-size: 4.0%;"></div>
+            </div>
+            <div class="range-text">3.00 – 14.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.93</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בוקצ&#39;וי</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 13.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בזיליקום</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.91</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 13.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.74</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בטטה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.92</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">4.88 – 24.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">6.65</span>
+          
+        </td>
+        <td class="num">10</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●●
+            10
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בטטה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">21.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">21.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">19.90 – 22.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.12</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="eggs">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ביצים</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">22.23</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">24.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 27.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.61</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="alliums">
+        <td>
+          <span class="product-emoji">🧅</span>
+          <span class="product-name">בצל יבש</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text text-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בצל ירוק</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.71</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 15.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.06</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ברוקולי</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.11</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">14.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.9%; inline-size: 6.0%;"></div>
+            </div>
+            <div class="range-text">10.00 – 27.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">6.44</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥕</span>
+          <span class="product-name">גזר</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלורית</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">14.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 17.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.34</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלורית</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 17.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלעת</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 16.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">חסה זן מובחר</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.17</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.4%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.50 – 16.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.47</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🍆</span>
+          <span class="product-name">חציל</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.77</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.3%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">2.36 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.50</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🍆</span>
+          <span class="product-name">חציל</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 15.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.83</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">טימין</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.97</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.52</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🌿</span>
+          <span class="product-name">כוסברה</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.86</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">7.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">4.90 – 16.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.18</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כורכום טרי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">42.98</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">39.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.2%; inline-size: 25.9%;"></div>
+            </div>
+            <div class="range-text">7.90 – 85.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">39.84</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרוב לבן</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 13.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.54</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרובית</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">19.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">19.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">18.90 – 19.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרישה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.31</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 19.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.40</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרישה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">15.95</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">13.00 – 18.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.17</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">לפת</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.53</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.4%; inline-size: 4.8%;"></div>
+            </div>
+            <div class="range-text">2.60 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">7.31</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">לפת</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 13.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥒</span>
+          <span class="product-name">מלפפון</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 14.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">מנגולד</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.30</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 10.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.46</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">מרווה</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.30</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">7.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.07</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">נבטים</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.20</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.7%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.50 – 13.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.60</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">נענע</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.18</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">4.90 – 19.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.71</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות בינוני</span>
+          <span class="unit-badge">סל בינוני</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">163.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">95.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 31.4%; inline-size: 68.6%;"></div>
+            </div>
+            <div class="range-text">95.00 – 299.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">117.78</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות גדול</span>
+          <span class="unit-badge">סל גדול</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">131.67</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">130.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 38.2%; inline-size: 11.8%;"></div>
+            </div>
+            <div class="range-text">115.00 – 150.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">17.56</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🟣</span>
+          <span class="product-name">סלק</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.77</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4.6%;"></div>
+            </div>
+            <div class="range-text">5.90 – 19.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.15</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🟣</span>
+          <span class="product-name">סלק</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.90 – 14.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.54</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">סלרי שורש</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.4%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.50 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.89</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🍅</span>
+          <span class="product-name">עגבנייה שרי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">25.66</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">26.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.6%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">15.00 – 34.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.83</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">עירית</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 21.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">7.42</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פומלית</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.98</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 14.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.52</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🌿</span>
+          <span class="product-name">פטרוזיליה</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">9.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 4.1%;"></div>
+            </div>
+            <div class="range-text">4.90 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.68</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🫑</span>
+          <span class="product-name">פלפל אדום</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">16.90 – 19.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.12</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל חריף</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">13.00 – 13.50</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.35</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל חריף</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.90 – 15.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.24</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🫑</span>
+          <span class="product-name">פלפל ירוק</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">10.63</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.03</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל סוויט בייט</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.45</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 11.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.64</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל צהוב / כתום</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.68</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">19.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">14.00 – 22.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.00</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל צהוב / כתום</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 19.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל רמירו</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">23.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">24.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.6%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">21.00 – 25.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">2.08</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פסיפלורה</span>
+          <span class="unit-badge">יחידה</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">26.17</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">28.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.1%; inline-size: 5.9%;"></div>
+            </div>
+            <div class="range-text">16.50 – 34.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">8.89</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פפאיה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">27.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">27.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 7.6%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">24.00 – 32.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.86</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🔴</span>
+          <span class="product-name">צנון</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">21.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">19.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 10.4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 40.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">13.28</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🔴</span>
+          <span class="product-name">צנון</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text text-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קולורבי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">11.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.4%; inline-size: 4.8%;"></div>
+            </div>
+            <div class="range-text">2.70 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">5.11</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קולורבי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text text-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קיווי</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">23.71</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">26.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.5%; inline-size: 11.8%;"></div>
+            </div>
+            <div class="range-text">2.95 – 38.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">14.81</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קישוא</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.44</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 8.5%;"></div>
+            </div>
+            <div class="range-text">3.70 – 29.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">7.83</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קישוא</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 18.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קלמנטינה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">16.48</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.0%; inline-size: 16.3%;"></div>
+            </div>
+            <div class="range-text">1.45 – 50.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">17.08</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">רוזמרין</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">8.60</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.4%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.50 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.38</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥗</span>
+          <span class="product-name">רוקט</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">13.07</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 24.90</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">6.52</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שיבא</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text text-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שמיר</span>
+          <span class="unit-badge">צרור</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">6.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">6.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">3.00 – 10.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.51</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="legumes_fresh">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שעועית ירוקה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">15.62</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.60</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 20.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">3.44</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תות שדה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">20.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">23.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.2%; inline-size: 8.4%;"></div>
+            </div>
+            <div class="range-text">5.00 – 30.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">11.16</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תמר</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">57.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">41.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 10.3%; inline-size: 27.9%;"></div>
+            </div>
+            <div class="range-text">32.00 – 115.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">38.82</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תפוז</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.17</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.3%; inline-size: 7.6%;"></div>
+            </div>
+            <div class="range-text">2.30 – 25.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">6.95</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥔</span>
+          <span class="product-name">תפוח אדמה</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">12.74</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.75</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 20.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">4.42</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תפוח עץ</span>
+          <span class="unit-badge">קילוגרם</span>
+        </td>
+        <td class="num">
+          
+            <span class="price-main">18.65</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">21.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.7%; inline-size: 8.6%;"></div>
+            </div>
+            <div class="range-text">3.50 – 29.00</div>
+          
+        </td>
+        <td class="num hide-mobile">
+          
+            <span class="stddev-text">8.89</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+<p class="text-center mt-3" style="font-size:0.8rem; color: var(--muted);">
+  נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
+</p>
+</div>
+
+<footer class="site-footer">
+  <p>🌱 <a href="https://www.nimrod.bio" target="_blank" rel="noopener">nimrod.bio</a> — חקלאות אקולוגית מקומית אורגנית</p>
+</footer>
+
+</body>
+</html>

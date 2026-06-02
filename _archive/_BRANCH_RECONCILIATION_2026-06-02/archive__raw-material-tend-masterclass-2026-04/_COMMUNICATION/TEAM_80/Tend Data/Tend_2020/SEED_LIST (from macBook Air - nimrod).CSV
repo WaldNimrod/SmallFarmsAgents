@@ -1,0 +1,611 @@
+Parents Crop,Variety,Year,Total Seeds Needed,Total Weight Needed,Total Seed Weight Needed Unit,Planting,Planting Seed Needed,Planting Seed Weight Needed,Planting Seed Weight Needed Unit,Planting Extra Seed Order %,Planting Seed Spec
+Amaranth (Vegetable),Generic Variety,2019,9000,6.0,g,"12/3/2020,  12 bed m, Ra.2 > C2 > Bed 222",1800,3.6,g,0.0,
+,,,,,,"16/7/2020,  12 bed m, Ra.2 > C1 > Bed 213",7200,2.4,g,0.0,
+Arugula,Arugula,2019,126720,48.47,g,"6/1/2020,  12 bed m, HH > B > Bed 10",21120,8.45,g,10.0,Organic
+,,,,,,"25/2/2020,  12 bed m, HH > B > Bed 12",21120,8.45,g,10.0,Organic
+,,,,,,"12/3/2020,  12 bed m, HH > B > Bed 9",21120,7.04,g,10.0,Organic
+,,,,,,"2/4/2020,  12 bed m, HH > B > Bed 10",21120,8.45,g,10.0,Organic
+,,,,,,"28/5/2020,  10 bed m, Ra.1 > L1 > Bed 110",21120,5.52,g,10.0,Organic
+,,,,,,"16/7/2020,  12 bed m, Ra.1 > L1 > Bed 117",21120,10.56,g,10.0,Organic
+Arugula,Arugula,2020,73920,34.85,g,"29/10/2020,  12 bed m, Ra.3 > R1 > Bed 316",21120,8.45,g,10.0,Organic
+,,,,,,"2/9/2020,  6 bed m, Ra.2 > C6m > Bed 203",10560,5.28,g,10.0,Organic
+,,,,,,"24/9/2020,  12 bed m, Ra.3 > R2 > Bed 328",21120,10.56,g,10.0,Organic
+,,,,,,"2/12/2020,  12 bed m, Ra.2 > C2 > Bed 218",21120,10.56,g,10.0,Organic
+Arugula,Generic Variety,2019,1602380,495.0,g,29/3/2020  · Microgreen,57420,15.0,g,0.0,Organic
+,,,,,,16/4/2020  · Microgreen,57420,15.0,g,0.0,Organic
+,,,,,,20/4/2020  · Microgreen,57420,15.0,g,0.0,Organic
+,,,,,,30/4/2020  · Microgreen,57420,15.0,g,0.0,Organic
+,,,,,,3/5/2020  · Microgreen,57420,15.0,g,0.0,Organic
+,,,,,,11/5/2020  · Microgreen,114840,30.0,g,0.0,Organic
+,,,,,,14/5/2020  · Microgreen,114840,30.0,g,0.0,Organic
+,,,,,,12/6/2020  · Microgreen,114840,30.0,g,0.0,Organic
+,,,,,,16/6/2020  · Microgreen,306240,80.0,g,0.0,Organic
+,,,,,,29/6/2020  · Microgreen,320000,160.0,g,0.0,Organic
+,,,,,,22/5/2020  · Microgreen,114840,30.0,g,0.0,Organic
+,,,,,,25/5/2020  · Microgreen,114840,30.0,g,0.0,Organic
+,,,,,,1/6/2020  · Microgreen,114840,30.0,g,0.0,Organic
+Arugula,Wild Rocket,2019,42240,13.32,g,"22/1/2020,  6 bed m, Ra.1 > L1 > Bed 111",10560,3.52,g,10.0,Organic
+,,,,,,"13/4/2020,  12 bed m, Ra.2 > C2 > Bed 223",21120,7.04,g,10.0,Organic
+,,,,,,"1/7/2020,  12 bed m, Ra.1 > L2 > Bed 129",10560,2.76,g,10.0,Organic
+Arugula,Wild Rocket,2020,31680,14.78,g,"2/9/2020,  6 bed m, Ra.2 > C6m > Bed 202",10560,4.22,g,10.0,Organic
+,,,,,,"16/12/2020,  12 bed m, Ra.3 > R2 > Bed 324",21120,10.56,g,10.0,Organic
+Basil,Dwarf Greek,2019,471,0.51,g,"21/5/2020,  6 bed m, Ra.1 > L6m > Bed 105",471,0.51,g,0.0,Organic
+Basil,Generic Variety,2019,1317,1.43,g,"1/4/2020,  12 bed m, Ra.1 > L1 > Bed 112",312,0.34,g,0.0,Organic
+,,,,,,"12/7/2020,  12 bed m, Ra.3 > R1 > Bed 308",189,0.2,g,0.0,Organic
+,,,,,,"26/7/2020,  24 bed m, Ra.3 > R1 > Beds 309-310",378,0.41,g,0.0,Organic
+,,,,,,"19/8/2020,  12 bed m, Ra.3 > R3 > Bed 336",126,0.14,g,0.0,Organic
+,,,,,,"19/3/2020,  12 bed m, Ra.1 > L2 > Bed 127",312,0.34,g,0.0,Organic
+Basil,Genovese,2019,1896,2.05,g,"25/6/2020,  12 bed m, Ra.3 > R1 > Bed 307",1153,1.25,g,0.0,Organic
+,,,,,,"1/4/2020,  12 bed m, Ra.1 > L2 > Bed 124",743,0.8,g,0.0,Organic
+Basil,hyd. Prospera,2019,625,0.67,g,"23/8/2020,  12 bed m, Field not assigned",307,0.33,g,0.0,Organic
+,,,,,,"25/8/2020,  199 plants, Field not assigned",318,0.34,g,0.0,Organic
+Basil,Violetto aromatico,2019,1153,1.25,g,"25/6/2020,  6 bed m, Ra.1 > L6m > Bed 104",1153,1.25,g,0.0,Organic
+Beans: Bush & Pole,Blauhilde,2019,132,13.2,g,"7/5/2020,  12 bed m, HH > B > Bed 8",132,13.2,g,10.0,Organic
+Beans: Bush & Pole,California Black Eyed,2019,528,35.2,g,"8/6/2020,  24 bed m, Zvika > zB > Beds 515-516",528,35.2,g,10.0,Organic
+Beans: Bush & Pole,Dulico Del Metro,2019,156,10.4,g,"27/5/2020,  12 bed m, Ra.2 > C1 > Bed 209",156,10.4,g,0.0,
+Beans: Bush & Pole,NeckarGold - צהובה מטפסת נטע,2019,264,17.6,kg,"20/4/2020,  12 bed m, Ra.3 > R6m > Beds 303-304",264,17.6,kg,10.0,Organic
+Beans: Bush & Pole,Purple King,2019,264,17.6,kg,"20/4/2020,  12 bed m, Ra.1 > L6m > Beds 107-108",264,17.6,kg,10.0,Organic
+Beans: Bush & Pole,Speedy,2019,924,61.6,g,"17/4/2020,  12 bed m, Ra.1 > L6m > Beds 101-102",264,17.6,g,10.0,Organic
+,,,,,,"8/6/2020,  20 bed m, Zvika > zB > Beds 520-521",660,44.0,g,10.0,Organic
+Beets,Bull's Blood,2020,252,5.04,kg,"23/11/2020,  12 bed m, Ra.1 > L2 > Bed 126",252,5.04,kg,0.0,Organic
+Beets,Chioggia Guardsmark,2019,878,5052.52,g,"27/8/2020,  12 bed m, Ra.1 > L2 > Bed 123",252,5.04,kg,0.0,Organic
+,,,,,,"25/3/2020,  12 bed m, Field not assigned",626,12.52,g,0.0,Organic
+Beets,Chioggia Guardsmark,2020,1174,23.48,kg,"30/9/2020,  12 bed m, Ra.1 > L2 > Bed 125",252,5.04,kg,0.0,Organic
+,,,,,,"20/1/2021,  12 bed m, Zvika > zB > Bed 520",670,13.4,kg,0.0,Organic
+,,,,,,"9/12/2020,  12 bed m, Ra.1 > L2 > Bed 121",252,5.04,kg,0.0,Organic
+Beets,Forono - מוערך נטע,2019,335,6.7,g,"25/3/2020,  12 bed m, Ra.2 > C1 > Bed 209",335,6.7,g,0.0,Organic
+Beets,Forono - מוערך נטע,2020,503,10.06,g,"13/1/2021,  6 bed m, Ra.1 > L1 > Bed 114",168,3.36,g,0.0,Organic
+,,,,,,"29/10/2020,  12 bed m, Ra.1 > L2 > Bed 132",335,6.7,g,0.0,Organic
+Beets,Generic Variety,2019,1448,13093.24,g,"22/1/2020,  6 bed m, Ra.1 > L6m > Bed 107",132,0.0,kg,10.0,Organic
+,,,,,,"27/8/2020,  12 bed m, Ra.1 > L2 > Bed 124",252,5.04,g,0.0,Organic
+,,,,,,"26/3/2020,  12 bed m, Field not assigned",252,5.04,g,0.0,Organic
+,,,,,,"6/1/2020,  12 bed m, Ra.3 > R6m > Beds 301-302",528,10.56,kg,10.0,Organic
+,,,,,,"6/1/2020,  6 bed m, Ra.3 > R6m > Bed 304",126,2.52,kg,0.0,Organic
+,,,,,,"20/4/2020,  10 bed m, Ra.1 > L1 > Bed 110",158,3.16,g,0.0,Organic
+Beets,Generic Variety,2020,336,6.72,g,"9/12/2020,  12 bed m, Ra.1 > L2 > Bed 122",336,6.72,g,0.0,Organic
+Beets,MIX עלי ביבי,2019,38280,0.67,kg,"10/4/2020,  6 bed m, Ra.2 > C6m > Bed 208",7560,0.11,kg,5.0,Organic
+,,,,,,"17/2/2020,  6 bed m, Ra.2 > C6m > Bed 205",10560,0.16,kg,10.0,Organic
+,,,,,,"1/7/2020,  12 bed m, Field not assigned",20160,403.2,g,5.0,Organic
+Beets,MIX עלי ביבי,2020,22680,453.6,g,"2/9/2020,  6 bed m, Ra.2 > C6m > Bed 204",7560,151.2,g,5.0,Organic
+,,,,,,"7/10/2020,  6 bed m, Ra.2 > C6m > Bed 201",7560,151.2,g,5.0,Organic
+,,,,,,"18/11/2020,  6 bed m, Ra.1 > L6m > Bed 101",7560,151.2,g,5.0,Organic
+Broccoli,Generic Variety,2020,156,0.64,g,"23/12/2020,  12 bed m, Ra.3 > R1 > Bed 313",156,0.64,g,0.0,Organic
+Broccoli,Marathon,2020,63,0.26,g,"10/9/2020,  12 bed m, Zvika > zB > Bed 514",63,0.26,g,0.0,Organic
+Broccoli,Partenon,2020,95,0.39,g,"1/10/2020,  18 bed m, Ra.4 > Lo18 > Bed 403",95,0.39,g,0.0,Organic
+Cabbage,Generic Variety,2020,351,1.41,g,"23/11/2020,  18 bed m, Ra.4 > Lo18 > Bed 404",234,0.94,g,0.0,Organic
+,,,,,,"13/1/2021,  12 bed m, Zvika > zB > Bed 519",117,0.47,g,0.0,Organic
+Cabbage,ירוק חישתיל,2020,120,0.48,g,"10/9/2020,  18 bed m, Ra.4 > Lo18 > Bed 405",120,0.48,g,0.0,
+Cabbage,סגול חישתיל,2020,80,0.32,g,"10/9/2020,  16 bed m, Ra.4 > Lo18 > Bed 406",80,0.32,g,0.0,
+Carrots,colori Mix - Franchi,2019,17600,23.03,g,"18/3/2020,  12 bed m, Ra.3 > R1 > Bed 310",3520,4.61,g,10.0,Organic
+,,,,,,"6/1/2020,  12 bed m, Ra.2 > C2 > Bed 226",7040,9.21,g,10.0,Organic
+,,,,,,"13/2/2020,  12 bed m, Ra.3 > R1 > Bed 308",7040,9.21,g,10.0,Organic
+Carrots,FLAKKEE   LONG,2019,8064,10.56,g,"12/3/2020,  12 bed m, Ra.3 > R1 > Bed 315",4032,5.28,g,5.0,Organic
+,,,,,,"22/1/2020,  12 bed m, Ra.1 > L1 > Bed 120",4032,5.28,g,5.0,Organic
+Carrots,Nantes Half Long,2019,6579,8.61,g,"13/8/2020,  12 bed m, Ra.3 > R3 > Bed 332",2667,3.49,g,0.0,Organic
+,,,,,,"27/1/2020,  12 bed m, Ra.3 > R1 > Bed 309",1800,2.36,g,0.0,Organic
+,,,,,,"18/3/2020,  12 bed m, Ra.3 > R1 > Bed 310",2112,2.76,g,10.0,Organic
+Carrots,Nantes Half Long,2020,49352,64.58,g,"17/9/2020,  12 bed m, Ra.1 > L2 > Bed 127",3556,4.65,g,0.0,Organic
+,,,,,,"2/9/2020,  12 bed m, Ra.3 > R2 > Bed 328",3556,4.65,g,0.0,Organic
+,,,,,,"24/9/2020,  24 bed m, Ra.1 > L1 > Beds 111-112",14080,18.43,g,10.0,Organic
+,,,,,,"29/10/2020,  12 bed m, Ra.2 > C2 > Bed 227",7040,9.21,g,10.0,Organic
+,,,,,,"18/11/2020,  24 bed m, Ra.1 > L2 > Beds 123-124",14080,18.43,g,10.0,Organic
+,,,,,,"31/12/2020,  12 bed m, Ra.2 > C2 > Bed 223",7040,9.21,g,10.0,Organic
+Carrots,Purple Haze,2019,1890,2.47,g,"27/1/2020,  12 bed m, Ra.3 > R1 > Bed 311",1890,2.47,g,5.0,Organic
+Carrots,Purple Haze,2020,1890,2.47,g,"31/12/2020,  12 bed m, Ra.2 > C1 > Bed 214",1890,2.47,g,5.0,Organic
+Cauliflower,Generic Variety,2019,84,0.37,g,"1/10/2020,  12 bed m, Zvika > zB > Bed 523",84,0.37,g,0.0,Organic
+Cauliflower,Veronica,2020,189,0.83,g,"2/12/2020,  24 bed m, Zvika > zA > Beds 510-511",189,0.83,g,0.0,Organic
+Celery,Generic Variety,2019,210,0.09,g,"23/7/2020,  5 bed m, Ra.1 > L1 > Bed 110",210,0.09,g,0.0,Organic
+Celery,Gigante Dorato,2019,252,0.11,g,"27/8/2020,  12 bed m, Ra.3 > R1 > Bed 314",252,0.11,g,0.0,Organic
+Celery,Gigante Dorato,2020,504,0.22,g,"30/9/2020,  12 bed m, Ra.1 > L1 > Bed 113",252,0.11,g,0.0,Organic
+,,,,,,"30/12/2020,  12 bed m, Zvika > zB > Bed 523",252,0.11,g,0.0,Organic
+Celery,hyd. Giant Dorato,2020,780,0.36,g,"11/2/2021,  288 plants, Hyd. S - no beds selected",374,0.19,g,0.0,Organic
+,,,,,,"4/3/2021,  192 plants, Hyd. S - no beds selected",406,0.17,g,0.0,Organic
+Celery,hyd. Samba,2019,260,0.11,g,"25/8/2020,  200 plants, Field not assigned",260,0.11,g,0.0,Organic
+Celery,hyd. ספרטקוס,2019,520,0.22,g,"25/8/2020,  400 plants, Field not assigned",520,0.22,g,0.0,Organic
+Chard,Bright Lights,2019,581,8.81,g,"25/6/2020,  12 bed m, Ra.2 > C2 > Bed 221",269,4.08,g,0.0,Organic
+,,,,,,"10/4/2020,  12 bed m, Ra.2 > C2 > Bed 219",312,4.73,g,0.0,Organic
+Chard,Bright Lights,2020,156,3.12,g,"29/10/2020,  12 bed m, Ra.1 > L2 > Bed 129",156,3.12,g,0.0,Organic
+Chard,Fordhook Giant,2019,117,1.77,g,"13/7/2020,  12 bed m, Ra.3 > R2 > Bed 318",117,1.77,g,0.0,
+,,,,,,"21/5/2020,  12 bed m, Ra.2 > C1 > Bed 214",0,0.0,g,0.0,
+Chard,Fordhook Giant,2020,315,5.34,g,"1/1/2021,  12 bed m, Zvika > zA > Bed 509",117,2.34,g,0.0,
+,,,,,,"22/10/2020,  12 bed m, Ra.1 > L2 > Bed 130",99,1.5,g,0.0,
+,,,,,,"30/12/2020,  12 bed m, Ra.1 > L2 > Bed 127",99,1.5,g,0.0,
+Chard,Generic Variety,2019,132,2.64,g,"30/7/2020,  12 bed m, Ra.2 > C2 > Bed 226",132,2.64,g,0.0,
+Chard,Silverado,2019,311,4.71,g,"18/3/2020,  12 bed m, Ra.1 > L2 > Bed 121",311,4.71,g,0.0,
+Chard,Silverado,2020,156,3.12,g,"1/1/2021,  12 bed m, Zvika > zA > Bed 505",156,3.12,g,0.0,Organic
+Chard,נפולי - ראש,2019,99,1.5,g,"21/5/2020,  12 bed m, Ra.1 > L1 > Bed 117",99,1.5,g,0.0,
+Chives,Common,2020,936,1.28,g,"30/11/2020,  6 bed m, Ra.2 > C6m > Bed 204",936,1.28,g,0.0,
+Chives,Generic Variety,2019,5834,7.95,g,"9/7/2020,  6 bed m, Ra.2 > C6m > Bed 205",3023,4.12,g,0.0,Organic
+,,,,,,"21/5/2020,  6 bed m, Ra.2 > C6m > Bed 206",2811,3.83,g,0.0,
+Chives,Generic Variety,2020,2811,3.83,g,"13/10/2020,  6 bed m, Ra.2 > C6m > Bed 206",2811,3.83,g,0.0,
+Cilantro,Generic Variety,2020,240,2.76,g,"17/9/2020,  6 bed m, Ra.1 > L6m > Bed 101",240,2.76,g,0.0,
+Cilantro,Santirini - נטע,2019,48189,602.22,g,"19/2/2020,  12 bed m, Ra.1 > L2 > Bed 122",5171,59.44,g,0.0,Organic
+,,,,,,"11/3/2020,  12 bed m, Ra.2 > C2 > Bed 221",5171,59.44,g,0.0,Organic
+,,,,,,"1/4/2020,  12 bed m, Ra.1 > L1 > Bed 115",5171,59.44,g,0.0,Organic
+,,,,,,"6/5/2020,  12 bed m, Ra.2 > C2 > Bed 221",4668,53.66,g,0.0,Organic
+,,,,,,"21/5/2020,  12 bed m, Field not assigned",4668,53.66,g,0.0,Organic
+,,,,,,"14/5/2020,  12 bed m, Ra.1 > L1 > Bed 113",4668,53.66,g,0.0,Organic
+,,,,,,"25/6/2020,  12 bed m, Ra.2 > C2 > Bed 219",4668,53.66,g,0.0,Organic
+,,,,,,"11/6/2020,  12 bed m, Ra.2 > C2 > Bed 225",4668,53.66,g,0.0,Organic
+,,,,,,"19/8/2020,  12 bed m, Field not assigned",4668,77.8,g,0.0,Organic
+,,,,,,"2/9/2020,  12 bed m, Ra.2 > C2 > Bed 223",4668,77.8,g,0.0,Organic
+Cilantro,Santirini - נטע,2020,23862,397.7,g,"8/10/2020,  12 bed m, Ra.2 > C2 > Bed 222",4668,77.8,g,0.0,Organic
+,,,,,,"7/1/2021,  12 bed m, Ra.3 > R1 > Bed 305",5171,86.18,g,0.0,Organic
+,,,,,,"29/10/2020,  12 bed m, Ra.3 > R2 > Bed 317",4668,77.8,g,0.0,Organic
+,,,,,,"9/12/2020,  12 bed m, Ra.3 > R2 > Bed 319",4687,78.12,g,0.0,Organic
+,,,,,,"21/1/2021,  12 bed m, Ra.3 > R3 > Bed 332",4668,77.8,g,0.0,Organic
+Cilantro,רימיני 77,2019,23736,272.84,g,"30/7/2020,  12 bed m, Ra.2 > C2 > Bed 225",4668,53.66,g,0.0,Organic
+,,,,,,"13/7/2020,  12 bed m, Ra.1 > L1 > Bed 116",7200,82.76,g,0.0,
+,,,,,,"20/8/2020,  12 bed m, Ra.2 > C2 > Bed 220",7200,82.76,g,0.0,Organic
+,,,,,,"9/7/2020,  12 bed m, Ra.1 > L1 > Bed 118",4668,53.66,g,0.0,Organic
+Cress,Garden Broadleaf,2019,9240,4.62,g,"27/1/2020,  3 bed m, Ra.1 > L2 > Bed 129",5280,2.64,g,10.0,Organic
+,,,,,,"17/2/2020,  3 bed m, Ra.1 > L2 > Bed 129",3960,1.98,g,10.0,Organic
+Cress,Watercress,2020,756,0.38,g,"23/9/2020,  6 bed m, Ra.2 > C6m > Bed 207",378,0.19,g,0.0,
+,,,,,,"2/12/2020,  8 bed m, Ra.1 > L1 > Bed 110",378,0.19,g,0.0,
+Cucumbers,Facus - פאקוס,2019,182,6.07,g,"11/6/2020,  18 bed m, Ra.2 > C6m > Beds 201, 204, 207",78,2.6,g,0.0,
+,,,,,,"27/4/2020,  24 bed m, Ra.3 > R2 > Beds 318, 322",78,2.6,g,0.0,
+,,,,,,"14/5/2020,  12 bed m, Ra.3 > R1 > Bed 314",26,0.87,g,0.0,
+Dill,Dukat,2019,600,0.99,g,"30/7/2020,  6 bed m, Ra.1 > L6m > Bed 102",600,0.99,g,0.0,
+Dill,Generic Variety,2020,520,0.86,g,"2/9/2020,  8 bed m, Ra.2 > C1 > Bed 216",520,0.86,g,0.0,
+Dill,אמליה,2019,20157,33.49,g,"11/6/2020,  12 bed m, Field not assigned",6223,10.25,g,0.0,
+,,,,,,"19/2/2020,  10 bed m, Ra.1 > L2 > Bed 123",3465,5.71,g,0.0,
+,,,,,,"6/5/2020,  18 bed m, Ra.1 > L1 > Beds 115-116",3112,5.13,g,0.0,
+,,,,,,"18/3/2020,  6 bed m, Ra.2 > C6m > Bed 204",3465,5.71,g,0.0,
+,,,,,,"9/7/2020,  12 bed m, Ra.1 > L1 > Bed 113",3112,5.13,g,0.0,
+,,,,,,"30/9/2020,  12 bed m, Ra.2 > C2 > Bed 225",780,1.56,g,0.0,Organic
+Dill,אמליה,2020,21823,43.65,g,"22/10/2020,  6 bed m, Ra.1 > L6m > Bed 102",6223,12.45,g,0.0,Organic
+,,,,,,"23/11/2020,  6 bed m, Ra.2 > C6m > Bed 202",6250,12.5,g,0.0,Organic
+,,,,,,"2/12/2020,  12 bed m, Ra.1 > L1 > Bed 114",4985,9.97,g,0.0,Organic
+,,,,,,"21/1/2021,  12 bed m, Ra.2 > C2 > Bed 219",4365,8.73,g,0.0,Organic
+Eggplant,Aragon - חישתיל,2019,25,0.11,g,"16/4/2020,  12 bed m, Ra.3 > R2 > Bed 324",25,0.11,g,0.0,
+Eggplant,בלאדי - יעל,2019,164,0.7,g,"20/4/2020,  24 bed m, Ra.3 > R2 > Beds 325-326",164,0.7,g,0.0,
+Fennel,Generic Variety,2019,1679,8.44,g,"24/8/2020,  12 bed m, Field not assigned",626,3.13,g,0.0,
+,,,,,,"13/8/2020,  15 bed m, Ra.2 > C1 > Beds 213-214",300,1.5,g,0.0,
+,,,,,,"23/7/2020,  12 bed m, Ra.1 > L1 > Bed 115",240,1.2,g,0.0,
+,,,,,,"27/8/2020,  10 bed m, Ra.2 > C2 > Bed 217",200,1.0,g,0.0,
+,,,,,,"20/2/2020  · Plant Sale, 280 plants",313,1.61,g,0.0,
+Fennel,Orion,2019,480,2.4,g,"25/8/2020,  24 bed m, Field not assigned",480,2.4,g,0.0,
+Fennel,Orion,2020,2621,13.11,g,"30/9/2020,  12 bed m, Ra.3 > R1 > Bed 308",240,1.2,g,0.0,
+,,,,,,"23/11/2020,  12 bed m, Ra.1 > L1 > Bed 120",240,1.2,g,0.0,
+,,,,,,"29/10/2020,  12 bed m, Ra.2 > C1 > Bed 209",626,3.13,g,0.0,
+,,,,,,"1/1/2021,  12 bed m, Zvika > zA > Bed 504",312,1.56,g,0.0,Organic
+,,,,,,"13/1/2021,  18 bed m, Ra.1 > L1 > Beds 114-115",577,2.89,g,0.0,Organic
+,,,,,,"23/12/2020,  12 bed m, Ra.3 > R1 > Bed 307",626,3.13,g,0.0,Organic
+Garlic,שני - מהגינה,2020,4830,25.98,kg,"8/10/2020,  36 bed m, HH > C > Beds 16-18",2070,12.18,kg,15.0,
+,,,,,,"22/10/2020,  36 bed m, Ra.4 > Lo24 > Beds 401-402",2760,13.8,kg,15.0,Organic
+Gourds,Generic Variety,2019,15,0.0,g,"9/7/2020,  12 bed m, Zvika > zB > Bed 514",15,0.0,g,0.0,
+Jicama,Generic Variety,2019,789,78.9,g,"2/7/2020,  24 bed m, Ra.3 > R1 > Beds 312-313",469,46.9,g,0.0,Organic
+,,,,,,"8/6/2020,  12 bed m, Zvika > zB > Bed 518",320,32.0,g,0.0,Organic
+Jicama,Itay,2019,264,26.4,g,"22/6/2020,  24 bed m, Ra.3 > R1 > Beds 305-306",264,26.4,g,10.0,
+Kale,Lacinato (Dinosaur),2019,349,1.75,g,"12/7/2020,  12 bed m, HH > C > Bed 18",349,1.75,g,0.0,
+Kale,Lacinato (Dinosaur),2020,234,1.17,g,"7/10/2020,  24 bed m, HH > C > Beds 14-15",234,1.17,g,0.0,
+Kale,Red Russian,2019,15840,79.2,g,"30/7/2020,  6 bed m, Ra.1 > L2 > Bed 125",10560,52.8,g,10.0,Organic
+,,,,,,"19/2/2020,  3 bed m, Ra.2 > C6m > Bed 206",5280,26.4,g,10.0,
+Kale,Red Russian,2020,21120,105.6,g,"30/9/2020,  6 bed m, Ra.1 > L2 > Bed 122",10560,52.8,g,10.0,Organic
+,,,,,,"2/12/2020,  6 bed m, Ra.2 > C2 > Bed 221",10560,52.8,g,10.0,Organic
+Kale,White Russian,2019,154,0.77,g,"24/5/2020,  12 bed m, HH > C > Bed 14",154,0.77,g,0.0,
+Kale,גומן,2020,335,1.68,g,"8/10/2020,  12 bed m, Zvika > zB > Bed 518",23,0.12,g,0.0,
+,,,,,,"30/12/2020,  12 bed m, Ra.1 > L2 > Bed 125",312,1.56,g,0.0,
+Kohlrabi,Generic Variety,2019,252,1.2,g,"6/1/2020,  12 bed m, Ra.3 > R1 > Bed 312",252,1.2,g,0.0,
+Kohlrabi,Generic Variety,2020,504,2.4,g,"2/11/2020,  12 bed m, Ra.2 > C2 > Bed 220",252,1.2,g,0.0,
+,,,,,,"30/9/2020,  12 bed m, Ra.3 > R1 > Bed 307",252,1.2,g,0.0,
+Kohlrabi,Konmar,2019,1043,4.97,g,"9/7/2020,  6 bed m, Ra.2 > C1 > Bed 216",140,0.67,g,0.0,
+,,,,,,"23/7/2020,  12 bed m, Ra.1 > L1 > Bed 114",252,1.2,g,0.0,
+,,,,,,"13/8/2020,  15 bed m, Ra.2 > C1 > Beds 213, 215",441,2.1,g,0.0,
+,,,,,,"27/8/2020,  10 bed m, Ra.2 > C2 > Bed 218",210,1.0,g,0.0,
+Kohlrabi,קרף - נטע,2019,313,1.49,g,"26/3/2020,  12 bed m, Field not assigned",313,1.49,g,0.0,
+Kohlrabi,קרף - נטע,2020,939,4.55,g,"23/11/2020,  18 bed m, Ra.2 > C1 > Beds 215-216",313,1.49,g,0.0,
+,,,,,,"10/12/2020,  12 bed m, Zvika > zA > Bed 503",313,1.49,g,0.0,
+,,,,,,"23/12/2020,  12 bed m, Ra.2 > C2 > Bed 217",313,1.57,g,0.0,
+Leeks,Alto,2019,756,2.49,g,"19/8/2020,  20 bed m, Zvika > zB > Beds 520-521",504,1.66,g,0.0,
+,,,,,,"8/6/2020,  12 bed m, Zvika > zB > Bed 519",252,0.83,g,0.0,
+Leeks,Alto,2020,630,2.08,g,"27/10/2020,  12 bed m, Ra.1 > L6m > Beds 104-105",252,0.83,g,0.0,
+,,,,,,"2/12/2020,  18 bed m, Ra.1 > L6m > Beds 106-108",378,1.25,g,0.0,
+Leeks,Generic Variety,2019,1499,4.95,g,"30/7/2020,  24 bed m, Field not assigned",623,2.06,g,0.0,
+,,,,,,"30/7/2020,  10 bed m, Ra.3 > R1 > Bed 305",252,0.83,g,0.0,
+,,,,,,"13/4/2020,  12 bed m, Field not assigned",312,1.03,g,0.0,
+,,,,,,"26/3/2020,  12 bed m, Field not assigned",312,1.03,g,0.0,
+Lemon Verbena,Generic Variety,2019,40,0.0,,"25/5/2020,  6 bed m, HH > B > Bed 9",40,0.0,,0.0,
+,,,,,,"22/8/2020  · Plant Sale, 50 plants",0,0.0,,0.0,
+Lettuce,936 רומית,2019,483,0.58,g,"31/8/2020,  12 bed m, Ra.3 > R1 > Bed 315",168,0.19,g,0.0,
+,,,,,,"13/8/2020,  18 bed m, Zvika > zB > Beds 524-525",315,0.39,g,0.0,
+Lettuce,936 רומית,2020,462,0.56,g,"14/9/2020,  12 bed m, Ra.2 > C1 > Bed 209",168,0.19,g,0.0,
+,,,,,,"5/11/2020,  12 bed m, Field not assigned",126,0.16,g,0.0,
+,,,,,,"2/11/2020,  12 bed m, Zvika > zB > Bed 522",168,0.21,g,0.0,
+Lettuce,Generic Variety,2019,240,0.3,g,"23/7/2020,  24 bed m, Zvika - no beds selected",240,0.3,g,0.0,
+Lettuce,hyd. ערבית - נהורה נטע,2019,2354,2.73,g,"21/5/2020,  12 bed m, Field not assigned",217,0.25,g,0.0,
+,,,,,,"22/6/2020,  18 bed m, Zvika - no beds selected",336,0.38,g,0.0,
+,,,,,,"20/7/2020,  12 bed m, Field not assigned",336,0.38,g,0.0,
+,,,,,,"19/8/2020,  12 bed m, Ra.2 > C1 > Bed 212",336,0.42,g,0.0,
+,,,,,,"25/3/2020,  18 bed m, HH > A > Beds 1-3",297,0.34,g,0.0,
+,,,,,,"29/4/2020,  12 bed m, Field not assigned",208,0.24,g,0.0,
+,,,,,,"7/4/2020,  12 bed m, Field not assigned",208,0.24,g,0.0,
+,,,,,,"27/2/2020  · Plant Sale, 200 plants",208,0.24,g,0.0,
+,,,,,,"27/2/2020  · Plant Sale, 200 plants",208,0.24,g,0.0,
+Lettuce,hyd. ערבית - נהורה נטע,2020,1036,1.28,g,"18/11/2020,  12 bed m, Ra.1 > L1 > Bed 117",335,0.42,g,0.0,
+,,,,,,"2/12/2020,  12 bed m, Zvika > zA > Bed 507",168,0.21,g,0.0,
+,,,,,,"9/12/2020,  12 bed m, Ra.3 > R3 > Bed 330",335,0.42,g,0.0,
+,,,,,,"30/12/2020,  12 bed m, Ra.3 > R1 > Bed 312",198,0.23,g,0.0,
+Lettuce,Iceberg,2019,782,0.92,g,"1/4/2020,  12 bed m, Ra.3 > R1 > Bed 312",160,0.18,g,0.0,
+,,,,,,"30/4/2020,  6 bed m, Ra.1 > L2 > Bed 123",90,0.1,g,0.0,
+,,,,,,"14/5/2020,  12 bed m, Ra.3 > R1 > Bed 312",120,0.14,g,0.0,
+,,,,,,"8/6/2020,  12 bed m, Zvika > zB > Bed 524",126,0.16,g,0.0,
+,,,,,,"31/8/2020,  12 bed m, Ra.3 > R2 > Bed 320",126,0.16,g,0.0,
+,,,,,,"13/4/2020,  12 bed m, Ra.3 > R1 > Bed 307",160,0.18,g,0.0,
+Lettuce,Iceberg,2020,126,0.16,g,"2/9/2020,  12 bed m, Ra.2 > C1 > Bed 210",126,0.16,g,0.0,
+Lettuce,IceBerg - לימור,2020,462,0.58,g,"13/9/2020,  12 bed m, Ra.1 > L2 > Bed 132",126,0.16,g,0.0,
+,,,,,,"12/11/2020,  12 bed m, Ra.3 > R3 > Bed 333",168,0.21,g,0.0,
+,,,,,,"30/12/2020,  18 bed m, Ra.4 > Lo18 > Bed 405",168,0.21,g,0.0,
+Lettuce,May queen - Regina di Maggio,2020,2009,2.3,g,"18/11/2020,  12 bed m, Ra.2 > C1 > Bed 210",753,0.86,g,0.0,
+,,,,,,"21/1/2021,  12 bed m, Ra.3 > R6m > Beds 301, 304",1256,1.44,g,0.0,
+Lettuce,Salanova - רם שחר,2019,189,0.22,g,"1/1/2020,  12 bed m, Ra.3 > R3 > Bed 336",189,0.22,g,0.0,
+Lettuce,Salanova - רם שחר,2020,336,0.38,g,"21/9/2020,  24 bed m, Ra.1 > L1 > Beds 116, 120",336,0.38,g,0.0,
+Lettuce,Samba - אדומה,2019,744,0.89,g,"22/6/2020,  18 bed m, Zvika - no beds selected",336,0.38,g,0.0,
+,,,,,,"30/7/2020,  12 bed m, Field not assigned",24,0.03,g,0.0,
+,,,,,,"20/7/2020,  12 bed m, Field not assigned",24,0.03,g,0.0,
+,,,,,,"19/8/2020,  12 bed m, Ra.2 > C1 > Bed 211",336,0.42,g,0.0,Organic
+,,,,,,"26/8/2020,  12 bed m, Field not assigned",24,0.03,g,0.0,
+Lettuce,Samba - אדומה,2020,446,0.56,g,"18/11/2020,  9 bed m, Ra.2 > C2 > Bed 228",446,0.56,g,0.0,Organic
+Lettuce,מיאל - אדומה,2019,120,0.15,g,"31/8/2020,  12 bed m, Ra.2 > C1 > Bed 210",120,0.15,g,0.0,
+Lettuce,מסולסלת מעורב,2019,1358,1.55,g,"19/2/2020,  12 bed m, Ra.3 > R2 > Bed 322",248,0.28,g,0.0,
+,,,,,,"18/3/2020,  12 bed m, Ra.1 > L2 > Bed 125",248,0.28,g,0.0,
+,,,,,,"7/4/2020,  12 bed m, Field not assigned",225,0.26,g,0.0,
+,,,,,,"23/4/2020,  12 bed m, Ra.2 > C2 > Bed 225",189,0.22,g,0.0,
+,,,,,,"10/4/2020,  12 bed m, Ra.1 > L1 > Bed 117",225,0.26,g,0.0,
+,,,,,,"27/2/2020  · Plant Sale, 200 plants",223,0.25,g,0.0,
+Lettuce,מסולסלת מעורב,2019,132,0.15,g,"21/5/2020,  12 bed m, Ra.1 > L1 > Bed 118",132,0.15,g,0.0,
+Lettuce,מסולסלת מעורב,2020,294,0.35,g,"5/11/2020,  12 bed m, Ra.2 > C1 > Bed 211",126,0.16,g,0.0,
+,,,,,,"2/12/2020,  12 bed m, Zvika > zA > Bed 506",168,0.19,g,0.0,
+Lettuce,מסולסלת מעורב,2020,381,0.44,g,"20/1/2021,  12 bed m, HH > C > Bed 15",381,0.44,g,0.0,
+Lettuce,מסולסלת מעורב,2020,126,0.14,g,"2/11/2020,  12 bed m, Ra.3 > R2 > Bed 322",126,0.14,g,0.0,
+Lettuce,ערבית - רם שחר,2019,1215,1.43,g,"30/4/2020,  11 bed m, Ra.1 > L2 > Bed 123",147,0.17,g,0.0,
+,,,,,,"30/7/2020,  24 bed m, Zvika - no beds selected",264,0.3,g,0.0,
+,,,,,,"10/7/2020,  24 bed m, Zvika - no beds selected",240,0.3,g,0.0,
+,,,,,,"23/4/2020,  12 bed m, Ra.2 > C2 > Bed 224",132,0.15,g,0.0,
+,,,,,,"14/5/2020,  12 bed m, Ra.3 > R1 > Bed 313",132,0.15,g,0.0,
+,,,,,,"8/6/2020,  6 bed m, Zvika > zB > Bed 525",132,0.17,g,0.0,
+,,,,,,"7/4/2020,  12 bed m, Ra.1 > L1 > Bed 118",168,0.19,g,0.0,
+Lettuce,ערבית צהובת עלים,2020,168,0.21,g,"30/12/2020,  12 bed m, Ra.3 > R2 > Bed 318",168,0.21,g,0.0,
+Lettuce,רונה לי - מסולסלת,2020,132,0.17,g,"10/9/2020,  12 bed m, Ra.2 > C2 > Bed 226",132,0.17,g,0.0,
+Lettuce: Salad Mix,Chicory,2019,10560,13.27,g,"26/2/2020,  8 bed m, Ra.1 > L1 > Bed 111",10560,13.27,g,10.0,
+Lettuce: Salad Mix,Franchi Mix,2019,1211,1.52,g,"1/4/2020,  12 bed m, Field not assigned",433,0.54,g,0.0,
+,,,,,,"7/4/2020,  12 bed m, Field not assigned",778,0.98,g,0.0,
+Lettuce: Salad Mix,Mesclun Mix,2019,411360,566.41,g,"25/6/2020,  24 bed m, Ra.1 > L2 > Beds 123-124",21120,26.53,g,5.0,
+,,,,,,"16/7/2020,  24 bed m, Ra.1 > L1 > Beds 119-120",18480,23.22,g,5.0,
+,,,,,,"6/1/2020,  24 bed m, HH > C > Beds 14-15",21120,26.53,g,10.0,
+,,,,,,"22/1/2020,  12 bed m, HH > C > Bed 13",7920,9.95,g,10.0,
+,,,,,,"9/2/2020,  24 bed m, HH > B > Beds 8-9",21120,26.53,g,10.0,
+,,,,,,"12/3/2020,  24 bed m, HH > B > Beds 11-12",21120,26.53,g,10.0,
+,,,,,,"2/4/2020,  24 bed m, HH > C > Beds 13-14",21120,26.53,g,10.0,
+,,,,,,"13/4/2020,  24 bed m, Ra.1 > L2 > Beds 128-129",21120,26.53,g,10.0,
+,,,,,,"6/5/2020,  24 bed m, Ra.1 > L2 > Beds 125-126",21120,26.53,g,10.0,
+,,,,,,"28/5/2020,  24 bed m, Ra.1 > L1 > Beds 119-120",21120,26.53,g,10.0,
+,,,,,,"18/6/2020,  24 bed m, Ra.1 > L2 > Beds 130-131",63360,79.6,g,5.0,
+,,,,,,"1/7/2020,  12 bed m, Ra.1 > L2 > Bed 132",31680,39.8,g,5.0,
+,,,,,,"30/7/2020,  24 bed m, Ra.1 > L2 > Beds 121-122",60480,100.8,g,5.0,
+,,,,,,"13/8/2020,  24 bed m, Ra.1 > L2 > Beds 130-131",60480,100.8,g,5.0,
+Lettuce: Salad Mix,Mesclun Mix,2020,211680,340.39,g,"14/10/2020,  24 bed m, Ra.3 > R3 > Beds 334-335",60480,100.8,g,5.0,
+,,,,,,"7/10/2020,  12 bed m, Ra.3 > R2 > Bed 324",10080,12.66,g,5.0,
+,,,,,,"21/12/2020,  24 bed m, Ra.3 > R3 > Beds 334-335",20160,25.33,g,5.0,
+,,,,,,"2/9/2020,  12 bed m, Ra.3 > R2 > Bed 327",30240,50.4,g,5.0,
+,,,,,,"17/9/2020,  24 bed m, Ra.3 > R2 > Bed 323 + 1 more Block",60480,100.8,g,5.0,
+,,,,,,"2/11/2020,  12 bed m, Ra.3 > R2 > Bed 320",30240,50.4,g,5.0,
+Lettuce: Salad Mix,Nussly,2020,376,0.47,g,"20/1/2021,  6 bed m, Ra.2 > C6m > Bed 205",376,0.47,g,0.0,
+Lettuce: Salad Mix,Ricciolina  Da Taglio,2019,3960,4.97,g,"9/2/2020,  12 bed m, HH > B > Bed 11",3960,4.97,g,10.0,Organic
+Lettuce: Salad Mix,Salanova® Home Garden Mix,2020,754,0.95,g,"7/12/2020,  12 bed m, Ra.3 > R3 > Bed 329",252,0.32,g,0.0,
+,,,,,,"7/10/2020,  12 bed m, Ra.3 > R3 > Bed 336",250,0.31,g,0.0,
+,,,,,,"30/12/2020,  12 bed m, Ra.3 > R2 > Bed 327",252,0.32,g,0.0,
+Lettuce: Salad Mix,נטע מיקס - Luna Nera+Cavalo,2019,778,0.98,g,"6/5/2020,  12 bed m, Field not assigned",778,0.98,g,0.0,
+Lettuce: Salad Mix,נטע מיקס - Luna Nera+Cavalo,2020,3960,4.97,g,"2/11/2020,  12 bed m, Ra.3 > R1 > Bed 315",3960,4.97,g,5.0,Organic
+Lovage,Generic Variety,2020,205,0.65,g,"2/12/2020,  12 bed m, Ra.2 - no beds selected",205,0.65,g,0.0,Organic
+Lovage,Lovage,2019,136,0.43,g,"1/4/2020,  12 bed m, Field not assigned",136,0.43,g,0.0,Organic
+Melons,Hustan - הוסטאן,2019,78,2.6,g,"11/3/2020,  24 bed m, Ra.2 > C1 > Bed 212 + 1 more Block",78,2.6,g,0.0,
+Melons,Rymond - ריימונד,2019,63,2.1,g,"6/4/2020,  24 bed m, Ra.2 > C1 > Beds 210-211",63,2.1,g,0.0,
+Mint,Common Mint,2019,60,0.01,g,"28/5/2020,  6 bed m, side > 200 > Bed 3",60,0.01,g,0.0,
+Mint,Doublemint,2019,60,0.01,g,"31/1/2020,  6 bed m, side > 300 > Bed 4",60,0.01,g,0.0,
+Mizuna,Generic Variety,2019,18480,61.6,g,"30/7/2020,  6 bed m, Ra.1 > L2 > Bed 125",10560,35.2,g,10.0,
+,,,,,,"11/6/2020,  6 bed m, Ra.1 > L2 > Bed 121",2640,8.8,g,10.0,
+,,,,,,"12/3/2020,  6 bed m, Ra.2 > C2 > Bed 222",2640,8.8,g,10.0,
+,,,,,,"6/1/2020,  6 bed m, Ra.1 > L6m > Bed 106",2640,8.8,g,10.0,
+Mizuna,Generic Variety,2020,10560,35.2,g,"30/9/2020,  6 bed m, Ra.1 > L2 > Bed 121",10560,35.2,g,10.0,
+Mizuna,mix red&green,2020,10560,35.2,g,"2/12/2020,  6 bed m, Ra.2 > C2 > Bed 222",10560,35.2,g,10.0,
+Mustard,Double Face,2019,5040,11.2,g,"13/8/2020,  6 bed m, Ra.1 > L2 > Bed 132",5040,11.2,g,5.0,
+Mustard,Generic Variety,2020,10080,17.78,g,"30/9/2020,  6 bed m, Ra.1 > L2 > Bed 121",10080,17.78,g,5.0,Organic
+Mustard,Red Giant,2019,15120,28.99,g,"10/4/2020,  6 bed m, Ra.2 > C6m > Bed 207",5040,8.89,g,5.0,Organic
+,,,,,,"13/8/2020,  6 bed m, Ra.1 > L2 > Bed 132",5040,11.2,g,5.0,
+,,,,,,"11/6/2020,  6 bed m, Ra.1 > L2 > Bed 121",5040,8.9,g,5.0,
+Mustard,Red Giant,2020,5040,8.89,g,"2/12/2020,  6 bed m, Ra.2 > C2 > Bed 222",5040,8.89,g,5.0,Organic
+New Zealand Spinach,Tetragonia Specialty,2019,1301,74.97,g,"10/9/2020,  12 bed m, HH > B > Bed 8",706,35.3,g,0.0,
+,,,,,,"11/3/2020,  24 bed m, HH > C > Beds 16-17",360,24.0,g,0.0,
+,,,,,,"1/4/2020,  12 bed m, HH > C > Bed 15",235,15.67,g,0.0,
+New Zealand Spinach,Tetragonia Specialty,2020,2309,76.96,g,"7/10/2020,  12 bed m, HH > C > Bed 13",706,23.53,g,0.0,
+,,,,,,"2/12/2020,  12 bed m, HH > C > Bed 14",198,6.6,g,0.0,
+,,,,,,"22/10/2020,  12 bed m, Ra.1 > L2 > Bed 131",1405,46.83,g,0.0,Organic
+Okra,Kandahar Pendi,2019,924,46.2,g,"8/6/2020,  24 bed m, Zvika > zB > Beds 522-523",672,33.6,g,0.0,
+,,,,,,"27/5/2020,  18 bed m, Ra.4 > Lo18 > Bed 404",252,12.6,g,0.0,
+Onions: Scallions,Generic Variety,2019,4381,14.6,g,"13/4/2020,  6 bed m, Ra.1 > L6m > Bed 106",315,1.05,g,0.0,
+,,,,,,"30/4/2020,  4 bed m, Ra.1 > L6m > Bed 107",126,0.42,g,0.0,
+,,,,,,"28/5/2020,  4 bed m, Ra.2 > C6m > Bed 206",252,0.84,g,0.0,
+,,,,,,"28/6/2020,  5 bed m, Ra.3 > R1 > Bed 311",250,0.83,g,0.0,
+,,,,,,"10/7/2020,  2 bed m, Ra.3 > R1 > Bed 311",120,0.4,g,0.0,
+,,,,,,"9/8/2020,  120 plants, Ra.3 > R1 > Bed 305",390,1.3,g,0.0,
+,,,,,,"12/2/2020,  6 bed m, Ra.2 > C6m > Bed 204",1980,6.6,g,0.0,
+,,,,,,"27/4/2020,  6 bed m, Ra.1 > L1 > Bed 115",468,1.56,g,0.0,
+,,,,,,"14/5/2020,  5 bed m, Ra.1 > L2 > Bed 122",480,1.6,g,0.0,
+Onions: Scallions,hyd. Aldorado,2019,205,0.68,g,"25/8/2020,  195 plants, Field not assigned",205,0.68,g,0.0,
+Onions: Scallions,Red Bunching,2019,1874,6.25,g,"28/6/2020,  2.5 bed m, Ra.3 > R1 > Bed 311",1874,6.25,g,0.0,
+Onions: Scallions,Red Bunching,2020,753,2.51,g,"7/12/2020,  3.3 bed m, Ra.1 > L1 > Bed 110",267,0.89,g,0.0,
+,,,,,,"18/11/2020,  6 bed m, Ra.3 > R1 > Bed 310",486,1.62,g,0.0,
+Onions: Scallions,Summer Time,2020,452,1.51,g,"30/9/2020,  480 plants, Ra.3 > R3 > Bed 331",452,1.51,g,0.0,
+Onions: Scallions,אלדורדו,2019,24009,80.02,g,"28/6/2020,  2.5 bed m, Ra.3 > R1 > Bed 311",2016,6.72,g,0.0,
+,,,,,,"25/3/2020,  6 bed m, Ra.1 > L6m > Bed 104",2970,9.9,g,0.0,
+,,,,,,"23/7/2020,  2 bed m, Ra.2 > C6m > Bed 208",3748,12.49,g,0.0,
+,,,,,,"19/8/2020,  6 bed m, Ra.2 > C1 > Bed 213",3748,12.49,g,0.0,
+,,,,,,"10/9/2020,  3 bed m, Ra.2 > C6m > Bed 208",3748,12.49,g,0.0,
+,,,,,,"16/9/2020,  3 bed m, Ra.2 > C6m > Bed 208",3748,12.49,g,0.0,
+,,,,,,"4/6/2020,  6 bed m, HH > B > Bed 8",4031,13.44,g,0.0,
+Onions: Scallions,אלדורדו,2020,6718,22.39,g,"29/10/2020,  4 bed m, Ra.3 > R1 > Bed 311",2505,8.35,g,0.0,
+,,,,,,"18/11/2020,  6 bed m, Ra.3 > R1 > Bed 310",3745,12.48,g,0.0,
+,,,,,,"30/12/2020,  6 bed m, Ra.2 > C6m > Bed 203",468,1.56,g,0.0,
+Oregano,Generic Variety,2019,118,0.01,g,"1/11/2020  · Plant Sale, 30 plants",118,0.01,g,0.0,
+Pac Choi (Bok Choy),Generic Variety,2019,993,2.38,g,"22/6/2020,  12 bed m, Zvika - no beds selected",233,0.55,g,0.0,
+,,,,,,"30/7/2020,  12 bed m, Ra.1 > L2 > Bed 128",233,0.58,g,0.0,
+,,,,,,"10/2/2020,  12 bed m, Ra.1 > L2 > Bed 125",233,0.55,g,0.0,
+,,,,,,"6/1/2020,  6 bed m, Ra.1 > L6m > Bed 104",126,0.3,g,0.0,
+,,,,,,"27/8/2020,  12 bed m, Ra.3 > R3 > Bed 333",168,0.4,g,0.0,
+Pac Choi (Bok Choy),Generic Variety,2020,486,1.14,g,"18/11/2020,  12 bed m, Ra.2 > C2 > Bed 223",252,0.59,g,0.0,
+,,,,,,"2/12/2020,  12 bed m, Zvika > zA > Bed 508",234,0.55,g,0.0,
+Pac Choi (Bok Choy),Yuushou,2019,156,0.39,g,"26/8/2020,  12 bed m, Field not assigned",156,0.39,g,0.0,
+Parsley,Generic Variety,2019,852,1.42,g,"12/2/2020,  12 bed m, Ra.2 > C2 > Bed 226",600,1.0,g,0.0,
+,,,,,,"25/3/2020,  6 bed m, Ra.2 > C2 > Bed 218",252,0.42,g,0.0,
+Parsley,Generic Variety,2020,630,1.05,g,"8/10/2020,  12 bed m, Ra.2 > C2 > Bed 221",630,1.05,g,0.0,
+Parsley,Green Perle - מסולסלת,2019,8421,14.07,g,"19/2/2020,  6 bed m, Ra.1 > L6m > Bed 103",4310,7.2,g,0.0,
+,,,,,,"25/3/2020,  6 bed m, Ra.2 > C2 > Bed 218",2166,3.62,g,0.0,
+,,,,,,"15/6/2020,  6 bed m, Ra.2 > C2 > Bed 224",1945,3.25,g,0.0,
+Parsley,hyd. מסולסלת,2020,4685,7.82,g,"11/2/2021,  720 plants, Hyd. S - no beds selected",4685,7.82,g,0.0,
+Parsley,בורג'ו - נטע,2019,19569,33.95,g,"10/9/2020,  12 bed m, Ra.1 > L1 > Bed 118",3890,7.78,g,0.0,
+,,,,,,"30/7/2020,  6 bed m, Ra.1 > L6m > Bed 103",600,1.0,g,0.0,
+,,,,,,"13/8/2020,  20 bed m, Ra.1 > L1 > Bed 119 + 1 more Block",1000,1.67,g,0.0,
+,,,,,,"7/4/2020,  10 bed m, Ra.2 > C1 > Bed 215",4310,7.2,g,0.0,
+,,,,,,"6/5/2020,  12 bed m, Ra.2 > C2 > Bed 220",3890,6.49,g,0.0,
+,,,,,,"4/6/2020,  12 bed m, Ra.1 > L2 > Bed 127",3890,6.49,g,0.0,
+,,,,,,"15/6/2020,  6 bed m, Ra.2 > C2 > Bed 224",1989,3.32,g,0.0,
+Parsley,בורג'ו - נטע,2020,3781,6.31,g,"1/9/2020,  12 bed m, Ra.2 > C2 > Bed 219",1440,2.4,g,0.0,
+,,,,,,"18/11/2020,  12 bed m, Ra.3 > R1 > Bed 309",2341,3.91,g,0.0,
+Parsley Root,Generic Variety,2019,3080,3.5,g,"6/1/2020,  6 bed m, Ra.2 > C1 > Bed 214",1760,2.0,g,10.0,
+,,,,,,"5/2/2020,  6 bed m, Ra.1 > L6m > Bed 105",1320,1.5,g,10.0,
+Parsley Root,Generic Variety,2020,7040,8.0,g,"29/10/2020,  12 bed m, Ra.1 > L1 > Bed 114",3520,4.0,g,10.0,
+,,,,,,"2/12/2020,  12 bed m, Ra.1 > L1 > Bed 115",3520,4.0,g,10.0,
+Parsley Root,Hilmar,2019,3960,7.92,g,"13/8/2020,  2 bed m, Ra.3 > R3 > Bed 331",3960,7.92,g,10.0,Organic
+Parsley Root,Hilmar,2020,3520,4.0,g,"24/9/2020,  12 bed m, Ra.1 > L2 > Bed 128",3520,4.0,g,10.0,Organic
+Peas,Generic Variety,2020,220,55.0,g,"21/12/2020,  12 bed m, HH > B > Bed 12",0,0.0,g,0.0,
+,,,,,,"8/10/2020  · Plant Sale, 200 plants",220,55.0,g,0.0,
+Peas,Sugar Snap,2020,240,60.0,g,"2/11/2020,  12 bed m, Ra.3 > R6m > Beds 301, 304",120,30.0,g,0.0,
+,,,,,,"9/12/2020,  12 bed m, HH > B > Bed 11",120,30.0,g,0.0,
+Peas,Taccola gigante,2019,528,132.0,g,"6/1/2020,  12 bed m, HH > C > Bed 18",528,132.0,g,10.0,Organic
+Peas,Taccola gigante,2020,720,180.0,g,"1/10/2020,  18 bed m, Zvika > zB > Beds 524-525",720,180.0,g,20.0,Organic
+Peas,Yellow Sugar,2020,144,36.0,g,"2/12/2020,  12 bed m, HH > C > Bed 15",144,36.0,g,20.0,Organic
+,,,,,,"30/12/2020,  18 bed m, HH > A > Beds 5-6",0,0.0,g,0.0,
+Peas,בר לכל - אפונה נבטים,2019,2000,500.0,g,27/8/2020  · Microgreen,2000,500.0,g,0.0,
+Peas,ורדה,2020,288,72.0,g,"16/9/2020,  12 bed m, Ra.3 > R1 > Bed 306",144,36.0,g,20.0,Organic
+,,,,,,"2/12/2020,  12 bed m, Zvika > zB > Bed 518",144,36.0,g,20.0,Organic
+,,,,,,"30/12/2020,  18 bed m, HH > A > Bed 5 + 1 more Block",0,0.0,g,0.0,
+Peppers,Cornito Rosso,2019,60,0.42,g,"16/4/2020,  12 bed m, Ra.3 > R3 > Bed 329",60,0.42,g,0.0,
+Peppers,Generic Variety,2019,30,0.21,g,"27/4/2020,  6 bed m, Ra.3 > R6m > Bed 302",30,0.21,g,0.0,
+Peppers,Macabi,2019,336,2.33,g,"11/6/2020,  9 bed m, Ra.1 > L1 > Bed 111",336,2.33,g,0.0,
+Peppers,Padron,2019,502,3.49,g,"29/6/2020,  6 bed m, Ra.3 > R1 > Bed 315",32,0.22,g,0.0,
+,,,,,,"7/4/2020,  6 bed m, Field not assigned",90,0.63,g,0.0,
+,,,,,,"4/5/2020,  6 bed m, Field not assigned",156,1.08,g,0.0,
+,,,,,,"4/6/2020,  8 bed m, HH > C > Bed 13",224,1.56,g,0.0,
+Peppers,Romance,2019,141,0.98,g,"30/4/2020,  12 bed m, Ra.3 > R2 > Bed 319",63,0.44,g,0.0,
+,,,,,,"6/4/2020,  12 bed m, Ra.3 > R3 > Bed 330",78,0.54,g,0.0,
+Peppers,לפיד,2019,45,0.31,g,"4/6/2020,  4 bed m, HH > C > Bed 13",45,0.31,g,0.0,
+Poppy,Generic Variety,2019,4298,1.08,g,"2/4/2020  · Plant Sale, 130 plants",1436,0.36,g,0.0,
+,,,,,,"6/5/2020  · Plant Sale, 130 plants",1436,0.36,g,0.0,
+,,,,,,"6/5/2020  · Plant Sale, 130 plants",1426,0.36,g,0.0,
+Radishes,AB 708,2019,3218,34.23,g,"30/7/2020,  6 bed m, Ra.1 > L6m > Bed 101",1238,13.17,g,10.0,Organic
+,,,,,,"13/8/2020,  6 bed m, Ra.3 > R6m > Bed 301",1980,21.06,g,10.0,Organic
+Radishes,AZ-506 sisi,2020,7920,84.24,g,"23/9/2020,  6 bed m, Ra.3 > R6m > Bed 301",1980,21.06,g,10.0,Organic
+,,,,,,"11/11/2020,  6 bed m, Ra.2 > C1 > Bed 213",1980,21.06,g,10.0,Organic
+,,,,,,"2/9/2020,  6 bed m, Ra.2 > C6m > Bed 201",1980,21.06,g,10.0,Organic
+,,,,,,"17/9/2020,  6 bed m, Ra.3 > R6m > Bed 303",1980,21.06,g,10.0,Organic
+Radishes,Daikon Long,2019,1320,14.04,g,"5/2/2020,  4 bed m, Ra.1 > L1 > Bed 116",1320,14.04,g,10.0,Organic
+Radishes,Daikon Long,2020,2640,28.08,g,"23/11/2020,  6 bed m, HH > B > Bed 10",1320,14.04,g,10.0,Organic
+,,,,,,"31/12/2020,  6 bed m, HH > B > Bed 8",1320,14.04,g,10.0,Organic
+Radishes,French Breakfast,2019,330,3.51,g,"6/1/2020,  12 bed m, Ra.2 > C2 > Bed 217",330,3.51,g,10.0,Organic
+Radishes,French Breakfast,2020,5280,56.17,g,"2/12/2020,  3 bed m, Ra.1 > L6m > Bed 102",1320,14.04,g,10.0,Organic
+,,,,,,"31/12/2020,  12 bed m, Zvika > zB > Bed 523",1320,14.04,g,10.0,Organic
+,,,,,,"9/12/2020,  6 bed m, Ra.2 > C1 > Bed 213",2640,28.09,g,10.0,Organic
+Radishes,Generic Variety,2020,3432,36.52,g,"15/10/2020,  5 bed m, Ra.1 > L1 > Bed 110",2640,28.09,g,10.0,Organic
+,,,,,,"7/10/2020,  6 bed m, Ra.2 > C6m > Bed 204",792,8.43,g,10.0,Organic
+Radishes,ice candle,2019,2640,28.09,g,"18/3/2020,  12 bed m, Ra.3 > R2 > Bed 323",2640,28.09,g,10.0,Organic
+Radishes,ice candle,2020,660,7.02,g,"2/12/2020,  3 bed m, Ra.1 > L6m > Bed 102",660,7.02,g,10.0,Organic
+Radishes,Nero Tondo,2019,1848,19.66,g,"20/4/2020,  12 bed m, Ra.3 > R6m > Beds 303-304",528,5.62,g,10.0,Organic
+,,,,,,"5/2/2020,  4 bed m, Ra.1 > L1 > Bed 116",1320,14.04,g,10.0,Organic
+Radishes,Nero Tondo,2020,2640,28.08,g,"18/11/2020,  6 bed m, Ra.1 > L1 > Bed 116",1320,14.04,g,10.0,Organic
+,,,,,,"31/12/2020,  6 bed m, HH > B > Bed 8",1320,14.04,g,10.0,Organic
+Radishes,sakora - נבטים,2019,253800,2700.0,g,29/3/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,7/4/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,20/4/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,24/4/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,30/4/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,11/5/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,14/5/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,11/6/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,17/6/2020  · Microgreen,15040,160.0,g,0.0,
+,,,,,,1/7/2020  · Microgreen,7520,80.0,g,0.0,
+,,,,,,9/7/2020  · Microgreen,15040,160.0,g,0.0,
+,,,,,,13/7/2020  · Microgreen,9400,100.0,g,0.0,
+,,,,,,22/7/2020  · Microgreen,18800,200.0,g,0.0,Organic
+,,,,,,23/7/2020  · Microgreen,18800,200.0,g,0.0,Organic
+,,,,,,30/7/2020  · Microgreen,9400,100.0,g,0.0,Organic
+,,,,,,3/8/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,6/8/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,17/8/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,24/8/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,3/9/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,21/5/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,22/5/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,1/6/2020  · Microgreen,5640,60.0,g,0.0,
+,,,,,,10/8/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,20/8/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,7/9/2020  · Microgreen,7520,80.0,g,0.0,Organic
+Radishes,sakora - נבטים,2020,195520,2080.0,g,24/9/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,24/9/2020  · Microgreen,0,0.0,g,0.0,Organic
+,,,,,,11/10/2020  · Microgreen,0,0.0,g,0.0,Organic
+,,,,,,15/10/2020  · Microgreen,0,0.0,g,0.0,Organic
+,,,,,,19/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,22/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,10/9/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,4/10/2020  · Microgreen,15040,160.0,g,0.0,Organic
+,,,,,,7/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,12/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,26/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,5/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,9/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,16/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,23/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,30/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,7/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,14/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,4/2/2021  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,30/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,29/10/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,12/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,26/11/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,3/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,10/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,20/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+,,,,,,24/12/2020  · Microgreen,7520,80.0,g,0.0,Organic
+Radishes,Saxa,2019,5940,63.18,g,"20/2/2020,  12 bed m, Ra.2 > C2 > Bed 225",660,7.02,g,10.0,Organic
+,,,,,,"11/6/2020,  6 bed m, Ra.1 > L6m > Bed 103",1980,21.06,g,10.0,Organic
+,,,,,,"10/4/2020,  4 bed m, Ra.3 > R1 > Bed 305",1320,14.04,g,10.0,Organic
+,,,,,,"27/1/2020,  6 bed m, Ra.1 > L6m > Bed 104",1980,21.06,g,10.0,Organic
+Radishes,נטע אדומה,2019,15070,160.31,g,"20/4/2020,  12 bed m, Ra.1 > L6m > Beds 107-108",1760,18.72,g,10.0,Organic
+,,,,,,"15/1/2020,  12 bed m, Ra.2 > C1 > Bed 209",1320,14.04,g,10.0,Organic
+,,,,,,"22/1/2020,  12 bed m, Ra.3 > R1 > Bed 305",1320,14.04,g,10.0,Organic
+,,,,,,"12/3/2020,  12 bed m, HH > B > Bed 8",1320,14.04,g,10.0,Organic
+,,,,,,"18/3/2020,  12 bed m, Ra.3 > R2 > Bed 323",2640,28.09,g,10.0,Organic
+,,,,,,"17/4/2020,  2 bed m, Ra.1 > L6m > Bed 106",440,4.68,g,10.0,Organic
+,,,,,,"5/2/2020,  6 bed m, Ra.2 > C6m > Bed 208",2640,28.09,g,10.0,Organic
+,,,,,,"17/2/2020,  3 bed m, Ra.1 > L2 > Bed 125",990,10.53,g,10.0,Organic
+,,,,,,"7/5/2020,  12 bed m, HH > B > Bed 8",1760,18.72,g,10.0,Organic
+,,,,,,"28/5/2020,  12 bed m, Ra.2 > C1 > Bed 209",880,9.36,g,10.0,Organic
+Radishes,צנון אדום - נטע,2020,528,5.62,g,"7/10/2020,  12 bed m, HH > A > Bed 5",528,5.62,g,10.0,Organic
+Radishes,צנון לבן z1015,2020,528,5.62,g,"7/10/2020,  12 bed m, HH > A > Bed 6",528,5.62,g,10.0,Organic
+Sorrel,Red Veined,2019,6092,4.81,g,"23/7/2020,  5 bed m, Ra.2 > C6m > Bed 208",2343,1.85,g,0.0,
+,,,,,,"23/4/2020,  7 bed m, Ra.1 > L2 > Bed 122",2586,2.04,g,0.0,
+,,,,,,"26/2/2020,  6 bed m, Ra.1 > L1 > Bed 111",1163,0.92,g,0.0,
+Sorrel,Red Veined,2020,4686,5.86,g,"5/11/2020,  6 bed m, Ra.3 > R6m > Bed 303",2343,2.93,g,0.0,
+,,,,,,"13/1/2021,  6 bed m, Ra.3 > R6m > Bed 303",2343,2.93,g,0.0,
+Soybeans,Generic Variety,2019,836,209.0,g,"25/5/2020,  12 bed m, Field not assigned",308,77.0,g,0.0,
+,,,,,,"12/3/2020,  12 bed m, Field not assigned",528,132.0,g,10.0,
+Spinach,Aurora Mountain Red,2019,120,2.0,kg,"12/7/2020,  12 bed m, Ra.3 > R2 > Bed 322",120,2.0,kg,0.0,
+Spinach,Aurora Mountain Spinach,2019,100,1.67,kg,"13/8/2020,  10 bed m, Ra.3 > R2 > Bed 321",100,1.67,kg,0.0,
+Spinach,Regata ריגאטה,2020,6386,37778.26,g,"21/11/2020,  24 bed m, Zvika > zB > Beds 515-516",36,0.51,kg,0.0,
+,,,,,,"29/10/2020,  12 bed m, Ra.2 > C2 > Bed 226",792,13.2,g,10.0,
+,,,,,,"4/11/2020,  12 bed m, Ra.2 > C2 > Bed 225",2232,37.2,kg,0.0,
+,,,,,,"31/12/2020,  24 bed m, Ra.2 > C1 > Beds 211-212",3168,52.8,g,10.0,
+,,,,,,"9/12/2020,  6 bed m, Ra.2 > C6m > Bed 208",158,2.26,g,0.0,
+Summer Squash,kingu F1 - ירוק נטע,2019,92,9.2,g,"18/3/2020,  12 bed m, Ra.2 > C1 > Bed 213",31,3.1,g,0.0,Organic
+,,,,,,"6/5/2020,  12 bed m, Ra.3 > R1 > Bed 306",61,6.1,g,0.0,Organic
+Summer Squash,topazio - חישתיל,2019,46,4.6,g,"11/3/2020,  22 bed m, Ra.1 > L2 > Beds 130-131",46,4.6,g,0.0,
+Summer Squash,פסים - נטע,2019,122,12.2,g,"18/3/2020,  12 bed m, Ra.2 > C6m > Beds 202-203",61,6.1,g,0.0,
+,,,,,,"6/5/2020,  12 bed m, Ra.3 > R2 > Bed 323",61,6.1,g,0.0,
+Sunflower,Generic Variety,2019,207000,4500.0,g,30/1/2020  · Microgreen,46000,1000.0,g,0.0,
+,,,,,,5/2/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,9/2/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,13/2/2020  · Microgreen,46000,1000.0,g,0.0,
+,,,,,,20/2/2020  · Microgreen,46000,1000.0,g,0.0,
+,,,,,,24/2/2020  · Microgreen,23000,500.0,g,0.0,
+Sunflower,Generic Variety,2020,414000,9000.0,g,18/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,22/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,25/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,1/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,8/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,15/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,22/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,29/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,6/12/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,13/12/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,20/12/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,29/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,5/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,11/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,25/11/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,2/12/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,16/12/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,23/12/2020  · Microgreen,23000,500.0,g,0.0,
+Sunflower,חמניה אוקראינית - בר לכל,2019,501400,10900.0,g,29/3/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,7/4/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,10/4/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,14/4/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,20/4/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,24/4/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,1/5/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,9/7/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,16/7/2020  · Microgreen,27600,600.0,g,0.0,
+,,,,,,23/7/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,30/7/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,1/8/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,5/8/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,9/8/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,17/8/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,24/8/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,3/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,2/3/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,14/3/2020  · Microgreen,13800,300.0,g,0.0,
+,,,,,,2/3/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,18/3/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,20/8/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,7/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,31/8/2020  · Microgreen,23000,500.0,g,0.0,
+Sunflower,חמניה אוקראינית - בר לכל,2020,207000,4500.0,g,14/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,24/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,24/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,11/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,15/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,10/9/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,4/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,6/10/2020  · Microgreen,23000,500.0,g,0.0,
+,,,,,,12/10/2020  · Microgreen,23000,500.0,g,0.0,
+Sweet Pea,Generic Variety,2020,420,35.0,g,"11/3/2021  · Plant Sale, 200 plants",210,17.5,g,0.0,
+,,,,,,"11/3/2021  · Plant Sale, 200 plants",210,17.5,g,0.0,
+Tatsoi,Generic Variety,2019,2640,5.38,g,"19/2/2020,  3 bed m, Ra.2 > C6m > Bed 206",2640,5.38,g,10.0,Organic
+Tatsoi,Generic Variety,2020,10560,26.4,g,"30/9/2020,  6 bed m, Ra.1 > L2 > Bed 122",10560,26.4,g,10.0,Organic
+Tatsoi,Tatsoi,2020,10560,26.4,g,"2/12/2020,  6 bed m, Ra.2 > C2 > Bed 221",10560,26.4,g,10.0,Organic
+Thyme,Generic Variety,2019,255,0.05,g,"25/5/2020,  12 bed m, HH > B > Bed 9",160,0.03,g,0.0,
+,,,,,,"25/5/2020,  3 bed m, side > 200 > Bed 3",45,0.01,g,0.0,
+,,,,,,"30/10/2020  · Plant Sale, 50 plants",50,0.01,g,0.0,
+Tomatoes,Black Cherry,2019,38,0.1,g,"16/4/2020,  8 bed m, Ra.3 > R2 > Bed 321",38,0.1,g,0.0,
+Tomatoes,Blond Kopfcer - יעל,2019,77,0.2,g,"16/4/2020,  6 bed m, Ra.3 > R2 > Bed 320",77,0.2,g,0.0,
+Tomatoes,Bull's Heart - מורשת יעל,2019,38,0.1,g,"10/4/2020,  12 bed m, Ra.3 > R3 > Bed 331",38,0.1,g,0.0,
+Tomatoes,Ikram - חישתיל,2019,75,0.2,g,"25/3/2020,  24 bed m, Ra.3 > R3 > Beds 333, 336",50,0.13,g,0.0,
+,,,,,,"16/4/2020,  12 bed m, Ra.3 > R3 > Bed 332",25,0.07,g,0.0,
+Tomatoes,Lobelo - לובלו,2019,123,0.32,g,"6/4/2020,  24 bed m, Ra.3 > R3 > Beds 334-335",53,0.14,g,0.0,
+,,,,,,"4/6/2020,  24 bed m, Ra.3 > R1 > Bed 316 + 1 more Block",53,0.14,g,0.0,
+,,,,,,"11/6/2020,  4 bed m, Ra.1 > L1 > Beds 111-112",17,0.04,g,0.0,
+Tomatoes,Marmande - מורשת יעל,2019,38,0.1,g,"6/4/2020,  12 bed m, Ra.3 > R2 > Bed 327",38,0.1,g,0.0,
+Tomatoes,Red Pear,2019,65,0.17,g,"16/4/2020  · Plant Sale, 50 plants",65,0.17,g,0.0,
+Tomatoes,Tigerella,2019,77,0.2,g,"7/4/2020,  12 bed m, Ra.3 > R2 > Bed 328",77,0.2,g,0.0,
+Tomatoes,שרי אדום גדול - יעל,2019,61,0.16,g,"16/4/2020,  10 bed m, Ra.3 > R2 > Beds 320-321",61,0.16,g,0.0,
+Turmeric,Elad,2019,396,39.6,kg,"25/5/2020,  36 bed m, HH > B > Beds 10-12",297,29.7,kg,10.0,Organic
+,,,,,,"17/7/2020,  12 bed m, Zvika > zB > Bed 517",99,9.9,kg,10.0,Organic
+Turnips,Generic Variety,2020,864,4.32,g,"7/10/2020,  6 bed m, Ra.2 > C6m > Bed 205",864,4.32,g,20.0,
+Turnips,lodigiana לבן שטוח,2019,504,1.68,g,"5/2/2020,  4 bed m, Ra.1 > L1 > Bed 116",504,1.68,g,5.0,
+Turnips,lodigiana לבן שטוח,2020,756,3.78,g,"18/11/2020,  6 bed m, Ra.1 > L1 > Bed 116",756,3.78,g,5.0,
+Winter Squash,Atlantic Giant,2019,31,2.58,g,"26/3/2020,  6 bed m, Ra.2 > C1 > Bed 216",31,2.58,g,0.0,
+Winter Squash,Atlas,2019,98,8.17,g,"10/7/2020,  24 bed m, Zvika - no beds selected",60,5.0,g,0.0,
+,,,,,,"11/3/2020,  18 bed m, Ra.4 > Lo18 > Bed 404",38,3.17,g,0.0,
+Winter Squash,Gialla Quintale,2019,31,3.1,g,"26/3/2020,  6 bed m, Ra.4 > Lo18 > Bed 405",31,3.1,g,0.0,Organic
+Winter Squash,Lunga Di Napoli,2019,31,3.1,g,"26/3/2020,  6 bed m, Ra.2 > C1 > Bed 216",31,3.1,g,0.0,Organic
+Winter Squash,Marina di Chioggia,2019,31,3.1,g,"26/3/2020,  6 bed m, Ra.4 > Lo18 > Bed 406",31,3.1,g,0.0,Organic
+Winter Squash,Red Kuri,2019,106,8.84,g,"27/4/2020,  12 bed m, Ra.1 > L2 > Bed 132",59,4.92,g,0.0,
+,,,,,,"26/3/2020,  12 bed m, Ra.4 > Lo18 > Beds 405-406",47,3.92,g,0.0,
+Winter Squash,Table Queen,2019,95,7.92,g,"19/2/2020,  18 bed m, Ra.4 > Lo18 > Bed 403",36,3.0,g,0.0,
+,,,,,,"27/4/2020,  14 bed m, Ra.3 > R6m > Bed 301 + 1 more Block",59,4.92,g,0.0,
+Winter Squash,Turkish Turban,2019,31,2.58,g,"26/3/2020,  10 bed m, HH > C > Bed 18",31,2.58,g,0.0,Organic
+Winter Squash,טריפולי,2019,190,15.84,g,"2/3/2020,  18 bed m, Ra.4 > Lo24 > Bed 402",50,4.17,g,0.0,
+,,,,,,"12/2/2020,  18 bed m, Ra.4 > Lo24 > Bed 401",50,4.17,g,0.0,
+,,,,,,"16/3/2020  · Plant Sale, 60 plants",90,7.5,g,0.0,
+Winter Squash,סיציליאני - נוי,2019,54,4.5,g,"9/7/2020,  18 bed m, Ra.1 > L6m > Beds 106-108",54,4.5,g,0.0,

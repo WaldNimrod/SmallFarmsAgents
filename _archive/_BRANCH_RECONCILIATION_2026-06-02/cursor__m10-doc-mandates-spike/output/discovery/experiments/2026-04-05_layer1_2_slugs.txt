@@ -1,0 +1,34 @@
+# Deduped storefront slugs from web_search query matrix (L1+L2 experiment).
+# Sources: site:mypips.app (ירקות, משק, הזמנות, סל, תוצרת) and "mypips.app" (ירקות, משק).
+# Extracted 2026-04-05 by Cursor agent from search result URLs.
+anatiyot
+arava
+barshah
+bestfruit
+brodavkameshek
+cohen
+finerotem
+fourminimonline
+freshness
+fruit4soul
+hagitsigal
+hilinoa
+mahlevot-habraun
+mashtelatharoe
+meshek-herskovits
+meshek27
+mesheknaveh
+mypips
+nimrod
+organicaganyarak-home
+poli
+popisrael
+sal-hagolan
+salata
+shaked
+solomon
+the-group
+thelab
+veghit
+vigenbari
+we-connect

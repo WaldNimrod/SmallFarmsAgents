@@ -1,0 +1,19 @@
+{
+  "collected_at_utc": "2026-04-05T09:04:39.742636+00:00",
+  "alembic_version": "070",
+  "raw_extracted_items_by_status": {
+    "extracted": 31,
+    "ignored": 3089,
+    "normalized": 2392,
+    "unresolvable": 2
+  },
+  "unresolvable_rows_non_quarantined": 2,
+  "distinct_unresolvable_raw_product_names": 2,
+  "unresolvable_by_source": [
+    {
+      "source_id": 61,
+      "source_code": "SRC061",
+      "unresolvable_count": 2
+    }
+  ]
+}

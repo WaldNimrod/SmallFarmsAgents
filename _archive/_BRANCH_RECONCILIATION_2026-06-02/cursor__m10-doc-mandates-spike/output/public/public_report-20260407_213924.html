@@ -1,0 +1,3915 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מחירי ירקות אורגניים — 2026-04-05</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #1b4332;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --sand:        #f5f0e8;
+      --sand-dark:   #e8dfc8;
+      --gold:        #c9a84c;
+      --text:        #1a1a1a;
+      --muted:       #6b7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .site-header {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .site-header .brand {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-block-end: 0.25rem;
+    }
+    .site-header .sub {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .report-meta {
+      background: var(--green-mid);
+      color: #fff;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .report-meta span { direction: ltr; }
+
+    /* Stale banner */
+    .stale-banner {
+      background: #fef3c7;
+      border-inline-start: 4px solid var(--gold);
+      padding: 0.75rem 1.25rem;
+      margin: 1rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #92400e;
+    }
+
+    /* Data-quality transparency (matches public_report.json → data_quality) */
+    .dq-box {
+      background: #fff;
+      border-radius: 12px;
+      border-inline-start: 4px solid var(--green-mid);
+      padding: 1rem 1.25rem;
+      margin-block-end: 1.25rem;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    }
+    .dq-title {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+      color: var(--green-dark);
+    }
+    .dq-lead {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      line-height: 1.45;
+    }
+    .dq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+      gap: 0.5rem 1rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.88rem;
+    }
+    .dq-grid li span.ltr { font-weight: 600; }
+
+    /* Main content */
+    .container { max-inline-size: 1100px; margin-inline: auto; padding: 1.5rem; }
+
+    /* Table */
+    .price-table-wrap {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    thead tr {
+      background: var(--green-dark);
+      color: #fff;
+    }
+    thead th {
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      text-align: start;
+      white-space: nowrap;
+    }
+    thead th.num { text-align: end; }
+    tbody tr { border-block-end: 1px solid #f0ede6; }
+    tbody tr:last-child { border-block-end: none; }
+    tbody tr:nth-child(even) { background: #fafaf8; }
+    tbody tr:hover { background: #f0faf4; }
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+    td.num { text-align: end; font-variant-numeric: tabular-nums; direction: ltr; }
+    .product-name { font-weight: 600; font-size: 1rem; }
+    .product-icon {
+      width: 1.5rem; height: 1.5rem; margin-inline-end: 0.4rem;
+      vertical-align: middle; object-fit: contain; flex-shrink: 0;
+    }
+    .sfa-filter-ico {
+      width: 1.05rem; height: 1.05rem; margin-inline-end: 0.25rem;
+      vertical-align: middle; object-fit: contain;
+    }
+    .unit-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      background: var(--sand-dark);
+      color: var(--green-dark);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-weight: 500;
+      margin-inline-start: 4px;
+      direction: rtl;
+    }
+    .price-main { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); }
+    .price-secondary { color: var(--muted); font-size: 0.88rem; }
+    /* range bar */
+    .range-bar-wrap {
+      position: relative;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      min-inline-size: 80px;
+      margin-block: 4px;
+    }
+    .range-bar-fill {
+      position: absolute;
+      inset-block: 0;
+      background: linear-gradient(to left, var(--green-light), var(--green-dark));
+      border-radius: 3px;
+    }
+    .range-text { font-size: 0.78rem; color: var(--muted); direction: ltr; }
+    .stddev-text { font-size: 0.78rem; color: var(--muted); }
+    .sources-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .sfa-product-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .sfa-product-cell-main {
+      display: inline;
+      min-width: 0;
+    }
+    .sfa-row-chevron {
+      display: none;
+    }
+    .hidden { display: none !important; }
+    tbody.sfa-product-group tr.sfa-product-row { cursor: pointer; }
+    tbody.sfa-product-group tr.sfa-product-row:hover {
+      background: #e8f4ec !important;
+    }
+    tbody.sfa-product-group tr.sfa-product-row:focus-visible {
+      outline: 2px solid var(--green-mid);
+      outline-offset: -2px;
+    }
+    .sfa-detail-overlay {
+      position: fixed; inset: 0; z-index: 100000;
+      background: rgba(15, 30, 20, 0.45);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem; box-sizing: border-box;
+    }
+    .sfa-detail-modal {
+      background: #fafdf9; color: var(--text);
+      border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      max-width: 36rem; width: 100%; max-height: min(90vh, 640px);
+      display: flex; flex-direction: column; overflow: hidden;
+      border: 1.5px solid var(--green-mid);
+    }
+    .sfa-detail-modal-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      padding: 0.65rem 0.85rem; border-bottom: 1px solid #e0e8e2;
+      background: var(--green-dark); color: #fff;
+      flex-shrink: 0;
+    }
+    .sfa-detail-nav {
+      display: flex; align-items: center; gap: 0.5rem; flex: 1; justify-content: center;
+    }
+    .sfa-detail-nav-btn {
+      padding: 0.4rem 0.85rem; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.12); color: #fff; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+    }
+    .sfa-detail-nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+    .sfa-detail-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .sfa-detail-nav-pos { font-size: 0.78rem; opacity: 0.9; min-width: 3.5rem; text-align: center; }
+    .sfa-detail-close {
+      min-width: 2.25rem; min-height: 2.25rem; border-radius: 8px; border: none;
+      background: rgba(255,255,255,0.15); color: #fff; font-size: 1.35rem; line-height: 1;
+      cursor: pointer; font-family: inherit;
+    }
+    .sfa-detail-close:hover { background: rgba(255,255,255,0.3); }
+    .sfa-detail-modal-body {
+      padding: 1rem 1.15rem 1.25rem; overflow-y: auto; flex: 1;
+    }
+    .sfa-detail-modal-title {
+      margin: 0 0 0.5rem; font-size: 1.05rem; color: var(--green-dark);
+    }
+    .sfa-detail-meta { font-size: 0.88rem; color: var(--text); margin-bottom: 0.75rem; }
+    .sfa-detail-chart-wrap {
+      position: relative; height: 220px; max-width: 100%; margin-top: 0.75rem;
+    }
+    .sfa-detail-chart-wrap canvas { max-height: 220px; }
+    .sfa-csa-disclaimer { font-size: 0.82rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); border: 0; white-space: nowrap;
+    }
+    .sfa-muted { color: var(--muted); font-size: 0.85rem; }
+    .sfa-filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0 0.75rem; }
+    .sfa-filter-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.4rem 1rem; border-radius: 20px; border: 1.5px solid var(--green-mid);
+      background: #fff; color: var(--green-dark); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+    }
+    .sfa-filter-btn:hover { background: var(--green-light); color: #fff; }
+    .sfa-filter-btn.active { background: var(--green-dark); color: #fff; border-color: var(--green-dark); }
+    .sfa-filter-btn.disabled { opacity: 0.35; pointer-events: none; }
+    .sfa-filter-tools {
+      margin: 0.35rem 0 0.25rem;
+      padding: 0.5rem 0.65rem;
+      background: #f6faf7;
+      border-radius: 8px;
+      border: 1px solid #dceee4;
+    }
+    .sfa-combined-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--green-dark);
+      cursor: pointer;
+      user-select: none;
+    }
+    .sfa-combined-checkbox-label input {
+      width: 1.05rem;
+      height: 1.05rem;
+      accent-color: var(--green-dark);
+    }
+    .sfa-combined-hint {
+      margin: 0.45rem 0 0;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #3d5248;
+      max-width: 42rem;
+    }
+    .sfa-basket-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      background: #e8f4ec; color: var(--green-dark);
+      border: 1px solid var(--green-mid); border-radius: 4px;
+      padding: 1px 6px; margin-inline-start: 4px; vertical-align: middle;
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .site-footer a { color: var(--green-mid); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      thead th, td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+      .sfa-product-cell { flex-wrap: nowrap; }
+      .sfagent .sfa-row-chevron {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-inline-start: auto;
+        flex-shrink: 0;
+        width: 0.75rem;
+        height: 0.75rem;
+        border: none;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+      }
+      .sfagent .sfa-row-chevron::before {
+        content: "";
+        display: block;
+        width: 0.32rem;
+        height: 0.32rem;
+        border-left: 1.5px solid var(--muted);
+        border-bottom: 1.5px solid var(--muted);
+        transform: rotate(45deg);
+        opacity: 0.55;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">🌿 מחירי ירקות אורגניים</div>
+  <div class="sub">נתוני מחיר מקהילת המגדלים האורגנית</div>
+</header>
+
+<div class="report-meta">
+  <span>תאריך דוח: 2026-04-05</span>
+  <span>עודכן: 2026-04-07 21:39</span>
+  <span>49 מוצרים</span>
+</div>
+
+
+
+<div class="container sfagent">
+
+
+<div class="dq-box" aria-label="שקיפות צינור נירמול">
+  <h2 class="dq-title">שקיפות — מצב צינור הנירמול</h2>
+  <p class="dq-lead">
+    ספירות לפי מסד הנתונים המקומי (<span class="ltr">raw_extracted_items</span>).
+    אותם ערכים מופיעים בקובץ <span class="ltr">public_report.json</span> תחת <span class="ltr">data_quality</span>.
+    לא משמשים לחישוב המחירים בטבלה למטה.
+  </p>
+  <ul class="dq-grid">
+    <li>מנורמל: <span class="ltr">3252</span></li>
+    <li>לא ניתן לזיהוי: <span class="ltr">95</span></li>
+    <li>ממתין לעיבוד: <span class="ltr">31</span></li>
+    <li>דולג (<span class="ltr">ignored</span>): <span class="ltr">4658</span></li>
+    <li>דילוג מאושר (סקופ): <span class="ltr">4658</span></li>
+    <li>כללי סקופ פעילים: <span class="ltr">923</span></li>
+    <li>אחוז פתרון (מנורמל מול מנורמל+לא ניתן): <span class="ltr">97.16%</span></li>
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+<div class="sfa-filter-tools">
+  <label class="sfa-combined-checkbox-label">
+    <input type="checkbox" id="sfaShowCombinedStats" autocomplete="off" />
+    הצג חישוב כולל
+  </label>
+  <p id="sfaCombinedStatsHint" class="sfa-combined-hint" hidden>
+    מצב זה מציג ממוצע, טווח ומדדי פיזור שמחושבים על <strong>כל ערוצי המקור</strong> יחד (מגדלים, חנויות, סלים וכו׳).
+    כדי לראות מחירים לפי סוג קטגוריה בלבד, בטל את הסימון והשתמש בכפתורי הסינון למטה.
+  </p>
+</div>
+<div class="sfa-filter-bar" id="sfaFilterBar">
+  <button type="button" class="sfa-filter-btn active" data-filter="all">
+    <img class="sfa-filter-ico" src="icons/iconpark/view-grid-list.svg" alt="" width="18" height="18" decoding="async" loading="lazy" />
+    הכל
+  </button>
+  <button type="button" class="sfa-filter-btn" data-filter="grower">
+    <img class="sfa-filter-ico" src="icons/iconpark/seedling.svg" alt="" width="18" height="18" decoding="async" loading="lazy" />
+    מגדלים
+  </button>
+  <button type="button" class="sfa-filter-btn" data-filter="baskets">
+    <img class="sfa-filter-ico" src="icons/iconpark/vegetable-basket.svg" alt="" width="18" height="18" decoding="async" loading="lazy" />
+    סלים
+  </button>
+  <button type="button" class="sfa-filter-btn" data-filter="store">
+    <img class="sfa-filter-ico" src="icons/iconpark/shop.svg" alt="" width="18" height="18" decoding="async" loading="lazy" />
+    חנויות
+  </button>
+  <button type="button" class="sfa-filter-btn" data-filter="chain">
+    <img class="sfa-filter-ico" src="icons/iconpark/shopping-mall.svg" alt="" width="18" height="18" decoding="async" loading="lazy" />
+    רשתות
+  </button>
+</div>
+
+<div class="price-table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>מוצר</th>
+        <th class="num">ממוצע ₪</th>
+        <th class="num">חציון ₪</th>
+        <th>טווח מחירים</th>
+        <th class="num hide-mobile">סטיית תקן</th>
+        <th class="num">תצפיות</th>
+        <th class="num">מקורות</th>
+      </tr>
+    </thead>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD070" data-detail-index="0">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אגס"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אגס</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">23.14</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">27.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 11.1%;"></div>
+            </div>
+            <div class="range-text">5.00 – 38.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">11.20</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">9</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD086" data-detail-index="1">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אוכמניות"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אוכמניות</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">27.98</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">35.45</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 10.5%;"></div>
+            </div>
+            <div class="range-text">5.00 – 36.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">15.33</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD066" data-detail-index="2">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אזוב"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אזוב</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">19.33</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.25</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 12.7%;"></div>
+            </div>
+            <div class="range-text">6.00 – 43.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">17.21</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD085" data-detail-index="3">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אנדיב"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אנדיב</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">16.00</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.00 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">2</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD071" data-detail-index="4">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אספרגוס"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אספרגוס</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">28.83</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">27.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 8.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">27.00 – 32.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.75</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD043" data-detail-index="5">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אפונה טריה"
+        data-source-types="grower,store" data-category="legumes_fresh">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אפונה טריה</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">16.06</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">15.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 20.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.67</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">7</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD035" data-detail-index="6">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: ארטישוק"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">ארטישוק</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">31.54</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">37.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.3%; inline-size: 11.7%;"></div>
+            </div>
+            <div class="range-text">12.50 – 47.20</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">14.00</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">5</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD057" data-detail-index="7">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: ארטישוק ירושלמי"
+        data-source-types="grower" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">ארטישוק ירושלמי</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">33.38</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">29.95</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.8%; inline-size: 15.2%;"></div>
+            </div>
+            <div class="range-text">19.90 – 65.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">16.20</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD058" data-detail-index="8">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: אשכולית אדומה"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">אשכולית אדומה</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.67</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">11.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.53</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD062" data-detail-index="9">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: בוקצ&#39;וי"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">בוקצ&#39;וי</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">11.12</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">11.45</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 14.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.26</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD063" data-detail-index="10">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: בזיליקום"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">בזיליקום</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">9.66</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">8.90</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 13.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.39</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">11</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD067" data-detail-index="11">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: ביצים"
+        data-source-types="grower" data-category="eggs">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">ביצים</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">23.82</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">24.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.5%; inline-size: 4.4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 29.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">4.55</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">9</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD018" data-detail-index="12">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: בצל ירוק"
+        data-source-types="grower,store" data-category="alliums">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/scallion.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">בצל ירוק</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">9.18</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 14.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.58</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">13</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●●●
+            13
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD023" data-detail-index="13">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: ברוקולי"
+        data-source-types="grower,store" data-category="brassicas">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/peas.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">ברוקולי</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">17.25</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">15.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 6.0%;"></div>
+            </div>
+            <div class="range-text">10.00 – 27.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">5.97</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">11</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD079" data-detail-index="14">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: חוביזה"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">חוביזה</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">7.83</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.6%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">4.50 – 10.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.93</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD094" data-detail-index="15">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: חמאת גהי אורגנית ארוזה"
+        data-source-types="grower,store" data-category="pantry_dry">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">חמאת גהי אורגנית ארוזה</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">87.40</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">87.40</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 27.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">84.90 – 89.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.54</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">2</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD030" data-detail-index="16">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: חסה זן מובחר"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">חסה זן מובחר</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.08</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.86</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD076" data-detail-index="17">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: טימין"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">טימין</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">8.97</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.49</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD011" data-detail-index="18">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: כוסברה"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">כוסברה</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">7.49</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">7.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">4.90 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.55</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">11</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD045" data-detail-index="19">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: כורכום טרי"
+        data-source-types="grower,store" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">כורכום טרי</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">37.76</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">16.90</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.8%; inline-size: 26.0%;"></div>
+            </div>
+            <div class="range-text">7.90 – 85.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">36.42</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">5</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD020" data-detail-index="20">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: כרישה"
+        data-source-types="grower,store" data-category="alliums">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/scallion.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">כרישה</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">13.71</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">14.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 19.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">4.79</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">10</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●
+            10
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD015" data-detail-index="21">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: לפת"
+        data-source-types="grower,store" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/pumpkin.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">לפת</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">12.07</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">12.95</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.0%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">2.60 – 17.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">5.02</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD040" data-detail-index="22">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: מנגולד"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">מנגולד</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">8.71</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.84</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">9</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD064" data-detail-index="23">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: מרווה"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">מרווה</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">8.30</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">7.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.07</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">5</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD033" data-detail-index="24">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: נבטים"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">נבטים</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.92</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.75</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.3%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.50 – 13.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.39</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD073" data-detail-index="25">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: נענע"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">נענע</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.63</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">4.90 – 19.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">5.23</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD026" data-detail-index="26">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: סל ירקות בינוני"
+        data-source-types="grower" data-category="baskets">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/vegetable-basket.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">סל ירקות בינוני</span>
+            
+            <span class="sfa-basket-badge" title="סל CSA / מנוי">סל</span>
+            
+            <span class="unit-badge">סל בינוני</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">163.00</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">95.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 31.2%; inline-size: 68.8%;"></div>
+            </div>
+            <div class="range-text">95.00 – 299.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">117.78</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD025" data-detail-index="27">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: סל ירקות קטן"
+        data-source-types="grower" data-category="baskets">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/bowl-one.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">סל ירקות קטן</span>
+            
+            <span class="sfa-basket-badge" title="סל CSA / מנוי">סל</span>
+            
+            <span class="unit-badge">סל קטן</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">111.25</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">115.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 29.5%; inline-size: 11.8%;"></div>
+            </div>
+            <div class="range-text">90.00 – 125.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">17.02</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD014" data-detail-index="28">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: סלק"
+        data-source-types="grower,store" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/radish-one.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">סלק</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">11.88</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4.6%;"></div>
+            </div>
+            <div class="range-text">5.90 – 19.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">4.75</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">11</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD039" data-detail-index="29">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: סלרי שורש"
+        data-source-types="grower,store" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">סלרי שורש</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.38</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.0%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.50 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">1.89</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD002" data-detail-index="30">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: עגבנייה שרי"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/cherry.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">עגבנייה שרי</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">23.25</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">25.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.2%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">15.00 – 29.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">5.22</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">11</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD081" data-detail-index="31">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: עירית"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">עירית</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">16.25</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">16.25</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 21.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">7.42</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">2</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD009" data-detail-index="32">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: עלי תרד"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">עלי תרד</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">9.88</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">3.00 – 17.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">4.06</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">9</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD012" data-detail-index="33">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פטרוזיליה"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פטרוזיליה</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">8.44</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">7.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">4.90 – 14.50</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.41</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">10</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●●
+            10
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD032" data-detail-index="34">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פלפל חריף"
+        data-source-types="grower" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/chili.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פלפל חריף</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">13.07</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">13.25</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.90 – 15.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.47</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD004" data-detail-index="35">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פלפל ירוק"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/peas.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פלפל ירוק</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">10.63</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 12.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.03</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD031" data-detail-index="36">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פלפל סוויט בייט"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/cherry.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פלפל סוויט בייט</span>
+            
+            <span class="unit-badge">חבילה / אריזה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">17.73</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">12.45</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 8.1%;"></div>
+            </div>
+            <div class="range-text">11.00 – 35.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">11.55</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD053" data-detail-index="37">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פלפל רמירו"
+        data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פלפל רמירו</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">23.18</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">24.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.9%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">20.00 – 25.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.56</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">5</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD072" data-detail-index="38">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פסיפלורה"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פסיפלורה</span>
+            
+            <span class="unit-badge">יחידה</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">26.17</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">28.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.7%; inline-size: 5.9%;"></div>
+            </div>
+            <div class="range-text">16.50 – 34.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">8.89</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">3</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD054" data-detail-index="39">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: פפאיה"
+        data-source-types="grower" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">פפאיה</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">27.78</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">27.90</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 7.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">24.00 – 32.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.35</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">5</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD068" data-detail-index="40">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: קיווי"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">קיווי</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">26.12</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">28.95</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 11.8%;"></div>
+            </div>
+            <div class="range-text">2.95 – 38.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">12.09</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD075" data-detail-index="41">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: רוזמרין"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">רוזמרין</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">8.60</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">8.45</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.0%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.50 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.38</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD010" data-detail-index="42">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: רוקט"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">רוקט</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">12.57</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 24.90</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">6.52</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD082" data-detail-index="43">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: שיבא"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">שיבא</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">12.00</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 12.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text text-muted">—</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">2</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD074" data-detail-index="44">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: שמיר"
+        data-source-types="grower,store" data-category="leafy_greens">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">שמיר</span>
+            
+            <span class="unit-badge">צרור</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">5.97</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">5.45</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">3.00 – 10.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">2.96</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD024" data-detail-index="45">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: שעועית ירוקה"
+        data-source-types="grower,store" data-category="legumes_fresh">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/vicia-faba.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">שעועית ירוקה</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">15.62</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">15.60</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 20.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">3.44</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD069" data-detail-index="46">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: תות שדה"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">תות שדה</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">27.75</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">23.50</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.7%; inline-size: 10.3%;"></div>
+            </div>
+            <div class="range-text">19.50 – 50.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">11.57</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">6</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD049" data-detail-index="47">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: תמר"
+        data-source-types="grower,store" data-category="fruits">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">תמר</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">57.38</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">41.25</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 9.9%; inline-size: 28.0%;"></div>
+            </div>
+            <div class="range-text">32.00 – 115.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">38.82</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">4</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+      <tbody class="sfa-product-group" data-product-id="PRD056" data-detail-index="48">
+      <tr class="sfa-product-row" tabindex="0" role="button"
+        aria-haspopup="dialog" aria-controls="sfaProductDetailDialog"
+        aria-label="פרטים מלאים: תפוח אדמה"
+        data-source-types="grower,store" data-category="root_vegetables">
+        <td class="sfa-product-cell">
+          <span class="sfa-product-cell-main">
+            <img class="product-icon" src="icons/iconpark/leaf.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
+            <span class="product-name">תפוח אדמה</span>
+            
+            <span class="unit-badge">קילוגרם</span>
+          </span>
+          <span class="sfa-row-chevron" aria-hidden="true"></span>
+        </td>
+        <td class="num sfa-cell-avg">
+          
+            <span class="price-main">12.64</span>
+          
+        </td>
+        <td class="num sfa-cell-median">
+          
+            <span class="price-secondary">11.00</span>
+          
+        </td>
+        <td class="sfa-cell-range">
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 20.00</div>
+          
+        </td>
+        <td class="num hide-mobile sfa-cell-stddev">
+          
+            <span class="stddev-text">4.14</span>
+          
+        </td>
+        <td class="num sfa-cell-sample">9</td>
+        <td class="num sfa-cell-sources">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      </tbody>
+      
+  </table>
+
+  <div id="sfaProductDetailOverlay" class="sfa-detail-overlay hidden" aria-hidden="true">
+    <div class="sfa-detail-modal" role="dialog" aria-modal="true" aria-labelledby="sfaProductDetailTitle" id="sfaProductDetailDialog">
+      <div class="sfa-detail-modal-head">
+        <div class="sfa-detail-nav">
+          <button type="button" class="sfa-detail-nav-btn" id="sfaDetailPrev">הקודם</button>
+          <span class="sfa-detail-nav-pos" id="sfaDetailPosition"></span>
+          <button type="button" class="sfa-detail-nav-btn" id="sfaDetailNext">הבא</button>
+        </div>
+        <button type="button" class="sfa-detail-close" id="sfaDetailClose" aria-label="סגור">×</button>
+      </div>
+      <div class="sfa-detail-modal-body">
+        <h2 class="sfa-detail-modal-title" id="sfaProductDetailTitle"></h2>
+        <div class="sfa-detail-meta" id="sfaDetailMeta"></div>
+        <div id="sfaDetailVariant"></div>
+        <div class="sfa-detail-chart-wrap">
+          <canvas id="sfa-detail-modal-chart" aria-label="גרף מגמת מחיר"></canvas>
+        </div>
+        <p class="sfa-chart-fallback sfa-muted" id="sfaDetailChartMsg" hidden>אין מספיק נתונים להצגת מגמה</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="text-center mt-3" style="font-size:0.8rem; color: var(--muted);">
+  נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
+</p>
+</div>
+
+<footer class="site-footer">
+  <p>🌱 <a href="https://www.nimrod.bio" target="_blank" rel="noopener">nimrod.bio</a> — חקלאות אקולוגית מקומית אורגנית</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+<script>
+(function() {
+  var report = document.querySelector('.sfagent');
+  if (!report || typeof Chart === 'undefined') return;
+  window.SFAGENT_CHARTS = window.SFAGENT_CHARTS || {};
+
+  var DETAILS = {
+
+    "PRD070": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 22.5}, {"d": "2026-04-04", "v": 27.95}, {"d": "2026-04-05", "v": 23.75}], "source_count": 9, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD086": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 28.0}, {"d": "2026-04-04", "v": 36.0}, {"d": "2026-04-05", "v": 20.0}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD066": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 6.0}, {"d": "2026-04-02", "v": 6.0}, {"d": "2026-04-03", "v": 13.0}, {"d": "2026-04-04", "v": 25.5}, {"d": "2026-04-05", "v": 7.5}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD085": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 17.0}, {"d": "2026-04-04", "v": 15.0}, {"d": "2026-04-05", "v": 17.0}], "source_count": 2, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD071": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 32.0}, {"d": "2026-04-04", "v": 27.0}, {"d": "2026-04-05", "v": 29.75}], "source_count": 3, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD043": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 20.0}, {"d": "2026-04-02", "v": 20.0}, {"d": "2026-04-03", "v": 20.0}, {"d": "2026-04-04", "v": 13.0}, {"d": "2026-04-05", "v": 19.5}], "source_count": 7, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD035": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 22.0}, {"d": "2026-04-02", "v": 17.25}, {"d": "2026-04-03", "v": 17.25}, {"d": "2026-04-04", "v": 30.5}, {"d": "2026-04-05", "v": 30.5}], "source_count": 5, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD057": {"benchmark": null, "csa": null, "details_variant": "grower_price_grid", "price_series": [{"d": "2026-03-31", "v": 30.0}, {"d": "2026-04-02", "v": 30.0}, {"d": "2026-04-03", "v": 28.0}, {"d": "2026-04-04", "v": 65.0}, {"d": "2026-04-05", "v": 30.0}], "source_count": 6, "store": null},
+
+
+    "PRD058": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.0}, {"d": "2026-04-02", "v": 12.0}, {"d": "2026-04-03", "v": 11.0}, {"d": "2026-04-04", "v": 9.0}, {"d": "2026-04-05", "v": 11.5}], "source_count": 3, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD062": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 8.0}, {"d": "2026-04-02", "v": 8.0}, {"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 8.5}, {"d": "2026-04-05", "v": 7.5}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD063": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 9.0}, {"d": "2026-04-02", "v": 9.0}, {"d": "2026-04-03", "v": 9.5}, {"d": "2026-04-04", "v": 8.9}, {"d": "2026-04-05", "v": 9.0}], "source_count": 11, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD067": {"benchmark": null, "csa": null, "details_variant": "grower_price_grid", "price_series": [{"d": "2026-03-31", "v": 27.0}, {"d": "2026-04-02", "v": 25.5}, {"d": "2026-04-03", "v": 24.5}, {"d": "2026-04-04", "v": 27.9}, {"d": "2026-04-05", "v": 24.5}], "source_count": 9, "store": null},
+
+
+    "PRD018": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 9.0}, {"d": "2026-04-02", "v": 9.0}, {"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 10.0}, {"d": "2026-04-05", "v": 9.5}], "source_count": 13, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD023": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 13.5}, {"d": "2026-04-02", "v": 13.5}, {"d": "2026-04-03", "v": 15.5}, {"d": "2026-04-04", "v": 20.0}, {"d": "2026-04-05", "v": 16.75}], "source_count": 11, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD079": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 9.0}, {"d": "2026-04-05", "v": 7.25}], "source_count": 3, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD094": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [], "source_count": 2, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD030": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 11.0}, {"d": "2026-04-04", "v": 11.5}, {"d": "2026-04-05", "v": 10.0}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD076": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 12.0}, {"d": "2026-04-04", "v": 12.0}, {"d": "2026-04-05", "v": 9.0}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD011": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 8.0}, {"d": "2026-04-02", "v": 7.0}, {"d": "2026-04-03", "v": 8.5}, {"d": "2026-04-04", "v": 4.9}, {"d": "2026-04-05", "v": 7.0}], "source_count": 11, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD045": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 10.0}, {"d": "2026-04-02", "v": 10.0}, {"d": "2026-04-03", "v": 42.5}, {"d": "2026-04-04", "v": 11.95}, {"d": "2026-04-05", "v": 42.5}], "source_count": 5, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD020": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 18.0}, {"d": "2026-04-02", "v": 18.0}, {"d": "2026-04-03", "v": 18.0}, {"d": "2026-04-04", "v": 12.0}, {"d": "2026-04-05", "v": 16.0}], "source_count": 10, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD015": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.0}, {"d": "2026-04-02", "v": 12.0}, {"d": "2026-04-03", "v": 13.0}, {"d": "2026-04-04", "v": 12.5}, {"d": "2026-04-05", "v": 12.5}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD040": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 9.5}, {"d": "2026-04-02", "v": 9.0}, {"d": "2026-04-03", "v": 9.0}, {"d": "2026-04-04", "v": 5.9}, {"d": "2026-04-05", "v": 9.0}], "source_count": 9, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD064": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 6.0}, {"d": "2026-04-02", "v": 6.0}, {"d": "2026-04-03", "v": 9.25}, {"d": "2026-04-04", "v": 9.0}, {"d": "2026-04-05", "v": 6.75}], "source_count": 5, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD033": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.75}, {"d": "2026-04-02", "v": 12.75}, {"d": "2026-04-03", "v": 12.0}, {"d": "2026-04-04", "v": 12.0}, {"d": "2026-04-05", "v": 11.5}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD073": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 11.0}, {"d": "2026-04-04", "v": 6.95}, {"d": "2026-04-05", "v": 9.0}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD026": {"benchmark": null, "csa": null, "details_variant": "basket_csa", "price_series": [], "source_count": 3, "store": null},
+
+
+    "PRD025": {"benchmark": null, "csa": {"cadence_note": "\u05d7\u05e9\u05d5\u05d1 \u05dc\u05e0\u05d5 \u05dc\u05e6\u05d9\u05d9\u05df \u05e9\u05d4\u05de\u05e9\u05dc\u05d5\u05d7\u05d9\u05dd \u05de\u05d2\u05d9\u05e2\u05d9\u05dd \u05d1\u05e9\u05e2\u05d5\u05ea \u05d4\u05e2\u05e8\u05d1/\u05dc\u05d9\u05dc\u05d4 \u05e9\u05dc \u05d0\u05d5\u05ea\u05d5 \u05d9\u05d5\u05dd. | \u05d0\u05d9\u05e1\u05d5\u05e3 \u05de\u05d4\u05d7\u05d5\u05d5\u05d4 \u05d1\u05d3\"\u05db \u05d4\u05d7\u05dc \u05de\u05d4\u05e9\u05e2\u05d4 14:00 \u05e9\u05dc \u05d0\u05d5\u05ea\u05d5 \u05d4\u05d9\u05d5\u05dd. | \u05d9\u05d5\u05dd \u05d7\u05de\u05d9\u05e9\u05d9", "contents_summary_generalized": "\u05de\u05d4 \u05d4\u05d9\u05d4 \u05d4\u05e9\u05d1\u05d5\u05e2 \u05d1\u05e1\u05dc \u05d7\u05e7\u05dc\u05d0\u05d5\u05ea \u05d1\u05e9\u05d9\u05ea\u05d5\u05e3 \u05d4\u05e7\u05d4\u05d9\u05dc\u05d4 \u05d4\u05e8\u05e9\u05de\u05d4 \u05d9\u05e8\u05e7\u05d5\u05ea \u05d4\u05e9\u05d3\u05d4 \u05d4\u05e7\u05d1\u05d5\u05e2\u05d9\u05dd \u05e7\u05d9\u05e5 | \u05de\u05d4 \u05d4\u05d9\u05d4 \u05d4\u05e9\u05d1\u05d5\u05e2 \u05d1\u05e1\u05dc \u05d0\u05d6 \u05de\u05d4 \u05d9\u05e9 \u05d1\u05e1\u05dc?? \u05db\u05dc \u05e2\u05d5\u05e0\u05d4 \u05d4\u05d9\u05d0 \u05d0\u05d7\u05e8\u05ea \u05d5\u05de\u05d2\u05d5\u05d5\u05df \u05d4\u05d9\u05e8\u05e7\u05d5\u05ea \u05de\u05e9\u05ea\u05e0\u05d4 \u05d5\u05db\u05da \u05d2\u05dd \u05d4\u05e1\u05dc \u05de\u05e9\u05ea\u05e0\u05d4 \u05de\u05e9\u05d1\u05d5\u05e2 \u05dc\u05e9\u05d1\u05d5\u05e2. \u05d5\u05d1\u05db\u05dc \u05d6\u05d0\u05ea \u05d1\u05db\u05dc \u05e2\u05d5\u05e0\u05d4 \u05d9\u05e9 \u05d0\u05d9\u05d6\u05d4 \u05de\u05d2\u05d5\u05d5\u05df \u05d0\u05e4\u05e9\u05e8\u05d9 \u05d9\u05d5\u05ea\u05e8 \u05e9\u05dc \u05d3\u05d1\u05e8\u05d9\u05dd. \u05d1\u05e9\u05d1\u05d9\u05dc \u05dc\u05d4\u05d1\u05d9\u05df \u05d9\u05d5\u05ea\u05e8 \u05d8\u05d5\u05d1 \u05d4\u05e0\u05d4 \u05d3\u05d5\u05d2\u05de\u05d0 \u05dc\u05e1\u05dc\u05d9\u05dd \u05dc\u05e4\u05d9 \u05e2\u05d5\u05e0\u05d4 \u05d7\u05d5\u05e8\u05e3 | \u05d0\u05d6 \u05de\u05d4 \u05d9\u05e9 \u05d1\u05e1\u05dc?? \u05db\u05dc \u05e2\u05d5\u05e0\u05d4 \u05d4\u05d9\u05d0 \u05d0\u05d7\u05e8\u05ea \u05d5\u05de\u05d2\u05d5\u05d5\u05df \u05d4\u05d9\u05e8\u05e7\u05d5\u05ea \u05de\u05e9\u05ea\u05e0\u05d4 \u05d5\u05db\u05da \u05d2\u05dd \u05d4\u05e1\u05dc \u05de\u05e9\u05ea\u05e0\u05d4 \u05de\u05e9\u05d1\u05d5\u05e2 \u05dc\u05e9\u05d1\u05d5\u05e2. \u05d5\u05d1\u05db\u05dc \u05d6\u05d0\u05ea \u05d1\u05db\u05dc \u05e2\u05d5\u05e0\u05d4 \u05d9\u05e9 \u05d0\u05d9\u05d6\u05d4 \u05de\u05d2\u05d5\u05d5\u05df \u05d0\u05e4\u05e9\u05e8\u05d9 \u05d9\u05d5\u05ea\u05e8 \u05e9\u05dc \u05d3\u05d1\u05e8\u05d9\u05dd. \u05d1\u05e9\u05d1\u05d9\u05dc \u05dc\u05d4\u05d1\u05d9\u05df \u05d9\u05d5\u05ea\u05e8 \u05d8\u05d5\u05d1 \u05d4\u05e0\u05d4 \u05d3\u05d5\u05d2\u05de\u05d0 \u05dc\u05e1\u05dc\u05d9\u05dd \u05dc\u05e4\u05d9 \u05e2\u05d5\u05e0\u05d4 \u05d7\u05d5\u05e8\u05e3 \u05d0\u05d1\u05d9\u05d1 | \u05de\u05d4 \u05d4\u05d9\u05d4 \u05d4\u05e9\u05d1\u05d5\u05e2 \u05d1\u05e1\u05dc \u05de\u05e2\u05e8\u05db\u05ea \u05d4\u05d6\u05de\u05e0\u05d5\u05ea \u05d7\u05e7\u05dc\u05d0\u05d5\u05ea \u05d1\u05e9\u05d9\u05ea\u05d5\u05e3 \u05d4\u05e7\u05d4\u05d9\u05dc\u05d4 \u05e2\u05d9\u05e0\u05ea \u05d7\u05d5\u05d5\u05ea \u05d9\u05e8\u05e7\u05d5\u05ea \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05e2\u05dd \u05de\u05e9\u05dc\u05d5\u05d7 \u05e2\u05d3 \u05d4\u05d1\u05d9\u05ea \u05db\u05e4\u05e8 \u05d4\u05e0\u05d5\u05e2\u05e8 \u05e2\u05d9\u05d9\u05e0\u05d5\u05ea (\u05dc\u05d9\u05d3 \u05e6\u05d5\u05de\u05ea \u05d1\u05d9\u05ea \u05e2\u05d5\u05d1\u05d3)", "context_incomplete": false}, "details_variant": "basket_csa", "price_series": [], "source_count": 4, "store": null},
+
+
+    "PRD014": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.5}, {"d": "2026-04-02", "v": 12.0}, {"d": "2026-04-03", "v": 12.0}, {"d": "2026-04-04", "v": 5.9}, {"d": "2026-04-05", "v": 12.0}], "source_count": 11, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD039": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.0}, {"d": "2026-04-02", "v": 12.0}, {"d": "2026-04-03", "v": 12.0}, {"d": "2026-04-05", "v": 12.0}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD002": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 15.0}, {"d": "2026-04-02", "v": 15.0}, {"d": "2026-04-03", "v": 33.0}, {"d": "2026-04-04", "v": 25.0}, {"d": "2026-04-05", "v": 23.0}], "source_count": 11, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD081": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 11.0}, {"d": "2026-04-04", "v": 11.0}, {"d": "2026-04-05", "v": 11.0}], "source_count": 2, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD009": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 10.0}, {"d": "2026-04-02", "v": 10.0}, {"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 8.9}, {"d": "2026-04-05", "v": 10.0}], "source_count": 9, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD012": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 10.0}, {"d": "2026-04-02", "v": 8.0}, {"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 5.9}, {"d": "2026-04-05", "v": 10.0}], "source_count": 10, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD032": {"benchmark": null, "csa": null, "details_variant": "grower_price_grid", "price_series": [{"d": "2026-03-31", "v": 13.0}, {"d": "2026-04-02", "v": 13.0}, {"d": "2026-04-03", "v": 13.25}, {"d": "2026-04-05", "v": 13.25}], "source_count": 4, "store": null},
+
+
+    "PRD004": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 10.0}, {"d": "2026-04-02", "v": 10.0}, {"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 12.9}, {"d": "2026-04-05", "v": 10.0}], "source_count": 3, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD031": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 13.0}, {"d": "2026-04-02", "v": 13.0}, {"d": "2026-04-03", "v": 18.0}, {"d": "2026-04-05", "v": 16.0}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD053": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 23.0}, {"d": "2026-04-02", "v": 23.0}, {"d": "2026-04-03", "v": 24.0}, {"d": "2026-04-05", "v": 22.5}], "source_count": 5, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD072": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 34.0}, {"d": "2026-04-04", "v": 28.0}, {"d": "2026-04-05", "v": 34.0}], "source_count": 3, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD054": {"benchmark": null, "csa": null, "details_variant": "grower_price_grid", "price_series": [{"d": "2026-03-31", "v": 31.0}, {"d": "2026-04-02", "v": 31.0}, {"d": "2026-04-03", "v": 30.0}, {"d": "2026-04-04", "v": 24.0}, {"d": "2026-04-05", "v": 30.0}], "source_count": 5, "store": null},
+
+
+    "PRD068": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 33.0}, {"d": "2026-04-04", "v": 28.95}, {"d": "2026-04-05", "v": 30.0}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD075": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD010": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 12.0}, {"d": "2026-04-02", "v": 12.0}, {"d": "2026-04-03", "v": 11.5}, {"d": "2026-04-04", "v": 12.0}, {"d": "2026-04-05", "v": 12.0}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD082": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 12.0}, {"d": "2026-04-04", "v": 12.0}, {"d": "2026-04-05", "v": 12.0}], "source_count": 2, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD074": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 10.0}, {"d": "2026-04-04", "v": 4.9}, {"d": "2026-04-05", "v": 10.0}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD024": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 13.2}, {"d": "2026-04-02", "v": 13.2}, {"d": "2026-04-03", "v": 20.75}, {"d": "2026-04-04", "v": 18.0}, {"d": "2026-04-05", "v": 20.75}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD069": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-04-03", "v": 20.0}, {"d": "2026-04-04", "v": 27.0}, {"d": "2026-04-05", "v": 22.5}], "source_count": 6, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD049": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 37.0}, {"d": "2026-04-02", "v": 37.0}, {"d": "2026-04-03", "v": 45.25}, {"d": "2026-04-04", "v": 84.5}, {"d": "2026-04-05", "v": 43.25}], "source_count": 4, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}},
+
+
+    "PRD056": {"benchmark": null, "csa": null, "details_variant": "store_retail", "price_series": [{"d": "2026-03-31", "v": 10.0}, {"d": "2026-04-02", "v": 10.0}, {"d": "2026-04-03", "v": 11.0}, {"d": "2026-04-04", "v": 8.9}, {"d": "2026-04-05", "v": 11.0}], "source_count": 9, "store": {"organic_catalog_note": "\u05de\u05d7\u05d9\u05e8\u05d9\u05dd \u05de\u05e7\u05d8\u05dc\u05d5\u05d2 \u05de\u05d5\u05e6\u05e8\u05d9\u05dd \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05d9\u05dd \u05d1\u05d7\u05e0\u05d5\u05ea, \u05dc\u05e4\u05d9 \u05ea\u05e6\u05d5\u05d2\u05ea \u05d4\u05d0\u05ea\u05e8."}}
+
+
+  };
+
+  window.SFAGENT_ACTIVE_FILTER_KEY = 'all';
+  window.SFAGENT_COMBINED_ONLY = false;
+
+  var PRODUCT_ROWS = [
+
+    {
+      productId: "PRD070",
+      category: "fruits",
+      nameHe: "\u05d0\u05d2\u05e1",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 23.1444, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:02.485032+00:00", "max_price": 38.0, "median_price": 27.0, "min_price": 5.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 9, "stddev_price": 11.1953}, "baskets": null, "chain": null, "grower": {"avg_price": 21.2875, "distinct_sources": 8, "last_observed_at": "2026-04-05T09:17:01.501400+00:00", "max_price": 30.0, "median_price": 26.0, "min_price": 5.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 8, "stddev_price": 10.3814}, "store": null}
+    },
+
+
+    {
+      productId: "PRD086",
+      category: "fruits",
+      nameHe: "\u05d0\u05d5\u05db\u05de\u05e0\u05d9\u05d5\u05ea",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 27.975, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.467670+00:00", "max_price": 36.0, "median_price": 35.45, "min_price": 5.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 4, "stddev_price": 15.3254}, "baskets": null, "chain": null, "grower": {"avg_price": 25.3, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:00.158328+00:00", "max_price": 36.0, "median_price": 34.9, "min_price": 5.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 3, "stddev_price": 17.5889}, "store": null}
+    },
+
+
+    {
+      productId: "PRD066",
+      category: "leafy_greens",
+      nameHe: "\u05d0\u05d6\u05d5\u05d1",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 19.3333, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.960096+00:00", "max_price": 43.5, "median_price": 10.25, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 6, "stddev_price": 17.2095}, "baskets": null, "chain": null, "grower": {"avg_price": 20.6, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.038801+00:00", "max_price": 43.5, "median_price": 7.5, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 5, "stddev_price": 18.9255}, "store": null}
+    },
+
+
+    {
+      productId: "PRD085",
+      category: "leafy_greens",
+      nameHe: "\u05d0\u05e0\u05d3\u05d9\u05d1",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 16.0, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:02.767185+00:00", "max_price": 17.0, "median_price": 16.0, "min_price": 15.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 2, "stddev_price": 1.4142}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD071",
+      category: "fruiting_vegetables",
+      nameHe: "\u05d0\u05e1\u05e4\u05e8\u05d2\u05d5\u05e1",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 28.8333, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:03.047743+00:00", "max_price": 32.0, "median_price": 27.5, "min_price": 27.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 3, "stddev_price": 2.7538}, "baskets": null, "chain": null, "grower": {"avg_price": 27.25, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:00.713881+00:00", "max_price": 27.5, "median_price": 27.25, "min_price": 27.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 2, "stddev_price": 0.3536}, "store": null}
+    },
+
+
+    {
+      productId: "PRD043",
+      category: "legumes_fresh",
+      nameHe: "\u05d0\u05e4\u05d5\u05e0\u05d4 \u05d8\u05e8\u05d9\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 16.0571, "distinct_sources": 7, "last_observed_at": "2026-04-05T09:17:02.816980+00:00", "max_price": 20.5, "median_price": 15.0, "min_price": 12.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 7, "stddev_price": 3.6705}, "baskets": null, "chain": null, "grower": {"avg_price": 15.5667, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:01.711899+00:00", "max_price": 20.5, "median_price": 14.0, "min_price": 12.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 6, "stddev_price": 3.7612}, "store": null}
+    },
+
+
+    {
+      productId: "PRD035",
+      category: "fruiting_vegetables",
+      nameHe: "\u05d0\u05e8\u05d8\u05d9\u05e9\u05d5\u05e7",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 31.54, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:03.389599+00:00", "max_price": 47.2, "median_price": 37.0, "min_price": 12.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 5, "stddev_price": 14.0021}, "baskets": null, "chain": null, "grower": {"avg_price": 29.675, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:03.389599+00:00", "max_price": 47.2, "median_price": 29.5, "min_price": 12.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 4, "stddev_price": 15.4345}, "store": null}
+    },
+
+
+    {
+      productId: "PRD057",
+      category: "root_vegetables",
+      nameHe: "\u05d0\u05e8\u05d8\u05d9\u05e9\u05d5\u05e7 \u05d9\u05e8\u05d5\u05e9\u05dc\u05de\u05d9",
+      variant: "grower_price_grid",
+      statsByFilter: {"all": {"avg_price": 33.3833, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:01.899439+00:00", "max_price": 65.0, "median_price": 29.95, "min_price": 19.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 6, "stddev_price": 16.1999}, "baskets": null, "chain": null, "grower": {"avg_price": 33.3833, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:01.899439+00:00", "max_price": 65.0, "median_price": 29.95, "min_price": 19.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 6, "stddev_price": 16.1999}, "store": null}
+    },
+
+
+    {
+      productId: "PRD058",
+      category: "fruits",
+      nameHe: "\u05d0\u05e9\u05db\u05d5\u05dc\u05d9\u05ea \u05d0\u05d3\u05d5\u05de\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.6667, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:02.455402+00:00", "max_price": 12.0, "median_price": 11.0, "min_price": 9.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 3, "stddev_price": 1.5275}, "baskets": null, "chain": null, "grower": {"avg_price": 10.5, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:01.715915+00:00", "max_price": 12.0, "median_price": 10.5, "min_price": 9.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 2, "stddev_price": 2.1213}, "store": null}
+    },
+
+
+    {
+      productId: "PRD062",
+      category: "leafy_greens",
+      nameHe: "\u05d1\u05d5\u05e7\u05e6\u0027\u05d5\u05d9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 11.1167, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:03.135075+00:00", "max_price": 14.9, "median_price": 11.45, "min_price": 7.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 6, "stddev_price": 3.2603}, "baskets": null, "chain": null, "grower": {"avg_price": 11.34, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.034967+00:00", "max_price": 14.9, "median_price": 12.9, "min_price": 7.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 5, "stddev_price": 3.5935}, "store": null}
+    },
+
+
+    {
+      productId: "PRD063",
+      category: "leafy_greens",
+      nameHe: "\u05d1\u05d6\u05d9\u05dc\u05d9\u05e7\u05d5\u05dd",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 9.6636, "distinct_sources": 11, "last_observed_at": "2026-04-05T09:17:03.283968+00:00", "max_price": 13.0, "median_price": 8.9, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 11, "stddev_price": 2.388}, "baskets": null, "chain": null, "grower": {"avg_price": 9.33, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:02.353973+00:00", "max_price": 12.0, "median_price": 8.7, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 10, "stddev_price": 2.2306}, "store": null}
+    },
+
+
+    {
+      productId: "PRD067",
+      category: "eggs",
+      nameHe: "\u05d1\u05d9\u05e6\u05d9\u05dd",
+      variant: "grower_price_grid",
+      statsByFilter: {"all": {"avg_price": 23.8222, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.507467+00:00", "max_price": 29.0, "median_price": 24.5, "min_price": 15.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 9, "stddev_price": 4.5494}, "baskets": null, "chain": null, "grower": {"avg_price": 23.8222, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.507467+00:00", "max_price": 29.0, "median_price": 24.5, "min_price": 15.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 9, "stddev_price": 4.5494}, "store": null}
+    },
+
+
+    {
+      productId: "PRD018",
+      category: "alliums",
+      nameHe: "\u05d1\u05e6\u05dc \u05d9\u05e8\u05d5\u05e7",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 9.1769, "distinct_sources": 13, "last_observed_at": "2026-04-05T09:17:03.456664+00:00", "max_price": 14.0, "median_price": 9.0, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 13, "stddev_price": 2.5798}, "baskets": null, "chain": null, "grower": {"avg_price": 8.9417, "distinct_sources": 12, "last_observed_at": "2026-04-05T09:17:03.456664+00:00", "max_price": 14.0, "median_price": 8.5, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 12, "stddev_price": 2.5447}, "store": null}
+    },
+
+
+    {
+      productId: "PRD023",
+      category: "brassicas",
+      nameHe: "\u05d1\u05e8\u05d5\u05e7\u05d5\u05dc\u05d9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 17.2545, "distinct_sources": 11, "last_observed_at": "2026-04-05T09:17:03.202478+00:00", "max_price": 27.9, "median_price": 15.5, "min_price": 10.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 11, "stddev_price": 5.97}, "baskets": null, "chain": null, "grower": {"avg_price": 17.78, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:02.114863+00:00", "max_price": 27.9, "median_price": 15.75, "min_price": 10.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 10, "stddev_price": 6.0188}, "store": null}
+    },
+
+
+    {
+      productId: "PRD079",
+      category: "leafy_greens",
+      nameHe: "\u05d7\u05d5\u05d1\u05d9\u05d6\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 7.8333, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:03.073098+00:00", "max_price": 10.0, "median_price": 9.0, "min_price": 4.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 3, "stddev_price": 2.9297}, "baskets": null, "chain": null, "grower": {"avg_price": 6.75, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:00.885379+00:00", "max_price": 9.0, "median_price": 6.75, "min_price": 4.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 2, "stddev_price": 3.182}, "store": null}
+    },
+
+
+    {
+      productId: "PRD094",
+      category: "pantry_dry",
+      nameHe: "\u05d7\u05de\u05d0\u05ea \u05d2\u05d4\u05d9 \u05d0\u05d5\u05e8\u05d2\u05e0\u05d9\u05ea \u05d0\u05e8\u05d5\u05d6\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 87.4, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:48:57.829091+00:00", "max_price": 89.9, "median_price": 87.4, "min_price": 84.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 2, "stddev_price": 3.5355}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD030",
+      category: "leafy_greens",
+      nameHe: "\u05d7\u05e1\u05d4 \u05d6\u05df \u05de\u05d5\u05d1\u05d7\u05e8",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.0833, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.979650+00:00", "max_price": 12.0, "median_price": 10.5, "min_price": 7.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 6, "stddev_price": 1.8552}, "baskets": null, "chain": null, "grower": {"avg_price": 9.9, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:01.457167+00:00", "max_price": 12.0, "median_price": 10.0, "min_price": 7.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 5, "stddev_price": 2.0125}, "store": null}
+    },
+
+
+    {
+      productId: "PRD076",
+      category: "leafy_greens",
+      nameHe: "\u05d8\u05d9\u05de\u05d9\u05df",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 8.975, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:03.372697+00:00", "max_price": 12.0, "median_price": 9.0, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 4, "stddev_price": 3.4932}, "baskets": null, "chain": null, "grower": {"avg_price": 7.9667, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.476803+00:00", "max_price": 12.0, "median_price": 6.0, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 3, "stddev_price": 3.4933}, "store": null}
+    },
+
+
+    {
+      productId: "PRD011",
+      category: "leafy_greens",
+      nameHe: "\u05db\u05d5\u05e1\u05d1\u05e8\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 7.4909, "distinct_sources": 11, "last_observed_at": "2026-04-05T09:17:03.466250+00:00", "max_price": 12.0, "median_price": 7.0, "min_price": 4.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 11, "stddev_price": 2.5497}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD045",
+      category: "root_vegetables",
+      nameHe: "\u05db\u05d5\u05e8\u05db\u05d5\u05dd \u05d8\u05e8\u05d9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 37.76, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:03.117035+00:00", "max_price": 85.0, "median_price": 16.9, "min_price": 7.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 5, "stddev_price": 36.4175}, "baskets": null, "chain": null, "grower": {"avg_price": 29.95, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:01.757487+00:00", "max_price": 85.0, "median_price": 13.45, "min_price": 7.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 4, "stddev_price": 36.9008}, "store": null}
+    },
+
+
+    {
+      productId: "PRD020",
+      category: "alliums",
+      nameHe: "\u05db\u05e8\u05d9\u05e9\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 13.707, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:03.471053+00:00", "max_price": 19.0, "median_price": 14.5, "min_price": 6.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 10, "stddev_price": 4.7896}, "baskets": null, "chain": null, "grower": {"avg_price": 13.1189, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.471053+00:00", "max_price": 18.9, "median_price": 13.0, "min_price": 6.0, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 9, "stddev_price": 4.6815}, "store": null}
+    },
+
+
+    {
+      productId: "PRD015",
+      category: "root_vegetables",
+      nameHe: "\u05dc\u05e4\u05ea",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 12.0667, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.831429+00:00", "max_price": 17.0, "median_price": 12.95, "min_price": 2.6, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 6, "stddev_price": 5.019}, "baskets": null, "chain": null, "grower": {"avg_price": 11.08, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:01.954248+00:00", "max_price": 15.0, "median_price": 12.0, "min_price": 2.6, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 4.918}, "store": null}
+    },
+
+
+    {
+      productId: "PRD040",
+      category: "leafy_greens",
+      nameHe: "\u05de\u05e0\u05d2\u05d5\u05dc\u05d3",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 8.7111, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.477107+00:00", "max_price": 12.0, "median_price": 9.0, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 9, "stddev_price": 1.8408}, "baskets": null, "chain": null, "grower": {"avg_price": 8.675, "distinct_sources": 8, "last_observed_at": "2026-04-05T09:17:03.477107+00:00", "max_price": 12.0, "median_price": 8.5, "min_price": 5.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 8, "stddev_price": 1.9645}, "store": null}
+    },
+
+
+    {
+      productId: "PRD064",
+      category: "leafy_greens",
+      nameHe: "\u05de\u05e8\u05d5\u05d5\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 8.3, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:03.362996+00:00", "max_price": 12.0, "median_price": 7.5, "min_price": 5.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 5, "stddev_price": 3.0741}, "baskets": null, "chain": null, "grower": {"avg_price": 7.625, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.072550+00:00", "max_price": 12.0, "median_price": 6.75, "min_price": 5.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 4, "stddev_price": 3.0923}, "store": null}
+    },
+
+
+    {
+      productId: "PRD033",
+      category: "leafy_greens",
+      nameHe: "\u05e0\u05d1\u05d8\u05d9\u05dd",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.9167, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:03.269270+00:00", "max_price": 13.5, "median_price": 10.75, "min_price": 9.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 6, "stddev_price": 1.3934}, "baskets": null, "chain": null, "grower": {"avg_price": 11.0, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.122588+00:00", "max_price": 13.5, "median_price": 11.0, "min_price": 9.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 5, "stddev_price": 1.5411}, "store": null}
+    },
+
+
+    {
+      productId: "PRD073",
+      category: "leafy_greens",
+      nameHe: "\u05e0\u05e2\u05e0\u05e2",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.6333, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:03.376962+00:00", "max_price": 19.5, "median_price": 10.0, "min_price": 4.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 6, "stddev_price": 5.2252}, "baskets": null, "chain": null, "grower": {"avg_price": 10.56, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:00.835372+00:00", "max_price": 19.5, "median_price": 9.0, "min_price": 4.9, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 5, "stddev_price": 5.8385}, "store": null}
+    },
+
+
+    {
+      productId: "PRD026",
+      category: "baskets",
+      nameHe: "\u05e1\u05dc \u05d9\u05e8\u05e7\u05d5\u05ea \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9",
+      variant: "basket_csa",
+      statsByFilter: {"all": {"avg_price": 163.0, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.704371+00:00", "max_price": 299.0, "median_price": 95.0, "min_price": 95.0, "normalized_unit": "\u05e1\u05dc \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9", "sample_size": 3, "stddev_price": 117.7795}, "baskets": {"avg_price": 163.0, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.704371+00:00", "max_price": 299.0, "median_price": 95.0, "min_price": 95.0, "normalized_unit": "\u05e1\u05dc \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9", "sample_size": 3, "stddev_price": 117.7795}, "chain": null, "grower": {"avg_price": 163.0, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.704371+00:00", "max_price": 299.0, "median_price": 95.0, "min_price": 95.0, "normalized_unit": "\u05e1\u05dc \u05d1\u05d9\u05e0\u05d5\u05e0\u05d9", "sample_size": 3, "stddev_price": 117.7795}, "store": null}
+    },
+
+
+    {
+      productId: "PRD025",
+      category: "baskets",
+      nameHe: "\u05e1\u05dc \u05d9\u05e8\u05e7\u05d5\u05ea \u05e7\u05d8\u05df",
+      variant: "basket_csa",
+      statsByFilter: {"all": {"avg_price": 111.25, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.398331+00:00", "max_price": 125.0, "median_price": 115.0, "min_price": 90.0, "normalized_unit": "\u05e1\u05dc \u05e7\u05d8\u05df", "sample_size": 4, "stddev_price": 17.0171}, "baskets": {"avg_price": 111.25, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.398331+00:00", "max_price": 125.0, "median_price": 115.0, "min_price": 90.0, "normalized_unit": "\u05e1\u05dc \u05e7\u05d8\u05df", "sample_size": 4, "stddev_price": 17.0171}, "chain": null, "grower": {"avg_price": 111.25, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.398331+00:00", "max_price": 125.0, "median_price": 115.0, "min_price": 90.0, "normalized_unit": "\u05e1\u05dc \u05e7\u05d8\u05df", "sample_size": 4, "stddev_price": 17.0171}, "store": null}
+    },
+
+
+    {
+      productId: "PRD014",
+      category: "root_vegetables",
+      nameHe: "\u05e1\u05dc\u05e7",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 11.8818, "distinct_sources": 11, "last_observed_at": "2026-04-05T09:17:03.487862+00:00", "max_price": 19.5, "median_price": 12.0, "min_price": 5.9, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 11, "stddev_price": 4.7474}, "baskets": null, "chain": null, "grower": {"avg_price": 11.77, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:03.487862+00:00", "max_price": 19.5, "median_price": 10.95, "min_price": 5.9, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 10, "stddev_price": 4.9889}, "store": null}
+    },
+
+
+    {
+      productId: "PRD039",
+      category: "root_vegetables",
+      nameHe: "\u05e1\u05dc\u05e8\u05d9 \u05e9\u05d5\u05e8\u05e9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.375, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:03.441921+00:00", "max_price": 12.0, "median_price": 10.5, "min_price": 8.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 4, "stddev_price": 1.8875}, "baskets": null, "chain": null, "grower": {"avg_price": 9.8333, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:03.441921+00:00", "max_price": 12.0, "median_price": 9.0, "min_price": 8.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 3, "stddev_price": 1.893}, "store": null}
+    },
+
+
+    {
+      productId: "PRD002",
+      category: "fruiting_vegetables",
+      nameHe: "\u05e2\u05d2\u05d1\u05e0\u05d9\u05d9\u05d4 \u05e9\u05e8\u05d9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 23.2545, "distinct_sources": 11, "last_observed_at": "2026-04-05T09:17:02.628898+00:00", "max_price": 29.5, "median_price": 25.0, "min_price": 15.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 11, "stddev_price": 5.2173}, "baskets": null, "chain": null, "grower": {"avg_price": 23.28, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:02.012741+00:00", "max_price": 29.5, "median_price": 25.0, "min_price": 15.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 10, "stddev_price": 5.4988}, "store": null}
+    },
+
+
+    {
+      productId: "PRD081",
+      category: "leafy_greens",
+      nameHe: "\u05e2\u05d9\u05e8\u05d9\u05ea",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 16.25, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:03.265216+00:00", "max_price": 21.5, "median_price": 16.25, "min_price": 11.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 2, "stddev_price": 7.4246}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD009",
+      category: "leafy_greens",
+      nameHe: "\u05e2\u05dc\u05d9 \u05ea\u05e8\u05d3",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 9.8778, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.502765+00:00", "max_price": 17.5, "median_price": 9.0, "min_price": 3.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 9, "stddev_price": 4.0555}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD012",
+      category: "leafy_greens",
+      nameHe: "\u05e4\u05d8\u05e8\u05d5\u05d6\u05d9\u05dc\u05d9\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 8.44, "distinct_sources": 10, "last_observed_at": "2026-04-05T09:17:03.492671+00:00", "max_price": 14.5, "median_price": 7.0, "min_price": 4.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 10, "stddev_price": 3.4144}, "baskets": null, "chain": null, "grower": {"avg_price": 8.0444, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.492671+00:00", "max_price": 14.5, "median_price": 7.0, "min_price": 4.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 9, "stddev_price": 3.3698}, "store": null}
+    },
+
+
+    {
+      productId: "PRD032",
+      category: "fruiting_vegetables",
+      nameHe: "\u05e4\u05dc\u05e4\u05dc \u05d7\u05e8\u05d9\u05e3",
+      variant: "grower_price_grid",
+      statsByFilter: {"all": {"avg_price": 13.075, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:01.825886+00:00", "max_price": 15.9, "median_price": 13.25, "min_price": 9.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 4, "stddev_price": 2.4663}, "baskets": null, "chain": null, "grower": {"avg_price": 13.075, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:01.825886+00:00", "max_price": 15.9, "median_price": 13.25, "min_price": 9.9, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 4, "stddev_price": 2.4663}, "store": null}
+    },
+
+
+    {
+      productId: "PRD004",
+      category: "fruiting_vegetables",
+      nameHe: "\u05e4\u05dc\u05e4\u05dc \u05d9\u05e8\u05d5\u05e7",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 10.6333, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:02.674232+00:00", "max_price": 12.9, "median_price": 10.0, "min_price": 9.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 3, "stddev_price": 2.0257}, "baskets": null, "chain": null, "grower": {"avg_price": 11.45, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:01.976194+00:00", "max_price": 12.9, "median_price": 11.45, "min_price": 10.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 2, "stddev_price": 2.0506}, "store": null}
+    },
+
+
+    {
+      productId: "PRD031",
+      category: "fruiting_vegetables",
+      nameHe: "\u05e4\u05dc\u05e4\u05dc \u05e1\u05d5\u05d5\u05d9\u05d8 \u05d1\u05d9\u05d9\u05d8",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 17.725, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.726533+00:00", "max_price": 35.0, "median_price": 12.45, "min_price": 11.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 4, "stddev_price": 11.5457}, "baskets": null, "chain": null, "grower": {"avg_price": 11.9667, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.980341+00:00", "max_price": 13.0, "median_price": 11.9, "min_price": 11.0, "normalized_unit": "\u05d7\u05d1\u05d9\u05dc\u05d4 / \u05d0\u05e8\u05d9\u05d6\u05d4", "sample_size": 3, "stddev_price": 1.0017}, "store": null}
+    },
+
+
+    {
+      productId: "PRD053",
+      category: "fruiting_vegetables",
+      nameHe: "\u05e4\u05dc\u05e4\u05dc \u05e8\u05de\u05d9\u05e8\u05d5",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 23.18, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.679048+00:00", "max_price": 25.9, "median_price": 24.0, "min_price": 20.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 2.5616}, "baskets": null, "chain": null, "grower": {"avg_price": 22.975, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:01.984253+00:00", "max_price": 25.9, "median_price": 23.0, "min_price": 20.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 4, "stddev_price": 2.9102}, "store": null}
+    },
+
+
+    {
+      productId: "PRD072",
+      category: "fruits",
+      nameHe: "\u05e4\u05e1\u05d9\u05e4\u05dc\u05d5\u05e8\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 26.1667, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:02.428447+00:00", "max_price": 34.0, "median_price": 28.0, "min_price": 16.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 3, "stddev_price": 8.8929}, "baskets": null, "chain": null, "grower": {"avg_price": 22.25, "distinct_sources": 2, "last_observed_at": "2026-04-04T20:17:34.332296+00:00", "max_price": 28.0, "median_price": 22.25, "min_price": 16.5, "normalized_unit": "\u05d9\u05d7\u05d9\u05d3\u05d4", "sample_size": 2, "stddev_price": 8.1317}, "store": null}
+    },
+
+
+    {
+      productId: "PRD054",
+      category: "fruits",
+      nameHe: "\u05e4\u05e4\u05d0\u05d9\u05d4",
+      variant: "grower_price_grid",
+      statsByFilter: {"all": {"avg_price": 27.78, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.137722+00:00", "max_price": 32.0, "median_price": 27.9, "min_price": 24.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 3.3454}, "baskets": null, "chain": null, "grower": {"avg_price": 27.78, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.137722+00:00", "max_price": 32.0, "median_price": 27.9, "min_price": 24.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 3.3454}, "store": null}
+    },
+
+
+    {
+      productId: "PRD068",
+      category: "fruits",
+      nameHe: "\u05e7\u05d9\u05d5\u05d5\u05d9",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 26.125, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.436563+00:00", "max_price": 38.0, "median_price": 28.95, "min_price": 2.95, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 6, "stddev_price": 12.0866}, "baskets": null, "chain": null, "grower": {"avg_price": 23.75, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:01.517950+00:00", "max_price": 32.0, "median_price": 28.0, "min_price": 2.95, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 11.8449}, "store": null}
+    },
+
+
+    {
+      productId: "PRD075",
+      category: "leafy_greens",
+      nameHe: "\u05e8\u05d5\u05d6\u05de\u05e8\u05d9\u05df",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 8.6, "distinct_sources": 4, "last_observed_at": "2026-04-04T19:23:00.308683+00:00", "max_price": 12.0, "median_price": 8.45, "min_price": 5.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 4, "stddev_price": 3.3774}, "baskets": null, "chain": null, "grower": {"avg_price": 7.8, "distinct_sources": 3, "last_observed_at": "2026-04-04T19:23:00.308683+00:00", "max_price": 12.0, "median_price": 5.9, "min_price": 5.5, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 3, "stddev_price": 3.6428}, "store": null}
+    },
+
+
+    {
+      productId: "PRD010",
+      category: "leafy_greens",
+      nameHe: "\u05e8\u05d5\u05e7\u05d8",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 12.5667, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:03.176244+00:00", "max_price": 24.9, "median_price": 12.0, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 6, "stddev_price": 6.5228}, "baskets": null, "chain": null, "grower": {"avg_price": 12.68, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.091023+00:00", "max_price": 24.9, "median_price": 12.0, "min_price": 6.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 5, "stddev_price": 7.2861}, "store": null}
+    },
+
+
+    {
+      productId: "PRD082",
+      category: "leafy_greens",
+      nameHe: "\u05e9\u05d9\u05d1\u05d0",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 12.0, "distinct_sources": 2, "last_observed_at": "2026-04-05T09:17:03.367081+00:00", "max_price": 12.0, "median_price": 12.0, "min_price": 12.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 2, "stddev_price": null}, "baskets": null, "chain": null, "grower": null, "store": null}
+    },
+
+
+    {
+      productId: "PRD074",
+      category: "leafy_greens",
+      nameHe: "\u05e9\u05de\u05d9\u05e8",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 5.975, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:03.358247+00:00", "max_price": 10.0, "median_price": 5.45, "min_price": 3.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 4, "stddev_price": 2.9556}, "baskets": null, "chain": null, "grower": {"avg_price": 4.6333, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:00.872023+00:00", "max_price": 6.0, "median_price": 4.9, "min_price": 3.0, "normalized_unit": "\u05e6\u05e8\u05d5\u05e8", "sample_size": 3, "stddev_price": 1.5177}, "store": null}
+    },
+
+
+    {
+      productId: "PRD024",
+      category: "legumes_fresh",
+      nameHe: "\u05e9\u05e2\u05d5\u05e2\u05d9\u05ea \u05d9\u05e8\u05d5\u05e7\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 15.6167, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.811523+00:00", "max_price": 20.0, "median_price": 15.6, "min_price": 12.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 6, "stddev_price": 3.4412}, "baskets": null, "chain": null, "grower": {"avg_price": 15.14, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:02.246695+00:00", "max_price": 20.0, "median_price": 13.2, "min_price": 12.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 3.6191}, "store": null}
+    },
+
+
+    {
+      productId: "PRD069",
+      category: "fruits",
+      nameHe: "\u05ea\u05d5\u05ea \u05e9\u05d3\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 27.75, "distinct_sources": 6, "last_observed_at": "2026-04-05T09:17:02.411286+00:00", "max_price": 50.0, "median_price": 23.5, "min_price": 19.5, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 6, "stddev_price": 11.5661}, "baskets": null, "chain": null, "grower": {"avg_price": 28.3, "distinct_sources": 5, "last_observed_at": "2026-04-05T09:17:01.542290+00:00", "max_price": 50.0, "median_price": 22.0, "min_price": 19.5, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 5, "stddev_price": 12.8433}, "store": null}
+    },
+
+
+    {
+      productId: "PRD049",
+      category: "fruits",
+      nameHe: "\u05ea\u05de\u05e8",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 57.375, "distinct_sources": 4, "last_observed_at": "2026-04-05T09:17:02.592688+00:00", "max_price": 115.0, "median_price": 41.25, "min_price": 32.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 4, "stddev_price": 38.8188}, "baskets": null, "chain": null, "grower": {"avg_price": 38.1667, "distinct_sources": 3, "last_observed_at": "2026-04-05T09:17:01.850896+00:00", "max_price": 45.5, "median_price": 37.0, "min_price": 32.0, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 3, "stddev_price": 6.8252}, "store": null}
+    },
+
+
+    {
+      productId: "PRD056",
+      category: "root_vegetables",
+      nameHe: "\u05ea\u05e4\u05d5\u05d7 \u05d0\u05d3\u05de\u05d4",
+      variant: "store_retail",
+      statsByFilter: {"all": {"avg_price": 12.6444, "distinct_sources": 9, "last_observed_at": "2026-04-05T09:17:03.446750+00:00", "max_price": 20.0, "median_price": 11.0, "min_price": 8.9, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 9, "stddev_price": 4.144}, "baskets": null, "chain": null, "grower": {"avg_price": 12.85, "distinct_sources": 8, "last_observed_at": "2026-04-05T09:17:03.446750+00:00", "max_price": 20.0, "median_price": 11.2, "min_price": 8.9, "normalized_unit": "\u05e7\u05d9\u05dc\u05d5\u05d2\u05e8\u05dd", "sample_size": 8, "stddev_price": 4.3808}, "store": null}
+    }
+
+
+  ];
+
+  var overlay = document.getElementById('sfaProductDetailOverlay');
+  var btnPrev = document.getElementById('sfaDetailPrev');
+  var btnNext = document.getElementById('sfaDetailNext');
+  var btnClose = document.getElementById('sfaDetailClose');
+  var titleEl = document.getElementById('sfaProductDetailTitle');
+  var metaEl = document.getElementById('sfaDetailMeta');
+  var variantEl = document.getElementById('sfaDetailVariant');
+  var posEl = document.getElementById('sfaDetailPosition');
+  if (!overlay || !btnPrev || !btnNext || !titleEl) return;
+
+  var modalOpen = false;
+  var modalVisiblePos = 0;
+  var currentGlobalIdx = -1;
+
+  function getGroups() {
+    var table = report.querySelector('table');
+    return table ? table.querySelectorAll('tbody.sfa-product-group') : [];
+  }
+
+  function getVisibleIndices() {
+    var out = [];
+    getGroups().forEach(function(g) {
+      if (g.style.display === 'none') return;
+      var idx = parseInt(g.getAttribute('data-detail-index'), 10);
+      if (!isNaN(idx)) out.push(idx);
+    });
+    return out;
+  }
+
+  function fmt2(x) {
+    if (x == null || x === '') return '';
+    var n = Number(x);
+    return isNaN(n) ? '' : n.toFixed(2);
+  }
+
+  function formatPriceRange(st) {
+    if (!st || st.min_price == null || st.max_price == null) return '—';
+    return fmt2(st.min_price) + '–' + fmt2(st.max_price) + ' ₪';
+  }
+
+  function effectiveFilterKey() {
+    return window.SFAGENT_COMBINED_ONLY ? 'all' : (window.SFAGENT_ACTIVE_FILTER_KEY || 'all');
+  }
+
+  function resolveStatsForRow(row, key, tr) {
+    var cat = tr ? (tr.getAttribute('data-category') || '') : row.category;
+    if (key === 'all') return row.statsByFilter && row.statsByFilter.all;
+    if (key === 'baskets') {
+      if (cat !== 'baskets') return null;
+      return row.statsByFilter && row.statsByFilter.baskets;
+    }
+    return row.statsByFilter && row.statsByFilter[key];
+  }
+
+  function activeSliceForModal(row) {
+    var key = effectiveFilterKey();
+    var st = resolveStatsForRow(row, key, null);
+    if (st) return st;
+    return row.statsByFilter && row.statsByFilter.all;
+  }
+
+  function renderSourcesBadge(el, n) {
+    if (!el) return;
+    var dots = '';
+    var i;
+    for (i = 0; i < n; i++) dots += '●';
+    el.textContent = dots + ' ' + n;
+  }
+
+  function refreshPriceTable() {
+    var key = effectiveFilterKey();
+    var groups = getGroups();
+    var visibleMins = [];
+    var visibleMaxs = [];
+    groups.forEach(function(g) {
+      var idx = parseInt(g.getAttribute('data-detail-index'), 10);
+      var prow = PRODUCT_ROWS[idx];
+      var tr = g.querySelector('tr.sfa-product-row');
+      if (!prow || !tr) return;
+      var st = resolveStatsForRow(prow, key, tr);
+      if (!st) {
+        g.style.display = 'none';
+        return;
+      }
+      g.style.display = '';
+      visibleMins.push(st.min_price);
+      visibleMaxs.push(st.max_price);
+      var avgTd = tr.querySelector('.sfa-cell-avg');
+      if (avgTd) {
+        if (st.avg_price == null) {
+          avgTd.innerHTML = '—';
+        } else {
+          avgTd.innerHTML = '<span class="price-main">' + fmt2(st.avg_price) + '</span>';
+        }
+      }
+      var medTd = tr.querySelector('.sfa-cell-median');
+      if (medTd) {
+        if (st.median_price == null) medTd.innerHTML = '—';
+        else medTd.innerHTML = '<span class="price-secondary">' + fmt2(st.median_price) + '</span>';
+      }
+      var stdTd = tr.querySelector('.sfa-cell-stddev');
+      if (stdTd) {
+        if (st.stddev_price == null) {
+          stdTd.innerHTML = '<span class="stddev-text text-muted">—</span>';
+        } else {
+          stdTd.innerHTML = '<span class="stddev-text">' + fmt2(st.stddev_price) + '</span>';
+        }
+      }
+      var samp = tr.querySelector('.sfa-cell-sample');
+      if (samp) samp.textContent = String(st.sample_size != null ? st.sample_size : '—');
+      var sb = tr.querySelector('.sfa-cell-sources .sources-badge');
+      if (sb) renderSourcesBadge(sb, st.distinct_sources || 0);
+    });
+    var gmin = visibleMins.length ? Math.min.apply(null, visibleMins) : 0;
+    var gmax = visibleMaxs.length ? Math.max.apply(null, visibleMaxs) : 100;
+    var span = (gmax !== gmin) ? (gmax - gmin) : 1;
+    groups.forEach(function(g) {
+      if (g.style.display === 'none') return;
+      var idx = parseInt(g.getAttribute('data-detail-index'), 10);
+      var prow = PRODUCT_ROWS[idx];
+      var tr = g.querySelector('tr.sfa-product-row');
+      if (!prow || !tr) return;
+      var st = resolveStatsForRow(prow, key, tr);
+      if (!st || st.min_price == null || st.max_price == null) return;
+      var wrap = tr.querySelector('.sfa-cell-range .range-bar-wrap');
+      var fill = tr.querySelector('.sfa-cell-range .range-bar-fill');
+      var rtx = tr.querySelector('.sfa-cell-range .range-text');
+      if (!wrap || !fill || !rtx) return;
+      var barStart = ((st.min_price - gmin) / span * 100);
+      var barW = ((st.max_price - st.min_price) / span * 100);
+      if (barW < 4) barW = 4;
+      fill.style.setProperty('inset-inline-end', barStart.toFixed(1) + '%');
+      fill.style.setProperty('inline-size', barW.toFixed(1) + '%');
+      rtx.textContent = fmt2(st.min_price) + ' – ' + fmt2(st.max_price);
+    });
+    if (typeof window.SFAGENT_detailModalOnFilterChange === 'function') {
+      window.SFAGENT_detailModalOnFilterChange();
+    }
+  }
+
+  function wireFilterAndCombinedUi() {
+    var bar = document.getElementById('sfaFilterBar');
+    var cb = document.getElementById('sfaShowCombinedStats');
+    var hint = document.getElementById('sfaCombinedStatsHint');
+    if (!bar) return;
+    var btns = bar.querySelectorAll('.sfa-filter-btn');
+    var typeCounts = { all: PRODUCT_ROWS.length, grower: 0, store: 0, chain: 0, baskets: 0 };
+    PRODUCT_ROWS.forEach(function(r) {
+      if (r.category === 'baskets' && r.statsByFilter && r.statsByFilter.baskets) typeCounts.baskets++;
+      if (r.statsByFilter && r.statsByFilter.grower) typeCounts.grower++;
+      if (r.statsByFilter && r.statsByFilter.store) typeCounts.store++;
+      if (r.statsByFilter && r.statsByFilter.chain) typeCounts.chain++;
+    });
+    btns.forEach(function(btn) {
+      var f = btn.getAttribute('data-filter');
+      if (f !== 'all' && typeCounts[f] === 0) btn.classList.add('disabled');
+    });
+    function setFilterDisabled(dis) {
+      btns.forEach(function(b) {
+        b.disabled = !!dis;
+        if (dis) {
+          b.classList.add('disabled');
+        } else {
+          var fk = b.getAttribute('data-filter');
+          if (fk !== 'all' && typeCounts[fk] === 0) b.classList.add('disabled');
+          else b.classList.remove('disabled');
+        }
+      });
+    }
+    if (cb) {
+      cb.addEventListener('change', function() {
+        window.SFAGENT_COMBINED_ONLY = cb.checked;
+        if (hint) hint.hidden = !cb.checked;
+        setFilterDisabled(cb.checked);
+        window.SFAGENT_ACTIVE_FILTER_KEY = 'all';
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        var first = bar.querySelector('.sfa-filter-btn[data-filter="all"]');
+        if (first) first.classList.add('active');
+        refreshPriceTable();
+      });
+    }
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (window.SFAGENT_COMBINED_ONLY) return;
+        var f = btn.getAttribute('data-filter');
+        if (f !== 'all' && typeCounts[f] === 0) return;
+        window.SFAGENT_ACTIVE_FILTER_KEY = f;
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        refreshPriceTable();
+      });
+    });
+  }
+
+  function destroyModalChart() {
+    var canvas = document.getElementById('sfa-detail-modal-chart');
+    if (canvas && window.SFAGENT_CHARTS[canvas.id]) {
+      window.SFAGENT_CHARTS[canvas.id].destroy();
+      delete window.SFAGENT_CHARTS[canvas.id];
+    }
+  }
+
+  function appendParaWithStrong(container, strongText, bodyText) {
+    var p = document.createElement('p');
+    var s = document.createElement('strong');
+    s.textContent = strongText;
+    p.appendChild(s);
+    p.appendChild(document.createTextNode(bodyText));
+    container.appendChild(p);
+  }
+
+  function renderVariantBlocks(det, variant) {
+    variantEl.innerHTML = '';
+    if (!det) return;
+    if (variant === 'basket_csa' && det.csa) {
+      var csa = det.csa;
+      if (csa.contents_summary_generalized) {
+        appendParaWithStrong(variantEl, 'תוכן הסל (מתומצת): ', csa.contents_summary_generalized);
+      }
+      if (csa.cadence_note) {
+        appendParaWithStrong(variantEl, 'משלוח / איסוף: ', csa.cadence_note);
+      }
+      var disc = document.createElement('p');
+      disc.className = 'sfa-csa-disclaimer';
+      disc.textContent = 'תוכן הסל משתנה לפי עונה וזמינות — המידע לשקיפות בלבד.';
+      variantEl.appendChild(disc);
+    } else if (variant === 'store_retail' && det.store && det.store.organic_catalog_note) {
+      var p = document.createElement('p');
+      p.className = 'sfa-detail-meta';
+      p.textContent = det.store.organic_catalog_note;
+      variantEl.appendChild(p);
+    } else if (variant === 'chain_benchmark' && det.benchmark && det.benchmark.disclaimer) {
+      var p2 = document.createElement('p');
+      p2.className = 'sfa-detail-meta';
+      p2.textContent = det.benchmark.disclaimer;
+      variantEl.appendChild(p2);
+    }
+  }
+
+  function ensureModalChart(productId) {
+    var canvas = document.getElementById('sfa-detail-modal-chart');
+    var msg = document.getElementById('sfaDetailChartMsg');
+    if (!canvas || !msg) return;
+    var det = DETAILS[productId];
+    var series = det && det.price_series ? det.price_series : [];
+    if (!series || series.length < 3) {
+      canvas.style.display = 'none';
+      msg.hidden = false;
+      return;
+    }
+    canvas.style.display = 'block';
+    msg.hidden = true;
+    if (window.SFAGENT_CHARTS[canvas.id]) {
+      window.SFAGENT_CHARTS[canvas.id].destroy();
+    }
+    var labels = series.map(function(pt) { return String(pt.d); });
+    var values = series.map(function(pt) { return Number(pt.v); });
+    window.SFAGENT_CHARTS[canvas.id] = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'מחיר',
+          data: values,
+          borderColor: '#2d5a3d',
+          backgroundColor: 'rgba(45, 90, 61, 0.12)',
+          fill: true,
+          tension: 0.2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { reverse: true, ticks: { maxRotation: 45, minRotation: 45 } },
+          y: { beginAtZero: false }
+        }
+      }
+    });
+  }
+
+  function updateNavButtons(vis, pos) {
+    btnPrev.disabled = pos <= 0;
+    btnNext.disabled = pos >= vis.length - 1;
+    if (posEl) posEl.textContent = (pos + 1) + ' / ' + vis.length;
+  }
+
+  function showModalAtVisiblePos(pos) {
+    var vis = getVisibleIndices();
+    if (vis.length === 0) return;
+    if (pos < 0) pos = 0;
+    if (pos >= vis.length) pos = vis.length - 1;
+    modalVisiblePos = pos;
+    var globalIdx = vis[modalVisiblePos];
+    currentGlobalIdx = globalIdx;
+    var row = PRODUCT_ROWS[globalIdx];
+    if (!row) return;
+
+    modalOpen = true;
+    overlay.classList.remove('hidden');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    var slice = activeSliceForModal(row);
+    titleEl.textContent = 'פירוט — ' + row.nameHe;
+    metaEl.innerHTML = 'מבוסס על <span class="ltr">' + (slice && slice.distinct_sources != null ? slice.distinct_sources : '—') + '</span> מקורות · טווח: ' + formatPriceRange(slice);
+
+    var det = DETAILS[row.productId];
+    renderVariantBlocks(det, row.variant);
+    destroyModalChart();
+    ensureModalChart(row.productId);
+    updateNavButtons(vis, modalVisiblePos);
+    if (btnClose) btnClose.focus();
+  }
+
+  function openModalFromTrigger(globalIdx) {
+    var vis = getVisibleIndices();
+    var pos = vis.indexOf(globalIdx);
+    if (pos < 0) return;
+    showModalAtVisiblePos(pos);
+  }
+
+  function closeModal() {
+    if (!modalOpen) return;
+    modalOpen = false;
+    overlay.classList.add('hidden');
+    overlay.setAttribute('aria-hidden', 'true');
+    destroyModalChart();
+  }
+
+  function onFilterChange() {
+    if (!modalOpen) return;
+    var vis = getVisibleIndices();
+    if (vis.length === 0) {
+      closeModal();
+      return;
+    }
+    var pos = vis.indexOf(currentGlobalIdx);
+    if (pos < 0) {
+      showModalAtVisiblePos(0);
+    } else {
+      showModalAtVisiblePos(pos);
+    }
+  }
+  window.SFAGENT_detailModalOnFilterChange = onFilterChange;
+
+  btnPrev.addEventListener('click', function() {
+    showModalAtVisiblePos(modalVisiblePos - 1);
+  });
+  btnNext.addEventListener('click', function() {
+    showModalAtVisiblePos(modalVisiblePos + 1);
+  });
+  btnClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeModal();
+  });
+  document.getElementById('sfaProductDetailDialog').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  getGroups().forEach(function(g) {
+    var row = g.querySelector('tr.sfa-product-row');
+    if (!row) return;
+    function openThisRow() {
+      var idx = parseInt(g.getAttribute('data-detail-index'), 10);
+      openModalFromTrigger(idx);
+    }
+    row.addEventListener('click', openThisRow);
+    row.addEventListener('keydown', function(ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        openThisRow();
+      }
+    });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (!modalOpen) return;
+    if (e.key === 'Escape') closeModal();
+  });
+
+  wireFilterAndCombinedUi();
+  refreshPriceTable();
+})();
+</script>
+
+</body>
+</html>

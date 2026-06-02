@@ -1,0 +1,155 @@
+---
+document_type: TEAM_BRIEFING
+version: "1.0"
+---
+
+# Team 20 — Briefing: v1.1.0 Infrastructure Readiness
+
+**From:** Team 100 (Architecture)  
+**To:** Team 20 (Infrastructure)  
+**Date:** 2026-04-08  
+**Subject:** All 7 information requests resolved — corrected templates and migration plan ready
+
+---
+
+## 1. Status: Your information requests are fully resolved
+
+All 7 items from your request (`QA-INFRA-REQ-20260408-V1-1`) have been answered in the canonical ARCH_DECISION:
+
+> **ARCH-20260408-TEAM20-RESPONSE-V1-1**  
+> `_COMMUNICATION/TEAM_100/reports/2026-04-08_TEAM20_INFRA_RESPONSE_TEAM100.md`
+
+**Read that document in full before authoring any migration.** This briefing summarizes the most actionable points.
+
+---
+
+## 2. Corrected migration templates (use these — not the original spec)
+
+### `catalog_scope_skip_rules` INSERT (ERR-01)
+
+The original spec had the wrong column name (`rule_pattern`) and was missing two NOT NULL columns. Use this exactly:
+
+```python
+# Tuple: (display_order, category_code, pattern, match_type, notes)
+# display_order — globally unique integer (find next: SELECT MAX(display_order) FROM catalog_scope_skip_rules)
+# category_code — one of: donation | cleaning | dry_grocery | grocery | other
+# match_type    — one of: exact | prefix | contains | regex
+scope_skip_rules = [
+    # (400, 'cleaning', 'שקית', 'contains', 'packaging material'),
+]
+for display_order, category_code, pattern, match_type, notes in scope_skip_rules:
+    conn.execute(sa.text("""
+        INSERT INTO catalog_scope_skip_rules
+          (display_order, category_code, pattern, match_type, is_active, notes, created_at, updated_at)
+        VALUES
+          (:display_order, :category_code, :pattern, :match_type, true, :notes, now(), now())
+        ON CONFLICT (display_order) DO NOTHING
+    """), {"display_order": display_order, "category_code": category_code,
+           "pattern": pattern, "match_type": match_type, "notes": notes})
+```
+
+### `product_aliases` INSERT (ERR-02)
+
+The original spec had `confidence_score` (wrong — use `confidence`) and included `updated_at` (does not exist on `product_aliases`). Use this exactly:
+
+```python
+# Global aliases (source_id = NULL):
+conn.execute(sa.text("""
+    INSERT INTO product_aliases
+      (alias_text, alias_text_normalized, product_id, source_id,
+       is_active, confidence, created_at)
+    SELECT
+      :alias_text,
+      lower(regexp_replace(:alias_text, '\\s+', ' ', 'g')),
+      p.id, NULL, true, :confidence, now()
+    FROM products p WHERE p.code = :product_code
+    ON CONFLICT (alias_text_normalized, source_id) DO NOTHING
+"""), {"alias_text": ..., "product_code": ..., "confidence": ...})
+# Source-scoped aliases:
+conn.execute(sa.text("""
+    INSERT INTO product_aliases
+      (alias_text, alias_text_normalized, product_id, source_id,
+       is_active, confidence, created_at)
+    SELECT
+      :alias_text,
+      lower(regexp_replace(:alias_text, '\\s+', ' ', 'g')),
+      p.id, s.id, true, :confidence, now()
+    FROM products p, sources s
+    WHERE p.code = :product_code AND s.code = :source_code
+    ON CONFLICT (alias_text_normalized, source_id) DO NOTHING
+"""), {"alias_text": ..., "product_code": ..., "source_code": ..., "confidence": ...})
+```
+
+### Migration 073 — SRC_WA + `pending_manual` CHECK extension (ERR-03/04)
+
+`pending_manual` is **not** in the current `chk_rei_extraction_status` CHECK constraint. Migration 073 must extend it:
+
+```python
+# In upgrade():
+op.execute("ALTER TABLE raw_extracted_items DROP CONSTRAINT chk_rei_extraction_status")
+op.execute("""
+    ALTER TABLE raw_extracted_items ADD CONSTRAINT chk_rei_extraction_status
+    CHECK (extraction_status IN ('extracted','normalized','unresolvable','ignored','pending_manual'))
+""")
+# In downgrade():
+op.execute("ALTER TABLE raw_extracted_items DROP CONSTRAINT chk_rei_extraction_status")
+op.execute("""
+    ALTER TABLE raw_extracted_items ADD CONSTRAINT chk_rei_extraction_status
+    CHECK (extraction_status IN ('extracted','normalized','unresolvable','ignored'))
+""")
+```
+
+SRC_WA source row seed (also in 073):
+
+```sql
+INSERT INTO sources (code, name, source_group, market_scope, sales_channel, status, priority, is_active)
+VALUES ('SRC_WA', 'WhatsApp Community Submissions', 'direct_price', 'community', 'community_direct', 'active', 3, true)
+ON CONFLICT (code) DO NOTHING;
+```
+
+---
+
+## 3. Migration numbering plan (binding)
+
+| Migration | Purpose | Trigger |
+|-----------|---------|---------|
+| **072** | CQ-P01 alias batch + scope-skip rules | Team 10 files H1 migration request after A2 triage |
+| **073** | SRC_WA seed row + `pending_manual` CHECK extension | Team 10 files H1 migration request after A4 protocol draft |
+| **074** | (Optional) A1 drift fix — cherry/basket schema drift | Only if A1 SQL audit shows drift; Team 10 files H1 request |
+
+If A1 drift fix is needed before A2 triage is complete, **074 takes the next available number** after 073 is authored — or Team 10 may request it be merged into 072 if the fix is small.
+
+---
+
+## 4. Idempotency reference
+
+| Table | Unique constraint | Correct `ON CONFLICT` target |
+|-------|------------------|-----------------------------|
+| `catalog_scope_skip_rules` | `uq_catalog_scope_skip_rules_display_order` (column: `display_order`) | `ON CONFLICT (display_order) DO NOTHING` |
+| `product_aliases` | `uq_alias_text_source` (columns: `alias_text_normalized`, `source_id`) | `ON CONFLICT (alias_text_normalized, source_id) DO NOTHING` |
+| `sources` | unique on `code` column | `ON CONFLICT (code) DO NOTHING` |
+
+---
+
+## 5. What Team 20 does NOT do until Team 10 files H1
+
+- Do not create any revision files yet
+- Do not run `alembic upgrade head` for this cycle
+- Do not copy-paste templates until Team 10 files the H1 migration request with actual SQL/row specs
+- Do not guess `display_order` values — Team 10's migration request must specify them
+
+---
+
+## 6. Your next action (one step)
+
+**Wait for Team 10's H1 migration request** at:
+
+```
+_COMMUNICATION/TEAM_20/reports/YYYY-MM-DD_V1_1_MIGRATION_072_REQUEST_TEAM10.md
+```
+
+When that arrives, use the corrected templates above (and the full ARCH_DECISION for edge cases), author the revision file, run `alembic upgrade head` on validation DB, and file your confirmation report.
+
+---
+
+*From: Team 100 (Architecture) — 2026-04-08*

@@ -1,0 +1,1573 @@
+{
+  "generated_at": "2026-04-04T19:24:09.747762+00:00",
+  "report_date": "2026-04-04",
+  "index": {
+    "mode": "rolling_7d",
+    "window_days": 7,
+    "window_start": "2026-03-29",
+    "window_end": "2026-04-04"
+  },
+  "data_quality": {
+    "raw_extracted_items": {
+      "normalized": 1966,
+      "unresolvable": 1,
+      "extracted_pending": 3,
+      "ignored": 2840,
+      "ignored_approved_scope_skip": 2840
+    },
+    "resolution_pct_norm_vs_unres": 99.95,
+    "active_scope_skip_rules": 907
+  },
+  "products": [
+    {
+      "product_id": "PRD059",
+      "canonical_name_he": "אבוקדו",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 17.9,
+      "max_price": 19.9,
+      "avg_price": 18.9,
+      "median_price": 18.9,
+      "stddev_price": 1.4142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.730320+00:00"
+    },
+    {
+      "product_id": "PRD070",
+      "canonical_name_he": "אגס",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 5.0,
+      "max_price": 38.0,
+      "avg_price": 20.48,
+      "median_price": 25.0,
+      "stddev_price": 14.6825,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:11.598289+00:00"
+    },
+    {
+      "product_id": "PRD086",
+      "canonical_name_he": "אוכמניות",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 5.0,
+      "max_price": 36.0,
+      "avg_price": 25.6667,
+      "median_price": 36.0,
+      "stddev_price": 17.8979,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:13:49.609941+00:00"
+    },
+    {
+      "product_id": "PRD077",
+      "canonical_name_he": "אורגנו",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 8.9,
+      "max_price": 99.0,
+      "avg_price": 29.36,
+      "median_price": 12.0,
+      "stddev_price": 38.9877,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:23:00.212922+00:00"
+    },
+    {
+      "product_id": "PRD066",
+      "canonical_name_he": "אזוב",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 6.0,
+      "max_price": 43.5,
+      "avg_price": 19.3333,
+      "median_price": 10.25,
+      "stddev_price": 17.2095,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T17:12:11.708724+00:00"
+    },
+    {
+      "product_id": "PRD071",
+      "canonical_name_he": "אספרגוס",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 27.5,
+      "max_price": 32.0,
+      "avg_price": 29.75,
+      "median_price": 29.75,
+      "stddev_price": 3.182,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T16:58:05.408292+00:00"
+    },
+    {
+      "product_id": "PRD043",
+      "canonical_name_he": "אפונה טריה",
+      "category": "legumes_fresh",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 12.9,
+      "max_price": 45.0,
+      "avg_price": 23.78,
+      "median_price": 20.0,
+      "stddev_price": 13.3881,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:13:45.578961+00:00"
+    },
+    {
+      "product_id": "PRD035",
+      "canonical_name_he": "ארטישוק",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 12.5,
+      "max_price": 47.2,
+      "avg_price": 26.425,
+      "median_price": 23.0,
+      "stddev_price": 14.7306,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:22:59.805734+00:00"
+    },
+    {
+      "product_id": "PRD057",
+      "canonical_name_he": "ארטישוק ירושלמי",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 23.5,
+      "max_price": 65.0,
+      "avg_price": 37.125,
+      "median_price": 30.0,
+      "stddev_price": 18.9049,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:11.573164+00:00"
+    },
+    {
+      "product_id": "PRD057",
+      "canonical_name_he": "ארטישוק ירושלמי",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 19.9,
+      "max_price": 31.9,
+      "avg_price": 25.9,
+      "median_price": 25.9,
+      "stddev_price": 8.4853,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.848089+00:00"
+    },
+    {
+      "product_id": "PRD065",
+      "canonical_name_he": "אשכולית",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 4.17,
+      "max_price": 25.0,
+      "avg_price": 11.814,
+      "median_price": 10.0,
+      "stddev_price": 8.2726,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:11.593260+00:00"
+    },
+    {
+      "product_id": "PRD058",
+      "canonical_name_he": "אשכולית אדומה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.0,
+      "max_price": 12.0,
+      "avg_price": 11.5,
+      "median_price": 11.5,
+      "stddev_price": 0.7071,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-03T20:21:32.748155+00:00"
+    },
+    {
+      "product_id": "PRD062",
+      "canonical_name_he": "בוקצ'וי",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 3.0,
+      "max_price": 14.9,
+      "avg_price": 8.975,
+      "median_price": 9.0,
+      "stddev_price": 4.9264,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:24:09.398645+00:00"
+    },
+    {
+      "product_id": "PRD062",
+      "canonical_name_he": "בוקצ'וי",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.9,
+      "max_price": 13.9,
+      "avg_price": 13.4,
+      "median_price": 13.4,
+      "stddev_price": 0.7071,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T17:12:07.600888+00:00"
+    },
+    {
+      "product_id": "PRD063",
+      "canonical_name_he": "בזיליקום",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 5.9,
+      "max_price": 13.0,
+      "avg_price": 8.9125,
+      "median_price": 8.25,
+      "stddev_price": 2.7362,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.303734+00:00"
+    },
+    {
+      "product_id": "PRD060",
+      "canonical_name_he": "בטטה",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 10,
+      "distinct_sources": 10,
+      "min_price": 4.88,
+      "max_price": 24.0,
+      "avg_price": 16.918,
+      "median_price": 18.0,
+      "stddev_price": 6.6541,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.141791+00:00"
+    },
+    {
+      "product_id": "PRD060",
+      "canonical_name_he": "בטטה",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 19.9,
+      "max_price": 22.9,
+      "avg_price": 21.4,
+      "median_price": 21.4,
+      "stddev_price": 2.1213,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.832237+00:00"
+    },
+    {
+      "product_id": "PRD067",
+      "canonical_name_he": "ביצים",
+      "category": "eggs",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 15.9,
+      "max_price": 27.0,
+      "avg_price": 22.2333,
+      "median_price": 24.25,
+      "stddev_price": 4.6072,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:12:11.655689+00:00"
+    },
+    {
+      "product_id": "PRD017",
+      "canonical_name_he": "בצל יבש",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.9,
+      "max_price": 12.9,
+      "avg_price": 12.9,
+      "median_price": 12.9,
+      "stddev_price": null,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.806007+00:00"
+    },
+    {
+      "product_id": "PRD018",
+      "canonical_name_he": "בצל ירוק",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 6.0,
+      "max_price": 15.0,
+      "avg_price": 9.7111,
+      "median_price": 10.0,
+      "stddev_price": 3.0641,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:14:03.270527+00:00"
+    },
+    {
+      "product_id": "PRD023",
+      "canonical_name_he": "ברוקולי",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 10.0,
+      "max_price": 27.9,
+      "avg_price": 16.1125,
+      "median_price": 14.25,
+      "stddev_price": 6.4366,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:18:57.128426+00:00"
+    },
+    {
+      "product_id": "PRD013",
+      "canonical_name_he": "גזר",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.9,
+      "max_price": 12.9,
+      "avg_price": 12.4,
+      "median_price": 12.4,
+      "stddev_price": 0.7071,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.769477+00:00"
+    },
+    {
+      "product_id": "PRD041",
+      "canonical_name_he": "דלורית",
+      "category": "cucurbits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 8.9,
+      "max_price": 17.5,
+      "avg_price": 14.3833,
+      "median_price": 15.5,
+      "stddev_price": 3.3403,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:22:59.997927+00:00"
+    },
+    {
+      "product_id": "PRD041",
+      "canonical_name_he": "דלורית",
+      "category": "cucurbits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 15.9,
+      "max_price": 17.9,
+      "avg_price": 16.9,
+      "median_price": 16.9,
+      "stddev_price": 1.4142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.765107+00:00"
+    },
+    {
+      "product_id": "PRD037",
+      "canonical_name_he": "דלעת",
+      "category": "cucurbits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 15.9,
+      "max_price": 16.9,
+      "avg_price": 16.4,
+      "median_price": 16.4,
+      "stddev_price": 0.7071,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.790225+00:00"
+    },
+    {
+      "product_id": "PRD030",
+      "canonical_name_he": "חסה זן מובחר",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 11.5,
+      "max_price": 16.0,
+      "avg_price": 13.1667,
+      "median_price": 12.0,
+      "stddev_price": 2.4664,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:23:00.350924+00:00"
+    },
+    {
+      "product_id": "PRD006",
+      "canonical_name_he": "חציל",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 7,
+      "distinct_sources": 7,
+      "min_price": 2.36,
+      "max_price": 17.0,
+      "avg_price": 10.7657,
+      "median_price": 10.0,
+      "stddev_price": 4.4957,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:13:35.848993+00:00"
+    },
+    {
+      "product_id": "PRD006",
+      "canonical_name_he": "חציל",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.9,
+      "max_price": 15.9,
+      "avg_price": 13.9,
+      "median_price": 13.9,
+      "stddev_price": 2.8284,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.574344+00:00"
+    },
+    {
+      "product_id": "PRD076",
+      "canonical_name_he": "טימין",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 5.9,
+      "max_price": 12.0,
+      "avg_price": 9.9667,
+      "median_price": 12.0,
+      "stddev_price": 3.5218,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.332306+00:00"
+    },
+    {
+      "product_id": "PRD011",
+      "canonical_name_he": "כוסברה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 4.9,
+      "max_price": 16.5,
+      "avg_price": 8.8625,
+      "median_price": 7.0,
+      "stddev_price": 4.1775,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.294583+00:00"
+    },
+    {
+      "product_id": "PRD045",
+      "canonical_name_he": "כורכום טרי",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 7.9,
+      "max_price": 85.0,
+      "avg_price": 42.975,
+      "median_price": 39.5,
+      "stddev_price": 39.8372,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:24:09.383480+00:00"
+    },
+    {
+      "product_id": "PRD021",
+      "canonical_name_he": "כרוב לבן",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 8.9,
+      "max_price": 13.9,
+      "avg_price": 11.4,
+      "median_price": 11.4,
+      "stddev_price": 3.5355,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:12:07.651946+00:00"
+    },
+    {
+      "product_id": "PRD022",
+      "canonical_name_he": "כרובית",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 18.9,
+      "max_price": 19.9,
+      "avg_price": 19.4,
+      "median_price": 19.4,
+      "stddev_price": 0.7071,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:12:07.852800+00:00"
+    },
+    {
+      "product_id": "PRD020",
+      "canonical_name_he": "כרישה",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 7,
+      "distinct_sources": 7,
+      "min_price": 6.0,
+      "max_price": 19.0,
+      "avg_price": 13.31,
+      "median_price": 16.0,
+      "stddev_price": 5.4002,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-03T21:35:47.716852+00:00"
+    },
+    {
+      "product_id": "PRD020",
+      "canonical_name_he": "כרישה",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 13.0,
+      "max_price": 18.9,
+      "avg_price": 15.95,
+      "median_price": 15.95,
+      "stddev_price": 4.1719,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:12:07.745648+00:00"
+    },
+    {
+      "product_id": "PRD015",
+      "canonical_name_he": "לפת",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 2.6,
+      "max_price": 17.0,
+      "avg_price": 10.5333,
+      "median_price": 12.0,
+      "stddev_price": 7.3112,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-03T21:35:46.150521+00:00"
+    },
+    {
+      "product_id": "PRD015",
+      "canonical_name_he": "לפת",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.9,
+      "max_price": 13.9,
+      "avg_price": 12.9,
+      "median_price": 12.9,
+      "stddev_price": 1.4142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.840316+00:00"
+    },
+    {
+      "product_id": "PRD005",
+      "canonical_name_he": "מלפפון",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.9,
+      "max_price": 14.9,
+      "avg_price": 13.9,
+      "median_price": 13.9,
+      "stddev_price": 1.4142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.661087+00:00"
+    },
+    {
+      "product_id": "PRD040",
+      "canonical_name_he": "מנגולד",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 5.9,
+      "max_price": 10.0,
+      "avg_price": 8.3,
+      "median_price": 8.5,
+      "stddev_price": 1.4609,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.336829+00:00"
+    },
+    {
+      "product_id": "PRD064",
+      "canonical_name_he": "מרווה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 5.0,
+      "max_price": 12.0,
+      "avg_price": 8.3,
+      "median_price": 7.5,
+      "stddev_price": 3.0741,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:18:57.389533+00:00"
+    },
+    {
+      "product_id": "PRD033",
+      "canonical_name_he": "נבטים",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 9.5,
+      "max_price": 13.5,
+      "avg_price": 11.2,
+      "median_price": 11.0,
+      "stddev_price": 1.6047,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T17:01:24.974505+00:00"
+    },
+    {
+      "product_id": "PRD073",
+      "canonical_name_he": "נענע",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 4.9,
+      "max_price": 19.5,
+      "avg_price": 10.18,
+      "median_price": 9.0,
+      "stddev_price": 5.7085,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.341389+00:00"
+    },
+    {
+      "product_id": "PRD026",
+      "canonical_name_he": "סל ירקות בינוני",
+      "category": "baskets",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 95.0,
+      "max_price": 299.0,
+      "avg_price": 163.0,
+      "median_price": 95.0,
+      "stddev_price": 117.7795,
+      "normalized_unit": "סל בינוני",
+      "last_observed_at": "2026-04-04T16:59:03.533035+00:00"
+    },
+    {
+      "product_id": "PRD027",
+      "canonical_name_he": "סל ירקות גדול",
+      "category": "baskets",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 115.0,
+      "max_price": 150.0,
+      "avg_price": 131.6667,
+      "median_price": 130.0,
+      "stddev_price": 17.5594,
+      "normalized_unit": "סל גדול",
+      "last_observed_at": "2026-04-03T21:35:47.729978+00:00"
+    },
+    {
+      "product_id": "PRD014",
+      "canonical_name_he": "סלק",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 5.9,
+      "max_price": 19.5,
+      "avg_price": 11.7667,
+      "median_price": 12.0,
+      "stddev_price": 5.1505,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.051928+00:00"
+    },
+    {
+      "product_id": "PRD014",
+      "canonical_name_he": "סלק",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 9.9,
+      "max_price": 14.9,
+      "avg_price": 12.4,
+      "median_price": 12.4,
+      "stddev_price": 3.5355,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.695005+00:00"
+    },
+    {
+      "product_id": "PRD039",
+      "canonical_name_he": "סלרי שורש",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 8.5,
+      "max_price": 12.0,
+      "avg_price": 10.375,
+      "median_price": 10.5,
+      "stddev_price": 1.8875,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-03T21:35:46.347043+00:00"
+    },
+    {
+      "product_id": "PRD002",
+      "canonical_name_he": "עגבנייה שרי",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 15.0,
+      "max_price": 34.0,
+      "avg_price": 25.6556,
+      "median_price": 26.0,
+      "stddev_price": 5.8293,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.015134+00:00"
+    },
+    {
+      "product_id": "PRD081",
+      "canonical_name_he": "עירית",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.0,
+      "max_price": 21.5,
+      "avg_price": 16.25,
+      "median_price": 16.25,
+      "stddev_price": 7.4246,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T16:58:05.462103+00:00"
+    },
+    {
+      "product_id": "PRD051",
+      "canonical_name_he": "פומלית",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 7.0,
+      "max_price": 14.0,
+      "avg_price": 10.9833,
+      "median_price": 11.95,
+      "stddev_price": 2.5222,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.153105+00:00"
+    },
+    {
+      "product_id": "PRD012",
+      "canonical_name_he": "פטרוזיליה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 4.9,
+      "max_price": 17.0,
+      "avg_price": 9.425,
+      "median_price": 8.0,
+      "stddev_price": 4.6845,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.281185+00:00"
+    },
+    {
+      "product_id": "PRD003",
+      "canonical_name_he": "פלפל אדום",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 16.9,
+      "max_price": 19.9,
+      "avg_price": 18.4,
+      "median_price": 18.4,
+      "stddev_price": 2.1213,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.675200+00:00"
+    },
+    {
+      "product_id": "PRD032",
+      "canonical_name_he": "פלפל חריף",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 13.0,
+      "max_price": 13.5,
+      "avg_price": 13.25,
+      "median_price": 13.25,
+      "stddev_price": 0.3536,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-03T21:35:46.256341+00:00"
+    },
+    {
+      "product_id": "PRD032",
+      "canonical_name_he": "פלפל חריף",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 9.9,
+      "max_price": 15.9,
+      "avg_price": 12.9,
+      "median_price": 12.9,
+      "stddev_price": 4.2426,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:14:23.367362+00:00"
+    },
+    {
+      "product_id": "PRD004",
+      "canonical_name_he": "פלפל ירוק",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 9.0,
+      "max_price": 12.9,
+      "avg_price": 10.6333,
+      "median_price": 10.0,
+      "stddev_price": 2.0257,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.037414+00:00"
+    },
+    {
+      "product_id": "PRD031",
+      "canonical_name_he": "פלפל סוויט בייט",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.0,
+      "max_price": 11.9,
+      "avg_price": 11.45,
+      "median_price": 11.45,
+      "stddev_price": 0.6364,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.670574+00:00"
+    },
+    {
+      "product_id": "PRD047",
+      "canonical_name_he": "פלפל צהוב / כתום",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 14.0,
+      "max_price": 22.0,
+      "avg_price": 18.68,
+      "median_price": 19.5,
+      "stddev_price": 2.9978,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.203323+00:00"
+    },
+    {
+      "product_id": "PRD047",
+      "canonical_name_he": "פלפל צהוב / כתום",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 17.9,
+      "max_price": 19.9,
+      "avg_price": 18.9,
+      "median_price": 18.9,
+      "stddev_price": 1.4142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.812259+00:00"
+    },
+    {
+      "product_id": "PRD053",
+      "canonical_name_he": "פלפל רמירו",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 21.0,
+      "max_price": 25.0,
+      "avg_price": 23.3333,
+      "median_price": 24.0,
+      "stddev_price": 2.0817,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-03T20:21:32.901041+00:00"
+    },
+    {
+      "product_id": "PRD072",
+      "canonical_name_he": "פסיפלורה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 16.5,
+      "max_price": 34.0,
+      "avg_price": 26.1667,
+      "median_price": 28.0,
+      "stddev_price": 8.8929,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T19:18:57.252226+00:00"
+    },
+    {
+      "product_id": "PRD054",
+      "canonical_name_he": "פפאיה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 24.0,
+      "max_price": 32.0,
+      "avg_price": 27.75,
+      "median_price": 27.5,
+      "stddev_price": 3.8622,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:13:49.671108+00:00"
+    },
+    {
+      "product_id": "PRD016",
+      "canonical_name_he": "צנון",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 9.0,
+      "max_price": 40.0,
+      "avg_price": 21.75,
+      "median_price": 19.0,
+      "stddev_price": 13.2759,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T16:58:05.382392+00:00"
+    },
+    {
+      "product_id": "PRD016",
+      "canonical_name_he": "צנון",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.9,
+      "max_price": 12.9,
+      "avg_price": 12.9,
+      "median_price": 12.9,
+      "stddev_price": null,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T17:12:07.581910+00:00"
+    },
+    {
+      "product_id": "PRD036",
+      "canonical_name_he": "קולורבי",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 2.7,
+      "max_price": 17.0,
+      "avg_price": 11.4333,
+      "median_price": 11.45,
+      "stddev_price": 5.1103,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.173517+00:00"
+    },
+    {
+      "product_id": "PRD036",
+      "canonical_name_he": "קולורבי",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.9,
+      "max_price": 12.9,
+      "avg_price": 12.9,
+      "median_price": 12.9,
+      "stddev_price": null,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.632002+00:00"
+    },
+    {
+      "product_id": "PRD068",
+      "canonical_name_he": "קיווי",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 2.95,
+      "max_price": 38.0,
+      "avg_price": 23.7125,
+      "median_price": 26.95,
+      "stddev_price": 14.8142,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:22:59.966596+00:00"
+    },
+    {
+      "product_id": "PRD007",
+      "canonical_name_he": "קישוא",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 7,
+      "distinct_sources": 7,
+      "min_price": 3.7,
+      "max_price": 29.0,
+      "avg_price": 18.4429,
+      "median_price": 18.5,
+      "stddev_price": 7.8313,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.193916+00:00"
+    },
+    {
+      "product_id": "PRD007",
+      "canonical_name_he": "קישוא",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 17.9,
+      "max_price": 18.9,
+      "avg_price": 18.4,
+      "median_price": 18.4,
+      "stddev_price": 0.7071,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T17:12:07.684334+00:00"
+    },
+    {
+      "product_id": "PRD055",
+      "canonical_name_he": "קלמנטינה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 1.45,
+      "max_price": 50.0,
+      "avg_price": 16.475,
+      "median_price": 11.95,
+      "stddev_price": 17.081,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:22:59.974524+00:00"
+    },
+    {
+      "product_id": "PRD075",
+      "canonical_name_he": "רוזמרין",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 5.5,
+      "max_price": 12.0,
+      "avg_price": 8.6,
+      "median_price": 8.45,
+      "stddev_price": 3.3774,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.308683+00:00"
+    },
+    {
+      "product_id": "PRD010",
+      "canonical_name_he": "רוקט",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 6.0,
+      "max_price": 24.9,
+      "avg_price": 13.0667,
+      "median_price": 12.5,
+      "stddev_price": 6.5243,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:24:09.408593+00:00"
+    },
+    {
+      "product_id": "PRD082",
+      "canonical_name_he": "שיבא",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.0,
+      "max_price": 12.0,
+      "avg_price": 12.0,
+      "median_price": 12.0,
+      "stddev_price": null,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:18:57.428209+00:00"
+    },
+    {
+      "product_id": "PRD074",
+      "canonical_name_he": "שמיר",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 3.0,
+      "max_price": 10.0,
+      "avg_price": 6.3333,
+      "median_price": 6.0,
+      "stddev_price": 3.5119,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:18:57.223298+00:00"
+    },
+    {
+      "product_id": "PRD024",
+      "canonical_name_he": "שעועית ירוקה",
+      "category": "legumes_fresh",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 12.0,
+      "max_price": 20.0,
+      "avg_price": 15.6167,
+      "median_price": 15.6,
+      "stddev_price": 3.4412,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:18:57.073339+00:00"
+    },
+    {
+      "product_id": "PRD069",
+      "canonical_name_he": "תות שדה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 5.0,
+      "max_price": 30.0,
+      "avg_price": 20.375,
+      "median_price": 23.25,
+      "stddev_price": 11.1608,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:13:49.648362+00:00"
+    },
+    {
+      "product_id": "PRD049",
+      "canonical_name_he": "תמר",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 32.0,
+      "max_price": 115.0,
+      "avg_price": 57.375,
+      "median_price": 41.25,
+      "stddev_price": 38.8188,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T16:58:05.372468+00:00"
+    },
+    {
+      "product_id": "PRD061",
+      "canonical_name_he": "תפוז",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 7,
+      "distinct_sources": 7,
+      "min_price": 2.3,
+      "max_price": 25.0,
+      "avg_price": 12.1714,
+      "median_price": 12.0,
+      "stddev_price": 6.9462,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:18:57.242715+00:00"
+    },
+    {
+      "product_id": "PRD056",
+      "canonical_name_he": "תפוח אדמה",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 8.9,
+      "max_price": 20.0,
+      "avg_price": 12.7375,
+      "median_price": 10.75,
+      "stddev_price": 4.4201,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:23:00.189412+00:00"
+    },
+    {
+      "product_id": "PRD042",
+      "canonical_name_he": "תפוח עץ",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 3.5,
+      "max_price": 29.0,
+      "avg_price": 18.65,
+      "median_price": 21.25,
+      "stddev_price": 8.8857,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-04T19:24:09.336054+00:00"
+    }
+  ]
+}

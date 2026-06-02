@@ -1,0 +1,3595 @@
+
+<div class="sfagent" dir="rtl" lang="he">
+<style>
+  /* ── Page-specific: Market Report ── */
+
+  .sfagent .report-update-line {
+    font-size: 0.8rem;
+    color: var(--sfa-muted);
+    text-align: left;
+    margin: 0 0 0.35rem;
+  }
+
+  .sfagent .vision-block {
+    margin-bottom: 1.25rem;
+    padding: 0 0.25rem;
+    line-height: 1.65;
+  }
+  .sfagent .vision-block h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sfa-green-dark);
+    margin: 0 0 0.6rem;
+  }
+  .sfagent .vision-block p {
+    font-size: 0.92rem;
+    color: var(--sfa-text);
+    margin: 0 0 0.6rem;
+  }
+  .sfagent .vision-block a {
+    color: var(--sfa-green-mid);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* Table framing title (M8 Item 6) */
+  .sfagent .table-framing {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--sfa-green-dark);
+    margin: 0.75rem 0 0.35rem;
+  }
+
+  /* Price table */
+  .sfagent table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .sfagent thead tr { background: var(--sfa-green-dark); color: #fff; }
+  .sfagent thead th { padding: 0.9rem 1rem; font-weight: 600; text-align: start; white-space: nowrap; }
+  .sfagent thead th.num { text-align: center; }
+  .sfagent tbody tr { border-bottom: 1px solid #f0ede6; }
+  .sfagent tbody tr:last-child { border-bottom: none; }
+  .sfagent tbody tr:nth-child(even) { background: #fafaf8; }
+  .sfagent tbody tr:hover { background: #f0faf4; }
+  .sfagent td { padding: 0.75rem 1rem; vertical-align: middle; }
+  .sfagent td.num { text-align: center; font-variant-numeric: tabular-nums; direction: ltr; }
+  .sfagent .product-name { font-weight: 600; font-size: 1rem; }
+  .sfagent .product-emoji { font-size: 1.3rem; margin-left: 0.4rem; }
+  .sfagent .sfa-badge { margin-right: 4px; }
+  /* M8 Item 3: Visual hierarchy — average dominant, median secondary */
+  .sfagent .price-main { font-size: 1.15rem; font-weight: 800; color: var(--sfa-green-dark); }
+  .sfagent .price-secondary { color: #9ca3af; font-size: 0.8rem; }
+  .sfagent .range-bar-wrap {
+    position: relative; height: 6px; background: #e5e7eb;
+    border-radius: 3px; min-width: 80px; margin: 4px 0;
+  }
+  .sfagent .range-bar-fill {
+    position: absolute; top: 0; bottom: 0;
+    background: linear-gradient(to left, var(--sfa-green-light), var(--sfa-green-dark));
+    border-radius: 3px;
+  }
+  .sfagent .range-text { font-size: 0.75rem; color: var(--sfa-muted); direction: ltr; }
+  .sfagent .stddev-text { font-size: 0.78rem; color: var(--sfa-muted); }
+  .sfagent .sources-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 0.78rem; color: var(--sfa-muted);
+  }
+
+  @media (max-width: 640px) {
+    .sfagent thead th, .sfagent td { padding: 0.6rem 0.5rem; font-size: 0.82rem; }
+  }
+
+  /* Source type filter bar */
+  .sfagent .sfa-filter-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin: 0.5rem 0 0.75rem; padding: 0;
+  }
+  .sfagent .sfa-filter-btn {
+    padding: 0.4rem 1rem; border-radius: 20px;
+    border: 1.5px solid var(--sfa-green-mid);
+    background: #fff; color: var(--sfa-green-dark);
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit;
+  }
+  .sfagent .sfa-filter-btn:hover {
+    background: var(--sfa-green-light); color: #fff;
+  }
+  .sfagent .sfa-filter-btn.active {
+    background: var(--sfa-green-dark); color: #fff;
+    border-color: var(--sfa-green-dark);
+  }
+  .sfagent .sfa-filter-btn.disabled {
+    opacity: 0.35; pointer-events: none;
+  }
+</style>
+
+
+<div class="sfa-modal-overlay" id="sfagentDisclaimer">
+  <div class="sfa-modal-box">
+    <h3>אודות מדד המחירים</h3>
+    <p>
+      הנתונים המוצגים בעמוד זה נאספים באופן אוטומטי ממקורות ציבוריים של מגדלים אורגניים בקהילה.
+      המחירים משקפים ממוצע תצפיות מ-7 הימים האחרונים ואינם מהווים המלצה מסחרית או הצעת מחיר.
+      ייתכנו אי-דיוקים הנובעים מהבדלי עונתיות, איכות או אזור גיאוגרפי.
+    </p>
+    <div style="overflow:hidden; margin-top: 0.5rem;">
+      <button class="sfa-btn" style="float: left;" onclick="document.getElementById('sfagentDisclaimer').classList.add('hidden')">
+        הבנתי, תודה
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="sfa-container">
+
+<h1 style="margin: 0 0 0.5rem; text-align: center;">מדד מחירי חקלאות אורגנית</h1>
+
+
+<div class="vision-block">
+  <p>
+    מי שניהל פעם חווה קטנה יודע — לתמחר תוצרת אורגנית בשוק שמשתנה כל שבוע זה
+    אחד הדברים הכי מתסכלים בעסק. המערכת הזו נולדה מתוך הצורך הזה בדיוק, מתוך
+    ניסיון אישי בשטח ומתוך הקהילה החקלאית כאן בפרדס חנה.
+  </p>
+  <p>
+    הסוכן שבנינו אוסף מחירים ממגדלים אורגניים, מנרמל אותם ומציג תמונה עדכנית —
+    כדי שחקלאים יוכלו לתמחר בביטחון, וצרכנים יוכלו להבין מה עומד מאחורי המחיר.
+  </p>
+  <p>
+    חווה חקלאית קטנה היא עסק מורכב עם המון נתונים, ובעלים שבסוף היום רוצה לגדל
+    חסה — לא להתעסק בטבלאות ובמחשבים. אני לוקח את הצורך, את ההבנה המעמיקה של
+    העסק החקלאי, ואת הידע שלי בפיתוח תוכנה וסוכני AI — ומייצר כלים שעושים את
+    הקסם מאחורי הקלעים.
+  </p>
+  <p>
+    <strong>יש לכם חווה, משק או עסק חקלאי?</strong> מעקב מחירים, ניהול מלאי, תזמון
+    משלוחים, מערכות הידרופוניות — כל דבר שיאפשר לכם להגשים את החלום בלי
+    הבירוקרטיה. <a href="https://wa.me/972547776770">בואו נדבר</a>.
+  </p>
+</div>
+
+<div class="report-update-line">
+  עודכן: 2026-04-04 22:15 · 76 מוצרים · תאריך דוח: 2026-04-04
+</div>
+
+
+<div class="sfa-bridge-link">
+  איך הנתונים נוצרים? <a href="#sfagent-dq-box">↓ ראה פירוט מתחת לטבלה</a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<h2 class="table-framing">מדד מחירים מבוסס נתונים אמיתיים מהשטח</h2>
+
+
+<div class="sfa-filter-bar" id="sfaFilterBar">
+  <button class="sfa-filter-btn active" data-filter="all">הכל</button>
+  <button class="sfa-filter-btn" data-filter="grower">🌱 מגדלים</button>
+  <button class="sfa-filter-btn" data-filter="store">🏪 חנויות</button>
+  <button class="sfa-filter-btn" data-filter="chain">🏬 רשתות</button>
+</div>
+
+<div class="sfa-card">
+  <table>
+    <thead>
+      <tr>
+        <th>מוצר</th>
+        
+        <th class="num" data-tooltip="הממוצע החשבוני של כל התצפיות ב-7 הימים האחרונים">ממוצע ₪</th>
+        <th class="num" data-tooltip="הערך האמצעי — 50% מהתצפיות מעל, 50% מתחת">חציון ₪</th>
+        <th data-tooltip="המחיר הנמוך והגבוה ביותר שנצפו">טווח מחירים</th>
+        <th class="num sfa-hide-mobile" data-tooltip="מדד לפיזור המחירים — ערך נמוך = מחירים דומים">סטיית תקן</th>
+        <th class="num" data-tooltip="מספר דיווחי מחיר שנאספו עבור המוצר">תצפיות</th>
+        <th class="num" data-tooltip="מספר חוות שונות (ללא חשיפה של חווה ספציפית)">מקורות</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+      <tr data-source-types="grower" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אבוקדו</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 19.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אגס</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">22.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">26.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 11.1%;"></div>
+            </div>
+            <div class="range-text">5.00 – 38.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">11.74</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אוכמניות</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">25.67</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">36.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 10.5%;"></div>
+            </div>
+            <div class="range-text">5.00 – 36.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">17.90</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אזוב</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">19.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 12.7%;"></div>
+            </div>
+            <div class="range-text">6.00 – 43.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">17.21</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אנדיב</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.00 – 17.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אספרגוס</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">28.83</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">27.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 8.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">27.00 – 32.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.75</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">29.68</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">29.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.3%; inline-size: 11.7%;"></div>
+            </div>
+            <div class="range-text">12.50 – 47.20</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">15.43</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק ירושלמי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">37.12</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">30.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 7.1%; inline-size: 14.0%;"></div>
+            </div>
+            <div class="range-text">23.50 – 65.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">18.90</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ארטישוק ירושלמי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">25.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">25.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.8%; inline-size: 4.0%;"></div>
+            </div>
+            <div class="range-text">19.90 – 31.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">8.49</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">אשכולית אדומה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.67</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.53</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בוקצ&#39;וי</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">9.97</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 14.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.51</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בוקצ&#39;וי</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">13.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 13.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בזיליקום</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">9.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.70</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 13.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.38</span>
+          
+        </td>
+        <td class="num">10</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●●
+            10
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בטטה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.11</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">17.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 6.5%;"></div>
+            </div>
+            <div class="range-text">4.88 – 24.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">6.19</span>
+          
+        </td>
+        <td class="num">11</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●●●
+            11
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בטטה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">21.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">21.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">19.90 – 22.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.12</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="eggs">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ביצים</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">23.06</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">24.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.5%; inline-size: 4.1%;"></div>
+            </div>
+            <div class="range-text">15.90 – 28.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.74</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="alliums">
+        <td>
+          <span class="product-emoji">🧅</span>
+          <span class="product-name">בצל יבש</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text sfa-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">בצל ירוק</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">8.78</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.23</span>
+          
+        </td>
+        <td class="num">12</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●●●●
+            12
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">ברוקולי</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.69</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 6.0%;"></div>
+            </div>
+            <div class="range-text">10.00 – 27.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.98</span>
+          
+        </td>
+        <td class="num">10</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●●
+            10
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥕</span>
+          <span class="product-name">גזר</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 12.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלורית</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">14.61</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 17.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.11</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלורית</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 17.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="cucurbits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">דלעת</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">15.90 – 16.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">חוביזה</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">7.83</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.6%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">4.50 – 10.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.93</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">חסה זן מובחר</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.92</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.75</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 16.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.07</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🍆</span>
+          <span class="product-name">חציל</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">13.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 15.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.83</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">טימין</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">8.97</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.49</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כורכום טרי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">42.98</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">39.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.8%; inline-size: 26.0%;"></div>
+            </div>
+            <div class="range-text">7.90 – 85.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">39.84</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרוב לבן</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 13.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.54</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרובית</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">19.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">19.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">18.90 – 19.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרישה</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">13.15</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">14.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 19.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.02</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="alliums">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">כרישה</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">15.95</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">13.00 – 18.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.17</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">לפת</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.65</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.0%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">2.60 – 17.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">6.37</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">לפת</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.90 – 13.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥒</span>
+          <span class="product-name">מלפפון</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">13.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 14.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">מנגולד</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">8.30</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.90 – 10.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.46</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">מרווה</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">8.30</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">7.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.00 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.07</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">נבטים</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.17</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.3%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.50 – 13.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.44</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">נענע</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.18</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">4.90 – 19.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.71</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות בינוני</span>
+          <span class="sfa-badge">סל בינוני</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">163.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">95.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 31.2%; inline-size: 68.8%;"></div>
+            </div>
+            <div class="range-text">95.00 – 299.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">117.78</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות גדול</span>
+          <span class="sfa-badge">סל גדול</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">156.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">140.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 37.9%; inline-size: 38.8%;"></div>
+            </div>
+            <div class="range-text">115.00 – 230.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">51.21</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות גדול</span>
+          <span class="sfa-badge">סל גדול</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">135.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">135.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 43.0%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">130.00 – 140.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">7.07</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="baskets">
+        <td>
+          <span class="product-emoji">🧺</span>
+          <span class="product-name">סל ירקות קטן</span>
+          <span class="sfa-badge">סל קטן</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">97.50</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">97.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 29.5%; inline-size: 5.1%;"></div>
+            </div>
+            <div class="range-text">90.00 – 105.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">10.61</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🟣</span>
+          <span class="product-name">סלק</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.77</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 4.6%;"></div>
+            </div>
+            <div class="range-text">5.90 – 19.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.15</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🟣</span>
+          <span class="product-name">סלק</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.90 – 14.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.54</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">סלרי שורש</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.0%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.50 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.89</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🍅</span>
+          <span class="product-name">עגבנייה שרי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">25.66</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">26.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.2%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">15.00 – 34.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.83</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">עירית</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">16.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 21.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">7.42</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">עלי תרד</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">9.88</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">9.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 4.9%;"></div>
+            </div>
+            <div class="range-text">3.00 – 17.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.06</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פומלית</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.99</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.95</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">7.00 – 14.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.20</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🌿</span>
+          <span class="product-name">פטרוזיליה</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">9.16</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">7.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 4.1%;"></div>
+            </div>
+            <div class="range-text">4.90 – 17.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.46</span>
+          
+        </td>
+        <td class="num">9</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●●
+            9
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🫑</span>
+          <span class="product-name">פלפל אדום</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">16.90 – 19.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.12</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל חריף</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">13.25</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">13.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">13.00 – 13.50</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.35</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל חריף</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.90 – 15.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.24</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🫑</span>
+          <span class="product-name">פלפל ירוק</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">10.63</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">9.00 – 12.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.03</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל סוויט בייט</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.45</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">11.00 – 11.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.64</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל צהוב / כתום</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.68</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">19.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.8%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">14.00 – 22.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.00</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל צהוב / כתום</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 19.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">1.41</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פלפל רמירו</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">23.33</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">24.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 6.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">21.00 – 25.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.08</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פסיפלורה</span>
+          <span class="sfa-badge">יחידה</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">26.17</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">28.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 4.7%; inline-size: 5.9%;"></div>
+            </div>
+            <div class="range-text">16.50 – 34.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">8.89</span>
+          
+        </td>
+        <td class="num">3</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●
+            3
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">פפאיה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">27.75</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">27.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 7.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">24.00 – 32.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.86</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🔴</span>
+          <span class="product-name">צנון</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">19.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">16.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.8%; inline-size: 10.8%;"></div>
+            </div>
+            <div class="range-text">8.00 – 40.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">13.04</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🔴</span>
+          <span class="product-name">צנון</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text sfa-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קולורבי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">11.43</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">11.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.0%; inline-size: 4.8%;"></div>
+            </div>
+            <div class="range-text">2.70 – 17.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">5.11</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="brassicas">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קולורבי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.90</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.90</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.5%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.90 – 12.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text sfa-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קיווי</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">25.37</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">28.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 11.8%;"></div>
+            </div>
+            <div class="range-text">2.95 – 38.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">13.35</span>
+          
+        </td>
+        <td class="num">5</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●
+            5
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קישוא</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.44</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.4%; inline-size: 8.5%;"></div>
+            </div>
+            <div class="range-text">3.70 – 29.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">7.83</span>
+          
+        </td>
+        <td class="num">7</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●
+            7
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower" data-category="fruiting_vegetables">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">קישוא</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">18.40</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">18.40</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 5.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">17.90 – 18.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">0.71</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">רוזמרין</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">8.60</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">8.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.0%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">5.50 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.38</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥗</span>
+          <span class="product-name">רוקט</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.73</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 1.1%; inline-size: 6.4%;"></div>
+            </div>
+            <div class="range-text">6.00 – 24.90</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">6.52</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שיבא</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.00</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">12.00</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 12.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text sfa-muted">—</span>
+          
+        </td>
+        <td class="num">2</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●
+            2
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="leafy_greens">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שמיר</span>
+          <span class="sfa-badge">צרור</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">5.97</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">5.45</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">3.00 – 10.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">2.96</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="legumes_fresh">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">שעועית ירוקה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">15.62</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">15.60</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 3.2%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">12.00 – 20.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">3.44</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תות שדה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">25.58</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">24.50</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 0.8%; inline-size: 15.2%;"></div>
+            </div>
+            <div class="range-text">5.00 – 50.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">14.77</span>
+          
+        </td>
+        <td class="num">6</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●
+            6
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="fruits">
+        <td>
+          <span class="product-emoji">🥬</span>
+          <span class="product-name">תמר</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">57.38</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">41.25</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 9.9%; inline-size: 28.0%;"></div>
+            </div>
+            <div class="range-text">32.00 – 115.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">38.82</span>
+          
+        </td>
+        <td class="num">4</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●
+            4
+          </span>
+        </td>
+      </tr>
+      
+      
+      <tr data-source-types="grower,store" data-category="root_vegetables">
+        <td>
+          <span class="product-emoji">🥔</span>
+          <span class="product-name">תפוח אדמה</span>
+          <span class="sfa-badge">קילוגרם</span>
+        </td>
+        
+        <td class="num" style="border-inline-start: 3px solid var(--sfa-green-light);">
+          
+            <span class="price-main">12.74</span>
+          
+        </td>
+        <td class="num">
+          
+            <span class="price-secondary">10.75</span>
+          
+        </td>
+        <td>
+          
+            
+            
+            <div class="range-bar-wrap">
+              <div class="range-bar-fill"
+                   style="inset-inline-end: 2.1%; inline-size: 4%;"></div>
+            </div>
+            <div class="range-text">8.90 – 20.00</div>
+          
+        </td>
+        <td class="num sfa-hide-mobile">
+          
+            <span class="stddev-text">4.42</span>
+          
+        </td>
+        <td class="num">8</td>
+        <td class="num">
+          <span class="sources-badge">
+            ●●●●●●●●
+            8
+          </span>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+
+<div class="sfa-cta-banner">
+  <p>יש לך נתונים מדויקים יותר? עזור לשפר את המדד — זה משרת את כל הקהילה.</p>
+  <a class="sfa-btn" href="https://wa.me/972547776770?text=היי, אני רוצה לשתף נתוני מחירים למדד">שלח בוואטסאפ</a>
+</div>
+
+
+
+<div class="sfa-card--accent" id="sfagent-dq-box" aria-label="שקיפות צינור נירמול">
+  
+  <p class="sfa-bridge-target">הטבלה מעל מבוססת על תהליך זה:</p>
+  <h2 class="sfa-card-title">שקיפות — מצב צינור הנירמול</h2>
+  <p class="sfa-card-lead">
+    נתונים מבוססים על מחירון מגדלים פעילים. מחיר ממוצע בהתאם ליחידה שנצפתה.
+    הנתונים נאספים באופן אוטומטי ממקורות ציבוריים, משקפים ממוצע תצפיות מ-7 הימים
+    האחרונים, ואינם מהווים המלצה מסחרית או הצעת מחיר. ייתכנו אי-דיוקים הנובעים
+    מהבדלי עונתיות, איכות או אזור גיאוגרפי.
+  </p>
+  <p class="sfa-card-lead">
+    ספירות לפי מסד הנתונים המקומי. לא משמשים לחישוב המחירים בטבלה למעלה.
+  </p>
+  
+  <div class="sfa-privacy-block">
+    <strong>🔒 פרטיות:</strong>
+    <ul>
+      <li>המערכת מציגה נתונים מצרפיים בלבד.</li>
+      <li>אין חשיפה של מחירים ברמת חווה בודדת.</li>
+      <li>לא ניתן לזהות מגדל ספציפי.</li>
+    </ul>
+  </div>
+  <ul class="sfa-card-grid">
+    <li>מנורמל: <span class="sfa-ltr">2298</span></li>
+    <li>לא ניתן לזיהוי: <span class="sfa-ltr">5</span></li>
+    <li>ממתין לעיבוד: <span class="sfa-ltr">17</span></li>
+    <li>דולג (<span class="sfa-ltr">ignored</span>): <span class="sfa-ltr">3098</span></li>
+    <li>דילוג מאושר (סקופ): <span class="sfa-ltr">3098</span></li>
+    <li>כללי סקופ פעילים: <span class="sfa-ltr">933</span></li>
+    <li>אחוז פתרון: <span class="sfa-ltr">99.78%</span></li>
+  </ul>
+</div>
+
+
+</div>
+
+
+<script>
+(function() {
+  var report = document.querySelector('.sfagent');
+  if (!report) return;
+  var headers = report.querySelectorAll('[data-tooltip]');
+  var activeTooltip = null;
+
+  function showTooltip(th) {
+    hideTooltip();
+    var tip = document.createElement('div');
+    tip.className = 'sfa-tooltip';
+    tip.textContent = th.getAttribute('data-tooltip');
+    th.style.position = 'relative';
+    th.appendChild(tip);
+    requestAnimationFrame(function() {
+      var rect = tip.getBoundingClientRect();
+      if (rect.left < 8) tip.style.transform = 'translateX(0)';
+      if (rect.right > window.innerWidth - 8) tip.style.transform = 'translateX(-100%)';
+      tip.classList.add('visible');
+    });
+    activeTooltip = { el: tip, th: th };
+  }
+
+  function hideTooltip() {
+    if (activeTooltip) {
+      activeTooltip.el.remove();
+      activeTooltip = null;
+    }
+  }
+
+  var isTouchDevice = 'ontouchstart' in window;
+
+  headers.forEach(function(th) {
+    if (!isTouchDevice) {
+      th.addEventListener('mouseenter', function() { showTooltip(th); });
+      th.addEventListener('mouseleave', hideTooltip);
+    }
+    th.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (activeTooltip && activeTooltip.th === th) { hideTooltip(); }
+      else { showTooltip(th); }
+    });
+  });
+
+  document.addEventListener('click', hideTooltip);
+})();
+</script>
+
+
+<script>
+(function() {
+  var bar = document.getElementById('sfaFilterBar');
+  if (!bar) return;
+  var btns = bar.querySelectorAll('.sfa-filter-btn');
+  var table = document.querySelector('.sfagent table');
+  if (!table) return;
+  var rows = table.querySelectorAll('tbody tr');
+
+  var typeCounts = { all: rows.length, grower: 0, store: 0, chain: 0 };
+  rows.forEach(function(r) {
+    var types = (r.getAttribute('data-source-types') || '').split(',');
+    types.forEach(function(t) { if (typeCounts[t] !== undefined) typeCounts[t]++; });
+  });
+
+  btns.forEach(function(btn) {
+    var f = btn.getAttribute('data-filter');
+    if (f !== 'all' && typeCounts[f] === 0) btn.classList.add('disabled');
+
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      rows.forEach(function(r) {
+        if (f === 'all') { r.style.display = ''; return; }
+        var types = (r.getAttribute('data-source-types') || '').split(',');
+        if (types.indexOf(f) >= 0) { r.style.display = ''; }
+        else { r.style.display = 'none'; }
+      });
+    });
+  });
+})();
+</script>
+
+</div>

@@ -1,0 +1,3678 @@
+{
+  "report_schema_version": "3.0",
+  "generated_at": "2026-04-07T22:42:15.159421+00:00",
+  "report_date": "2026-04-05",
+  "index": {
+    "mode": "rolling_7d",
+    "window_days": 7,
+    "window_start": "2026-03-30",
+    "window_end": "2026-04-05"
+  },
+  "data_quality": {
+    "raw_extracted_items": {
+      "normalized": 3252,
+      "unresolvable": 95,
+      "extracted_pending": 31,
+      "ignored": 4658,
+      "ignored_approved_scope_skip": 4658
+    },
+    "resolution_pct_norm_vs_unres": 97.16,
+    "active_scope_skip_rules": 923
+  },
+  "products": [
+    {
+      "product_id": "PRD070",
+      "canonical_name_he": "אגס",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 5.0,
+      "max_price": 30.0,
+      "avg_price": 21.2875,
+      "median_price": 26.0,
+      "stddev_price": 10.3814,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.501400+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.0,
+          "max_price": 38.0,
+          "avg_price": 23.1444,
+          "median_price": 27.0,
+          "stddev_price": 11.1953,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.485032+00:00"
+        },
+        "grower": {
+          "min_price": 5.0,
+          "max_price": 30.0,
+          "avg_price": 21.2875,
+          "median_price": 26.0,
+          "stddev_price": 10.3814,
+          "sample_size": 8,
+          "distinct_sources": 8,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.501400+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 9,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 22.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 27.95
+          },
+          {
+            "d": "2026-04-05",
+            "v": 23.75
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD086",
+      "canonical_name_he": "אוכמניות",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 5.0,
+      "max_price": 36.0,
+      "avg_price": 25.3,
+      "median_price": 34.9,
+      "stddev_price": 17.5889,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:00.158328+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.0,
+          "max_price": 36.0,
+          "avg_price": 27.975,
+          "median_price": 35.45,
+          "stddev_price": 15.3254,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:02.467670+00:00"
+        },
+        "grower": {
+          "min_price": 5.0,
+          "max_price": 36.0,
+          "avg_price": 25.3,
+          "median_price": 34.9,
+          "stddev_price": 17.5889,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:00.158328+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 28.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 36.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 20.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD066",
+      "canonical_name_he": "אזוב",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 6.0,
+      "max_price": 43.5,
+      "avg_price": 20.6,
+      "median_price": 7.5,
+      "stddev_price": 18.9255,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:02.038801+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 6.0,
+          "max_price": 43.5,
+          "avg_price": 19.3333,
+          "median_price": 10.25,
+          "stddev_price": 17.2095,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.960096+00:00"
+        },
+        "grower": {
+          "min_price": 6.0,
+          "max_price": 43.5,
+          "avg_price": 20.6,
+          "median_price": 7.5,
+          "stddev_price": 18.9255,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.038801+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 6.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 6.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 25.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 7.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD085",
+      "canonical_name_he": "אנדיב",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 15.0,
+      "max_price": 17.0,
+      "avg_price": 16.0,
+      "median_price": 16.0,
+      "stddev_price": 1.4142,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:02.767185+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 15.0,
+          "max_price": 17.0,
+          "avg_price": 16.0,
+          "median_price": 16.0,
+          "stddev_price": 1.4142,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.767185+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 2,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 17.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 15.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 17.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD071",
+      "canonical_name_he": "אספרגוס",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 27.0,
+      "max_price": 27.5,
+      "avg_price": 27.25,
+      "median_price": 27.25,
+      "stddev_price": 0.3536,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:00.713881+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 27.0,
+          "max_price": 32.0,
+          "avg_price": 28.8333,
+          "median_price": 27.5,
+          "stddev_price": 2.7538,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.047743+00:00"
+        },
+        "grower": {
+          "min_price": 27.0,
+          "max_price": 27.5,
+          "avg_price": 27.25,
+          "median_price": 27.25,
+          "stddev_price": 0.3536,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:00.713881+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 3,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 32.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 27.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 29.75
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD043",
+      "canonical_name_he": "אפונה טריה",
+      "category": "legumes_fresh",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 12.0,
+      "max_price": 20.5,
+      "avg_price": 15.5667,
+      "median_price": 14.0,
+      "stddev_price": 3.7612,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:01.711899+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 12.0,
+          "max_price": 20.5,
+          "avg_price": 16.0571,
+          "median_price": 15.0,
+          "stddev_price": 3.6705,
+          "sample_size": 7,
+          "distinct_sources": 7,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:02.816980+00:00"
+        },
+        "grower": {
+          "min_price": 12.0,
+          "max_price": 20.5,
+          "avg_price": 15.5667,
+          "median_price": 14.0,
+          "stddev_price": 3.7612,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:01.711899+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 7,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 20.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 20.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 20.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 19.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD035",
+      "canonical_name_he": "ארטישוק",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 12.5,
+      "max_price": 47.2,
+      "avg_price": 29.675,
+      "median_price": 29.5,
+      "stddev_price": 15.4345,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:03.389599+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 12.5,
+          "max_price": 47.2,
+          "avg_price": 31.54,
+          "median_price": 37.0,
+          "stddev_price": 14.0021,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.389599+00:00"
+        },
+        "grower": {
+          "min_price": 12.5,
+          "max_price": 47.2,
+          "avg_price": 29.675,
+          "median_price": 29.5,
+          "stddev_price": 15.4345,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.389599+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 5,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 22.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 17.25
+          },
+          {
+            "d": "2026-04-03",
+            "v": 17.25
+          },
+          {
+            "d": "2026-04-04",
+            "v": 30.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 30.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD057",
+      "canonical_name_he": "ארטישוק ירושלמי",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 6,
+      "distinct_sources": 6,
+      "min_price": 19.9,
+      "max_price": 65.0,
+      "avg_price": 33.3833,
+      "median_price": 29.95,
+      "stddev_price": 16.1999,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:01.899439+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 19.9,
+          "max_price": 65.0,
+          "avg_price": 33.3833,
+          "median_price": 29.95,
+          "stddev_price": 16.1999,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.899439+00:00"
+        },
+        "grower": {
+          "min_price": 19.9,
+          "max_price": 65.0,
+          "avg_price": 33.3833,
+          "median_price": 29.95,
+          "stddev_price": 16.1999,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.899439+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "grower_price_grid",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 30.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 30.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 28.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 65.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 30.0
+          }
+        ],
+        "csa": null,
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD058",
+      "canonical_name_he": "אשכולית אדומה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 9.0,
+      "max_price": 12.0,
+      "avg_price": 10.5,
+      "median_price": 10.5,
+      "stddev_price": 2.1213,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.715915+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 9.0,
+          "max_price": 12.0,
+          "avg_price": 10.6667,
+          "median_price": 11.0,
+          "stddev_price": 1.5275,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.455402+00:00"
+        },
+        "grower": {
+          "min_price": 9.0,
+          "max_price": 12.0,
+          "avg_price": 10.5,
+          "median_price": 10.5,
+          "stddev_price": 2.1213,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.715915+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 3,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 11.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD062",
+      "canonical_name_he": "בוקצ'וי",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 7.0,
+      "max_price": 14.9,
+      "avg_price": 11.34,
+      "median_price": 12.9,
+      "stddev_price": 3.5935,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:02.034967+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 7.0,
+          "max_price": 14.9,
+          "avg_price": 11.1167,
+          "median_price": 11.45,
+          "stddev_price": 3.2603,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.135075+00:00"
+        },
+        "grower": {
+          "min_price": 7.0,
+          "max_price": 14.9,
+          "avg_price": 11.34,
+          "median_price": 12.9,
+          "stddev_price": 3.5935,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:02.034967+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 8.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 8.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 8.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 7.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD063",
+      "canonical_name_he": "בזיליקום",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 10,
+      "distinct_sources": 10,
+      "min_price": 6.0,
+      "max_price": 12.0,
+      "avg_price": 9.33,
+      "median_price": 8.7,
+      "stddev_price": 2.2306,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:02.353973+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 6.0,
+          "max_price": 13.0,
+          "avg_price": 9.6636,
+          "median_price": 8.9,
+          "stddev_price": 2.388,
+          "sample_size": 11,
+          "distinct_sources": 11,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.283968+00:00"
+        },
+        "grower": {
+          "min_price": 6.0,
+          "max_price": 12.0,
+          "avg_price": 9.33,
+          "median_price": 8.7,
+          "stddev_price": 2.2306,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.353973+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 11,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 9.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 8.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 9.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD067",
+      "canonical_name_he": "ביצים",
+      "category": "eggs",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 15.9,
+      "max_price": 29.0,
+      "avg_price": 23.8222,
+      "median_price": 24.5,
+      "stddev_price": 4.5494,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:03.507467+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 15.9,
+          "max_price": 29.0,
+          "avg_price": 23.8222,
+          "median_price": 24.5,
+          "stddev_price": 4.5494,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.507467+00:00"
+        },
+        "grower": {
+          "min_price": 15.9,
+          "max_price": 29.0,
+          "avg_price": 23.8222,
+          "median_price": 24.5,
+          "stddev_price": 4.5494,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.507467+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "grower_price_grid",
+        "source_count": 9,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 27.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 25.5
+          },
+          {
+            "d": "2026-04-03",
+            "v": 24.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 27.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 24.5
+          }
+        ],
+        "csa": null,
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD018",
+      "canonical_name_he": "בצל ירוק",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 12,
+      "distinct_sources": 12,
+      "min_price": 5.9,
+      "max_price": 14.0,
+      "avg_price": 8.9417,
+      "median_price": 8.5,
+      "stddev_price": 2.5447,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.456664+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.9,
+          "max_price": 14.0,
+          "avg_price": 9.1769,
+          "median_price": 9.0,
+          "stddev_price": 2.5798,
+          "sample_size": 13,
+          "distinct_sources": 13,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.456664+00:00"
+        },
+        "grower": {
+          "min_price": 5.9,
+          "max_price": 14.0,
+          "avg_price": 8.9417,
+          "median_price": 8.5,
+          "stddev_price": 2.5447,
+          "sample_size": 12,
+          "distinct_sources": 12,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.456664+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 13,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 9.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "scallion",
+      "icon_path": "icons/iconpark/scallion.svg"
+    },
+    {
+      "product_id": "PRD023",
+      "canonical_name_he": "ברוקולי",
+      "category": "brassicas",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 10,
+      "distinct_sources": 10,
+      "min_price": 10.0,
+      "max_price": 27.9,
+      "avg_price": 17.78,
+      "median_price": 15.75,
+      "stddev_price": 6.0188,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:02.114863+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 10.0,
+          "max_price": 27.9,
+          "avg_price": 17.2545,
+          "median_price": 15.5,
+          "stddev_price": 5.97,
+          "sample_size": 11,
+          "distinct_sources": 11,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.202478+00:00"
+        },
+        "grower": {
+          "min_price": 10.0,
+          "max_price": 27.9,
+          "avg_price": 17.78,
+          "median_price": 15.75,
+          "stddev_price": 6.0188,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:02.114863+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 11,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 13.5
+          },
+          {
+            "d": "2026-04-02",
+            "v": 13.5
+          },
+          {
+            "d": "2026-04-03",
+            "v": 15.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 20.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 16.75
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "peas",
+      "icon_path": "icons/iconpark/peas.svg"
+    },
+    {
+      "product_id": "PRD079",
+      "canonical_name_he": "חוביזה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 4.5,
+      "max_price": 9.0,
+      "avg_price": 6.75,
+      "median_price": 6.75,
+      "stddev_price": 3.182,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:00.885379+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 4.5,
+          "max_price": 10.0,
+          "avg_price": 7.8333,
+          "median_price": 9.0,
+          "stddev_price": 2.9297,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.073098+00:00"
+        },
+        "grower": {
+          "min_price": 4.5,
+          "max_price": 9.0,
+          "avg_price": 6.75,
+          "median_price": 6.75,
+          "stddev_price": 3.182,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:00.885379+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 3,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 7.25
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD094",
+      "canonical_name_he": "חמאת גהי אורגנית ארוזה",
+      "category": "pantry_dry",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 84.9,
+      "max_price": 89.9,
+      "avg_price": 87.4,
+      "median_price": 87.4,
+      "stddev_price": 3.5355,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:48:57.829091+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 84.9,
+          "max_price": 89.9,
+          "avg_price": 87.4,
+          "median_price": 87.4,
+          "stddev_price": 3.5355,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:48:57.829091+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 2,
+        "price_series": [],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD030",
+      "canonical_name_he": "חסה זן מובחר",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 7.0,
+      "max_price": 12.0,
+      "avg_price": 9.9,
+      "median_price": 10.0,
+      "stddev_price": 2.0125,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:01.457167+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 7.0,
+          "max_price": 12.0,
+          "avg_price": 10.0833,
+          "median_price": 10.5,
+          "stddev_price": 1.8552,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:02.979650+00:00"
+        },
+        "grower": {
+          "min_price": 7.0,
+          "max_price": 12.0,
+          "avg_price": 9.9,
+          "median_price": 10.0,
+          "stddev_price": 2.0125,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:01.457167+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 11.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 10.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD076",
+      "canonical_name_he": "טימין",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 5.9,
+      "max_price": 12.0,
+      "avg_price": 7.9667,
+      "median_price": 6.0,
+      "stddev_price": 3.4933,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:01.476803+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.9,
+          "max_price": 12.0,
+          "avg_price": 8.975,
+          "median_price": 9.0,
+          "stddev_price": 3.4932,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.372697+00:00"
+        },
+        "grower": {
+          "min_price": 5.9,
+          "max_price": 12.0,
+          "avg_price": 7.9667,
+          "median_price": 6.0,
+          "stddev_price": 3.4933,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:01.476803+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 9.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD011",
+      "canonical_name_he": "כוסברה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 11,
+      "distinct_sources": 11,
+      "min_price": 4.9,
+      "max_price": 12.0,
+      "avg_price": 7.4909,
+      "median_price": 7.0,
+      "stddev_price": 2.5497,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.466250+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 4.9,
+          "max_price": 12.0,
+          "avg_price": 7.4909,
+          "median_price": 7.0,
+          "stddev_price": 2.5497,
+          "sample_size": 11,
+          "distinct_sources": 11,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.466250+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 11,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 8.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 7.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 8.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 4.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 7.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD045",
+      "canonical_name_he": "כורכום טרי",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 7.9,
+      "max_price": 85.0,
+      "avg_price": 29.95,
+      "median_price": 13.45,
+      "stddev_price": 36.9008,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:01.757487+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 7.9,
+          "max_price": 85.0,
+          "avg_price": 37.76,
+          "median_price": 16.9,
+          "stddev_price": 36.4175,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.117035+00:00"
+        },
+        "grower": {
+          "min_price": 7.9,
+          "max_price": 85.0,
+          "avg_price": 29.95,
+          "median_price": 13.45,
+          "stddev_price": 36.9008,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.757487+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 5,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 42.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 11.95
+          },
+          {
+            "d": "2026-04-05",
+            "v": 42.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD020",
+      "canonical_name_he": "כרישה",
+      "category": "alliums",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 6.0,
+      "max_price": 18.9,
+      "avg_price": 13.1189,
+      "median_price": 13.0,
+      "stddev_price": 4.6815,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:03.471053+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 6.0,
+          "max_price": 19.0,
+          "avg_price": 13.707,
+          "median_price": 14.5,
+          "stddev_price": 4.7896,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.471053+00:00"
+        },
+        "grower": {
+          "min_price": 6.0,
+          "max_price": 18.9,
+          "avg_price": 13.1189,
+          "median_price": 13.0,
+          "stddev_price": 4.6815,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.471053+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 10,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 18.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 18.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 18.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 16.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "scallion",
+      "icon_path": "icons/iconpark/scallion.svg"
+    },
+    {
+      "product_id": "PRD015",
+      "canonical_name_he": "לפת",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 2.6,
+      "max_price": 15.0,
+      "avg_price": 11.08,
+      "median_price": 12.0,
+      "stddev_price": 4.918,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.954248+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 2.6,
+          "max_price": 17.0,
+          "avg_price": 12.0667,
+          "median_price": 12.95,
+          "stddev_price": 5.019,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.831429+00:00"
+        },
+        "grower": {
+          "min_price": 2.6,
+          "max_price": 15.0,
+          "avg_price": 11.08,
+          "median_price": 12.0,
+          "stddev_price": 4.918,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.954248+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 12.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "pumpkin",
+      "icon_path": "icons/iconpark/pumpkin.svg"
+    },
+    {
+      "product_id": "PRD040",
+      "canonical_name_he": "מנגולד",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 5.9,
+      "max_price": 12.0,
+      "avg_price": 8.675,
+      "median_price": 8.5,
+      "stddev_price": 1.9645,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.477107+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.9,
+          "max_price": 12.0,
+          "avg_price": 8.7111,
+          "median_price": 9.0,
+          "stddev_price": 1.8408,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.477107+00:00"
+        },
+        "grower": {
+          "min_price": 5.9,
+          "max_price": 12.0,
+          "avg_price": 8.675,
+          "median_price": 8.5,
+          "stddev_price": 1.9645,
+          "sample_size": 8,
+          "distinct_sources": 8,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.477107+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 9,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 9.5
+          },
+          {
+            "d": "2026-04-02",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 5.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 9.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD064",
+      "canonical_name_he": "מרווה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 5.0,
+      "max_price": 12.0,
+      "avg_price": 7.625,
+      "median_price": 6.75,
+      "stddev_price": 3.0923,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:02.072550+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.0,
+          "max_price": 12.0,
+          "avg_price": 8.3,
+          "median_price": 7.5,
+          "stddev_price": 3.0741,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.362996+00:00"
+        },
+        "grower": {
+          "min_price": 5.0,
+          "max_price": 12.0,
+          "avg_price": 7.625,
+          "median_price": 6.75,
+          "stddev_price": 3.0923,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.072550+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 5,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 6.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 6.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 9.25
+          },
+          {
+            "d": "2026-04-04",
+            "v": 9.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 6.75
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD033",
+      "canonical_name_he": "נבטים",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 9.5,
+      "max_price": 13.5,
+      "avg_price": 11.0,
+      "median_price": 11.0,
+      "stddev_price": 1.5411,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-05T09:17:02.122588+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 9.5,
+          "max_price": 13.5,
+          "avg_price": 10.9167,
+          "median_price": 10.75,
+          "stddev_price": 1.3934,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:03.269270+00:00"
+        },
+        "grower": {
+          "min_price": 9.5,
+          "max_price": 13.5,
+          "avg_price": 11.0,
+          "median_price": 11.0,
+          "stddev_price": 1.5411,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:02.122588+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.75
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.75
+          },
+          {
+            "d": "2026-04-03",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 11.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD073",
+      "canonical_name_he": "נענע",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 4.9,
+      "max_price": 19.5,
+      "avg_price": 10.56,
+      "median_price": 9.0,
+      "stddev_price": 5.8385,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:00.835372+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 4.9,
+          "max_price": 19.5,
+          "avg_price": 10.6333,
+          "median_price": 10.0,
+          "stddev_price": 5.2252,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.376962+00:00"
+        },
+        "grower": {
+          "min_price": 4.9,
+          "max_price": 19.5,
+          "avg_price": 10.56,
+          "median_price": 9.0,
+          "stddev_price": 5.8385,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:00.835372+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 6.95
+          },
+          {
+            "d": "2026-04-05",
+            "v": 9.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD026",
+      "canonical_name_he": "סל ירקות בינוני",
+      "category": "baskets",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 95.0,
+      "max_price": 299.0,
+      "avg_price": 163.0,
+      "median_price": 95.0,
+      "stddev_price": 117.7795,
+      "normalized_unit": "סל בינוני",
+      "last_observed_at": "2026-04-05T09:17:01.704371+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 95.0,
+          "max_price": 299.0,
+          "avg_price": 163.0,
+          "median_price": 95.0,
+          "stddev_price": 117.7795,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "סל בינוני",
+          "last_observed_at": "2026-04-05T09:17:01.704371+00:00"
+        },
+        "grower": {
+          "min_price": 95.0,
+          "max_price": 299.0,
+          "avg_price": 163.0,
+          "median_price": 95.0,
+          "stddev_price": 117.7795,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "סל בינוני",
+          "last_observed_at": "2026-04-05T09:17:01.704371+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": {
+          "min_price": 95.0,
+          "max_price": 299.0,
+          "avg_price": 163.0,
+          "median_price": 95.0,
+          "stddev_price": 117.7795,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "סל בינוני",
+          "last_observed_at": "2026-04-05T09:17:01.704371+00:00"
+        }
+      },
+      "details": {
+        "details_variant": "basket_csa",
+        "source_count": 3,
+        "price_series": [],
+        "csa": null,
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "vegetable-basket",
+      "icon_path": "icons/iconpark/vegetable-basket.svg"
+    },
+    {
+      "product_id": "PRD025",
+      "canonical_name_he": "סל ירקות קטן",
+      "category": "baskets",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 90.0,
+      "max_price": 125.0,
+      "avg_price": 111.25,
+      "median_price": 115.0,
+      "stddev_price": 17.0171,
+      "normalized_unit": "סל קטן",
+      "last_observed_at": "2026-04-05T09:17:02.398331+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 90.0,
+          "max_price": 125.0,
+          "avg_price": 111.25,
+          "median_price": 115.0,
+          "stddev_price": 17.0171,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "סל קטן",
+          "last_observed_at": "2026-04-05T09:17:02.398331+00:00"
+        },
+        "grower": {
+          "min_price": 90.0,
+          "max_price": 125.0,
+          "avg_price": 111.25,
+          "median_price": 115.0,
+          "stddev_price": 17.0171,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "סל קטן",
+          "last_observed_at": "2026-04-05T09:17:02.398331+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": {
+          "min_price": 90.0,
+          "max_price": 125.0,
+          "avg_price": 111.25,
+          "median_price": 115.0,
+          "stddev_price": 17.0171,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "סל קטן",
+          "last_observed_at": "2026-04-05T09:17:02.398331+00:00"
+        }
+      },
+      "details": {
+        "details_variant": "basket_csa",
+        "source_count": 4,
+        "price_series": [],
+        "csa": {
+          "contents_summary_generalized": "מה היה השבוע בסל חקלאות בשיתוף הקהילה הרשמה ירקות השדה הקבועים קיץ | מה היה השבוע בסל אז מה יש בסל?? כל עונה היא אחרת ומגוון הירקות משתנה וכך גם הסל משתנה משבוע לשבוע. ובכל זאת בכל עונה יש איזה מגוון אפשרי יותר של דברים. בשביל להבין יותר טוב הנה דוגמא לסלים לפי עונה חורף | אז מה יש בסל?? כל עונה היא אחרת ומגוון הירקות משתנה וכך גם הסל משתנה משבוע לשבוע. ובכל זאת בכל עונה יש איזה מגוון אפשרי יותר של דברים. בשביל להבין יותר טוב הנה דוגמא לסלים לפי עונה חורף אביב | מה היה השבוע בסל מערכת הזמנות חקלאות בשיתוף הקהילה עינת חוות ירקות אורגניים עם משלוח עד הבית כפר הנוער עיינות (ליד צומת בית עובד)",
+          "cadence_note": "חשוב לנו לציין שהמשלוחים מגיעים בשעות הערב/לילה של אותו יום. | איסוף מהחווה בד\"כ החל מהשעה 14:00 של אותו היום. | יום חמישי",
+          "context_incomplete": false
+        },
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "bowl-one",
+      "icon_path": "icons/iconpark/bowl-one.svg"
+    },
+    {
+      "product_id": "PRD014",
+      "canonical_name_he": "סלק",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 10,
+      "distinct_sources": 10,
+      "min_price": 5.9,
+      "max_price": 19.5,
+      "avg_price": 11.77,
+      "median_price": 10.95,
+      "stddev_price": 4.9889,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:03.487862+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.9,
+          "max_price": 19.5,
+          "avg_price": 11.8818,
+          "median_price": 12.0,
+          "stddev_price": 4.7474,
+          "sample_size": 11,
+          "distinct_sources": 11,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:03.487862+00:00"
+        },
+        "grower": {
+          "min_price": 5.9,
+          "max_price": 19.5,
+          "avg_price": 11.77,
+          "median_price": 10.95,
+          "stddev_price": 4.9889,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:03.487862+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 11,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.5
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 5.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 12.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "radish-one",
+      "icon_path": "icons/iconpark/radish-one.svg"
+    },
+    {
+      "product_id": "PRD039",
+      "canonical_name_he": "סלרי שורש",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 8.5,
+      "max_price": 12.0,
+      "avg_price": 9.8333,
+      "median_price": 9.0,
+      "stddev_price": 1.893,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.441921+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 8.5,
+          "max_price": 12.0,
+          "avg_price": 10.375,
+          "median_price": 10.5,
+          "stddev_price": 1.8875,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.441921+00:00"
+        },
+        "grower": {
+          "min_price": 8.5,
+          "max_price": 12.0,
+          "avg_price": 9.8333,
+          "median_price": 9.0,
+          "stddev_price": 1.893,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.441921+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 12.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD002",
+      "canonical_name_he": "עגבנייה שרי",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 10,
+      "distinct_sources": 10,
+      "min_price": 15.0,
+      "max_price": 29.5,
+      "avg_price": 23.28,
+      "median_price": 25.0,
+      "stddev_price": 5.4988,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:02.012741+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 15.0,
+          "max_price": 29.5,
+          "avg_price": 23.2545,
+          "median_price": 25.0,
+          "stddev_price": 5.2173,
+          "sample_size": 11,
+          "distinct_sources": 11,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.628898+00:00"
+        },
+        "grower": {
+          "min_price": 15.0,
+          "max_price": 29.5,
+          "avg_price": 23.28,
+          "median_price": 25.0,
+          "stddev_price": 5.4988,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.012741+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 11,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 15.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 15.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 33.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 25.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 23.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "cherry",
+      "icon_path": "icons/iconpark/cherry.svg"
+    },
+    {
+      "product_id": "PRD081",
+      "canonical_name_he": "עירית",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 11.0,
+      "max_price": 21.5,
+      "avg_price": 16.25,
+      "median_price": 16.25,
+      "stddev_price": 7.4246,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.265216+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 11.0,
+          "max_price": 21.5,
+          "avg_price": 16.25,
+          "median_price": 16.25,
+          "stddev_price": 7.4246,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.265216+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 2,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 11.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD009",
+      "canonical_name_he": "עלי תרד",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 3.0,
+      "max_price": 17.5,
+      "avg_price": 9.8778,
+      "median_price": 9.0,
+      "stddev_price": 4.0555,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.502765+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 3.0,
+          "max_price": 17.5,
+          "avg_price": 9.8778,
+          "median_price": 9.0,
+          "stddev_price": 4.0555,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.502765+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 9,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 8.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 10.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD012",
+      "canonical_name_he": "פטרוזיליה",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 9,
+      "distinct_sources": 9,
+      "min_price": 4.9,
+      "max_price": 14.5,
+      "avg_price": 8.0444,
+      "median_price": 7.0,
+      "stddev_price": 3.3698,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:03.492671+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 4.9,
+          "max_price": 14.5,
+          "avg_price": 8.44,
+          "median_price": 7.0,
+          "stddev_price": 3.4144,
+          "sample_size": 10,
+          "distinct_sources": 10,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.492671+00:00"
+        },
+        "grower": {
+          "min_price": 4.9,
+          "max_price": 14.5,
+          "avg_price": 8.0444,
+          "median_price": 7.0,
+          "stddev_price": 3.3698,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:03.492671+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 10,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 8.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 5.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 10.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD032",
+      "canonical_name_he": "פלפל חריף",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 9.9,
+      "max_price": 15.9,
+      "avg_price": 13.075,
+      "median_price": 13.25,
+      "stddev_price": 2.4663,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:01.825886+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 9.9,
+          "max_price": 15.9,
+          "avg_price": 13.075,
+          "median_price": 13.25,
+          "stddev_price": 2.4663,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.825886+00:00"
+        },
+        "grower": {
+          "min_price": 9.9,
+          "max_price": 15.9,
+          "avg_price": 13.075,
+          "median_price": 13.25,
+          "stddev_price": 2.4663,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.825886+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "grower_price_grid",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 13.25
+          },
+          {
+            "d": "2026-04-05",
+            "v": 13.25
+          }
+        ],
+        "csa": null,
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "chili",
+      "icon_path": "icons/iconpark/chili.svg"
+    },
+    {
+      "product_id": "PRD004",
+      "canonical_name_he": "פלפל ירוק",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 10.0,
+      "max_price": 12.9,
+      "avg_price": 11.45,
+      "median_price": 11.45,
+      "stddev_price": 2.0506,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.976194+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 9.0,
+          "max_price": 12.9,
+          "avg_price": 10.6333,
+          "median_price": 10.0,
+          "stddev_price": 2.0257,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.674232+00:00"
+        },
+        "grower": {
+          "min_price": 10.0,
+          "max_price": 12.9,
+          "avg_price": 11.45,
+          "median_price": 11.45,
+          "stddev_price": 2.0506,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.976194+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 3,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 10.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "peas",
+      "icon_path": "icons/iconpark/peas.svg"
+    },
+    {
+      "product_id": "PRD031",
+      "canonical_name_he": "פלפל סוויט בייט",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 11.0,
+      "max_price": 13.0,
+      "avg_price": 11.9667,
+      "median_price": 11.9,
+      "stddev_price": 1.0017,
+      "normalized_unit": "חבילה / אריזה",
+      "last_observed_at": "2026-04-05T09:17:01.980341+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 11.0,
+          "max_price": 35.0,
+          "avg_price": 17.725,
+          "median_price": 12.45,
+          "stddev_price": 11.5457,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:02.726533+00:00"
+        },
+        "grower": {
+          "min_price": 11.0,
+          "max_price": 13.0,
+          "avg_price": 11.9667,
+          "median_price": 11.9,
+          "stddev_price": 1.0017,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "חבילה / אריזה",
+          "last_observed_at": "2026-04-05T09:17:01.980341+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 13.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 18.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 16.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "cherry",
+      "icon_path": "icons/iconpark/cherry.svg"
+    },
+    {
+      "product_id": "PRD053",
+      "canonical_name_he": "פלפל רמירו",
+      "category": "fruiting_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 4,
+      "distinct_sources": 4,
+      "min_price": 20.0,
+      "max_price": 25.9,
+      "avg_price": 22.975,
+      "median_price": 23.0,
+      "stddev_price": 2.9102,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.984253+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 20.0,
+          "max_price": 25.9,
+          "avg_price": 23.18,
+          "median_price": 24.0,
+          "stddev_price": 2.5616,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.679048+00:00"
+        },
+        "grower": {
+          "min_price": 20.0,
+          "max_price": 25.9,
+          "avg_price": 22.975,
+          "median_price": 23.0,
+          "stddev_price": 2.9102,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.984253+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 5,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 23.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 23.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 24.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 22.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD072",
+      "canonical_name_he": "פסיפלורה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 16.5,
+      "max_price": 28.0,
+      "avg_price": 22.25,
+      "median_price": 22.25,
+      "stddev_price": 8.1317,
+      "normalized_unit": "יחידה",
+      "last_observed_at": "2026-04-04T20:17:34.332296+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 16.5,
+          "max_price": 34.0,
+          "avg_price": 26.1667,
+          "median_price": 28.0,
+          "stddev_price": 8.8929,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-05T09:17:02.428447+00:00"
+        },
+        "grower": {
+          "min_price": 16.5,
+          "max_price": 28.0,
+          "avg_price": 22.25,
+          "median_price": 22.25,
+          "stddev_price": 8.1317,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "יחידה",
+          "last_observed_at": "2026-04-04T20:17:34.332296+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 3,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 34.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 28.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 34.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD054",
+      "canonical_name_he": "פפאיה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 24.0,
+      "max_price": 32.0,
+      "avg_price": 27.78,
+      "median_price": 27.9,
+      "stddev_price": 3.3454,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:02.137722+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 24.0,
+          "max_price": 32.0,
+          "avg_price": 27.78,
+          "median_price": 27.9,
+          "stddev_price": 3.3454,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.137722+00:00"
+        },
+        "grower": {
+          "min_price": 24.0,
+          "max_price": 32.0,
+          "avg_price": 27.78,
+          "median_price": 27.9,
+          "stddev_price": 3.3454,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.137722+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "grower_price_grid",
+        "source_count": 5,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 31.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 31.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 30.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 24.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 30.0
+          }
+        ],
+        "csa": null,
+        "store": null,
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD068",
+      "canonical_name_he": "קיווי",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 2.95,
+      "max_price": 32.0,
+      "avg_price": 23.75,
+      "median_price": 28.0,
+      "stddev_price": 11.8449,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.517950+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 2.95,
+          "max_price": 38.0,
+          "avg_price": 26.125,
+          "median_price": 28.95,
+          "stddev_price": 12.0866,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.436563+00:00"
+        },
+        "grower": {
+          "min_price": 2.95,
+          "max_price": 32.0,
+          "avg_price": 23.75,
+          "median_price": 28.0,
+          "stddev_price": 11.8449,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.517950+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 33.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 28.95
+          },
+          {
+            "d": "2026-04-05",
+            "v": 30.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD075",
+      "canonical_name_he": "רוזמרין",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 5.5,
+      "max_price": 12.0,
+      "avg_price": 7.8,
+      "median_price": 5.9,
+      "stddev_price": 3.6428,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-04T19:23:00.308683+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 5.5,
+          "max_price": 12.0,
+          "avg_price": 8.6,
+          "median_price": 8.45,
+          "stddev_price": 3.3774,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-04T19:23:00.308683+00:00"
+        },
+        "grower": {
+          "min_price": 5.5,
+          "max_price": 12.0,
+          "avg_price": 7.8,
+          "median_price": 5.9,
+          "stddev_price": 3.6428,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-04T19:23:00.308683+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD010",
+      "canonical_name_he": "רוקט",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 6.0,
+      "max_price": 24.9,
+      "avg_price": 12.68,
+      "median_price": 12.0,
+      "stddev_price": 7.2861,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:02.091023+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 6.0,
+          "max_price": 24.9,
+          "avg_price": 12.5667,
+          "median_price": 12.0,
+          "stddev_price": 6.5228,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.176244+00:00"
+        },
+        "grower": {
+          "min_price": 6.0,
+          "max_price": 24.9,
+          "avg_price": 12.68,
+          "median_price": 12.0,
+          "stddev_price": 7.2861,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:02.091023+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 11.5
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 12.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD082",
+      "canonical_name_he": "שיבא",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 2,
+      "distinct_sources": 2,
+      "min_price": 12.0,
+      "max_price": 12.0,
+      "avg_price": 12.0,
+      "median_price": 12.0,
+      "stddev_price": null,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:03.367081+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 12.0,
+          "max_price": 12.0,
+          "avg_price": 12.0,
+          "median_price": 12.0,
+          "stddev_price": null,
+          "sample_size": 2,
+          "distinct_sources": 2,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.367081+00:00"
+        },
+        "grower": null,
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 2,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 12.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 12.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD074",
+      "canonical_name_he": "שמיר",
+      "category": "leafy_greens",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 3.0,
+      "max_price": 6.0,
+      "avg_price": 4.6333,
+      "median_price": 4.9,
+      "stddev_price": 1.5177,
+      "normalized_unit": "צרור",
+      "last_observed_at": "2026-04-05T09:17:00.872023+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 3.0,
+          "max_price": 10.0,
+          "avg_price": 5.975,
+          "median_price": 5.45,
+          "stddev_price": 2.9556,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:03.358247+00:00"
+        },
+        "grower": {
+          "min_price": 3.0,
+          "max_price": 6.0,
+          "avg_price": 4.6333,
+          "median_price": 4.9,
+          "stddev_price": 1.5177,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "צרור",
+          "last_observed_at": "2026-04-05T09:17:00.872023+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 4.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 10.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD024",
+      "canonical_name_he": "שעועית ירוקה",
+      "category": "legumes_fresh",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 12.0,
+      "max_price": 20.0,
+      "avg_price": 15.14,
+      "median_price": 13.2,
+      "stddev_price": 3.6191,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:02.246695+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 12.0,
+          "max_price": 20.0,
+          "avg_price": 15.6167,
+          "median_price": 15.6,
+          "stddev_price": 3.4412,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.811523+00:00"
+        },
+        "grower": {
+          "min_price": 12.0,
+          "max_price": 20.0,
+          "avg_price": 15.14,
+          "median_price": 13.2,
+          "stddev_price": 3.6191,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.246695+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 13.2
+          },
+          {
+            "d": "2026-04-02",
+            "v": 13.2
+          },
+          {
+            "d": "2026-04-03",
+            "v": 20.75
+          },
+          {
+            "d": "2026-04-04",
+            "v": 18.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 20.75
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "vicia-faba",
+      "icon_path": "icons/iconpark/vicia-faba.svg"
+    },
+    {
+      "product_id": "PRD069",
+      "canonical_name_he": "תות שדה",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 5,
+      "distinct_sources": 5,
+      "min_price": 19.5,
+      "max_price": 50.0,
+      "avg_price": 28.3,
+      "median_price": 22.0,
+      "stddev_price": 12.8433,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.542290+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 19.5,
+          "max_price": 50.0,
+          "avg_price": 27.75,
+          "median_price": 23.5,
+          "stddev_price": 11.5661,
+          "sample_size": 6,
+          "distinct_sources": 6,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.411286+00:00"
+        },
+        "grower": {
+          "min_price": 19.5,
+          "max_price": 50.0,
+          "avg_price": 28.3,
+          "median_price": 22.0,
+          "stddev_price": 12.8433,
+          "sample_size": 5,
+          "distinct_sources": 5,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.542290+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 6,
+        "price_series": [
+          {
+            "d": "2026-04-03",
+            "v": 20.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 27.0
+          },
+          {
+            "d": "2026-04-05",
+            "v": 22.5
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD049",
+      "canonical_name_he": "תמר",
+      "category": "fruits",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 3,
+      "distinct_sources": 3,
+      "min_price": 32.0,
+      "max_price": 45.5,
+      "avg_price": 38.1667,
+      "median_price": 37.0,
+      "stddev_price": 6.8252,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:01.850896+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 32.0,
+          "max_price": 115.0,
+          "avg_price": 57.375,
+          "median_price": 41.25,
+          "stddev_price": 38.8188,
+          "sample_size": 4,
+          "distinct_sources": 4,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:02.592688+00:00"
+        },
+        "grower": {
+          "min_price": 32.0,
+          "max_price": 45.5,
+          "avg_price": 38.1667,
+          "median_price": 37.0,
+          "stddev_price": 6.8252,
+          "sample_size": 3,
+          "distinct_sources": 3,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:01.850896+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 4,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 37.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 37.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 45.25
+          },
+          {
+            "d": "2026-04-04",
+            "v": 84.5
+          },
+          {
+            "d": "2026-04-05",
+            "v": 43.25
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    },
+    {
+      "product_id": "PRD056",
+      "canonical_name_he": "תפוח אדמה",
+      "category": "root_vegetables",
+      "market_scope": "community",
+      "source_types": [
+        "grower",
+        "store"
+      ],
+      "meets_publish_threshold": true,
+      "sample_size": 8,
+      "distinct_sources": 8,
+      "min_price": 8.9,
+      "max_price": 20.0,
+      "avg_price": 12.85,
+      "median_price": 11.2,
+      "stddev_price": 4.3808,
+      "normalized_unit": "קילוגרם",
+      "last_observed_at": "2026-04-05T09:17:03.446750+00:00",
+      "stats_by_filter": {
+        "all": {
+          "min_price": 8.9,
+          "max_price": 20.0,
+          "avg_price": 12.6444,
+          "median_price": 11.0,
+          "stddev_price": 4.144,
+          "sample_size": 9,
+          "distinct_sources": 9,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:03.446750+00:00"
+        },
+        "grower": {
+          "min_price": 8.9,
+          "max_price": 20.0,
+          "avg_price": 12.85,
+          "median_price": 11.2,
+          "stddev_price": 4.3808,
+          "sample_size": 8,
+          "distinct_sources": 8,
+          "normalized_unit": "קילוגרם",
+          "last_observed_at": "2026-04-05T09:17:03.446750+00:00"
+        },
+        "store": null,
+        "chain": null,
+        "baskets": null
+      },
+      "details": {
+        "details_variant": "store_retail",
+        "source_count": 9,
+        "price_series": [
+          {
+            "d": "2026-03-31",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-02",
+            "v": 10.0
+          },
+          {
+            "d": "2026-04-03",
+            "v": 11.0
+          },
+          {
+            "d": "2026-04-04",
+            "v": 8.9
+          },
+          {
+            "d": "2026-04-05",
+            "v": 11.0
+          }
+        ],
+        "csa": null,
+        "store": {
+          "organic_catalog_note": "מחירים מקטלוג מוצרים אורגניים בחנות, לפי תצוגת האתר."
+        },
+        "benchmark": null
+      },
+      "icon_slug": "leaf",
+      "icon_path": "icons/iconpark/leaf.svg"
+    }
+  ]
+}
