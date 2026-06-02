@@ -111,8 +111,63 @@ final class HubController
     public function calc(Request $request, Response $response): Response
     {
         // WP-CB-1: serve the new calculator dashboard; hub_calc.php is legacy backup.
+        // V03 fix: pass crop list so [data-k="crop_slug"] <select> can be populated.
+        $cropList = [];
+        try {
+            $stmt = $this->pdo->query(
+                'SELECT slug, hebrew_name FROM crops ORDER BY hebrew_name'
+            );
+            if ($stmt) {
+                foreach ($stmt->fetchAll() as $row) {
+                    $cropList[] = [
+                        'slug'    => (string)($row['slug']        ?? ''),
+                        'name_he' => (string)($row['hebrew_name'] ?? ''),
+                    ];
+                }
+            }
+        } catch (\Throwable) {
+            $cropList = []; // DB unavailable — select renders empty, calc still works manually
+        }
+
+        // V03 fix: also pass per-crop book values (key fields used by SFA_CALC)
+        // so that crop selection can auto-populate book chips in the dashboard calculators.
+        // We embed only the 7 numeric fields that CALC.* actually read:
+        //   spacing, rows, seeds_per_gram, yield_per_m, price, n, p, k
+        $cropBookValues = [];
+        if (!empty($cropList)) {
+            try {
+                $slugs       = array_column($cropList, 'slug');
+                $inMarks     = implode(',', array_fill(0, count($slugs), '?'));
+                $enStmt      = $this->pdo->prepare(
+                    "SELECT c.slug, e.field_name, e.value_best
+                     FROM crops c
+                     JOIN crop_field_enrichment e ON e.crop_id = c.id
+                     WHERE c.slug IN ($inMarks)
+                       AND e.field_name IN (
+                           'spacing_in_row_cm','in_row_spacing_cm',
+                           'rows_per_bed',
+                           'seeds_per_g','seeds_per_gram',
+                           'yield_per_bed_m','avg_yield_per_bed_m',
+                           'price_documented','documented_price',
+                           'nutrient_removal_n_kg_per_ha','nutrient_removal_N',
+                           'nutrient_removal_p_kg_per_ha',
+                           'nutrient_removal_k_kg_per_ha'
+                       )"
+                );
+                $enStmt->execute($slugs);
+                foreach ($enStmt->fetchAll() as $row) {
+                    $cropBookValues[(string)$row['slug']][(string)$row['field_name']] = $row['value_best'];
+                }
+            } catch (\Throwable) {
+                // crop_field_enrichment may not exist on MySQL mirror yet — degrade gracefully.
+                // JS will fall back to manual-input mode (same as current behaviour).
+            }
+        }
+
         $html = Template::render('pages/calc_dash', [
-            'contact' => Modules::all()['contact'] ?? [],
+            'contact'         => Modules::all()['contact'] ?? [],
+            'crop_list'       => $cropList,
+            'crop_book_values'=> $cropBookValues,
         ]);
         return self::html($response, $html);
     }

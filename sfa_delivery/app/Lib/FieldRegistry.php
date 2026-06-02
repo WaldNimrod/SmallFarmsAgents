@@ -187,4 +187,114 @@ final class FieldRegistry
         }
         return $out;
     }
+
+    /**
+     * Enum-value → Hebrew label map.
+     * Keyed by canonical field name → [raw_value => hebrew_label].
+     *
+     * Source of truth: book_entry.php lines ~168,177 (the existing
+     * filter-bar select options) plus sensible Hebrew for all other
+     * coded enums exposed in crop pages.
+     *
+     * @var array<string, array<string,string>>
+     */
+    private const ENUM_LABELS = [
+        // planting_method (AC: direct_seed→זריעה ישירה, transplant→שתיל, both→שניהם)
+        'planting_method' => [
+            'direct_seed' => 'זריעה ישירה',
+            'transplant'  => 'שתיל',
+            'both'        => 'שניהם',
+            'direct'      => 'זריעה ישירה',
+        ],
+        // frost_tolerance_class (AC: hardy/half_hardy/tender/very_tender)
+        'frost_tolerance_class' => [
+            'hardy'       => 'עמיד',
+            'half_hardy'  => 'חצי-עמיד',
+            'tender'      => 'רגיש',
+            'very_tender' => 'רגיש מאוד',
+        ],
+        // frost_tolerance — alias to same map
+        'frost_tolerance' => [
+            'hardy'       => 'עמיד',
+            'half_hardy'  => 'חצי-עמיד',
+            'tender'      => 'רגיש',
+            'very_tender' => 'רגיש מאוד',
+        ],
+        // irrigation_type
+        'irrigation_type' => [
+            'drip'      => 'טפטוף',
+            'sprinkler' => 'ממטרות',
+            'flood'     => 'הצפה',
+            'overhead'  => 'מעל-ראש',
+            'none'      => 'ללא השקיה',
+        ],
+        // root_depth_class
+        'root_depth_class' => [
+            'shallow' => 'רדוד',
+            'medium'  => 'בינוני',
+            'deep'    => 'עמוק',
+        ],
+        // needs_summer_shade (boolean-ish or pct string)
+        'needs_summer_shade' => [
+            'true'  => 'כן',
+            'false' => 'לא',
+            '0'     => 'לא',
+            '1'     => 'כן',
+            '30%'   => 'כן — 30%',
+            '40%'   => 'כן — 40%',
+            '50%'   => 'כן — 50%',
+        ],
+        // activity_type (calendar)
+        'activity_type' => [
+            'seed'       => 'זריעה ישירה',
+            'transplant' => 'שתילה',
+            'sow'        => 'זריעה',
+        ],
+        // growth_cycle
+        'growth_cycle' => [
+            'annual'    => 'חד-שנתי',
+            'biennial'  => 'דו-שנתי',
+            'perennial' => 'רב-שנתי',
+        ],
+        // category
+        'category' => [
+            'vegetables'        => 'ירקות',
+            'herbs'             => 'עשבי תיבול',
+            'fruits'            => 'פירות',
+            'legumes'           => 'קטניות',
+            'grains'            => 'דגנים',
+            'flowers'           => 'פרחים',
+            'roots'             => 'שורשים',
+            'brassicas'         => 'כרוביים',
+            'alliums'           => 'בצליים',
+            'cucurbits'         => 'דלועיים',
+            'solanums'          => 'סולניים',
+            'fruiting_vegetables' => 'ירקות פרי',
+            'leafy_greens'      => 'ירוקי עלים',
+            'root_vegetables'   => 'ירקות שורש',
+        ],
+    ];
+
+    /**
+     * Map a stored enum value to its Hebrew label.
+     *
+     * enumLabel('planting_method', 'direct_seed') → 'זריעה ישירה'
+     * enumLabel('frost_tolerance_class', 'half_hardy') → 'חצי-עמיד'
+     *
+     * Falls back to the raw $value if not mapped (so nothing breaks).
+     * Also resolves field aliases before lookup (e.g. frost_tolerance → frost_tolerance_class).
+     *
+     * @param string $field  any field name (canonical or alias)
+     * @param string $value  raw stored value
+     * @return string        Hebrew label or original value when not mapped
+     */
+    public static function enumLabel(string $field, string $value): string
+    {
+        $canonical = self::resolve($field);
+        $map = self::ENUM_LABELS[$canonical] ?? (self::ENUM_LABELS[$field] ?? null);
+        if ($map === null) {
+            return $value;
+        }
+        return $map[strtolower($value)] ?? ($map[$value] ?? $value);
+    }
 }

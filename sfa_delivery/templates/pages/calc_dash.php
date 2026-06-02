@@ -17,6 +17,7 @@
  * @see TEMPLATES-delta.md §1 (route /calc/)
  */
 use SFA\Lib\Template;
+use SFA\Lib\FieldRegistry;
 use SFA\Controllers\AssumptionsController;
 
 $h = [Template::class, 'h'];
@@ -34,6 +35,10 @@ $oversow     = (float)($assumptions['oversow']['default']          ?? 1.10);
 $compostN    = (float)($assumptions['compost_N_pct']['default']    ?? 0.015);
 $appEff      = (float)($assumptions['application_efficiency']['default'] ?? 0.50);
 
+// V03: crop list for the context-strip <select> + book values for JS calc binding.
+$crop_list        = is_array($crop_list        ?? null) ? $crop_list        : [];
+$crop_book_values = is_array($crop_book_values ?? null) ? $crop_book_values : [];
+
 ob_start();
 ?>
 <div class="calc-page">
@@ -49,8 +54,11 @@ ob_start();
       <label class="ipt">
         <label>גידול</label>
         <span class="ipt__box">
-          <select data-k="crop_slug" aria-label="בחר גידול">
+          <select data-k="crop_slug" aria-label="בחר גידול" id="ctx-crop-slug">
             <option value="">בחר גידול…</option>
+            <?php foreach ($crop_list as $crop_opt): ?>
+              <option value="<?= $h((string)($crop_opt['slug'] ?? '')) ?>"><?= $h((string)($crop_opt['name_he'] ?? '')) ?></option>
+            <?php endforeach; ?>
           </select>
         </span>
       </label>
@@ -113,7 +121,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field">rows_per_bed · in_row_spacing_cm</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('rows_per_bed')[0] ?> · <?= FieldRegistry::label('spacing_in_row_cm')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">מחשבון זה יופעל כאשר נתוני הגידול הנבחר יכללו מרווח ושורות בערוגה.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#2+ספיגים" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -130,9 +138,9 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field">days_in_nursery</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('days_in_nursery')[0] ?></span>
           </div>
-          <p class="modcard__disabled-msg">ממתין להעשרת שדה ימי משתלה (days_in_nursery) — בביצוע בWP-CB-DATA.</p>
+          <p class="modcard__disabled-msg">ממתין להעשרת שדה ימים במשתלה — בביצוע בWP-CB-DATA.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#3+מגשים" target="_blank" rel="noopener">← בקש/י מידע</a>
         </div>
       </div>
@@ -157,7 +165,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field">days_to_maturity · days_in_nursery</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('days_to_maturity')[0] ?> · <?= FieldRegistry::label('days_in_nursery')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">יחשב מתאריך קציר יעד לאחור — ימי גידול + משתלה.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#4+זריעה" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -174,7 +182,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field">days_to_maturity · harvest_window_max_days</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('days_to_maturity')[0] ?> · <?= FieldRegistry::label('harvest_window_max_days')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">יחשב מתאריך זריעה קדימה — התחלה וסיום חלון קציר.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#5+קציר" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -191,7 +199,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field">succession_interval_weeks</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('succession_interval_weeks')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">ממתין להעשרת שדה מחזור זריעה (succession_interval_weeks).</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#6+מחזור" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -297,7 +305,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field">frost_tolerance_class · days_to_maturity</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('frost_tolerance_class')[0] ?> · <?= FieldRegistry::label('days_to_maturity')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">יחשב מתי בטוח לשתול לפי סבילות לכפור ותאריכי הכפור האחרון והראשון.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#11+כפור" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -352,7 +360,7 @@ ob_start();
         <div class="modcard__body">
           <div class="modcard__needs">
             <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field">avg_yield_per_bed_m · documented_price</span>
+            <span class="modcard__needs-field"><?= FieldRegistry::label('avg_yield_per_bed_m')[0] ?> · <?= FieldRegistry::label('documented_price')[0] ?></span>
           </div>
           <p class="modcard__disabled-msg">ידרג גידולים לפי הכנסה למטר — ממתין למחשבון #14 לחישוב שולי רווח.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#13+רווח" target="_blank" rel="noopener">← בקש/י מידע</a>
@@ -422,6 +430,75 @@ ob_start();
     </div>
   </div>
 </div>
+
+<?php if (!empty($crop_book_values)): ?>
+<!-- V03: per-crop book values for SFA_CALC binding on crop selection.
+     Field aliases mirror FieldRegistry::CANON + CALC operand names in crop-book-v1.js.
+     Only numeric/measurable fields are embedded; enum fields (planting_method etc.) are omitted. -->
+<script>
+window.SFA_CROP_BOOK = <?= json_encode($crop_book_values, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+</script>
+<?php endif; ?>
+
+<!-- V03: wire crop <select> → populate [data-book] chips in every active calc panel. -->
+<script>
+(function () {
+  'use strict';
+  // Field alias map: maps SFA_CROP_BOOK field_name variants → the data-book key
+  // that crop-book-v1.js CALC functions read.
+  var BOOK_ALIAS = {
+    spacing_in_row_cm:            'spacing',
+    in_row_spacing_cm:            'spacing',
+    rows_per_bed:                 'rows',
+    seeds_per_g:                  'seeds_per_gram',
+    seeds_per_gram:               'seeds_per_gram',
+    yield_per_bed_m:              'yield_per_m',
+    avg_yield_per_bed_m:          'yield_per_m',
+    price_documented:             'price',
+    documented_price:             'price',
+    nutrient_removal_n_kg_per_ha: 'n',
+    'nutrient_removal_N':         'n',
+    nutrient_removal_p_kg_per_ha: 'p',
+    nutrient_removal_k_kg_per_ha: 'k'
+  };
+
+  function applyBookValues(slug) {
+    var bookData = (window.SFA_CROP_BOOK && slug) ? (window.SFA_CROP_BOOK[slug] || {}) : {};
+    // Build a flat map: data-book key → numeric value
+    var flat = {};
+    Object.keys(bookData).forEach(function (fn) {
+      var key = BOOK_ALIAS[fn];
+      if (key) {
+        var v = parseFloat(bookData[fn]);
+        if (isFinite(v)) flat[key] = v;
+      }
+    });
+    // Update all [data-book] elements across active calc panels.
+    document.querySelectorAll('[data-calc]:not(.modcard--disabled) [data-book]').forEach(function (el) {
+      var bookKey = el.getAttribute('data-book');
+      if (bookKey && flat[bookKey] != null) {
+        el.setAttribute('data-val', flat[bookKey]);
+        // Also update any editable input inside this chip.
+        var inp = el.querySelector('.bv__in');
+        if (inp) { inp.value = flat[bookKey]; inp.setAttribute('data-orig', flat[bookKey]); }
+      }
+    });
+    // Trigger recompute across all calc panels via the global SFA_CALC / crop-book-v1.js.
+    // crop-book-v1.js exposes no public recomputeAll; dispatch input events on all data-k inputs.
+    document.querySelectorAll('[data-calc]:not(.modcard--disabled) [data-k]').forEach(function (el) {
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var sel = document.getElementById('ctx-crop-slug');
+    if (!sel) return;
+    sel.addEventListener('change', function () {
+      applyBookValues(sel.value);
+    });
+  });
+})();
+</script>
 <?php
 $content = ob_get_clean();
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active', 'back_url'));

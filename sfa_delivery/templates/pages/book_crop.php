@@ -58,12 +58,15 @@ $pv = function(string $field_name) use ($cb1_fields, $h, $crop): string {
         $ri = '<a class="reqinfo" href="#" data-field="' . $fn($field_name) . '" data-crop="' . $fn($slug) . '">◐ בקשו נתון</a>';
         return '<span class="val--missing">—</span> ' . $ri;
     }
+    // Translate enum values to Hebrew before display (V02 fix).
+    // enumLabel() returns the original value when no mapping exists, so it is safe for all fields.
+    $display = \SFA\Lib\FieldRegistry::enumLabel($field_name, (string)$value);
     if ($state === 'UNVALIDATED') {
         $conf = isset($field['confidence_score']) ? round((float)$field['confidence_score'] * 100) . '%' : '';
         $tip  = 'מקור: ' . $fn((string)($field['winning_source_class'] ?? '')) . ($conf !== '' ? ' · ביטחון ' . $conf : '');
-        return '<span class="tip">' . $fn((string)$value) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '<span class="ast" title="' . $fn($tip) . '">*</span><span class="tip__pop"><b>ערך לא מאומת</b>' . $fn($tip) . '</span></span>';
+        return '<span class="tip">' . $fn($display) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '<span class="ast" title="' . $fn($tip) . '">*</span><span class="tip__pop"><b>ערך לא מאומת</b>' . $fn($tip) . '</span></span>';
     }
-    return '<span class="pv-validated">' . $fn((string)$value) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '</span>';
+    return '<span class="pv-validated">' . $fn($display) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '</span>';
 };
 
 // Month chip helper (for sowing_months int[] array)
@@ -500,8 +503,19 @@ ob_start();
 
     <?php if (!empty($crop['family_tag_he']) || !empty($crop['dtm_days'])): ?>
       <div class="cb-crop-hero__meta">
-        <?php if (!empty($crop['family_tag_he'])): ?>
-          <span class="pill pill--soil"><?= $h((string)$crop['family_tag_he']) ?></span>
+        <?php if (!empty($crop['family_tag_he'])):
+          // Strip any slug:variant debug-format (e.g. "asteraceae:compositae") — show
+          // only the Hebrew family name. The $family object (name_he) is the canonical
+          // source; family_tag_he may arrive as a raw payload slug on older records.
+          $fam_display = (string)$crop['family_tag_he'];
+          if ($family !== null && !empty($family['name_he'])) {
+              $fam_display = (string)$family['name_he'];
+          } elseif (strpos($fam_display, ':') !== false) {
+              // Fallback: strip everything after the colon (raw slug format).
+              $fam_display = trim(explode(':', $fam_display)[0]);
+          }
+        ?>
+          <span class="pill pill--soil"><?= $h($fam_display) ?></span>
         <?php endif; ?>
         <?php
           $dtm = $crop['dtm_days'] ?? null;

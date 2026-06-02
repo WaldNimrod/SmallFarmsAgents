@@ -407,7 +407,9 @@
       f.textContent = 'ⓘ';
       var pop = document.createElement('span');
       pop.className = 'tip__pop';
-      pop.innerHTML = '<b>' + info[0] + '</b>' + info[1] + '<span class="k">' + info[2] + '</span>';
+      // V02 fix: omit raw canonical key (<span class="k">) from farmer-facing tooltip.
+      // The key is an implementation detail; farmers see Hebrew label + explainer only.
+      pop.innerHTML = '<b>' + info[0] + '</b>' + info[1];
       f.appendChild(pop);
       el.appendChild(f);
     });
