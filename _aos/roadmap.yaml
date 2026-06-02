@@ -3634,15 +3634,16 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-ALIGN
   label: "ספר גידולים: יישור עיצוב Class A (ספר+מחשבון+app-shell) ל-LOD300 צוות 35 — מימוש מיידי"
-  status: BUILDING
+  status: DONE
   phase: ui_align
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
+  closed_at: "2026-06-02"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-1"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-ALIGN/LOD400_spec.md"
@@ -3714,13 +3715,49 @@ work_packages:
       enum/field keys (direct_seed/half_hardy/family:variety/yield_per_bed_m/price_documented) — must route
       through FieldRegistry Hebrew labels + enum-value map; (V03 MAJOR) calc crop <select> unpopulated — wire
       live crop index. Verdict + evidence: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-ALIGN/.
-  notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
-    (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
-    export. Delivery-tier only; no backend/migration. L-GATE_S PASS → LOD400 LOCKED → DEPLOYED @ b72bcca →
-    L-GATE_V R1 FAIL (3 findings). R2: V02 (crop-page Hebrew enums) + V03 (calc selector, 70 crops) FIXED & LIVE
-    @ c1d9cff (team_99 verified). V01 (PDF 404) = uPress origin does not route .pdf → CODE fix @ fdb4fc7 (PDF
-    moved to extension-less /calc/print + Cache-Control no-store). NEXT: re-deploy fdb4fc7 (team_99) → team_50
-    live re-QA (all 3) → team_190 L-GATE_V R2."
+  - gate: L-GATE_V
+    result: FAIL
+    round: 2
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor/Composer (non-Claude)"
+    notes: >
+      Live @ 58c4899. V01 PASS (/calc/print 200, csv 200, .pdf 404 retired) + V03 PASS (71-option selector) +
+      shell/calc/AC-1/AC-2 PASS. ONE residual: V02 not fully closed — rotation_hint.php rendered
+      <span class=meta>family: {latin}</span> → users saw "family: variety" (R2 grep used 'family:variety' w/o
+      the space, so it slipped). MINOR: raw (succession_interval_weeks) on a disabled calc card. → R3.
+  - gate: L-GATE_V
+    result: PASS
+    round: 3
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor/Composer (non-Claude)"
+    notes: >
+      FINAL constitutional round on live @ f66360d (fix b5ad8e5 cherry-picked to main; tip 815acdc). R2-V02
+      CLOSED: /crop-book/lettuce + /crop-book/watermelon grep 'family:' = 0; .rothint .meta gone. MINOR closed
+      (Hebrew-only disabled card; raw key only in an HTML comment). Full round V1-V7 PASS incl. AC-3 design-vs-live
+      screenshot pairs (book-entry, crop simple/full/drill, calc-dash), AC-1 computed #f8fbf8, AC-2 .sh+#sfa-logo
+      site-wide, AC-4 SFA_CALC recompute, AC-5 routes 200, AC-6 no farmer-facing raw keys. IR#1/#5 satisfied.
+      Non-blocking minors logged: SFA_CROP_BOOK book-chip bind awaits crop_field_enrichment mirror (WP-CB-DATA);
+      tokens.css legacy #f5f3ec remains in COMMENTS only (computed ground is #f8fbf8). Verdict:
+      _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-ALIGN/WP-CB-UI-ALIGN_LGATE-V_R3_VERDICT_v1.0.0.md.
+  - gate: CLOSURE
+    result: DONE
+    date: "2026-06-02"
+    validator: team_100
+    notes: >
+      ADR042 closure: L-GATE_V R3 PASS → WP DONE / LOD500_LOCKED. Class A delivered & LIVE on sfa.nimrod.bio:
+      white-green palette (cream killed), team_35 .sh app-shell site-wide, /calc fixed (14 calcs/6 interactive,
+      print+csv export), crop pages humanized. Build=team_10(Sonnet), QA=team_50(Haiku), gates=team_190(Cursor,
+      non-Claude). Archive mandate → team_191. Follow-ups (separate WPs, non-blocking): WP-CB-DATA (populate
+      crop_field_enrichment mirror → calc book-chip bind); tokens.css comment cleanup; team_191 branch/worktree
+      cleanup per its audit; Class B = WP-CB-UI-CLASSB.
+  notes: "CLOSED 2026-06-02 (DONE / LOD500_LOCKED). Class A visual alignment delivered & LIVE @ sfa.nimrod.bio:
+    cream killed (--gj-paper #f8fbf8), team_35 .sh/.sh__nav app-shell site-wide, /calc fixed (JS load + 14 calcs +
+    print/csv export), crop pages humanized (Hebrew enums/labels). Flow: L-GATE_S PASS → build (team_10/Sonnet) +
+    internal QA (team_50/Haiku) → DEPLOY → L-GATE_V R1 FAIL → R2 FAIL → R2 fixes (V01 /calc/print, V02 enums, V03
+    selector) → R3 PASS (team_190/Cursor). Non-blocking follow-ups: WP-CB-DATA enrichment mirror; tokens.css
+    comment scrub; team_191 branch cleanup."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
