@@ -3699,10 +3699,26 @@ work_packages:
       #f8fbf8 with #f5f3ec count 0 (cream killed, no Cloudflare purge needed). Anomaly: stale server FTPS pass
       (len 11 vs 13) synced out-of-band, backup kept, team_60 flagged for a rotation-sync runbook (non-blocking).
       Report: _COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-ALIGN/DEPLOY_REPORT_v1.0.0.md. L-GATE_V now executable.
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor/Composer (non-Claude)"
+    notes: >
+      Live @ b72bcca. Class A shell/CSS PASS (V1 body #f8fbf8 + no cream; V2 .sh + #sfa-logo site-wide,
+      leaf/sun/tomato active, mobile bar ≤899px, no legacy shells; V6 routes 200; V7 mobile-nav + .sh__icon
+      accepted). Visual: book-entry PASS; crop simple/full/drill FAIL; calc-dash PARTIAL. THREE findings →
+      R2: (V01 BLOCKER) /calc/export.pdf 404 live (csv 200; route in code — hosting/cache, team_100 dx: stale
+      Cloudflare 404 / uPress .pdf routing — team_99 to purge+probe origin); (V02 MAJOR) crop pages leak raw
+      enum/field keys (direct_seed/half_hardy/family:variety/yield_per_bed_m/price_documented) — must route
+      through FieldRegistry Hebrew labels + enum-value map; (V03 MAJOR) calc crop <select> unpopulated — wire
+      live crop index. Verdict + evidence: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-ALIGN/.
   notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
     (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
-    export. Delivery-tier only; no backend/migration. L-GATE_S PASS (Cursor) → LOD400 LOCKED → DEPLOYED to
-    sfa.nimrod.bio @ b72bcca (team_99, all smoke PASS). NEXT: team_190 L-GATE_V (Cursor) live per-page round."
+    export. Delivery-tier only; no backend/migration. L-GATE_S PASS → LOD400 LOCKED → DEPLOYED @ b72bcca →
+    L-GATE_V R1 FAIL (3 findings: PDF 404, crop-page raw-key leak, empty calc selector). NEXT: team_10 R2 build
+    (V02+V03) + team_99 PDF fix (V01) → re-deploy → team_50 live re-QA → team_190 L-GATE_V R2."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
