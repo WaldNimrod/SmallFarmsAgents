@@ -3879,12 +3879,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-DATA
   label: "ספר גידולים: Enrichment Mirror — populate crop_field_enrichment + crop_attribute on the uPress MySQL delivery tier"
-  status: SPEC
-  phase: spec
+  status: BUILDING
+  phase: build
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
@@ -3919,9 +3919,24 @@ work_packages:
       4 risks. SPEC ONLY — routed to team_190 (NON-CLAUDE, IR#1/#5) for L-GATE_S before any build. Mandate +
       Cursor prompt: _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-DATA/.
     validator: team_190
-  notes: "OPENED 2026-06-02. Mirror + transport only (no enrichment-computation change — reconciler/runner/
-    field_policy LOCKED). NEXT: team_190 L-GATE_S (non-Claude) → team_10 build → team_50 QA → team_99 deploy +
-    Mac push → team_190 L-GATE_V."
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 (GPT — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-DATA/WP-CB-DATA_LGATE-S_VERDICT_v1.0.0.md"
+    notes: >
+      team_190 (non-Claude) L-GATE_S. PASS_WITH_FINDINGS — constitutional 5/5, precision 6/6, scope 3/3,
+      authorize_build:true. Central answer confirmed: WI-1/WI-2 columns match what HubController (calc book-chips)
+      + CropBookViewController (structured reads) SELECT; canonical whitelist names bind via calc_dash BOOK_ALIAS;
+      no UI threshold math; field_state stamped at ingest with existing τ constants. 2 INFO (non-blocking),
+      ADDRESSED INLINE by team_100 (LOD400 v0.2.0, no R2): INFO-1 L101 is the dtm aggregate join not the
+      variety-selection SSoT (citation corrected §2.1); INFO-2 no-default fallback aligned to the consumer's
+      `is_default` then first-by-`name` (supersedes MIN(id) — §2.1/AC-04) to avoid payload-vs-mirror drift.
+      LOD400_LOCKED; team_10 L-GATE_B build authorized.
+  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (team_190 non-Claude); 2 INFO addressed inline → LOD400_LOCKED
+    v0.2.0. Mirror + transport only (no enrichment-computation change — reconciler/runner/field_policy LOCKED).
+    NEXT: team_10 L-GATE_B build → team_50 QA → team_99 deploy (migrations on uPress) + Mac push → team_190 L-GATE_V."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS

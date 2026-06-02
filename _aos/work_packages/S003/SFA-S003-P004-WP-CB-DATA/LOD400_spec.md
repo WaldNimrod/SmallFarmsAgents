@@ -1,11 +1,13 @@
 ---
 id: SFA-S003-P004-WP-CB-DATA-LOD400
 wp: SFA-S003-P004-WP-CB-DATA — Crop Book Enrichment Mirror (populate crop_field_enrichment + crop_attribute on the uPress MySQL delivery tier)
-gate: L-GATE_S (LOD400 — executable) → ROUTED to team_190 (non-Claude, IR#1/#5)
-status: LOD400_DRAFT — pending team_190 L-GATE_S
+gate: L-GATE_S PASS_WITH_FINDINGS (team_190 Cursor/Composer 2.5 GPT, non-Claude, IR#1/#5; 14/14; authorize_build:true) — 2 INFO addressed inline (v0.2.0)
+status: LOD400_LOCKED — team_10 L-GATE_B build authorized
 author: team_100 (Claude Code, Chief Architect)
-date: 2026-06-02
-version: v0.1.0
+date: 2026-06-03
+version: v0.2.0
+lgate_s_verdict_ref: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-DATA/WP-CB-DATA_LGATE-S_VERDICT_v1.0.0.md
+findings_addressed_inline: "INFO-1 (L101 dtm-join is aggregate, not variety-selection — citation corrected §2.1); INFO-2 (no-default fallback aligned to consumer ORDER BY name first-variety, supersedes MIN(id) — §2.1/AC-04). Validator pre-authorized build; no R2."
 canon_ref: _aos/work_packages/S003/SFA-S003-P004-WP-CB-0/LOD200_CROP_DATA_MODEL_CANON.md (v1.3.0, LOD200_LOCKED)
 depends_on: SFA-S003-P004-WP-CB-MIG2 (LOD500_LOCKED, head 060), SFA-S003-P004-WP-CB-UI-ALIGN (DONE — calc book-chip + crop-page reads live, degrade-gracefully)
 interface_map_ref: _archive/SFA-S003-P004-WP-CB-1/TEAM_100/FIELD_INTERFACE_MAP_v1.0.0.md
@@ -79,9 +81,18 @@ This closes the WP-CB-UI-ALIGN L-GATE_V R3 non-blocking follow-up:
 
 1. **Crop-level aggregation via the default variety.** The MySQL mirror is keyed by `crop_id` (both consumer
    queries join/filter on `crop_id`). Postgres enrichment/attributes are variety-level. The fetchers select each
-   crop's **default variety** (`crop_varieties.is_default = TRUE`), **fallback to the lowest `id`** variety when no
-   default — the same SSoT default-variety rule the existing `dtm` join uses (`sfa_ingest_push.py` L101) and that
-   crop pages center on. Exactly **one row per `(crop_id, field_name)`** and per `(crop_id, attribute_key)`.
+   crop's representative variety with the SAME rule the crop-page consumer uses
+   (`CropBookViewController.php` L289–300): **the `crop_varieties.is_default = TRUE` variety; if none, the first
+   variety by mirror-`name` ascending** (the consumer reads varieties `ORDER BY name` at L264 and falls back to
+   `$varieties[0]`). Implement as
+   `ROW_NUMBER() OVER (PARTITION BY crop_id ORDER BY is_default DESC, COALESCE(name_he,name_en,'variety-'||id) ASC, id ASC) = 1`
+   — `COALESCE(name_he,name_en,'variety-'||id)` is exactly what the publisher pushes as the mirror `name`
+   (`_fetch_crop_varieties` L511). This **supersedes the earlier MIN(id) fallback** so the mirror's chosen variety
+   matches the page's default for no-default crops (addresses L-GATE_S INFO-2). Exactly **one row per
+   `(crop_id, field_name)`** and per `(crop_id, attribute_key)`. The fetcher **logs the count of no-default crops**
+   (data-hygiene signal; the name-collation tiebreak is best-effort across PG/MySQL and only matters for that minority).
+   NOTE (INFO-1): the existing `dtm` read at `sfa_ingest_push.py` L101 is a per-crop **aggregate join**, not the
+   variety-selection rule — the SSoT default-variety rule is `crop_varieties.is_default` per the consumer above.
 2. **`unit` attached at ingest** from `FIELD_REGISTRY[field_name].unit` (Postgres enrichment carries no unit).
    `None` → SQL `NULL`.
 3. **`crop_attribute` name mapping:** Postgres `attribute_name` → MySQL `attribute_key` (identical string).
@@ -177,7 +188,9 @@ No other endpoint change — the generic upsert + idempotency handler already co
 - **AC-03** `--table` choices include both; `_fetch_crop_field_enrichment` + `_fetch_crop_attribute` exist and
   are wired into `all`.
 - **AC-04** Default-variety aggregation: exactly one row per `(crop_id, field_name)` / `(crop_id, attribute_key)`;
-  no-default crops fall back to MIN(id) (covered by a test with a multi-variety crop).
+  selection = `is_default DESC, COALESCE(name_he,name_en,'variety-'||id) ASC, id ASC` (matches the consumer's
+  `is_default` then first-by-`name`). Tests cover: (a) a crop WITH a default variety, (b) a multi-variety crop
+  with NO default → picks the first by name (NOT MIN id); fetcher logs the no-default count.
 - **AC-05** Every emitted enrichment row's `unit == FIELD_REGISTRY[field_name].unit` (None→NULL).
 - **AC-06** field_state stamp matches the τ/high-trust truth table, using the existing constants (no new threshold,
   no UI math).
