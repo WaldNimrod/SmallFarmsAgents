@@ -3934,9 +3934,44 @@ work_packages:
       variety-selection SSoT (citation corrected §2.1); INFO-2 no-default fallback aligned to the consumer's
       `is_default` then first-by-`name` (supersedes MIN(id) — §2.1/AC-04) to avoid payload-vs-mirror drift.
       LOD400_LOCKED; team_10 L-GATE_B build authorized.
-  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (team_190 non-Claude); 2 INFO addressed inline → LOD400_LOCKED
-    v0.2.0. Mirror + transport only (no enrichment-computation change — reconciler/runner/field_policy LOCKED).
-    NEXT: team_10 L-GATE_B build → team_50 QA → team_99 deploy (migrations on uPress) + Mac push → team_190 L-GATE_V."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-03"
+    validator: team_100
+    builder: team_10
+    notes: >
+      team_10 (Sonnet) build; team_100 (Opus) INDEPENDENT L-GATE_B verify PASS. MySQL migrations 004/005
+      (crop-level, composite PK, FK→crops); IngestController TABLE_COLUMNS + ANSI conflict-key match (MySQL
+      ON DUPLICATE KEY path unchanged); sfa_ingest_push _fetch_crop_field_enrichment + _fetch_crop_attribute
+      via _REPRESENTATIVE_VARIETY_CTE (is_default→first-by-name per INFO-2, NOT MIN id), unit from FIELD_REGISTRY,
+      field_state stamped with existing τ=0.40/{EX,NI}, attribute_name→attribute_key, value_list→JSON, no-default
+      count logged, wired into --table + all. VERIFY: pytest crop_book 750 pass / 2 PRE-EXISTING (test_ac21b,
+      test_uc_prefix) / 0 new; new mirror tests 28/28; composer 141; validate_aos 29/19/0. Scope: delivery +
+      publisher only; locked enrichment layer untouched; IR#4 clean. BUILD_REPORT_v1.0.0.md.
+  - gate: QA
+    result: PASS
+    date: "2026-06-03"
+    validator: team_50
+    report_ref: "_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-DATA/QA_REPORT_v1.0.0.md"
+    notes: >
+      team_50 (Haiku, read-only) functional QA. All 12 ACs PASS — migration columns satisfy the consumer SELECTs;
+      AC-04 representative-variety = is_default→first-by-name; AC-05 unit from FIELD_REGISTRY; AC-06 field_state via
+      existing constants; AC-07 attribute mapping + value_list JSON; scope clean. 28 pytest + 6 PHPUnit pass.
+  - gate: DEPLOY
+    result: ROUTED
+    date: "2026-06-03"
+    validator: team_99
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-DATA/DEPLOY_MANDATE_team99_2026-06-03_v1.0.0.md"
+    notes: >
+      team_100 routed the DEPLOY+PUSH mandate to team_99: the shared branch FTPS mirror carries migrations 004/005
+      (do it WITH the Class B deploy), then run migrate.php on uPress, then push crop_field_enrichment + crop_attribute
+      from the Mac (outbound HTTPS HMAC; oma-postgres must be up). SSH to the prod host is auth-gated → team_00 runs
+      team_99 or authorizes. team_190 L-GATE_V mandate PRE-STAGED (VALIDATION_MANDATE_team190_LGATE-V_2026-06-03),
+      fires on deploy+push SUCCESS (live AC-09 book-chips + AC-10 structured reads).
+  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (2 INFO inline → LOD400_LOCKED v0.2.0) → team_10 L-GATE_B build +
+    team_100 verify PASS → team_50 QA PASS. Mirror + transport only (locked enrichment layer untouched). NEXT
+    (team_00 handoff): team_99 deploy (migrations on uPress, with the Class B deploy) + Mac push → team_190 L-GATE_V
+    (non-Claude, pre-staged) → LOD500_LOCKED + ADR042 archive. All work on branch claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
