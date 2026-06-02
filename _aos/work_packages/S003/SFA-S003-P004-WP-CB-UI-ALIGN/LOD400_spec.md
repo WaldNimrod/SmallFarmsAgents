@@ -307,6 +307,26 @@ team_99 (FTPS→uPress per `documentation/05-admin-and-operations/UI_DEPLOY_RUNB
 
 ---
 
+## QA addendum (2026-06-02, post-build internal visual QA) — spec corrections
+
+team_50 internal visual QA (computed-style, design-vs-live harness) found 4 defects; all fixed at commit
+`f85691e`. Two are **spec gaps in this LOD400** worth recording so the gate sees a complete picture:
+
+- **D1 correction (F-QA-01, BLOCKER):** D1's token grep targeted `var(--paper)` *consumers* but missed that
+  `gj.css:4–10` carried a leftover v1 cream `:root` *redefining* `--gj-paper #f6f1e3` (+ `-2/-3/--gj-ink/-soft/
+  --gj-line`). Because gj.css loads after tokens.css, it overrode the v2 white ground → `body` rendered cream.
+  **Corrected scope:** D1 must also remove cream `--gj-*` *redefinitions* anywhere in served CSS, not only
+  legacy `--paper` consumers. Fixed (gj.css cream `:root` removed).
+- **Token-port gap (F-QA-02):** served tokens.css was missing `--status-{fresh,aging,stale,error}` (present in
+  design tokens.css §status) — `.sh__foot .dot` and freshness cues had no color. Added.
+- **F-QA-03 (MINOR):** `.sh__foot .dot` needed `flex:none` (flex-shrink collapsed it to width:0).
+- **F-QA-04 (design gap, MAJOR):** the SSoT styles only `.sh__nav a`, never `.sh__nav--mobile a` — the mobile
+  bottom bar (a primary nav surface) rendered as default blue/underlined links with no active color. Added
+  faithful mobile-nav color + per-surface active (leaf/sun/tomato). **This is a gap in the team_35 design board
+  itself — flagged for team_35 to confirm/own in the Class B delivery.**
+
+Evidence: `_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-UI-ALIGN/INTERNAL_VISUAL_QA_2026-06-02_v1.0.0.md`.
+
 ## Build constraints (team_10 / Sonnet)
 
 - Delivery-tier only. Do NOT touch `_aos/`, Python, migrations, or any LOCKED file.
