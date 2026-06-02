@@ -601,7 +601,7 @@
 .sh__icon { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--gj-line); background: var(--gj-paper); display: grid; place-items: center; color: var(--gj-ink-soft); cursor: pointer; font-size: 15px; }
 .sh__body { padding: 18px; }
 .sh__foot { margin-top: auto; display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-top: 1px solid var(--gj-line); font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); }
-.sh__foot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--status-fresh); }
+.sh__foot .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--status-fresh); }
 
 /* ── MAIN NAV (team_35 LOD300 §11) ── */
 .sh__nav { display: flex; align-items: center; gap: 2px; margin-inline-start: 8px; }
@@ -617,6 +617,13 @@
 .sh__nav--mobile { display: flex; gap: 4px; padding: 8px 12px; border-top: 1px solid var(--gj-line); background: var(--gj-paper-2); }
 .sh__nav--mobile a { flex: 1; flex-direction: column; gap: 2px; font-size: 10px; padding: 6px 2px; text-align: center; }
 .sh__nav--mobile a .g { font-size: 17px; }
+/* Mobile-nav color + active state — design-gap remediation (the SSoT styles only
+   .sh__nav a, not .sh__nav--mobile a; the bottom bar is a primary nav surface so
+   it must carry the same legibility + per-surface active color). team_35 to confirm. */
+.sh__nav--mobile a { display: flex; align-items: center; justify-content: center; color: var(--gj-ink-soft); text-decoration: none; font-weight: 700; }
+.sh__nav--mobile a.is-active { color: var(--gj-leaf-deep); }
+.sh__nav--mobile a.is-active.is-calc { color: var(--gj-sun-deep); }
+.sh__nav--mobile a.is-active.is-market { color: var(--gj-tomato-deep); }
 
 /* Responsive nav switch — desktop top bar vs mobile bottom tab bar (project-authored, not in SSoT) */
 @media (max-width: 899px) { .sh__nav, .sh__acct { display: none; } }

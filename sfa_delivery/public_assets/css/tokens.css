@@ -192,6 +192,12 @@ body {
   --cb-assume:      var(--gj-code);
   --cb-assume-wash: #e3eeee;
 
+  /* ── Freshness status (used by .sh__foot .dot + freshness cues) ── */
+  --status-fresh:   var(--gj-leaf);
+  --status-aging:   var(--gj-sun);
+  --status-stale:   var(--gj-tomato);
+  --status-error:   #c43a2e;
+
   /* ── Topic colors (13-topic taxonomy) ── */
   --t-nursery: var(--gj-code-deep);
   --t-grow:    var(--gj-leaf-deep);

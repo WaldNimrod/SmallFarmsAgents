@@ -1,14 +1,9 @@
 /* gj.css — Garden Journal direction styles (LOD300) */
 
-/* Color extensions: warmer paper + sun accent */
+/* Accent + font extensions. Paper/ink/line tokens are owned by tokens.css (v2
+   white-green palette); the legacy cream redefinitions here were removed in
+   WP-CB-UI-ALIGN so the v2 --gj-paper #f8fbf8 ground is not overridden. */
 :root {
-  --gj-paper:   #f6f1e3;            /* warmer cream */
-  --gj-paper-2: #ece5d2;
-  --gj-paper-3: #ddd2b2;
-  --gj-ink:     #2a2418;
-  --gj-ink-soft:#776a4d;
-  --gj-line:    #d8ccae;
-
   --gj-leaf:        #6f8a45;
   --gj-leaf-deep:   #4d6a2c;
   --gj-leaf-soft:   #9bb172;
