@@ -3687,10 +3687,22 @@ work_packages:
       (now LOCKED). Build (f22138d) + QA fixes (f85691e) + team_50 internal visual QA already on branch.
       Verdict: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-ALIGN/WP-CB-UI-ALIGN_LGATE-S_VERDICT_v1.0.0.md.
       NEXT: deploy branch to uPress (team_99) → team_190 L-GATE_V live per-page visual round.
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-02"
+    validator: team_99
+    notes: >
+      team_99 deployed the branch to sfa.nimrod.bio (uPress) via the waldhomeserver FTPS relay. lftp mirror
+      61 transferred / 62 in-place / exit 0. Deployed SHA b72bcca. All 5 smoke checks PASS: / 200; /calc/ loads
+      crop-book-v1.js (1 match); /calc/export.csv 200; /,/crop-book/,/calc/,/market/,/crop-book/questions all 200
+      in the .sh top-nav shell with 0 refs to legacy .gj-shell/.dt-shell/.sfa-nav; served tokens.css --gj-paper
+      #f8fbf8 with #f5f3ec count 0 (cream killed, no Cloudflare purge needed). Anomaly: stale server FTPS pass
+      (len 11 vs 13) synced out-of-band, backup kept, team_60 flagged for a rotation-sync runbook (non-blocking).
+      Report: _COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-ALIGN/DEPLOY_REPORT_v1.0.0.md. L-GATE_V now executable.
   notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
     (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
-    export. Delivery-tier only; no backend/migration. L-GATE_S PASS_WITH_FINDINGS 2026-06-02 (Cursor) → LOD400
-    LOCKED. NEXT: deploy to uPress (team_99) → team_190 L-GATE_V."
+    export. Delivery-tier only; no backend/migration. L-GATE_S PASS (Cursor) → LOD400 LOCKED → DEPLOYED to
+    sfa.nimrod.bio @ b72bcca (team_99, all smoke PASS). NEXT: team_190 L-GATE_V (Cursor) live per-page round."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
