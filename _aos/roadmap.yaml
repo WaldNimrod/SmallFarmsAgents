@@ -3870,6 +3870,19 @@ work_packages:
       Branch pushed (tip 355be17+). team_100 could not self-execute (SSH to the prod host is auth-gated) → team_00
       to run team_99 or authorize. team_190 L-GATE_V mandate PRE-STAGED
       (VALIDATION_MANDATE_team190_LGATE-V_2026-06-02_v1.0.0.md), fires on deploy SUCCESS.
+  - gate: L-GATE_V
+    result: FAIL
+    round: 2
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 (GPT — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-CLASSB/WP-CB-UI-CLASSB_LGATE-V_VERDICT_R2_v1.0.0.md"
+    notes: >
+      DEPLOY-PRECONDITION FAIL (R1 + R2 both) — NOT a build defect. Live sfa.nimrod.bio still serves the
+      pre-fix-all HTML (surface 1/7: only the about 5-tier ladder PASS; .hub-home__inner=0, contact.webp=0,
+      ◐ .reqinfo missing, .ptable__th=0, footer still <a href=/community>). No team_99 DEPLOY_REPORT in repo.
+      Branch code confirmed ready (composer 135, validate_aos 0 FAIL). Do NOT LOD500_LOCK. UNBLOCK: team_99 runs
+      DEPLOY_MANDATE_team99_2026-06-02 → commits DEPLOY_REPORT → re-route L-GATE_V R3 (expect live markers).
   notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Built + merged + LIVE; team_50 QA PASS_WITH_FINDINGS
     (2 MAJOR + 6 MINOR + 2 cosmetic). Per team_00 'fix all': team_10 fix-all build (10/10) → team_100 L-GATE_B
     verify PASS → team_50 re-QA v1.1.0 PASS. NEXT (team_00 handoff): team_99 DEPLOY (SSH auth-gated) → team_190
@@ -3968,6 +3981,21 @@ work_packages:
       from the Mac (outbound HTTPS HMAC; oma-postgres must be up). SSH to the prod host is auth-gated → team_00 runs
       team_99 or authorizes. team_190 L-GATE_V mandate PRE-STAGED (VALIDATION_MANDATE_team190_LGATE-V_2026-06-03),
       fires on deploy+push SUCCESS (live AC-09 book-chips + AC-10 structured reads).
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 (GPT — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-DATA/WP-CB-DATA_LGATE-V_VERDICT_v1.0.0.md"
+    notes: >
+      DEPLOY-PRECONDITION FAIL — NOT a build defect. Live 0/3: C1 no window.SFA_CROP_BOOK block on /calc
+      (mirror table empty/missing → empty crop_book_values); C2 crop pages show partial badge only, no
+      winning_source_class/validated prov cues; C3 (no-default first-by-name) not live-verifiable without a push.
+      Code 3/3 PASS on branch (migrations 004/005, IngestController whitelist, pytest 750/2-pre-existing,
+      composer 141, validate_aos 0 FAIL). No team_99 DEPLOY_REPORT in repo (migrate.php 004/005 + Mac push not
+      attested). Do NOT LOD500_LOCK. UNBLOCK: team_99 runs DEPLOY_MANDATE_team99_2026-06-03 (migrate + push) →
+      commits DEPLOY_REPORT → re-route L-GATE_V R2.
   notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (2 INFO inline → LOD400_LOCKED v0.2.0) → team_10 L-GATE_B build +
     team_100 verify PASS → team_50 QA PASS. Mirror + transport only (locked enrichment layer untouched). NEXT
     (team_00 handoff): team_99 deploy (migrations on uPress, with the Class B deploy) + Mac push → team_190 L-GATE_V
