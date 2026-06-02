@@ -193,12 +193,14 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringContainsString('text/csv', $res->getHeaderLine('Content-Type'));
     }
 
-    public function testCalcExportPdfReturnsPrintHtml(): void
+    public function testCalcExportPrintReturnsPrintHtml(): void
     {
-        $res = $this->get('/calc/export.pdf?crop=' . rawurlencode('חסה') . '&beds=5');
+        // WP-CB-UI-ALIGN R3: PDF print moved off the .pdf extension (uPress/Apache 404s
+        // .pdf to Slim) to the extension-less /calc/print route. (Was /calc/export.pdf.)
+        $res = $this->get('/calc/print?crop=' . rawurlencode('חסה') . '&beds=5');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('window.print', $html, 'PDF route returns a print-friendly auto-print page');
+        $this->assertStringContainsString('window.print', $html, 'print route returns a print-friendly auto-print page');
         $this->assertStringContainsString('חסה', $html, 'print sheet includes the crop');
     }
 
