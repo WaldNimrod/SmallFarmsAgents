@@ -4024,10 +4024,27 @@ work_packages:
       AWAITING team_00 (holds the secret): set ADMIN_MIGRATE_TOKEN in the uPress sfa_delivery/.env + give team_99
       the token, OR apply 004/005 directly via uPress phpMyAdmin, OR run migrate.php with shell. Then team_99
       runs the Mac push + writes the CB-DATA DEPLOY_REPORT → re-route L-GATE_V R2.
-  notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (2 INFO inline → LOD400_LOCKED v0.2.0) → team_10 L-GATE_B build +
-    team_100 verify PASS → team_50 QA PASS. Mirror + transport only (locked enrichment layer untouched). NEXT
-    (team_00 handoff): team_99 deploy (migrations on uPress, with the Class B deploy) + Mac push → team_190 L-GATE_V
-    (non-Claude, pre-staged) → LOD500_LOCKED + ADR042 archive. All work on branch claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-03"
+    validator: team_99
+    deployed_sha: "c51c2e5"
+    rows_pushed: 1010
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-DATA/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 executed the autonomous procedure (per team_100 RESPONSE + team_00 GO): FTPS-backed up the uPress
+      .env, self-generated ADMIN_MIGRATE_TOKEN (secrets.token_hex(24), value team_99-owned, left in .env for the
+      runner; team_00 may rotate), GET /admin/migrate → applied 004+005 (HTTP 200, errors:[]), then the Mac push
+      → crop_field_enrichment accepted=767 + crop_attribute accepted=243 = 1010 rows / 0 errors (matches dry-run).
+      SMOKE PASS (live): /calc serves a populated window.SFA_CROP_BOOK (11.6 KB, all crops); /crop-book/watermelon
+      pv-validated=18 / pv-fallback=0 (numeric+unit + Hebrew categoricals read from the NEW tables, not the
+      payload fallback); anise-hyssop 9 validated / 0 fallback; re-push idempotent (5 rows accepted=5). IR#4 clean
+      (no _aos/roadmap edits by team_99). L-GATE_V R2 now executable.
+  notes: "DEPLOYED + LIVE 2026-06-03 — migrations 004/005 applied on uPress + 1010 rows pushed (team_99); smoke
+    PASS (SFA_CROP_BOOK populated, crop pages read structured prov from the tables, 0 payload-fallback). L-GATE_S
+    PASS_WITH_FINDINGS → L-GATE_B (team_100 verify) → team_50 QA PASS → DEPLOY SUCCESS. Mirror + transport only
+    (locked enrichment layer untouched). NEXT: team_190 L-GATE_V R2 (non-Claude, pre-staged) → LOD500_LOCKED +
+    ADR042 archive. Branch claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
