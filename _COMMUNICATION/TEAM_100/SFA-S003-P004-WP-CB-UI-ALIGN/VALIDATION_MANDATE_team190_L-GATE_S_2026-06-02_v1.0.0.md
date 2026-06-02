@@ -1,8 +1,10 @@
 # VALIDATION MANDATE (L-GATE_S) — SFA-S003-P004-WP-CB-UI-ALIGN — team_100 → team_190 — v1.0.0
 
 **Date:** 2026-06-02 · **From:** team_100 (Claude Opus 4.8) · **To:** team_190 · **Routed by:** team_00
-**Repo:** `SmallFarmsAgents` · **Branch:** `claude/wp-cb-ui-align-2026-06-02` · **HEAD:** `289a50c`
+**Repo:** `SmallFarmsAgents` · **Branch:** `claude/wp-cb-ui-align-2026-06-02` · **HEAD:** `a308d28`
 **Gate:** L-GATE_S (spec) · **Round:** 1 · **Class:** A
+**Note:** the build (team_10, Sonnet) + team_50 internal visual QA already ran on this branch; the LOD400 now
+carries a QA addendum (4 findings, all fixed). Review the LOD400 **including** that addendum.
 
 ## 0. Cross-engine (IR#1 / IR#5)
 The build will be executed by **Claude (Sonnet)**. This spec gate must therefore be validated by a
