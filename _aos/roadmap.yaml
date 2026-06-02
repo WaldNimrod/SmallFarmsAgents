@@ -3826,9 +3826,55 @@ work_packages:
       session, NOT Class B). validate_aos 29/19/0. Constitutional CLEAN: no _aos/Python/migration by team_10
       (roadmap edits in-range are the parallel Class A session, IR#4 intact). 0 SRV-IDEAS filed.
       BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-UI-CLASSB/BUILD_REPORT_v1.0.0.md.
-  notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Holds the design-missing surfaces. NEXT: team_35
-    delivers v2 templates → team_100 LOD400 → team_190 L-GATE_S → team_10 build → team_50 visual QA →
-    team_190 L-GATE_V (non-Claude)."
+  - gate: QA
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-02"
+    validator: team_50
+    report_ref: "_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-UI-CLASSB/VISUAL_QA_REPORT_2026-06-02_v1.0.0.md"
+    notes: >
+      team_50 (Haiku) visual QA of the merged build (0f5ea64), design-vs-live per surface. PASS_WITH_FINDINGS,
+      0 BLOCKER: 2 MAJOR (M-1 hub-intro blank-left at wide viewport; M-2 community .comm-banner empty beige box —
+      points at a non-existent heroes/community-banner.webp), 6 MINOR, 2 COSMETIC. team_00 directive: fix ALL,
+      not just MAJORs, then resubmit to L-GATE_V.
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-02"
+    pass: fix-all
+    validator: team_100
+    notes: >
+      Fix-all build. team_10 (Sonnet) resolved all 10 findings (DISPATCH_sfa_build_FIXALL); team_100 (Opus)
+      INDEPENDENT L-GATE_B verify PASS. F-1 hub .hub-home__inner max-width:1100px (hub-scoped); F-2/M-3 comm-banner
+      → existing contact.webp (Board-B L807), box only renders w/ image; F-3 search "◐ בקשו" .reqinfo; F-4 acct
+      logo clip+size; F-5 th→.ptable__th; F-6 footer aria-current on /community; F-7 nav trailing-space trim.
+      Non-fixes documented: MINOR-2 live hub stats → SRV-IDEAS SRV-5 (design intends static, server-side
+      out of Class B scope); COSMETIC-2 canonical=production correct in prod. VERIFY: composer 135/135 (348
+      assert), php -l clean, validate_aos 29/19/0, delivery tier only, IR#4 clean. BUILD_REPORT_FIXALL_v1.0.0.md.
+  - gate: QA
+    result: PASS
+    date: "2026-06-02"
+    pass: re-qa
+    validator: team_50
+    report_ref: "_COMMUNICATION/TEAM_50/SFA-S003-P004-WP-CB-UI-CLASSB/VISUAL_QA_REPORT_REQA_v1.1.0.md"
+    notes: >
+      team_50 (Haiku) re-QA v1.1.0 of the fix-all build, rendered-HTML. PASS — all 10 findings resolved
+      (community img present/no bare box; .hub-home__inner; footer aria-current span; .ptable__th; trimmed
+      nav; ◐ .reqinfo CTA; acct logo clip). All 7 routes 200; composer 135/135. Visual pixel-fidelity → team_190.
+  - gate: DEPLOY
+    result: ROUTED
+    date: "2026-06-02"
+    validator: team_99
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-CLASSB/DEPLOY_MANDATE_team99_2026-06-02_v1.0.0.md"
+    notes: >
+      team_100 routed the DEPLOY mandate to team_99 (waldhomeserver FTPS relay → sfa.nimrod.bio): fetch origin,
+      checkout/reset origin/claude/sfa-p004-cbdata-classb-2026-06-02, run ftp_deploy_sfa_ui.sh, 7 smoke checks.
+      Branch pushed (tip 355be17+). team_100 could not self-execute (SSH to the prod host is auth-gated) → team_00
+      to run team_99 or authorize. team_190 L-GATE_V mandate PRE-STAGED
+      (VALIDATION_MANDATE_team190_LGATE-V_2026-06-02_v1.0.0.md), fires on deploy SUCCESS.
+  notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Built + merged + LIVE; team_50 QA PASS_WITH_FINDINGS
+    (2 MAJOR + 6 MINOR + 2 cosmetic). Per team_00 'fix all': team_10 fix-all build (10/10) → team_100 L-GATE_B
+    verify PASS → team_50 re-QA v1.1.0 PASS. NEXT (team_00 handoff): team_99 DEPLOY (SSH auth-gated) → team_190
+    L-GATE_V (non-Claude, pre-staged) → LOD500_LOCKED + ADR042 archive. All work on branch
+    claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DATA
