@@ -3762,12 +3762,14 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
   label: "ספר גידולים: Class B — עיצוב v2 למשטחי hub/market/search/community/about/account (ממתין לצוות 35)"
-  status: BUILDING
-  phase: ui_align
+  status: DONE
+  phase: validation
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-06-03"
+  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-UI-CLASSB-ARCHIVE)"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
@@ -3895,21 +3897,40 @@ work_packages:
       / hub-home__inner=2; /market ptable__th=3 (no inline style); /search ◐ .reqinfo; /account+/about 200;
       footer <span aria-current=page>קהילה</span> (no self-link). Fixes are LIVE. L-GATE_V R3 now executable
       (live matches branch). NEXT: re-route team_190 L-GATE_V R3 → on PASS LOD500_LOCKED + ADR042 archive.
-  notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Built + merged + LIVE; team_50 QA PASS_WITH_FINDINGS
-    (2 MAJOR + 6 MINOR + 2 cosmetic). Per team_00 'fix all': team_10 fix-all build (10/10) → team_100 L-GATE_B
-    verify PASS → team_50 re-QA v1.1.0 PASS. NEXT (team_00 handoff): team_99 DEPLOY (SSH auth-gated) → team_190
-    L-GATE_V (non-Claude, pre-staged) → LOD500_LOCKED + ADR042 archive. All work on branch
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 3
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 Fast (GPT — non-Claude, IR#1/#5)"
+    deployed_sha: "c51c2e5"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-CLASSB/WP-CB-UI-CLASSB_LGATE-V_VERDICT_R3_v1.0.0.md"
+    notes: >
+      team_190 (non-Claude) L-GATE_V R3 against the LIVE site. PASS_WITH_FINDINGS — surface 7/7 +
+      constitutional 4/4. All R2-FAIL markers flipped live: hub-home__inner, contact.webp banner, ◐ .reqinfo,
+      .ptable__th, footer aria-current, /about 5-tier, account-logo non-overlap (CDP bbox); market detail
+      mkt-disc + 7י/28י active / 90י/שנה disabled. SRV-5 scope-guard intact (66 גידולים still static — no
+      server-side creep). 2 INFO (non-blocking): legacy --paper #f5f3ec appears only as a COMMENT in live
+      tokens.css (computed body = rgb(248,251,248) = #f8fbf8 ✓); composer 141 vs mandate 135 (combined branch
+      includes the CB-DATA mirror tests — expected, not a regression). LOD500_LOCKED.
+  notes: "DONE / LOD500_LOCKED 2026-06-03 — L-GATE_V R3 PASS_WITH_FINDINGS (team_190 non-Claude). Class B (7
+    surfaces) LIVE on sfa.nimrod.bio. Per team_00 'fix all': team_50 QA PASS_WITH_FINDINGS (2 MAJOR/6 MINOR/2
+    cosmetic) → team_10 fix-all build (10/10) → team_100 L-GATE_B verify PASS → team_50 re-QA v1.1.0 PASS →
+    team_99 DEPLOY SUCCESS (7/7 smoke) → L-GATE_V R3 PWF (2 INFO). MINOR-2 (live hub stats) deferred to
+    WP-SRV-IDEAS SRV-5 (server-side, out of Class B scope). ADR042 archive mandate → team_191. Branch
     claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DATA
   label: "ספר גידולים: Enrichment Mirror — populate crop_field_enrichment + crop_attribute on the uPress MySQL delivery tier"
-  status: BUILDING
-  phase: build
+  status: DONE
+  phase: validation
   track: A
   effort: NORMAL
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  closed_at: "2026-06-03"
+  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-DATA-ARCHIVE)"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
@@ -4040,11 +4061,28 @@ work_packages:
       pv-validated=18 / pv-fallback=0 (numeric+unit + Hebrew categoricals read from the NEW tables, not the
       payload fallback); anise-hyssop 9 validated / 0 fallback; re-push idempotent (5 rows accepted=5). IR#4 clean
       (no _aos/roadmap edits by team_99). L-GATE_V R2 now executable.
-  notes: "DEPLOYED + LIVE 2026-06-03 — migrations 004/005 applied on uPress + 1010 rows pushed (team_99); smoke
-    PASS (SFA_CROP_BOOK populated, crop pages read structured prov from the tables, 0 payload-fallback). L-GATE_S
-    PASS_WITH_FINDINGS → L-GATE_B (team_100 verify) → team_50 QA PASS → DEPLOY SUCCESS. Mirror + transport only
-    (locked enrichment layer untouched). NEXT: team_190 L-GATE_V R2 (non-Claude, pre-staged) → LOD500_LOCKED +
-    ADR042 archive. Branch claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 2
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 Fast (GPT — non-Claude, IR#1/#5)"
+    deployed_sha: "c51c2e5"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-DATA/WP-CB-DATA_LGATE-V_VERDICT_R2_v1.0.0.md"
+    notes: >
+      team_190 (non-Claude) L-GATE_V R2 against the LIVE site. PASS_WITH_FINDINGS — live 3/3 + code 3/3.
+      C1 /calc serves a populated window.SFA_CROP_BOOK (book-chips bind); C2 crop pages read structured prov
+      from the crop_field_enrichment/crop_attribute TABLES (pv-validated>0, pv-fallback=0); C4 consumer-contract
+      fidelity + backend-stamped field_state (no UI τ); C5 idempotent re-push; C6 scope/locked clean, IR#4,
+      validate_aos 0 FAIL. 1 INFO (builder-acknowledge): F-190-CBDATA-V-R2-01 — C3 no-default spot-check N/A
+      (canonical PG has no_default_count=0; the is_default→first-by-name rule is attested by code + AC-04 tests).
+      LOD500_LOCKED.
+  notes: "DONE / LOD500_LOCKED 2026-06-03 — L-GATE_V R2 PASS_WITH_FINDINGS (team_190 non-Claude). Enrichment mirror
+    LIVE on sfa.nimrod.bio: migrations 004/005 applied + 1010 rows pushed; /calc book-chips bind + crop pages read
+    structured prov from the tables (0 payload fallback). Full ladder: L-GATE_S PWF (2 INFO inline) → L-GATE_B
+    (team_100 verify) → team_50 QA PASS → DEPLOY SUCCESS (team_99) → L-GATE_V R2 PWF (1 INFO). Mirror + transport
+    only; locked enrichment layer untouched. ADR042 archive mandate → team_191. Branch
+    claude/sfa-p004-cbdata-classb-2026-06-02 (pushed)."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
