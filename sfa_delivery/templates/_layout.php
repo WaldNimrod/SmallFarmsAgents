@@ -24,7 +24,7 @@ if (!isset($asset_ver)) {
     $_css_dir = __DIR__ . '/../public_assets/css';
     $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
     $_mtimes  = [];
-    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras'] as $_n) {
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras', 'classb'] as $_n) {
         $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
         if ($_mt) { $_mtimes[] = $_mt; }
     }
@@ -32,8 +32,22 @@ if (!isset($asset_ver)) {
     if ($_mt) { $_mtimes[] = $_mt; }
     $_mt = @filemtime(__DIR__ . '/../public_assets/js/crop-book-v1.js');
     if ($_mt) { $_mtimes[] = $_mt; }
+    $_mt = @filemtime(__DIR__ . '/../public_assets/js/classb.js');
+    if ($_mt) { $_mtimes[] = $_mt; }
     $asset_ver = $_mtimes ? max($_mtimes) : 'build';
 }
+
+// Class B routes: /, /market/*, /search, /community, /about, /account
+// (not /crop-book/* and not /calc/* which are Class A only)
+$_path = $canonical_path ?? '/';
+$_is_classb = (
+    $_path === '/' ||
+    str_starts_with($_path, '/market') ||
+    $_path === '/search' ||
+    $_path === '/community' ||
+    $_path === '/about' ||
+    str_starts_with($_path, '/account')
+);
 ?><!doctype html>
 <html lang="he" dir="rtl">
 <head>
@@ -63,10 +77,17 @@ if (!isset($asset_ver)) {
 <link rel="stylesheet" href="/public_assets/css/crop-book-deep.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/crop-book-v1.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/desktop-extras.css?v=<?= $h($asset_ver) ?>">
+<?php if ($_is_classb): ?>
+<link rel="stylesheet" href="/public_assets/css/classb.css?v=<?= $h($asset_ver) ?>">
+<?php endif; ?>
 
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
 <?php if (isset($active) && in_array($active, ['crop-book', 'calc'], true)): ?>
 <script defer src="/public_assets/js/crop-book-v1.js?v=<?= $h($asset_ver) ?>"></script>
+<?php endif; ?>
+<?php if ($_is_classb): ?>
+<script defer src="/public_assets/js/crop-book-v1.js?v=<?= $h($asset_ver) ?>"></script>
+<script defer src="/public_assets/js/classb.js?v=<?= $h($asset_ver) ?>"></script>
 <?php endif; ?>
 </head>
 <body class="sfa-app">
@@ -87,7 +108,7 @@ if (!isset($asset_ver)) {
 </symbol></svg>
 <div class="sh">
   <div class="sh__bar">
-    <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+    <a class="sh__mark" href="/" aria-label="SFA — דף הבית"><svg><use href="#sfa-logo"/></svg></a>
     <div class="sh__name">SFA<small><?= $h($page_sub) ?></small></div>
     <nav class="sh__nav">
       <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר גידולים</a>
@@ -95,17 +116,27 @@ if (!isset($asset_ver)) {
       <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
     </nav>
     <span class="sh__nav__sp"></span>
-    <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
-    <a class="sh__icon" href="/search" title="חיפוש">⌕</a>
+    <?php /* Class B: inline search (≥760px); collapses to icon below that */ ?>
+    <form class="sh__search" action="/search" method="get" role="search" aria-label="חיפוש">
+      <span class="ic">⌕</span>
+      <input type="search" name="q" placeholder="חיפוש גידולים ומחירים…" aria-label="שדה חיפוש">
+    </form>
+    <a class="sh__icon" href="/search" title="חיפוש" aria-label="חיפוש">⌕</a>
+    <a class="sh__acct <?= $active==='account' ? 'is-active' : '' ?>" href="/account" aria-label="חשבון"><span class="av">◔</span>חשבון</a>
   </div>
   <div class="sh__body"><?= $body_html ?></div>
-  <nav class="sh__nav--mobile">
+  <nav class="sh__nav--mobile" aria-label="ניווט ראשי">
     <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר</a>
     <a class="is-calc <?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
     <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
-    <a href="/account"><span class="g">◔</span>חשבון</a>
+    <a class="<?= $active==='account' ? 'is-active' : '' ?>" href="/account"><span class="g">◔</span>חשבון</a>
   </nav>
-  <div class="sh__foot"><span class="dot"></span><?= $h($foot_text) ?></div>
+  <footer class="sh__foot">
+    <span class="dot"></span>
+    <a href="/">SFA</a> · קוד פתוח · קהילתי ·
+    <a href="/about">על הכלים</a> ·
+    <a href="/community">קהילה</a>
+  </footer>
 </div>
 </body>
 </html>

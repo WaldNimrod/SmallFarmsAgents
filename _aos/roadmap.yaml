@@ -3774,13 +3774,21 @@ work_packages:
       account_landing); constitutional clean (tokens sha256 matches, validate_aos 29/19/0). 7 minors folded
       into the team_10 build dispatch. Verdict: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-CLASSB/LOD400-VERDICT_v1.0.0.md.
   - gate: L-GATE_B
-    result: IN_PROGRESS
+    result: PASS
     date: "2026-06-02"
     validator: team_10
+    commit: "4695fc7"
+    validator: team_10
     notes: >
-      Build dispatched to team_10 (DISPATCH_sfa_build_2026-06-02_v1.0.0.md) — 7 surfaces + shell refine,
-      with the 7 team_190 L-GATE_S minors folded in as build requirements (disclaimer class, 28d range
-      label, reqchip→request-info only, search honesty, disabled 90/year, ignore feed line, asset load order).
+      team_10 (sfa_build, Sonnet — IR#1) self-attest PASS. 7 surfaces + shell built (b9b30b4..4695fc7);
+      classb.css/js ported; AccountController + account_landing (UI shell + בקרוב). All 7 team_190 minors
+      addressed (verified by team_100: .mkt-disc+locked copy, 28י range, reqchip→request-info, search no
+      fake counts, 90י/שנה disabled server-side, feed-less, classb asset load order). 22 new ClassBRouteTest
+      pass; full suite 128/129 (the 1 failure = stale Class A test CropBookV1RouteTest::testCalcExportPdfReturnsPrintHtml
+      hitting the retired /calc/export.pdf — Class A moved it to /calc/print; flagged to the WP-CB-UI-ALIGN
+      session, NOT Class B). validate_aos 29/19/0. Constitutional CLEAN: no _aos/Python/migration by team_10
+      (roadmap edits in-range are the parallel Class A session, IR#4 intact). 0 SRV-IDEAS filed.
+      BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-UI-CLASSB/BUILD_REPORT_v1.0.0.md.
   notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Holds the design-missing surfaces. NEXT: team_35
     delivers v2 templates → team_100 LOD400 → team_190 L-GATE_S → team_10 build → team_50 visual QA →
     team_190 L-GATE_V (non-Claude)."
