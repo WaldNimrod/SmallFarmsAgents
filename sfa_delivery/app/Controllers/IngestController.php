@@ -42,6 +42,14 @@ final class IngestController
         'product_prices' => [
             'product_id', 'price_date', 'price', 'source',
         ],
+        'crop_field_enrichment' => [
+            'crop_id', 'field_name', 'value_best', 'unit',
+            'field_state', 'winning_source_class', 'confidence_score', 'last_pushed_at',
+        ],
+        'crop_attribute' => [
+            'crop_id', 'attribute_key', 'value_canonical', 'value_list',
+            'field_state', 'last_pushed_at',
+        ],
     ];
 
     public function __construct(
@@ -179,7 +187,12 @@ final class IngestController
         } else {
             // sqlite / postgres ANSI-style upsert (used by tests)
             $updates = array_map(fn($c) => "{$c} = excluded.{$c}", $cols);
-            $conflictKey = ($table === 'product_prices') ? 'product_id, price_date, source' : 'id';
+            $conflictKey = match ($table) {
+                'product_prices'        => 'product_id, price_date, source',
+                'crop_field_enrichment' => 'crop_id, field_name',
+                'crop_attribute'        => 'crop_id, attribute_key',
+                default                 => 'id',
+            };
             $sql = sprintf(
                 'INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s',
                 $table, implode(', ', $cols), implode(', ', $placeholders),

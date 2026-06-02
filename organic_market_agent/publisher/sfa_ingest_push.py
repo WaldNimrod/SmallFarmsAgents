@@ -39,6 +39,8 @@ import psycopg2.extras
 import requests
 from dotenv import load_dotenv
 
+from organic_market_agent.crop_book.canon.field_registry import FIELD_REGISTRY
+
 logger = logging.getLogger("sfa_ingest_push")
 
 # ---------------------------------------------------------------------------
@@ -617,6 +619,159 @@ def _fetch_cover_crops(conn) -> list[dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
+# WP-CB-DATA WI-4: crop-level enrichment + attribute fetchers
+# ---------------------------------------------------------------------------
+
+# SQL fragment reused by both crop-level fetchers.
+# Resolves the representative variety per crop:
+#   1. is_default = TRUE variety if any
+#   2. Else first by COALESCE(name_he, name_en, 'variety-'||id) ASC, id ASC
+#      — matches the publisher push name in _fetch_crop_varieties L511 and the
+#        CropBookViewController L264/L289-300 consumer fallback (LOD400 §2.1, INFO-2)
+_REPRESENTATIVE_VARIETY_CTE = """
+WITH rep AS (
+    SELECT id AS variety_id, crop_id,
+           ROW_NUMBER() OVER (
+               PARTITION BY crop_id
+               ORDER BY is_default DESC,
+                        COALESCE(name_he, name_en, 'variety-' || id::text) ASC,
+                        id ASC
+           ) AS rn
+    FROM crop_varieties
+)
+"""
+
+
+def _fetch_crop_field_enrichment(conn) -> list[dict[str, Any]]:
+    """Crop-level enrichment mirror rows (WP-CB-DATA LOD400 §3 WI-4).
+
+    For each crop, picks the representative variety (is_default first, then
+    first-by-name fallback), reads crop_field_enrichment rows in
+    _AGRONOMY_FIELD_WHITELIST, and emits one row per (crop_id, field_name)
+    with unit from FIELD_REGISTRY and field_state stamped via existing τ/class
+    constants.  Logs the count of crops with no default variety.
+    """
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    # Count crops that have no is_default variety (data-hygiene signal, LOD §2.1).
+    cur.execute("""
+        SELECT COUNT(DISTINCT crop_id) AS no_default_count
+        FROM crop_varieties
+        WHERE crop_id NOT IN (
+            SELECT DISTINCT crop_id FROM crop_varieties WHERE is_default = TRUE
+        )
+    """)
+    count_row = cur.fetchone()
+    no_default_count = count_row["no_default_count"] if count_row else 0
+    if no_default_count:
+        logger.info(
+            "crop_field_enrichment: %d crops have no default variety — using first-by-name fallback",
+            no_default_count,
+        )
+
+    # Window query: pick rn=1 variety per crop (is_default DESC, then first-by-name)
+    # and join to crop_field_enrichment for the whitelist fields.
+    whitelist_placeholders = ",".join(["%s"] * len(_AGRONOMY_FIELD_WHITELIST))
+    cur.execute(f"""
+        {_REPRESENTATIVE_VARIETY_CTE}
+        SELECT rep.crop_id,
+               cfe.field_name,
+               cfe.value_best,
+               cfe.confidence_score,
+               cfe.winning_source_class
+        FROM rep
+        JOIN crop_field_enrichment cfe ON cfe.variety_id = rep.variety_id
+        WHERE rep.rn = 1
+          AND cfe.field_name IN ({whitelist_placeholders})
+        ORDER BY rep.crop_id, cfe.field_name
+    """, _AGRONOMY_FIELD_WHITELIST)
+    enrichment_rows = cur.fetchall()
+
+    now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    out: list[dict[str, Any]] = []
+    for er in enrichment_rows:
+        fname = er["field_name"]
+        score_raw = er["confidence_score"]
+        score = float(score_raw) if score_raw is not None else 0.0
+        src_class = er["winning_source_class"] or ""
+
+        if src_class in _HIGH_TRUST_CLASSES or score >= _FIELD_STATE_TAU:
+            field_state = "VALIDATED"
+        else:
+            field_state = "UNVALIDATED"
+
+        unit = FIELD_REGISTRY[fname].unit if fname in FIELD_REGISTRY else None
+
+        out.append({
+            "crop_id": er["crop_id"],
+            "field_name": fname,
+            "value_best": float(er["value_best"]) if er["value_best"] is not None else None,
+            "unit": unit,  # None → SQL NULL via json_encode NULL path
+            "field_state": field_state,
+            "winning_source_class": src_class or None,
+            "confidence_score": score_raw,
+            "last_pushed_at": now,
+        })
+    return out
+
+
+def _fetch_crop_attribute(conn) -> list[dict[str, Any]]:
+    """Crop-level attribute mirror rows (WP-CB-DATA LOD400 §3 WI-4).
+
+    For each crop, picks the representative variety (same rule as
+    _fetch_crop_field_enrichment), reads crop_attribute rows in
+    _CATEGORICAL_ATTRS_WHITELIST, maps attribute_name → attribute_key,
+    and emits one row per (crop_id, attribute_key).  value_list (jsonb list)
+    is JSON-encoded when present; otherwise value_canonical is used.
+    """
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    cat_placeholders = ",".join(["%s"] * len(_CATEGORICAL_ATTRS_WHITELIST))
+    cur.execute(f"""
+        {_REPRESENTATIVE_VARIETY_CTE}
+        SELECT rep.crop_id,
+               ca.attribute_name,
+               ca.value_canonical,
+               ca.value_list
+        FROM rep
+        JOIN crop_attribute ca ON ca.variety_id = rep.variety_id
+        WHERE rep.rn = 1
+          AND ca.attribute_name IN ({cat_placeholders})
+        ORDER BY rep.crop_id, ca.attribute_name
+    """, _CATEGORICAL_ATTRS_WHITELIST)
+    attr_rows = cur.fetchall()
+
+    now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    out: list[dict[str, Any]] = []
+    for ar in attr_rows:
+        value_list_raw = ar["value_list"]
+        value_canonical = ar["value_canonical"]
+
+        # value_list (jsonb list) takes precedence over value_canonical.
+        # psycopg2 returns jsonb as Python list already; encode to JSON string
+        # for the push payload (IngestController stores it in JSON column).
+        if value_list_raw is not None:
+            value_list_json = json.dumps(value_list_raw, ensure_ascii=False)
+            field_state = "VALIDATED"
+        elif value_canonical:
+            value_list_json = None
+            field_state = "VALIDATED"
+        else:
+            value_list_json = None
+            field_state = "MISSING"
+
+        out.append({
+            "crop_id": ar["crop_id"],
+            "attribute_key": ar["attribute_name"],  # attribute_name → attribute_key
+            "value_canonical": value_canonical,
+            "value_list": value_list_json,
+            "field_state": field_state,
+            "last_pushed_at": now,
+        })
+    return out
+
+
+# ---------------------------------------------------------------------------
 
 
 def _slugify(value: str | None, *, fallback: str) -> str:
@@ -697,6 +852,8 @@ def _push_table(
         "crop_varieties": _fetch_crop_varieties,
         "products": _fetch_products,
         "cover_crops": _fetch_cover_crops,
+        "crop_field_enrichment": _fetch_crop_field_enrichment,
+        "crop_attribute": _fetch_crop_attribute,
     }
     if table not in fetchers:
         raise SystemExit(f"Unknown table: {table}")
@@ -729,8 +886,15 @@ def _push_table(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Push canonical data to sfa.nimrod.bio ingest API")
-    parser.add_argument("--table", choices=("crops", "crop_varieties", "products", "cover_crops", "all"),
-                        default="all", help="Which table to push")
+    parser.add_argument(
+        "--table",
+        choices=(
+            "crops", "crop_varieties", "products", "cover_crops",
+            "crop_field_enrichment", "crop_attribute", "all",
+        ),
+        default="all",
+        help="Which table to push",
+    )
     parser.add_argument("--limit", type=int, default=None,
                         help="Limit rows per table (for testing)")
     parser.add_argument("--dry-run", action="store_true",
@@ -748,7 +912,11 @@ def main() -> int:
 
     conn = psycopg2.connect(cfg.db_url)
     try:
-        tables = ["crops", "crop_varieties", "products", "cover_crops"] if args.table == "all" else [args.table]
+        tables = (
+            ["crops", "crop_varieties", "products", "cover_crops",
+             "crop_field_enrichment", "crop_attribute"]
+            if args.table == "all" else [args.table]
+        )
         for tbl in tables:
             res = _push_table(cfg, conn, tbl, limit=args.limit, dry_run=args.dry_run)
             print(json.dumps(res, ensure_ascii=False, default=str, indent=2))
