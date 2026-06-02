@@ -89,20 +89,45 @@ LOD400 lock (after §9) → **team_190 L-GATE_S** (non-Claude) → **team_10 bui
 Backend/calculator/migrations; real auth (account is a shell); populating market price DATA (F-MKT-002 is an
 ingest/data-freshness item, not UI); crop-book/calculator screens (Class A); WP-CB-MIG2 schema work.
 
-## 9. OPEN QUESTIONS for team_00 (must resolve before LOD400 v1.0.0 lock)
-team_35 + team_100 surfaced these — each changes the build:
-1. **Community feed (CONFLICT).** team_35 delivered Community **feed-less** (manifesto + request form only),
-   citing your earlier "no community management — form + text only." The Mobbin note had suggested a light feed.
-   **Confirm feed-less** (team_100 recommends yes — matches your prior directive), or re-add a feed?
-2. **Account scope for v1.** No auth backend exists. Build the account as a **visual shell only** (login form +
-   open-core empty state + static profile-settings layout, non-functional), as a stable nav hook? (team_100: yes —
-   matches team_35 "stable hook, full flows later".) Or defer `/account` entirely to a later module?
-3. **Market graph time-ranges.** History API serves up to 28 days; the design's `.rangesel` offers 7/30/90/year.
-   For v1: wire **7 + 28-day** (real data) and show 90/year as disabled-until-data, or implement all four against
-   whatever history exists? (team_100: 7+28 live, 90/year disabled — honest, no fake series.)
-4. **Search suggestions/recent.** Client-side localStorage for recent searches + static suggestion chips (no new
-   backend), acceptable for v1? (team_100: yes.)
-5. **Market units & freshness thresholds** (team_35 Q3): cards show ₪/kg·unit·bunch from `sale_unit`; freshness
-   fresh ≤3d / aging 4–7d / stale >7d. Confirm these thresholds match OrganicMarketAgent's rolling window.
+## 9. team_00 DECISIONS (resolved 2026-06-02 — LOD400 v1.0.0)
+1. **Community = feed-less — CONFIRMED.** team_35's feed-less delivery is correct; it reflects a team_00 update
+   sent directly to them. Build manifesto + `.reqcard` request form only. No activity feed. (Closes the conflict.)
+2. **Account = UI shell only + "בקרוב" label — CONFIRMED.** Build `/account` as visual-only: login card +
+   open-core empty state + static profile/settings layout, each carrying a **"בקרוב"** badge. No auth backend,
+   no functional submit. Stable nav hook.
+3. **Graph time-ranges — APPROVED.** `.rangesel` wires **7 + 28-day from real history**; **90-day + year render
+   disabled** (`.is-disabled`, "בקרוב") — never a fabricated series. (Honest-data rule.)
+4. **Search suggestions/recent — APPROVED, WITH CONDITION.** Client-side localStorage only (recent searches) +
+   static suggestion chips; **no new backend**. ⚠ team_00 condition: **any server-side change proposed by the
+   build (search ranking, new endpoints, indexing, etc.) is NOT approved** — it is logged as an *idea to review*
+   in a future WP register (`SFA-S003-P004-WP-SRV-IDEAS`, opened 2026-06-02), with clear provenance ("proposed,
+   unapproved"). The build must stay UI/client-side; if it believes a server change is required, it STOPS and
+   files the idea, not implements it.
+5. **Market units & freshness — APPROVED IN PRINCIPLE; thresholds locked to the OMA 7-day window (see §9a).**
 
-*team_100 will lock LOD400 v1.0.0 on your answers, then route team_190 L-GATE_S.*
+## 9a. Market units + freshness — APPROVED TABLE (real values, v1.0.0)
+Grounded in the live system (not invented): `freshness_days = today − last_price_date` (computed at ingest,
+`sfa_ingest_push.py`); the OMA window is **7 days** (the live disclaimer states "ממוצעים מתגלגלים … 7 ימים
+אחרונים"). `unit` comes from `measurement_units.unit_symbol` per product; `sale_unit` aliases `harvest_unit_default`.
+
+**Freshness pill (3-state, on the 7-day window):**
+| State | `freshness_days` | Pill class | Color | Label (he) | Example |
+|-------|------------------|-----------|-------|------------|---------|
+| Fresh | `≤ 3` | `.fresh--fresh` | leaf | "טרי · עודכן היום/אתמול" | price_date = today → 0d → fresh |
+| Aging | `4–7` | `.fresh--aging` | sun | "מתעדכן · לפני N ימים" | price_date = 5d ago → aging |
+| Stale | `> 7` (or null) | `.fresh--stale` | tomato | "ישן · לפני N ימים" / "אין דיווח" | 9d ago → stale; null → empty card |
+
+**Price unit display (from product `unit` / `sale_unit`):**
+| Source value (`unit_symbol`) | Display (he) | Example card price |
+|------------------------------|--------------|--------------------|
+| `kg` | ₪ N.NN · לק״ג | "₪ 8.50 · לק״ג" |
+| `unit` / `יח׳` | ₪ N.NN · ליחידה | "₪ 3.00 · ליחידה" |
+| `bunch` / `אגודה` | ₪ N.NN · לאגודה | "₪ 5.00 · לאגודה" |
+| (null / unknown) | ₪ N.NN | "₪ 8.50" (no unit suffix) |
+| (no price row) | — · אין דיווח + ◐ תרמו מחיר | empty `.pcard.is-empty` |
+
+> ⏳ **team_00 to APPROVE this §9a table** (decision #5 was "approve in principle, show me the full table with
+> examples"). On approval the spec is fully locked v1.0.0. Thresholds (≤3 / 4–7 / >7) and the 7-day window are the
+> only freshness numbers; if OMA's window differs, adjust here only.
+
+*Locked to v1.0.0 on team_00 approval of §9a → then team_190 L-GATE_S.*

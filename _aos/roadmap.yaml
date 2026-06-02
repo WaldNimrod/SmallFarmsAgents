@@ -3765,6 +3765,33 @@ work_packages:
     team_190 L-GATE_V (non-Claude)."
   profile: L0
 
+- id: SFA-S003-P004-WP-SRV-IDEAS
+  label: "ספר גידולים: מאגר רעיונות צד-שרת (מוצע, לא מאושר — לבדיקה עתידית)"
+  status: OPEN
+  phase: register
+  track: A
+  effort: TBD
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: TBD
+  assigned_validator: team_00
+  created_at: "2026-06-02"
+  milestone_ref: "S003"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-SRV-IDEAS/REGISTER.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-02"
+    notes: >
+      team_00 condition on WP-CB-UI-CLASSB Q4: Class B UI work is client-side/UI ONLY. Any server-side
+      change proposed by a build (search ranking/index, new endpoints, schema, ingest) is logged here as an
+      IDEA with provenance — PROPOSED, NOT approved, NOT implemented. team_00 triages into real WPs later.
+      Seeded: SRV-1 search ranking, SRV-2 90d/year aggregates, SRV-3 account auth, SRV-4 market price data.
+    validator: team_00
+  notes: "OPEN register — not for execution. Holds unapproved server-side ideas surfaced during the UI WPs,
+    each with clear provenance + PROPOSED status. team_00 decides if any becomes a real WP."
+  profile: L0
+
 # ----------------------------------------------------------------------------
 # S003-P004 LOD100 PLACEHOLDERS — FUTURE modules (brief direction only).
 # Consume WP-CB-1 calculator outputs via stable API contracts (LOD400 section 12).
