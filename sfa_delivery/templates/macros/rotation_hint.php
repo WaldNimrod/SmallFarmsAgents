@@ -29,7 +29,4 @@ if ($family_name_he === '') {
     אל תעקבו אחרי <b><?= $h($family_name_he) ?></b> באותה ערוגה
     במשך <b data-assume-echo="rotation_gap_seasons"><?= $h((string)$gap_seasons) ?></b> עונות.
   </div>
-  <?php if ($family_lat !== ''): ?>
-  <span class="meta">family: <?= $h($family_lat) ?></span>
-  <?php endif; ?>
 </div>

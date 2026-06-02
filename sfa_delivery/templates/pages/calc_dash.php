@@ -201,7 +201,7 @@ ob_start();
             <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
             <span class="modcard__needs-field"><?= FieldRegistry::label('succession_interval_weeks')[0] ?></span>
           </div>
-          <p class="modcard__disabled-msg">ממתין להעשרת שדה מחזור זריעה (succession_interval_weeks).</p>
+          <p class="modcard__disabled-msg">ממתין להעשרת שדה מחזור זריעה.</p>
           <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#6+מחזור" target="_blank" rel="noopener">← בקש/י מידע</a>
         </div>
       </div>
