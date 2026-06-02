@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>LOD300 · Crop Book UI — Class B surfaces · team_35</title>
+<link rel="stylesheet" href="tokens.css?v=1"/>
+<link rel="stylesheet" href="cropbook-v1.css?v=1"/>
+<link rel="stylesheet" href="classb.css?v=1"/>
+</head>
+<body>
+<div class="board">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+    <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+    <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+    <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+    <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+    <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+  </symbol></svg>
+
+  <!-- ══════════ STICKY SPEC HEADER ══════════ -->
+  <header class="board__top">
+    <div class="board__brand">
+      <svg class="board__brandmark" width="34" height="34"><use href="#sfa-logo"/></svg>
+      <b>SFA</b>
+    </div>
+    <div class="meta dir-ltr">
+      <div><strong>LOD300</strong> · Crop Book UI — Class B surfaces</div>
+      <div>SFA-S003-P004-WP-CB-UI-CLASSB · team_35 → team_100 · v1.0.0 · 2026-06-02</div>
+    </div>
+    <div class="board__legend dir-ltr">
+      <span><i style="background:#6f8a45"></i>open</span>
+      <span><i style="background:#d39a32"></i>beta</span>
+      <span><i style="background:#dde8dd"></i>coming</span>
+      <span><i style="background:#8b5d2f"></i>paid</span>
+      <span><i style="background:#c24f2c"></i>custom</span>
+    </div>
+  </header>
+
+  <!-- ══════════ INTRO ══════════ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">CLASS B · 7 surfaces · extends v2 white-green</span>
+      <h1 class="sec__title">אותו ספר, <em>כל המערכת</em>.</h1>
+      <p class="sec__desc">שש המשטחים שעדיין לבושים בעור ה־Cool Stone הישן — בית, מחירון, חיפוש, קהילה, אודות וחשבון — עוברים ל־v2 הלבן-ירוק. אותם טוקנים (<code>--gj-*</code>), אותו app-shell, אותם watercolor masters. בלי קרם, בלי פלטה חדשה. team_100 בונה את ה־shell (Class A); כאן מעוצב <b>התוכן</b> של כל משטח שיושב בתוכו.</p>
+      <p class="sec__desc ltr" style="margin-top:12px;font-size:13px;">A pannable spec board, same conventions as the WP-CB-1 LOD300. Hebrew = production UI copy · English = design annotations. Each frame is the <code>.sh</code> shell wrapping real product UI only — no spec chrome inside. Frames carry <code>data-screen-label</code>.</p>
+    </div>
+    <div class="wrap" style="gap:10px">
+      <span class="tier tier--leaf"><span class="tier__glyph">●</span>בית · hub</span>
+      <span class="tier tier--tomato"><span class="tier__glyph">₪</span>מחירון · market</span>
+      <span class="pill pill--code">app-shell · §24</span>
+      <span class="pill pill--muted">Slim4 / PHP · server-rendered + light JS</span>
+      <span class="patref">§3.8 · UX patterns: Planta · Notion · Copilot · Wolt-RTL → v2 tokens</span>
+    </div>
+    <p class="sec__desc ltr" style="margin-top:14px;font-size:12.5px;max-width:760px;background:color-mix(in oklch, var(--gj-code) 6%, var(--gj-paper));border:1px solid color-mix(in oklch, var(--gj-code) 22%, var(--gj-paper));border-radius:var(--gj-r-m);padding:12px 14px"><b>§3.8 Reference patterns (Mobbin).</b> Per team_00: each surface borrows a proven <b>UX pattern</b> (structure / layout / flow / interaction) from a named app — never its skin. Our <code>tokens.css</code> v2 (white-green · Carmela · Assistant / Frank Ruhl Libre · watercolor) is applied on top. <b>If a pattern conflicts with the tokens, the tokens win.</b> The pattern source for each surface is tagged in its header (▤ chip). RTL behaviour (nav · bottom-tab · forms · price/number direction) follows Wolt · Bit · Riseup.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.1 · APP-SHELL REFERENCE FRAME
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-shell">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.1 · CONFIRM / REFINE</span> <span class="patref">Planta · Notion · Arc</span>
+      <h2 class="sec__title">ה־shell, <em>סופית</em>.</h2>
+      <p class="sec__desc ltr">The definitive render of <code>.sh</code> wrapping a generic (non-crop-book) page, so the Class A build matches intent exactly. Header = logo + wordmark · primary nav (book·calc·market) · spacer · inline search · account button. Active state colours by surface: <b>book = leaf</b> · <b>calc = sun</b> · <b>market = tomato</b>. Mobile drops the inline nav for a 4-item bottom tab bar (<code>.sh__nav--mobile</code>). Refinement vs §24 as written: the search affordance is an <b>inline field</b> on desktop (not just an icon), and the account button keeps its avatar + label.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>SHELL · DESKTOP</b> · ≥900px · <code>data-screen-label="shell/desktop"</code></div>
+        <div class="frame frame--desk-wide" data-screen-label="shell-desktop">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <label class="sh__search"><span class="ic">⌕</span><input type="text" placeholder="חיפוש גידולים ומוצרים…"/></label>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__bc" style="padding:9px 18px;border-bottom:1px solid var(--gj-line)"><a href="#">בית</a> › <strong>עמוד כללי</strong></div>
+            <div class="sh__body">
+              <div class="pagehead">
+                <div class="pagehead__txt">
+                  <h1>כותרת עמוד</h1>
+                  <p class="pagehead__sub">אזור התוכן של משטח כללי. ה־shell עוטף כל עמוד במערכת — אותה כותרת, אותה ניווט, אותו פוטר.</p>
+                </div>
+                <div class="pagehead__aside"><span class="pill pill--muted">slot · page content</span></div>
+              </div>
+              <div style="border:1px dashed var(--gj-line);border-radius:var(--gj-r-l);background:var(--gj-paper-2);min-height:150px;display:grid;place-items:center;color:var(--gj-ink-soft);font-family:var(--gj-font-mono);font-size:12px">‹ page body — per-surface content mounts here ›</div>
+            </div>
+            <div class="sh__foot"><span class="dot"></span>SFA · חקלאות קטנה · קוד פתוח · קהילתי</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>SHELL · MOBILE</b> · &lt;640px · <code>data-screen-label="shell/mobile"</code></div>
+        <div class="frame frame--mobile" data-screen-label="shell-mobile">
+          <div class="sh">
+            <div class="sh__bar" style="padding:10px 14px">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name">SFA</div>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+              <button class="sh__icon" title="החשבון שלי" style="background:var(--gj-soil);color:#fff;border-color:var(--gj-soil)">נ</button>
+            </div>
+            <div class="sh__body" style="padding:16px">
+              <div class="pagehead" style="margin-bottom:14px"><div class="pagehead__txt"><h1 style="font-size:22px">כותרת עמוד</h1><p class="pagehead__sub" style="font-size:12px">תוכן המשטח על מסך נייד.</p></div></div>
+              <div style="border:1px dashed var(--gj-line);border-radius:var(--gj-r-m);background:var(--gj-paper-2);min-height:220px;display:grid;place-items:center;color:var(--gj-ink-soft);font-family:var(--gj-font-mono);font-size:11px">‹ page body ›</div>
+            </div>
+            <nav class="sh__nav--mobile">
+              <a class="is-active" href="#"><span class="g">▤</span>ספר</a>
+              <a href="#"><span class="g">∑</span>מחשבון</a>
+              <a href="#"><span class="g">₪</span>מחירון</a>
+              <a href="#"><span class="g">◔</span>חשבון</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>One shell, every surface.</b> Logo + wordmark are the home affordance (→ hub). The three primary nav items are the only colour-coded actives; community/about/account live in footer + account area, not the primary nav.</div>
+        <div class="note"><b>Active = surface colour.</b> book leaf · calc sun · market tomato — already in <code>.sh__nav a.is-active{.is-calc,.is-market}</code>. No new tokens.</div>
+        <div class="note note--data"><b>Search is inline on desktop.</b> A real input in the bar (collapses to <code>.sh__icon</code> under 760px), so the Search surface (§3.4) is one keystroke away from anywhere.</div>
+        <div class="note note--calc"><b>Mobile = bottom tabs.</b> 4 items (ספר · מחשבון · מחירון · חשבון). Account becomes the 4th tab; the top bar keeps only logo + search + avatar.</div>
+        <div class="note"><b>Footer.</b> Quiet single line — brand + "קוד פתוח · קהילתי". Links to about/community/privacy hang here.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.2 · HUB / HOME
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-hub">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.2 · <code>/</code></span> <span class="patref">Notion · Arc · Flighty launchers · Planta home</span>
+      <h2 class="sec__title">בית = <em>רשת מודולים</em>.</h2>
+      <p class="sec__desc ltr">The landing surface, in reading order: the three <b>open tools</b> → an <b>explainer band</b> (where the project is now: open knowledge built on field experience + advanced-AI research) → an <b>audience entry row</b> (gardener / market-farmer / season-planner — each routes into the right view) → the <b>advanced tools</b>. Each tool card carries a watercolor hero, tier badge (open · beta · coming · paid · custom), one-line description and a stat. Coming-soon cards render disabled.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>HUB</b> · desktop · <code>data-screen-label="hub/home"</code></div>
+        <div class="frame frame--desk-wide" data-screen-label="hub-home">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <label class="sh__search"><span class="ic">⌕</span><input type="text" placeholder="חיפוש גידולים ומוצרים…"/></label>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body sh__body--wide">
+
+              <div class="hub-intro">
+                <div class="hub-intro__txt">
+                  <h1>כלים <em>פתוחים</em> לחקלאות קטנה.</h1>
+                  <p>מערכת קהילתית לחקלאי שוק, גננים ולומדים — ידע אגרונומי, מחירון תוצרת ומחשבוני תכנון. פתוח, בלי הרשמה, בלי תשלום על הליבה.</p>
+                </div>
+                <div class="hub-intro__stats">
+                  <span class="tier tier--leaf tier--lg"><span class="tier__glyph">●</span>3 כלים פתוחים</span>
+                  <span class="tier tier--sun tier--lg"><span class="tier__glyph">β</span>1 בבטא</span>
+                </div>
+              </div>
+
+              <div class="hub-groupbar"><h2>כלים לקהילה</h2><span class="gj-eyebrow dir-ltr">open · no signup</span></div>
+              <div class="hub-grid">
+                <a class="modtile modtile--leaf" href="#">
+                  <div class="modtile__art"><span class="tier tier--leaf modtile__tier"><span class="tier__glyph">●</span>פתוח</span><span class="modtile__glyph">▤</span><img src="assets/heroes/crop-book.webp" alt="ספר גידולים"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">ספר גידולים <small>crop-book</small></div>
+                    <p class="modtile__desc">אינדקס פתוח של גידולים, זנים ומחזורי גידול — שלוש רמות עומק, שני קהלים.</p>
+                    <div class="modtile__foot"><span class="modtile__stat">66<small>גידולים · 242 זנים</small></span><span class="modtile__go">פתחו ›</span></div>
+                  </div>
+                </a>
+                <a class="modtile modtile--tomato" href="#">
+                  <div class="modtile__art"><span class="tier tier--tomato modtile__tier"><span class="tier__glyph">●</span>פתוח</span><span class="modtile__glyph">₪</span><img src="assets/heroes/market.webp" alt="מחירון"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">מחירון <small>market</small></div>
+                    <p class="modtile__desc">מדד מחירי תוצרת טרייה מהקהילה — ממוצעים מתגלגלים, מעודכן יומי.</p>
+                    <div class="modtile__foot"><span class="modtile__stat">30<small>מוצרים · 14 מקורות</small></span><span class="modtile__go">פתחו ›</span></div>
+                  </div>
+                </a>
+                <a class="modtile modtile--sun" href="#">
+                  <div class="modtile__art"><span class="tier tier--sun modtile__tier"><span class="tier__glyph">β</span>בטא</span><span class="modtile__glyph">∑</span><img src="assets/heroes/calc.webp" alt="מחשבון"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">מחשבון <small>calculator</small></div>
+                    <p class="modtile__desc">תכנון זרעים, תאריכי שתילה, יבול, הכנסה ורווח — מבוסס על נתוני הספר.</p>
+                    <div class="modtile__foot"><span class="modtile__stat">14<small>מחשבונים</small></span><span class="modtile__go">פתחו ›</span></div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- explainer band: where the project is now -->
+              <div class="hub-manifest">
+                <svg class="hub-manifest__mark" viewBox="0 0 48 48"><use href="#sfa-logo"/></svg>
+                <div class="hub-manifest__txt">
+                  <h2>ידע פתוח, <em>בנוי מהשטח</em>.</h2>
+                  <p>הליבה כולה פתוחה ובחינם — נבנית על ניסיון מהשדה לצד מחקר בכלי AI מתקדמים, ומשתפרת עם כל תרומה מהקהילה.</p>
+                </div>
+                <div class="hub-manifest__stats">
+                  <div class="hub-manifest__stat"><b class="num">66</b><span>גידולים</span></div>
+                  <div class="hub-manifest__stat"><b class="num">242</b><span>זנים</span></div>
+                  <div class="hub-manifest__stat"><b class="num">14</b><span>מחשבונים</span></div>
+                  <div class="hub-manifest__stat"><b>חי</b><span>מחירון</span></div>
+                </div>
+              </div>
+
+              <!-- audience entry — where to start -->
+              <div class="hub-groupbar"><h2>מאיפה כדאי להתחיל?</h2><span class="gj-eyebrow dir-ltr">by audience</span></div>
+              <div class="hub-aud">
+                <a class="audcard audcard--leaf" href="#">
+                  <span class="audcard__ic">▦</span>
+                  <div class="audcard__t">גנן ביתי / לומד<small>home gardener</small></div>
+                  <p class="audcard__d">תצוגת כרטיסים ויזואלית, גידול-אחר-גידול, עם רמת עומק "פשוט".</p>
+                  <span class="audcard__go">לספר · תצוגת כרטיסים ›</span>
+                </a>
+                <a class="audcard audcard--soil" href="#">
+                  <span class="audcard__ic">▤</span>
+                  <div class="audcard__t">חקלאי שוק<small>market farmer</small></div>
+                  <p class="audcard__d">טבלה צפופה וניתנת למיון + מחשבוני זרעים, יבול ורווחיות למטר ערוגה.</p>
+                  <span class="audcard__go">לספר · תצוגת טבלה ›</span>
+                </a>
+                <a class="audcard audcard--code" href="#">
+                  <span class="audcard__ic">∑</span>
+                  <div class="audcard__t">מתכננים עונה<small>planning a season</small></div>
+                  <p class="audcard__d">ישר למחשבון — גידול, שטח ותאריך יעד, וכל הפלט במקום אחד.</p>
+                  <span class="audcard__go">למחשבון ›</span>
+                </a>
+              </div>
+
+              <div class="hub-groupbar"><h2>כלים מתקדמים</h2><span class="gj-eyebrow dir-ltr">in development · per-farm</span></div>
+              <div class="hub-grid">
+                <div class="modtile is-soon">
+                  <div class="modtile__art"><span class="tier tier--paper modtile__tier"><span class="tier__glyph">◷</span>בקרוב</span><span class="modtile__glyph">◰</span><img src="assets/heroes/planner.webp" alt="מתכנן עונה"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">מתכנן עונה <small>planner</small></div>
+                    <p class="modtile__desc">ערוגות, מחזור גידולים ולוח שתילה — נבנה על הפלטים מהמחשבון.</p>
+                    <div class="modtile__foot"><span class="gj-eyebrow dir-ltr">Q3 2026</span><span class="modtile__go">בקרוב</span></div>
+                  </div>
+                </div>
+                <div class="modtile is-soon">
+                  <div class="modtile__art"><span class="tier tier--soil modtile__tier"><span class="tier__glyph">★</span>בתשלום</span><span class="modtile__glyph">◑</span><img src="assets/heroes/clients.webp" alt="ניהול לקוחות"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">ניהול לקוחות <small>clients</small></div>
+                    <p class="modtile__desc">מנויי סלי תוצרת, חיובים ותקשורת עם הלקוחות שלכם.</p>
+                    <div class="modtile__foot"><span class="gj-eyebrow dir-ltr">paid module</span><span class="modtile__go">בקרוב</span></div>
+                  </div>
+                </div>
+                <div class="modtile is-soon">
+                  <div class="modtile__art"><span class="tier tier--soil modtile__tier"><span class="tier__glyph">★</span>בתשלום</span><span class="modtile__glyph">▦</span><img src="assets/heroes/inventory.webp" alt="מעקב יבול ומלאי"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">מעקב יבול ומלאי <small>inventory</small></div>
+                    <p class="modtile__desc">קצירה, אובדנים ומלאי בקירור — מהשדה עד המכירה.</p>
+                    <div class="modtile__foot"><span class="gj-eyebrow dir-ltr">paid module</span><span class="modtile__go">בקרוב</span></div>
+                  </div>
+                </div>
+                <div class="modtile is-soon">
+                  <div class="modtile__art"><span class="tier tier--tomato modtile__tier"><span class="tier__glyph">✦</span>לחווה שלך</span><span class="modtile__glyph">✑</span><img src="assets/heroes/field-log.webp" alt="יומן שדה"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">יומן שדה <small>field-log</small></div>
+                    <p class="modtile__desc">תיעוד מזג אוויר, מחלות וטיפולים — מותאם לחלקות שלכם.</p>
+                    <div class="modtile__foot"><span class="gj-eyebrow dir-ltr">custom</span><span class="modtile__go">בקרוב</span></div>
+                  </div>
+                </div>
+                <div class="modtile is-soon">
+                  <div class="modtile__art"><span class="tier tier--tomato modtile__tier"><span class="tier__glyph">✦</span>לחווה שלך</span><span class="modtile__glyph">⇄</span><img src="assets/heroes/tend-bridge.webp" alt="חיבור Tend"/></div>
+                  <div class="modtile__body">
+                    <div class="modtile__title">חיבור Tend <small>tend-bridge</small></div>
+                    <p class="modtile__desc">סנכרון חשבוניות והכנסות עם חשבונית-ירוקה ומערכות חיצוניות.</p>
+                    <div class="modtile__foot"><span class="gj-eyebrow dir-ltr">custom</span><span class="modtile__go">בקרוב</span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot"></span>SFA · חקלאות קטנה · קוד פתוח · קהילתי</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>HUB · MOBILE</b> · <code>data-screen-label="hub/home·mobile"</code></div>
+        <div class="frame frame--mobile" data-screen-label="hub-home-mobile">
+          <div class="sh">
+            <div class="sh__bar" style="padding:10px 14px">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name">SFA</div>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+              <button class="sh__icon" title="החשבון שלי" style="background:var(--gj-soil);color:#fff;border-color:var(--gj-soil)">נ</button>
+            </div>
+            <div class="sh__body" style="padding:16px">
+              <h1 style="font-family:var(--gj-font-head);font-weight:900;font-size:22px;margin:0 0 4px">כלים פתוחים</h1>
+              <p style="font-size:12.5px;color:var(--gj-ink-soft);margin:0 0 16px;line-height:1.5">ידע, מחירון וכלי תכנון לחקלאות קטנה.</p>
+              <div class="hub-groupbar" style="margin:0 0 12px"><h2 style="font-size:15px">כלים לקהילה</h2></div>
+              <div class="hub-grid" style="grid-template-columns:1fr;gap:10px">
+                <a class="modtile modtile--row modtile--leaf" href="#">
+                  <div class="modtile__art"><span class="tier tier--leaf modtile__tier"><span class="tier__glyph">●</span>פתוח</span><img src="assets/heroes/crop-book.webp" alt="ספר גידולים"/></div>
+                  <div class="modtile__body"><div class="modtile__title">ספר גידולים</div><p class="modtile__desc">66 גידולים · 242 זנים</p></div>
+                </a>
+                <a class="modtile modtile--row modtile--tomato" href="#">
+                  <div class="modtile__art"><span class="tier tier--tomato modtile__tier"><span class="tier__glyph">●</span>פתוח</span><img src="assets/heroes/market.webp" alt="מחירון"/></div>
+                  <div class="modtile__body"><div class="modtile__title">מחירון</div><p class="modtile__desc">30 מוצרים · מעודכן יומי</p></div>
+                </a>
+                <a class="modtile modtile--row modtile--sun" href="#">
+                  <div class="modtile__art"><span class="tier tier--sun modtile__tier"><span class="tier__glyph">β</span>בטא</span><img src="assets/heroes/calc.webp" alt="מחשבון"/></div>
+                  <div class="modtile__body"><div class="modtile__title">מחשבון</div><p class="modtile__desc">14 מחשבוני תכנון</p></div>
+                </a>
+              </div>
+            </div>
+            <nav class="sh__nav--mobile">
+              <a href="#"><span class="g">▤</span>ספר</a>
+              <a href="#"><span class="g">∑</span>מחשבון</a>
+              <a href="#"><span class="g">₪</span>מחירון</a>
+              <a href="#"><span class="g">◔</span>חשבון</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Rhythm: tools → why → who → more.</b> Open tools first, then the explainer band, then the audience entry row (gardener leaf · farmer soil · planner teal), then advanced. Cards never blur into one wall.</div>
+        <div class="note note--data"><b>Card = module.</b> Tier badge top-start, module glyph top-end, hero fills 16:9. Reuses <code>.tier--*</code> verbatim — open leaf · beta sun · coming paper · paid soil · custom tomato.</div>
+        <div class="note note--calc"><b>Coming-soon state.</b> Greyed + diagonal hatch over the hero, no hover-lift, "בקרוב" instead of a stat — telegraphs "not yet" without hiding the roadmap.</div>
+        <div class="note"><b>Mobile = short cards.</b> <code>.modtile--row</code> drops the tile to ≈⅓ height: small square hero on the side, title + one line beside it — a scannable list, not a stack of billboards.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.3 · MARKET — LIST
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-market">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.3 · <code>/market/</code></span> <span class="patref">Copilot Money · Delta · Blinkit/Zepto</span>
+      <h2 class="sec__title">מחירון — <em>מדד פתוח</em>.</h2>
+      <p class="sec__desc ltr">The OrganicMarketAgent community price index. The <b>mandatory disclaimer</b> (its 4 bullets: מה · מאיפה · למה · לא) sits above the results and is never suppressed. A <b>cards ⇄ table</b> density toggle (the same <code>.aud</code> switch the book uses) lets farmers scan a dense, sortable table or browse price cards. Cards show product · current price · range · #sources · a freshness pill (fresh / aging / stale) + a CSS sparkline. Empty + stale states are first-class — the live data is currently sparse, so the grid must read gracefully when a product has 0 recent reports.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>MARKET · LIST</b> · desktop · <code>data-screen-label="market/"</code></div>
+        <div class="frame frame--desk-wide" data-screen-label="market-list">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-active is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <label class="sh__search"><span class="ic">⌕</span><input type="text" placeholder="חיפוש מוצר…"/></label>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body sh__body--wide">
+
+              <div class="pagehead">
+                <div class="pagehead__txt">
+                  <h1>מחירון תוצרת</h1>
+                  <p class="pagehead__sub">ממוצעים מתגלגלים של מחירי תוצרת חקלאית טרייה — 7 ימים אחרונים, מהקהילה.</p>
+                </div>
+                <div class="pagehead__aside">
+                  <span class="fresh fresh--fresh">עודכן היום 06:00</span>
+                  <button class="contrib__btn" style="border:0;background:var(--gj-tomato-deep);color:#fff;font-family:inherit;font-weight:700;font-size:13px;padding:9px 16px;border-radius:var(--gj-r-pill);cursor:pointer">＋ תרמו מחיר</button>
+                </div>
+              </div>
+
+              <!-- MANDATORY DISCLAIMER — 4 bullets, never suppressed -->
+              <div class="mkt-disc">
+                <span class="mkt-disc__ic">ⓘ</span>
+                <div class="mkt-disc__head">מה זה? מאיפה? למה זה? למה לא?</div>
+                <ul class="mkt-disc__list">
+                  <li><b>מה:</b> ממוצעים מתגלגלים של מחירי תוצרת חקלאית טרייה — 7 ימים אחרונים.</li>
+                  <li><b>מאיפה:</b> סוכני סריקה ציבוריים של mezoo + תרומות חקלאים. מצרפי, אנונימי.</li>
+                  <li><b>למה:</b> כלי שיווקי קהילתי. הוכחה שאפשר ידע פתוח גם בשוק החקלאי הקטן.</li>
+                  <li><b>למה לא:</b> לא הצעה מסחרית, לא קביעת מחיר, לא חוות-דעת. אינדיקטיבי בלבד.</li>
+                </ul>
+              </div>
+
+              <div class="mkt-tools">
+                <div class="fchips">
+                  <button class="fchip is-on" data-single="1" data-default-on>הכל</button>
+                  <button class="fchip" data-single="1">עליים</button>
+                  <button class="fchip" data-single="1">מצליבים</button>
+                  <button class="fchip" data-single="1">עלים ירוקים</button>
+                  <button class="fchip" data-single="1">פירות-ירק</button>
+                  <button class="fchip" data-single="1">שורשיים</button>
+                  <button class="fchip" data-single="1">דלועיים</button>
+                </div>
+                <div class="mkt-legend">
+                  <span><i style="background:var(--gj-leaf)"></i>טרי ≤3 ימים</span>
+                  <span><i style="background:var(--gj-sun)"></i>מתיישן</span>
+                  <span><i style="background:var(--gj-tomato)"></i>ישן ›7</span>
+                </div>
+              </div>
+
+              <div class="mkt-aud-head">
+                <span class="mkt-aud-head__n">מציג <b>30</b> מוצרים · 14 מקורות</span>
+                <div class="aud" data-aud-switch="mkt-scope" role="tablist" aria-label="תצוגה">
+                  <button class="aud__opt is-active is-cards" data-view="cards" role="tab"><span class="g">▦</span><span>כרטיסים</span></button>
+                  <button class="aud__opt is-table" data-view="table" role="tab"><span class="g">▤</span><span>טבלה</span></button>
+                </div>
+              </div>
+
+              <div id="mkt-scope">
+              <div data-aud-view="cards">
+              <div class="pcard-grid">
+                <a class="pcard" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-tomato.png" alt=""/><div><div class="pcard__name">עגבנייה</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+                  <div class="pcard__price"><span class="big num">12.40</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+                  <div class="pcard__range num">טווח 9.80–14.50 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i class="hi" style="height:62%"></i><i style="height:80%"></i><i class="hi" style="height:72%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>9</b> מקורות</span><span class="fresh fresh--fresh">טרי · אתמול</span></div>
+                </a>
+
+                <a class="pcard" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-lettuce.png" alt=""/><div><div class="pcard__name">חסה</div><div class="pcard__unit dir-ltr">₪ / unit</div></div></div>
+                  <div class="pcard__price"><span class="big num">4.90</span><span class="cur">₪</span><span class="per">ליחידה</span></div>
+                  <div class="pcard__range num">טווח 3.50–6.00 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:60%"></i><i style="height:52%"></i><i style="height:64%"></i><i style="height:48%"></i><i class="hi" style="height:58%"></i><i style="height:44%"></i><i class="hi" style="height:50%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>6</b> מקורות</span><span class="fresh fresh--fresh">טרי · אתמול</span></div>
+                </a>
+
+                <a class="pcard" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-cucumber.png" alt=""/><div><div class="pcard__name">מלפפון</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+                  <div class="pcard__price"><span class="big num">7.20</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+                  <div class="pcard__range num">טווח 5.90–8.40 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:70%"></i><i style="height:62%"></i><i class="hi" style="height:74%"></i><i style="height:58%"></i><i style="height:66%"></i><i style="height:52%"></i><i style="height:60%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>5</b> מקורות</span><span class="fresh fresh--fresh">טרי · 2 ימים</span></div>
+                </a>
+
+                <a class="pcard is-stale" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-carrot.png" alt=""/><div><div class="pcard__name">גזר</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+                  <div class="pcard__price"><span class="big num">5.10</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+                  <div class="pcard__range num">טווח 4.20–6.30 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:50%"></i><i style="height:44%"></i><i style="height:52%"></i><i style="height:40%"></i><i style="height:36%"></i><i class="hi" style="height:30%"></i><i style="height:22%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>3</b> מקורות</span><span class="fresh fresh--aging">מתיישן · 5 ימים</span></div>
+                </a>
+
+                <a class="pcard" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-pepper.png" alt=""/><div><div class="pcard__name">פלפל</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+                  <div class="pcard__price"><span class="big num">10.80</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+                  <div class="pcard__range num">טווח 8.00–13.20 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:54%"></i><i style="height:66%"></i><i style="height:60%"></i><i class="hi" style="height:78%"></i><i style="height:70%"></i><i style="height:84%"></i><i class="hi" style="height:76%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>7</b> מקורות</span><span class="fresh fresh--fresh">טרי · אתמול</span></div>
+                </a>
+
+                <a class="pcard is-stale" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-onion.png" alt=""/><div><div class="pcard__name">בצל יבש</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+                  <div class="pcard__price"><span class="big num">4.20</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+                  <div class="pcard__range num">טווח 3.60–5.00 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:48%"></i><i style="height:40%"></i><i style="height:44%"></i><i style="height:32%"></i><i style="height:28%"></i><i style="height:24%"></i><i class="hi" style="height:20%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>2</b> מקורות</span><span class="fresh fresh--stale">ישן · 9 ימים</span></div>
+                </a>
+
+                <a class="pcard" href="#">
+                  <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-parsley.png" alt=""/><div><div class="pcard__name">פטרוזיליה</div><div class="pcard__unit dir-ltr">₪ / bunch</div></div></div>
+                  <div class="pcard__price"><span class="big num">3.20</span><span class="cur">₪</span><span class="per">לאגודה</span></div>
+                  <div class="pcard__range num">טווח 2.50–4.00 · ממוצע 7 ימים</div>
+                  <div class="pcard__spark"><div class="spark"><i style="height:42%"></i><i style="height:50%"></i><i style="height:46%"></i><i class="hi" style="height:56%"></i><i style="height:52%"></i><i style="height:60%"></i><i style="height:54%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src"><b>4</b> מקורות</span><span class="fresh fresh--fresh">טרי · 2 ימים</span></div>
+                </a>
+
+                <!-- EMPTY state card — no recent reports -->
+                <div class="pcard is-empty">
+                  <div class="pcard__top"><span class="pcard__sw pcard__sw--glyph">🥬</span><div><div class="pcard__name">מנגולד</div><div class="pcard__unit dir-ltr">₪ / bunch</div></div></div>
+                  <div class="pcard__price"><span class="big num">—</span></div>
+                  <div class="pcard__range">אין דיווחים ב־7 ימים אחרונים</div>
+                  <div class="pcard__spark"><div class="spark spark--empty"><i style="height:14%"></i><i style="height:14%"></i><i style="height:14%"></i><i style="height:14%"></i><i style="height:14%"></i><i style="height:14%"></i><i style="height:14%"></i></div></div>
+                  <div class="pcard__foot"><span class="pcard__src">0 מקורות</span><a class="reqinfo" href="#" style="margin-inline-start:auto">◐ תרמו מחיר</a></div>
+                </div>
+              </div>
+              </div><!-- /cards view -->
+
+              <div data-aud-view="table" style="display:none">
+                <div style="overflow-x:auto;border:1px solid var(--gj-line);border-radius:var(--gj-r-l)">
+                  <table class="ptable">
+                    <thead><tr>
+                      <th>מוצר</th><th class="sortable">קטגוריה</th><th class="sortable">מחיר</th><th class="sortable">טווח</th><th class="sortable">מקורות</th><th class="sortable">טריות</th>
+                    </tr></thead>
+                    <tbody>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-tomato.png" alt=""/>עגבנייה</span></td><td class="t-fam">פירות-ירק</td><td class="t-price num">12.40 <small>₪/ק״ג</small></td><td class="num">9.80–14.50</td><td class="num">9</td><td><span class="fresh fresh--fresh">טרי</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-lettuce.png" alt=""/>חסה</span></td><td class="t-fam">עלים ירוקים</td><td class="t-price num">4.90 <small>₪/יח׳</small></td><td class="num">3.50–6.00</td><td class="num">6</td><td><span class="fresh fresh--fresh">טרי</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-cucumber.png" alt=""/>מלפפון</span></td><td class="t-fam">דלועיים</td><td class="t-price num">7.20 <small>₪/ק״ג</small></td><td class="num">5.90–8.40</td><td class="num">5</td><td><span class="fresh fresh--fresh">טרי</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-pepper.png" alt=""/>פלפל</span></td><td class="t-fam">פירות-ירק</td><td class="t-price num">10.80 <small>₪/ק״ג</small></td><td class="num">8.00–13.20</td><td class="num">7</td><td><span class="fresh fresh--fresh">טרי</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-carrot.png" alt=""/>גזר</span></td><td class="t-fam">שורשיים</td><td class="t-price num">5.10 <small>₪/ק״ג</small></td><td class="num">4.20–6.30</td><td class="num">3</td><td><span class="fresh fresh--aging">מתיישן</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-parsley.png" alt=""/>פטרוזיליה</span></td><td class="t-fam">עלים ירוקים</td><td class="t-price num">3.20 <small>₪/אגודה</small></td><td class="num">2.50–4.00</td><td class="num">4</td><td><span class="fresh fresh--fresh">טרי</span></td></tr>
+                      <tr><td><span class="t-name"><img class="sw" src="assets/crops/wc-onion.png" alt=""/>בצל יבש</span></td><td class="t-fam">עליים</td><td class="t-price t-stale num">4.20 <small>₪/ק״ג</small></td><td class="num">3.60–5.00</td><td class="num">2</td><td><span class="fresh fresh--stale">ישן</span></td></tr>
+                      <tr><td><span class="t-name"><span style="font-size:20px">🥬</span>מנגולד</span></td><td class="t-fam">עלים ירוקים</td><td class="t-price t-stale num">—</td><td class="num muted">אין דיווח</td><td class="num">0</td><td><a class="reqinfo" href="#">◐ תרמו</a></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="muted" style="font-size:11px;margin-top:10px;direction:ltr">Same data, dense layout for scanning &amp; sorting — the farmer-tier density toggle from the book (<code>.aud</code> + <code>.ptable</code>), reused on the market.</p>
+              </div>
+              </div><!-- /mkt-scope -->
+
+              <!-- contribute strip (unchanged component) -->
+              <div class="contrib" style="margin-top:18px">
+                <span class="contrib__ic">＋</span>
+                <div><b>יודעים מחיר עדכני?</b><small>תרומה אנונימית · בונה את המדד לכל הקהילה</small></div>
+                <button>תרמו מחיר</button>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot"></span>30 מוצרים · 14 מקורות פעילים · עודכן 06:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note"><b>Cards ⇄ table.</b> The same <code>.aud</code> density switch from the book (§2.1) — cards for browsing, a sortable <code>.ptable</code> for scanning. Same data, two layouts.</div>
+        <div class="note note--new"><b>Disclaimer is law.</b> The 4 bullets ride above every list + detail render, amber-edged, never collapsed. Compact variant repeats on the detail page.</div>
+        <div class="note note--new"><b>Freshness, three ways.</b> <code>.fresh--fresh/aging/stale</code> maps to the existing status tokens (leaf/sun/tomato). The pill + the sparkline's last bar both telegraph age.</div>
+        <div class="note note--data"><b>Empty is designed.</b> A product with 0 recent reports renders a muted card with "—", a flat sparkline and a "◐ תרמו מחיר" request — the index stays honest about what it doesn't know (same ethos as the book's MISSING cue).</div>
+        <div class="note"><b>Category filter</b> reuses <code>.fchip</code> single-select; price uses tomato (market/attention world).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.3 · MARKET — DETAIL
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-market-detail">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.3 · <code>/market/{slug}</code></span> <span class="patref">Copilot Money · Delta</span>
+      <h2 class="sec__title">מוצר אחד, <em>כל ההיסטוריה</em>.</h2>
+      <p class="sec__desc ltr">Detail = a <b>14-day price graph</b> (data viz, tomato line + area) · big current price · price-history table (with day-over-day delta) · stat strip · source breakdown (reuses the book's <code>.prov</code> hierarchy) · the compact disclaimer · and a cross-link back to the crop in the book. When history is empty, the table swaps for the empty box (annotated).</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>MARKET · DETAIL</b> · desktop · <code>data-screen-label="market/onion-dry"</code></div>
+        <div class="frame frame--desktop" data-screen-label="market-detail">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-active is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+            </div>
+            <div class="sh__bc" style="padding:9px 18px;border-bottom:1px solid var(--gj-line)"><a href="#">מחירון</a> › <a href="#">עליים</a> › <strong>בצל יבש</strong></div>
+            <div class="sh__body">
+
+              <div class="pdetail">
+                <div class="pdetail__main">
+                  <div class="pbig">
+                    <div class="pbig__art"><img src="assets/crops/wc-onion.png" alt="בצל יבש"/></div>
+                    <div>
+                      <div class="gj-eyebrow dir-ltr" style="margin-bottom:4px">Allium cepa · עליים</div>
+                      <div class="pbig__price"><span class="big num">4.20</span><span class="cur">₪</span><span class="per">ל־ק״ג · ממוצע 7 ימים</span></div>
+                      <div class="pbig__meta">
+                        <span>טווח <b class="num">3.60–5.00</b></span>
+                        <span><b>2</b> מקורות</span>
+                        <span class="fresh fresh--stale">ישן · 9 ימים</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pgraph">
+                    <div class="pgraph__top"><h3>מגמת מחיר</h3><span class="pgraph__chg dn">▼ 4%<small>7 ימים</small></span>
+                      <div class="rangesel" role="tablist" aria-label="טווח זמן">
+                        <button class="is-active">7י</button><button>30 י</button><button>90 י</button><button>שנה</button>
+                      </div>
+                    </div>
+                    <svg class="pgraph__svg" viewBox="0 0 560 184" preserveAspectRatio="none" role="img" aria-label="גרף מגמת מחיר 14 ימים">
+                      <line class="pgraph__grid" x1="44" y1="30" x2="552" y2="30"/>
+                      <line class="pgraph__grid" x1="44" y1="100" x2="552" y2="100"/>
+                      <line class="pgraph__grid" x1="44" y1="170" x2="552" y2="170"/>
+                      <text class="pgraph__ylab" x="6" y="34">5.0</text>
+                      <text class="pgraph__ylab" x="6" y="104">4.5</text>
+                      <text class="pgraph__ylab" x="6" y="170">4.0</text>
+                      <path class="pgraph__area" d="M44,93 L126,114 L209,135 L291,121 L374,128 L456,135 L540,142 L540,170 L44,170 Z"/>
+                      <path class="pgraph__line" d="M44,93 L126,114 L209,135 L291,121 L374,128 L456,135 L540,142"/>
+                      <circle class="pgraph__dot" cx="44" cy="93" r="3.6"/>
+                      <circle class="pgraph__dot" cx="126" cy="114" r="3.6"/>
+                      <circle class="pgraph__dot" cx="209" cy="135" r="3.6"/>
+                      <circle class="pgraph__dot" cx="291" cy="121" r="3.6"/>
+                      <circle class="pgraph__dot" cx="374" cy="128" r="3.6"/>
+                      <circle class="pgraph__dot" cx="456" cy="135" r="3.6"/>
+                      <circle class="pgraph__dot" cx="540" cy="142" r="3.6"/>
+                    </svg>
+                    <div class="pgraph__x"><span>11/5</span><span>14/5</span><span>16/5</span><span>18/5</span><span>20/5</span><span>22/5</span><span>24/5</span></div>
+                  </div>
+
+                  <div class="cb-block">
+                    <h3>היסטוריית מחיר <span class="gj-eyebrow dir-ltr">last reports · day-over-day</span></h3>
+                    <table class="phist">
+                      <thead><tr><th>תאריך</th><th>מחיר</th><th>שינוי</th><th>מקור</th></tr></thead>
+                      <tbody>
+                        <tr><td>24 מאי</td><td class="num">4.20 ₪</td><td><span class="delta-dn">▼ 4%</span></td><td class="muted">סריקה · שוק כרמל</td></tr>
+                        <tr><td>22 מאי</td><td class="num">4.35 ₪</td><td><span class="delta-up">▲ 2%</span></td><td class="muted">תרומת חקלאי</td></tr>
+                        <tr><td>19 מאי</td><td class="num">4.25 ₪</td><td><span class="delta-dn">▼ 6%</span></td><td class="muted">סריקה · רמי לוי</td></tr>
+                        <tr><td>15 מאי</td><td class="num">4.55 ₪</td><td class="muted">—</td><td class="muted">תרומת חקלאי</td></tr>
+                      </tbody>
+                    </table>
+                    <p class="muted" style="font-size:11px;margin-top:10px">היסטוריה דלילה — רק 4 דיווחים ב־14 ימים. ככל שיותר חקלאים תורמים, המדד מדויק יותר.</p>
+                  </div>
+
+                  <!-- source breakdown reuses .prov from the book -->
+                  <div class="cb-block">
+                    <h3>פירוט מקורות <span class="gj-eyebrow dir-ltr">contributing sources</span></h3>
+                    <div class="prov">
+                      <div class="prov__row is-winner"><span class="prov__cls prov__cls--ex">EX</span><span class="prov__src">תרומות חקלאים (2)</span><span class="prov__num num">4.30 ₪</span><span class="prov__win">קובע ✓</span></div>
+                      <div class="prov__row"><span class="prov__cls prov__cls--wr">WR</span><span class="prov__src">סריקה ציבורית · mezoo (3)</span><span class="prov__num num">4.15 ₪</span><span class="prov__conf">משקל 0.4</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pdetail__aside" style="display:flex;flex-direction:column;gap:14px">
+                  <div class="pstats">
+                    <div class="pstat"><div class="pstat__k">ממוצע 7 ימים</div><div class="pstat__v num">4.20<small>₪</small></div></div>
+                    <div class="pstat"><div class="pstat__k">מגמה</div><div class="pstat__v num" style="color:var(--gj-leaf-deep)">▼ 4%</div></div>
+                    <div class="pstat"><div class="pstat__k">מקורות</div><div class="pstat__v num">2</div></div>
+                    <div class="pstat"><div class="pstat__k">דיווח אחרון</div><div class="pstat__v num">9<small>ימים</small></div></div>
+                  </div>
+
+                  <!-- cross-link to crop in the book -->
+                  <a class="xlink" href="#">
+                    <div><div class="xlink__big">בצל<small> · בספר הגידולים</small></div><div class="xlink__sub">DTM · מרווח · יבול · מחשבונים</div></div>
+                    <span class="xlink__cta">לספר ↗</span>
+                  </a>
+
+                  <!-- compact disclaimer -->
+                  <div class="mkt-disc" style="grid-template-columns:1fr;margin:0">
+                    <div class="mkt-disc__head" style="display:flex;gap:8px;align-items:center"><span class="mkt-disc__ic">ⓘ</span>אינדיקטיבי בלבד</div>
+                    <ul class="mkt-disc__list" style="grid-template-columns:1fr">
+                      <li>ממוצע קהילתי, לא קביעת מחיר.</li>
+                      <li>לא הצעה מסחרית ולא חוות-דעת.</li>
+                    </ul>
+                  </div>
+
+                  <div class="contrib">
+                    <span class="contrib__ic">＋</span>
+                    <div><b>מחיר עדכני לבצל?</b><small>תרמו ועדכנו את המדד</small></div>
+                    <button>תרמו</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot" style="background:var(--gj-tomato)"></span>בצל יבש · 2 מקורות · דיווח אחרון לפני 9 ימים</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Price hero.</b> 54px Frank Ruhl tomato number + unit + 7-day context. Freshness pill repeats here so the page is honest about age before any number is trusted.</div>
+        <div class="note note--data"><b>Source breakdown reuses <code>.prov</code>.</b> Same source-hierarchy component as the book's drill-down — EX (farmer donations) wins, WR (public scan) carries lower weight. One system, two surfaces.</div>
+        <div class="note"><b>Cross-link both ways.</b> <code>.xlink</code> bridges market↔book (the book's crop page already links out to market). Closes the loop between price and agronomy.</div>
+        <div class="note note--calc"><b>Empty history</b> swaps the table for <code>.emptybox</code> ("אין נתוני היסטוריה זמינים עבור 28 הימים האחרונים") — shown sparse here on purpose.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.4 · SEARCH
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-search">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.4 · <code>/search?q=</code></span> <span class="patref">Planta · NYT Cooking</span>
+      <h2 class="sec__title">חיפוש <em>אחד</em>, כל המקורות.</h2>
+      <p class="sec__desc ltr">Unified results across crops (book) + products (market), grouped by source with a query echo and per-group counts. Result rows carry the watercolor swatch, name, and the right meta for their world (book → DTM/family; market → price/freshness). Matched substring is highlighted. A clean no-match state routes the user to the request CTA.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>SEARCH · RESULTS</b> · <code>data-screen-label="search?q=עגבני"</code></div>
+        <div class="frame frame--desktop" data-screen-label="search-results">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body">
+              <div class="srch-bar"><span class="ic">⌕</span><input type="text" value="עגבני"/><button class="clear" aria-label="נקה">✕</button></div>
+              <p class="srch-echo">נמצאו <b>3</b> תוצאות עבור <span class="q">"עגבני"</span> — בספר הגידולים ובמחירון.</p>
+              <div class="srch-suggest"><span class="srch-suggest__lbl">חיפושים קשורים</span><a class="schip" href="#">עגבניית שרי</a><a class="schip" href="#">סולניים</a><a class="schip" href="#">פלפל</a><a class="schip" href="#">חציל</a></div>
+
+              <div class="srch-group">
+                <div class="srch-group__head"><span class="ic ic--book">▤</span><h3>בספר הגידולים</h3><span class="count">(1)</span><a class="seeall" href="#">כל הגידולים ›</a></div>
+                <div class="srch-rows">
+                  <a class="srow" href="#">
+                    <span class="srow__art"><img src="assets/crops/wc-tomato.png" alt=""/></span>
+                    <div><div class="srow__name"><mark>עגבני</mark>ה <em>Solanum lycopersicum</em></div><div class="srow__meta"><span>משפחה: סולניים</span><span>DTM <span class="num">70</span> ימים</span><span>יבול <span class="num">9.2</span> ק״ג/מ׳</span><span class="tier tier--leaf" style="font-size:9px;padding:1px 7px">ספר שלם</span></div></div>
+                    <div class="srow__end"><span class="gj-eyebrow dir-ltr">crop</span><span style="font-size:11px;color:var(--gj-ink-soft)">14 מחשבונים ›</span></div>
+                  </a>
+                </div>
+              </div>
+
+              <div class="srch-group">
+                <div class="srch-group__head"><span class="ic ic--market">₪</span><h3>במחירון</h3><span class="count">(2)</span><a class="seeall" href="#">כל המוצרים ›</a></div>
+                <div class="srch-rows">
+                  <a class="srow" href="#">
+                    <span class="srow__art"><img src="assets/crops/wc-tomato.png" alt=""/></span>
+                    <div><div class="srow__name"><mark>עגבני</mark>ה</div><div class="srow__meta"><span>₪/ק״ג</span><span><b class="num">9</b> מקורות</span><span class="fresh fresh--fresh">טרי · אתמול</span></div></div>
+                    <div class="srow__end"><span class="srow__price num">12.40<small> ₪</small></span><span style="font-size:10px;color:var(--gj-ink-soft)">ממוצע 7 ימים</span></div>
+                  </a>
+                  <a class="srow" href="#">
+                    <span class="srow__art"><span class="veg">🍅</span></span>
+                    <div><div class="srow__name"><mark>עגבני</mark>יית שרי</div><div class="srow__meta"><span>₪/ק״ג</span><span><b class="num">4</b> מקורות</span><span class="fresh fresh--aging">מתיישן · 4 ימים</span></div></div>
+                    <div class="srow__end"><span class="srow__price num">18.90<small> ₪</small></span><span style="font-size:10px;color:var(--gj-ink-soft)">ממוצע 7 ימים</span></div>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot"></span>חיפוש מאוחד · ספר + מחירון</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>SEARCH · NO MATCH</b> · <code>data-screen-label="search?q=…·empty"</code></div>
+        <div class="frame frame--panel" data-screen-label="search-nomatch">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+            </div>
+            <div class="sh__body">
+              <div class="srch-bar"><span class="ic">⌕</span><input type="text" value="זוקיני קוואטרו"/><button class="clear" aria-label="נקה">✕</button></div>
+              <div class="srch-nomatch">
+                <div class="srch-nomatch__ic">🔍</div>
+                <h3>אין תוצאות</h3>
+                <p>לא מצאנו "זוקיני קוואטרו" בספר או במחירון.<br/>אולי תרצו לבקש שנוסיף אותו?</p>
+                <a class="reqinfo" href="#" style="font-size:13px;padding:8px 16px">◐ בקשו להוסיף לספר</a>
+              </div>
+              <div style="border-top:1px solid var(--gj-line);margin-top:8px;padding-top:14px">
+                <span class="srch-suggest__lbl" style="margin:0 2px 8px;display:flex">חיפושים אחרונים</span>
+                <div class="srch-recent">
+                  <a class="srch-recent__row" href="#"><span class="ic">↺</span><span class="q">עגבנייה</span><span class="go">‹</span></a>
+                  <a class="srch-recent__row" href="#"><span class="ic">↺</span><span class="q">חסה</span><span class="go">‹</span></a>
+                  <a class="srch-recent__row" href="#"><span class="ic">↺</span><span class="q">בצל יבש · מחיר</span><span class="go">‹</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="sh__foot"><span class="dot" style="background:var(--gj-sun)"></span>0 תוצאות · הצעה נקלטת בקהילה</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Grouped by source.</b> "בספר הגידולים" then "במחירון", each with a count + see-all. Same query hits both indexes.</div>
+        <div class="note note--data"><b>World-aware rows.</b> A book row shows DTM/family/completeness; a market row shows price/sources/freshness. <code>&lt;mark&gt;</code> highlights the matched substring (sun wash).</div>
+        <div class="note note--calc"><b>No-match → action.</b> Empty state isn't a wall — it offers the same "◐ בקשו" request CTA the MISSING cue uses, feeding the community capture (§3.5).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.5 · COMMUNITY
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-community">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.5 · <code>/community</code></span> <span class="patref">Strava/Duolingo lightness · suggestion CTA</span>
+      <h2 class="sec__title">קהילה — <em>תרומה ושיתוף</em>.</h2>
+      <p class="sec__desc ltr">Reframed per client: <b>not</b> a managed community surface — no activity feed, nothing to "moderate." Just two things: a manifesto explaining SFA is first and foremost an open contribution to the gardening + farming community (built on field experience + advanced-AI research), and a low-friction request/suggest form. The tone is communal &amp; collaborative; the posture is "we offer collaborations &amp; ideas, we don't run an internal community." The form chips post to the same <code>/api/v1/contribute</code> as the book's request-info CTA.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>COMMUNITY</b> · desktop · <code>data-screen-label="community"</code></div>
+        <div class="frame frame--desktop" data-screen-label="community">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body">
+              <div class="comm-wrap">
+                <div class="comm-banner"><img src="assets/contact.webp" alt=""/></div>
+
+                <div class="comm-manifest">
+                  <span class="gj-eyebrow dir-ltr">community · open contribution</span>
+                  <h2>קודם כל — <em>תרומה לקהילה</em>.</h2>
+                  <p>SFA היא קודם כל תרומה לקהילה המגננת והחקלאית: <b>ידע פתוח, בלי הרשמה ובלי תשלום על הליבה</b>. הכלים נבנים על ניסיון מהשטח לצד מחקר בכלי AI מתקדמים, ומשתפרים עם כל הערה שמגיעה מהשדה.</p>
+                  <p>אנחנו מציעים <b>שיתופי פעולה, רעיונות ויוזמות</b> — לא מנהלים קהילה פנימית, אבל הטון תמיד שיתופי ופתוח. יש לכם בקשה, הצעה או רעיון לשיתוף פעולה? כתבו לנו.</p>
+                </div>
+
+                <!-- low-friction request / suggest capture -->
+                <div class="reqcard">
+                  <h3>בקשות והצעות</h3>
+                  <p>חסר גידול בספר? מחיר לא מעודכן? רעיון לכלי או הצעה לשיתוף פעולה? כתבו — נקלט ישירות אצלנו.</p>
+                  <div class="reqcard__chips">
+                    <button class="reqchip is-on">◐ בקשת נתון</button>
+                    <button class="reqchip">＋ גידול חדש</button>
+                    <button class="reqchip">₪ מחיר</button>
+                    <button class="reqchip">💡 רעיון לכלי</button>
+                    <button class="reqchip">🤝 שיתוף פעולה</button>
+                  </div>
+                  <div class="reqcard__field"><input type="text" placeholder="במה נוכל לעזור, או מה תרצו להציע?"/><button class="reqcard__send">שליחה</button></div>
+                </div>
+
+                <p class="comm-collab">מעדיפים לדבר? <a href="#">דברו איתנו בוואטסאפ ›</a></p>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot"></span>תרומה לקהילה · ניסיון מהשטח + מחקר AI · קוד פתוח</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Manifesto, not a feed.</b> The page states the posture: open contribution to the gardening + farming community, built on field experience + advanced-AI research. No activity stream to manage.</div>
+        <div class="note note--data"><b>One capture, everywhere.</b> The request/suggest chips + the book's "◐ בקשו" + search no-match all <code>POST /api/v1/contribute</code>. Collaboration / idea is just another chip.</div>
+        <div class="note note--calc"><b>Communal tone, no overhead.</b> Warm contact wash + a single "דברו איתנו בוואטסאפ" line keep it collaborative without pretending to run a forum.</div>
+        <div class="note" style="border:1px dashed var(--gj-tomato);border-radius:8px;padding:10px 12px;background:color-mix(in oklch,var(--gj-tomato) 6%,var(--gj-paper))"><b>⚠ §3.8 conflict — flagged.</b> The Mobbin note suggests a Strava/Duolingo "light feed." The client explicitly removed the feed (prev round: "no community management"). We kept it feed-less and applied only the <i>lightness/friendliness</i> of those patterns to the form. <b>Confirm with team_00 before re-adding any feed.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.6 · ABOUT / TIERS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-about">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.6 · <code>/about</code></span> <span class="patref">Notion · Linear pricing</span>
+      <h2 class="sec__title">חמש <em>שכבות</em>.</h2>
+      <p class="sec__desc ltr">The 5-tier explainer — open · beta · coming · paid · custom — each with its badge, a plain-language description, and example modules. Same <code>.tier--*</code> badge colours as the hub cards, so a user who saw a badge on a tile learns what it means here.</p>
+    </div>
+
+    <div class="stage" style="flex-direction:column">
+      <div class="ab" style="width:100%;max-width:980px">
+        <div class="ab__label dir-ltr"><b>ABOUT · TIERS</b> · desktop · <code>data-screen-label="about"</code></div>
+        <div class="frame" style="width:100%" data-screen-label="about-tiers">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body sh__body--wide">
+              <div class="tier-hero">
+                <h1>איך SFA בנוי</h1>
+                <p>חמש שכבות של כלים — מהקהילתי הפתוח, דרך הניסיוני, ועד לבדיוק-בשבילך. כל מודול נושא תג שמסמן באיזו שכבה הוא נמצא.</p>
+              </div>
+
+              <div class="tier-list">
+                <div class="tier-row tier-row--leaf">
+                  <div class="tier-row__badge"><span class="tier tier--leaf tier--lg"><span class="tier__glyph">●</span>כלים לקהילה</span><span class="en">open · no signup</span><span class="tier-row__price">חינם</span></div>
+                  <div class="tier-row__txt"><h3>פתוח</h3><p>נתונים ציבוריים פתוחים — בלי הרשמה, בלי תשלום. תרומה לקהילה החקלאית. הליבה של SFA.</p></div>
+                  <div class="tier-row__eg"><b>ספר גידולים · מחירון</b>פעיל</div>
+                </div>
+                <div class="tier-row tier-row--sun">
+                  <div class="tier-row__badge"><span class="tier tier--sun tier--lg"><span class="tier__glyph">β</span>בטא</span><span class="en">experimental</span><span class="tier-row__price">חינם</span></div>
+                  <div class="tier-row__txt"><h3>ניסיוני</h3><p>פתוח לשימוש אבל עדיין בפיתוח. ייתכנו שינויים, מוזמנים לתת פידבק שמעצב את הכלי.</p></div>
+                  <div class="tier-row__eg"><b>מחשבון</b>פעיל</div>
+                </div>
+                <div class="tier-row tier-row--paper">
+                  <div class="tier-row__badge"><span class="tier tier--paper tier--lg"><span class="tier__glyph">◷</span>בקרוב</span><span class="en">coming soon</span><span class="tier-row__price">—</span></div>
+                  <div class="tier-row__txt"><h3>בקרוב</h3><p>אנחנו עובדים על זה. השאירו פרטים בקהילה כדי לקבל הודעה כשנפתח.</p></div>
+                  <div class="tier-row__eg"><b>מתכנן עונה</b>Q3 2026</div>
+                </div>
+                <div class="tier-row tier-row--soil">
+                  <div class="tier-row__badge"><span class="tier tier--soil tier--lg"><span class="tier__glyph">★</span>כלים מתקדמים</span><span class="en">paid</span><span class="tier-row__price">לפי שימוש</span></div>
+                  <div class="tier-row__txt"><h3>בתשלום</h3><p>כלים עסקיים מורחבים לחוות פעילות — תמחור לפי גודל ושימוש. תומכים בפיתוח הליבה הפתוחה.</p></div>
+                  <div class="tier-row__eg"><b>לקוחות · מלאי</b>בקרוב</div>
+                </div>
+                <div class="tier-row tier-row--tomato">
+                  <div class="tier-row__badge"><span class="tier tier--tomato tier--lg"><span class="tier__glyph">✦</span>בדיוק לחווה שלך</span><span class="en">custom</span><span class="tier-row__price">בהתאמה</span></div>
+                  <div class="tier-row__txt"><h3>מותאם</h3><p>אינטגרציות וכלים מותאמים אישית — דברו איתנו, נתפור עבורכם פתרון לחווה שלכם.</p></div>
+                  <div class="tier-row__eg"><b>יומן שדה · Tend</b><a href="#" style="color:var(--gj-tomato-deep);font-weight:700;text-decoration:none">דברו איתנו ›</a></div>
+                </div>
+              </div>
+            </div>
+            <div class="sh__foot"><span class="dot"></span>SFA · 5 שכבות · קוד פתוח · קהילתי</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes" style="width:100%;max-width:980px;flex-direction:row;flex-wrap:wrap;padding-top:8px">
+        <div class="note note--new" style="flex:1;min-width:240px"><b>Badges carry meaning across surfaces.</b> The same five <code>.tier--*</code> chips appear on hub tiles, search rows and here — learned once, recognised everywhere.</div>
+        <div class="note note--data" style="flex:1;min-width:240px"><b>Left accent bar</b> repeats the tier colour as a 4px spine — quick scan of the ladder from open (leaf) to custom (tomato).</div>
+        <div class="note" style="flex:1;min-width:240px"><b>Examples ground it.</b> Each row names the real modules in that tier, so "paid" / "custom" aren't abstract.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3.7 · ACCOUNT (nav hook)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-account">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§3.7 · <code>/account</code> · nav hook</span> <span class="patref">Wolt · Planta settings</span>
+      <h2 class="sec__title">החשבון — <em>לא מבוי סתום</em>.</h2>
+      <p class="sec__desc ltr">A v2 landing for the 4th nav item so it isn't a dead end: a login/profile shell + a friendly empty state explaining the core is open and accounts are optional (for the future paid/custom modules). Full account flows are a later module.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>ACCOUNT · LANDING</b> · desktop · <code>data-screen-label="account"</code></div>
+        <div class="frame frame--desktop" data-screen-label="account">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct" style="border-color:var(--gj-soil);background:color-mix(in oklch, var(--gj-soil) 12%, var(--gj-paper))"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body">
+
+              <div class="acct-empty" style="margin-bottom:22px">
+                <span class="acct-empty__ic">◔</span>
+                <div><b>הליבה פתוחה — חשבון הוא רשות.</b><p>ספר הגידולים, המחירון והמחשבון עובדים בלי הרשמה. חשבון נדרש רק לכלים המתקדמים (לקוחות · מלאי) ולשמירת תכניות.</p></div>
+              </div>
+
+              <div class="acct-wrap">
+                <div class="acct-card">
+                  <svg class="acct-card__mark" viewBox="0 0 48 48"><use href="#sfa-logo"/></svg>
+                  <h1>כניסה לחשבון</h1>
+                  <p>היכנסו כדי לשמור תכניות, לנהל מודולים מתקדמים ולסנכרן בין מכשירים.</p>
+                  <div class="acct-field"><label>דוא״ל</label><input type="email" placeholder="name@farm.co.il" dir="ltr"/></div>
+                  <div class="acct-field"><label>סיסמה</label><input type="password" placeholder="••••••••" dir="ltr"/></div>
+                  <button class="acct-btn">כניסה</button>
+                  <div class="acct-alt">אין לכם חשבון? <a href="#">הרשמה ›</a></div>
+                  <div class="acct-soon"><span>◷</span>פרופיל מלא, מנויים וסנכרון — בקרוב</div>
+                </div>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot" style="background:var(--gj-soil)"></span>חשבון · רשות · הליבה תמיד פתוחה</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>ACCOUNT · PROFILE</b> · logged-in · <code>data-screen-label="account/profile"</code></div>
+        <div class="frame frame--desktop" data-screen-label="account-profile">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <a class="sh__name" href="#" style="text-decoration:none;color:inherit">SFA<small>חקלאות קטנה</small></a>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct" style="border-color:var(--gj-soil);background:color-mix(in oklch, var(--gj-soil) 12%, var(--gj-paper))"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body">
+              <div class="acct-profile">
+                <div class="acct-prof-head">
+                  <span class="acct-prof-head__av">נ</span>
+                  <div><div class="acct-prof-head__name">נמרוד · חוות הבוסתן</div><div class="acct-prof-head__sub dir-ltr">nimrod@bustan.co.il</div></div>
+                  <button class="acct-prof-head__edit">עריכה</button>
+                </div>
+
+                <div class="setgroup">
+                  <div class="setgroup__lbl">החשבון</div>
+                  <a class="setrow" href="#"><span class="setrow__ic">◔</span><span class="setrow__t">פרופיל ופרטים<small>שם, חווה, אזור</small></span><span class="setrow__chev">‹</span></a>
+                  <a class="setrow" href="#"><span class="setrow__ic">▣</span><span class="setrow__t">התכניות שלי<small>תכניות תכנון שמורות</small></span><span class="setrow__val">3 שמורות</span><span class="setrow__chev">‹</span></a>
+                  <a class="setrow" href="#"><span class="setrow__ic">⌘</span><span class="setrow__t">שפה</span><span class="setrow__val">עברית</span><span class="setrow__chev">‹</span></a>
+                </div>
+
+                <div class="setgroup">
+                  <div class="setgroup__lbl">מודולים</div>
+                  <a class="setrow" href="#"><span class="setrow__ic">★</span><span class="setrow__t">מנוי ומודולים<small>כלים מתקדמים בתשלום</small></span><span class="setrow__val">חינם</span><span class="setrow__chev">‹</span></a>
+                  <a class="setrow" href="#"><span class="setrow__ic">⇄</span><span class="setrow__t">חיבורים<small>Tend · חשבונית-ירוקה</small></span><span class="setrow__val">לא מחובר</span><span class="setrow__chev">‹</span></a>
+                </div>
+
+                <div class="setgroup">
+                  <div class="setgroup__lbl">מערכת</div>
+                  <a class="setrow" href="#"><span class="setrow__ic">◑</span><span class="setrow__t">התראות</span><span class="setrow__chev">‹</span></a>
+                  <a class="setrow" href="#"><span class="setrow__ic">⛉</span><span class="setrow__t">פרטיות ונתונים</span><span class="setrow__chev">‹</span></a>
+                  <a class="setrow setrow--danger" href="#"><span class="setrow__ic">⏻</span><span class="setrow__t">יציאה</span><span class="setrow__chev">‹</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="sh__foot"><span class="dot" style="background:var(--gj-soil)"></span>מחובר · נ · חוות הבוסתן</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Not a wall.</b> The empty-state banner says the core is open and accounts are optional — honest, on-brand, no forced signup.</div>
+        <div class="note note--data"><b>Soil world.</b> Account uses the soil accent (earth / paid), matching the avatar chip already in the shell.</div>
+        <div class="note note--calc"><b>Stable hook.</b> A real login shell so the 4th nav item resolves; full profile/subscription/sync flows are a later module (annotated "בקרוב").</div>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:30px 20px 10px;font-family:var(--gj-font-mono);font-size:11px;color:var(--gj-ink-soft)">
+    SFA-S003-P004-WP-CB-UI-CLASSB · team_35 → team_100 · v1.0.0 · extends WP-CB-1 v2 white-green · 2026-06-02
+  </div>
+</div>
+
+<script src="cropbook-v1.js?v=1"></script>
+<script src="classb.js?v=1"></script>
+</body>
+</html>

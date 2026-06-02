@@ -1,0 +1,140 @@
+/* ============================================================
+   SFA Crop Book v1 — token layer
+   Verbatim from team_35 DESIGN_TOKENS.md (--gj-*), AOS DS v3.4.
+   LOD300 · SFA-S003-P004-WP-CB-1 · team_35 → team_100
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@font-face {
+  font-family: "Carmela";
+  src: url("assets/Carmela.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+:root {
+  /* ── Paper / ink — white with a whisper of green (v2 palette) ── */
+  --gj-paper:     #f8fbf8;
+  --gj-paper-2:   #eef4ee;
+  --gj-paper-3:   #dde8dd;
+  --gj-ink:       #1f2a22;
+  --gj-ink-soft:  #5d6b5e;
+  --gj-line:      #dce6dc;
+
+  /* ─── Worlds (Nimrod DS v3.3) ─── */
+  --gj-leaf:        #6f8a45;  /* book / open community */
+  --gj-leaf-deep:   #4d6a2c;
+  --gj-leaf-soft:   #9bb172;
+  --gj-tomato:      #c24f2c;  /* market / attention */
+  --gj-tomato-deep: #8e3018;
+  --gj-sun:         #d39a32;  /* beta / calculator / warnings */
+  --gj-sun-deep:    #a4711a;
+  --gj-soil:        #8b5d2f;  /* paid / earth */
+  --gj-soil-deep:   #5a3c1a;
+  --gj-code:        #2d8a8c;  /* digital / mezoo accent */
+  --gj-code-deep:   #1f5e60;
+
+  /* ─── Status ─── */
+  --status-fresh:  var(--gj-leaf);
+  --status-aging:  var(--gj-sun);
+  --status-stale:  var(--gj-tomato);
+  --status-error:  #c43a2e;
+
+  /* ─── Confidence / provenance (CB-1 new, see DESIGN_TOKENS delta) ─── */
+  --cb-validated:    var(--gj-leaf-deep);
+  --cb-unvalidated:  var(--gj-sun-deep);
+  --cb-missing:      var(--gj-tomato-deep);
+  --cb-assume:       var(--gj-code);       /* AssumptionField accent */
+  --cb-assume-wash:  #e3eeee;
+
+  /* ─── Type ─── */
+  --gj-font-body: "Assistant", "Heebo", system-ui, sans-serif;
+  --gj-font-head: "Frank Ruhl Libre", "David Libre", "Times New Roman", serif;
+  --gj-font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --gj-font-brand: "Carmela", "Frank Ruhl Libre", serif;
+
+  /* ─── Radii ─── */
+  --gj-r-s:    8px;
+  --gj-r-m:    12px;
+  --gj-r-l:    14px;
+  --gj-r-xl:   18px;
+  --gj-r-pill: 99px;
+
+  /* ─── Shadows (green-neutral) ─── */
+  --gj-shadow-s: 0 1px 3px rgba(30, 50, 35, .05);
+  --gj-shadow-m: 0 4px 14px rgba(30, 55, 38, .07);
+  --gj-shadow-l: 0 8px 28px rgba(28, 55, 38, .11);
+
+  /* ─── Spacing (4-pt) ─── */
+  --gj-sp-1: 4px;
+  --gj-sp-2: 8px;
+  --gj-sp-3: 12px;
+  --gj-sp-4: 16px;
+  --gj-sp-5: 24px;
+  --gj-sp-6: 32px;
+  --gj-sp-7: 48px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--gj-font-body);
+  background: var(--gj-paper);
+  color: var(--gj-ink);
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─── Shared type helpers ─── */
+.gj-eyebrow {
+  font-family: var(--gj-font-mono);
+  font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; font-weight: 700;
+  color: var(--gj-tomato-deep);
+}
+.gj-h1 {
+  font-family: var(--gj-font-head); font-weight: 900;
+  font-size: 32px; line-height: 1.04; letter-spacing: -.015em; margin: 0 0 10px;
+}
+.gj-h2 { font-family: var(--gj-font-head); font-weight: 700; font-size: 24px; line-height: 1.12; letter-spacing: -.01em; margin: 0; }
+.gj-h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 18px; line-height: 1.2; margin: 0; }
+.gj-lede { font-size: 14px; line-height: 1.6; color: var(--gj-ink-soft); max-width: 40ch; }
+
+.gj-underline {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10'><path d='M2 6 Q 30 1 70 4 T 140 5 T 198 4' stroke='%23c24f2c' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: 0 100%; background-size: 100% 10px;
+  padding-bottom: 6px;
+}
+
+/* numeric */
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* ─── Tier badge ─── */
+.tier {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--gj-font-body); font-weight: 700; font-size: 11px;
+  padding: 3px 10px 3px 8px; border-radius: var(--gj-r-pill);
+  line-height: 1; white-space: nowrap;
+}
+.tier__glyph { font-size: 11px; }
+.tier--lg { font-size: 13px; padding: 6px 14px; }
+.tier--leaf   { background: color-mix(in oklch, var(--gj-leaf) 20%, var(--gj-paper)); color: var(--gj-leaf-deep); }
+.tier--sun    { background: color-mix(in oklch, var(--gj-sun) 28%, var(--gj-paper)); color: #7a4a08; }
+.tier--soil   { background: color-mix(in oklch, var(--gj-soil) 22%, var(--gj-paper)); color: var(--gj-soil-deep); }
+.tier--tomato { background: color-mix(in oklch, var(--gj-tomato) 18%, var(--gj-paper)); color: var(--gj-tomato-deep); }
+.tier--paper  { background: var(--gj-paper-2); color: var(--gj-ink-soft); }
+
+/* ─── Pills ─── */
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  padding: 3px 9px; border-radius: var(--gj-r-pill);
+}
+.pill--soil  { background: color-mix(in oklch, var(--gj-soil) 16%, var(--gj-paper)); color: var(--gj-soil-deep); }
+.pill--know  { background: color-mix(in oklch, var(--gj-tomato) 14%, var(--gj-paper)); color: var(--gj-tomato-deep); }
+.pill--code  { background: color-mix(in oklch, var(--gj-code) 16%, var(--gj-paper)); color: var(--gj-code-deep); }
+.pill--leaf  { background: color-mix(in oklch, var(--gj-leaf) 18%, var(--gj-paper)); color: var(--gj-leaf-deep); }
+.pill--muted { background: var(--gj-paper-2); color: var(--gj-ink-soft); }
+.pill--warn  { background: color-mix(in oklch, var(--gj-sun) 30%, var(--gj-paper)); color: #7a4a08; }

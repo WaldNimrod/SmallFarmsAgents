@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>LOD300 · Crop Book v1 — calculator-driven · team_35</title>
+<link rel="stylesheet" href="tokens.css?v=11"/>
+<link rel="stylesheet" href="cropbook-v1.css?v=11"/>
+</head>
+<body>
+<div class="board">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+    <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+    <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+    <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+    <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+    <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+  </symbol></svg>
+
+  <!-- ══════════ STICKY SPEC HEADER ══════════ -->
+  <header class="board__top">
+    <div class="board__brand">
+      <svg class="board__brandmark" width="34" height="34"><use href="#sfa-logo"/></svg>
+      <b>SFA</b>
+    </div>
+    <div class="meta dir-ltr">
+      <div><strong>LOD300</strong> · Crop Book v1 — calculator-driven</div>
+      <div>SFA-S003-P004-WP-CB-1 · team_35 → team_100 · v1.0.0 · 2026-05-30</div>
+    </div>
+    <div class="board__legend dir-ltr">
+      <span><i style="background:#4d6a2c"></i>Validated</span>
+      <span><i style="background:#a4711a"></i>Unvalidated *</span>
+      <span><i style="background:#8e3018"></i>Missing</span>
+      <span><i style="background:#2d8a8c"></i>AssumptionField</span>
+      <span><i style="background:#d39a32"></i>Calculator</span>
+    </div>
+  </header>
+
+  <!-- ══════════ INTRO ══════════ -->
+  <section class="sec">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">DESIGN PACKAGE · 6 deliverables</span>
+      <h1 class="sec__title">הספר הופך ל<em>כלי תכנון</em>.</h1>
+      <p class="sec__desc">ספר הגידולים החי ב־<code>sfa.nimrod.bio/crop-book/</code> מקבל 14 מחשבונים. אותם נתונים — שני קהלים, שלוש רמות עומק, וכלי תכנון אמין שמודה בכנות איפה הוא לא יודע. כל הרכיבים מרחיבים את ה־kit הקיים (AOS DS v3.4 · ווטרקולור · Carmela · RTL).</p>
+      <p class="sec__desc ltr" style="margin-top:12px;font-size:13px;">A pannable spec board. Hebrew = production UI copy · English = design annotations for cross-team routing. Calculators &amp; AssumptionFields are <b>live</b> — type in them. Frames carry <code>data-screen-label</code>.</p>
+    </div>
+    <div class="wrap" style="gap:10px">
+      <span class="tier tier--leaf"><span class="tier__glyph">●</span>ספר גידולים · open</span>
+      <span class="tier tier--sun"><span class="tier__glyph">β</span>מחשבונים · 14</span>
+      <span class="pill pill--code">AssumptionField · NEW</span>
+      <span class="pill pill--muted">Slim4 / PHP · server-rendered + light JS</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.1 · TWO-AUDIENCE LAYOUT
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-audience">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.1</span>
+      <h2 class="sec__title">קהל אחד מחליף — <em>אותם נתונים</em>, צפיפות אחרת.</h2>
+      <p class="sec__desc ltr">One persistent switch. <b>Cards</b> = home gardener / course student (default for <code>/crop-book/</code>) — visual, per-crop, surfaces calculators #1·2·4·5·8·10·11. <b>Table</b> = small farmer — dense, sortable, exposes calculators #6·7·9·12·13 inline per row. Same crops, same data — not two products. A <b>filter rail</b> on the same page (family · season · sow-vs-transplant · frost · DTM · completeness) narrows the list <b>in place</b> — search and results together, never a separate screen.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>BOOK · ENTRY</b> · desktop ≥900px · <code>data-screen-label="book/"</code></div>
+        <div class="frame frame--desk-wide" data-screen-label="book-entry">
+          <div class="sh" id="aud-scope">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name">SFA<small>חקלאות קטנה</small></div>
+              <nav class="sh__nav">
+                <a class="is-active" href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+            </div>
+            <div class="sh__body">
+
+              <!-- TOP FILTER BAR — quick filters always visible; advanced collapses (default closed) -->
+              <div class="ftop">
+                <div class="ftop__top">
+                  <div class="filters__search"><span class="ic">⌕</span><input type="text" placeholder="חיפוש חופשי בכל הגידולים…"/></div>
+                  <button class="ftop__advbtn" data-filter-toggle="adv-filters" aria-expanded="false">סינון מתקדם <span class="badge">6</span><span class="chev">▾</span></button>
+                  <div class="ftop__count">מציג <b>66</b> מתוך 66</div>
+                </div>
+                <div class="ftop__adv" id="adv-filters">
+                  <div class="ftop__row">
+                    <div class="fset"><div class="fset__lbl" data-field="family">משפחה</div><div class="fchips">
+                      <button class="fchip">סולניים</button><button class="fchip">מצליבים</button><button class="fchip">חסתיים</button><button class="fchip">סוככיים</button><button class="fchip">דלועיים</button><button class="fchip">קטניות</button>
+                    </div></div>
+                    <div class="fset"><div class="fset__lbl" data-field="planting_season">עונת גידול</div><div class="fchips">
+                      <button class="fchip">אביב</button><button class="fchip">קיץ</button><button class="fchip">סתיו</button><button class="fchip">חורף</button>
+                      <span class="fdate-wrap">או בתאריך <input type="date" class="fdate"/></span>
+                    </div></div>
+                    <div class="fset"><div class="fset__lbl" data-field="planting_method">זריעה / שתילה</div><div class="fchips">
+                      <button class="fchip seg-sow is-on" data-single="1" data-default-on>הכל</button><button class="fchip seg-sow" data-single="1">זריעה ישירה</button><button class="fchip seg-sow" data-single="1">שתילה</button>
+                    </div></div>
+                    <div class="fset"><div class="fset__lbl" data-field="needs_summer_shade">הצללה בקיץ <span class="pill pill--code" style="font-size:9px;padding:1px 6px">ישראל</span></div><div class="fchips">
+                      <button class="fchip is-on" data-single="1" data-default-on>הכל</button><button class="fchip" data-single="1">ללא הצללה</button><button class="fchip" data-single="1">30%</button><button class="fchip" data-single="1">40%</button><button class="fchip" data-single="1">50%</button>
+                    </div></div>
+                    <div class="fset"><div class="fset__lbl" data-field="frost_tolerance">עמידות לקרה</div><div class="fchips">
+                      <button class="fchip">עמיד</button><button class="fchip">חצי-עמיד</button><button class="fchip">רגיש</button>
+                    </div></div>
+                    <div class="fset"><div class="fset__lbl" data-field="days_to_maturity">ימים להבשלה</div>
+                      <div class="frange" style="min-width:150px"><div class="frange__track"><div class="frange__fill" style="inset-inline-start:0;inset-inline-end:0"></div></div><div class="frange__val">הכל · 0–120</div></div>
+                    </div>
+                    <div class="fset"><div class="fset__lbl">מצב ספר</div><div class="fchips">
+                      <button class="fchip is-on" data-single="1" data-default-on>הכל</button><button class="fchip" data-single="1">שלם בלבד</button>
+                    </div></div>
+                  </div>
+                  <div class="ftop__advfoot">
+                    <span class="ftop__count">תואמים: <b>66</b> גידולים</span>
+                    <button class="btn-ghost-sm" data-filter-reset>↺ איפוס פילטרים</button>
+                    <button class="filters__apply">החל סינון</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="aud-head">
+                <div>
+                  <h2 class="gj-h2">66 גידולים · 242 זנים</h2>
+                  <div class="aud-head__sub dir-ltr">52 complete · 14 partial</div>
+                </div>
+                <!-- AUDIENCE SWITCH -->
+                <div class="aud" data-aud-switch="aud-scope" role="tablist" aria-label="תצוגה">
+                  <button class="aud__opt is-active is-cards" data-view="cards" role="tab">
+                    <span class="g">▦</span> <span>כרטיסים<small> · גנן/לומד</small></span>
+                  </button>
+                  <button class="aud__opt is-table" data-view="table" role="tab">
+                    <span class="g">▤</span> <span>טבלה<small> · חקלאי</small></span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- CARDS VIEW -->
+              <div data-aud-view="cards">
+                <div class="cards-grid">
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/wc-lettuce.png" alt="חסה"/></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">חסה</div><div class="ccard__en">Lettuce</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:34%"></div></div><span class="minibar__v">3.4 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ccard__dtm">55<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--partial" title="ספר חלקי">!</span><img src="assets/wc-radish.png" alt="צנונית"/></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">צנונית</div><div class="ccard__en">Radish</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class="on"></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:21%"></div></div><span class="minibar__v">2.1 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i class="off"></i><i></i><i></i><i></i><i></i></span><span class="ccard__dtm">28<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/wc-parsley.png" alt="פטרוזיליה"/></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">פטרוזיליה</div><div class="ccard__en">Parsley</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:28%"></div></div><span class="minibar__v">2.8 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ccard__dtm">75<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><span class="veg">🍅</span></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">עגבנייה</div><div class="ccard__en">Tomato</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class=""></i><i class="on"></i><i class="on"></i><i class="peak"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:92%"></div></div><span class="minibar__v">9.2 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ccard__dtm">70<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--partial" title="ספר חלקי">!</span><img src="assets/wc-dill.png" alt="שמיר"/></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">שמיר</div><div class="ccard__en">Dill</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class=""></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:18%"></div></div><span class="minibar__v">1.8 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i></i><i class="off"></i><i></i><i></i><i class="off"></i></span><span class="ccard__dtm">45<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                  <a class="ccard" href="#">
+                    <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><span class="veg">🥒</span></div>
+                    <div class="ccard__body">
+                      <div class="ccard__name">מלפפון</div><div class="ccard__en">Cucumber</div><div class="cardviz"><div class="seasonbar" title="עונת גידול · חודשי שתילה"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><i class="on"></i><i class="peak"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cardviz__lbl"><span>ינ׳</span><span>חודשי שתילה</span><span>דצ׳</span></div><div class="minibar"><span class="minibar__ic">⚖</span><div class="minibar__track"><div class="minibar__fill" style="width:65%"></div></div><span class="minibar__v">6.5 ק״ג/מ׳</span></div></div>
+                      <div class="ccard__meta"><span class="ccard__calcs"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ccard__dtm">55<small>ימים</small></span></div>
+                    </div>
+                  </a>
+                </div>
+                <p class="muted" style="font-size:11px;margin-top:12px;direction:ltr">● = calculators enabled on this crop · dim = disabled (a required field is missing)</p>
+                <!-- PAGINATION (cards) -->
+                <div class="pager" data-pager>
+                  <div class="pager__info">מציג <b>1–25</b> מתוך <b>66</b> גידולים</div>
+                  <div class="pager__size">כרטיסים לעמוד <select><option>25</option><option>50</option><option>100</option></select></div>
+                  <div class="pager__nav">
+                    <button class="pager__arrow" aria-label="הקודם">›</button>
+                    <button class="pager__pg is-active">1</button>
+                    <button class="pager__pg">2</button>
+                    <button class="pager__pg">3</button>
+                    <span class="pager__ellipsis">…</span>
+                    <button class="pager__pg">6</button>
+                    <button class="pager__arrow" aria-label="הבא">‹</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TABLE VIEW -->
+              <div data-aud-view="table" style="display:none">
+                <div style="overflow-x:auto;border:1px solid var(--gj-line);border-radius:var(--gj-r-l)">
+                  <table class="ptable">
+                    <thead>
+                      <tr>
+                        <th>גידול</th>
+                        <th class="sortable">משפחה</th>
+                        <th class="sortable">DTM</th>
+                        <th class="sortable">מרווח</th>
+                        <th class="sortable">יבול</th>
+                        <th class="sortable">מחיר</th>
+                        <th class="calc-col" title="מחשבון #1">זרעים / מ׳ ערוגה</th>
+                        <th class="calc-col" title="מחשבון #9">הכנסה / מ׳ ערוגה</th>
+                        <th class="calc-col" title="מחשבון #13">רווח / מ׳ ערוגה</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><span class="t-name"><img class="sw" src="assets/wc-lettuce.png" alt=""/>חסה <em>Lactuca</em></span></td>
+                        <td class="t-fam">חסתיים</td>
+                        <td class="num">55</td>
+                        <td class="num">30×25</td>
+                        <td class="num">3.4 <small class="muted">ק״ג/מ׳</small></td>
+                        <td class="num">9.00</td>
+                        <td class="calc-cell num">0.12 <small>גרם</small></td>
+                        <td class="calc-cell num">30.6 <small>₪</small></td>
+                        <td class="calc-cell num">28.6 <small>₪</small></td>
+                      </tr>
+                      <tr>
+                        <td><span class="t-name"><img class="sw" src="assets/wc-radish.png" alt=""/>צנונית <em>Raphanus</em></span></td>
+                        <td class="t-fam">מצליבים</td>
+                        <td class="num">28</td>
+                        <td class="num">15×3</td>
+                        <td class="num"><span class="tip">2.1<span class="ast">*</span><span class="tip__pop"><b>ערך לא מאומת</b> — מקור web (WR), confidence 0.30. ייתכן לא מדויק עד אישור Nimrod.</span></span> <small class="muted">ק״ג/מ׳</small></td>
+                        <td class="num">7.50</td>
+                        <td class="calc-cell num val--missing" title="seeds_per_gram חסר">—</td>
+                        <td class="calc-cell num">19.7<span class="ast">*</span> <small>₪</small></td>
+                        <td class="calc-cell num">18.2<span class="ast">*</span> <small>₪</small></td>
+                      </tr>
+                      <tr>
+                        <td><span class="t-name"><img class="sw" src="assets/wc-parsley.png" alt=""/>פטרוזיליה <em>Petroselinum</em></span></td>
+                        <td class="t-fam">סוככיים</td>
+                        <td class="num">75</td>
+                        <td class="num">30×15</td>
+                        <td class="num">2.8 <small class="muted">ק״ג/מ׳</small></td>
+                        <td class="num">14.00</td>
+                        <td class="calc-cell num">0.17 <small>גרם</small></td>
+                        <td class="calc-cell num">39.2 <small>₪</small></td>
+                        <td class="calc-cell num">37.8 <small>₪</small></td>
+                      </tr>
+                      <tr>
+                        <td><span class="t-name"><span style="font-size:20px">🍅</span>עגבנייה <em>Solanum</em></span></td>
+                        <td class="t-fam">סולניים</td>
+                        <td class="num">70</td>
+                        <td class="num">50×50</td>
+                        <td class="num">9.2 <small class="muted">ק״ג/מ׳</small></td>
+                        <td class="num">12.40</td>
+                        <td class="calc-cell num">0.03 <small>גרם</small></td>
+                        <td class="calc-cell num">114 <small>₪</small></td>
+                        <td class="calc-cell num">41.0 <small>₪</small></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="muted" style="font-size:11px;margin-top:10px;direction:ltr">Amber cells = calculator outputs, all normalized to <b>per bed-meter</b> (#1 seeds/m · #9 revenue/m · #13 profit/m) — one consistent unit across the whole column. <span class="ast">*</span> = derived from an unvalidated value. <span class="val--missing">—</span> = a required field is missing.</p>
+                <!-- PAGINATION (table) -->
+                <div class="pager" data-pager>
+                  <div class="pager__info">מציג <b>1–25</b> מתוך <b>66</b> גידולים</div>
+                  <div class="pager__size">שורות לעמוד <select><option>25</option><option>50</option><option>100</option></select></div>
+                  <div class="pager__nav">
+                    <button class="pager__arrow" aria-label="הקודם">›</button>
+                    <button class="pager__pg is-active">1</button>
+                    <button class="pager__pg">2</button>
+                    <button class="pager__pg">3</button>
+                    <button class="pager__arrow" aria-label="הבא">‹</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="sh__foot"><span class="dot"></span>עודכן 14:32 · enrichment head ~057 · 17 שדות חובה</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Persistent switch.</b> Lives in the page header, survives navigation (stored client-side). Cards is the default route; Table is a density toggle, not a different URL tree.</div>
+        <div class="note"><b>Same SSoT.</b> Both views read the identical SQLAlchemy queries / <code>value_best</code> — the difference is template + density only.</div>
+        <div class="note note--calc"><b>Inline calc columns.</b> Table exposes the farmer-tier calculators (#6·7·9·12·13) as sortable columns; Cards keeps calculators inside the crop page.</div>
+        <div class="note note--data"><b>State at a glance.</b> The corner dot (✓ / !) and the calculator pips telegraph complete vs partial before the user clicks in.</div>
+        <div class="note note--new"><b>Filters on top, on the page.</b> A horizontal bar above the results narrows by family · season (or a specific sow date) · sow vs transplant · frost · <b>summer-shade (Israel)</b> · DTM · completeness — results update in place. Default = search all; a reset button clears every filter.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.2 · PER-CROP PAGE — THREE DEPTHS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-depths">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.2</span>
+      <h2 class="sec__title">גידול אחד, <em>שלוש רמות עומק</em>.</h2>
+      <p class="sec__desc ltr">A toggle on the crop page — never a different URL. All three depths are <b>organized by subject</b> (משתלה · תהליך גידול · קציר ואחסון · יבול · תשומות) so the page reads as a plan, not a data dump. <b>Simple</b> = headline values + a per-topic summary. <b>Full</b> = every mandatory field, grouped into collapsible topic sections. <b>Drill-down</b> = a <b>variety-comparison table</b> (with averages) + a full <b>per-source reference sheet</b> at JMF-MasterClass depth, organized by topic. The one winning value is always shown up front; the hierarchy lives in Drill-down. Worked crop: <b>חסה (lettuce)</b> — a COMPLETE book.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>BOOK · CROP</b> · desktop · <code>data-screen-label="book/lettuce/"</code> <span class="chip chip--complete">complete</span></div>
+        <div class="frame frame--desktop" data-screen-label="crop-lettuce">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name">SFA<small>חקלאות קטנה</small></div>
+              <nav class="sh__nav">
+                <a class="is-active" href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+              <button class="sh__icon" title="חיפוש">⌕</button>
+            </div>
+            <div class="sh__bc" style="padding:8px 18px;border-bottom:1px solid var(--gj-line)"><a href="#">ספר</a> › <a href="#">חסתיים</a> › <strong>חסה</strong></div>
+            <div class="sh__body">
+
+              <!-- crop hero -->
+              <div class="crophero">
+                <div class="crophero__art"><img src="assets/wc-lettuce.png" alt="חסה"/></div>
+                <div>
+                  <div class="crophero__bc dir-ltr">Lactuca sativa · חסתיים · 8 זנים</div>
+                  <h1><span class="gj-underline">חסה</span></h1>
+                  <p class="crophero__sci">Lactuca sativa</p>
+                </div>
+                <div class="crophero__state">
+                  <span class="statebadge statebadge--complete"><span class="d"></span>ספר שלם</span>
+                  <span class="statebadge__cov dir-ltr">17/17 fields · all calcs on</span>
+                </div>
+              </div>
+
+              <!-- DEPTH SWITCH -->
+              <div class="depths" data-depths="depth-scope" role="tablist">
+                <button class="is-active" data-depth="simple">פשוט<small>headline</small></button>
+                <button data-depth="full">מלא<small>all fields</small></button>
+                <button data-depth="drill">העמקה<small>per-variety</small></button>
+              </div>
+
+              <div id="depth-scope">
+
+                <!-- ░░ SIMPLE ░░ -->
+                <div data-depth-view="simple">
+                  <div class="headvals">
+                    <div class="hv"><div class="hv__lbl" data-field="dtm">ימים להבשלה</div><div class="hv__val num">55<small>ימים</small></div></div>
+                    <div class="hv"><div class="hv__lbl" data-field="yield">יבול</div><div class="hv__val num">3.4<small>ק״ג/מ׳</small></div></div>
+                    <div class="hv"><div class="hv__lbl" data-field="in_row_spacing_cm">מרווח</div><div class="hv__val num">30×25<small>ס״מ</small></div></div>
+                    <div class="hv"><div class="hv__lbl" data-field="documented_price">מחיר</div><div class="hv__val num">9.00<small>₪/יח׳</small></div></div>
+                  </div>
+
+                  <!-- topic summary grid: one card per subject, the key numbers only -->
+                  <h3 class="gj-h3" style="margin:6px 0 10px">סקירה לפי נושא</h3>
+                  <div class="tsum">
+                    <div class="tcard tcard--nursery">
+                      <div class="tcard__head"><span class="tcard__ic">🌱</span><span class="tcard__t">משתלה</span></div>
+                      <div class="tcard__rows">
+                        <div class="tcard__row"><span class="k">שיטה</span><span class="v">שתיל</span></div>
+                        <div class="tcard__row"><span class="k">ימים במשתלה</span><span class="v num">21</span></div>
+                      </div>
+                    </div>
+                    <div class="tcard tcard--grow">
+                      <div class="tcard__head"><span class="tcard__ic">🌿</span><span class="tcard__t">תהליך גידול</span></div>
+                      <div class="tcard__rows">
+                        <div class="tcard__row"><span class="k">ימים להבשלה</span><span class="v num">55</span></div>
+                        <div class="tcard__row"><span class="k">השקיה</span><span class="v">טפטוף ×4</span></div>
+                      </div>
+                    </div>
+                    <div class="tcard tcard--harvest">
+                      <div class="tcard__head"><span class="tcard__ic">🧺</span><span class="tcard__t">קציר ואחסון</span></div>
+                      <div class="tcard__rows">
+                        <div class="tcard__row"><span class="k">חלון קציר</span><span class="v num">14 ימים</span></div>
+                        <div class="tcard__row"><span class="k">אחסון</span><span class="v">2°C · 3 ימים</span></div>
+                      </div>
+                    </div>
+                    <div class="tcard tcard--yield">
+                      <div class="tcard__head"><span class="tcard__ic">⚖</span><span class="tcard__t">יבול והכנסה</span></div>
+                      <div class="tcard__rows">
+                        <div class="tcard__row"><span class="k">יבול</span><span class="v num">3.4 ק״ג/מ׳</span></div>
+                        <div class="tcard__row"><span class="k">הכנסה/מ׳</span><span class="v num">30.6 ₪</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="cb-block" style="margin-top:14px">
+                    <h3>מחשבונים <span class="gj-eyebrow dir-ltr">tap a button → opens over the page</span></h3>
+                    <div class="calcbtns">
+                      <button class="calcbtn" data-calc-open="modal-yield"><span class="calcbtn__no">8</span>יבול צפוי<span class="calcbtn__arrow">↗</span></button>
+                      <button class="calcbtn"><span class="calcbtn__no">1</span>זרעים לקנייה<span class="calcbtn__arrow">↗</span></button>
+                      <button class="calcbtn"><span class="calcbtn__no">4</span>תאריך זריעה<span class="calcbtn__arrow">↗</span></button>
+                      <button class="calcbtn"><span class="calcbtn__no">11</span>חלון קרה<span class="calcbtn__arrow">↗</span></button>
+                      <button class="calcbtn is-disabled" title="חסר שדה"><span class="calcbtn__no">9</span>הכנסה<span class="calcbtn__arrow">🔒</span></button>
+                    </div>
+                    <p class="muted" style="font-size:12px;margin-top:10px">המחשבון המלא (כל המודולים יחד + סיכום + ייצוא) הוא עמוד נפרד — <a href="#s-calcpage" style="color:var(--gj-leaf-deep);font-weight:700">מחשבון ›</a></p>
+                  </div>
+
+                  <!-- calculator module overlay — opens OVER the crop page -->
+                  <div class="calcmodal" id="modal-yield">
+                    <div class="calcmodal__overlay"></div>
+                    <div class="calcmodal__card">
+                      <div class="calcmodal__head"><span class="gj-eyebrow dir-ltr">מודול · #8</span><span class="calcmodal__title">יבול צפוי</span><button class="calcmodal__close" data-calc-close aria-label="סגור">✕</button></div>
+                      <div class="calcmodal__body">
+                        <div class="cv" data-calc="yield" style="border:0;box-shadow:none">
+                          <div class="cv__body" style="padding:0">
+                            <div class="cv__uses">ערך מהספר</div>
+                            <div class="bvrow">
+                              <span class="bv" data-book="yield_per_m" data-val="3.4">יבול/מ׳ <b class="num">3.4</b><small>ק״ג</small><a class="bv__link" href="#">↗ ספר</a></span>
+                            </div>
+                            <div class="cv__inputs">
+                              <label class="ipt"><label>אורך ערוגה</label><span class="ipt__box"><input type="number" data-k="bed_len" value="30" step="1"/><span class="u">מ׳</span></span></label>
+                            </div>
+                            <div class="cv__result"><span class="lbl">יבול צפוי</span><span class="big num" data-result>102 <small>ק״ג</small></span></div>
+                            <div class="cv__formula" data-formula>30 m × 3.4 kg/m</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="calcmodal__foot"><span>מודול עצמאי · בסיס למערכת ההמשך</span><a href="#s-calcpage" data-calc-close>פתח במחשבון המלא ›</a></div>
+                    </div>
+                  </div>
+
+                  <div class="rothint">
+                    <span class="rothint__icon">⟳</span>
+                    <div>אל תעקבו אחרי <b>חסתיים</b> באותה ערוגה במשך <b>3 עונות</b>.</div>
+                    <span class="meta dir-ltr">family: Asteraceae</span>
+                  </div>
+                </div>
+
+                <!-- ░░ FULL ░░ — every field organized by topic (collapsible) -->
+                <div data-depth-view="full" style="display:none">
+                  <p class="muted" style="font-size:12px;margin:0 0 12px">17/17 שדות חובה מאומתים · מסודרים לפי נושא · לחצו על כותרת לפתיחה/סגירה</p>
+
+                  <div class="topic topic--nursery">
+                    <div class="topic__head"><span class="topic__ic">🌱</span><div class="topic__t">משתלה<small>הנבטה והכנת שתיל</small></div><span class="topic__meta">3 שדות · מחשבון ③ <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="planting_method"></dt><dd>שתיל / זריעה</dd></div>
+                      <div class="fg"><dt data-field="days_in_nursery_cell"></dt><dd class="num">21 ימים</dd></div>
+                      <div class="fg"><dt data-field="seeds_per_gram"></dt><dd class="num">800</dd></div>
+                    </dl></div>
+                  </div>
+
+                  <div class="topic topic--grow">
+                    <div class="topic__head"><span class="topic__ic">🌿</span><div class="topic__t">תהליך גידול<small>מרווח · עונה · קרה · השקיה</small></div><span class="topic__meta">8 שדות · מחשבונים ④⑤⑩⑪ <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="rows_per_bed"></dt><dd class="num">4</dd></div>
+                      <div class="fg"><dt data-field="in_row_spacing_cm"></dt><dd class="num">25 ס״מ</dd></div>
+                      <div class="fg"><dt data-field="planting_season"></dt><dd>סתיו · אביב</dd></div>
+                      <div class="fg"><dt data-field="days_to_maturity"></dt><dd class="num">55 ימים</dd></div>
+                      <div class="fg"><dt data-field="frost_tolerance"></dt><dd>חצי-עמיד</dd></div>
+                      <div class="fg"><dt data-field="needs_summer_shade"></dt><dd>כן · רשת 40%</dd></div>
+                      <div class="fg"><dt data-field="irrigation_type"></dt><dd>טפטוף ×4 <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span></dd></div>
+                      <div class="fg"><dt data-field="root_depth_class"></dt><dd>רדוד <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span></dd></div>
+                    </dl></div>
+                  </div>
+
+                  <div class="topic topic--harvest">
+                    <div class="topic__head"><span class="topic__ic">🧺</span><div class="topic__t">קציר ואחסון<small>חלון · רצף · תפוקה · אחסון</small></div><span class="topic__meta">5 שדות · מחשבונים ⑤⑥ <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="harvest_window"></dt><dd class="num">14 ימים</dd></div>
+                      <div class="fg"><dt data-field="succession_interval"></dt><dd class="num">2 שבועות</dd></div>
+                      <div class="fg"><dt data-field="sale_unit"></dt><dd>ראש בודד <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span></dd></div>
+                      <div class="fg"><dt data-field="labor_rate_harvest"></dt><dd class="num">~60 יח׳/שעה <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span></dd></div>
+                      <div class="fg"><dt data-field="storage_days"></dt><dd class="num">3 ימים <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span></dd></div>
+                    </dl></div>
+                  </div>
+
+                  <div class="topic topic--pest">
+                    <div class="topic__head"><span class="topic__ic">🐞</span><div class="topic__t">מזיקים ומחלות<small>הגנה · הזנה עלוותית</small></div><span class="topic__meta">2 שדות <span class="pill pill--code" style="font-size:9px;padding:0 6px">מוצע</span> <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="common_pests"></dt><dd>כנימות · זחלים</dd></div>
+                      <div class="fg"><dt data-field="foliar_program"></dt><dd>בורון + אצות חודשי</dd></div>
+                    </dl>
+                    <p class="muted" style="font-size:11px;margin-top:8px">שדות מוצעים חדשים — נגזרים ממבנה דף ה-JMF המקורי (ראו gap-analysis ב-OPEN_ISSUES).</p></div>
+                  </div>
+
+                  <div class="topic topic--yield">
+                    <div class="topic__head"><span class="topic__ic">⚖</span><div class="topic__t">יבול והכנסה<small>תפוקה · מחיר</small></div><span class="topic__meta">2 שדות · מחשבונים ⑧⑨⑬ <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="avg_yield_per_bed_m"></dt><dd class="num">3.4 ק״ג/מ׳</dd></div>
+                      <div class="fg"><dt data-field="documented_price"></dt><dd class="num">9.00 ₪/יח׳</dd></div>
+                    </dl></div>
+                  </div>
+
+                  <div class="topic topic--inputs">
+                    <div class="topic__head"><span class="topic__ic">⬡</span><div class="topic__t">תשומות<small>דישון · זרעים</small></div><span class="topic__meta">2 שדות · מחשבונים ⑫⑭ <span class="topic__chev">▾</span></span></div>
+                    <div class="topic__body"><dl class="fieldgrid">
+                      <div class="fg"><dt data-field="nutrient_removal_N"></dt><dd class="num">90 ק״ג/הא׳</dd></div>
+                      <div class="fg"><dt data-field="family"></dt><dd>חסתיים</dd></div>
+                    </dl></div>
+                  </div>
+                </div>
+
+                <!-- ░░ DRILL-DOWN — variety comparison table + full JMF reference sheet ░░ -->
+                <div data-depth-view="drill" style="display:none">
+
+                  <!-- 1 · VARIETY COMPARISON TABLE with averages -->
+                  <div class="cb-block">
+                    <h3>השוואת זנים <span class="gj-eyebrow dir-ltr">5 varieties · averages below</span></h3>
+                    <div class="vtable-wrap">
+                      <table class="vtable">
+                        <thead><tr>
+                          <th>זן</th><th>סוג</th><th data-field="dtm">ימים להבשלה</th><th data-field="yield">יבול ק״ג/מ׳</th><th>צבע / מאפיין</th><th>חלון קציר</th>
+                        </tr></thead>
+                        <tbody>
+                          <tr class="v-default"><td><span class="v-name"><span class="star">★</span>חסת עלים ירוקה</span></td><td><span class="vbadge vbadge--op">OP</span></td><td class="num">52</td><td class="num">3.6</td><td>ירוק · עלים</td><td class="num">12 ימים</td></tr>
+                          <tr><td><span class="v-name">New Red Fire</span></td><td><span class="vbadge vbadge--op">OP</span></td><td class="num">55</td><td class="num">3.4</td><td>אדום · עלים</td><td class="num">14 ימים</td></tr>
+                          <tr><td><span class="v-name">Adriana</span></td><td><span class="vbadge vbadge--f1">F1</span></td><td class="num">48</td><td class="num">3.8</td><td>ראש חמאה</td><td class="num">10 ימים</td></tr>
+                          <tr><td><span class="v-name">Jericho</span></td><td><span class="vbadge vbadge--op">OP</span></td><td class="num">57</td><td class="num">3.2</td><td>רומיין</td><td class="num">16 ימים</td></tr>
+                          <tr><td><span class="v-name">Eruption</span></td><td><span class="vbadge vbadge--f1">F1</span></td><td class="num">50</td><td class="num">3.5</td><td>מיני אדום</td><td class="num">12 ימים</td></tr>
+                        </tbody>
+                        <tfoot><tr>
+                          <td>ממוצע <span class="avg-lbl">(5 זנים)</span></td><td>—</td><td class="num">52.4</td><td class="num">3.5</td><td>—</td><td class="num">12.8 ימים</td>
+                        </tr></tfoot>
+                      </table>
+                    </div>
+                    <p class="muted" style="font-size:12px;margin-top:8px">השורה התחתונה = ממוצע על פני הזנים. הערך הקובע בספר (3.4) נגזר מ-override של Nimrod, לא מהממוצע — ראו מקור והערכת ודאות למטה.</p>
+                  </div>
+
+                  <!-- 2 · FULL REFERENCE SHEET — per source, organized by topic (JMF level) -->
+                  <div class="cb-block" style="padding:0;border:0;background:transparent">
+                    <div class="refsheet">
+                      <div class="ref-srcbar">
+                        <b>דף גידול מלא</b>
+                        <span class="ref-srctab is-active"><span class="cls">PR</span> JMF MasterClass</span>
+                        <span class="ref-srctab"><span class="cls">EX</span> Nimrod</span>
+                        <span class="ref-srctab"><span class="cls">WR</span> מחקר רשת</span>
+                        <span class="ref-srcbar__note">תוכן ומבנה תואמים לדף ה-MasterClass המקורי — אותם נושאים, אותו סדר. החלפת מקור מציגה את ערכי אותו מקור.</span>
+                      </div>
+                      <div class="refbody">
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-grow)">🌾</span>זנים</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main"><ul>
+                            <li>New Red Fire · Adriana · Jericho · Eruption</li>
+                            <li>שילוב זנים בעלי DTM שונה לאספקה רציפה מאותה זריעה</li>
+                          </ul></div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-grow)">📐</span>מרווח ופריסה</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main"><div class="kv">
+                            <div><span class="k">שורות בערוגה</span><span class="v num">3</span></div>
+                            <div><span class="k">מרווח בשורה</span><span class="v num">30 ס״מ</span></div>
+                            <div><span class="k">מרווח בין שורות</span><span class="v num">30 ס״מ</span></div>
+                            <div><span class="k">רוחב ערוגה</span><span class="v num">80 ס״מ</span></div>
+                          </div></div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-nursery)">⚙</span>ציוד וכיוונון</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <ul>
+                              <li>מגש הנבטה (popping tray) לחילוץ והעברת שתילים</li>
+                              <li>מגרפת הכנה 30″ + 3 צינורות סימון לפריסת שורות</li>
+                            </ul>
+                            <div class="tnote">בזריעה ישירה (למשל גזר): JANG 3X · גלגל X-24 · F-13B · מברשת "0" — דגם וכיוונון הזורעת הם שדה תכנון בפני עצמו.</div>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-inputs)">⬡</span>קרקע ודישון</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv"><div><span class="k">קומפוסט (no-till)</span><span class="v num">2.5 ס״מ</span></div></div>
+                            <ul>
+                              <li>ערוגה שעברה קומפוסט ודושנה לפני השתילה</li>
+                              <li>תערובת: קמח אספסת (2-0-2) + זבל עוף מגורען (5-3-2)</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-nursery)">🪴</span>הכנת ערוגה</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main"><ul>
+                            <li>הסרת היריעה וניקוי פסולת גסה; מעבר במעדר רוטרי לעומק 5 ס״מ</li>
+                            <li>מכינים את הערוגה רק סמוך לשתילה (הקרקע תחוחה)</li>
+                            <li>סימון שורות לאורך ולרוחב עם מגרפת הכנה + 3 צינורות סימון</li>
+                          </ul></div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-nursery)">🌱</span>שתילה</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv"><div><span class="k">יחס עבודה</span><span class="v">2 עובדים / 30 מ׳ ערוגה</span></div></div>
+                            <ul>
+                              <li>אדם אחד מניח שתילים, שני שותל מהר ככל האפשר</li>
+                              <li>התקנת השקיה והרטבה עמוקה מיד לאחר השתילה</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-grow)">💧</span>השקיה</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv">
+                              <div><span class="k">סוג</span><span class="v">טפטוף ×4 / ממטרות</span></div>
+                              <div><span class="k">עומק שורשים</span><span class="v">רדוד · 15–60 ס״מ</span></div>
+                            </div>
+                            <ul><li>השקיה עקבית למניעת טעם מר; קריטי להשקות לפני התפתחות הראש</li></ul>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-grow)">🧹</span>טיפוח ועישוב</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main"><ul>
+                            <li>עישוב יחיד במעדר קולינארי, 14–16 ימים לאחר השתילה (או מוקדם יותר אם נוצר קרום)</li>
+                          </ul></div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-pest)">🐞</span>מזיקים ומחלות</span><span class="reftopic__prov"><span class="cls wr">WR</span> מחקר · 0.30</span></div>
+                          <div class="reftopic__main">
+                            <ul>
+                              <li>כנימות עלה וזחלי לפידופטרה — כיסוי ברשת אנטי-חרקים במנהרות נמוכות במידת הצורך</li>
+                              <li>הזנה עלוותית חודשית (בורון + אצות / תה קומפוסט) לחיזוק</li>
+                            </ul>
+                            <div class="tnote">מקור: מחקר רשת (WR, 0.30) — לא מאומת. שדה מזיקים/מחלות חסר במקור ה-JMF לחסה; להשלמה ע״י Nimrod.</div>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-harvest)">🔪</span>קציר</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv">
+                              <div><span class="k">יחידת מכירה</span><span class="v">ראש בודד</span></div>
+                              <div><span class="k">תפוקת קציר</span><span class="v num">~60 יח׳/שעה</span></div>
+                            </div>
+                            <ul>
+                              <li>קוצרים בישיבה על הברכיים, בסכין חדה מאוד (להשחיז לפני כל קציר)</li>
+                              <li>אדם אחד קוצר 2 שורות בו-זמנית ודוחף מיכל; השלישית בדרך חזרה</li>
+                              <li>הסרת חלזונות ועלים פגומים; לא למלא מיכלים יתר על המידה</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-harvest)">🧊</span>שטיפה ואחסון</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv">
+                              <div><span class="k">טמפ׳ אחסון</span><span class="v num">2°C</span></div>
+                              <div><span class="k">חיי מדף</span><span class="v num">עד 3 ימים</span></div>
+                              <div><span class="k">תפוקת שטיפה</span><span class="v num">~100 יח׳/שעה</span></div>
+                            </div>
+                            <ul>
+                              <li>טבילה מהירה במים קרים — לא יותר מדקה למניעת ספיגת מים</li>
+                              <li>ניעור עודפי מים והנחה הפוכה לניקוז; אריזה צפופה הפוכה</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="reftopic">
+                          <div class="reftopic__side"><span class="reftopic__tag"><span class="ic" style="background:var(--t-harvest)">🔁</span>רצף וחברה</span><span class="reftopic__prov"><span class="cls pr">PR</span> JMF · 0.70</span></div>
+                          <div class="reftopic__main">
+                            <div class="kv">
+                              <div><span class="k">מרווח זריעה</span><span class="v num">כל שבועיים</span></div>
+                              <div><span class="k">אספקה לזריעה</span><span class="v num">3 שבועות</span></div>
+                            </div>
+                            <ul>
+                              <li>מקובצת עם: בצל ירוק, רפיני, פאק צ׳וי, מיני-רומיין, מיני-שומר, שמיר, כוסברה, מיני-קולורבי (גידולי ±50 ימים)</li>
+                            </ul>
+                            <div class="tnote">חברה (companions), # זריעות בעונה ושבועות-קציר הם hooks יציבים למודול ה-Planner העתידי.</div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 3 · PROVENANCE for the headline value -->
+                  <div class="cb-block">
+                    <h3>מקור והערכת ודאות · <span data-field="avg_yield_per_bed_m">יבול ממוצע</span> <span class="gj-eyebrow dir-ltr">one winning value</span></h3>
+                    <div class="hv" style="margin-bottom:12px;background:color-mix(in oklch, var(--gj-leaf) 12%, var(--gj-paper))">
+                      <div class="hv__lbl">הערך הקובע · מוצג בכל הספר</div>
+                      <div class="hv__val num">3.4 <small>ק״ג/מ׳</small> <span class="pill pill--leaf" style="vertical-align:middle">EX · ודאות 0.92</span></div>
+                    </div>
+                    <div class="prov">
+                      <div class="prov__row is-winner"><span class="prov__cls prov__cls--ex">EX</span><span class="prov__src">Nimrod override · team_00</span><span class="prov__num num">3.4</span><span class="prov__win">◆ נבחר</span></div>
+                      <div class="prov__row"><span class="prov__cls prov__cls--pr">PR</span><span class="prov__src">JMF MasterClass chart</span><span class="prov__num num">3.6</span><span class="confbar"><i style="width:70%"></i></span></div>
+                      <div class="prov__row"><span class="prov__cls prov__cls--wr">WR</span><span class="prov__src">מחקר רשת (סינתזת Claude)</span><span class="prov__num num">2.9</span><span class="confbar is-low"><i style="width:30%"></i></span></div>
+                    </div>
+                    <p class="muted" style="font-size:12px;margin-top:10px">override של EX/NI תמיד מנצח ומאמת. מתחת: PR (0.70) מאשש; WR (0.30) מוצג לשקיפות אך לא דורס. ההיררכיה מוצגת <b>רק</b> כאן — רמות פשוט/מלא מציגות 3.4 בלבד.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+                        <div class="sh__foot"><span class="dot"></span>חסה · ספר שלם · 17/17 שדות מאומתים</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>Organized by subject.</b> Every depth groups content into the same topics — משתלה, תהליך גידול, קציר ואחסון, יבול, תשומות — colour-coded. The page reads as a growing plan, not a flat field list.</div>
+        <div class="note note--data"><b>Drill-down = a real reference sheet.</b> A variety-comparison table (with an averages row) plus a per-source sheet at JMF-MasterClass depth: cultivars, spacing, soil, bed-prep, irrigation, cultivation, harvest, washing/storage, succession & companions.</div>
+        <div class="note"><b>One winning value up front.</b> Simple &amp; Full show the single reconciled <code>value_best</code>; switch the source tab in Drill-down to read any one source in full.</div>
+        <div class="note note--calc"><b>Try it.</b> Full-depth topic headers collapse; in Simple, the calculator <b>buttons open a module over the page</b> (tap "יבול צפוי").</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.3 · CALCULATOR PANEL
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-calc">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.3</span>
+      <h2 class="sec__title">המחשבון: <em>ערכי ספר → תכנון</em>.</h2>
+      <p class="sec__desc ltr">One reusable card: title + the book values it reads (each with the <code>↗ ספר</code> cross-link from <code>CalcField §11</code>) + user inputs + the result, all with units. <b>In the crop page the small calculators are buttons that open this card as a module overlay over the page</b> (the full multi-calculator page is separate, §2.3b). Each calculator is a self-contained <b>module — the basis for the future system</b>. Below: the <b>disabled</b> state (a required field is MISSING), the <b>grouped</b> seed→sow→nursery sequence, and the <b>visual</b> population layout (#10).</p>
+    </div>
+
+    <!-- enabled + population, side by side -->
+    <div class="stage" style="margin-bottom:40px">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>CALC #1 · seed quantity</b> · enabled · live <span class="chip chip--state">type in it</span></div>
+        <div class="frame frame--panel">
+          <div class="cv" data-calc="seed" style="border:0;box-shadow:none">
+            <div class="cv__head">
+              <span class="cv__no">1</span>
+              <div class="cv__title">כמה זרעים לקנות<small>הזמנת זרעים</small></div>
+              <span class="tier tier--leaf cv__aud"><span class="tier__glyph">●</span>שני הקהלים</span>
+            </div>
+            <div class="cv__body">
+              <div class="cv__uses">ערכי ספר (הערך הקובע)</div>
+              <div class="bvrow">
+                <span class="bv" data-book="rows" data-val="4">שורות/ערוגה <b class="num">4</b><a class="bv__link" href="#">↗ ספר</a></span>
+                <span class="bv" data-book="spacing" data-val="25">מרווח <b class="num">25</b><small>ס״מ</small><a class="bv__link" href="#">↗ ספר</a></span>
+                <span class="bv" data-book="seeds_per_gram" data-val="800">זרעים/גרם <b class="num">800</b><a class="bv__link" href="#">↗ ספר</a></span>
+              </div>
+
+              <!-- inline AssumptionField: germination -->
+              <div class="af is-open" style="margin-bottom:14px">
+                <div class="af__bar">
+                  <span class="af__tag"><span>◇</span>הנחה</span>
+                  <div class="af__lbl">נביטה<small>הנחת תכנון</small></div>
+                  <div class="af__value"><div class="af__default"><span data-assume-echo="germination_rate">90%</span></div><button class="af__edit" aria-label="ערוך">✎</button></div>
+                </div>
+                <div class="af__body">
+                  <div class="af__panel">
+                    <div class="af__override">
+                      <label>ערך מותאם</label>
+                      <span class="af__input"><input type="number" data-assume="germination_rate" data-scale="0.01" data-suffix="%" value="90" min="40" max="100" step="1"/><span>%</span></span>
+                      <button class="af__reset" data-reset data-default="90">↺ ברירת מחדל 90%</button>
+                    </div>
+                    <div class="af__explain">
+                      <span class="when">מתי לשנות?</span>
+                      <p>זרעים מאבדים חיוניות עם הגיל. זרע מלפני 3 שנים? הורידו ל־70–75% והמערכת תגדיל את כמות הקנייה אוטומטית.</p>
+                      <a class="af__more" href="https://nimrod.bio/seed-aging">קראו עוד · התיישנות זרעים</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cv__uses">הקלט שלך</div>
+              <div class="cv__inputs">
+                <label class="ipt"><label>אורך ערוגה</label><span class="ipt__box"><input type="number" data-k="bed_len" value="30" step="1"/><span class="u">מ׳</span></span></label>
+                <label class="ipt"><label>זרעים לחור</label><span class="ipt__box"><input type="number" data-k="seeds_per_hole" value="3" step="1"/><span class="u">זרעים</span></span></label>
+              </div>
+
+              <div class="cv__result"><span class="lbl">לקנות</span><span class="big num" data-result>—</span></div>
+              <div class="cv__formula" data-formula></div>
+              <div class="muted" style="font-size:11px;margin-top:6px" data-extra></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes" style="width:auto;padding-top:0">
+          <div class="note note--new"><b>Three operand types, three visual languages.</b> Green = book value (<code>value_best</code>, cross-linked). Teal = AssumptionField (default + override). Plain box = user input.</div>
+          <div class="note note--calc"><b>Live recompute.</b> Lower the germination % → grams-to-buy rises. AssumptionFields never disable a calc; they always carry a default.</div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>CALC #10 · plant population</b> · visual layout</div>
+        <div class="frame frame--panel">
+          <div class="cv" data-calc="pop" style="border:0;box-shadow:none">
+            <div class="cv__head">
+              <span class="cv__no">10</span>
+              <div class="cv__title">אוכלוסיית צמחים<small>פריסת שתילה</small></div>
+              <span class="tier tier--leaf cv__aud"><span class="tier__glyph">●</span>שני הקהלים</span>
+            </div>
+            <div class="cv__body">
+              <div class="cv__uses">ערכי ספר · ניתנים לעריכה</div>
+              <div class="bvrow">
+                <span class="bv is-editable" data-book="rows" data-val="4"><span data-field="rows_per_bed">שורות</span> <input class="bv__in" type="number" value="4" data-orig="4" step="1" aria-label="שורות"/><span class="bv__pen">✎</span><span class="bv__flag">שונה מהספר</span><a class="bv__link" href="#">↗ ספר</a><button class="bv__restore" type="button">↺ ספר</button></span>
+                <span class="bv is-editable" data-book="spacing" data-val="25"><span data-field="in_row_spacing_cm">מרווח</span> <input class="bv__in" type="number" value="25" data-orig="25" step="1" aria-label="מרווח"/><small>ס״מ</small><span class="bv__flag">שונה מהספר</span><a class="bv__link" href="#">↗ ספר</a><button class="bv__restore" type="button">↺ ספר</button></span>
+              </div>
+
+              <!-- inline AssumptionField: bed_width -->
+              <div class="af" style="margin-bottom:14px">
+                <div class="af__bar">
+                  <span class="af__tag"><span>◇</span>הנחה</span>
+                  <div class="af__lbl">רוחב ערוגה<small>הנחת תכנון</small></div>
+                  <div class="af__value"><div class="af__default"><span data-assume-echo="bed_width">80</span> <small>ס״מ</small></div><button class="af__edit" aria-label="ערוך">✎</button></div>
+                </div>
+                <div class="af__body">
+                  <div class="af__panel">
+                    <div class="af__override">
+                      <label>ערך מותאם</label>
+                      <span class="af__input"><input type="number" data-assume="bed_width" data-scale="0.01" data-suffix="" value="80" min="40" max="150" step="5"/><span>ס״מ</span></span>
+                      <button class="af__reset" data-reset data-default="80">↺ 80 ס״מ</button>
+                    </div>
+                    <div class="af__explain">
+                      <span class="when">למה 80?</span>
+                      <p>אנחנו מתרגמים את ה־30″ של JM Fortier ל־<b>80 ס״מ</b> (ולא 75) — סטנדרט אחיד לכל הספר. ערוגה רחבה יותר? עדכנו כאן.</p>
+                      <a class="af__more" href="https://nimrod.bio/bed-geometry">קראו עוד · גאומטריית ערוגה</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cv__result" style="margin-bottom:12px"><span class="lbl">צפיפות</span><span class="big num" data-result>—</span></div>
+              <div class="popgrid" data-popgrid style="grid-template-columns:repeat(4,1fr)"></div>
+              <div class="cv__formula" data-formula></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes" style="width:auto;padding-top:0">
+          <div class="note note--new"><b>bed_width — the 2nd launch AssumptionField.</b> Collapsed here (default + ✎). Open it; the grid + density redraw live.</div>
+          <div class="note"><b>Visual result.</b> #10 renders a spacing grid, not just a number — the catalog calls for the layout to be shown.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- disabled + grouped, side by side -->
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>CALC #1 on צנונית</b> · DISABLED — required field missing <span class="chip chip--partial">partial crop</span></div>
+        <div class="frame frame--panel">
+          <div class="cv is-disabled" style="border:0;box-shadow:none">
+            <div class="cv__head">
+              <span class="cv__no">1</span>
+              <div class="cv__title">כמה זרעים לקנות<small>הזמנת זרעים</small></div>
+              <span class="pill pill--muted cv__aud">מושבת</span>
+            </div>
+            <div class="cv__body">
+              <div class="cv__uses">ערכי ספר נדרשים</div>
+              <div class="bvrow">
+                <span class="bv" >שורות/ערוגה <b class="num">8</b></span>
+                <span class="bv">מרווח <b class="num">3</b><small>ס״מ</small></span>
+                <span class="bv bv--missing">זרעים/גרם <b>—</b> חסר</span>
+              </div>
+              <div class="cv__disabled">
+                <span class="ic">🔒</span>
+                <div>
+                  <h5>חסר שדה אחד</h5>
+                  <p>המחשבון יידלק כש־<code>seeds_per_gram</code> יתמלא לצנונית. שאר השדות קיימים.</p>
+                  <a class="reqinfo" href="#"><span>◐</span>בקשו השלמת נתון</a>
+                </div>
+              </div>
+              <div class="cv__inputs is-locked mt12">
+                <label class="ipt"><label>אורך ערוגה</label><span class="ipt__box"><input type="number" value="30" disabled/><span class="u">מ׳</span></span></label>
+                <label class="ipt"><label>זרעים לחור</label><span class="ipt__box"><input type="number" value="6" disabled/><span class="u">זרעים</span></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notes" style="width:auto;padding-top:0">
+          <div class="note"><b>Disabled ≠ hidden.</b> The card stays, names the missing field, promises it will light up, and offers <code>request info</code>. Only a MISSING book field disables — never an AssumptionField or user input.</div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>GROUPED · #1 → #3 → #4</b> · seed → sow → nursery reads as a sequence</div>
+        <div class="frame frame--panel">
+          <div class="cv-seq">
+            <div class="cv">
+              <div class="cv__head"><span class="cv__no">1</span><div class="cv__title">זרעים לקנות</div><span class="tier tier--leaf cv__aud">●</span></div>
+              <div class="cv__body" style="padding-bottom:12px">
+                <div class="row" style="justify-content:space-between"><span class="muted" style="font-size:12px">3.6 גרם · 1,067 זרעים</span><span class="pill pill--leaf">→ מזין שתילים</span></div>
+              </div>
+            </div>
+            <div class="cv-seq__link"><span class="arr">↓</span><span>נגזר אוטומטית · <span class="flow">plants 970</span></span></div>
+            <div class="cv">
+              <div class="cv__head"><span class="cv__no">3</span><div class="cv__title">מגשי משתלה + תאריך זריעה</div><span class="tier tier--sun cv__aud">חקלאי</span></div>
+              <div class="cv__body" style="padding-bottom:12px">
+                <div class="row" style="justify-content:space-between"><span class="muted" style="font-size:12px">8 מגשים · 128 תאים · זריעה 21 ימים לפני שתילה</span></div>
+                <div class="cv__inputs mt8"><label class="ipt"><label>תאריך שתילה בשדה</label><span class="ipt__box"><input type="date" value="2026-03-15"/></span></label></div>
+              </div>
+            </div>
+            <div class="cv-seq__link"><span class="arr">↓</span><span>נגזר אוטומטית · <span class="flow">sow = field-set − nursery</span></span></div>
+            <div class="cv">
+              <div class="cv__head"><span class="cv__no">4</span><div class="cv__title">תאריך זריעה מהקציר</div><span class="tier tier--leaf cv__aud">●</span></div>
+              <div class="cv__body" style="padding-bottom:14px">
+                <div class="cv__result" style="margin:0"><span class="lbl">לזרוע במשתלה</span><span class="big num">22/2</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notes" style="width:auto;padding-top:0">
+          <div class="note note--calc"><b>Sequence, not silos.</b> Outputs flow down: #1's plant count seeds #3's tray count; #3's nursery days back-calc #4's sow date. The dark connectors name the carried value (typed outputs → Planner/Tasks later).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.3b · CALCULATOR AS ONE SMART PAGE (module /calc/)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-calcpage">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.3b</span>
+      <h2 class="sec__title">המחשבון: <em>דשבורד של מודולים</em> מחוברים.</h2>
+      <p class="sec__desc ltr">The <code>/calc/</code> module is a <b>dashboard</b>: one shared context (crop + area + target date) drives every calculator, and each calculator is an independent <b>module card</b> in a grid. Modules feed each other (#1 → #3) and feed a single <b>summary</b> (cost · yield · revenue · profit). One <b>export</b> writes the whole plan to PDF / CSV. <b>The code mirrors this 1:1 — calculator modules + a dashboard that composes them.</b></p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>CALC · one smart page</b> · <code>data-screen-label="calc/"</code></div>
+        <div class="frame frame--desk-wide" data-screen-label="calc-page">
+          <div class="sh">
+            <div class="sh__bar">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name">SFA<small>חקלאות קטנה</small></div>
+              <nav class="sh__nav">
+                <a href="#"><span class="g">▤</span>ספר גידולים</a>
+                <a class="is-active is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+                <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              </nav>
+              <span class="sh__nav__sp"></span>
+              <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+            </div>
+            <div class="sh__body">
+              <div class="row" style="justify-content:space-between;margin-bottom:14px">
+                <div>
+                  <span class="tier tier--sun"><span class="tier__glyph">β</span>מחשבון · בטא</span>
+                  <h2 class="gj-h2" style="margin-top:8px">לוח מחוונים לתכנון גידול</h2>
+                </div>
+              </div>
+
+              <div class="calc-page">
+                <div class="calc-main">
+                  <!-- shared context — feeds every module -->
+                  <div class="calc-context">
+                    <div class="ipt"><label>גידול</label><span class="ipt__box"><select><option>חסה · חסת עלים ירוקה</option><option>עגבנייה · תמר F1</option><option>צנונית</option></select></span></div>
+                    <div class="ipt"><label>ערוגות</label><span class="ipt__box"><input type="number" value="3"/><span class="u">×30מ׳</span></span></div>
+                    <div class="ipt"><label>תאריך שתילה יעד</label><span class="ipt__box"><input type="date" value="2026-04-01"/></span></div>
+                    <div class="calc-context__tag">קלט משותף → <b>מזין את כל המודולים</b> ומתעדכן יחד</div>
+                  </div>
+
+                  <!-- DASHBOARD: every calculator is a module; the page composes them -->
+                  <div class="calc-dash">
+
+                    <div class="dash-group"><span class="dash-group__ic" style="background:var(--gj-leaf-deep)">⚘</span><b>זרעים וזריעה</b><span>מודולים 1 · 3 · 14</span></div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">1</span><div class="modcard__t">זרעים לקנות</div><span class="modcard__feed">→ מזין מודול 3</span></div>
+                      <div class="modcard__body"><div class="modcard__src">90 מ׳ · נביטה 90% · <b>800</b> זרעים/גרם</div><div class="modcard__res">10.8 <small>גרם</small></div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">3</span><div class="modcard__t">מגשי משתלה</div><span class="modcard__feed">← מ‑מודול 1</span></div>
+                      <div class="modcard__body"><div class="modcard__src">970 צמחים · <b>128</b> תאים/מגש</div><div class="modcard__res">24 <small>מגשים</small></div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">14</span><div class="modcard__t">עלות זרעים</div><span class="modcard__feed to-sum">→ סיכום</span></div>
+                      <div class="modcard__body"><div class="modcard__src">10.8 גרם × <b>4.20</b> ₪/גרם</div><div class="modcard__res">45 <small>₪</small></div></div>
+                    </div>
+
+                    <div class="dash-group"><span class="dash-group__ic" style="background:var(--gj-code-deep)">◷</span><b>לוח זמנים</b><span>מודולים 4 · 5 · 6 · 11</span></div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">4</span><div class="modcard__t">תאריך זריעה</div><span class="modcard__feed">← יעד שתילה</span></div>
+                      <div class="modcard__body"><div class="modcard__src">יעד 1/4 − משתלה 21 ימים</div><div class="modcard__res">10/3</div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">5</span><div class="modcard__t">חלון קציר</div><span class="modcard__feed">DTM 55 + 14</span></div>
+                      <div class="modcard__body"><div class="modcard__src">משתילה + DTM עד סוף החלון</div><div class="modcard__res" style="font-size:20px">26/5 – 9/6</div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">6</span><div class="modcard__t">רצף הדרגתי</div><span class="modcard__feed">כל שבועיים</span></div>
+                      <div class="modcard__body"><div class="modcard__src">4 מנות · קציר רציף לאורך העונה</div><div class="modcard__res">4 <small>תאריכים</small></div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">11</span><div class="modcard__t">חלון קרה</div><span class="modcard__feed">חצי‑עמיד</span></div>
+                      <div class="modcard__body"><div class="modcard__src">14 ימים לפני הקרה האחרונה</div><div class="modcard__res" style="font-size:20px">מ‑15/3</div></div>
+                    </div>
+
+                    <div class="dash-group"><span class="dash-group__ic" style="background:var(--gj-sun-deep)">≈</span><b>יבול והכנסה</b><span>מודולים 8 · 9 · 13</span></div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">8</span><div class="modcard__t">יבול צפוי</div><span class="modcard__feed to-sum">→ סיכום</span></div>
+                      <div class="modcard__body"><div class="modcard__src">90 מ׳ × <b>3.4</b> ק״ג/מ׳</div><div class="modcard__res">306 <small>ק״ג</small></div></div>
+                    </div>
+                    <div class="modcard">
+                      <div class="modcard__head"><span class="modcard__no">9</span><div class="modcard__t">הכנסה צפויה</div><span class="modcard__feed to-sum">→ סיכום</span></div>
+                      <div class="modcard__body"><div class="modcard__src">306 ק״ג × <b>9.00</b> ₪</div><div class="modcard__res">2,754 <small>₪</small></div></div>
+                    </div>
+                    <div class="modcard modcard--wide">
+                      <div class="modcard__head"><span class="modcard__no">13</span><div class="modcard__t">השוואת רווחיות</div><span class="modcard__feed">מול 4 גידולים</span></div>
+                      <div class="modcard__body"><div class="modcard__src">רווח/מ׳ ערוגה — חסה <b>28.6 ₪</b> · עגבנייה 41.0 ₪ · צנונית 14.2 ₪ · פטרוזיליה 37.8 ₪</div></div>
+                    </div>
+
+                    <div class="dash-group"><span class="dash-group__ic" style="background:var(--gj-soil-deep)">⬡</span><b>דישון</b><span>מודול 12</span></div>
+                    <div class="modcard modcard--wide">
+                      <div class="modcard__head"><span class="modcard__no">12</span><div class="modcard__t">קומפוסט נדרש</div><span class="modcard__feed to-sum">→ סיכום</span></div>
+                      <div class="modcard__body"><div class="modcard__src">N <b>2.16</b> ק״ג ÷ (1.5% × יעילות 0.5) · P 0.9 · K 2.7 ק״ג</div><div class="modcard__res">288 <small>ק״ג</small></div></div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- sticky summary + export — aggregates the module outputs -->
+                <aside class="calc-rail">
+                  <div class="calc-summary">
+                    <h4>סיכום התכנון</h4>
+                    <div class="calc-summary__row"><span>שטח</span><b>90 מ״ר</b></div>
+                    <div class="calc-summary__row"><span>זרעים <span class="muted" style="font-size:10px">מודול 1</span></span><b class="num">10.8 גרם</b></div>
+                    <div class="calc-summary__row"><span>יבול צפוי <span class="muted" style="font-size:10px">מודול 8</span></span><b class="num">306 ק״ג</b></div>
+                    <div class="calc-summary__row"><span>הכנסה <span class="muted" style="font-size:10px">מודול 9</span></span><b class="num">2,754 ₪</b></div>
+                    <div class="calc-summary__row"><span>עלויות <span class="muted" style="font-size:10px">14 · 12</span></span><b class="num">−333 ₪</b></div>
+                    <div class="calc-summary__row is-total"><span>רווח צפוי</span><b class="num">2,421 ₪</b></div>
+                  </div>
+                  <div class="calc-export">
+                    <h4>ייצוא התכנית</h4>
+                    <p>כל המודולים + הסיכום → קובץ אחד. להדפסה, לשיתוף, או לייבוא לתכנון העונה.</p>
+                    <div class="calc-export__btns">
+                      <a class="calc-export__btn" href="#"><span>⬇</span>ייצוא PDF</a>
+                      <a class="calc-export__btn calc-export__btn--ghost" href="#"><span>⬇</span>ייצוא CSV</a>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+            <div class="sh__foot"><span class="dot"></span>מחשבון בטא · נתונים מהספר ומהמחירון · ערכים ניתנים לעריכה</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note note--new"><b>A dashboard, not a wizard.</b> Each calculator is an independent <b>module card</b>; the page composes them in a grid. Shared context at top feeds all; results land in the summary.</div>
+        <div class="note note--calc"><b>Modules are wired.</b> Outputs flow between cards (#1 seeds → #3 trays) and into the sticky <b>summary</b> — seeds, yield, revenue, profit. The "is this crop worth it?" answer.</div>
+        <div class="note note--data"><b>Architecture for the teams.</b> This is the build contract too: <b>one calculator = one module</b> (self-contained partial/service, keyed by <code>data-calc</code>); the <code>/calc/</code> page = a <b>dashboard</b> that mounts the modules and aggregates the summary. Modules also embed standalone inside crop pages (§2.3).</div>
+        <div class="note"><b>Export</b> serializes every module + the summary → PDF / CSV. A clean hand-off hook to the future Planner module.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.4 · ASSUMPTIONFIELD — NEW first-class component
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-assume">
+    <div class="sec__head">
+      <span class="sec__tag is-new dir-ltr">§2.4 · NEW</span>
+      <h2 class="sec__title">AssumptionField — <em>הנחת תכנון, גלויה</em>.</h2>
+      <p class="sec__desc ltr">team_00 directive: a planning assumption is <b>never a silent constant</b>. Four parts, all accessible: <b>(1)</b> default value · <b>(2)</b> inline override · <b>(3)</b> an attractive when/why/how explainer · <b>(4)</b> a "read more →" link to a nimrod.bio post. Two states: collapsed (default + edit affordance) and expanded. First launch instances: <code>germination_rate (90%)</code> and <code>bed_width (80 cm)</code> — both must ship with a published explainer + link.</p>
+    </div>
+
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>STATE A · collapsed</b> · the resting state</div>
+        <div class="frame frame--panel">
+          <div style="padding:18px">
+            <div class="af">
+              <div class="af__bar">
+                <span class="af__tag"><span>◇</span>הנחה</span>
+                <div class="af__lbl">נביטה<small>הנחת תכנון</small></div>
+                <div class="af__value"><div class="af__default">90<small>%</small></div><button class="af__edit" aria-label="ערוך">✎</button></div>
+              </div>
+              <div class="af__body"><div class="af__panel"><div class="af__explain"><p style="margin:0" class="muted">לחצו ✎ לפריסה…</p></div></div></div>
+            </div>
+            <div class="af" style="margin-top:12px">
+              <div class="af__bar">
+                <span class="af__tag"><span>◇</span>הנחה</span>
+                <div class="af__lbl">רוחב ערוגה<small>הנחת תכנון</small></div>
+                <div class="af__value"><div class="af__default">80<small>ס״מ</small></div><button class="af__edit" aria-label="ערוך">✎</button></div>
+              </div>
+              <div class="af__body"><div class="af__panel"><div class="af__explain"><p style="margin:0" class="muted">לחצו ✎ לפריסה…</p></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="notes" style="width:auto;padding-top:0">
+          <div class="note note--new"><b>① default + ② edit affordance only.</b> Reads as a calm, settled value with a teal "assumption" tag so it's never mistaken for a book value. The ✎ rotates to ✕-ish on open.</div>
+        </div>
+      </div>
+
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>STATE B · expanded</b> · override + explainer + link</div>
+        <div class="frame frame--panel-wide">
+          <div style="padding:18px">
+            <div class="af is-open">
+              <div class="af__bar">
+                <span class="af__tag"><span>◇</span>הנחה</span>
+                <div class="af__lbl">נביטה<small>הנחת תכנון · מחשבון 1</small></div>
+                <div class="af__value"><div class="af__default">90<small>%</small></div><button class="af__edit" aria-label="סגור">✎</button></div>
+              </div>
+              <div class="af__body">
+                <div class="af__panel">
+                  <div class="af__override">
+                    <label>② ערך מותאם</label>
+                    <span class="af__input"><input type="number" value="90" min="40" max="100" step="1"/><span>%</span></span>
+                    <button class="af__reset" data-default="90">↺ ברירת מחדל 90%</button>
+                  </div>
+                  <div class="af__explain">
+                    <span class="when">③ מתי ולמה לשנות?</span>
+                    <h5>זרעים מאבדים חיוניות עם הגיל</h5>
+                    <p>אחוז הנביטה יורד ככל שהזרע מתיישן ולפי תנאי האחסון. זרעים טריים מהשנה — 90% ומעלה. זרעים מלפני 2–3 שנים — בדקו נביטה (10 זרעים על נייר לח) ועדכנו כאן; המחשבון יגדיל את כמות הקנייה כדי לפצות.</p>
+                    <a class="af__more" href="https://nimrod.bio/seed-aging">④ קראו עוד · התיישנות זרעים ומבחן נביטה</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notes">
+          <div class="note"><b>① Default value</b> — stays visible in the bar even when open, so the user always sees what they're deviating from.</div>
+          <div class="note"><b>② Inline override</b> — a single typed field with units + a one-tap reset to default.</div>
+          <div class="note"><b>③ Explainer</b> — a "when/why/how" with an eyebrow prompt; attractive, not a tooltip. The hook that teaches.</div>
+          <div class="note"><b>④ Read more →</b> — deep link to the nimrod.bio blog post. germination_rate &amp; bed_width must have a live URL at launch; others may ship "soon".</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec__desc ltr" style="margin-top:22px;max-width:none;font-size:13px"><b>8 registered assumptions</b> (config registry, not per-crop columns): germination_rate · bed_width · oversow · tray_cells · std_bed_length_m · hardiness_offset · compost_N_pct · application_efficiency. Same component, same four parts; only germination_rate &amp; bed_width are launch-blocking on content.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.5 · COMPLETE vs PARTIAL
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-states">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.5</span>
+      <h2 class="sec__title">כן אומר כן, <em>לא אומר לא</em>.</h2>
+      <p class="sec__desc ltr">A COMPLETE crop is trustworthy: clean values, all calculators on. A PARTIAL crop degrades <b>honestly</b> — no silent gaps. Four cues, defined once and reused everywhere: the <b>asterisk</b> (+tooltip) on unvalidated/web-sourced values, the <b>"—" + request-info</b> on missing values, and the <b>disabled calculator</b> when a required field is missing.</p>
+    </div>
+
+    <!-- cue catalog -->
+    <div class="wrap" style="gap:14px;margin-bottom:36px;align-items:stretch">
+      <div class="frame" style="width:250px;padding:16px">
+        <div class="ab__label dir-ltr" style="margin-bottom:10px"><span class="chip" style="background:var(--cb-validated);color:#fff">VALIDATED</span></div>
+        <div class="hv" style="border-color:color-mix(in oklch,var(--gj-leaf) 40%,var(--gj-line))">
+          <div class="hv__lbl">יבול</div><div class="hv__val num">3.4 <small>ק״ג/מ׳</small></div>
+        </div>
+        <p class="note note--data" style="margin-top:10px;padding-top:2px">EX/NI override <b>or</b> confidence ≥ τ (0.50). Plain value, calculators enabled.</p>
+      </div>
+
+      <div class="frame" style="width:250px;padding:16px">
+        <div class="ab__label dir-ltr" style="margin-bottom:10px"><span class="chip" style="background:var(--cb-unvalidated);color:#fff">UNVALIDATED</span></div>
+        <div class="hv" style="border-color:color-mix(in oklch,var(--gj-sun) 45%,var(--gj-line))">
+          <div class="hv__lbl">יבול</div>
+          <div class="hv__val num">2.1<span class="tip"><span class="ast">*</span><span class="tip__pop"><b>ערך לא מאומת</b> — מקור web (WR), confidence 0.30. ייתכן לא מדויק עד אישור Nimrod.</span></span> <small>ק״ג/מ׳</small></div>
+        </div>
+        <p class="note" style="margin-top:10px;padding-top:2px;border:0">Asterisk + hover/focus tooltip. Calculators stay <b>on</b> but flagged. <span class="dir-ltr">(hover the *)</span></p>
+      </div>
+
+      <div class="frame" style="width:250px;padding:16px">
+        <div class="ab__label dir-ltr" style="margin-bottom:10px"><span class="chip" style="background:var(--cb-missing);color:#fff">MISSING</span></div>
+        <div class="hv" style="border-style:dashed;border-color:color-mix(in oklch,var(--gj-tomato) 45%,var(--gj-line))">
+          <div class="hv__lbl">זרעים/גרם</div>
+          <div class="hv__val val--missing num">— <a class="reqinfo" href="#" style="vertical-align:middle"><span>◐</span>בקשו נתון</a></div>
+        </div>
+        <p class="note" style="margin-top:10px;padding-top:2px;border:0">No <code>enrichment</code> row. "—" + request-info CTA → community/Nimrod feedback loop.</p>
+      </div>
+
+      <div class="frame" style="width:250px;padding:16px">
+        <div class="ab__label dir-ltr" style="margin-bottom:10px"><span class="chip" style="background:var(--gj-ink);color:#fff">DISABLED CALC</span></div>
+        <div class="cv is-disabled" style="border-radius:var(--gj-r-m)">
+          <div class="cv__head" style="padding:8px 10px"><span class="cv__no" style="width:22px;height:22px">1</span><div class="cv__title" style="font-size:13px">זרעים לקנות</div></div>
+          <div class="cv__body" style="padding:10px"><div class="cv__disabled" style="padding:10px"><span class="ic" style="font-size:16px">🔒</span><div><h5 style="font-size:12px">חסר <code>seeds_per_gram</code></h5><a class="reqinfo" href="#"><span>◐</span>בקשו השלמה</a></div></div></div>
+        </div>
+        <p class="note" style="margin-top:10px;padding-top:2px;border:0">Only a <b>MISSING</b> field disables (not merely unvalidated). Names the field; promises re-enable.</p>
+      </div>
+    </div>
+
+    <!-- partial crop in context (mobile) -->
+    <div class="stage">
+      <div class="ab">
+        <div class="ab__label dir-ltr"><b>BOOK · CROP · mobile</b> · <code>data-screen-label="book/radish/"</code> <span class="chip chip--partial">partial</span></div>
+        <div class="frame frame--mobile" data-screen-label="crop-radish-partial">
+          <div class="sh">
+            <div class="sh__bar" style="padding:10px 14px">
+              <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+              <div class="sh__name" style="font-size:16px">SFA</div>
+              <div class="sh__tools"><button class="sh__icon">←</button></div>
+            </div>
+            <div class="sh__body" style="padding:14px">
+              <div class="crophero" style="grid-template-columns:64px 1fr;gap:12px">
+                <div class="crophero__art" style="width:64px;height:64px"><img src="assets/wc-radish.png" alt="צנונית"/></div>
+                <div>
+                  <div class="crophero__bc dir-ltr">Raphanus · מצליבים</div>
+                  <h1 style="font-size:26px"><span class="gj-underline">צנונית</span></h1>
+                </div>
+              </div>
+              <div class="row" style="justify-content:space-between;margin:-6px 0 14px">
+                <span class="statebadge statebadge--partial"><span class="d"></span>ספר חלקי</span>
+                <span class="statebadge__cov dir-ltr">14/16 fields</span>
+              </div>
+
+              <div class="headvals" style="grid-template-columns:1fr 1fr">
+                <div class="hv"><div class="hv__lbl">DTM</div><div class="hv__val num">28<small>ימים</small></div></div>
+                <div class="hv" style="border-color:color-mix(in oklch,var(--gj-sun) 40%,var(--gj-line))"><div class="hv__lbl">יבול</div><div class="hv__val num">2.1<span class="tip"><span class="ast">*</span><span class="tip__pop"><b>ערך לא מאומת</b> — web (WR), conf 0.30.</span></span><small>ק״ג/מ׳</small></div></div>
+                <div class="hv" style="border-style:dashed;border-color:color-mix(in oklch,var(--gj-tomato) 40%,var(--gj-line))"><div class="hv__lbl">זרעים/גרם</div><div class="hv__val val--missing" style="font-size:18px">— <a class="reqinfo" href="#"><span>◐</span>בקשו</a></div></div>
+                <div class="hv"><div class="hv__lbl">מחיר</div><div class="hv__val num">7.50<small>₪</small></div></div>
+              </div>
+
+              <div class="cb-block" style="padding:12px">
+                <h3 style="font-size:15px">מחשבונים</h3>
+                <div class="wrap" style="gap:6px;margin-bottom:10px">
+                  <span class="pill pill--leaf">② שתילים</span>
+                  <span class="pill pill--leaf">⑧ יבול<span class="ast">*</span></span>
+                  <span class="pill pill--leaf">⑪ חלון קרה</span>
+                  <span class="pill pill--muted" style="opacity:.6">① זרעים · 🔒</span>
+                </div>
+                <div class="cv is-disabled" style="border-radius:var(--gj-r-m)">
+                  <div class="cv__head" style="padding:8px 10px"><span class="cv__no" style="width:22px;height:22px">1</span><div class="cv__title" style="font-size:13px">זרעים לקנות</div></div>
+                  <div class="cv__body" style="padding:10px"><div class="cv__disabled" style="padding:10px"><span class="ic" style="font-size:16px">🔒</span><div><h5 style="font-size:12px">חסר <code>seeds_per_gram</code></h5><p style="font-size:11px;margin:2px 0 6px">יידלק כשהנתון יושלם.</p><a class="reqinfo" href="#"><span>◐</span>בקשו השלמה</a></div></div></div>
+                </div>
+              </div>
+
+              <div class="rothint" style="font-size:12px">
+                <span class="rothint__icon">⟳</span>
+                <div>לא לעקוב אחרי <b>מצליבים</b> · <b>3 עונות</b>.</div>
+              </div>
+            </div>
+            <nav class="sh__nav--mobile">
+              <a class="is-active" href="#"><span class="g">▤</span>ספר</a>
+              <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+              <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+              <a href="#"><span class="g">◔</span>חשבון</a>
+            </nav>
+            <div class="sh__foot" style="padding:8px 14px"><span class="dot" style="background:var(--status-aging)"></span>צנונית · ספר חלקי · 14/16</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="note"><b>Everything it has, honestly.</b> The partial crop still shows DTM, price, 3 working calculators — it just marks the 2 gaps instead of hiding them.</div>
+        <div class="note note--calc"><b>Asterisk propagates.</b> #8 yield is enabled but its pill carries the <span class="ast">*</span> because it consumed an unvalidated value. Trust is traceable end-to-end.</div>
+        <div class="note note--data"><b>Threshold τ = 0.50.</b> EX/NI always validate; lone WR(0.30) reads unvalidated. A single tunable config constant.</div>
+        <div class="note"><b>Mobile shell.</b> Same component vocabulary as desktop — <code>.gj-*</code> mobile / <code>.dt-*</code> desktop swap at 900px.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2.6 · FAMILY ROTATION HINT
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-rotation">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">§2.6</span>
+      <h2 class="sec__title">רמז מחזור — <em>אינפורמטיבי, לא מחשבון</em>.</h2>
+      <p class="sec__desc ltr">A small informational chip derived from the botanical family — not a calculator, no inputs. The gap count is the <code>rotation_gap_seasons</code> AssumptionField (default 3). A stable hook for the future Planner's bed-rotation logic.</p>
+    </div>
+    <div class="wrap" style="gap:16px;max-width:760px">
+      <div class="rothint" style="flex:1;min-width:320px">
+        <span class="rothint__icon">⟳</span>
+        <div>אל תעקבו אחרי <b>חסתיים</b> באותה ערוגה במשך <b>3 עונות</b>.</div>
+        <span class="meta dir-ltr">family: Asteraceae</span>
+      </div>
+      <div class="rothint" style="flex:1;min-width:320px">
+        <span class="rothint__icon">⟳</span>
+        <div>אל תעקבו אחרי <b>מצליבים</b> באותה ערוגה במשך <b>3 עונות</b>.</div>
+        <span class="meta dir-ltr">family: Brassicaceae</span>
+      </div>
+    </div>
+    <p class="sec__desc ltr" style="margin-top:16px;font-size:13px">Informational only this WP — a richer companion-matrix model is deferred to Planner/Tasks (CB-2/CB-3). The chip is a deliberate, stable entry point for it.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HANDOFF INDEX
+       ══════════════════════════════════════════════════════════ -->
+  <section class="sec" id="s-handoff">
+    <div class="sec__head">
+      <span class="sec__tag dir-ltr">DELIVERABLE · route → team_100</span>
+      <h2 class="sec__title">חבילת LOD300 · <em>מה מצורף</em>.</h2>
+      <p class="sec__desc ltr">Mockups above embed into LOD400 §10. The written deltas extend the existing kit (do not restyle from scratch) and ship beside this file.</p>
+    </div>
+    <div class="cards-grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr));max-width:1000px">
+      <a class="frame" href="COMPONENTS-delta.md" style="padding:16px;text-decoration:none;color:inherit">
+        <div class="gj-eyebrow dir-ltr" style="margin-bottom:6px">+ COMPONENTS.md</div>
+        <div class="gj-h3">רכיבים חדשים</div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">AssumptionField · CalcPanel · provenance cues · rotation chip · audience switch · depth tabs</p>
+      </a>
+      <a class="frame" href="DESIGN_TOKENS-delta.md" style="padding:16px;text-decoration:none;color:inherit">
+        <div class="gj-eyebrow dir-ltr" style="margin-bottom:6px">+ DESIGN_TOKENS.md</div>
+        <div class="gj-h3">טוקנים</div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">confidence/provenance + AssumptionField color tokens · Carmela wordmark face</p>
+      </a>
+      <a class="frame" href="TEMPLATES-delta.md" style="padding:16px;text-decoration:none;color:inherit">
+        <div class="gj-eyebrow dir-ltr" style="margin-bottom:6px">+ TEMPLATES.md</div>
+        <div class="gj-h3">מפת ראוטים</div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">depth param · audience param · calc partials · macro contracts</p>
+      </a>
+      <a class="frame" href="OPEN_ISSUES.md" style="padding:16px;text-decoration:none;color:inherit">
+        <div class="gj-eyebrow dir-ltr" style="margin-bottom:6px">? OPEN_ISSUES.md</div>
+        <div class="gj-h3">8 שאלות פתוחות</div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">for team_100 / team_00 before L-GATE_S</p>
+      </a>
+    </div>
+    <p class="sec__desc ltr" style="margin-top:24px;font-size:12px;opacity:.7">team_35 (Design Studio) · LOD300 → team_100 → LOD400 §10 → L-GATE_S (team_190). Brand: AOS DS v3.4 · watercolor (Devora masters) · Carmela · RTL Hebrew · Slim4/PHP server-rendered + light JS.</p>
+  </section>
+
+</div>
+<script src="cropbook-v1.js?v=11"></script>
+</body>
+</html>

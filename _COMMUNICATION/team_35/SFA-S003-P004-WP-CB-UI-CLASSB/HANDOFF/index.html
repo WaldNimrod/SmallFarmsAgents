@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SFA UI — Handoff index · team_35 → team_100</title>
+<link rel="stylesheet" href="design/tokens.css"/>
+<link rel="stylesheet" href="design/cropbook-v1.css"/>
+<link rel="stylesheet" href="design/classb.css"/>
+<style>
+  body { background:
+    radial-gradient(circle at 1px 1px, rgba(60,110,70,.05) 1px, transparent 0) 0 0 / 26px 26px,
+    var(--gj-paper); }
+  .ix { max-width: 1100px; margin: 0 auto; padding: 0 clamp(18px,4vw,40px) 80px; }
+  .ix__top { display: flex; align-items: center; gap: 14px; padding: 26px 0 22px; border-bottom: 2px solid var(--gj-leaf); margin-bottom: 30px; flex-wrap: wrap; }
+  .ix__mark { width: 46px; height: 46px; }
+  .ix__title { font-family: var(--gj-font-brand); font-size: 30px; font-weight: 700; line-height: 1; }
+  .ix__title small { display: block; font-family: var(--gj-font-mono); font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--gj-ink-soft); margin-top: 5px; }
+  .ix__meta { margin-inline-start: auto; font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-ink-soft); text-align: end; line-height: 1.6; direction: ltr; }
+  .ix__meta b { color: var(--gj-leaf-deep); }
+  .ix__lede { font-size: 16px; line-height: 1.6; color: var(--gj-ink); max-width: 70ch; margin: 0 0 8px; }
+  .ix__lede b { color: var(--gj-leaf-deep); }
+  .ix__sub { font-size: 13px; color: var(--gj-ink-soft); max-width: 70ch; margin: 0 0 30px; line-height: 1.55; }
+
+  .ix__band { display: flex; align-items: center; gap: 12px; margin: 34px 0 16px; }
+  .ix__band h2 { font-family: var(--gj-font-head); font-weight: 900; font-size: 22px; margin: 0; white-space: nowrap; letter-spacing: -.01em; }
+  .ix__band .tier { flex: none; }
+  .ix__band::after { content: ''; flex: 1; height: 1px; background: var(--gj-line); }
+  .ix__band a.openall { font-size: 12.5px; font-weight: 700; color: var(--gj-leaf-deep); text-decoration: none; white-space: nowrap; }
+
+  .ix__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .scard { display: flex; flex-direction: column; gap: 7px; text-decoration: none; color: inherit; background: var(--gj-paper); border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); padding: 16px 18px; box-shadow: var(--gj-shadow-s); transition: transform .15s, box-shadow .15s, border-color .15s; position: relative; }
+  .scard:hover { transform: translateY(-2px); box-shadow: var(--gj-shadow-m); border-color: color-mix(in oklch, var(--gj-leaf) 40%, var(--gj-line)); }
+  .scard__top { display: flex; align-items: baseline; gap: 8px; }
+  .scard__name { font-family: var(--gj-font-head); font-weight: 700; font-size: 18px; }
+  .scard__route { font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-ink-soft); margin-inline-start: auto; background: var(--gj-paper-2); padding: 2px 8px; border-radius: var(--gj-r-pill); direction: ltr; }
+  .scard__d { font-size: 13px; line-height: 1.5; color: var(--gj-ink-soft); margin: 0; }
+  .scard__foot { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; }
+  .scard__pat { font-family: var(--gj-font-mono); font-size: 9.5px; color: var(--gj-code-deep); }
+  .scard__go { margin-inline-start: auto; font-size: 12px; font-weight: 700; color: var(--gj-leaf-deep); }
+
+  .ix__files { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  @media (max-width: 720px) { .ix__files { grid-template-columns: 1fr; } }
+  .filecard { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); padding: 16px 18px; }
+  .filecard h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 15px; margin: 0 0 10px; }
+  .filecard ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .filecard li { display: flex; gap: 9px; align-items: baseline; font-size: 12.5px; }
+  .filecard code { font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-soil-deep); background: var(--gj-paper-2); padding: 1px 6px; border-radius: 5px; white-space: nowrap; }
+  .filecard a { color: var(--gj-leaf-deep); text-decoration: none; font-weight: 600; }
+  .filecard span { color: var(--gj-ink-soft); line-height: 1.45; }
+
+  .ix__flag { display: grid; grid-template-columns: auto 1fr; gap: 12px 14px; margin-top: 30px; border: 1px solid color-mix(in oklch, var(--gj-tomato) 35%, var(--gj-paper)); border-inline-start: 4px solid var(--gj-tomato); background: color-mix(in oklch, var(--gj-tomato) 7%, var(--gj-paper)); border-radius: var(--gj-r-m); padding: 16px 18px; }
+  .ix__flag__ic { width: 30px; height: 30px; border-radius: 9px; background: color-mix(in oklch, var(--gj-tomato) 16%, var(--gj-paper)); color: var(--gj-tomato-deep); display: grid; place-items: center; font-size: 16px; }
+  .ix__flag h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 15px; margin: 0; align-self: center; }
+  .ix__flag ol { grid-column: 1 / -1; margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .ix__flag li { font-size: 12.5px; line-height: 1.5; color: var(--gj-ink-soft); }
+  .ix__flag b { color: var(--gj-ink); }
+</style>
+</head>
+<body>
+<div class="ix">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+    <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+    <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+    <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+    <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+    <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+  </symbol></svg>
+
+  <header class="ix__top">
+    <svg class="ix__mark"><use href="#sfa-logo"/></svg>
+    <div class="ix__title">SFA · ממשק מלא<small>handoff index · whole interface</small></div>
+    <div class="ix__meta"><div><b>WP-CB-UI-CLASSB</b> · team_35 → team_100</div><div>v1.0.0 · 2026-06-02 · v2 white-green</div></div>
+  </header>
+
+  <p class="ix__lede">חבילת הנדאוף המלאה לכל הממשק — <b>Class A</b> (ספר גידולים + מחשבון, כבר פותחו) ו־<b>Class B</b> (בית · מחירון · חיפוש · קהילה · אודות · חשבון · app-shell). מערכת אחת, אותם טוקנים, שני boards.</p>
+  <p class="ix__sub dir-ltr">Each card opens the exact frame in its board. The boards are <b>spec canvases</b> — build only what's inside the <code>.sh</code> shells (chrome &amp; annotations are review-only). Start with <b>README.md</b> for the build contract; tokens &amp; component specs live in <code>spec/</code>.</p>
+
+  <!-- CLASS A -->
+  <div class="ix__band">
+    <h2>Class A — ספר גידולים + מחשבון</h2>
+    <span class="tier tier--leaf"><span class="tier__glyph">✓</span>delivered</span>
+    <a class="openall" href="design/Board-A-Book-and-Calculator.html">פתחו את ה־board ›</a>
+  </div>
+  <div class="ix__grid">
+    <a class="scard" href="design/Board-A-Book-and-Calculator.html#s-audience">
+      <div class="scard__top"><span class="scard__name">עמוד הספר הראשי</span><span class="scard__route">/crop-book/</span></div>
+      <p class="scard__d">אינדקס הגידולים — מתג קהל (כרטיסים⇄טבלה), סינון מתקדם רב-פרמטרי, ויזואליזציית עונה+יבול, עימוד.</p>
+      <div class="scard__foot"><span class="scard__pat">incl. advanced search</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-A-Book-and-Calculator.html#s-depths">
+      <div class="scard__top"><span class="scard__name">עמוד גידול · 3 רמות עומק</span><span class="scard__route">/crop-book/{slug}</span></div>
+      <p class="scard__d">פשוט · מלא · העמקה — מאורגן ב-13 נושאים. טבלת השוואת זנים + דף מקור מלא בעומק JMF + היררכיית מקורות. (חסה, גרסה סופית.)</p>
+      <div class="scard__foot"><span class="scard__pat">final · 3 depths</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-A-Book-and-Calculator.html#s-calcpage">
+      <div class="scard__top"><span class="scard__name">מחשבון · דשבורד</span><span class="scard__route">/calc/</span></div>
+      <p class="scard__d">דשבורד של מודולים מחוברים — context משותף, פלט זורם בין מודולים, סיכום נדבק, ייצוא PDF/CSV.</p>
+      <div class="scard__foot"><span class="scard__pat">14 calculators</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-A-Book-and-Calculator.html#s-assume">
+      <div class="scard__top"><span class="scard__name">AssumptionField + מצבים</span><span class="scard__route">component</span></div>
+      <p class="scard__d">הנחת תכנון first-class (לעולם לא קבוע סמוי) · מאומת/לא-מאומת/חסר · רמז מחזור גידולים.</p>
+      <div class="scard__foot"><span class="scard__pat">§2.4–2.6</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+  </div>
+
+  <!-- CLASS B -->
+  <div class="ix__band">
+    <h2>Class B — מערכת מלאה</h2>
+    <span class="tier tier--sun"><span class="tier__glyph">+</span>new</span>
+    <a class="openall" href="design/Board-B-Hub-Market-Search-Community-About-Account.html">פתחו את ה־board ›</a>
+  </div>
+  <div class="ix__grid">
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-shell">
+      <div class="scard__top"><span class="scard__name">App-shell</span><span class="scard__route">shell</span></div>
+      <p class="scard__d">כותרת + ניווט (ספר·מחשבון·מחירון) + חיפוש inline + חשבון · bottom-tab במובייל. הגרסה הסופית של §24.</p>
+      <div class="scard__foot"><span class="scard__pat">Planta · Notion · Arc</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-hub">
+      <div class="scard__top"><span class="scard__name">בית / Hub</span><span class="scard__route">/</span></div>
+      <p class="scard__d">רשת מודולים + badge שכבה → אלמנט הסבר → שורת כרטיסים לפי קהל → כלים מתקדמים. דסקטופ + מובייל.</p>
+      <div class="scard__foot"><span class="scard__pat">launchers + Planta</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-market">
+      <div class="scard__top"><span class="scard__name">מחירון · רשימה</span><span class="scard__route">/market/</span></div>
+      <p class="scard__d">דיסקליימר חובה (4 נק׳) · קטגוריות · כרטיסים⇄טבלה · טריות + sparkline · מצבי ריק/ישן.</p>
+      <div class="scard__foot"><span class="scard__pat">Blinkit · Copilot</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-market-detail">
+      <div class="scard__top"><span class="scard__name">מחירון · מוצר</span><span class="scard__route">/market/{slug}</span></div>
+      <p class="scard__d">גרף מגמה + בורר טווח (7/30/90/שנה) · מחיר גדול · היסטוריה · פירוט מקורות (.prov) · קישור לספר.</p>
+      <div class="scard__foot"><span class="scard__pat">Copilot · Delta</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-search">
+      <div class="scard__top"><span class="scard__name">חיפוש מאוחד</span><span class="scard__route">/search?q=</span></div>
+      <p class="scard__d">תוצאות ספר + מחירון, מקובצות · חיפושים קשורים + אחרונים · מצב אין-תוצאה → CTA בקשה.</p>
+      <div class="scard__foot"><span class="scard__pat">Planta · NYT</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-community">
+      <div class="scard__top"><span class="scard__name">קהילה</span><span class="scard__route">/community</span></div>
+      <p class="scard__d">מניפסט (תרומה לקהילה · ניסיון מהשטח + מחקר AI) + טופס בקשות/הצעות. ללא feed (ראו דגל).</p>
+      <div class="scard__foot"><span class="scard__pat">⚠ feed flagged</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-about">
+      <div class="scard__top"><span class="scard__name">אודות / שכבות</span><span class="scard__route">/about</span></div>
+      <p class="scard__d">סולם 5 השכבות (פתוח·בטא·בקרוב·בתשלום·מותאם) עם badges ותג מחיר לכל שכבה.</p>
+      <div class="scard__foot"><span class="scard__pat">Notion · Linear</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+    <a class="scard" href="design/Board-B-Hub-Market-Search-Community-About-Account.html#s-account">
+      <div class="scard__top"><span class="scard__name">חשבון</span><span class="scard__route">/account</span></div>
+      <p class="scard__d">כניסה + מצב "הליבה פתוחה, חשבון רשות" · shell פרופיל מחובר (קבוצות הגדרות).</p>
+      <div class="scard__foot"><span class="scard__pat">Wolt · Planta</span><span class="scard__go">פתחו ›</span></div>
+    </a>
+  </div>
+
+  <!-- FILES -->
+  <div class="ix__band"><h2>קבצים ומפרטים</h2></div>
+  <div class="ix__files">
+    <div class="filecard">
+      <h3>design/ — visual + behaviour contract</h3>
+      <ul>
+        <li><code>tokens.css</code><span>טוקנים + טייפוגרפיה. פורטו ראשון, verbatim.</span></li>
+        <li><code>cropbook-v1.css/.js</code><span>רכיבי Class A + התנהגות (מחשבונים, פילטרים, עומק).</span></li>
+        <li><code>classb.css/.js</code><span>רכיבי Class B + התנהגות (range selector, chips).</span></li>
+        <li><code>assets/</code><span>Carmela · watercolor masters · 8 module heroes · contact.</span></li>
+      </ul>
+    </div>
+    <div class="filecard">
+      <h3>spec/ — component &amp; route contracts</h3>
+      <ul>
+        <li><a href="README.md">README.md</a><span>חוזה ה-build לכל הממשק — התחילו כאן.</span></li>
+        <li><a href="spec/B_COMPONENTS-TEMPLATES-classb-delta.md">B_COMPONENTS-TEMPLATES</a><span>Class B §30–42 + routes + §3.8 patterns.</span></li>
+        <li><a href="spec/A_COMPONENTS-delta.md">A_COMPONENTS</a> · <a href="spec/A_TEMPLATES-delta.md">A_TEMPLATES</a><span>Class A contracts + macros.</span></li>
+        <li><a href="spec/A_DESIGN_TOKENS-delta.md">A_DESIGN_TOKENS</a> · <a href="spec/A_OPEN_ISSUES.md">A_OPEN_ISSUES</a><span>פלטה v2 + 8 שאלות פתוחות.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OPEN ITEMS -->
+  <div class="ix__flag">
+    <span class="ix__flag__ic">⚠</span>
+    <h3>פתוח לאישור team_00 / team_100</h3>
+    <ol>
+      <li><b>Community feed (קונפליקט):</b> §3.8 מציע "feed קל"; הלקוח הסיר feed במפורש. נמסר ללא feed (מניפסט + טופס). לאשר לפני החזרה.</li>
+      <li><b>שכבת חשבון:</b> הליבה הפתוחה לעולם לא דורשת חשבון (העיצוב מניח שהוא רשות).</li>
+      <li><b>יחידות מחיר + חלון טריות:</b> ₪/ק״ג·יח׳·אגודה לפי <code>sale_unit</code>; טרי ≤3 · מתיישן 4–7 · ישן >7 — לאשר מול OrganicMarketAgent.</li>
+    </ol>
+  </div>
+
+</div>
+</body>
+</html>
