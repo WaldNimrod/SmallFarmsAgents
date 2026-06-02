@@ -3723,11 +3723,11 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
   label: "ספר גידולים: Class B — עיצוב v2 למשטחי hub/market/search/community/about/account (ממתין לצוות 35)"
-  status: ELIGIBLE
+  status: BUILDING
   phase: ui_align
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
+  current_lean_gate: L-GATE_B
   lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
@@ -3761,13 +3761,24 @@ work_packages:
       graph ranges / search suggestions / market units+freshness) before LOD400 v1.0.0 lock.
     validator: team_100
   - gate: L-GATE_S
-    result: PENDING
+    result: PASS_WITH_FINDINGS
     date: "2026-06-02"
-    notes: >
-      LOD400 LOCKED v1.0.0 — team_00 approved all §9 decisions + the §9a units/freshness table
-      (≤3/4-7/>7 on the OMA 7-day window). Mandate issued to team_190 (non-Claude, IR#1):
-      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-CLASSB/VALIDATION_MANDATE_team190_LGATE-S_2026-06-02_v1.0.0.md.
+    commit: "45badf6"
     validator: team_190
+    notes: >
+      team_190 (Cursor/Composer, non-Claude — IR#1) L-GATE_S PASS_WITH_FINDINGS (verdict 45badf6):
+      0 blockers / 0 major / 7 minor. Build-precision confirmed for all 7 surfaces + shell; data fidelity
+      verified (fetchHistory/history-API/contribute/Modules exist; only new code = AccountController +
+      account_landing); constitutional clean (tokens sha256 matches, validate_aos 29/19/0). 7 minors folded
+      into the team_10 build dispatch. Verdict: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-CLASSB/LOD400-VERDICT_v1.0.0.md.
+  - gate: L-GATE_B
+    result: IN_PROGRESS
+    date: "2026-06-02"
+    validator: team_10
+    notes: >
+      Build dispatched to team_10 (DISPATCH_sfa_build_2026-06-02_v1.0.0.md) — 7 surfaces + shell refine,
+      with the 7 team_190 L-GATE_S minors folded in as build requirements (disclaimer class, 28d range
+      label, reqchip→request-info only, search honesty, disabled 90/year, ignore feed line, asset load order).
   notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Holds the design-missing surfaces. NEXT: team_35
     delivers v2 templates → team_100 LOD400 → team_190 L-GATE_S → team_10 build → team_50 visual QA →
     team_190 L-GATE_V (non-Claude)."
