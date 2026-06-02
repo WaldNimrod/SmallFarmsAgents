@@ -490,12 +490,6 @@ button, a.btn, a.btn-primary, .btn, .btn-primary {
   justify-content: center;
 }
 
-/* Desktop sidebar accordion summary + nav links */
-.dt-acc summary, .dt-nav a, .dt-nav__cta, .dt-side__contrib {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-}
 
 /* Table row link cells — make the link itself tap-sized */
 table td a {
@@ -515,15 +509,4 @@ a.tier, button.tier {
   padding: 6px 12px;
 }
 
-/* ============================================================
- * Shell swap @ 900px per team_35 LOD300 §3.5 (was missing — caused target-size
- * audit to fire on hidden desktop sidebar at mobile viewport). 2026-05-27.
- * ============================================================ */
-@media (max-width: 899.98px) {
-  .dt-shell { display: none !important; }
-  .gj-shell { display: block; }
-}
-@media (min-width: 900px) {
-  .gj-shell { display: none !important; }
-  .dt-shell { display: grid; }
-}
+/* Shell swap removed — legacy .gj-shell/.dt-shell retired; now using .sh (WP-CB-UI-ALIGN) */

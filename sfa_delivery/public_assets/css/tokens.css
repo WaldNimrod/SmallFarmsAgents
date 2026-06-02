@@ -2,20 +2,12 @@
    Nimrod.bio Design System v3 — LOCKED Stage 0 tokens
    Approved: 11.05.2026
    Direction: B · עם רסן (structural recursion, rare spark)
-   Palette:   Cool Stone
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* ─── Foundation: Cool Stone paper ─── */
-  --paper:      #f5f3ec;
-  --paper-2:    #e8e7df;
-  --paper-3:    #dedccf;
-  --line:       #d6d2c2;
-  --ink:        #1f1e1c;
-  --ink-soft:   #4a4844;
-  --soil:       #5b483a;
+  /* ─── Foundation tokens — legacy cream palette removed; use --gj-* below ─── */
 
   /* ─── 3 Worlds (v3.3 — LOCKED · אדמה · ידע · דיגיטל · approved 22.05.2026) ───
      Soil · Know · Code — deep + light per world  */
@@ -83,8 +75,8 @@
 html, body { margin: 0; padding: 0; }
 body {
   font-family: "Assistant", "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--gj-paper);
+  color: var(--gj-ink);
   font-size: 17px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -101,7 +93,7 @@ body {
 .t-h3      { font-family: "Frank Ruhl Libre", serif; font-size: 20px; line-height: 1.30; font-weight: 600; }
 .t-quote   { font-family: "Frank Ruhl Libre", serif; font-size: 24px; line-height: 1.5;  font-weight: 300; font-style: italic; }
 .t-body    { font-family: "Assistant", sans-serif; font-size: 17px; line-height: 1.65; font-weight: 400; }
-.t-body-sm { font-family: "Assistant", sans-serif; font-size: 14px; line-height: 1.55; font-weight: 400; color: var(--ink-soft); }
+.t-body-sm { font-family: "Assistant", sans-serif; font-size: 14px; line-height: 1.55; font-weight: 400; color: var(--gj-ink-soft); }
 .t-ui      { font-family: "Assistant", sans-serif; font-size: 15px; line-height: 1.0;  font-weight: 600; }
 
 /* ─── 6-column grid primitive ─── */
@@ -116,8 +108,8 @@ body {
 
 /* ─── Cards (default radius-m + shadow-m) ─── */
 .card {
-  background: var(--paper);
-  border: 1px solid var(--line);
+  background: var(--gj-paper);
+  border: 1px solid var(--gj-line);
   border-radius: var(--radius-m);
   box-shadow: var(--shadow-m);
   padding: var(--s-2);
@@ -136,8 +128,8 @@ body {
 .btn-primary   { background: var(--b-table); color: #fff; }
 .btn-primary:hover { background: #b15c33; }
 .btn-secondary { background: var(--leaf-deep); color: #fff; }
-.btn-ghost     { background: transparent; color: var(--ink); border-color: var(--ink); }
-.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+.btn-ghost     { background: transparent; color: var(--gj-ink); border-color: var(--gj-ink); }
+.btn-ghost:hover { background: var(--gj-ink); color: var(--gj-paper); }
 
 /* Spark CTA — use ≤5× per site */
 .btn-spark {
@@ -161,7 +153,7 @@ body {
 /* ============================================================
    WP-CB-1 additions — Crop Book v1 (additive, 2026-05-31)
    --gj-* v2 white-green palette + --cb-* provenance tokens + Carmela font.
-   These extend the existing Cool Stone token set without breaking other pages.
+   These extend the base token set without breaking other pages.
    ============================================================ */
 
 @font-face {
@@ -250,7 +242,7 @@ body {
         - added --w-garden / --w-field / --w-table (primary)
         - 6-branch tokens retained as sub-branch accents (no breaks)
    v3 · 11.05.2026 · Stage 0 lock
-        - palette switched: warm-paper → Cool Stone (#f5f3ec)
+        - palette switched: warm-paper → white-green (--gj-paper #f8fbf8)
         - grid: 12-col → 6-col
         - spacing: introduced --s-1..--s-8, base 16px
         - radius default: radius-m (14px)

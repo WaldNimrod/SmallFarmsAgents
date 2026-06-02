@@ -24,7 +24,7 @@ if (!isset($asset_ver)) {
     $_css_dir = __DIR__ . '/../public_assets/css';
     $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
     $_mtimes  = [];
-    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop', 'desktop-extras'] as $_n) {
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras'] as $_n) {
         $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
         if ($_mt) { $_mtimes[] = $_mt; }
     }
@@ -62,11 +62,10 @@ if (!isset($asset_ver)) {
 <link rel="stylesheet" href="/public_assets/css/community.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/crop-book-deep.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/crop-book-v1.css?v=<?= $h($asset_ver) ?>">
-<link rel="stylesheet" href="/public_assets/css/desktop.css?v=<?= $h($asset_ver) ?>">
 <link rel="stylesheet" href="/public_assets/css/desktop-extras.css?v=<?= $h($asset_ver) ?>">
 
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
-<?php if (isset($active) && $active === 'crop-book'): ?>
+<?php if (isset($active) && in_array($active, ['crop-book', 'calc'], true)): ?>
 <script defer src="/public_assets/js/crop-book-v1.js?v=<?= $h($asset_ver) ?>"></script>
 <?php endif; ?>
 </head>
@@ -78,8 +77,35 @@ if (!isset($asset_ver)) {
        href="#icon-X"> in macros/templates resolve synchronously. */
 @readfile(__DIR__ . '/../public_assets/img/icons.svg');
 ?>
-<?php include __DIR__ . '/partials/nav.php'; ?>
-<?php include __DIR__ . '/shell/mobile.php'; ?>
-<?php include __DIR__ . '/shell/desktop.php'; ?>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+  <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+  <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+  <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+  <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+  <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+</symbol></svg>
+<div class="sh">
+  <div class="sh__bar">
+    <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+    <div class="sh__name">SFA<small><?= $h($page_sub) ?></small></div>
+    <nav class="sh__nav">
+      <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר גידולים</a>
+      <a class="is-calc <?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
+      <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
+    </nav>
+    <span class="sh__nav__sp"></span>
+    <button class="sh__acct"><span class="av">נ</span>החשבון שלי</button>
+    <a class="sh__icon" href="/search" title="חיפוש">⌕</a>
+  </div>
+  <div class="sh__body"><?= $body_html ?></div>
+  <nav class="sh__nav--mobile">
+    <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר</a>
+    <a class="is-calc <?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
+    <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
+    <a href="/account"><span class="g">◔</span>חשבון</a>
+  </nav>
+  <div class="sh__foot"><span class="dot"></span><?= $h($foot_text) ?></div>
+</div>
 </body>
 </html>
