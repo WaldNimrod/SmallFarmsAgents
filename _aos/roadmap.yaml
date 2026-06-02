@@ -3717,8 +3717,10 @@ work_packages:
   notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
     (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
     export. Delivery-tier only; no backend/migration. L-GATE_S PASS → LOD400 LOCKED → DEPLOYED @ b72bcca →
-    L-GATE_V R1 FAIL (3 findings: PDF 404, crop-page raw-key leak, empty calc selector). NEXT: team_10 R2 build
-    (V02+V03) + team_99 PDF fix (V01) → re-deploy → team_50 live re-QA → team_190 L-GATE_V R2."
+    L-GATE_V R1 FAIL (3 findings). R2: V02 (crop-page Hebrew enums) + V03 (calc selector, 70 crops) FIXED & LIVE
+    @ c1d9cff (team_99 verified). V01 (PDF 404) = uPress origin does not route .pdf → CODE fix @ fdb4fc7 (PDF
+    moved to extension-less /calc/print + Cache-Control no-store). NEXT: re-deploy fdb4fc7 (team_99) → team_50
+    live re-QA (all 3) → team_190 L-GATE_V R2."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
