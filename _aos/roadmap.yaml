@@ -3638,8 +3638,8 @@ work_packages:
   phase: ui_align
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: LOD400
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
@@ -3674,9 +3674,23 @@ work_packages:
       (Haiku), external validation L-GATE_S/L-GATE_V=team_190 non-Claude in Cursor (IR#1/#5). NEXT: team_190
       L-GATE_S on the LOD400.
     validator: team_100
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-02"
+    validator: team_190
+    validator_engine: "Cursor/Composer (non-Claude)"
+    notes: >
+      Round 1. C1-C7 all PASS (IR#1/#5 satisfied — non-Claude validator). 3 MINOR findings, no R2:
+      F-190-UIALIGN-01 fold F-QA-01 (gj.css cream --gj-* redefinition) into main D1; F-190-UIALIGN-02 .sh__icon
+      <a href=/search> vs LOD300 <button> = intentional nav deviation; F-190-UIALIGN-03 promote mobile-nav active
+      colors + .sh__foot .dot{flex:none} from QA addendum into the §2a verbatim block. All 3 actioned in LOD400
+      (now LOCKED). Build (f22138d) + QA fixes (f85691e) + team_50 internal visual QA already on branch.
+      Verdict: _COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-ALIGN/WP-CB-UI-ALIGN_LGATE-S_VERDICT_v1.0.0.md.
+      NEXT: deploy branch to uPress (team_99) → team_190 L-GATE_V live per-page visual round.
   notes: "OPENED 2026-06-02. Visual alignment of the whole delivery tier to the team_35 LOD300: unify palette
     (remove cream), build the design app-shell + nav across all pages, fix /calc interactivity + 14 calcs +
-    export. Delivery-tier only; no backend/migration. LOD400 authored 2026-06-02 → NEXT: team_190 L-GATE_S."
+    export. Delivery-tier only; no backend/migration. L-GATE_S PASS_WITH_FINDINGS 2026-06-02 (Cursor) → LOD400
+    LOCKED. NEXT: deploy to uPress (team_99) → team_190 L-GATE_V."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB

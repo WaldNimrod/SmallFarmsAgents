@@ -44,7 +44,14 @@ are uniform across the whole system now.
 **Key de-risking fact:** the 7 legacy cream tokens are consumed via `var(--…)` **only inside tokens.css itself**
 (its own `body`/`.card`/`.btn-ghost`/`.t-body-sm` foundation rules). **Zero** legacy-token usages exist in any
 other CSS file (gj/hub/community/crop-book-deep/crop-book-v1/desktop/desktop-extras) — those were authored
-against `--gj-*`. So full reconciliation is contained to tokens.css.
+against `--gj-*`. So legacy `var(--paper)` reconciliation is contained to tokens.css.
+
+**⚠ D1 ALSO covers `--gj-*` REDEFINITIONS, not just `--paper` consumers (folds F-QA-01, per L-GATE_S
+F-190-UIALIGN-01).** A leftover v1 cream `:root` in `gj.css:4–10` redefined `--gj-paper #f6f1e3` (+ `-2/-3/--gj-ink/
+-soft/--gj-line`); because gj.css loads after tokens.css it overrode the v2 white ground → cream `body`. D1 must
+remove every cream `--gj-*` *redefinition* across served CSS (not only `var(--paper)` consumers) so the v2 values
+in tokens.css win. Verify: `grep -rnE -- '--gj-paper\s*:' sfa_delivery/public_assets/css/` returns exactly one
+line (tokens.css = #f8fbf8).
 
 **Edits (tokens.css):**
 
@@ -96,7 +103,7 @@ The served crop-book-v1.css has no `.sh` rules. Append the shell + nav rules **v
 .sh__icon { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--gj-line); background: var(--gj-paper); display: grid; place-items: center; color: var(--gj-ink-soft); cursor: pointer; font-size: 15px; }
 .sh__body { padding: 18px; }
 .sh__foot { margin-top: auto; display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-top: 1px solid var(--gj-line); font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); }
-.sh__foot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--status-fresh); }
+.sh__foot .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--status-fresh); } /* flex:none per F-QA-03 */
 
 /* ── MAIN NAV (team_35 LOD300 §11) ── */
 .sh__nav { display: flex; align-items: center; gap: 2px; margin-inline-start: 8px; }
@@ -112,6 +119,11 @@ The served crop-book-v1.css has no `.sh` rules. Append the shell + nav rules **v
 .sh__nav--mobile { display: flex; gap: 4px; padding: 8px 12px; border-top: 1px solid var(--gj-line); background: var(--gj-paper-2); }
 .sh__nav--mobile a { flex: 1; flex-direction: column; gap: 2px; font-size: 10px; padding: 6px 2px; text-align: center; }
 .sh__nav--mobile a .g { font-size: 17px; }
+/* mobile-nav color + active (design-gap remediation, F-QA-04 / L-GATE_S F-190-UIALIGN-03 — team_35 to confirm) */
+.sh__nav--mobile a { display: flex; align-items: center; justify-content: center; color: var(--gj-ink-soft); text-decoration: none; font-weight: 700; }
+.sh__nav--mobile a.is-active { color: var(--gj-leaf-deep); }
+.sh__nav--mobile a.is-active.is-calc { color: var(--gj-sun-deep); }
+.sh__nav--mobile a.is-active.is-market { color: var(--gj-tomato-deep); }
 ```
 
 ### 2b. Add the responsive toggle (NOT in SSoT — author it)
@@ -166,6 +178,9 @@ Notes for the build:
 - `$page_sub` defaults to `'חקלאות קטנה'` (`_layout.php:6`) — matches the design's `<small>` subtitle.
 - Account link target `/account` may 404 today — acceptable stable hook (the account module is future). Confirm
   it does not throw; if the router 500s on unknown routes, point it to `#` instead.
+- **Intentional deviation (L-GATE_S F-190-UIALIGN-02):** `.sh__icon` is rendered as `<a href="/search">` (a real
+  navigable link to the search route), where the LOD300 mockup used a `<button>`. The `<a>` is correct for a nav
+  target; `.sh__icon` CSS styles both identically. Noted, not a defect.
 
 ### 2d. `#sfa-logo` symbol — define once, reference via `<use>`
 
