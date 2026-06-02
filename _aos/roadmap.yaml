@@ -3883,6 +3883,18 @@ work_packages:
       ◐ .reqinfo missing, .ptable__th=0, footer still <a href=/community>). No team_99 DEPLOY_REPORT in repo.
       Branch code confirmed ready (composer 135, validate_aos 0 FAIL). Do NOT LOD500_LOCK. UNBLOCK: team_99 runs
       DEPLOY_MANDATE_team99_2026-06-02 → commits DEPLOY_REPORT → re-route L-GATE_V R3 (expect live markers).
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-03"
+    validator: team_99
+    deployed_sha: "c51c2e5"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-CLASSB/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 deployed the branch to sfa.nimrod.bio (waldhomeserver FTPS relay; 9 transferred / 7 replaced /
+      exit 0). ALL 7 §3 smoke checks PASS live: / 200; /community comm-banner+contact.webp (cream #f4ecdc=0);
+      / hub-home__inner=2; /market ptable__th=3 (no inline style); /search ◐ .reqinfo; /account+/about 200;
+      footer <span aria-current=page>קהילה</span> (no self-link). Fixes are LIVE. L-GATE_V R3 now executable
+      (live matches branch). NEXT: re-route team_190 L-GATE_V R3 → on PASS LOD500_LOCKED + ADR042 archive.
   notes: "OPENED 2026-06-02 (split from WP-CB-UI-ALIGN). Built + merged + LIVE; team_50 QA PASS_WITH_FINDINGS
     (2 MAJOR + 6 MINOR + 2 cosmetic). Per team_00 'fix all': team_10 fix-all build (10/10) → team_100 L-GATE_B
     verify PASS → team_50 re-QA v1.1.0 PASS. NEXT (team_00 handoff): team_99 DEPLOY (SSH auth-gated) → team_190
@@ -3996,6 +4008,22 @@ work_packages:
       composer 141, validate_aos 0 FAIL). No team_99 DEPLOY_REPORT in repo (migrate.php 004/005 + Mac push not
       attested). Do NOT LOD500_LOCK. UNBLOCK: team_99 runs DEPLOY_MANDATE_team99_2026-06-03 (migrate + push) →
       commits DEPLOY_REPORT → re-route L-GATE_V R2.
+  - gate: DEPLOY
+    result: BLOCKED
+    date: "2026-06-03"
+    validator: team_99
+    blocker: "ADMIN_MIGRATE_TOKEN unset on uPress"
+    ref: "_COMMUNICATION/TEAM_100/MSG-HUB-20260603-001.md + MSG-HUB-20260603-002.md"
+    notes: >
+      team_99 mirrored migrations 004/005 to uPress via the coupled FTPS deploy, BUT cannot apply them: the web
+      runner HealthController::migrate gates on $_ENV['ADMIN_MIGRATE_TOKEN'] (HealthController.php:54) which is
+      unset on uPress (and absent from every .env team_99 can read) — so /admin/migrate returns 401 unconditionally.
+      Real 1-row probe confirmed: HTTP 200 route + HMAC OK but DB error 1146 'crop_field_enrichment doesn't exist'
+      → migrations NOT applied; 0 rows written. Mac push is dry-run-validated (crop_field_enrichment ~767 rows /
+      crop_attribute ~243 rows, payloads HMAC-signed, oma-postgres up) and ready the instant the tables exist.
+      AWAITING team_00 (holds the secret): set ADMIN_MIGRATE_TOKEN in the uPress sfa_delivery/.env + give team_99
+      the token, OR apply 004/005 directly via uPress phpMyAdmin, OR run migrate.php with shell. Then team_99
+      runs the Mac push + writes the CB-DATA DEPLOY_REPORT → re-route L-GATE_V R2.
   notes: "L-GATE_S PASS_WITH_FINDINGS 2026-06-03 (2 INFO inline → LOD400_LOCKED v0.2.0) → team_10 L-GATE_B build +
     team_100 verify PASS → team_50 QA PASS. Mirror + transport only (locked enrichment layer untouched). NEXT
     (team_00 handoff): team_99 deploy (migrations on uPress, with the Class B deploy) + Mac push → team_190 L-GATE_V
