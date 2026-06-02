@@ -180,7 +180,8 @@ final class HubController
      */
     public function calcExport(Request $request, Response $response, array $args): Response
     {
-        $fmt = strtolower((string)($args['fmt'] ?? 'csv'));
+        // /calc/export.csv → fmt=csv (route arg); /calc/print → no fmt arg → pdf print view.
+        $fmt = strtolower((string)($args['fmt'] ?? 'pdf'));
         $qp  = $request->getQueryParams();
         $crop   = trim((string)($qp['crop']        ?? ''));
         $beds   = trim((string)($qp['beds']        ?? ''));
@@ -217,7 +218,9 @@ final class HubController
             'context' => $context,
             'rows'    => $rows,
         ]);
-        return self::html($response, $html);
+        // no-store so the edge never caches this HTML (prevents a repeat of the
+        // V01 stale-404 once /calc/print is reachable through Cloudflare).
+        return self::html($response->withHeader('Cache-Control', 'no-store'), $html);
     }
 
     public function community(Request $request, Response $response): Response

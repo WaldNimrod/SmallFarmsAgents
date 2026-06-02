@@ -21,7 +21,11 @@ return function (App $app): void {
     $app->get('/search[/]', [HubController::class, 'search']);
     $app->get('/calc[/]', [HubController::class, 'calc']);
     // WP-CB-1-patch01: calculator-plan export (csv | pdf-print)
-    $app->get('/calc/export.{fmt:csv|pdf}', [HubController::class, 'calcExport']);
+    // V01 (L-GATE_V R2): uPress/Apache does not route the .pdf extension to Slim
+    // (origin 404), so the PDF print view moves to an extension-less path /calc/print.
+    // CSV keeps the .csv extension (origin routes it fine).
+    $app->get('/calc/export.{fmt:csv}', [HubController::class, 'calcExport']);
+    $app->get('/calc/print[/]', [HubController::class, 'calcExport']);
 
     $app->get('/crop-book[/]', [CropBookViewController::class, 'entry']);
     $app->get('/crop-book/questions[/]', [CropBookViewController::class, 'questions']);

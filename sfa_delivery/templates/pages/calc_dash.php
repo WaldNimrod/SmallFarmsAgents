@@ -424,7 +424,7 @@ ob_start();
       <h4>יצוא תכנון</h4>
       <p>שמרו, שתפו, ייבאו.</p>
       <div class="calc-export__btns">
-        <a class="calc-export__btn" href="/calc/export.pdf" data-calc-export="pdf" target="_blank" rel="noopener">⬇ PDF</a>
+        <a class="calc-export__btn" href="/calc/print" data-calc-export="pdf" target="_blank" rel="noopener">⬇ PDF</a>
         <a class="calc-export__btn calc-export__btn--ghost" href="/calc/export.csv" data-calc-export="csv">⬇ CSV</a>
       </div>
     </div>
