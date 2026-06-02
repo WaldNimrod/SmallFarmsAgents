@@ -68,6 +68,7 @@ $active     = 'home';
 ob_start();
 ?>
 <div class="sh__body--wide">
+<div class="hub-home__inner">
 
   <?php /* ── Hub intro ── */ ?>
   <div class="hub-intro">
@@ -218,7 +219,9 @@ ob_start();
   </div>
   <?php endif; ?>
 
-</div>
+</div><!-- /hub-home__inner -->
+
+</div><!-- /sh__body--wide -->
 <?php
 $content = ob_get_clean();
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active'));

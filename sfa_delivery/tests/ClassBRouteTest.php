@@ -243,4 +243,89 @@ final class ClassBRouteTest extends TestCase
         $body = (string)$this->app->handle($req)->getBody();
         $this->assertStringContainsString('fresh', $body, 'Market list must render freshness pill');
     }
+
+    // ── F-2 FIX: community banner <img> present, no bare beige box ──────────
+
+    /** F-2 fix: community page renders .comm-banner with an <img> child */
+    public function testCommunityBannerHasImg(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/community');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The .comm-banner div must contain an <img — image must exist for the box to render
+        $this->assertMatchesRegularExpression(
+            '#comm-banner[^>]*>[\s]*<img#',
+            $body,
+            'Community .comm-banner must contain an <img> — no bare beige box allowed'
+        );
+    }
+
+    /** F-2 fix: community page must NOT render .comm-banner without an <img> inside */
+    public function testCommunityNoBareBeigeBannerBox(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/community');
+        $body = (string)$this->app->handle($req)->getBody();
+        // A bare box would match comm-banner" followed only by whitespace then </div>
+        $this->assertDoesNotMatchRegularExpression(
+            '#class="comm-banner[^"]*"\s*aria-hidden="true"\s*>\s*</div>#',
+            $body,
+            'Community must never render a .comm-banner without image content'
+        );
+    }
+
+    // ── F-1 FIX: hub intro width container ───────────────────────────────────
+
+    /** F-1 fix: hub home has .hub-home__inner max-width wrapper */
+    public function testHubHomeHasInnerWrapper(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('hub-home__inner', $body, 'Hub home must have .hub-home__inner width-cap wrapper (F-1 fix)');
+    }
+
+    // ── F-6 FIX: footer has no self-link on /community ──────────────────────
+
+    /** F-6 fix: footer "קהילה" is not an <a href="/community"> when on /community */
+    public function testFooterNoSelfLinkOnCommunity(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/community');
+        $body = (string)$this->app->handle($req)->getBody();
+        // Footer self-link pattern: <a href="/community"> inside sh__foot region.
+        // We check that href="/community" does NOT appear inside a footer <a> tag.
+        // The simplest reliable check: the footer span with aria-current should be present
+        // instead of a link.
+        $this->assertStringContainsString('aria-current="page"', $body,
+            'Footer קהילה must use aria-current="page" span (not <a>) when on /community (F-6 fix)');
+    }
+
+    // ── F-5 FIX: market table <th> has no inline style= ─────────────────────
+
+    /** F-5 fix: market list table headers use CSS classes, not inline style= */
+    public function testMarketTableThHasNoInlineStyle(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // Should have the new CSS class
+        $this->assertStringContainsString('ptable__th', $body, 'Market table <th> must use .ptable__th class (F-5 fix)');
+        // Must NOT have inline style on <th>
+        $this->assertDoesNotMatchRegularExpression(
+            '#<th\s[^>]*style=#',
+            $body,
+            'Market table <th> must not use inline style= attribute (F-5 fix)'
+        );
+    }
+
+    // ── F-7 FIX: nav class has no trailing space ─────────────────────────────
+
+    /** F-7 fix: nav link class attributes must not have trailing spaces */
+    public function testNavClassNoTrailingSpace(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // Trailing space in class: class="is-calc " or class="is-market "
+        $this->assertDoesNotMatchRegularExpression(
+            '#class="is-(?:calc|market)\s+"#',
+            $body,
+            'Nav link class must not have trailing space (e.g. "is-calc ") — F-7 fix'
+        );
+    }
 }

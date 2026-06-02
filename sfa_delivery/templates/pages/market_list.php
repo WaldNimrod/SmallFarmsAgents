@@ -169,9 +169,9 @@ ob_start();
       <table class="ptable" style="width:100%;border-collapse:collapse">
         <thead>
           <tr>
-            <th style="text-align:start;padding:8px 10px;border-bottom:1px solid var(--gj-line)">מוצר</th>
-            <th style="padding:8px 10px;border-bottom:1px solid var(--gj-line)">מחיר</th>
-            <th style="padding:8px 10px;border-bottom:1px solid var(--gj-line)">טריות</th>
+            <th class="ptable__th ptable__th--start">מוצר</th>
+            <th class="ptable__th">מחיר</th>
+            <th class="ptable__th">טריות</th>
           </tr>
         </thead>
         <tbody>

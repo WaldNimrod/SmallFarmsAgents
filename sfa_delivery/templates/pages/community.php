@@ -29,15 +29,23 @@ ob_start();
 ?>
 <div class="comm-wrap">
 
-  <?php /* Banner art — warm wash strip */ ?>
+  <?php /* Banner art — warm wash strip (Board-B L807: contact.webp) */ ?>
+  <?php
+  /* Only render the .comm-banner box when an image actually exists — no bare beige box. */
+  $banner_candidates = [
+      '/public_assets/img/contact.webp'        => __DIR__ . '/../../public_assets/img/contact.webp',
+      '/public_assets/img/heroes/clients.webp' => __DIR__ . '/../../public_assets/img/heroes/clients.webp',
+  ];
+  $banner_img = null;
+  foreach ($banner_candidates as $url => $path) {
+      if (file_exists($path)) { $banner_img = $url; break; }
+  }
+  ?>
+  <?php if ($banner_img !== null): ?>
   <div class="comm-banner" aria-hidden="true">
-    <?php
-    $banner_img = '/public_assets/img/heroes/community-banner.webp';
-    if (file_exists(__DIR__ . '/../../public_assets/img/heroes/community-banner.webp')):
-    ?>
-      <img src="<?= $h($banner_img) ?>" alt="" loading="lazy" decoding="async">
-    <?php endif; ?>
+    <img src="<?= $h($banner_img) ?>" alt="" loading="lazy" decoding="async">
   </div>
+  <?php endif; ?>
 
   <?php /* Manifesto */ ?>
   <div class="comm-manifest">

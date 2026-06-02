@@ -112,8 +112,8 @@ $_is_classb = (
     <div class="sh__name">SFA<small><?= $h($page_sub) ?></small></div>
     <nav class="sh__nav">
       <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר גידולים</a>
-      <a class="is-calc <?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
-      <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
+      <a class="<?= trim('is-calc ' . ($active==='calc' ? 'is-active' : '')) ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
+      <a class="<?= trim('is-market ' . ($active==='market' ? 'is-active' : '')) ?>" href="/market/"><span class="g">₪</span>מחירון</a>
     </nav>
     <span class="sh__nav__sp"></span>
     <?php /* Class B: inline search (≥760px); collapses to icon below that */ ?>
@@ -127,15 +127,19 @@ $_is_classb = (
   <div class="sh__body"><?= $body_html ?></div>
   <nav class="sh__nav--mobile" aria-label="ניווט ראשי">
     <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר</a>
-    <a class="is-calc <?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
-    <a class="is-market <?= $active==='market' ? 'is-active' : '' ?>" href="/market/"><span class="g">₪</span>מחירון</a>
+    <a class="<?= trim('is-calc ' . ($active==='calc' ? 'is-active' : '')) ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
+    <a class="<?= trim('is-market ' . ($active==='market' ? 'is-active' : '')) ?>" href="/market/"><span class="g">₪</span>מחירון</a>
     <a class="<?= $active==='account' ? 'is-active' : '' ?>" href="/account"><span class="g">◔</span>חשבון</a>
   </nav>
   <footer class="sh__foot">
     <span class="dot"></span>
     <a href="/">SFA</a> · קוד פתוח · קהילתי ·
     <a href="/about">על הכלים</a> ·
-    <a href="/community">קהילה</a>
+    <?php if ($active === 'community'): ?>
+      <span aria-current="page">קהילה</span>
+    <?php else: ?>
+      <a href="/community">קהילה</a>
+    <?php endif; ?>
   </footer>
 </div>
 </body>

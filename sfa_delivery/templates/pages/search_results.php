@@ -80,7 +80,7 @@ ob_start();
       <div class="srch-nomatch__ic">🔍</div>
       <h3>לא נמצאה תוצאה עבור "<?= $h($query) ?>"</h3>
       <p>נסו מילת חיפוש אחרת, או בקשו הוספת גידול/מוצר חדש.</p>
-      <a class="reqinfo" href="/community">בקשו הוספה ←</a>
+      <a class="reqinfo" href="/community">◐ בקשו הוספה</a>
     </div>
 
   <?php else: ?>
