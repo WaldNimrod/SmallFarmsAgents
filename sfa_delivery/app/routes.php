@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use SFA\Controllers\AccountController;
 use SFA\Controllers\AssumptionsController;
 use SFA\Controllers\CropBookViewController;
 use SFA\Controllers\CropsController;
@@ -45,6 +46,7 @@ return function (App $app): void {
     $app->get('/market/{slug}[/]', [MarketViewController::class, 'detail']);
 
     $app->get('/community[/]', [HubController::class, 'community']);
+    $app->get('/account[/]', [AccountController::class, 'index']);
 
     // AC-U4-07: redirect planned/future modules so they don't 404.
     // /clients/ is linked from the home page module grid (tier=paid, status=planned).
