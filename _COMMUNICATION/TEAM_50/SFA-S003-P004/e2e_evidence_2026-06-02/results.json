@@ -1,0 +1,524 @@
+{
+  "deploy": {
+    "/public_assets/css/crop-book-v1.css": 200,
+    "/public_assets/js/crop-book-v1.js": 200,
+    "wc-cropbook-hero": true,
+    "crop-book-v1.css_link": true
+  },
+  "captures": [
+    {
+      "viewport": "mobile",
+      "route": "home",
+      "path": "/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__home.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "about",
+      "path": "/about",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__about.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "search",
+      "path": "/search?q=חסה",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__search.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "community",
+      "path": "/community",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__community.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "market",
+      "path": "/market/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__market.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "market-product",
+      "path": "/market/prd017",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__market-product.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "calc",
+      "path": "/calc/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__calc.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "clients",
+      "path": "/clients/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__clients.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "crop-book",
+      "path": "/crop-book/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-lettuce.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-eggplant.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-turmeric.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-cabbage.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-chard.png"
+      ],
+      "file": "mobile__crop-book.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-table",
+      "path": "/crop-book/?view=table",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-basil.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-broccoli.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-ginger.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-lettuce.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-eggplant.png"
+      ],
+      "file": "mobile__book-table.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-questions",
+      "path": "/crop-book/questions",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-questions.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-family",
+      "path": "/crop-book/family",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-family.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-table-route",
+      "path": "/crop-book/table",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-table-route.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-search",
+      "path": "/crop-book/search?q=tomato",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-search.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-tomatoes",
+      "path": "/crop-book/tomatoes/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-tomatoes.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-carrots",
+      "path": "/crop-book/carrots/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-carrots.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-lettuce",
+      "path": "/crop-book/lettuce/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-lettuce.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-cucumbers",
+      "path": "/crop-book/cucumbers/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-cucumbers.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-eggplant",
+      "path": "/crop-book/eggplant/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-eggplant.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-chard",
+      "path": "/crop-book/chard/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-chard.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-cauliflower",
+      "path": "/crop-book/cauliflower/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-cauliflower.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-family-sol",
+      "path": "/crop-book/family/solanaceae",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-family-sol.png"
+    },
+    {
+      "viewport": "mobile",
+      "route": "book-family-api",
+      "path": "/crop-book/family/apiaceae",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "mobile__book-family-api.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "home",
+      "path": "/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__home.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "about",
+      "path": "/about",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__about.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "search",
+      "path": "/search?q=חסה",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__search.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "community",
+      "path": "/community",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__community.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "market",
+      "path": "/market/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__market.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "market-product",
+      "path": "/market/prd017",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__market-product.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "calc",
+      "path": "/calc/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__calc.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "clients",
+      "path": "/clients/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__clients.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "crop-book",
+      "path": "/crop-book/",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-lettuce.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-eggplant.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-turmeric.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-cabbage.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-chard.png"
+      ],
+      "file": "desktop__crop-book.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-table",
+      "path": "/crop-book/?view=table",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-basil.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-broccoli.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-ginger.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-lettuce.png",
+        "https://sfa.nimrod.bio/public_assets/img/crops/wc-eggplant.png"
+      ],
+      "file": "desktop__book-table.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-questions",
+      "path": "/crop-book/questions",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-questions.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-family",
+      "path": "/crop-book/family",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-family.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-table-route",
+      "path": "/crop-book/table",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-table-route.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-search",
+      "path": "/crop-book/search?q=tomato",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-search.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-tomatoes",
+      "path": "/crop-book/tomatoes/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-tomatoes.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-carrots",
+      "path": "/crop-book/carrots/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-carrots.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-lettuce",
+      "path": "/crop-book/lettuce/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-lettuce.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-cucumbers",
+      "path": "/crop-book/cucumbers/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-cucumbers.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-eggplant",
+      "path": "/crop-book/eggplant/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-eggplant.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-chard",
+      "path": "/crop-book/chard/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-chard.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-cauliflower",
+      "path": "/crop-book/cauliflower/?depth=full",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-cauliflower.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-family-sol",
+      "path": "/crop-book/family/solanaceae",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-family-sol.png"
+    },
+    {
+      "viewport": "desktop",
+      "route": "book-family-api",
+      "path": "/crop-book/family/apiaceae",
+      "http_status": 200,
+      "console_errs": [],
+      "bad_patterns": [],
+      "broken_imgs": [],
+      "file": "desktop__book-family-api.png"
+    }
+  ],
+  "calc_browser": {
+    "js_eval": {
+      "error": "no SFA_CALC"
+    },
+    "modcard_count": 10,
+    "export_csv_link": true,
+    "assumption_fill": false,
+    "assumption_fill_error": "Locator.scroll_into_view_if_needed: Timeout 4992ms exceeded.\nCall log:\n  - attempting scroll into view action\n    2 × waiting for element to be stable\n      - element is not visible\n    - retrying scr",
+    "export_csv": {
+      "code": 200,
+      "len": 14,
+      "has_hebrew": false
+    },
+    "export_pdf": {
+      "code": 404,
+      "is_html": true
+    },
+    "clients_redirect": false,
+    "tomatoes_proposed_tag": true,
+    "tomatoes_topics": [
+      "זנים",
+      "מרווח",
+      "קרקע",
+      "זריעה",
+      "השקיה",
+      "מזיקים",
+      "קציר",
+      "רצף"
+    ]
+  }
+}

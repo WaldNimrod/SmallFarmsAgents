@@ -1,0 +1,7 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "duration_s": 55.7,
+  "api_checks_pass": 13,
+  "api_checks_total": 14,
+  "aizoaceae_only_nz": true
+}

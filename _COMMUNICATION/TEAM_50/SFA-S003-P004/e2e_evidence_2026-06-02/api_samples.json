@@ -1,0 +1,527 @@
+{
+  "checks": [
+    {
+      "id": "health",
+      "pass": true
+    },
+    {
+      "id": "crops_list",
+      "pass": true
+    },
+    {
+      "id": "family_tomatoes",
+      "pass": true,
+      "expected": "Solanaceae",
+      "actual": "Solanaceae"
+    },
+    {
+      "id": "family_carrots",
+      "pass": true,
+      "expected": "Apiaceae",
+      "actual": "Apiaceae"
+    },
+    {
+      "id": "family_lettuce",
+      "pass": true,
+      "expected": "Asteraceae",
+      "actual": "Asteraceae"
+    },
+    {
+      "id": "family_cucumbers",
+      "pass": true,
+      "expected": "Cucurbitaceae",
+      "actual": "Cucurbitaceae"
+    },
+    {
+      "id": "family_eggplant",
+      "pass": true,
+      "expected": "Solanaceae",
+      "actual": "Solanaceae"
+    },
+    {
+      "id": "family_beets",
+      "pass": true,
+      "expected": "Amaranthaceae",
+      "actual": "Amaranthaceae"
+    },
+    {
+      "id": "family_garlic",
+      "pass": true,
+      "expected": "Amaryllidaceae",
+      "actual": "Amaryllidaceae"
+    },
+    {
+      "id": "family_onions",
+      "pass": true,
+      "expected": "Amaryllidaceae",
+      "actual": "Amaryllidaceae"
+    },
+    {
+      "id": "assumptions",
+      "pass": true
+    },
+    {
+      "id": "contribute_request_info",
+      "pass": true
+    },
+    {
+      "id": "contribute_400",
+      "pass": true
+    },
+    {
+      "id": "market_price_match",
+      "pass": false,
+      "reason": "no priced product"
+    }
+  ],
+  "family_sweep": [
+    {
+      "slug": "watermelon",
+      "scientific": "",
+      "he": "דלועיים"
+    },
+    {
+      "slug": "edamame",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "blackberry",
+      "scientific": "",
+      "he": "ורדיים"
+    },
+    {
+      "slug": "anise-hyssop",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "peas",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "arugula",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "artichokes",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "jerusalem-artichokes",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "basil",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "sweet-potato",
+      "scientific": "",
+      "he": "לשוניתניים"
+    },
+    {
+      "slug": "okra",
+      "scientific": "",
+      "he": "חלמיתיים"
+    },
+    {
+      "slug": "onions",
+      "scientific": "",
+      "he": "נרקיסיים"
+    },
+    {
+      "slug": "onions-scallions",
+      "scientific": "",
+      "he": "נרקיסיים"
+    },
+    {
+      "slug": "broccoli",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "ginger",
+      "scientific": "",
+      "he": "זנגוויליים"
+    },
+    {
+      "slug": "jicama",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "carrots",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "cress",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "winter-squash",
+      "scientific": "",
+      "he": "דלועיים"
+    },
+    {
+      "slug": "bay",
+      "scientific": "",
+      "he": "דפניים"
+    },
+    {
+      "slug": "hibiscus",
+      "scientific": "",
+      "he": "חלמיתיים"
+    },
+    {
+      "slug": "chickpea",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "wheat",
+      "scientific": "",
+      "he": "דשאיים"
+    },
+    {
+      "slug": "sunflower",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "lettuce",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "eggplant",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "thyme",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "tarragon",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "cilantro",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "turmeric",
+      "scientific": "",
+      "he": "זנגוויליים"
+    },
+    {
+      "slug": "cabbage",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "cauliflower",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "leeks",
+      "scientific": "",
+      "he": "נרקיסיים"
+    },
+    {
+      "slug": "lovage",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "lemon-balm",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "lemon-verbena",
+      "scientific": "",
+      "he": "ורבניים"
+    },
+    {
+      "slug": "turnips",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "melons",
+      "scientific": "",
+      "he": "דלועיים"
+    },
+    {
+      "slug": "cucumbers",
+      "scientific": "",
+      "he": "דלועיים"
+    },
+    {
+      "slug": "chard",
+      "scientific": "",
+      "he": "ירבוזיים"
+    },
+    {
+      "slug": "sage",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "mint",
+      "scientific": "",
+      "he": "שפתניים"
+    },
+    {
+      "slug": "soybean",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "beets",
+      "scientific": "",
+      "he": "ירבוזיים"
+    },
+    {
+      "slug": "celery",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "tomatoes",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "cherry-tomato",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "chives",
+      "scientific": "",
+      "he": "נרקיסיים"
+    },
+    {
+      "slug": "lettuce-salad-mix",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "pac-choi-bok-choy",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "fava-bean",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "parsley",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "peppers",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "chinese-lantern",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "chicory",
+      "scientific": "",
+      "he": "מורכבים"
+    },
+    {
+      "slug": "radishes",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "kohlrabi",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "kale",
+      "scientific": "",
+      "he": "מצליבים"
+    },
+    {
+      "slug": "summer-squash",
+      "scientific": "",
+      "he": "דלועיים"
+    },
+    {
+      "slug": "garlic",
+      "scientific": "",
+      "he": "נרקיסיים"
+    },
+    {
+      "slug": "fennel",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "sesame",
+      "scientific": "",
+      "he": "שומשומיים"
+    },
+    {
+      "slug": "dill",
+      "scientific": "",
+      "he": "סלריים"
+    },
+    {
+      "slug": "beans-default-pole-climbing",
+      "scientific": "",
+      "he": "קטניות"
+    },
+    {
+      "slug": "strawberry",
+      "scientific": "",
+      "he": "ורדיים"
+    },
+    {
+      "slug": "sweet-corn",
+      "scientific": "",
+      "he": "דשאיים"
+    },
+    {
+      "slug": "oranges",
+      "scientific": "",
+      "he": "פגיים"
+    },
+    {
+      "slug": "potato",
+      "scientific": "",
+      "he": "סולניים"
+    },
+    {
+      "slug": "spinach",
+      "scientific": "",
+      "he": "ירבוזיים"
+    },
+    {
+      "slug": "new-zealand-spinach",
+      "scientific": "",
+      "he": "ריסניים"
+    }
+  ],
+  "aizoaceae_crops": [
+    "new-zealand-spinach"
+  ],
+  "health": {
+    "code": 200,
+    "body": {
+      "status": "ok",
+      "php_version": "8.5.5",
+      "db": "ok",
+      "ts": "2026-06-01T23:09:00+00:00"
+    }
+  },
+  "crops_count": 70,
+  "assumptions": {
+    "germination_rate": {
+      "default": 0.9,
+      "unit": "fraction",
+      "explainer_he": "כמה מהזרעים שאתה זורע צפויים לנבוט? ברירת המחדל 90% מתאימה לזרעים רעננים. זרעים ישנים עשויים לנבוט פחות.",
+      "post_url": "https://nimrod.bio/blog/seed-germination-rate/"
+    },
+    "bed_width": {
+      "default": 0.8,
+      "unit": "m",
+      "explainer_he": "רוחב הערוגה בה אתה עובד. ברירת המחדל שלנו 80 ס״מ — תקן JM Fortier.",
+      "post_url": "https://nimrod.bio/blog/garden-bed-width-80cm/"
+    },
+    "oversow": {
+      "default": 1.1,
+      "unit": "x",
+      "explainer_he": "כמות הזרעים לזרות מעבר לצורך כמרווח ביטחון. 1.10 = 10% יותר.",
+      "post_url": null
+    },
+    "std_bed_length_m": {
+      "default": 30,
+      "unit": "m",
+      "explainer_he": "אורך ערוגה סטנדרטי לחישובים. ברירת מחדל 30 מטר.",
+      "post_url": null
+    },
+    "compost_N_pct": {
+      "default": 0.015,
+      "unit": "fraction",
+      "explainer_he": "אחוז חנקן (N) בקומפוסט. ברירת מחדל 1.5%. בדוק ניתוח קומפוסט לערך מדויק.",
+      "post_url": null
+    },
+    "application_efficiency": {
+      "default": 0.5,
+      "unit": "fraction",
+      "explainer_he": "שיעור הנטרול הביולוגי של חנקן הקומפוסט בעונה הראשונה. ברירת מחדל 50%.",
+      "post_url": null
+    },
+    "rotation_gap_seasons": {
+      "default": 3,
+      "unit": "seasons",
+      "explainer_he": "כמה עונות לחכות לפני שחוזרים לאותה משפחה בוטנית באותה ערוגה.",
+      "post_url": null
+    },
+    "tray_cells": {
+      "default": 128,
+      "unit": "cells",
+      "explainer_he": "מספר תאים במגש משתלה סטנדרטי. ברירת מחדל 128.",
+      "post_url": null
+    },
+    "hardiness_offset": {
+      "default": {
+        "hardy": 42,
+        "half_hardy": 14,
+        "tender": 0,
+        "very_tender": -7
+      },
+      "unit": "days",
+      "explainer_he": "כמה ימים לפני (או אחרי) גבול הכפור ניתן לשתול, לפי עמידות לקרה.",
+      "post_url": null
+    }
+  },
+  "contribute_ok": {
+    "code": 200,
+    "body": {
+      "ok": true
+    }
+  },
+  "prd017": {
+    "id": 17,
+    "slug": "prd017",
+    "hebrew_name": "בצל יבש",
+    "category": "alliums",
+    "unit": "kg",
+    "last_price": null,
+    "last_price_date": null,
+    "freshness_days": null,
+    "last_pushed_at": "2026-06-01 22:42:35",
+    "schema_version": 1,
+    "code": "PRD017",
+    "is_organic_required": true,
+    "is_basket_product": false,
+    "seasonality_notes": "כל השנה",
+    "price_history_30d": []
+  },
+  "non_kg_products": []
+}

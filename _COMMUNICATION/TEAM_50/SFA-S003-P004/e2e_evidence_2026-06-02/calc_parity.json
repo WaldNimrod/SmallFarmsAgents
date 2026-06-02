@@ -1,0 +1,94 @@
+{
+  "pytest_baseline": "43 passed",
+  "live_operands": {
+    "rows": 1.0,
+    "spacing": 32.0,
+    "yield_m": 128.0
+  },
+  "results": [
+    {
+      "calc": 1,
+      "name": "seed_quantity_to_buy",
+      "status": "PASS",
+      "detail": "grams=0.52"
+    },
+    {
+      "calc": 2,
+      "name": "transplants_needed",
+      "status": "PASS",
+      "detail": "plants=94"
+    },
+    {
+      "calc": 3,
+      "name": "nursery_trays_and_sow_date",
+      "status": "PASS",
+      "detail": "trays=1"
+    },
+    {
+      "calc": 4,
+      "name": "sowing_date_from_harvest",
+      "status": "FAIL",
+      "detail": "sowing_date_from_harvest() got an unexpected keyword argument 'target_harvest_date'"
+    },
+    {
+      "calc": 5,
+      "name": "harvest_window_from_sowing",
+      "status": "PASS",
+      "detail": "2026-05-18"
+    },
+    {
+      "calc": 6,
+      "name": "succession_schedule",
+      "status": "FAIL",
+      "detail": "succession_schedule() got an unexpected keyword argument 'first_sow_date'"
+    },
+    {
+      "calc": 7,
+      "name": "beds_for_target_yield",
+      "status": "PASS",
+      "detail": "beds=0.08"
+    },
+    {
+      "calc": 8,
+      "name": "expected_yield",
+      "status": "PASS",
+      "detail": "kg=3840.0"
+    },
+    {
+      "calc": 9,
+      "name": "expected_revenue",
+      "status": "PASS",
+      "detail": "rev=46080.0"
+    },
+    {
+      "calc": 10,
+      "name": "plant_population",
+      "status": "PASS",
+      "detail": "per_m2=3.90625"
+    },
+    {
+      "calc": 11,
+      "name": "frost_planting_window",
+      "status": "FAIL",
+      "detail": "frost_planting_window() got an unexpected keyword argument 'last_frost_date'"
+    },
+    {
+      "calc": 12,
+      "name": "fertilizer_compost_rate",
+      "status": "PASS",
+      "detail": "compost=666.7"
+    },
+    {
+      "calc": 13,
+      "name": "crop_profit_comparison",
+      "status": "FAIL",
+      "detail": "CropEconomics.__init__() missing 1 required positional argument: 'kg_per_unit'"
+    },
+    {
+      "calc": 14,
+      "name": "seed_input_cost",
+      "status": "FAIL",
+      "detail": "'SeedCostResult' object has no attribute 'total_cost'"
+    }
+  ]
+}
