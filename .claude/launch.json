@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sfa-qa",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["-S", "127.0.0.1:8099", "-t", "sfa_delivery"],
+      "port": 8099
+    },
+    {
+      "name": "design-board",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["-S", "127.0.0.1:8098", "-t", "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/HANDOFF_PACKAGE/design"],
+      "port": 8098
+    }
+  ]
+}
