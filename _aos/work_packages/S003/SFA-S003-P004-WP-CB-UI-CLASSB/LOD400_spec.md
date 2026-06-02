@@ -2,7 +2,7 @@
 id: SFA-S003-P004-WP-CB-UI-CLASSB-LOD400
 wp: SFA-S003-P004-WP-CB-UI-CLASSB — implement the team_35 v2 design across all non-crop-book surfaces
 gate: L-GATE_S (pending) — authored 2026-06-02
-status: DRAFT v0.9.0 — pending team_00 clarifications (§9) → lock v1.0.0 → team_190 L-GATE_S
+status: LOCKED v1.0.0 — team_00 approved §9 + §9a (2026-06-02) → team_190 L-GATE_S
 author: team_100 (Chief System Architect)
 date: 2026-06-02
 design_ssot: _COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-CLASSB/HANDOFF/
@@ -126,8 +126,7 @@ Grounded in the live system (not invented): `freshness_days = today − last_pri
 | (null / unknown) | ₪ N.NN | "₪ 8.50" (no unit suffix) |
 | (no price row) | — · אין דיווח + ◐ תרמו מחיר | empty `.pcard.is-empty` |
 
-> ⏳ **team_00 to APPROVE this §9a table** (decision #5 was "approve in principle, show me the full table with
-> examples"). On approval the spec is fully locked v1.0.0. Thresholds (≤3 / 4–7 / >7) and the 7-day window are the
-> only freshness numbers; if OMA's window differs, adjust here only.
+> ✅ **APPROVED by team_00 (2026-06-02).** Thresholds (≤3 / 4–7 / >7) on the OMA 7-day window + the unit-display
+> table are locked. These are the only freshness numbers.
 
-*Locked to v1.0.0 on team_00 approval of §9a → then team_190 L-GATE_S.*
+*LOCKED v1.0.0 — 2026-06-02 (team_00 approved §9 + §9a). Routing to team_190 L-GATE_S.*
