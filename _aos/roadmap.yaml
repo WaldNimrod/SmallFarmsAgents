@@ -3769,7 +3769,7 @@ work_packages:
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   closed_at: "2026-06-03"
-  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-UI-CLASSB-ARCHIVE)"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-CLASSB/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
@@ -3930,7 +3930,7 @@ work_packages:
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   closed_at: "2026-06-03"
-  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-DATA-ARCHIVE)"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-DATA/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-02"
