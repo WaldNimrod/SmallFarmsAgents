@@ -1,23 +1,25 @@
 <?php
 /**
- * market_disclaimer.php — COMPONENTS.md §10
+ * market_disclaimer.php — COMPONENTS.md §10 / classb §33
  *
  * CRITICAL: copy is LOCKED by team_00. Must remain verbatim.
+ * BEM class updated: .mk-disclaimer → .mkt-disc (classb.css §33, MINOR F-01).
  * No input variables — static block.
  *
- * BEM contract: .mk-disclaimer, .mk-disclaimer__head, .mk-disclaimer__icon,
- *   .mk-disclaimer__h, .mk-disclaimer__list, .mk-disclaimer__cta
+ * BEM contract: .mkt-disc, .mkt-disc__ic, .mkt-disc__head, .mkt-disc__list
+ *
+ * $compact (bool, optional) — if true, uses a shorter single-column layout
+ *   suitable for the market detail sidebar. Default false.
  */
+$compact = isset($compact) && $compact === true;
 ?>
-<aside class="mk-disclaimer">
-  <div class="mk-disclaimer__head">
-    <span class="mk-disclaimer__icon">ⓘ</span>
-    <h4 class="mk-disclaimer__h">מה זה? מאיפה זה? למה זה?</h4>
-  </div>
-  <ul class="mk-disclaimer__list">
-    <li><strong>מה:</strong> ממוצעים מתגלגלים של מחירי תוצרת חקלאית טרייה — 7 ימים אחרונים.</li>
-    <li><strong>מאיפה:</strong> סוכני סריקה ציבוריים של mezoo + תרומות חקלאים. ‎מצרפי, אנונימי.</li>
-    <li><strong>למה:</strong> כלי שיווקי קהילתי. הוכחה שאפשר ידע פתוח גם בשוק החקלאי הקטן.</li>
-    <li><strong>לא:</strong> לא הצעה מסחרית, לא קביעת מחיר, לא חוות-דעת. הקשר אינדיקטיבי בלבד.</li>
+<aside class="mkt-disc<?= $compact ? ' mkt-disc--compact' : '' ?>">
+  <div class="mkt-disc__ic" aria-hidden="true">ⓘ</div>
+  <div class="mkt-disc__head">מה זה? מאיפה זה? למה זה?</div>
+  <ul class="mkt-disc__list">
+    <li><b>מה:</b> ממוצעים מתגלגלים של מחירי תוצרת חקלאית טרייה — 7 ימים אחרונים.</li>
+    <li><b>מאיפה:</b> סוכני סריקה ציבוריים של mezoo + תרומות חקלאים. ‎מצרפי, אנונימי.</li>
+    <li><b>למה:</b> כלי שיווקי קהילתי. הוכחה שאפשר ידע פתוח גם בשוק החקלאי הקטן.</li>
+    <li><b>לא:</b> לא הצעה מסחרית, לא קביעת מחיר, לא חוות-דעת. הקשר אינדיקטיבי בלבד.</li>
   </ul>
 </aside>
