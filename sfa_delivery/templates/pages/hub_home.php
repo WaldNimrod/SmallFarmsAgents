@@ -62,7 +62,7 @@ foreach ($modules_in as $m) {
 }
 
 $page_title = 'SFA';
-$page_sub   = 'חקלאות קטנה';
+$page_sub   = 'חקלאות מקומית';
 $active     = 'home';
 
 ob_start();
@@ -73,7 +73,7 @@ ob_start();
   <?php /* ── Hub intro ── */ ?>
   <div class="hub-intro">
     <div class="hub-intro__txt">
-      <h1>כלים פתוחים לחקלאות <em>קטנה</em></h1>
+      <h1>כלים פתוחים לחקלאות <em>מקומית</em></h1>
       <p>ספר גידולים קהילתי, מחירון שוק בזמן-אמת, ומחשבון שדה — בנויים על ניסיון שדה ומחקר AI.</p>
     </div>
     <div class="hub-intro__stats">
@@ -148,7 +148,7 @@ ob_start();
   <div class="hub-manifest">
     <svg class="hub-manifest__mark" aria-hidden="true"><use href="#sfa-logo"/></svg>
     <div class="hub-manifest__txt">
-      <h2>ידע פתוח לחקלאות <em>קטנה</em></h2>
+      <h2>ידע פתוח לחקלאות <em>מקומית</em></h2>
       <p>SFA נבנה על ניסיון שדה קהילתי ומחקר AI מתקדם. כל נתון — מחיר, מינון, מועד — פתוח לעיון ולתרומה.</p>
     </div>
     <div class="hub-manifest__stats">
@@ -174,13 +174,13 @@ ob_start();
   <div class="hub-aud">
     <a class="audcard audcard--leaf" href="/crop-book/">
       <div class="audcard__ic">🌱</div>
-      <div class="audcard__t">גינאי ביתי<small>GARDENER</small></div>
+      <div class="audcard__t">גנן<small>GARDENER</small></div>
       <p class="audcard__d">ספר גידולים עם מועדי זריעה, ריווח וצרכי דישון — לגינה הקטנה.</p>
       <span class="audcard__go">לספר הגידולים ←</span>
     </a>
     <a class="audcard audcard--soil" href="/market/">
       <div class="audcard__ic">🌾</div>
-      <div class="audcard__t">חקלאי קטן<small>FARMER</small></div>
+      <div class="audcard__t">חקלאי מקומי<small>FARMER</small></div>
       <p class="audcard__d">מחירון שוק בזמן-אמת ומחשבון שדה — לקבלת החלטות חכמה.</p>
       <span class="audcard__go">למחירון ←</span>
     </a>
@@ -231,6 +231,35 @@ ob_start();
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
+
+
+  <?php /* ── Hub CTA ── */ ?>
+  <?php
+  $cta_wa_num  = '';
+  $cta_wa_link = 'https://wa.me/972547776770';
+  if (!empty($contact) && is_array($contact)) {
+      $cta_wa_num  = (string)($contact['whatsapp'] ?? '972547776770');
+      $cta_wa_link = 'https://wa.me/' . preg_replace('/\D/', '', $cta_wa_num);
+  }
+  ?>
+  <div class="hub-cta">
+    <a class="hub-cta__card hub-cta__card--secondary" href="/community">
+      <div class="hub-cta__icon" aria-hidden="true">📖</div>
+      <div class="hub-cta__body">
+        <div class="hub-cta__title">שתפו אותנו במידע והשלמות לספר</div>
+        <p class="hub-cta__sub">מצאתם נתון חסר או שגוי? עזרו לנו להשלים את הספר</p>
+      </div>
+      <span class="hub-cta__go">לקהילה ←</span>
+    </a>
+    <a class="hub-cta__card hub-cta__card--primary" href="<?= $h($cta_wa_link) ?>" target="_blank" rel="noopener">
+      <div class="hub-cta__icon" aria-hidden="true">💬</div>
+      <div class="hub-cta__body">
+        <div class="hub-cta__title">ספרו לנו מה תרצו שנפתח לחווה שלכם</div>
+        <p class="hub-cta__sub">בקשות לפיצ׳רים, רעיונות ופיתוחים ייעודיים — נשמח לבנות יחד</p>
+      </div>
+      <span class="hub-cta__go">בוואטסאפ ←</span>
+    </a>
+  </div>
 
 </div><!-- /hub-home__inner -->
 

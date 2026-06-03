@@ -3,7 +3,7 @@ use SFA\Lib\Template;
 
 $h = [Template::class, 'h'];
 $page_title       = $page_title       ?? 'Small Farms Agents';
-$page_sub         = $page_sub         ?? 'חקלאות קטנה';
+$page_sub         = $page_sub         ?? 'חקלאות מקומית';
 $page_description = $page_description ?? 'Small Farms Agents — אינדקס פתוח של גידולים ומחירי שוק קהילתי';
 $active           = $active           ?? '';
 $stats            = $stats            ?? [];

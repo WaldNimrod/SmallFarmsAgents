@@ -44,7 +44,10 @@
 .hub-intro__txt { flex: 1; min-width: 260px; }
 .hub-intro h1 { font-family: var(--gj-font-head); font-weight: 900; font-size: clamp(26px, 3vw, 34px); line-height: 1.04; margin: 0 0 6px; letter-spacing: -.015em; }
 .hub-intro h1 em { font-style: normal; color: var(--gj-leaf-deep); }
-.hub-intro p { font-size: 14.5px; line-height: 1.55; color: var(--gj-ink-soft); margin: 0; max-width: 52ch; }
+.hub-intro p { font-size: 14.5px; line-height: 1.55; color: var(--gj-ink-soft); margin: 0; }
+@media (min-width: 760px) {
+  .hub-intro p { white-space: nowrap; font-size: clamp(13px, 1.2vw, 14.5px); }
+}
 .hub-intro__stats { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .hub-groupbar { display: flex; align-items: center; gap: 10px; margin: 26px 2px 14px; }
@@ -529,3 +532,57 @@
 /* — pattern-provenance chip used in section heads — */
 .patref { display: inline-flex; align-items: center; gap: 6px; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; letter-spacing: .04em; color: var(--gj-code-deep); background: color-mix(in oklch, var(--gj-code) 12%, var(--gj-paper)); border: 1px solid color-mix(in oklch, var(--gj-code) 30%, var(--gj-paper)); padding: 3px 10px; border-radius: var(--gj-r-pill); }
 .patref::before { content: '▤'; font-size: 10px; }
+
+/* ════════════════════════════════════════════════════════════
+   3.9 · HUB CTA — primary call-to-action section (WI-4)
+   Two offers: secondary (community contribution) + primary (WhatsApp contact).
+   ════════════════════════════════════════════════════════════ */
+.hub-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 28px 0 8px;
+}
+@media (max-width: 680px) { .hub-cta { grid-template-columns: 1fr; } }
+
+.hub-cta__card {
+  display: flex; align-items: center; gap: 16px;
+  border: 1px solid var(--gj-line); border-radius: var(--gj-r-l);
+  padding: 18px 20px; text-decoration: none; color: inherit;
+  box-shadow: var(--gj-shadow-s);
+  transition: transform .16s, box-shadow .16s, border-color .16s;
+}
+.hub-cta__card:hover { transform: translateY(-2px); box-shadow: var(--gj-shadow-m); }
+
+/* secondary card — quiet outline style */
+.hub-cta__card--secondary {
+  background: var(--gj-paper);
+  border-color: color-mix(in oklch, var(--gj-leaf) 30%, var(--gj-line));
+}
+.hub-cta__card--secondary:hover { border-color: var(--gj-leaf); }
+.hub-cta__card--secondary .hub-cta__title { color: var(--gj-leaf-deep); }
+.hub-cta__card--secondary .hub-cta__go { color: var(--gj-leaf-deep); }
+
+/* primary card — filled, prominent */
+.hub-cta__card--primary {
+  background: var(--gj-leaf-deep);
+  border-color: var(--gj-leaf-deep);
+  color: #fff;
+}
+.hub-cta__card--primary:hover { transform: translateY(-3px); box-shadow: var(--gj-shadow-l); }
+.hub-cta__card--primary .hub-cta__sub { color: rgba(255,255,255,.78); }
+.hub-cta__card--primary .hub-cta__go { color: #fff; opacity: .9; }
+
+.hub-cta__icon {
+  font-size: 28px; flex: none;
+  width: 52px; height: 52px; border-radius: var(--gj-r-m);
+  background: rgba(255,255,255,.18); display: grid; place-items: center;
+}
+.hub-cta__card--secondary .hub-cta__icon {
+  background: color-mix(in oklch, var(--gj-leaf) 12%, var(--gj-paper));
+}
+
+.hub-cta__body { flex: 1; min-width: 0; }
+.hub-cta__title { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; line-height: 1.25; margin-bottom: 4px; }
+.hub-cta__sub { font-size: 12.5px; line-height: 1.5; color: var(--gj-ink-soft); margin: 0; }
+.hub-cta__go { flex: none; font-size: 12px; font-weight: 700; white-space: nowrap; margin-inline-start: auto; }

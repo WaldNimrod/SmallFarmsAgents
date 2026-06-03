@@ -423,4 +423,113 @@ final class ClassBRouteTest extends TestCase
             'crop-book-v1.css .cards-grid must use a compact minmax track (≤128px)'
         );
     }
+
+    // ── WP-CB-UI-patch01 WI-3: hub copy + system-wide terminology ────────────
+
+    /** WI-3: hub home audience card label is "גנן" (not "גינאי ביתי") */
+    public function testHubHomeGardenerLabelIsGnan(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('גנן', $body,
+            'Hub home audience card must use "גנן" (not "גינאי ביתי")');
+        $this->assertStringNotContainsString('גינאי ביתי', $body,
+            'Hub home must not contain the old label "גינאי ביתי"');
+    }
+
+    /** WI-3: hub home uses "חקלאי מקומי" (not "חקלאי קטן") */
+    public function testHubHomeUsesLocalFarmerTerm(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('חקלאי מקומי', $body,
+            'Hub home must contain "חקלאי מקומי"');
+        $this->assertStringNotContainsString('חקלאי קטן', $body,
+            'Hub home must not contain the old term "חקלאי קטן"');
+    }
+
+    /** WI-3: hub home uses "חקלאות מקומית" (not "חקלאות קטנה") */
+    public function testHubHomeUsesLocalAgricultureTerm(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('חקלאות מקומית', $body,
+            'Hub home must contain "חקלאות מקומית"');
+        $this->assertStringNotContainsString('חקלאות קטנה', $body,
+            'Hub home must not contain the old term "חקלאות קטנה"');
+    }
+
+    /** WI-3: /about has no customer-facing Tend integration copy */
+    public function testAboutHasNoTendIntegrationCopy(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/about');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringNotContainsString('חיבור Tend', $body,
+            '/about must not contain "חיבור Tend" integration teaser');
+        $this->assertStringNotContainsString('חיבור ל-Tend', $body,
+            '/about must not contain "חיבור ל-Tend" integration copy');
+    }
+
+    // ── WP-CB-UI-patch01 WI-4: hub CTA section ───────────────────────────────
+
+    /** WI-4: hub home has .hub-cta section */
+    public function testHubHomeHasCtaSection(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('hub-cta', $body,
+            'Hub home must have the .hub-cta section (WI-4)');
+    }
+
+    /** WI-4: hub CTA section has /community link (secondary offer) */
+    public function testHubCtaHasCommunityLink(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The secondary CTA card links to /community
+        $this->assertMatchesRegularExpression(
+            '#hub-cta[^<]*.*href="/community"#s',
+            $body,
+            'Hub CTA must contain a link to /community'
+        );
+    }
+
+    /** WI-4: hub CTA section has wa.me WhatsApp link (primary offer) */
+    public function testHubCtaHasWhatsAppLink(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertMatchesRegularExpression(
+            '#hub-cta[^<]*.*wa\.me#s',
+            $body,
+            'Hub CTA must contain a wa.me WhatsApp link (primary CTA)'
+        );
+    }
+
+    /** WI-4: hub CTA primary card has hub-cta__card--primary class */
+    public function testHubCtaHasPrimaryCard(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('hub-cta__card--primary', $body,
+            'Hub CTA must have a prominently-styled primary card');
+    }
+
+    /** WI-4: hub CTA has contribution copy (secondary offer text) */
+    public function testHubCtaHasContributionText(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('שתפו אותנו במידע', $body,
+            'Hub CTA must include the secondary contribution offer text');
+    }
+
+    /** WI-4: hub CTA has feature-request copy (primary offer text) */
+    public function testHubCtaHasFeatureRequestText(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('ספרו לנו מה תרצו שנפתח', $body,
+            'Hub CTA must include the primary feature-request offer text');
+    }
 }

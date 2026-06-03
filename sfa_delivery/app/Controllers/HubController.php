@@ -27,7 +27,8 @@ final class HubController
     {
         $html = Template::render('pages/hub_home', [
             'modules' => Modules::all()['modules'] ?? [],
-            'tiers' => Modules::all()['tiers'] ?? [],
+            'tiers'   => Modules::all()['tiers']   ?? [],
+            'contact' => Modules::all()['contact']  ?? [],
         ]);
         return self::html($response, $html);
     }
