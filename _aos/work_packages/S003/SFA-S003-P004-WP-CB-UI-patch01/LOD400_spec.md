@@ -84,3 +84,9 @@ team_00 live screenshot showed the `/crop-book/` **entry-path cards** (`.cb-path
 responsive grid `repeat(auto-fit, minmax(190px,1fr))`; cap `.mod-card__art` to `height:54px` (aspect-ratio
 auto); shrink the no-image icon svg to ≤28px; tighten body padding; 2-col on ≤600px. Result: the
 "איך תרצו להיכנס?" entry section reads as 4 compact cards in one band — fits screen, no giant box.
+
+## WI-6 — FIX: broken app-shell logo (team_00 live finding, site-wide)
+team_00: the SFA logo renders broken. Root cause: `.sh__mark` is an inline `<a>` (width/height ignored)
+wrapping an UNSIZED `<svg><use href="#sfa-logo">` (no width/height attr, sized nowhere) → the SVG renders at
+its default huge intrinsic size = broken/overflowing logo (site-wide, not crop-book-specific). FIX (team_100,
+classb.css): `.sh__mark { display:inline-flex; width/height:34px; overflow:hidden }` + `.sh__mark svg { width:100%; height:100% }`. Same unsized-`<use>` class as the earlier account-logo/mod-card-icon bugs.

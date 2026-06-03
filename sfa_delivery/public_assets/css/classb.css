@@ -586,3 +586,10 @@
 .hub-cta__title { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; line-height: 1.25; margin-bottom: 4px; }
 .hub-cta__sub { font-size: 12.5px; line-height: 1.5; color: var(--gj-ink-soft); margin: 0; }
 .hub-cta__go { flex: none; font-size: 12px; font-weight: 700; white-space: nowrap; margin-inline-start: auto; }
+
+/* ── WP-CB-UI-patch01 WI-6: fix the app-shell logo (broken site-wide) ──────────
+   .sh__mark is an inline <a> (so its width/height were ignored) wrapping an
+   UNSIZED <svg><use href="#sfa-logo"> → the SVG rendered at its default huge
+   intrinsic size = broken logo. Constrain the anchor + size the inner svg. */
+.sh__mark { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; overflow: hidden; flex: none; }
+.sh__mark svg { width: 100%; height: 100%; display: block; }
