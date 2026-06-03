@@ -80,7 +80,7 @@ $wc_art_map = ['basil'=>'wc-basil.png', 'beet'=>'wc-beet.png', 'broccoli'=>'wc-b
 
 ob_start();
 ?>
-<section class="cb-hero" aria-label="ספר הגידולים">
+<section class="cb-hero cb-hero--compact" aria-label="ספר הגידולים">
   <img class="cb-hero__art" src="/public_assets/img/crops/wc-cropbook-hero.webp"
        alt="ספר גידולים" loading="eager" decoding="async">
   <div class="cb-hero__txt">

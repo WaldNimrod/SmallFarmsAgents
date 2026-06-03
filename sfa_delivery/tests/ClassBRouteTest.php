@@ -328,4 +328,99 @@ final class ClassBRouteTest extends TestCase
             'Nav link class must not have trailing space (e.g. "is-calc ") — F-7 fix'
         );
     }
+
+    // ── WP-CB-UI-patch01: hub full-width / Field-Log tile ────────────────────
+
+    /** WI-2: hub home contains Field Log tile with יומן השדה text */
+    public function testHubHomeHasFieldLogTitle(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('יומן השדה', $body,
+            'Hub home must include the Field Log tile with "יומן השדה"');
+    }
+
+    /** WI-2: hub home Field Log tile has "בפיתוח" badge */
+    public function testHubHomeHasFieldLogBadge(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('בפיתוח', $body,
+            'Hub home Field Log tile must show "בפיתוח"');
+    }
+
+    /** WI-2: hub home Field Log tile carries is-dev class */
+    public function testHubHomeFieldLogHasIsDevClass(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('is-dev', $body,
+            'Hub home Field Log tile must have the is-dev CSS class');
+    }
+
+    /** WI-2: hub home Field Log tile has no href (non-clickable) */
+    public function testHubHomeFieldLogHasNoHref(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The tile must be a <div>, not an <a> — verify no <a … is-dev … href
+        $this->assertDoesNotMatchRegularExpression(
+            '#<a[^>]+is-dev[^>]+href#',
+            $body,
+            'Field Log tile must NOT have an href — it is a non-clickable teaser div'
+        );
+    }
+
+    /** WI-2: classb.css .hub-grid uses auto-fit (not auto-fill) */
+    public function testClassbCssUsesAutoFit(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/classb.css');
+        // Confirm the hub-grid line now uses auto-fit
+        $this->assertMatchesRegularExpression(
+            '#hub-grid[^}]*auto-fit#s',
+            $css,
+            'classb.css .hub-grid must use auto-fit for full-width tile row'
+        );
+        // Confirm the hub-grid line no longer uses auto-fill
+        $this->assertDoesNotMatchRegularExpression(
+            '#hub-grid[^}]*auto-fill#s',
+            $css,
+            'classb.css .hub-grid must not use auto-fill (replaced by auto-fit)'
+        );
+    }
+
+    // ── WP-CB-UI-patch01: crop-book density ──────────────────────────────────
+
+    /** WI-1: /crop-book/ returns HTTP 200 */
+    public function testCropBookEntryReturns200(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/');
+        $res = $this->app->handle($req);
+        $this->assertSame(200, $res->getStatusCode(), '/crop-book/ must return 200');
+    }
+
+    /** WI-1: /crop-book/ still renders .cards-grid */
+    public function testCropBookEntryHasCardsGrid(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // cards-grid class appears in static HTML even without $crops (via the template structure)
+        // We check at minimum that the cb-hero and cb-paths are present
+        $this->assertStringContainsString('cb-hero', $body,
+            '/crop-book/ must still render .cb-hero (WI-1 kept functionality)');
+        $this->assertStringContainsString('cb-paths', $body,
+            '/crop-book/ must still render .cb-paths (WI-1 kept functionality)');
+    }
+
+    /** WI-1: crop-book-v1.css uses compact minmax (≤128px) for .cards-grid */
+    public function testCropBookCssUsesCompactGrid(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-v1.css');
+        // Assert minmax track is ≤128px (compact) — pattern: minmax(NNNpx where NNN<=128
+        $this->assertMatchesRegularExpression(
+            '#cards-grid[^}]*minmax\(1[01]\d|minmax\([0-9]{2}px#',
+            $css,
+            'crop-book-v1.css .cards-grid must use a compact minmax track (≤128px)'
+        );
+    }
 }

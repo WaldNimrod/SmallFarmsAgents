@@ -128,6 +128,19 @@ ob_start();
       </div>
     </a>
     <?php endforeach; ?>
+    <?php /* ── WP-CB-UI-patch01: Field Log in-development teaser tile ── */ ?>
+    <div class="modtile modtile--soil is-dev" aria-disabled="true">
+      <div class="modtile__art">
+        <span class="modtile__glyph" aria-hidden="true">📒</span>
+      </div>
+      <div class="modtile__body">
+        <div class="modtile__title">יומן השדה<small>FIELD-LOG</small></div>
+        <p class="modtile__desc">תיעוד פעולות שדה — זריעה, השקיה, יבול ומשימות</p>
+        <div class="modtile__foot">
+          <span class="modtile__go">בפיתוח</span>
+        </div>
+      </div>
+    </div>
   </div>
   <?php endif; ?>
 

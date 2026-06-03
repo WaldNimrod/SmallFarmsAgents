@@ -52,7 +52,7 @@
 .hub-groupbar::after { content: ''; flex: 1; height: 1px; background: var(--gj-line); }
 .hub-groupbar .gj-eyebrow { color: var(--gj-ink-soft); }
 
-.hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px, 1fr)); gap: 16px; }
+.hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(248px, 1fr)); gap: 16px; }
 .modtile {
   display: flex; flex-direction: column; position: relative;
   background: var(--gj-paper); border: 1px solid var(--gj-line);
@@ -95,6 +95,16 @@
 }
 .modtile.is-soon .modtile__title { color: var(--gj-ink-soft); }
 .modtile.is-soon .modtile__go { color: var(--gj-ink-soft); }
+
+/* in-development teaser tile (WP-CB-UI-patch01 — Field Log) */
+.modtile.is-dev { box-shadow: none; background: var(--gj-paper-2); cursor: default; border-style: dashed; }
+.modtile.is-dev:hover { transform: none; box-shadow: none; border-color: var(--gj-line); }
+.modtile.is-dev .modtile__art { filter: grayscale(.7) opacity(.6); }
+.modtile.is-dev .modtile__art::after {
+  content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, transparent 0 9px, rgba(120,130,110,.07) 9px 18px);
+}
+.modtile.is-dev .modtile__title { color: var(--gj-ink-soft); }
+.modtile.is-dev .modtile__go { color: var(--gj-ink-soft); font-style: italic; }
 
 /* ════════════════════════════════════════════════════════════
    3.3 · MARKET — disclaimer · list cards · detail · history

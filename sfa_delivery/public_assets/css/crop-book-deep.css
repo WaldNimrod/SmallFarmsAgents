@@ -1,7 +1,12 @@
 /* crop-book-deep.css — styles for the deeper crop book modules */
 
 /* ─── Entry landing ─── */
+/* WP-CB-UI-patch01: compact hero on entry page so the crop grid shows above the fold */
 .cb-entry { padding-bottom: 80px; }
+.cb-hero--compact { padding: 10px 18px; margin-bottom: 14px; }
+.cb-hero--compact .cb-hero__art { width: clamp(80px, 14vw, 140px); }
+.cb-hero--compact .cb-hero__title { font-size: clamp(18px, 3vw, 24px); margin-bottom: 2px; }
+.cb-hero--compact .cb-hero__sub { font-size: 13px; }
 .cb-section-h {
   font-family: var(--gj-font-head);
   font-weight: 700;

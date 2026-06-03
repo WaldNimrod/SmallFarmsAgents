@@ -30,7 +30,7 @@
 /* ════════════════════════════════════════════════════════════
    2 · CROP CARDS  (Cards audience view)
    ════════════════════════════════════════════════════════════ */
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .ccard {
   display: flex; flex-direction: column;
   background: var(--gj-paper); border: 1px solid var(--gj-line);
@@ -39,12 +39,12 @@
 }
 .ccard:hover { transform: translateY(-2px); box-shadow: var(--gj-shadow-m); }
 .ccard__art {
-  aspect-ratio: 1.3 / 1; display: grid; place-items: center; position: relative;
+  aspect-ratio: 1.7 / 1; display: grid; place-items: center; position: relative;
   background: radial-gradient(120% 120% at 50% 20%, #fff 0%, var(--gj-paper-2) 100%);
   border-bottom: 1px solid var(--gj-line);
 }
-.ccard__art img { width: 78%; height: 78%; object-fit: contain; mix-blend-mode: multiply; }
-.ccard__art .veg { font-size: 46px; }
+.ccard__art img { width: 64%; height: 64%; object-fit: contain; mix-blend-mode: multiply; }
+.ccard__art .veg { font-size: 28px; }
 .ccard__state {
   position: absolute; top: 8px; inset-inline-start: 8px;
   width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
@@ -52,8 +52,8 @@
 }
 .ccard__state--complete { background: var(--gj-leaf); }
 .ccard__state--partial  { background: var(--gj-sun); color: #4a2d04; }
-.ccard__body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.ccard__name { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; line-height: 1.1; }
+.ccard__body { padding: 6px 8px 8px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.ccard__name { font-family: var(--gj-font-head); font-weight: 700; font-size: 13px; line-height: 1.1; }
 .ccard__en { font-size: 10px; color: var(--gj-ink-soft); font-style: italic; }
 .ccard__season {
   display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
@@ -545,7 +545,7 @@
   .crophero__state { grid-column: 1 / -1; flex-direction: row; align-items: center; }
 }
 @media (max-width: 600px) {
-  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
   .headvals { grid-template-columns: 1fr 1fr; }
 }
 
