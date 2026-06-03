@@ -58,15 +58,23 @@ $pv = function(string $field_name) use ($cb1_fields, $h, $crop): string {
         $ri = '<a class="reqinfo" href="#" data-field="' . $fn($field_name) . '" data-crop="' . $fn($slug) . '">◐ בקשו נתון</a>';
         return '<span class="val--missing">—</span> ' . $ri;
     }
-    // Translate enum values to Hebrew before display (V02 fix).
-    // enumLabel() returns the original value when no mapping exists, so it is safe for all fields.
-    $display = \SFA\Lib\FieldRegistry::enumLabel($field_name, (string)$value);
+    // WI-1: apply number formatting for numeric fields; WI-2: map unit token to Hebrew.
+    // For numeric values, fmtNumber() formats them; for enum/text, enumLabel() translates.
+    if (is_numeric($value)) {
+        $display  = \SFA\Lib\FieldRegistry::fmtNumber($value, $unit);
+        $unit_he  = \SFA\Lib\FieldRegistry::unitLabel($unit);
+    } else {
+        // Translate enum values to Hebrew before display (V02 fix).
+        $display  = \SFA\Lib\FieldRegistry::enumLabel($field_name, (string)$value);
+        $unit_he  = \SFA\Lib\FieldRegistry::unitLabel($unit);
+    }
+    $unit_html = ($unit_he !== '') ? '<small> ' . $fn($unit_he) . '</small>' : '';
     if ($state === 'UNVALIDATED') {
         $conf = isset($field['confidence_score']) ? round((float)$field['confidence_score'] * 100) . '%' : '';
         $tip  = 'מקור: ' . $fn((string)($field['winning_source_class'] ?? '')) . ($conf !== '' ? ' · ביטחון ' . $conf : '');
-        return '<span class="tip">' . $fn($display) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '<span class="ast" title="' . $fn($tip) . '">*</span><span class="tip__pop"><b>ערך לא מאומת</b>' . $fn($tip) . '</span></span>';
+        return '<span class="tip">' . $fn($display) . $unit_html . '<span class="ast" title="' . $fn($tip) . '">*</span><span class="tip__pop"><b>ערך לא מאומת</b>' . $fn($tip) . '</span></span>';
     }
-    return '<span class="pv-validated">' . $fn($display) . ($unit ? '<small> ' . $fn($unit) . '</small>' : '') . '</span>';
+    return '<span class="pv-validated">' . $fn($display) . $unit_html . '</span>';
 };
 
 // Month chip helper (for sowing_months int[] array)
@@ -151,7 +159,7 @@ ob_start();
       $art_html_v1 = '<span class="veg" aria-hidden="true">' . $emoji . '</span>';
   }
   ?>
-  <section class="crophero">
+  <section class="crophero" id="identity">
     <div class="crophero__art"><?= $art_html_v1 ?></div>
     <div>
       <div class="crophero__bc">
@@ -205,14 +213,14 @@ ob_start();
           <div class="tcard__head"><span class="tcard__ic">🌱</span><span class="tcard__t">זריעה/שתילה</span></div>
           <div class="tcard__rows">
             <div class="tcard__row"><span class="k">שיטה</span><span class="v"><?= $pv('planting_method') ?></span></div>
-            <div class="tcard__row"><span class="k">במשתלה</span><span class="v"><?= $pv('days_in_nursery') ?><small> ימ׳</small></span></div>
+            <div class="tcard__row"><span class="k">במשתלה</span><span class="v"><?= $pv('days_in_nursery') ?></span></div>
           </div>
         </div>
         <div class="tcard tcard--grow">
           <div class="tcard__head"><span class="tcard__ic">📏</span><span class="tcard__t">מרווח ופריסה</span></div>
           <div class="tcard__rows">
             <div class="tcard__row"><span class="k">שורות</span><span class="v"><?= $pv('rows_per_bed') ?></span></div>
-            <div class="tcard__row"><span class="k">מרווח בשורה</span><span class="v"><?= $pv('spacing_in_row_cm') ?><small> ס״מ</small></span></div>
+            <div class="tcard__row"><span class="k">מרווח בשורה</span><span class="v"><?= $pv('spacing_in_row_cm') ?></span></div>
           </div>
         </div>
         <div class="tcard tcard--harvest">
@@ -224,7 +232,7 @@ ob_start();
         <div class="tcard tcard--yield">
           <div class="tcard__head"><span class="tcard__ic">📅</span><span class="tcard__t">רצף</span></div>
           <div class="tcard__rows">
-            <div class="tcard__row"><span class="k">מרווח רצף</span><span class="v"><?= $pv('succession_interval_weeks') ?><small> שבועות</small></span></div>
+            <div class="tcard__row"><span class="k">מרווח רצף</span><span class="v"><?= $pv('succession_interval_weeks') ?></span></div>
           </div>
         </div>
       </div>
@@ -355,9 +363,14 @@ ob_start();
                 <td><span class="v-name"><?= $h((string)($v['name_he'] ?? ($v['name'] ?? ''))) ?>
                   <?php if ($isDefault): ?><span class="star">★</span><?php endif; ?>
                 </span></td>
-                <td><?= $h((string)($agro['days_to_maturity'] ?? ($v['dtm_days'] ?? '—'))) ?></td>
-                <td><?= $h((string)($agro['in_row_spacing_cm'] ?? ($agro['spacing_in_row_cm'] ?? '—'))) ?></td>
-                <td><?= $h((string)($agro['avg_yield_per_bed_m'] ?? ($agro['yield_per_bed_m'] ?? '—'))) ?></td>
+                <?php
+                  $_dtm  = $agro['days_to_maturity'] ?? ($v['dtm_days'] ?? null);
+                  $_spc  = $agro['in_row_spacing_cm'] ?? ($agro['spacing_in_row_cm'] ?? null);
+                  $_yld  = $agro['avg_yield_per_bed_m'] ?? ($agro['yield_per_bed_m'] ?? null);
+                ?>
+                <td><?= $h($_dtm !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_dtm, 'days') : '—') ?></td>
+                <td><?= $h($_spc !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_spc) : '—') ?></td>
+                <td><?= $h($_yld !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_yld) : '—') ?></td>
               </tr>
               <?php endforeach; ?>
             </tbody>
@@ -464,34 +477,8 @@ ob_start();
 
   <!-- ══ END WP-CB-1 ════════════════════════════════════════════════ -->
 
-  <!-- ── Hero (legacy) ───────────────────────────────────────────── -->
-  <section class="cb-crop-hero" id="identity">
-    <nav class="cb-crop-hero__breadcrumb" aria-label="נתיב ניווט">
-      <a href="/crop-book/">ספר גידולים</a><span aria-hidden="true">›</span>
-      <?php if ($family): ?>
-        <a href="/crop-book/family/<?= $h((string)($family['slug'] ?? '')) ?>"><?= $h((string)($family['name_he'] ?? '')) ?></a><span aria-hidden="true">›</span>
-      <?php endif; ?>
-      <strong><?= $h($name_he) ?></strong>
-    </nav>
-
-    <div class="cb-crop-hero__head">
-      <?php if ($icon_url !== ''): ?>
-        <img class="crop-card__art cb-crop-hero__art" src="<?= $h($icon_url) ?>"
-             loading="lazy" decoding="async"
-             alt="<?= $h($name_he) ?>">
-      <?php else: ?>
-        <span class="cb-crop-hero__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><use href="#icon-<?= $h($icon_slug) ?>"></use></svg>
-        </span>
-      <?php endif; ?>
-      <div>
-        <h1 class="cb-crop-hero__h"><?= $h($name_he) ?></h1>
-        <?php if ($name_lat !== ''): ?>
-          <p class="cb-crop-hero__sci"><em><?= $h($name_lat) ?></em></p>
-        <?php endif; ?>
-      </div>
-    </div>
-
+  <!-- ── Crop lede + meta pills (WI-4: deduped hero; breadcrumb/h1/icon-box removed; lede+pills preserved) -->
+  <div class="cb-crop-lede">
     <?php /* Always emit lede hook for deterministic grep. */ ?>
     <p class="cb-crop-hero__lede">
       <?php if ($desc_he !== ''): ?>
@@ -520,11 +507,11 @@ ob_start();
         <?php
           $dtm = $crop['dtm_days'] ?? null;
           if ($dtm !== null && $dtm !== '' && (int)$dtm !== -32768): ?>
-          <span class="pill pill--muted"><?= (int)$dtm ?> ימים</span>
+          <span class="pill pill--muted"><?= (int)$dtm ?> ימ׳</span>
         <?php endif; ?>
       </div>
     <?php endif; ?>
-  </section>
+  </div>
 
   <!-- ── Sticky in-page section anchor nav ─────────────────────── -->
   <?php if (count($sections) > 1): ?>

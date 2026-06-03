@@ -160,9 +160,9 @@ ob_start();
       </div>
 
       <?php /* Price graph — 28-day (MINOR F-02: range selector shows 28י not 30) */ ?>
-      <div class="pgraph">
+      <div class="pgraph" data-slug="<?= $h($slug) ?>">
         <div class="pgraph__top">
-          <h3>מחיר — 28 ימים אחרונים</h3>
+          <h3 class="pgraph__title">מחיר — 28 ימים אחרונים</h3>
           <?php if ($delta !== null): ?>
             <span class="pgraph__chg <?= $delta >= 0 ? 'up' : 'dn' ?>">
               <?= $delta >= 0 ? '▲' : '▼' ?><?= number_format(abs($delta), 1) ?>%

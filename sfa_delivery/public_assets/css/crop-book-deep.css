@@ -519,13 +519,8 @@
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 4px;
 }
-.cb-crop-hero__icon {
-  width: 80px; height: 80px;
-  display: grid; place-items: center;
-  background: color-mix(in oklch, var(--gj-leaf) 14%, var(--gj-paper));
-  border-radius: 16px;
-  flex: none;
-}
+/* .cb-crop-hero__icon removed — WI-4 hero dedup; icon art box was the "green blob"
+   (svg zero-bbox → empty green box). The .crophero section is now the single hero. */
 .cb-crop-hero__sci {
   font-size: 12px;
   font-style: italic;

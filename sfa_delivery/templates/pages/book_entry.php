@@ -154,8 +154,28 @@ ob_start();
           </select>
         </div>
         <div class="fset">
-          <label class="fset__lbl" for="f-season">עונה</label>
-          <input id="f-season" type="text" name="season" value="<?= $h($fseason) ?>" placeholder="קיץ / חורף / אביב…">
+          <label class="fset__lbl" for="f-season">מחזור גידול</label>
+          <?php
+          // WI-5 / D-4a: crops.season stores growth-cycle tokens (annual/year-round/biennial)
+          // derived from crops.growth_cycle via sfa_ingest_push.py _season_from_growth_cycle().
+          // This is NOT a planting-season field — the planting_season attribute lives in
+          // payload_json and is not yet a filterable mirror column (data WP required).
+          // Convert the broken free-text input to a <select> matching actual stored tokens
+          // so the filter returns correct (non-zero) results for the values that DO exist.
+          // team_35 Q4 / team_100: a seasonal filter (summer/winter/spring) requires a new
+          // season_class column in the delivery mirror populated from payload_json attributes.
+          $season_opts = [
+              ''           => 'הכל',
+              'annual'     => 'חד-שנתי',
+              'biennial'   => 'דו-שנתי',
+              'year-round' => 'רב-שנתי / כל-השנה',
+          ];
+          ?>
+          <select id="f-season" name="season">
+            <?php foreach ($season_opts as $val => $lbl): ?>
+            <option value="<?= $h($val) ?>"<?= $sel($fseason, $val) ?>><?= $h($lbl) ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
         <div class="fset">
           <label class="fset__lbl" for="f-dtm">ימים להבשלה (עד)</label>

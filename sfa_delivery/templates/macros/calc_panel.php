@@ -102,7 +102,10 @@ $aud_cls    = $aud_class[$audience]  ?? 'tier--leaf';
         if ($fs === 'MISSING' || $val === null || $val === '') $bv_cls = ' bv--missing';
         $editable = !empty($bf['editable']) ? ' is-editable' : '';
         $fname = (string)($bf['field_name'] ?? '');
-        $disp_val = $val !== null ? $h((string)$val) : '—';
+        // WI-1: apply number formatting for display
+        $disp_val = $val !== null ? $h(\SFA\Lib\FieldRegistry::fmtNumber($val, (string)($bf['unit'] ?? ''))) : '—';
+        // WI-2: map unit token to Hebrew
+        $unit_he  = \SFA\Lib\FieldRegistry::unitLabel((string)($bf['unit'] ?? ''));
       ?>
       <span class="bv<?= $bv_cls . $editable ?>"
             data-book="<?= $h((string)($bf['key'] ?? $fname)) ?>"
@@ -114,7 +117,7 @@ $aud_cls    = $aud_class[$audience]  ?? 'tier--leaf';
         <?php else: ?>
           <b><?= $disp_val ?></b>
         <?php endif; ?>
-        <?php if (!empty($bf['unit'])): ?><small><?= $h((string)$bf['unit']) ?></small><?php endif; ?>
+        <?php if ($unit_he !== ''): ?><small><?= $h($unit_he) ?></small><?php endif; ?>
         <a class="bv__link" href="/crop-book/<?= $h($crop_slug) ?>/?depth=full#<?= $h($fname) ?>">↗ ספר</a>
         <?php if (!empty($bf['editable'])): ?>
           <button class="bv__restore" type="button">↺ ספר</button>

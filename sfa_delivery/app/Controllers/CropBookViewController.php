@@ -119,13 +119,15 @@ final class CropBookViewController
 
     public function questions(Request $request, Response $response): Response
     {
-        // Template (book_questions.php) expects q_he/sub_he/href shape.
+        // WI-5 / D-4b: route leading-questions to correct filters.
+        // 'summer'/'winter' → season filter (D-4a BLOCKED: crops.season stores growth-cycle tokens
+        //   'annual'/'year-round'/'biennial', NOT season; planting_season is in payload_json
+        //   attributes and not mirrored as a filterable column. Remove summer/winter until D-4a
+        //   data WP adds a season_class column to the mirror — flagged to team_100 / team_35 Q4).
+        // 'fast'         → dtm_max=60 (≤60 days = "fast" threshold; picks up most fast crops).
+        // 'beginner'/'small-space' → removed for launch (no backing attribute in mirror DB — Q4).
         $questions = [
-            ['slug' => 'summer',      'q_he' => 'מה מתאים לקיץ?',     'sub_he' => 'גידולי קיץ פוריים',     'href' => '/crop-book/table?category=summer'],
-            ['slug' => 'winter',      'q_he' => 'מה זורעים לחורף?',   'sub_he' => 'גידולי חורף קלים',     'href' => '/crop-book/table?category=winter'],
-            ['slug' => 'fast',        'q_he' => 'מה גדל מהר?',        'sub_he' => 'DTM קצר',              'href' => '/crop-book/table?category=fast'],
-            ['slug' => 'beginner',    'q_he' => 'מה מתאים למתחילים?', 'sub_he' => 'התחלה רכה',            'href' => '/crop-book/table?category=beginner'],
-            ['slug' => 'small-space', 'q_he' => 'מה מתאים לשטח קטן?',  'sub_he' => 'כדים, מרפסות, מ״ר',    'href' => '/crop-book/table?category=small-space'],
+            ['slug' => 'fast', 'q_he' => 'מה גדל מהר?', 'sub_he' => 'עד 60 ימ׳ להבשלה', 'href' => '/crop-book/?dtm_max=60'],
         ];
         return $this->html($response, Template::render('pages/book_questions', ['questions' => $questions]));
     }

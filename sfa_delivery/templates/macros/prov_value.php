@@ -25,6 +25,7 @@
  * @see FIELD_INTERFACE_MAP_v1.0.0.md §4
  */
 use SFA\Lib\Template;
+use SFA\Lib\FieldRegistry;
 $h = [Template::class, 'h'];
 
 $field       = $field       ?? [];
@@ -61,9 +62,12 @@ if ($state === 'MISSING') {
 <?php
 } elseif ($state === 'UNVALIDATED') {
     $tip_he = 'מקור: ' . $h($src) . ($conf !== null ? ' · ביטחון ' . round($conf * 100) . '%' : '') . ' — מאומת חלקית';
+    // WI-1/WI-2: format number + Hebrew unit
+    $_disp    = is_numeric($value) ? FieldRegistry::fmtNumber($value, $unit) : FieldRegistry::enumLabel($field_name, (string)$value);
+    $_unit_he = FieldRegistry::unitLabel($unit);
 ?>
 <span class="tip" data-field="<?= $h($field_name) ?>">
-  <?= $h((string)$value) ?><?php if ($unit !== ''): ?><small> <?= $h($unit) ?></small><?php endif; ?>
+  <?= $h($_disp) ?><?php if ($_unit_he !== ''): ?><small> <?= $h($_unit_he) ?></small><?php endif; ?>
   <span class="ast" title="<?= $h($tip_he) ?>">*</span>
   <?php if ($show_tooltip): ?>
   <span class="tip__pop">
@@ -76,11 +80,15 @@ if ($state === 'MISSING') {
 } elseif ($state === 'UNKNOWN') {
     // Value present, backend stamped no state — show it plainly with a neutral
     // "not yet checked" cue. NOT styled as validated (no τ assumption). FIM §4.
+    $_disp    = is_numeric($value) ? FieldRegistry::fmtNumber($value, $unit) : FieldRegistry::enumLabel($field_name, (string)$value);
+    $_unit_he = FieldRegistry::unitLabel($unit);
 ?>
-<span class="pv-unknown" data-field="<?= $h($field_name) ?>" title="טרם אומת מול הספר"><?= $h((string)$value) ?><?php if ($unit !== ''): ?><small> <?= $h($unit) ?></small><?php endif; ?></span>
+<span class="pv-unknown" data-field="<?= $h($field_name) ?>" title="טרם אומת מול הספר"><?= $h($_disp) ?><?php if ($_unit_he !== ''): ?><small> <?= $h($_unit_he) ?></small><?php endif; ?></span>
 <?php
 } else { // VALIDATED
+    $_disp    = is_numeric($value) ? FieldRegistry::fmtNumber($value, $unit) : FieldRegistry::enumLabel($field_name, (string)$value);
+    $_unit_he = FieldRegistry::unitLabel($unit);
 ?>
-<span class="pv-validated" data-field="<?= $h($field_name) ?>"><?= $h((string)$value) ?><?php if ($unit !== ''): ?><small> <?= $h($unit) ?></small><?php endif; ?></span>
+<span class="pv-validated" data-field="<?= $h($field_name) ?>"><?= $h($_disp) ?><?php if ($_unit_he !== ''): ?><small> <?= $h($_unit_he) ?></small><?php endif; ?></span>
 <?php
 }
