@@ -1,0 +1,311 @@
+[
+ {
+  "title": "SFA · SFA",
+  "t": 1642,
+  "graph": 0,
+  "icon_uses": 2,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 4,
+  "svg_zero": 2,
+  "navText": [
+   "SFAחקלאות מקומית",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 0,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "classb.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/"
+ },
+ {
+  "title": "ספר גידולים · SFA",
+  "t": 2409,
+  "graph": 0,
+  "icon_uses": 5,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 7,
+  "svg_zero": 2,
+  "navText": [
+   "SFAמאגר ידע פתוח",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 2,
+  "hasFilters": 11,
+  "hasToggle": 2,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/crop-book/"
+ },
+ {
+  "title": "חסה · SFA",
+  "t": 5810,
+  "graph": 0,
+  "icon_uses": 2,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 4,
+  "svg_zero": 2,
+  "navText": [
+   "SFA",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA",
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 0,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/crop-book/lettuce/"
+ },
+ {
+  "title": "מחשבון · SFA",
+  "t": 2957,
+  "graph": 0,
+  "icon_uses": 1,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 3,
+  "svg_zero": 2,
+  "navText": [
+   "SFAתכנון גידולים · 14 מודולים",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 1,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/calc/"
+ },
+ {
+  "title": "מחירון · SFA",
+  "t": 3661,
+  "graph": 0,
+  "icon_uses": 1,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 3,
+  "svg_zero": 2,
+  "navText": [
+   "SFAמחירי שוק קהילתיים",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 0,
+  "hasToggle": 4,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "classb.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/market/"
+ },
+ {
+  "title": "חיפוש · SFA",
+  "t": 290,
+  "graph": 0,
+  "icon_uses": 1,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 3,
+  "svg_zero": 2,
+  "navText": [
+   "SFAחקלאות מקומית",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 2,
+  "hasFilters": 0,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "classb.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/search?q=%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%99%D7%94"
+ },
+ {
+  "title": "קהילה · SFA",
+  "t": 611,
+  "graph": 0,
+  "icon_uses": 1,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 3,
+  "svg_zero": 2,
+  "navText": [
+   "SFAקהילה פתוחה",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 0,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "classb.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/community"
+ },
+ {
+  "title": "מה זה SFA · SFA",
+  "t": 849,
+  "graph": 0,
+  "icon_uses": 1,
+  "icon_symbols": 11,
+  "icon_broken": 0,
+  "brokenSample": [],
+  "svg_total": 3,
+  "svg_zero": 2,
+  "navText": [
+   "SFAאיך הכלים מסודרים",
+   "▤ספר גידולים",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "▤ספר",
+   "∑מחשבון",
+   "₪מחירון",
+   "◔חשבון",
+   "SFA",
+   "על הכלים",
+   "קהילה"
+  ],
+  "hasLatinNav": [
+   "SFA"
+  ],
+  "hasSearchForm": 1,
+  "hasFilters": 0,
+  "hasToggle": 0,
+  "hasJS": [
+   "sfa.js?v=1780522574",
+   "crop-book-v1.js?v=1780522574",
+   "classb.js?v=1780522574",
+   "v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
+  ],
+  "console_errors": [],
+  "path": "/about"
+ }
+]

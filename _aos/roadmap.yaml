@@ -4193,6 +4193,48 @@ work_packages:
     NEXT: team_99 deploy patch01 final tip + team_10 overflow fix → team_50 re-audit → team_190 L-GATE_V → launch."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-UI-FIDELITY
+  label: "ספר גידולים: UI fidelity & Hebrew localization remediation — crop-book/market raw numbers + English tokens + broken hero/filters (pre-launch)"
+  status: SPEC
+  phase: spec
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400_DRAFT
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-04"
+  milestone_ref: "S003"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-FIDELITY/LOD400_spec.md"
+  evidence_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/audit_evidence/"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-04"
+    notes: >
+      team_00: live site far from team_35 mockups (raw numbers, English text, broken interfaces). team_100 CDP
+      audit confirmed launch-blocking defects on the CORE crop pages that passed composer/validate AND prior
+      L-GATE_V (structural gates miss rendered formatting/localization/fidelity; team_50 Haiku QA was unreliable).
+      team_00 directs a full remediation WP + repeat visual validation + team_35 completions, handed to a fresh
+      session via aos_handoff full 100 that must review/improve + externally validate (team_190) BEFORE execution.
+    validator: team_00
+  - gate: L-GATE_S
+    result: DRAFT
+    date: "2026-06-04"
+    validator: team_100
+    notes: >
+      team_100 authored LOD400 DRAFT (characterization). 5 BLOCKERS: D-1 raw 6-decimal floats on crop pages
+      (book_crop.php/prov_value.php), D-2 English unit codes cm/days/weeks/count (no unit→Hebrew map in
+      FieldRegistry), D-3 market category chips = raw English keys (root_vegetables/leafy_greens/…), D-4 crop-book
+      filters return 0 (season token vs data mismatch), D-5 broken/duplicated oversized crop hero (.crophero +
+      .cb-crop-hero). 3 MAJOR: classb.js not on crop-book/calc; English <small> eyebrows; full mockup-fidelity
+      sweep. 7 ACs (CDP visual + functional). Evidence: audit_evidence/ (live + Board-A/B screenshots, cdp_facts).
+      NOT self-certified — executing session improves it + routes external L-GATE_S (team_190) before build.
+  notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
+    100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
+    → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
+  profile: L0
+
 - id: SFA-S003-P004-WP-SRV-IDEAS
   label: "ספר גידולים: מאגר רעיונות צד-שרת (מוצע, לא מאושר — לבדיקה עתידית)"
   status: OPEN
