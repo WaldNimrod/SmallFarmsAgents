@@ -143,13 +143,21 @@
 
 /* ─── Pro table ─── */
 /* WI-7: .dt-table-wrap — horizontal-scroll container for the 7-col desktop
-   data table in /crop-book/table. Prevents page-level overflow at ≤768px. */
+   data table in /crop-book/table. Prevents page-level overflow at ≤768px.
+   WI-8: .cb-table-page gets overflow-x:clip to prevent the RTL-origin layout
+   width (scrollX starts negative in RTL) from leaking into the document
+   scrollWidth. clip does not create a scroll context, so .dt-table-wrap's
+   own overflow-x:auto scroll continues to work normally. */
+.cb-table-page {
+  overflow-x: clip;
+}
 .dt-table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border: 1px solid var(--gj-line);
   border-radius: 10px;
   margin-bottom: 12px;
+  min-width: 0;
 }
 .dt-table {
   width: 100%;
