@@ -628,3 +628,16 @@
 /* Responsive nav switch — desktop top bar vs mobile bottom tab bar (project-authored, not in SSoT) */
 @media (max-width: 899px) { .sh__nav, .sh__acct { display: none; } }
 @media (min-width: 900px)  { .sh__nav--mobile { display: none; } }
+
+/* ── WP-CB-UI-patch01 WI-5: compact crop-book entry-path cards ──────────────
+   FIX (team_00 live feedback): the /crop-book/ entry cards (.cb-paths .mod-card)
+   were full-width single-column with .mod-card__art aspect-ratio:2/1 → each card
+   ~half-its-width tall (~550px) = giant + blown-up leaf icon. Make .cb-paths a
+   tight responsive row and cap the art to a small icon band. Scoped to .cb-paths
+   only (does not affect .mod-card elsewhere). */
+.cb-paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.cb-paths .mod-card__art { aspect-ratio: auto; height: 54px; }
+.cb-paths .mod-card__art:not(:has(img, picture, .mod-card__hero)) > .mod-card__icon { padding: 8px; }
+.cb-paths .mod-card__art:not(:has(img, picture, .mod-card__hero)) > .mod-card__icon svg { max-width: 28px; max-height: 28px; }
+.cb-paths .mod-card__body { padding: 8px 10px 10px; }
+@media (max-width: 600px) { .cb-paths { grid-template-columns: 1fr 1fr; } }

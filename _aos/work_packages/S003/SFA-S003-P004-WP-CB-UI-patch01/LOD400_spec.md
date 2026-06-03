@@ -75,3 +75,12 @@ Style `.hub-cta` palette-consistent (white-green), RTL, responsive; reuse `.reqi
 - Delivery tier ONLY. No `_aos/`, Python, migration, backend. IR#4 (no roadmap edits by builder). No git by builder.
 - Palette/tokens unchanged (white-green); no new cream; classb.css stays last in load order.
 - "יומן השדה / Field Log" is a **teaser only** (PLANNED, not built) — must read as "בפיתוח", never as available.
+
+## WI-5 — FIX: compact `/crop-book/` entry-path cards (post-R1 live finding)
+team_00 live screenshot showed the `/crop-book/` **entry-path cards** (`.cb-paths .mod-card` — "שאלות מובילות"
+/ "משפחות בוטניות" / table / search) rendering **giant** (full-width single-column × `.mod-card__art`
+`aspect-ratio:2/1` → ~550px-tall cards with a blown-up leaf icon). WI-1 had densified the wrong cards (the
+`.ccard` crops grid). FIX (team_100, crop-book-v1.css, scoped to `.cb-paths`): make `.cb-paths` a tight
+responsive grid `repeat(auto-fit, minmax(190px,1fr))`; cap `.mod-card__art` to `height:54px` (aspect-ratio
+auto); shrink the no-image icon svg to ≤28px; tighten body padding; 2-col on ≤600px. Result: the
+"איך תרצו להיכנס?" entry section reads as 4 compact cards in one band — fits screen, no giant box.
