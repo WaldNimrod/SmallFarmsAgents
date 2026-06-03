@@ -4147,6 +4147,39 @@ work_packages:
     08f529d → DEPLOY_REPORT → team_190 L-GATE_V R2 (C1–C9) → LOD500_LOCKED. Branch claude/ui-polish-hub-cropbook-2026-06-03."
   profile: L0
 
+- id: SFA-S003-P004-WP-PRELAUNCH-QA
+  label: "ספר גידולים: Pre-launch full-system visual + E2E QA (all surfaces vs team_35 mockups) — launch-readiness audit"
+  status: ROUTED
+  phase: qa
+  track: A
+  effort: NORMAL
+  current_lean_gate: QA
+  lod_status: MANDATE
+  assigned_builder: team_50
+  assigned_validator: team_190
+  created_at: "2026-06-03"
+  milestone_ref: "S003"
+  spec_ref: "_COMMUNICATION/team_50/SFA-PRELAUNCH-QA/QA_MANDATE_PRELAUNCH_VISUAL_E2E_2026-06-03_v1.0.0.md"
+  mandate_ref: "_COMMUNICATION/team_50/SFA-PRELAUNCH-QA/QA_MANDATE_PRELAUNCH_VISUAL_E2E_2026-06-03_v1.0.0.md"
+  gate_history:
+  - gate: QA
+    result: ROUTED
+    date: "2026-06-03"
+    validator: team_50
+    notes: >
+      team_00 directive (pre-market-launch): comprehensive visual + E2E QA of ALL live surfaces on sfa.nimrod.bio
+      vs the approved team_35 mockups (Board-A crop+calc, Board-B surfaces), using the CDP browser-QA harness
+      (qa_probe.mjs — real rendering, NOT curl) at 4 viewports. Triggered by 2 render-only defects (giant
+      /crop-book/ entry cards; broken app-shell logo) that passed composer+validate. team_100 authored the
+      mandate: 17-route inventory, full E2E control matrix, design-vs-mockup screenshot pairs, cross-cutting
+      checks (unsized-SVG/overflow hunt, RTL, asset integrity, no raw-key leakage, console errors, a11y,
+      responsiveness) + team_50 discretionary additions. Required output: GO / GO-WITH-FIXES / NO-GO + prioritized
+      punch-list → team_100 dispatches fixes (team_10) → external L-GATE_V (team_190 non-Claude). Precondition:
+      patch01 tip 7fbcf89 deployed live.
+  notes: "OPENED 2026-06-03 (pre-launch readiness audit). team_50 read-only visual+E2E sweep → punch-list →
+    team_10 fixes → team_190 L-GATE_V. Mandate: QA_MANDATE_PRELAUNCH_VISUAL_E2E_2026-06-03_v1.0.0.md."
+  profile: L0
+
 - id: SFA-S003-P004-WP-SRV-IDEAS
   label: "ספר גידולים: מאגר רעיונות צד-שרת (מוצע, לא מאושר — לבדיקה עתידית)"
   status: OPEN
