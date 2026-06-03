@@ -4131,6 +4131,17 @@ work_packages:
       No team_99 DEPLOY_REPORT in repo. Branch code C5 PASS (delivery-tier, #f8fbf8, classb.css last, composer
       159/159, validate 0 FAIL, no roadmap edit). Do NOT LOD500_LOCK. UNBLOCK: team_99 deploys tip 08f529d
       (SHAs 3c74c87+f9d274c) → DEPLOY_REPORT → re-route team_190 L-GATE_V R2 (checks C1–C9).
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-03"
+    validator: team_99
+    deployed_sha: "08f529d"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-patch01/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 deployed tip 08f529d to sfa.nimrod.bio (FTPS relay; 15 transferred / exit 0). ALL 5 smoke PASS:
+      hub 4 tiles incl. 'יומן השדה' is-dev/aria-disabled non-clickable; 'גנן'=1, 'חקלאות מקומית'=1,
+      'חקלאות קטנה'=0; .hub-cta dual CTA (→/community + primary →wa.me); /crop-book/ dense grid (74 crop
+      anchors, no inline style); /about Tend=0; 6 routes 200. L-GATE_V R2 executable (live matches branch).
   notes: "OPENED 2026-06-03 (team_00 live UI feedback; round-2 folded in). BUILT + team_100 L-GATE_B PASS (08f529d).
     L-GATE_V R1 FAIL = deploy-precondition only (live still pre-patch01; branch ready). NEXT: team_99 deploy
     08f529d → DEPLOY_REPORT → team_190 L-GATE_V R2 (C1–C9) → LOD500_LOCKED. Branch claude/ui-polish-hub-cropbook-2026-06-03."
