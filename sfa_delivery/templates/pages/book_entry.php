@@ -26,7 +26,7 @@ $active     = 'crop-book';
 $crop_total     = (int)($crop_total     ?? 66);
 $family_total   = (int)($family_total   ?? 8);
 $variety_total  = (int)($variety_total  ?? 242);
-$question_total = (int)($question_total ?? 12);
+$question_total = (int)($question_total ?? 3);
 
 $paths = [
   [
@@ -154,21 +154,17 @@ ob_start();
           </select>
         </div>
         <div class="fset">
-          <label class="fset__lbl" for="f-season">מחזור גידול</label>
+          <label class="fset__lbl" for="f-season">עונה</label>
           <?php
-          // WI-5 / D-4a: crops.season stores growth-cycle tokens (annual/year-round/biennial)
-          // derived from crops.growth_cycle via sfa_ingest_push.py _season_from_growth_cycle().
-          // This is NOT a planting-season field — the planting_season attribute lives in
-          // payload_json and is not yet a filterable mirror column (data WP required).
-          // Convert the broken free-text input to a <select> matching actual stored tokens
-          // so the filter returns correct (non-zero) results for the values that DO exist.
-          // team_35 Q4 / team_100: a seasonal filter (summer/winter/spring) requires a new
-          // season_class column in the delivery mirror populated from payload_json attributes.
+          // Decision A (2026-06-04): real planting-season filter, derived from
+          // sowing_months ∪ transplant_months in payload_json['agronomy'] (PHP post-filter).
+          // Coverage: ~39–44/70 crops have month data; unmatched crops are excluded honestly.
           $season_opts = [
-              ''           => 'הכל',
-              'annual'     => 'חד-שנתי',
-              'biennial'   => 'דו-שנתי',
-              'year-round' => 'רב-שנתי / כל-השנה',
+              ''       => 'הכל',
+              'summer' => 'קיץ',
+              'winter' => 'חורף',
+              'spring' => 'אביב',
+              'autumn' => 'סתיו',
           ];
           ?>
           <select id="f-season" name="season">

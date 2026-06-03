@@ -46,12 +46,25 @@ final class CropBookViewController
         $sow       = trim((string)($qp['sow']    ?? ''));   // planting_method (payload)
         $frost     = trim((string)($qp['frost']  ?? ''));   // frost_tolerance_class (payload)
 
-        $sql    = 'SELECT slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
+        // Decision A (2026-06-04): season is a PHP post-filter derived from
+        // sowing_months ∪ transplant_months in payload_json['agronomy'].
+        // crops.season stores growth-cycle tokens (annual/year-round/biennial) — NOT planting season.
+        // Season→months map (meteorological, Israel):
+        /** @var array<string,int[]> */
+        $seasonMonthsMap = [
+            'summer' => [6, 7, 8],
+            'autumn' => [9, 10, 11],
+            'winter' => [12, 1, 2],
+            'spring' => [3, 4, 5],
+        ];
+
+        // Decision A fix (2026-06-04): id required to join crop_varieties for month data.
+        $sql    = 'SELECT id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
         $where  = [];
         $params = [];
         if ($q !== '')      { $where[] = '(hebrew_name LIKE ? OR scientific_name LIKE ?)'; $params[] = "%$q%"; $params[] = "%$q%"; }
         if ($family !== '') { $where[] = 'family_name_he = ?'; $params[] = $family; }
-        if ($season !== '') { $where[] = 'season LIKE ?';      $params[] = "%$season%"; }
+        // NOTE: season filter is NOT in SQL — handled as PHP post-filter below (Decision A).
         if ($dtmMax !== null) { $where[] = '(dtm_max IS NULL OR dtm_max <= ?)'; $params[] = $dtmMax; }
         if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
         $sql .= ' ORDER BY hebrew_name';
@@ -59,6 +72,57 @@ final class CropBookViewController
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $rows = $stmt->fetchAll() ?: [];
+
+        // Decision A fix: months data lives in crop_varieties.payload_json['agronomy'],
+        // NOT in crops.payload_json (the crop-level payload has only numeric medians).
+        // Build crop_id → int[] months map via ONE batched query across all result crops.
+        /** @var array<int,int[]> */
+        $monthsByCrop = [];
+
+        // Normalize a months value from payload: may be a JSON string, an array, or absent.
+        $normalizeMonths = static function (mixed $raw): array {
+            if (is_array($raw)) {
+                return array_map('intval', $raw);
+            }
+            if (is_string($raw) && $raw !== '') {
+                $decoded = json_decode($raw, true);
+                if (is_array($decoded)) {
+                    return array_map('intval', $decoded);
+                }
+            }
+            return [];
+        };
+
+        // Only fetch variety months when a season filter is active (avoids decoding every
+        // variety payload on the default list view — team_100 L-GATE_B perf guard).
+        $cropIds = $season !== '' ? array_filter(array_map(static fn ($r) => (int)($r['id'] ?? 0), $rows)) : [];
+        if (!empty($cropIds)) {
+            try {
+                $placeholders = implode(',', array_fill(0, count($cropIds), '?'));
+                $varStmt = $this->pdo->prepare(
+                    "SELECT crop_id, payload_json FROM crop_varieties WHERE crop_id IN ($placeholders)"
+                );
+                $varStmt->execute(array_values($cropIds));
+                foreach ($varStmt->fetchAll() as $vRow) {
+                    $cid     = (int)$vRow['crop_id'];
+                    $vPayload = json_decode((string)($vRow['payload_json'] ?? '{}'), true);
+                    $vPayload = is_array($vPayload) ? $vPayload : [];
+                    $agro    = is_array($vPayload['agronomy'] ?? null) ? $vPayload['agronomy'] : [];
+                    $sowM    = $normalizeMonths($agro['sowing_months']     ?? null);
+                    $transM  = $normalizeMonths($agro['transplant_months'] ?? null);
+                    $merged  = array_values(array_unique(array_merge(
+                        $monthsByCrop[$cid] ?? [],
+                        $sowM,
+                        $transM
+                    )));
+                    $monthsByCrop[$cid] = $merged;
+                }
+            } catch (\Throwable) {
+                // crop_varieties table absent or query failure — degrade to empty map.
+                // Season filter will exclude all crops when season is selected (no data → no match).
+                $monthsByCrop = [];
+            }
+        }
 
         $crops = [];
         foreach ($rows as $row) {
@@ -74,6 +138,18 @@ final class CropBookViewController
             if ($frost !== '') {
                 $ft = (string)($payload['frost_tolerance_class'] ?? ($payload['agronomy']['frost_tolerance_class'] ?? ''));
                 if ($ft !== $frost) { continue; }
+            }
+
+            // Decision A (2026-06-04): season post-filter — derive season from sowing_months ∪ transplant_months.
+            // Source: crop_varieties.payload_json['agronomy'] (batched above into $monthsByCrop).
+            // Crops lacking month data simply don't match any season (honest partial coverage).
+            if ($season !== '' && isset($seasonMonthsMap[$season])) {
+                $targetMonths = $seasonMonthsMap[$season];
+                $cropMonths   = $monthsByCrop[(int)($row['id'] ?? 0)] ?? [];
+
+                if (empty($cropMonths) || empty(array_intersect($cropMonths, $targetMonths))) {
+                    continue; // no month data, or months don't intersect the requested season
+                }
             }
 
             $dtm = isset($row['dtm_max']) && $row['dtm_max'] !== null
@@ -119,15 +195,14 @@ final class CropBookViewController
 
     public function questions(Request $request, Response $response): Response
     {
-        // WI-5 / D-4b: route leading-questions to correct filters.
-        // 'summer'/'winter' → season filter (D-4a BLOCKED: crops.season stores growth-cycle tokens
-        //   'annual'/'year-round'/'biennial', NOT season; planting_season is in payload_json
-        //   attributes and not mirrored as a filterable column. Remove summer/winter until D-4a
-        //   data WP adds a season_class column to the mirror — flagged to team_100 / team_35 Q4).
-        // 'fast'         → dtm_max=60 (≤60 days = "fast" threshold; picks up most fast crops).
-        // 'beginner'/'small-space' → removed for launch (no backing attribute in mirror DB — Q4).
+        // Decision B (2026-06-04): restore data-backed leading questions.
+        // summer/winter now route to the season filter backed by sowing_months ∪ transplant_months
+        // (Decision A). 'fast' routes to dtm_max=60 (≤60 days to maturity).
+        // team_35 owns the final/expanded set + exact "מתאים לקיץ" semantics via DESIGN_REQUEST_team35_v1.0.0.md (Q4).
         $questions = [
-            ['slug' => 'fast', 'q_he' => 'מה גדל מהר?', 'sub_he' => 'עד 60 ימ׳ להבשלה', 'href' => '/crop-book/?dtm_max=60'],
+            ['slug' => 'summer', 'q_he' => 'מה מתאים לקיץ?',    'sub_he' => 'זריעה בחודשי הקיץ',   'href' => '/crop-book/?season=summer'],
+            ['slug' => 'winter', 'q_he' => 'מה זורעים לחורף?',  'sub_he' => 'זריעה בחודשי החורף', 'href' => '/crop-book/?season=winter'],
+            ['slug' => 'fast',   'q_he' => 'מה גדל מהר?',        'sub_he' => 'עד 60 ימ׳ להבשלה',   'href' => '/crop-book/?dtm_max=60'],
         ];
         return $this->html($response, Template::render('pages/book_questions', ['questions' => $questions]));
     }

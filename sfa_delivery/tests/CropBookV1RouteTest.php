@@ -325,4 +325,71 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringContainsString('calc-page', $html, 'Calc dashboard must include .calc-page');
         $this->assertStringContainsString('calc-dash', $html, 'Calc dashboard must include .calc-dash');
     }
+
+    // ── Decision A regression: season filter reads variety months, not crop payload ──
+
+    /**
+     * Regression test for Decision A bug fix (2026-06-04):
+     * sowing_months lives in crop_varieties.payload_json['agronomy'], NOT in
+     * crops.payload_json. Before the fix, season filter always returned 0 crops.
+     *
+     * Seeds:
+     *   crop A (pepper, id=10)  → variety months [3,4,5]  → spring
+     *   crop B (tomato, id=11)  → variety months [6,7,8]  → summer
+     *   crop C (basil,  id=12)  → no variety month data   → no season match
+     *
+     * Asserts:
+     *   ?season=summer → B present, A absent, C absent
+     *   ?season=spring → A present, B absent, C absent
+     */
+    public function testSeasonFilterReadsVarietyMonths(): void
+    {
+        // Seed 3 extra crops with empty crop-level payload (months NOT in crop payload — mirrors real data).
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json, last_pushed_at)
+            VALUES
+            (10, 'pepper', 'פלפל',   'Capsicum annuum',  'סולניים', 'vegetables', 'annual', 60, 90, '{}', '2026-06-04'),
+            (11, 'tomato', 'עגבנייה','Solanum lycopersicum','סולניים','vegetables','annual', 60, 90, '{}', '2026-06-04'),
+            (12, 'basil',  'בזיליקום','Ocimum basilicum', 'שפתניים','herbs',       'annual', 60, 90, '{}', '2026-06-04')");
+
+        // Variety for crop A (pepper): spring months [3,4,5] in agronomy.sowing_months.
+        $springPayload = json_encode(['agronomy' => ['sowing_months' => [3, 4, 5]]]);
+        // Variety for crop B (tomato): summer months [6,7,8].
+        $summerPayload = json_encode(['agronomy' => ['sowing_months' => [6, 7, 8]]]);
+        // crop C (basil): variety exists but has NO month data (empty agronomy).
+        $noMonthPayload = json_encode(['agronomy' => []]);
+
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id, crop_id, name, payload_json) VALUES
+            (201, 10, 'Standard', " . $this->pdo->quote($springPayload) . "),
+            (202, 11, 'Cherry',   " . $this->pdo->quote($summerPayload) . "),
+            (203, 12, 'Genovese', " . $this->pdo->quote($noMonthPayload) . ")");
+
+        // ── season=summer ──────────────────────────────────────────────────────────
+        $resSummer = $this->get('/crop-book/?season=summer');
+        $this->assertSame(200, $resSummer->getStatusCode());
+        $htmlSummer = (string)$resSummer->getBody();
+        // Crop B (tomato) must be present.
+        $this->assertStringContainsString('/crop-book/tomato/', $htmlSummer,
+            'season=summer: tomato (months [6,7,8]) must be in results');
+        // Crop A (pepper, spring) must be absent.
+        $this->assertStringNotContainsString('/crop-book/pepper/', $htmlSummer,
+            'season=summer: pepper (months [3,4,5]) must NOT be in results');
+        // Crop C (basil, no data) must be absent.
+        $this->assertStringNotContainsString('/crop-book/basil/', $htmlSummer,
+            'season=summer: basil (no month data) must NOT be in results');
+
+        // ── season=spring ──────────────────────────────────────────────────────────
+        $resSpring = $this->get('/crop-book/?season=spring');
+        $this->assertSame(200, $resSpring->getStatusCode());
+        $htmlSpring = (string)$resSpring->getBody();
+        // Crop A (pepper) must be present.
+        $this->assertStringContainsString('/crop-book/pepper/', $htmlSpring,
+            'season=spring: pepper (months [3,4,5]) must be in results');
+        // Crop B (tomato, summer) must be absent.
+        $this->assertStringNotContainsString('/crop-book/tomato/', $htmlSpring,
+            'season=spring: tomato (months [6,7,8]) must NOT be in results');
+        // Crop C (basil, no data) must be absent.
+        $this->assertStringNotContainsString('/crop-book/basil/', $htmlSpring,
+            'season=spring: basil (no month data) must NOT be in results');
+    }
 }
