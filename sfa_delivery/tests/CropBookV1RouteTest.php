@@ -260,6 +260,61 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertSame(200, $res->getStatusCode());
     }
 
+    // ── WI-7: mobile horizontal overflow responsive wrappers ──────
+
+    /** WI-7: /crop-book/table wraps .dt-table in .dt-table-wrap for overflow-x:auto */
+    public function testBookTableHasDtTableWrap(): void
+    {
+        $res  = $this->get('/crop-book/table');
+        $this->assertSame(200, $res->getStatusCode(), '/crop-book/table must return 200');
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('dt-table-wrap', $html,
+            '/crop-book/table must render .dt-table-wrap for horizontal-scroll at mobile (WI-7)');
+    }
+
+    /** WI-7: crop-book-deep.css defines .dt-table-wrap with overflow-x:auto */
+    public function testDtTableWrapCssDefinition(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-deep.css');
+        $this->assertMatchesRegularExpression(
+            '#dt-table-wrap[^}]*overflow-x\s*:\s*auto#s',
+            $css,
+            'crop-book-deep.css must define .dt-table-wrap with overflow-x:auto (WI-7)'
+        );
+    }
+
+    /** WI-7: .dt-table has min-width to keep columns readable inside scroll container */
+    public function testDtTableMinWidth(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-deep.css');
+        $this->assertMatchesRegularExpression(
+            '#\.dt-table\b[^}]*min-width#s',
+            $css,
+            'crop-book-deep.css .dt-table must have min-width for scrollable columns (WI-7)'
+        );
+    }
+
+    /** WI-7: /crop-book/{slug} simple depth renders .cb-crop-detail wrapper */
+    public function testBookCropSimpleHasCropDetailWrapper(): void
+    {
+        $res  = $this->get('/crop-book/lettuce/?depth=simple');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('cb-crop-detail', $html,
+            '/crop-book/{slug} must render .cb-crop-detail container (WI-7 overflow guard)');
+    }
+
+    /** WI-7: crop-book-v1.css has overflow-x guard for .cb-crop-detail (hidden or clip) */
+    public function testCropDetailOverflowGuard(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-v1.css');
+        $this->assertMatchesRegularExpression(
+            '#cb-crop-detail[^}]*overflow-x\s*:\s*(hidden|clip)#s',
+            $css,
+            'crop-book-v1.css .cb-crop-detail must have overflow-x:hidden or overflow-x:clip guard (WI-7)'
+        );
+    }
+
     // ── calculator dashboard ──────────────────────────────────────
 
     public function testCalcDashReturns200(): void

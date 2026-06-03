@@ -532,4 +532,37 @@ final class ClassBRouteTest extends TestCase
         $this->assertStringContainsString('ספרו לנו מה תרצו שנפתח', $body,
             'Hub CTA must include the primary feature-request offer text');
     }
+
+    // ── WP-CB-UI-patch01 WI-7: mobile horizontal overflow fixes ─────────────
+
+    /** WI-7: market detail wraps .phist table in .phist-wrap for overflow-x:auto */
+    public function testMarketDetailHistoryHasScrollWrapper(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringContainsString('phist-wrap', $body,
+            'Market detail must render .phist-wrap scroll container around .phist table (WI-7)');
+    }
+
+    /** WI-7: classb.css defines .phist-wrap with overflow-x:auto */
+    public function testPhistwrapCssDefinition(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/classb.css');
+        $this->assertMatchesRegularExpression(
+            '#phist-wrap[^}]*overflow-x\s*:\s*auto#s',
+            $css,
+            'classb.css must define .phist-wrap with overflow-x:auto (WI-7)'
+        );
+    }
+
+    /** WI-7: classb.css .pgraph__top uses flex-wrap to prevent rangesel overflow */
+    public function testPgraphTopFlexWrap(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/classb.css');
+        $this->assertMatchesRegularExpression(
+            '#pgraph__top[^}]*flex-wrap\s*:\s*wrap#s',
+            $css,
+            'classb.css .pgraph__top must use flex-wrap:wrap so rangesel wraps on narrow screens (WI-7)'
+        );
+    }
 }

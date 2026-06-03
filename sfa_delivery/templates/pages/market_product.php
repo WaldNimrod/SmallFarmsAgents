@@ -214,10 +214,11 @@ ob_start();
         <?php endif; ?>
       </div>
 
-      <?php /* Price history table (.phist) */ ?>
+      <?php /* Price history table (.phist) — WI-7: wrapped in .phist-wrap for overflow-x:auto */ ?>
       <div>
         <h2 class="gj-h3" style="margin:0 0 10px">היסטוריית מחיר</h2>
         <?php if (!empty($hist_rows)): ?>
+        <div class="phist-wrap">
         <table class="phist">
           <thead>
             <tr>
@@ -255,6 +256,7 @@ ob_start();
             <?php endforeach; ?>
           </tbody>
         </table>
+        </div><!-- /.phist-wrap -->
         <?php else: ?>
         <div class="emptybox">
           <div class="emptybox__ic">📭</div>

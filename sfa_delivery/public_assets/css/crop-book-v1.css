@@ -543,10 +543,33 @@
   .fieldgrid { grid-template-columns: 1fr; }
   .crophero { grid-template-columns: 60px 1fr; }
   .crophero__state { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+  /* WI-7: prevent h1 text overflow on crop detail page at narrow viewports */
+  .crophero h1 { font-size: clamp(22px, 7vw, 34px); overflow-wrap: break-word; word-break: break-word; min-width: 0; }
 }
 @media (max-width: 600px) {
   .cards-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
   .headvals { grid-template-columns: 1fr 1fr; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   WI-7 · MOBILE HORIZONTAL OVERFLOW GUARDS
+   Target: /crop-book/{slug} simple depth @375px + 768px.
+   Scope: crop detail page only (inside .cb-crop-detail).
+   RTL layout and desktop layout are not affected.
+   NOTE: overflow-x:auto (not hidden) on crop-detail so that
+   .vtable-wrap nested scroll still works on iOS Safari.
+   ════════════════════════════════════════════════════════════ */
+/* The crop detail wrapper constrains width without hiding inner scroll contexts */
+.cb-crop-detail { max-width: 100%; overflow-x: clip; }
+/* Flex children in topic rows must shrink to fit */
+.tcard__row .v { min-width: 0; word-break: break-word; }
+/* Prov rows at narrow width: switch from 4-col grid to 2-col */
+@media (max-width: 480px) {
+  .prov__row { grid-template-columns: auto 1fr; }
+  .prov__conf { grid-column: 1 / -1; }
+  /* Ensure fieldgrid items don't squeeze their dd too hard */
+  .fg { flex-wrap: wrap; }
+  .fg dd { min-width: 0; overflow-wrap: break-word; }
 }
 
 /* ════════════════════════════════════════════════════════════

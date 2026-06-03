@@ -199,10 +199,17 @@
 .pbig__meta { display: flex; gap: 8px 16px; flex-wrap: wrap; margin-top: 10px; font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-ink-soft); }
 .pbig__meta b { color: var(--gj-ink); font-family: var(--gj-font-head); }
 
-/* price-history table */
-.phist { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.phist th { text-align: start; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--gj-ink-soft); padding: 8px 10px; border-bottom: 1px solid var(--gj-line); }
+/* price-history table — WI-7: .phist-wrap provides overflow-x:auto at mobile */
+.phist-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--gj-line);
+  border-radius: var(--gj-r-m);
+}
+.phist { width: 100%; min-width: 320px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.phist th { text-align: start; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--gj-ink-soft); padding: 8px 10px; border-bottom: 1px solid var(--gj-line); background: var(--gj-paper-2); }
 .phist td { padding: 9px 10px; border-bottom: 1px solid var(--gj-line); font-size: 13px; }
+.phist tbody tr:last-child td { border-bottom: 0; }
 .phist td.num { font-family: var(--gj-font-head); font-weight: 700; }
 .phist .delta-up { color: var(--gj-tomato-deep); font-size: 11px; }
 .phist .delta-dn { color: var(--gj-leaf-deep); font-size: 11px; }
@@ -455,7 +462,8 @@
 
 /* — price-history graph (data viz, not illustration) — */
 .pgraph { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); padding: 14px 16px 10px; }
-.pgraph__top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+/* WI-7: pgraph__top wraps on narrow screens so rangesel doesn't force page overflow */
+.pgraph__top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .pgraph__top h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; margin: 0; }
 .pgraph__legend { margin-inline-start: auto; font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); }
 .pgraph__svg { width: 100%; height: auto; display: block; direction: ltr; }
@@ -485,8 +493,9 @@
    ════════════════════════════════════════════════════════════ */
 
 /* — price-graph time-range selector (Copilot Money / Delta pattern) — */
-.rangesel { display: inline-flex; background: var(--gj-paper-2); border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 3px; gap: 2px; margin-inline-start: auto; }
-.rangesel button { border: 0; background: transparent; font-family: var(--gj-font-mono); font-size: 11px; font-weight: 700; color: var(--gj-ink-soft); padding: 5px 11px; border-radius: var(--gj-r-pill); cursor: pointer; }
+/* WI-7: removed margin-inline-start:auto so rangesel wraps to next line when flex-wrap kicks in */
+.rangesel { display: inline-flex; background: var(--gj-paper-2); border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 3px; gap: 2px; flex-shrink: 0; }
+.rangesel button { border: 0; background: transparent; font-family: var(--gj-font-mono); font-size: 11px; font-weight: 700; color: var(--gj-ink-soft); padding: 5px 9px; border-radius: var(--gj-r-pill); cursor: pointer; }
 .rangesel button.is-active { background: var(--gj-tomato-deep); color: #fff; }
 .pgraph__chg { display: inline-flex; align-items: baseline; gap: 6px; font-family: var(--gj-font-head); font-weight: 700; font-size: 14px; }
 .pgraph__chg.dn { color: var(--gj-leaf-deep); } .pgraph__chg.up { color: var(--gj-tomato-deep); }
@@ -593,3 +602,18 @@
    intrinsic size = broken logo. Constrain the anchor + size the inner svg. */
 .sh__mark { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; overflow: hidden; flex: none; }
 .sh__mark svg { width: 100%; height: 100%; display: block; }
+
+/* ════════════════════════════════════════════════════════════
+   WI-7 · MOBILE HORIZONTAL OVERFLOW GUARDS (market detail)
+   Target: /market/{slug} @375px + 768px.
+   Scope: market detail page components only.
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+  /* Price hero: reduce large price number to avoid overflow at extreme narrow */
+  .pbig__price .big { font-size: clamp(32px, 12vw, 54px); }
+  /* pbig grid: stack art + text at very narrow */
+  .pbig { grid-template-columns: 1fr; }
+  .pbig__art { width: 60px; height: 60px; }
+  /* pgraph__top: already flex-wrap:wrap; ensure rangesel fits on its own line */
+  .pgraph__top { gap: 6px; }
+}

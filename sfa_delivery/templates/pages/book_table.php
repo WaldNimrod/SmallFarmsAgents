@@ -76,7 +76,8 @@ ob_start();
       <?php endforeach; ?>
     </div>
 
-    <!-- Desktop data grid (.dt-table) -->
+    <!-- Desktop data grid (.dt-table) — WI-7: wrapped in .dt-table-wrap for overflow-x:auto at mobile -->
+    <div class="dt-table-wrap">
     <table class="dt-table">
       <thead>
         <tr>
@@ -103,6 +104,7 @@ ob_start();
         <?php endforeach; ?>
       </tbody>
     </table>
+    </div><!-- /.dt-table-wrap -->
 
   <?php endif; ?>
 

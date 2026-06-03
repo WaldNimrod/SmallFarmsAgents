@@ -142,15 +142,51 @@
 .cb-fam__crops { display: flex; flex-wrap: wrap; gap: 4px; }
 
 /* ─── Pro table ─── */
+/* WI-7: .dt-table-wrap — horizontal-scroll container for the 7-col desktop
+   data table in /crop-book/table. Prevents page-level overflow at ≤768px. */
+.dt-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--gj-line);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.dt-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.dt-table th {
+  text-align: start;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em;
+  color: var(--gj-ink-soft);
+  background: var(--gj-paper-2);
+  padding: 9px 12px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--gj-line);
+}
+.dt-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--gj-line);
+  font-size: 13px;
+}
+.dt-table tbody tr:last-child td { border-bottom: 0; }
+.dt-table tbody tr:hover { background: var(--gj-paper-2); }
+.dt-table td a { color: var(--gj-leaf-deep); text-decoration: none; font-weight: 700; font-size: 12px; }
+
 .cb-table {
   background: var(--gj-paper);
   border-top: 1px solid var(--gj-line);
   border-bottom: 1px solid var(--gj-line);
   font-variant-numeric: tabular-nums;
 }
+/* 4-col grid matching the 4 headers/cells in book_table.php template */
 .cb-table__head {
   display: grid;
-  grid-template-columns: 1.4fr 1fr .5fr .9fr .9fr .7fr;
+  grid-template-columns: 1.8fr 1.2fr .8fr 1fr;
   gap: 6px;
   padding: 10px 16px;
   background: var(--gj-paper-2);
@@ -163,7 +199,7 @@
 }
 .cb-table__row {
   display: grid;
-  grid-template-columns: 1.4fr 1fr .5fr .9fr .9fr .7fr;
+  grid-template-columns: 1.8fr 1.2fr .8fr 1fr;
   gap: 6px;
   padding: 12px 16px;
   border-top: 1px solid var(--gj-line);
