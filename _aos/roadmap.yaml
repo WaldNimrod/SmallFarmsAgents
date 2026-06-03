@@ -4195,11 +4195,11 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-FIDELITY
   label: "ספר גידולים: UI fidelity & Hebrew localization remediation — crop-book/market raw numbers + English tokens + broken hero/filters (pre-launch)"
-  status: BUILD
-  phase: build
+  status: VALIDATE
+  phase: validate
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_B
+  current_lean_gate: L-GATE_V
   lod_status: LOD400_REVIEWED_v1.1.0
   assigned_builder: team_10
   assigned_validator: team_190
@@ -4243,6 +4243,21 @@ work_packages:
       folded). team_190 (GPT-5.x) verified every pin against source: rootcause 5/5, precision 5/5, constitutional
       5/5. One MINOR F-190-FID-S-01 (AC-7 IR#4 should name roadmap.yaml) — folded inline by team_100. Build
       authorized. Next: team_10 (Sonnet) L-GATE_B build → team_100 independent CDP verification.
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-04"
+    validator: team_100
+    build_commit: "0cbd5b8"
+    verdict_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/LGATE-B_VERDICT_team100_2026-06-04_v1.0.0.md"
+    notes: >
+      team_10 (Sonnet) built WI-1..WI-9. team_100 independent L-GATE_B: full diff review + deterministic render
+      harness 19/19 (no raw floats; Hebrew units; single hero; #identity retarget; no green blob; enum xlate) +
+      static integration checks (graph route/selectors, classb gate). Inline polish: discrete units days/count
+      round to int (59.043478→59, Board-A). composer 167/167, php -l clean, validate 29/19/0, delivery-tier only,
+      IR#4 clean. SURFACED (non-blocking): D-4a season = growth-cycle data gap (honest "מחזור גידול" filter shipped;
+      true season filter needs a data WP); D-4b leading-questions reduced to `fast` (team_35 Q4). AC-3/5/6 deferred
+      to live L-GATE_V CDP. Next: team_99 deploy HEAD 0cbd5b8 (subsumes 5 undeployed commits + team_50 deploy-lag
+      NO-GO) → team_190 (non-Claude) L-GATE_V design-vs-mockup on live → LOD500_LOCKED.
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
