@@ -233,7 +233,9 @@ team_100 (architect) decides where it has authority; genuine design-authority it
 - **AC-6** Per-surface design-vs-live screenshot pairs (CDP, desktop 1440 + mobile 375) reviewed; no open BLOCKER/MAJOR
   divergence from Board-A/B (or design-approved by team_35/team_00). Includes WI-9 `/crop-book/table` 375 no-overflow.
 - **AC-7** No regression of the "WORKS" list; no horizontal overflow at 375 on any route; palette #f8fbf8 / no cream;
-  composer green; `php -l` clean on every edited file; `validate_aos.sh` 0 FAIL; delivery-tier scope; IR#4 honored.
+  composer green; `php -l` clean on every edited file; `validate_aos.sh` 0 FAIL; delivery-tier scope. **IR#4 honored —
+  the builder makes ZERO edits to `_aos/roadmap.yaml` (single-writer authority is team_100); every build commit touches
+  only `sfa_delivery/` paths** (explicit per L-GATE_S finding F-190-FID-S-01).
 
 ## 6. Validation flow (MANDATORY — executing session)
 1. **Review + improve** this LOD — DONE by team_100 (v1.1.0; root causes pinned, design questions decided). The executing

@@ -4195,12 +4195,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-FIDELITY
   label: "ספר גידולים: UI fidelity & Hebrew localization remediation — crop-book/market raw numbers + English tokens + broken hero/filters (pre-launch)"
-  status: SPEC
-  phase: spec
+  status: BUILD
+  phase: build
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_S
-  lod_status: LOD400_DRAFT
+  current_lean_gate: L-GATE_B
+  lod_status: LOD400_REVIEWED_v1.1.0
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-04"
@@ -4230,6 +4230,19 @@ work_packages:
       .cb-crop-hero). 3 MAJOR: classb.js not on crop-book/calc; English <small> eyebrows; full mockup-fidelity
       sweep. 7 ACs (CDP visual + functional). Evidence: audit_evidence/ (live + Board-A/B screenshots, cdp_facts).
       NOT self-certified — executing session improves it + routes external L-GATE_S (team_190) before build.
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-04"
+    validator: team_190
+    validator_engine: "Cursor Composer (GPT-5.x) — non-Claude (IR#1/#5)"
+    authorize_build: true
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-FIDELITY/WP-CB-UI-FIDELITY_LGATE-S_VERDICT_v1.0.0.md"
+    notes: >
+      team_100 improved LOD to v1.1.0 (all 5 blockers pinned to file:line; +D-1b double-unit, +D-4b mis-routed
+      leading-questions, +D-5b #identity anchor guard; design Q1 decided, Q2-Q5 → team_35 via WI-7; patch01 WI-9
+      folded). team_190 (GPT-5.x) verified every pin against source: rootcause 5/5, precision 5/5, constitutional
+      5/5. One MINOR F-190-FID-S-01 (AC-7 IR#4 should name roadmap.yaml) — folded inline by team_100. Build
+      authorized. Next: team_10 (Sonnet) L-GATE_B build → team_100 independent CDP verification.
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
