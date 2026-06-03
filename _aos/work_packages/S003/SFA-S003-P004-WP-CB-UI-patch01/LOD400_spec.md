@@ -47,6 +47,23 @@ open tools the `auto-fill` leaves an empty track, so the row doesn't fill the wi
 - **Acceptance:** at desktop the open-tools row spans the full content width (no trailing empty gap); the 4th
   tile renders "יומן השדה / בפיתוח", is non-clickable, palette-consistent; existing 3 tiles unchanged in function.
 
+## WI-3 — Hub copy + system-wide terminology (team_00 round 2)
+Customer-facing copy fixes (delivery-tier templates):
+- **Typo:** `hub_home.php:177` audience card label **"גינאי ביתי" → "גנן"** (GARDENER). ("there is no 'home gardening', there is a gardener.")
+- **One-line tagline:** the hub-intro tagline at `hub_home.php:77` is ALREADY the correct text
+  *"ספר גידולים קהילתי, מחירון שוק בזמן-אמת, ומחשבון שדה — בנויים על ניסיון שדה ומחקר AI."* — the requirement is it must render on **ONE line (no wrap)** on desktop. Remove/raise the `.hub-intro p { max-width: 52ch }` cap (classb.css ~L41) and prevent the break at desktop width (e.g. `white-space:nowrap` at ≥760px with a responsive/clamped font-size); allow graceful wrap ONLY on small mobile — **no horizontal overflow** anywhere.
+- **System-wide term — "small" → "local":** replace the positioning term across CUSTOMER-FACING templates:
+  "חקלאות קטנה" → "חקלאות מקומית", "חקלאי קטן" → "חקלאי מקומי", "השוק החקלאי הקטן" → "השוק החקלאי המקומי".
+  Targets: `_layout.php:6` (`$page_sub`), `hub_home.php:65` (`$page_sub`), `:76` (`<h1>כלים פתוחים לחקלאות <em>קטנה</em>`→`<em>מקומית</em>`), `:151` (`<h2>… לחקלאות <em>קטנה</em>`→`מקומית`), `:183` (`חקלאי קטן`→`חקלאי מקומי`), `community.php:53` (`חקלאות קטנה`→`חקלאות מקומית`), `macros/market_disclaimer.php:22` (`השוק החקלאי הקטן`→`המקומי`).
+  **Do NOT** change unrelated "קטן/קטנה" (e.g. `hub_home.php:178` "לגינה הקטנה", `community.php:60` "תרומה קטנה", and the internal AI-art-generation prompt strings in `modules.php` — not rendered as positioning copy).
+- **Remove Tend mentions (customer-facing):** team_00 — "the Tend connection is not in the plan and shouldn't be shown to customers." Read each occurrence in `hub_tiers.php`, `book_variety.php`, `book_entry.php` and: remove any **Tend integration/connection** teaser/tier copy entirely; where "Tend" appears as a **data-source brand label** shown to users, neutralize it to a generic term (e.g. "נתוני שדה" / "מקור תפעולי") — keep the underlying data, drop the brand name. (Internal `modules.php` art-prompt strings may stay — not user-rendered.)
+
+## WI-4 — Hub CTA section (the page's primary call-to-action)
+Add a prominent CTA section on the hub (`hub_home.php`, near the bottom — after the manifest band / soon-grid), `.hub-cta`, with **two offers** (this is the page's main CTA per team_00):
+1. **"שתפו אותנו במידע והשלמות לספר"** — links to the dedicated contribution form: route to **`/community`** (which hosts the reqcard → `/api/v1/contribute`). Secondary emphasis.
+2. **"ספרו לנו מה תרצו שנפתח לחווה שלכם — בקשות לפיצ'רים, רעיונות ופיתוחים ייעודיים"** — the **PRIMARY** CTA; link to the contact channel used on `/community` (WhatsApp `wa_num` 972547776770 via `Modules::all()['contact']`). Visually primary (filled button/card).
+Style `.hub-cta` palette-consistent (white-green), RTL, responsive; reuse `.reqinfo`/button patterns where sensible; the second offer is the prominent action. No new backend/endpoint (reuse existing contribute + contact).
+
 ## Tests + verification
 - Extend `sfa_delivery/tests/` (ClassBRouteTest or a crop-book route test): assert the Field-Log tile markup
   is present on `/` (text "יומן השדה" + "בפיתוח", `is-dev`, no href) and `.hub-grid` uses `auto-fit`; assert
