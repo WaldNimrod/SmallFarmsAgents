@@ -4176,8 +4176,21 @@ work_packages:
       responsiveness) + team_50 discretionary additions. Required output: GO / GO-WITH-FIXES / NO-GO + prioritized
       punch-list → team_100 dispatches fixes (team_10) → external L-GATE_V (team_190 non-Claude). Precondition:
       patch01 tip 7fbcf89 deployed live.
-  notes: "OPENED 2026-06-03 (pre-launch readiness audit). team_50 read-only visual+E2E sweep → punch-list →
-    team_10 fixes → team_190 L-GATE_V. Mandate: QA_MANDATE_PRELAUNCH_VISUAL_E2E_2026-06-03_v1.0.0.md."
+  - gate: QA
+    result: NO-GO
+    date: "2026-06-03"
+    validator: team_50
+    report_ref: "_COMMUNICATION/team_50/SFA-PRELAUNCH-QA/PRELAUNCH_QA_REPORT_2026-06-03_v1.0.0.md"
+    notes: >
+      team_50 (Haiku, CDP browser harness, 4 viewports, 80 screenshots) full-system audit. VERDICT NO-GO.
+      Much PASSES (20 routes, 0 console errors, Class B markers, /api/v1/contribute ok, calc 14 modcards, no
+      404s). 2 BLOCKERS = the pending patch01 7fbcf89 deploy (F-PRE-001 giant /crop-book/ entry cards ~786px;
+      app-shell logo) — fixed in branch (WI-5/WI-6), not live (DEPLOY_REPORT still 08f529d). 1 genuine new MAJOR
+      (F-PRE-004): mobile horizontal overflow @375/768 on /crop-book/{slug} simple, /crop-book/table,
+      /market/{slug}. Punch-list: (1) team_99 deploy 7fbcf89; (2) team_10 fix mobile overflow (fold to patch01
+      WI-7); (3) team_50 re-audit → team_190 L-GATE_V → GO.
+  notes: "OPENED 2026-06-03 (pre-launch readiness audit). team_50 NO-GO (deploy-pending + mobile overflow).
+    NEXT: team_99 deploy patch01 final tip + team_10 overflow fix → team_50 re-audit → team_190 L-GATE_V → launch."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
