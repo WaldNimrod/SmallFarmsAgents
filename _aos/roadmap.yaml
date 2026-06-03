@@ -4110,8 +4110,30 @@ work_packages:
     result: PASS
     date: "2026-06-03"
     validator: team_100
-    notes: "Delegated L-GATE_S (delivery-tier-only cosmetic; precedent WP-CB-1-patch01). 2 WIs: WI-1 crop-book entry density (.cards-grid minmax 168→~120, shrink .ccard art/body, trim cb-hero); WI-2 hub .hub-grid auto-fill→auto-fit + 4th .modtile.is-dev 'יומן השדה' בפיתוח (non-clickable teaser). Delivery tier only; Field-Log is PLANNED teaser, never 'available'. Build authorized → team_10."
-  notes: "OPENED 2026-06-03 (team_00 live UI feedback). NEXT: team_10 build → team_100 verify → team_99 deploy → team_190 L-GATE_V (live visual: dense crop grid + full-width hub row + Field-Log בפיתוח tile)."
+    notes: "Delegated L-GATE_S (delivery-tier-only cosmetic; precedent WP-CB-1-patch01). 2 WIs: WI-1 crop-book entry density (.cards-grid minmax 168→~120, shrink .ccard art/body, trim cb-hero); WI-2 hub .hub-grid auto-fill→auto-fit + 4th .modtile.is-dev 'יומן השדה' בפיתוח (non-clickable teaser). Delivery tier only; Field-Log is PLANNED teaser, never 'available'. Build authorized → team_10. SCOPE EXPANDED (team_00 round-2, v1.1.0): +WI-3 (גנן typo, one-line tagline, חקלאי קטן→מקומי system-wide, drop customer-facing Tend) +WI-4 (hub .hub-cta dual CTA: share-to-book + request-features primary)."
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-03"
+    validator: team_100
+    builder: team_10
+    commit: "08f529d"
+    notes: "team_10 (Sonnet) WI-1..WI-4; team_100 (Opus) independent L-GATE_B PASS. composer 159/159, php -l clean, validate_aos 29/19/0; delivery-tier only; IR#4 clean. Build SHAs 3c74c87 (WI-1/2) + f9d274c (WI-3/4). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-UI-patch01/BUILD_REPORT_v1.0.0.md."
+  - gate: L-GATE_V
+    result: FAIL
+    round: 1
+    date: "2026-06-03"
+    validator: team_190
+    validator_engine: "Cursor/Composer 2.5 (GPT — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-patch01/WP-CB-UI-patch01_LGATE-V_VERDICT_v1.0.0.md"
+    notes: >
+      DEPLOY-PRECONDITION FAIL (checks 0/9 live) — NOT a build defect. Live sfa.nimrod.bio is still pre-patch01
+      (auto-fill, no Field-Log/is-dev, crop grid minmax 168, 'גינאי ביתי'/'חקלאי קטן', Tend on /about, no .hub-cta).
+      No team_99 DEPLOY_REPORT in repo. Branch code C5 PASS (delivery-tier, #f8fbf8, classb.css last, composer
+      159/159, validate 0 FAIL, no roadmap edit). Do NOT LOD500_LOCK. UNBLOCK: team_99 deploys tip 08f529d
+      (SHAs 3c74c87+f9d274c) → DEPLOY_REPORT → re-route team_190 L-GATE_V R2 (checks C1–C9).
+  notes: "OPENED 2026-06-03 (team_00 live UI feedback; round-2 folded in). BUILT + team_100 L-GATE_B PASS (08f529d).
+    L-GATE_V R1 FAIL = deploy-precondition only (live still pre-patch01; branch ready). NEXT: team_99 deploy
+    08f529d → DEPLOY_REPORT → team_190 L-GATE_V R2 (C1–C9) → LOD500_LOCKED. Branch claude/ui-polish-hub-cropbook-2026-06-03."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
