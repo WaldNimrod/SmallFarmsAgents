@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-04
 **From:** team_100 (Chief System Architect) · **To:** team_99 (server/deploy session) / team_00
-**Repo:** `/Users/nimrod/Documents/SmallFarmsAgents` · branch `claude/ui-polish-hub-cropbook-2026-06-03` · **deploy commit `0cbd5b8`**
+**Repo:** `/Users/nimrod/Documents/SmallFarmsAgents` · branch `claude/ui-polish-hub-cropbook-2026-06-03` · **deploy commit `4c9bab2`** (HEAD; includes Decision A season-from-months + B questions)
 **Why routed:** this Mac session is deploy-auth-gated (SSH to waldhomeserver blocked by the auto-mode classifier — `reference_prod_deploy_authorization`). Deploy runs from **waldhomeserver** (the uPress-allowlisted FTPS relay), not this Mac.
 
 ## Gate state
@@ -21,7 +21,7 @@ Deliver the **delivery tier** (`sfa_delivery/`) at commit `0cbd5b8` to uPress (`
 On the LIVE site, confirm the served assets advanced and the fixes are live:
 1. `/crop-book/lettuce/` — numbers formatted (no `59.043478`, no `.000000`), Hebrew units (`ס״מ/ימ׳/שבועות`, no `cm/days/weeks`), **one** hero (no duplicate "חסה", no green blob).
 2. `/market/` — category chips in Hebrew (no `root_vegetables/legumes_fresh/…`).
-3. `/crop-book/` — filter labeled **"מחזור גידול"** (a `<select>`), `?dtm_max=60` leading-question returns a non-empty set.
+3. `/crop-book/` — filter labeled **"עונה"** (a `<select>`: קיץ/חורף/אביב/סתיו); `?season=summer` AND `?dtm_max=60` each return a non-empty, correct set; "שאלות מובילות" card reads **3 שאלות** (not 12) and its summer/winter/fast links land on non-empty results.
 4. Served CSS contains `.cb-paths{display:grid` (WI-5) and `.sh__mark` sizing (WI-6); served `classb.js` defines `window.fetchHistory`.
 5. Write `_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md` with the deployed SHA (`0cbd5b8`) and `?v=` value.
 

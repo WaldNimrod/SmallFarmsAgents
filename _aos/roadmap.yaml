@@ -4258,6 +4258,20 @@ work_packages:
       true season filter needs a data WP); D-4b leading-questions reduced to `fast` (team_35 Q4). AC-3/5/6 deferred
       to live L-GATE_V CDP. Next: team_99 deploy HEAD 0cbd5b8 (subsumes 5 undeployed commits + team_50 deploy-lag
       NO-GO) → team_190 (non-Claude) L-GATE_V design-vs-mockup on live → LOD500_LOCKED.
+  - gate: L-GATE_B
+    result: PASS-amended
+    date: "2026-06-04"
+    validator: team_100
+    build_commit: "4c9bab2"
+    decision_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/DECISION_team00_season-and-questions_2026-06-04_v1.0.0.md"
+    notes: >
+      team_00 Decision A (in-session): derive season from existing sowing_months — NO data WP. D-4a now a real
+      "עונה" filter (PHP post-filter on crop_varieties.payload_json.agronomy.sowing_months ∪ transplant_months ∩
+      season-months). Correctness fix: months live in the VARIETY payload, not the crop payload (batched lookup) —
+      caught + fixed before deploy. Decision B: leading-questions restored (summer/winter→season, fast→dtm_max),
+      "12 שאלות"→3; team_35 owns the final/expanded set + "מתאים לקיץ" semantics (DESIGN_REQUEST pending). +end-to-end
+      regression test testSeasonFilterReadsVarietyMonths; composer 168/168; validate 0 FAIL; +perf guard. Deploy
+      target advanced to HEAD 4c9bab2. team_00 held deploy until A/B resolved — now resolved (B interim shippable).
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
