@@ -4221,12 +4221,13 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-FIDELITY
   label: "ספר גידולים: UI fidelity & Hebrew localization remediation — crop-book/market raw numbers + English tokens + broken hero/filters (pre-launch)"
-  status: VALIDATE
+  status: COMPLETE
   phase: validate
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: LOD400_REVIEWED_v1.1.0
+  lod_status: LOD500_LOCKED
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-FIDELITY/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-04"
@@ -4326,14 +4327,19 @@ work_packages:
       served), served CSS minmax(168px)+cb-crop-detail max-width:1120px+aud-head flex-start (cache-busted), single
       hero, 0 raw 6-decimals incl. drill, 0 English units, CDP no-overflow. Crop-book visual round LIVE.
   - gate: L-GATE_V
-    result: ROUTED
+    result: PASS_WITH_FINDINGS
     date: "2026-06-04"
     validator: team_190
-    note: non-Claude launch gate on live acca9b2
-    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/VALIDATION_MANDATE_team190_LGATE-V_2026-06-04_v1.0.0.md"
+    validator_engine: "Cursor Agent (GPT-5.x — non-Claude, IR#1/#5)"
+    live_sha: "acca9b2"
+    served_asset_version: 1780576560
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-FIDELITY/WP-CB-UI-FIDELITY_LGATE-V_VERDICT_v1.0.0.md"
     notes: >
-      team_100 routed FIDELITY L-GATE_V (launch gate) to team_190 (non-Claude) — design-vs-Board-A/B on live
-      acca9b2 + AC-1..7 + regression (patch01 C1-C9 + blockers). On PASS → LOD500_LOCKED. team_50 re-audit parallel.
+      LAUNCH GATE PASS — AC-1..AC-7 all pass on live acca9b2 (@?v=1780576560); 0 BLOCKER/0 MAJOR; 3 INFO
+      (mono eyebrows→WI-7, calc JSON English keys non-user-visible, dead legacy table?category route). Crop-book
+      entry 70/70 wc-*.png cards @168px + toggle aligned; crop page single hero + centered 1120px; blockers
+      D-1..D-5 hold; 375 overflow clean incl. /crop-book/table; patch01 C1-C9 hold (C3 superseded by Board-A 168px,
+      INFO). team_100 evidence corroborated. → LOD500_LOCKED (ADR042 self-archive). WI-7 design completions separate.
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
