@@ -4431,6 +4431,36 @@ work_packages:
     computed from existing month data; no DB change)."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-MOBILE
+  label: "ספר גידולים + מחירון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
+  status: OPEN
+  phase: design
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: MANDATE
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-05"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/DESIGN_MANDATE_team35_mobile-ui_2026-06-05_v1.0.0.md"
+  branch: "claude/ui-polish-hub-cropbook-2026-06-03"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-05"
+    validator: team_00
+    notes: >
+      team_00 LAUNCH BLOCKER: crop-book + market not good enough on MOBILE (375). team_100 CDP audit found:
+      crop-page hero overlaps; planting calendar unreadable + leaks raw IL_general region codes; market list
+      one-card-per-row (~12500px scroll); entry cards DTM-number dominates crop name; length/pagination. + /about
+      too many tiers (active-vs-coming unclear). Flow: team_35 DESIGN (Claude Design env) -> team_10 BUILD ->
+      team_99 deploy -> team_50 VISUAL QA @375 -> team_100. Desktop is launch-quality; do not regress it.
+  notes: "OPENED 2026-06-05. Mobile is the launch blocker. team_35 mobile design mandate issued. IL_general
+    raw-token leak is a quick win team_100 may fix independently."
+  profile: L0
+
 - id: SFA-S003-P004-WP-SRV-IDEAS
   label: "ספר גידולים: מאגר רעיונות צד-שרת (מוצע, לא מאושר — לבדיקה עתידית)"
   status: OPEN
