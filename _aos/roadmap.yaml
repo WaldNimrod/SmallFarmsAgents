@@ -4373,7 +4373,7 @@ work_packages:
 
 - id: SFA-S004-P001-WP002
   label: "Competitive Intelligence — multi-system schema & white-space mapping (Team 80 lead)"
-  status: IN_PROGRESS
+  status: COMPLETE
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_E
@@ -4401,20 +4401,20 @@ work_packages:
       intel dossier; schema-comparison matrix (feeds SFA data model — D4 core);
       white-space analysis; pricing benchmark (feeds D1). Nimrod to add any
       Israeli/niche tools not surfaced by search."
-  notes: "IN_PROGRESS — internal CI pass COMPLETE 2026-06-04: 8 parallel sub-agents
-    (Tend, Seedtime, Heirloom/JM-Fortier, Farmbrite, AgriWebb, Croptracker, sales/CSA
-    cluster, home-garden cluster). Synthesis artifact: CI_SYNTHESIS_8COMPETITORS_*.
-    3 unanimous findings: (1) no one closes market-price->plan->profit loop (Heirloom
-    has it on roadmap, unshipped) = SFA #1 wedge; (2) zero Hebrew/RTL anywhere = moat;
-    (3) production<->sales loop industry-wide open. Pending: merge external multi-engine
-    outputs + triangulate; re-verify search-synthesized prices. Substantially resolves
-    D4; informs D1; D3 finding = BUILD Sell/Relate (no clean integration target).
-    Feeds detailed technical platform plan (Phase 0)."
+  notes: "COMPLETE 2026-06-04 — internal CI (8 parallel sub-agents: Tend, Seedtime,
+    Heirloom/JM-Fortier, Farmbrite, AgriWebb, Croptracker, sales/CSA cluster, home-garden
+    cluster; CI_SYNTHESIS_8COMPETITORS_*) + external triangulation (Perplexity + Claude-web;
+    CI_EXTERNAL_TRIANGULATION_*; raw in SFA-S004-CI-EXTERNAL/). 3 findings TRIPLE-confirmed:
+    (1) no one closes market-price->plan->profit loop (Heirloom roadmap-only) = SFA #1 wedge;
+    (2) zero Hebrew/RTL = moat; (3) production<->sales loop industry-wide open. NEW: LiteFarm
+    crop schema = deepest 2nd reference; 'soft schedules' UX; Israel-specific loc; light CSA
+    box. VERIFY: MGI tool id (Heirloom vs Grounded Garden Planner), Croptracker + Tend pricing.
+    D4 RESOLVED; D1 pricing benchmark consolidated; D3 = BUILD Sell/Relate. Feeds Phase 0."
   profile: L0
 
 - id: SFA-S004-P001-WP003
   label: "Tend deep-dive — module + schema reference study (PRIMARY architecture reference)"
-  status: IN_PROGRESS
+  status: COMPLETE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_E
@@ -4439,7 +4439,7 @@ work_packages:
       lived experience (essential-vs-bloat modules, learning-curve + maintenance causes,
       keep/kill list), (b) deep mining of Tend public docs/help center. Deliverable: Tend
       module+schema reference map + ADOPT/SKIP/ADAPT recommendations for SFA."
-  notes: "IN_PROGRESS — deep-dive (public docs) COMPLETE 2026-06-04. Blueprint artifact:
+  notes: "COMPLETE 2026-06-05 — deep-dive (public docs) done 2026-06-04. Blueprint artifact:
     TEND_SCHEMA_REFERENCE_BLUEPRINT_*. 16 modules + ERD spine + calculator inventory +
     ADOPT/SKIP/ADAPT->farmOS map. ADOPT spine Crop->Template->Planting->Task->Harvest->
     Lot->Inventory. Beat Tend on: sub-bed/intercrop geometry + market-price economics +
@@ -4450,5 +4450,50 @@ work_packages:
     experiential extraction CAPTURED (gold loop = harvest-list->field-report->accumulated
     learning, both most-valuable + most-painful; speed = hard NFR; KEEP time+space color map
     + auto-tasks + auto-harvest-lists; REDO faster + simpler structured field reporting).
-    Disambiguation: tend.com (farm) != tend.io (CRM)."
+    Disambiguation: tend.com (farm) != tend.io (CRM). FIELD-EXACT MAPPING COMPLETE 2026-06-05
+    (TEND_FIELD_EXACT_MAPPING_*): schema byte-stable 2018->2021; 64-col CROP_PLAN mapped to
+    13-topic/14-calc/farmOS Asset-Log-Quantity-Term + 13-item Phase-0 importer TODO (per-planting
+    Logs, irrigation/labor/water telemetry, organic-cert, sales-channel link, SEED_LIST/NOTES
+    parsers). Build-ready data-model reference for Phase 0."
+  profile: L0
+
+- id: SFA-S004-P001-WP004
+  label: "Competitive Intelligence Round 2 — newly-surfaced market-garden tools"
+  status: COMPLETE
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: team_80
+  assigned_validator: team_190
+  created_at: "2026-06-05"
+  milestone_ref: "S004"
+  depends_on: ["SFA-S004-P001-WP002"]
+  spec_ref: "_COMMUNICATION/TEAM_100/CI_EXTERNAL_TRIANGULATION_SFA-S004-P001-WP002_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PENDING
+    date: "2026-06-05"
+    validator: team_100
+    notes: "Team 00 directive 2026-06-05: open package for IMMEDIATE execution. WP002's
+      external triangulation (4 reports) surfaced market-garden tools NOT in the original
+      8-set, several closer to SFA's 5-pillar product than some already studied. Deep-dive
+      4 targets (1 agent each, dispatched 2026-06-05): MarketGardenPlanner (closest all-in-one
+      — beds/crops/tasks/harvest/customers/orders/payments + expected-vs-actual), MyGardenPlanner
+      (AI biointensive, Market-Gardener $19/mo tier), VeggieCropper (free, crew/manager accounts),
+      Solara (succession + revenue tracking). 10-axis framework + emphasis on: data schema depth,
+      5-pillar coverage, market-price->profit loop, daily cockpit, Hebrew/RTL, weaknesses, and
+      MATCH-vs-BEAT for SFA. Deliverable: per-tool dossiers + merge into CI synthesis +
+      ADOPT/BEAT updates. Hypothesis to test: none closes the price->profit loop or has RTL
+      (wedge+moat hold)."
+  notes: "COMPLETE 2026-06-05 — 4 dossiers + synthesis (CI_ROUND2_SYNTHESIS_*). HYPOTHESIS
+    HELD: none of the 4 closes market-price->profit loop, none has Hebrew/RTL (wedge+moat
+    confirmed vs ALL 12 competitors + 2 OSS). All 4 tiny/early/unproven (MarketGardenPlanner=
+    solopreneur Laravel, economics='coming soon' vaporware; VeggieCropper=bus-factor-1, KILLED
+    its free tier 2026 -> validates our cost-bounded free tier; Solara=likely synthetic/demo;
+    MyGardenPlanner=hobby w/ MG veneer, 'commercial' tier = just more beds). MATCH: backward-
+    from-harvest+bed-turnover, connected loop+order-forms, crew/manager accounts, CSA box-first
+    backward planning. BEAT: price->profit, RTL, curated KB+14 calcs, openness, commercial-tier=
+    capability-not-quantity. STEAL: programmatic-SEO (Hebrew per-region calendars) for free
+    brand-front. D4 fully closed; recommend proceed to Phase 0."
   profile: L0
