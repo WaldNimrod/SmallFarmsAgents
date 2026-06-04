@@ -4347,12 +4347,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-WI7
   label: "ספר גידולים: WI-7 design completions (team_35 Q2-Q5) + 2 INFO cleanups — FIDELITY follow-up polish"
-  status: OPEN
-  phase: design
+  status: VALIDATE
+  phase: validate
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_S
-  lod_status: MANDATE
+  current_lean_gate: L-GATE_V
+  lod_status: BUILT_DEPLOYED_VERIFIED
   assigned_builder: team_10
   assigned_validator: team_50
   created_at: "2026-06-04"
@@ -4372,6 +4372,30 @@ work_packages:
       לקיץ" semantics, Q5 English mono eyebrows; +INFO calc-JSON English keys (machine), +INFO dead legacy
       /crop-book/table?category= route. Flow: team_35 DESIGN (text-only — NO screenshots) → team_10 BUILD → team_99
       deploy → team_50 VISUAL QA (CDP — team_35 cannot screenshot, per team_00) → team_100 record. Delivery-tier.
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-04"
+    validator: team_100
+    builder: team_10
+    commit: "7fb3cf7"
+    notes: >
+      team_00 decided Q2-Q5 directly via /AOS_decide (DECISION_WI7_*); team_35 step skipped. Plus team_50
+      full-system re-audit (GO-WITH-FIXES) cross-checked vs team_100's own sweep — agreement on all but F-REA-001
+      (basket unit English, MAJOR) which team_50 caught + team_100 missed (value of dual-engine QA). Consolidated
+      build: F-REA-001 basket units→לסל + hardened default; F-REA-002 search watercolor; F-REA-003/Q5 hub eyebrows;
+      Q3 kg_per_ha ÷10→ק״ג/דונם (single choke point fmtNumber); legacy table?category→301. composer 205/205.
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "7fb3cf7"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-WI7/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 THIRD deploy 7fb3cf7 (5 PHP files on top of FIDELITY acca9b2; 82 mtime re-mirror). All 5 smoke PASS.
+      team_100 INDEPENDENT live re-verify PASS: basket_large=0 + לסל present + 0 unit leaks (F-REA-001 fixed —
+      the missed MAJOR confirmed gone); ק״ג/דונם live; search wc-img; no hub English eyebrows; legacy 301.
+      cf-cache DYNAMIC. OPEN (non-blocking): /about tier badges (OPEN/BETA/…) left pending decision; calc Board-A
+      pixel-polish deferred. team_50 spot-check (market-list לסל) to formally confirm → then LOD500.
   notes: "OPENED 2026-06-04 (FIDELITY follow-up). team_35 design decisions are TEXT/SPEC only (no visual QA
     capability); team_50 owns the visual screenshot-vs-Board verification per team_00 ruling. Mandates:
     _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/. NOTE 2026-06-04: Q4 elevated by team_00 to a 4-level
