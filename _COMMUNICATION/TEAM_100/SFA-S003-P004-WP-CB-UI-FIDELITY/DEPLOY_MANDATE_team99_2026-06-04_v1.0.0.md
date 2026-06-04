@@ -9,8 +9,11 @@
 L-GATE_B **PASS** (team_100, verdict `_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/LGATE-B_VERDICT_team100_2026-06-04_v1.0.0.md`). composer 167/167, validate 0 FAIL. Authorized for deploy → external L-GATE_V.
 
 ## What to deploy
-Deliver the **delivery tier** (`sfa_delivery/`) at commit `0cbd5b8` to uPress (`sfa.nimrod.bio`).
-- **This single deploy also brings live the 5 previously-undeployed `sfa_delivery/` commits** since the last DEPLOY_REPORT baseline `08f529d` — including patch01 **WI-5** (`.cb-paths` grid), **WI-6** (`.sh__mark` logo sizing, `7fbcf89`), and **WI-9** (`/crop-book/table` @375 overflow). It therefore **subsumes the team_50 pre-launch QA NO-GO** (`_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/PRELAUNCH_QA_REPORT_2026-06-03_v1.0.0.md`), which was deploy-lag, not new defects.
+Deliver the **delivery tier** (`sfa_delivery/`) at branch HEAD `4c9bab2` (delivery-tree identical at `f305bbd`) to uPress (`sfa.nimrod.bio`).
+
+**⚠ BASELINE CORRECTED (per team_99 MSG-HUB-20260604-001, 2026-06-04):** the live site is **already at `6703313`** — team_99 FINAL-deployed **WP-CB-UI-patch01** (WI-1..WI-7, `.cb-paths` grid, `.sh__mark` logo, mobile-overflow) on 2026-06-04, CSS `?v=` `1780515224`→`1780520599`, smoke 4/4 PASS. **The team_50 NO-GO (08f529d baseline) is therefore ALREADY RESOLVED** — do not re-attribute it here.
+- `6703313` is an **ancestor of this FIDELITY HEAD** (verified): the live→HEAD `sfa_delivery/` delta is **exactly the FIDELITY changes** (FieldRegistry + 2 controllers + book_crop/book_entry/prov_value/calc_panel + crop-book-deep.css + classb.js + market_product + 2 tests). So this deploy adds **only the FIDELITY delta** on top of the live patch01 state — clean forward deploy, no regression of patch01.
+- **SEQUENCING (team_00/team_190 decision):** patch01's own **L-GATE_V R2 is pending on the currently-live `6703313`** (team_99 pre-staged the mandate). Deploying FIDELITY moves live past `6703313`. RECOMMENDED: let team_190 close **patch01 L-GATE_V R2 on `6703313` first**, THEN deploy this FIDELITY HEAD, THEN FIDELITY L-GATE_V on the new live (which must regression-confirm patch01 WI-5/6/mobile still hold — FIDELITY is stacked on top and WI-9 re-verifies mobile). Alternative (faster): deploy FIDELITY now and have team_190 issue both verdicts from one live pass on `f305bbd` (its tree ⊇ patch01). team_00 picks.
 
 ## How (canon)
 - Runbook: `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`
