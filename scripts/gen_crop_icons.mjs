@@ -25,7 +25,13 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const ANCHOR = join(ROOT, 'sfa_delivery/public_assets/img/crops/wc-tomato.png'); // served master = style ref
+// Devora style references — radish is PRIMARY (per IMAGEPROMPT brief / PROMPT_SERIES_v1). Attach all.
+const REFS = [
+  'sfa_delivery/public_assets/img/crops/wc-radish.png',   // primary
+  'sfa_delivery/public_assets/img/crops/wc-lettuce.png',
+  'sfa_delivery/public_assets/img/crops/wc-dill.png',
+  'sfa_delivery/public_assets/img/crops/wc-parsley.png',
+].map((p) => join(ROOT, p));
 const OUT_DIR = join(ROOT, '_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/CROP_ART_MASTERS/incoming');
 const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-image';
 
@@ -76,24 +82,30 @@ const CROPS = {
   'winter-squash': 'winter squash — a tan butternut squash',
 };
 
+// Authoritative Devora style (IMAGEPROMPT_wc-tomato-cucumber + PROMPT_SERIES_v1 standing rules).
+// NOTE: if the Gemini session returns a refined recipe (REQUEST_TO_GEMINI_crop-icon-recipe), replace this.
 const PROMPT = (desc) =>
-  `Generate a botanical watercolor illustration of ${desc}. ` +
-  `Match the EXACT style of the attached reference image: loose hand-painted watercolor, ` +
-  `soft sage-and-leaf-green palette with natural accent colors, gentle brush texture, ` +
-  `a single centered subject on a plain off-white/transparent paper background, no text, no border, ` +
-  `no drop shadow, square framing, suitable as a ~512px crop icon.`;
+  `Real watercolor study of ${desc}, on cream paper (#f5f3ec). ` +
+  `Washed olive-green (#6a8a3a), earth-brown (#5b483a) and tan-orange (#c46a3e) pigment, ` +
+  `dusty teal (#2d8a8c) sparingly; warm-brown faint hand-drawn line, undefined feathered edges, ` +
+  `visible paper texture and pigment pooling, a faint pencil under-drawing showing. ` +
+  `Loose, gentle, semi-abstract, off-center with quiet empty paper around it. Hand-painted, slightly imperfect. ` +
+  `NO text, no numbers, no logo, no outline-clean vector, no digital gradient, no glossy look, no drop shadow, ` +
+  `not symmetrical, NO BRIGHT RED (any red stays tan-red #c46a3e). ` +
+  `Match the wash, palette, paper texture and pencil/ink line of the attached reference images — ` +
+  `especially the radishes. Same hand, same paper. PNG with transparent/near-cream ground, square framing.`;
 
 function args() {
   const a = process.argv.slice(2);
   return { list: a.includes('--list'), only: a.filter((x) => !x.startsWith('--')) };
 }
 
-async function genOne(slug, desc, anchorB64) {
+async function genOne(slug, desc, refsB64) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`;
   const body = {
     contents: [{ parts: [
       { text: PROMPT(desc) },
-      { inline_data: { mime_type: 'image/png', data: anchorB64 } },
+      ...refsB64.map((data) => ({ inline_data: { mime_type: 'image/png', data } })),
     ] }],
     generationConfig: { responseModalities: ['IMAGE'] },
   };
@@ -114,12 +126,14 @@ async function genOne(slug, desc, anchorB64) {
   const targets = (only.length ? only : Object.keys(CROPS)).filter((s) => CROPS[s]);
   if (list) { console.log(targets.join('\n')); console.log(`\n${targets.length} crops`); return; }
   if (!process.env.GEMINI_API_KEY) { console.error('Set GEMINI_API_KEY (get one free at https://aistudio.google.com/apikey)'); process.exit(1); }
-  if (!existsSync(ANCHOR)) { console.error(`Style anchor missing: ${ANCHOR}`); process.exit(1); }
+  const refs = REFS.filter((p) => existsSync(p));
+  if (!refs.length) { console.error(`No Devora reference images found under ${REFS[0]}`); process.exit(1); }
   mkdirSync(OUT_DIR, { recursive: true });
-  const anchorB64 = readFileSync(ANCHOR).toString('base64');
+  const refsB64 = refs.map((p) => readFileSync(p).toString('base64'));
+  console.log(`Refs attached: ${refs.length} (primary: ${refs[0].split('/').pop()})  ·  model: ${MODEL}`);
   let ok = 0, fail = 0;
   for (const slug of targets) {
-    try { const out = await genOne(slug, CROPS[slug], anchorB64); console.log(`✓ ${slug} → ${out}`); ok++; }
+    try { const out = await genOne(slug, CROPS[slug], refsB64); console.log(`✓ ${slug} → ${out}`); ok++; }
     catch (e) { console.error(`✗ ${e.message}`); fail++; }
   }
   console.log(`\nDone: ${ok} generated, ${fail} failed → review in incoming/, promote to masters/wc-<slug>.png, run scripts/wc_derivatives.sh, wire slugs.`);
