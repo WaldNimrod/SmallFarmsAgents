@@ -50,3 +50,25 @@ Growing-space-required · seed-quantity/planting-materials (+earliest date neede
 
 ## 6. ⚠ Field-exact gap & the ask
 Public docs give module/entity/calculator existence + attribute *categories*, but **not field-exact types/names** (real schema is login-gated at `pro-api.tend.com`). **Team 00 has an authenticated Tend account.** A **sample export (CSV/JSON) of one Growing Template + one Planting + one Order/Lot**, or a captured API response, would convert this blueprint from inference → field-exact — the single highest-value input for SFA's data-model design.
+
+---
+
+## 7. ✅ FIELD-EXACT SCHEMA (resolved — from in-repo real exports)
+
+**Gap CLOSED 2026-06-04.** Real multi-year Tend exports from Team 00's own farm are already in the repo: `data/external_sources/sample_extracts/tend_multi_year__Tend_{2018,2019,2020,2021}_{CROP_PLAN,GREENHOUSE_PLAN,TASKS,HARVESTS,SEED_LIST,NOTES}.txt` — plus an existing importer (`organic_market_agent/crop_book/importer/tend.py` + `tend_overlay.py`, migration `046_tend_overlay.py`, full test suite). These are **field-exact, real, Hebrew/metric/₪ data** (the "accumulated learning = the gold").
+
+### 7.1 CROP_PLAN — 64 columns (the GrowingTemplate + Planting master; 552 rows/yr)
+`Category · Family Name · Crop · Crop Type · Variety(Hebrew) · Planting Method · Harvest Stage · GH Sow Date · Days to 1st/2nd/3rd potting up (+dates) · Days In Greenhouse · Field Sowing Planting Date · DTM · Harvest Window · First Harvest · Last Harvest · Planting Amount("12 bed m") · Location("Farm,Sub,Block,Beds") · In-Row Spacing(+Unit cm) · Rows Per Bed · # Of Flats · Flat/pot type · Seeds per cell · Estimated loss · Total Transplants · Total Seed Needed · Average seed weight(+unit) · Total Weight Needed(+unit) · Extra Seed % · Seed spec · 1st/2nd/3rd Potting up {flat type, plants per cell, # flats} · Harvest Unit · Avg Yield Rate("4.000 bn/row m") · Avg. Sales Price("₪5.00/bn") · Est. Yield · Est. Revenue · Est. Rev./unit("₪20.00/row m") · Growing Cycle(Annual/Perennial/Biennial) · Rootstock · Harvest Season · First Fruiting Year · Between row spacing · Notes · Seeder(Jang JP-1) · Front gear · Rear gear · Roller plate`
+
+### 7.2 Other exports
+- **GREENHOUSE_PLAN** (35 cols, 318 rows): nursery/potting-up lifecycle (sow→transplant, 3 potting-up stages, flats, seeds/cell, loss) + `Microgreens/Plant sale`.
+- **TASKS** (30 cols, 825 rows — the **Execute-pillar schema**): `Due Date · Date Completed · Task Name · Task Type · Assignees · Plantings Assigned · Location Assigned · Method · Sub-method · Input · Description · Manufacturer · OMRI(organic flag) · Application Rate Amount(+Unit) · Application Rate Area · Comments · Name Of Pest Identified · Number Of Minutes · Lines Of Drip · 360 Pipe {#Lines,Minutes,Heads/Line} · 180 Pipe {#Lines,Minutes,Heads/Line} · Total Inches · Total Gallons · Completed · Total Labor Hours`.
+- **HARVESTS** (9 cols, 1723 rows — the **field-reporting gold**): `Date · Planting Name · Crop · Amount · Unit · Outlet Type · Outlet Name(הדוכן יום ב) · Harvest Stage · Final Harvest`.
+- **SEED_LIST** (12 cols, 412 rows): per-crop & per-planting seed/weight needed + extra-order % + spec.
+- **NOTES** (5 cols): `Date · Creator · Note · Plantings · Location`.
+
+### 7.3 Validation vs SFA model
+Tend's CROP_PLAN columns map **near 1:1 onto SFA's 13-topic taxonomy + 14 calculators** — Spacing/Population (in-row cm, rows/bed, between-row), Yield (Avg Yield Rate bn|kg/row m), Market/Price (₪ sales price, est revenue), Nursery (potting-up stages, flats, seeds/cell), Planting calendar (sow dates, DTM, harvest window), Seed (total seed, seeds/g, extra %), **Equipment/Seeder (Jang + gears + roller plate = topic 12)**. → Strong confirmation our taxonomy/calcs were well-aligned (the in-repo importer already proves ingestion). **Metric + ₪ + Hebrew + bed-meters native** — exactly SFA's frame, unlike the US/imperial assumptions in the public-docs inference.
+
+### 7.4 Execute-pillar design note (from Team 00 lived experience)
+HARVESTS + TASKS are the **most valuable AND most painful** loop (harvest-list prep + field-crew reporting; crew never understood what to update). HARVESTS schema is intentionally tiny (9 cols) — that simplicity is right, but Tend's *entry UX* failed. **SFA priority #1: make harvest-list generation + field reporting fast, structured, and worker-obvious** (the gold accumulated data lives here). TASKS irrigation/input detail (drip lines, application rate, OMRI) informs the input/spray Log model + organic-cert write-back.
