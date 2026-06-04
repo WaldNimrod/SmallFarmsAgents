@@ -147,6 +147,47 @@ final class CropCardIconTest extends TestCase
         $this->assertStringContainsString('crophero__art', $html, 'AC-U2-04: crophero__art art container must be present');
     }
 
+    // ── C1: plural-slug art regression (patch01 recovery) ───────────────────
+
+    /**
+     * C1-regression: plural DB slugs must resolve to their watercolor PNG, not fall back
+     * to the generic glyph. Guards against the patch01 singular-only map regression.
+     *
+     * We test by asserting the WC_ART constant directly via ReflectionClass so this
+     * does NOT require a running DB or rendered template.
+     *
+     * @dataProvider pluralSlugArtProvider
+     */
+    public function testPluralSlugResolvesToWcArt(string $slug, string $expectedFile): void
+    {
+        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
+        $map = $rc->getConstant('WC_ART');
+        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $this->assertArrayHasKey($slug, $map, "C1: plural slug '{$slug}' must be present in WC_ART");
+        $this->assertSame($expectedFile, $map[$slug], "C1: '{$slug}' must map to '{$expectedFile}'");
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function pluralSlugArtProvider(): array
+    {
+        return [
+            'carrots'              => ['carrots',                      'wc-carrot.png'],
+            'tomatoes'             => ['tomatoes',                     'wc-tomato.png'],
+            'cucumbers'            => ['cucumbers',                    'wc-cucumber.png'],
+            'onions'               => ['onions',                       'wc-onion.png'],
+            'peppers'              => ['peppers',                      'wc-pepper.png'],
+            'peas'                 => ['peas',                         'wc-pea.png'],
+            'beets'                => ['beets',                        'wc-beet.png'],
+            'radishes'             => ['radishes',                     'wc-radish.png'],
+            'melons'               => ['melons',                       'wc-melon.png'],
+            'leeks'                => ['leeks',                        'wc-leek.png'],
+            'cherry-tomato'        => ['cherry-tomato',                'wc-tomato.png'],
+            'summer-squash'        => ['summer-squash',                'wc-zucchini.png'],
+            'onions-scallions'     => ['onions-scallions',             'wc-scallion.png'],
+            'beans-default-pole-climbing-' => ['beans-default-pole-climbing-', 'wc-pole-bean.png'],
+        ];
+    }
+
     // ── Render helpers ───────────────────────────────────────────────────────
 
     /**

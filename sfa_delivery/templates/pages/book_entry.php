@@ -76,7 +76,53 @@ $view  = (string)($view  ?? 'cards');
 $total = (int)($total ?? count($crops));
 
 // Watercolor art mapping
-$wc_art_map = ['basil'=>'wc-basil.png', 'beet'=>'wc-beet.png', 'broccoli'=>'wc-broccoli.png', 'bush-bean'=>'wc-bush-bean.png', 'cabbage'=>'wc-cabbage.png', 'carrot'=>'wc-carrot.png', 'chard'=>'wc-chard.png', 'cucumber'=>'wc-cucumber.png', 'dill'=>'wc-dill.png', 'eggplant'=>'wc-eggplant.png', 'fennel'=>'wc-fennel.png', 'garlic'=>'wc-garlic.png', 'ginger'=>'wc-ginger.png', 'kale'=>'wc-kale.png', 'leek'=>'wc-leek.png', 'lettuce'=>'wc-lettuce.png', 'melon'=>'wc-melon.png', 'onion'=>'wc-onion.png', 'parsley'=>'wc-parsley.png', 'pea'=>'wc-pea.png', 'pepper'=>'wc-pepper.png', 'pole-bean'=>'wc-pole-bean.png', 'radish'=>'wc-radish.png', 'scallion'=>'wc-scallion.png', 'spinach'=>'wc-spinach.png', 'tomato'=>'wc-tomato.png', 'turmeric'=>'wc-turmeric.png', 'zucchini'=>'wc-zucchini.png'];
+// Watercolor art mapping — original singular keys + C1 plural DB-slug aliases (patch01 recovery)
+$wc_art_map = [
+    // original singular keys (14 masters)
+    'basil'      => 'wc-basil.png',
+    'beet'       => 'wc-beet.png',
+    'broccoli'   => 'wc-broccoli.png',
+    'bush-bean'  => 'wc-bush-bean.png',
+    'cabbage'    => 'wc-cabbage.png',
+    'carrot'     => 'wc-carrot.png',
+    'chard'      => 'wc-chard.png',
+    'cucumber'   => 'wc-cucumber.png',
+    'dill'       => 'wc-dill.png',
+    'eggplant'   => 'wc-eggplant.png',
+    'fennel'     => 'wc-fennel.png',
+    'garlic'     => 'wc-garlic.png',
+    'ginger'     => 'wc-ginger.png',
+    'kale'       => 'wc-kale.png',
+    'leek'       => 'wc-leek.png',
+    'lettuce'    => 'wc-lettuce.png',
+    'melon'      => 'wc-melon.png',
+    'onion'      => 'wc-onion.png',
+    'parsley'    => 'wc-parsley.png',
+    'pea'        => 'wc-pea.png',
+    'pepper'     => 'wc-pepper.png',
+    'pole-bean'  => 'wc-pole-bean.png',
+    'radish'     => 'wc-radish.png',
+    'scallion'   => 'wc-scallion.png',
+    'spinach'    => 'wc-spinach.png',
+    'tomato'     => 'wc-tomato.png',
+    'turmeric'   => 'wc-turmeric.png',
+    'zucchini'   => 'wc-zucchini.png',
+    // C1: plural DB-slug aliases (patch01 recovery)
+    'carrots'                      => 'wc-carrot.png',
+    'tomatoes'                     => 'wc-tomato.png',
+    'cucumbers'                    => 'wc-cucumber.png',
+    'onions'                       => 'wc-onion.png',
+    'peppers'                      => 'wc-pepper.png',
+    'peas'                         => 'wc-pea.png',
+    'beets'                        => 'wc-beet.png',
+    'radishes'                     => 'wc-radish.png',
+    'melons'                       => 'wc-melon.png',
+    'leeks'                        => 'wc-leek.png',
+    'cherry-tomato'                => 'wc-tomato.png',
+    'summer-squash'                => 'wc-zucchini.png',
+    'onions-scallions'             => 'wc-scallion.png',
+    'beans-default-pole-climbing-' => 'wc-pole-bean.png',
+];
 
 ob_start();
 ?>

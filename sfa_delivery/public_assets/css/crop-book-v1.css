@@ -25,12 +25,13 @@
 .aud__opt.is-active { background: var(--gj-paper); color: var(--gj-ink); box-shadow: var(--gj-shadow-s); }
 .aud__opt.is-active.is-cards { color: var(--gj-leaf-deep); }
 .aud__opt.is-active.is-table { color: var(--gj-soil-deep); }
-.aud-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.aud-head { display: flex; align-items: center; justify-content: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.aud-head__sub { margin-inline-start: auto; }
 
 /* ════════════════════════════════════════════════════════════
    2 · CROP CARDS  (Cards audience view)
    ════════════════════════════════════════════════════════════ */
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
 .ccard {
   display: flex; flex-direction: column;
   background: var(--gj-paper); border: 1px solid var(--gj-line);
@@ -547,7 +548,7 @@
   .crophero h1 { font-size: clamp(22px, 7vw, 34px); overflow-wrap: break-word; word-break: break-word; min-width: 0; }
 }
 @media (max-width: 600px) {
-  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .headvals { grid-template-columns: 1fr 1fr; }
 }
 
@@ -560,7 +561,7 @@
    .vtable-wrap nested scroll still works on iOS Safari.
    ════════════════════════════════════════════════════════════ */
 /* The crop detail wrapper constrains width without hiding inner scroll contexts */
-.cb-crop-detail { max-width: 100%; overflow-x: clip; }
+.cb-crop-detail { max-width: 1120px; margin-inline: auto; overflow-x: clip; }
 /* Flex children in topic rows must shrink to fit */
 .tcard__row .v { min-width: 0; word-break: break-word; }
 /* Prov rows at narrow width: switch from 4-col grid to 2-col */

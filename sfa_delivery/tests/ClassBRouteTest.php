@@ -412,15 +412,17 @@ final class ClassBRouteTest extends TestCase
             '/crop-book/ must still render .cb-paths (WI-1 kept functionality)');
     }
 
-    /** WI-1: crop-book-v1.css uses compact minmax (≤128px) for .cards-grid */
+    /** A1: crop-book-v1.css .cards-grid uses team_35 restored minmax(168px,1fr) */
     public function testCropBookCssUsesCompactGrid(): void
     {
         $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-v1.css');
-        // Assert minmax track is ≤128px (compact) — pattern: minmax(NNNpx where NNN<=128
-        $this->assertMatchesRegularExpression(
-            '#cards-grid[^}]*minmax\(1[01]\d|minmax\([0-9]{2}px#',
+        // A1 (patch01 regression restore): team_35 canonical value is minmax(168px,1fr).
+        // The old assertion (≤128px) was enforcing the shrunken patch01 size — updated to
+        // assert the restored team_35 value per WP-CB-UI-FIDELITY fix A1.
+        $this->assertStringContainsString(
+            'minmax(168px, 1fr)',
             $css,
-            'crop-book-v1.css .cards-grid must use a compact minmax track (≤128px)'
+            'crop-book-v1.css .cards-grid must use team_35 restored minmax(168px, 1fr) track'
         );
     }
 
