@@ -4087,18 +4087,19 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-patch01
   label: "ספר גידולים: UI polish — crop-book entry density + hub full-width / Field-Log tile (יומן השדה בפיתוח)"
-  status: BUILDING
+  status: COMPLETE
   phase: ui_polish
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-03"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-CLASSB"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-patch01/LOD400_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/ARCHIVE_MANIFEST.md"
   branch: "claude/ui-polish-hub-cropbook-2026-06-03"
   gate_history:
   - gate: L-GATE_E
@@ -4142,9 +4143,34 @@ work_packages:
       hub 4 tiles incl. 'יומן השדה' is-dev/aria-disabled non-clickable; 'גנן'=1, 'חקלאות מקומית'=1,
       'חקלאות קטנה'=0; .hub-cta dual CTA (→/community + primary →wa.me); /crop-book/ dense grid (74 crop
       anchors, no inline style); /about Tend=0; 6 routes 200. L-GATE_V R2 executable (live matches branch).
-  notes: "OPENED 2026-06-03 (team_00 live UI feedback; round-2 folded in). BUILT + team_100 L-GATE_B PASS (08f529d).
-    L-GATE_V R1 FAIL = deploy-precondition only (live still pre-patch01; branch ready). NEXT: team_99 deploy
-    08f529d → DEPLOY_REPORT → team_190 L-GATE_V R2 (C1–C9) → LOD500_LOCKED. Branch claude/ui-polish-hub-cropbook-2026-06-03."
+  - gate: DEPLOY
+    result: SUCCESS
+    round: FINAL
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "6703313"
+    report_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/team_99/SFA-S003-P004-WP-CB-UI-patch01/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 FINAL deploy 6703313 to sfa.nimrod.bio (FTPS; 12 transferred / exit 0). WI-1..WI-7 served; CSS ?v=
+      1780515224→1780520599; smoke 4/4 PASS. Supersedes the 08f529d partial. team_100 independently verified live
+      CSS byte-identical to branch (re-audit 2026-06-04); a prior team_50 'NO-GO' was a false wrong-file/stale-cache
+      read (rejected). WI-8/WI-9 (/crop-book/table @375 overflow, c7b4368/e798bc8) NOT in 6703313 — deploy with FIDELITY.
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 2
+    date: "2026-06-04"
+    validator: team_190
+    validator_engine: "Cursor Agent (GPT-5.x — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-patch01/WP-CB-UI-patch01_LGATE-V_R2_VERDICT_v1.0.0.md"
+    mandate_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/TEAM_100/SFA-S003-P004-WP-CB-UI-patch01/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-04_v1.0.0.md"
+    notes: >
+      9/9 C1–C9 PASS on live 6703313 @ ?v=1780520599 (cache-busted, correct CSS file per marker). 1 INFO
+      (F-190-PATCH01-V-R2-01: /crop-book/table @375 overflow — WI-8/9 undeployed, deferred to FIDELITY deploy +
+      team_50 PRELAUNCH-QA; per mandate §3 carve-out, NOT a C1–C9 failure). CLOSING verdict → team_100 LOD500_LOCKED.
+  notes: "CLOSED 2026-06-04 — LOD500_LOCKED per ADR042 (L-GATE_V R2 PASS_WITH_FINDINGS, team_190/GPT-5.x non-Claude,
+    9/9 on live 6703313). Self-archived (ADR034 R9 L2 spoke): _archive/SFA-S003-P004-WP-CB-UI-patch01/ARCHIVE_MANIFEST.md.
+    DEFERRED CARRY: WI-8/WI-9 (/crop-book/table overflow, c7b4368/e798bc8) deploy with WP-CB-UI-FIDELITY; tracked by
+    team_50 PRELAUNCH-QA. Branch claude/ui-polish-hub-cropbook-2026-06-03."
   profile: L0
 
 - id: SFA-S003-P004-WP-PRELAUNCH-QA
