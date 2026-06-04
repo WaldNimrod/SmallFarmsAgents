@@ -4374,7 +4374,37 @@ work_packages:
       deploy → team_50 VISUAL QA (CDP — team_35 cannot screenshot, per team_00) → team_100 record. Delivery-tier.
   notes: "OPENED 2026-06-04 (FIDELITY follow-up). team_35 design decisions are TEXT/SPEC only (no visual QA
     capability); team_50 owns the visual screenshot-vs-Board verification per team_00 ruling. Mandates:
-    _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/."
+    _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/. NOTE 2026-06-04: Q4 elevated by team_00 to a 4-level
+    graded seasonal-suitability model + new visual interface → split out to WP-CB-SEASON-VIZ (future)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-SEASON-VIZ
+  label: "ספר גידולים: דירוג התאמה עונתית (4 רמות) + ממשק עונות חזותי לכל גידול עם איקונים — פיצ'ר עתידי"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-04"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-SEASON-VIZ/REGISTER_seasonal-suitability_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-04"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-04): elevate the crop-book season concept from a binary filter to a 4-level graded
+      suitability (מועדף/מתאים/אפשרי/לא-מתאים, derived from sow∪transplant month-coverage per season) + a new
+      crop-page visual interface using the crop watercolor icons (per-season fill by level) + entry-card mini
+      indicator. Data model DECIDED + the 45-crop matrix approved; build deferred. "יש לרשום כחבילת עבודה עתידית".
+  notes: "REGISTERED 2026-06-04 (future feature, team_00). Data model + 45-crop graded matrix + visual direction
+    DECIDED — see REGISTER artifact. Needs LOD + build + team_50 visual QA when scheduled. Render-layer (levels
+    computed from existing month data; no DB change)."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
