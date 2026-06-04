@@ -4312,6 +4312,28 @@ work_packages:
       crop-book visual remediation (cards 168px, centered crop page, toggle) + 70 crop icons + the prov fix — those
       are committed (ea9b975/67195a4/8ce4fe1/acca9b2) but NOT live. SECOND deploy @acca9b2 routed to team_99
       (MSG-team100-to-team99-...-DEPLOY2-...). L-GATE_V HELD until the full visual set is live.
+  - gate: DEPLOY
+    result: SUCCESS
+    round: 2
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "acca9b2"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v2.0.0.md"
+    notes: >
+      team_99 SECOND deploy acca9b2 — 67 crop watercolors + CSS + templates (80 files; image gate met, not the
+      10-file failure mode); CSS ?v= 1780532267→1780576560; all 5 smoke PASS; §4.1 prov finding RESOLVED. team_100
+      independent live verification PASS (evidence live_evidence_acca9b2/): 70 crops render art (69 distinct wc-*.png
+      served), served CSS minmax(168px)+cb-crop-detail max-width:1120px+aud-head flex-start (cache-busted), single
+      hero, 0 raw 6-decimals incl. drill, 0 English units, CDP no-overflow. Crop-book visual round LIVE.
+  - gate: L-GATE_V
+    result: ROUTED
+    date: "2026-06-04"
+    validator: team_190
+    note: non-Claude launch gate on live acca9b2
+    mandate_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/VALIDATION_MANDATE_team190_LGATE-V_2026-06-04_v1.0.0.md"
+    notes: >
+      team_100 routed FIDELITY L-GATE_V (launch gate) to team_190 (non-Claude) — design-vs-Board-A/B on live
+      acca9b2 + AC-1..7 + regression (patch01 C1-C9 + blockers). On PASS → LOD500_LOCKED. team_50 re-audit parallel.
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
