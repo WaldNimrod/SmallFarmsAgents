@@ -4539,3 +4539,126 @@ work_packages:
     validator: team_100
   notes: "PLACEHOLDER — not for execution. OP-class operational feedback into enrichment."
   profile: L0
+
+# ============================================================================
+# S004 — Small-Farm OS: farmOS Headless Platform Program
+# Opened 2026-06-04 by Team 00 (Nimrod) in-session directive (planning session).
+# Strategic re-lock after base-layer completion: adopt farmOS (open-source,
+# GPL-2.0+) HEADLESS as the operational Delivery Tier; SFA engine stays SSoT.
+# North star: "מערכת ההפעלה של החווה הקטנה — הדף שכל מגדל פותח בבוקר."
+# Canonical brief: _COMMUNICATION/TEAM_100/BRIEF_SFA_VISION_RELOCK_AND_PLATFORM_DIRECTION_2026-06-04_v1.0.0.md
+# NOTE: this program SUPERSEDES the "build-our-own" intent of the S003-P004
+# downstream placeholders (WP-CB-3 tasks, WP-CB-4 Sales/POS, WP-CB-5 Tend
+# integration) — those capabilities are now to be delivered via farmOS adoption,
+# not custom modules. Reconciliation of those placeholders deferred to S004-P001.
+# DB online (hub probe) but spoke is L0 file-based (no in-tree AOS v3 engine,
+# project_id null) → roadmap.yaml is canonical WP registry per PROJECT_CONTEXT.
+# Open DECISIONS carried: D1 monetization specifics, D2 multi-tenancy scale,
+# D3 sales/CRM integration targets, D4 competitive schema mapping (= WP002).
+# ============================================================================
+
+- id: SFA-S004-P001-WP001
+  label: "Vision Re-Lock & Platform Selection (farmOS, headless)"
+  status: COMPLETE
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD200_APPROVED
+  assigned_builder: sfa_arch
+  assigned_validator: team_00
+  created_at: "2026-06-04"
+  milestone_ref: "S004"
+  spec_ref: "_COMMUNICATION/TEAM_100/BRIEF_SFA_VISION_RELOCK_AND_PLATFORM_DIRECTION_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-04"
+    validator: team_00
+    notes: "Vision phrasing + platform direction APPROVED in-session by Team 00.
+      farmOS selected over LiteFarm (API-for-integration + flexible data model +
+      blessed self-host; LiteFarm killers: 0 RTL/Hebrew + internal-only API).
+      Headless (own Hebrew/RTL frontend). 3-tier delivery (no-account / rented
+      sandbox / permanent instance). 5 pillars (Plan/Execute/Sell/Relate/Improve).
+      Freemium + strong indirect (brand→courses/consulting/custom)."
+  notes: "COMPLETE 2026-06-04. Output: BRIEF (vision re-lock + platform plan) +
+    project-memory persist. Deep-research provenance: 3 subagents (farmOS deep-dive,
+    LiteFarm deep-dive, farmOS multi-tenancy+modules)."
+  profile: L0
+
+- id: SFA-S004-P001-WP002
+  label: "Competitive Intelligence — multi-system schema & white-space mapping (Team 80 lead)"
+  status: IN_PROGRESS
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: team_80
+  assigned_validator: team_190
+  created_at: "2026-06-04"
+  milestone_ref: "S004"
+  depends_on: ["SFA-S004-P001-WP001"]
+  spec_ref: "_COMMUNICATION/TEAM_100/BRIEF_SFA_VISION_RELOCK_AND_PLATFORM_DIRECTION_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PENDING
+    date: "2026-06-04"
+    validator: team_100
+    notes: "DEFINED FOR EXECUTION — dedicated next session per Team 00 directive
+      2026-06-04. Aggressive (legal/public-source) competitive intelligence: trials,
+      docs, pricing pages, public APIs, user reviews/complaints (G2/Capterra/Reddit/
+      forums/YouTube). Targets: Tend, Seedtime, Layout (Market Gardener Institute),
+      Farmbrite, AgriWebb, Croptracker, Local Line/Barn2Door/Harvie, GrowVeg + re-look
+      at farmOS/LiteFarm. 10 intelligence axes per system: (1) data model/schema,
+      (2) feature set, (3) daily cockpit, (4) pricing/monetization, (5) audience/
+      positioning, (6) UX/UI, (7) weaknesses/complaints, (8) stack/API, (9) i18n/RTL,
+      (10) economics (market-price↔planning link). Deliverables: per-competitor
+      intel dossier; schema-comparison matrix (feeds SFA data model — D4 core);
+      white-space analysis; pricing benchmark (feeds D1). Nimrod to add any
+      Israeli/niche tools not surfaced by search."
+  notes: "IN_PROGRESS — internal CI pass COMPLETE 2026-06-04: 8 parallel sub-agents
+    (Tend, Seedtime, Heirloom/JM-Fortier, Farmbrite, AgriWebb, Croptracker, sales/CSA
+    cluster, home-garden cluster). Synthesis artifact: CI_SYNTHESIS_8COMPETITORS_*.
+    3 unanimous findings: (1) no one closes market-price->plan->profit loop (Heirloom
+    has it on roadmap, unshipped) = SFA #1 wedge; (2) zero Hebrew/RTL anywhere = moat;
+    (3) production<->sales loop industry-wide open. Pending: merge external multi-engine
+    outputs + triangulate; re-verify search-synthesized prices. Substantially resolves
+    D4; informs D1; D3 finding = BUILD Sell/Relate (no clean integration target).
+    Feeds detailed technical platform plan (Phase 0)."
+  profile: L0
+
+- id: SFA-S004-P001-WP003
+  label: "Tend deep-dive — module + schema reference study (PRIMARY architecture reference)"
+  status: IN_PROGRESS
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: team_80
+  assigned_validator: team_190
+  created_at: "2026-06-04"
+  milestone_ref: "S004"
+  depends_on: ["SFA-S004-P001-WP002"]
+  spec_ref: "_COMMUNICATION/TEAM_100/CI_SYNTHESIS_8COMPETITORS_SFA-S004-P001-WP002_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: PENDING
+    date: "2026-06-04"
+    validator: team_100
+    notes: "Team 00 directive 2026-06-04: weight Tend as the PRIMARY architecture reference.
+      Rationale (Nimrod primary-source, multi-year Tend user beta->full system): modules +
+      data model EXCELLENT; UI weaker (validates SFA headless); long learning curve + heavy
+      maintenance burden = the pains to design away. Study Tend modules + schema in maximum
+      depth (entities, fields, relationships, calculators, workflows) as the reference
+      blueprint for SFA's data model (wrapped headless over farmOS). Inputs: (a) Nimrod's
+      lived experience (essential-vs-bloat modules, learning-curve + maintenance causes,
+      keep/kill list), (b) deep mining of Tend public docs/help center. Deliverable: Tend
+      module+schema reference map + ADOPT/SKIP/ADAPT recommendations for SFA."
+  notes: "IN_PROGRESS — deep-dive (public docs) COMPLETE 2026-06-04. Blueprint artifact:
+    TEND_SCHEMA_REFERENCE_BLUEPRINT_*. 16 modules + ERD spine + calculator inventory +
+    ADOPT/SKIP/ADAPT->farmOS map. ADOPT spine Crop->Template->Planting->Task->Harvest->
+    Lot->Inventory. Beat Tend on: sub-bed/intercrop geometry + market-price economics +
+    RTL UI. Stay LEAN (Tend's hundreds-of-attributes = the maintenance burden). PENDING:
+    (a) field-exact schema needs an authenticated Tend export from team_00 (pro-api.tend.com
+    login-gated); (b) Nimrod experiential extraction (essential-vs-bloat, learning-curve/
+    maintenance causes, keep/kill). Disambiguation: tend.com (farm) != tend.io (CRM)."
+  profile: L0
