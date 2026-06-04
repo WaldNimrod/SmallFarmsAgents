@@ -4444,7 +4444,11 @@ work_packages:
     ADOPT/SKIP/ADAPT->farmOS map. ADOPT spine Crop->Template->Planting->Task->Harvest->
     Lot->Inventory. Beat Tend on: sub-bed/intercrop geometry + market-price economics +
     RTL UI. Stay LEAN (Tend's hundreds-of-attributes = the maintenance burden). PENDING:
-    (a) field-exact schema needs an authenticated Tend export from team_00 (pro-api.tend.com
-    login-gated); (b) Nimrod experiential extraction (essential-vs-bloat, learning-curve/
-    maintenance causes, keep/kill). Disambiguation: tend.com (farm) != tend.io (CRM)."
+    (a) field-exact schema RESOLVED 2026-06-04 from in-repo real exports
+    (data/external_sources/sample_extracts/tend_multi_year__* 2018-2021, 6 export types,
+    CROP_PLAN=64 cols; importer 046 + tend.py exists) — blueprint §7 updated; (b) Nimrod
+    experiential extraction CAPTURED (gold loop = harvest-list->field-report->accumulated
+    learning, both most-valuable + most-painful; speed = hard NFR; KEEP time+space color map
+    + auto-tasks + auto-harvest-lists; REDO faster + simpler structured field reporting).
+    Disambiguation: tend.com (farm) != tend.io (CRM)."
   profile: L0
