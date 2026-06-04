@@ -188,6 +188,41 @@ final class CropCardIconTest extends TestCase
         ];
     }
 
+    // ── C2: generated crop art regression (WP-CB-UI-FIDELITY batch) ────────
+
+    /**
+     * C2-regression: a sample of the 43 new identity-slug→art entries must be
+     * present in WC_ART. Guards against the map silently losing entries on
+     * future edits. Uses ReflectionClass — no DB or rendered template required.
+     *
+     * @dataProvider generatedCropArtProvider
+     */
+    public function testGeneratedCropArtWired(string $slug, string $expectedFile): void
+    {
+        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
+        $map = $rc->getConstant('WC_ART');
+        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $this->assertArrayHasKey($slug, $map, "C2: slug '{$slug}' must be present in WC_ART");
+        $this->assertSame($expectedFile, $map[$slug], "C2: '{$slug}' must map to '{$expectedFile}'");
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function generatedCropArtProvider(): array
+    {
+        return [
+            'strawberry'        => ['strawberry',         'wc-strawberry.png'],
+            'potato'            => ['potato',             'wc-potato.png'],
+            'wheat'             => ['wheat',              'wc-wheat.png'],
+            'mint'              => ['mint',               'wc-mint.png'],
+            'okra'              => ['okra',               'wc-okra.png'],
+            'cauliflower'       => ['cauliflower',        'wc-cauliflower.png'],
+            'arugula'           => ['arugula',            'wc-arugula.png'],
+            'sweet-corn'        => ['sweet-corn',         'wc-sweet-corn.png'],
+            'winter-squash'     => ['winter-squash',      'wc-winter-squash.png'],
+            'pac-choi-bok-choy' => ['pac-choi-bok-choy',  'wc-pac-choi-bok-choy.png'],
+        ];
+    }
+
     // ── Render helpers ───────────────────────────────────────────────────────
 
     /**
