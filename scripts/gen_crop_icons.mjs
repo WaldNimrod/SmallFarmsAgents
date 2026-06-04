@@ -35,65 +35,69 @@ const REFS = [
 const OUT_DIR = join(ROOT, '_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-1/CROP_ART_MASTERS/incoming');
 const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-image';
 
-// 43 crops with no watercolor master (slug → display name + optional botanical hint for a clean icon).
+// 43 crops with no watercolor master. {SUBJECT} lines verbatim from the Devora session recipe (API v1.0.0).
 const CROPS = {
-  'anise-hyssop': 'anise hyssop — upright herb with violet flower spikes and green leaves',
-  'artichokes': 'globe artichoke — single green-purple flower bud',
-  'arugula': 'arugula / rocket — cluster of lobed green leaves',
-  'bay': 'bay laurel — a few glossy dark-green bay leaves',
-  'beans-default-pole-climbing': 'pole bean — green climbing bean pods on a vine',
-  'blackberry': 'blackberries — a cluster of dark ripe berries with a leaf',
-  'cauliflower': 'cauliflower — white head with green leaves',
-  'celery': 'celery — bunch of pale-green ribbed stalks with leaves',
-  'chickpea': 'chickpea — green pods and a few beige chickpeas',
-  'chicory': 'chicory — leafy green head with a blue flower',
-  'chinese-lantern': 'chinese lantern — orange papery lantern husk',
-  'chives': 'chives — slender green stalks with a purple pompom flower',
-  'cilantro': 'cilantro / coriander — bright-green feathery leaves',
-  'cress': 'garden cress — tiny round green leaves',
-  'edamame': 'edamame — fuzzy green soybean pods',
-  'fava-bean': 'fava / broad bean — large green pods',
-  'hibiscus': 'roselle hibiscus — red calyx flower',
-  'jerusalem-artichokes': 'jerusalem artichoke — knobbly tan tuber',
-  'jicama': 'jicama — round tan root bulb',
-  'kohlrabi': 'kohlrabi — pale-green bulb with leaf stalks',
-  'lemon-balm': 'lemon balm — heart-shaped green herb leaves',
-  'lemon-verbena': 'lemon verbena — narrow pointed green leaves',
-  'lettuce-salad-mix': 'salad mix — a loose blend of small lettuce leaves',
-  'lovage': 'lovage — tall celery-like green leaves',
-  'mint': 'mint — a sprig of green mint leaves',
-  'new-zealand-spinach': 'New Zealand spinach — thick triangular green leaves',
-  'okra': 'okra — green ridged seed pods',
-  'oranges': 'orange — a ripe orange with a leaf',
-  'pac-choi-bok-choy': 'bok choy / pac choi — white stalks with dark-green leaves',
-  'potato': 'potato — a couple of tan potatoes',
-  'sage': 'sage — soft grey-green oval herb leaves',
-  'sesame': 'sesame — seed pods on a stalk with small leaves',
-  'soybean': 'soybean — green soybean pods on a stem',
-  'strawberry': 'strawberry — a red strawberry with a green calyx',
-  'sunflower': 'sunflower — a single yellow sunflower head',
-  'sweet-corn': 'sweet corn — an ear of yellow corn with husk',
-  'sweet-potato': 'sweet potato — an orange-tan tuber',
-  'tarragon': 'tarragon — slender pointed green herb leaves',
-  'thyme': 'thyme — tiny-leaved green herb sprigs',
-  'turnips': 'turnip — white-and-purple round root with leaves',
-  'watermelon': 'watermelon — a round green-striped melon (whole)',
-  'wheat': 'wheat — a few golden wheat stalks with grain heads',
-  'winter-squash': 'winter squash — a tan butternut squash',
+  'anise-hyssop': 'flowering anise hyssop spires with purple watercolor blooms',
+  'artichokes': 'two artichoke globes with open scales and thistle details',
+  'arugula': 'jagged arugula (rocket) leaves in a loose wash',
+  'bay': 'a small branch of laurel bay leaves, single and clustered',
+  'beans-default-pole-climbing': 'climbing pole beans with pods and tendrils wrapping a support line',
+  'blackberry': 'a bramble branch with ripening blackberries and thorny leaves',
+  'cauliflower': 'a dense cauliflower head partially shaded by its green outer leaves',
+  'celery': 'ribbed celery stalks rising from a base with bushy pale green leaves',
+  'chickpea': 'a chickpea plant section showing pods, fine leaves, and small flowers',
+  'chicory': 'blue chicory flowers on thin stems with basal leaves',
+  'chinese-lantern': 'papery orange-red calyxes of a chinese lantern plant on a thin stem',
+  'chives': 'chive leaves and purple flowering globes with thin stalks',
+  'cilantro': 'delicate, feathery cilantro leaves and thin stems',
+  'cress': 'small cress leaves on delicate stems in a clump',
+  'edamame': 'green edamame (soybean) pods clustered on a stem with leaves',
+  'fava-bean': 'large fava bean pods, some whole and one open revealing beans inside',
+  'hibiscus': 'a single, large hibiscus flower with natural, earthy tan-red petals and stamens',
+  'jerusalem-artichokes': 'knobby jerusalem artichoke tubers with thin roots and plant base',
+  'jicama': 'a large jicama root, whole, showing its distinct smooth skin and texture',
+  'kohlrabi': 'kohlrabi bulbs, one purple and one green, with leaves rising from the top',
+  'lemon-balm': 'crinkled lemon balm leaves in a loose cluster',
+  'lemon-verbena': 'long, pointed lemon verbena leaves on a slight stem',
+  'lettuce-salad-mix': 'a loose, varied mixture of diverse salad lettuce leaves and textures',
+  'lovage': 'upright lovage stalks and jagged green leaves',
+  'mint': 'vibrant, loosely washed mint leaves on square stems',
+  'new-zealand-spinach': 'fleshy, triangular leaves of new zealand spinach spreading on a vine',
+  'okra': 'okra pods and a single hibiscus-like cream flower with a dark center',
+  'oranges': 'two oranges with natural, muted rinds, one with a leaf attached',
+  'pac-choi-bok-choy': 'pac choi with white stems and dark green spoon-shaped leaves',
+  'potato': 'potato tubers, whole, as a biological study with fine roots',
+  'sage': 'a small cluster of woody stems with fuzzy, oblong sage leaves',
+  'sesame': 'a sesame plant section showing leaf axils and upright seed pods',
+  'soybean': 'a mature soybean plant stalk with small pods and leaves',
+  'strawberry': 'strawberries on a vine, showing natural, earthy red fruit and flowers',
+  'sunflower': 'a sunflower head with muted yellow petals and a textured brown seed center',
+  'sweet-corn': 'ears of sweet corn with some husks removed, showing irregular kernels',
+  'sweet-potato': 'long sweet potato tubers, whole, with a piece of trailing vine',
+  'tarragon': 'elegant, simple leaves on the thin stems of French tarragon',
+  'thyme': 'small, woody thyme branches with tiny, dense leaves',
+  'turnips': 'turnips, one white with a purple top, showing natural roots and leaves',
+  'watermelon': 'a whole, round watermelon with natural, muted green stripes',
+  'wheat': 'several heads of mature, golden wheat with awns and leaves',
+  'winter-squash': 'a variety of winter squashes, whole, with natural rinds and stems',
 };
 
-// Authoritative Devora style (IMAGEPROMPT_wc-tomato-cucumber + PROMPT_SERIES_v1 standing rules).
-// NOTE: if the Gemini session returns a refined recipe (REQUEST_TO_GEMINI_crop-icon-recipe), replace this.
-const PROMPT = (desc) =>
-  `Real watercolor study of ${desc}, on cream paper (#f5f3ec). ` +
-  `Washed olive-green (#6a8a3a), earth-brown (#5b483a) and tan-orange (#c46a3e) pigment, ` +
-  `dusty teal (#2d8a8c) sparingly; warm-brown faint hand-drawn line, undefined feathered edges, ` +
-  `visible paper texture and pigment pooling, a faint pencil under-drawing showing. ` +
-  `Loose, gentle, semi-abstract, off-center with quiet empty paper around it. Hand-painted, slightly imperfect. ` +
-  `NO text, no numbers, no logo, no outline-clean vector, no digital gradient, no glossy look, no drop shadow, ` +
-  `not symmetrical, NO BRIGHT RED (any red stays tan-red #c46a3e). ` +
-  `Match the wash, palette, paper texture and pencil/ink line of the attached reference images — ` +
-  `especially the radishes. Same hand, same paper. PNG with transparent/near-cream ground, square framing.`;
+// Devora Series Icon Recipe (API v1.0.0) — verbatim prompt template from the originating Gemini session.
+// Drift fixes baked in: floating subject, 35-45% frame area, off-center, feathered edges, no border/fill.
+const PROMPT = (subject) =>
+  `A solitary, off-center biological watercolor study of ${subject}, rendered on a raw, textured cream ` +
+  `watercolor paper surface. The style is loose, observational, and semi-abstract, with transparent, ` +
+  `wet-on-wet washes bleeding into feathered, undefined edges that fade to nothing into the paper. The palette ` +
+  `is muted and natural, prioritizing olive greens, earth browns, tan-oranges, and dusty teals, strictly ` +
+  `avoiding pure bright reds or synthetic pigments. Visible granulation and water blooms are present. The ` +
+  `composition must have significant quiet, empty space; the subject is small (occupying only 35–45% of the ` +
+  `frame area) and placed away from the dead center, floating in paper with no hard rectangular edges, frames, ` +
+  `borders, or filled background colors — all painted edges fade completely to blank nothingness so the image ` +
+  `composites cleanly under multiply. Subtle, light pencil under-drawing is occasionally visible. Lighting is ` +
+  `soft, ambient daylight. NO bright primary red (any red stays earth/tan-red #c46a3e), NO centering, NO ` +
+  `filling the frame, NO text, NO logos, NO 3D, NO vector, NO glossy finish, NO drop shadow, NO solid ` +
+  `background, NO borders. Match the loose feathering, granulation, earthy palette and pencil line of the ` +
+  `attached Devora reference images — especially the radishes. Same hand, same paper.`;
 
 function args() {
   const a = process.argv.slice(2);
@@ -107,7 +111,8 @@ async function genOne(slug, desc, refsB64) {
       { text: PROMPT(desc) },
       ...refsB64.map((data) => ({ inline_data: { mime_type: 'image/png', data } })),
     ] }],
-    generationConfig: { responseModalities: ['IMAGE'] },
+    // Recipe §5: 1:1 square (other ratios encourage frame-filling/centering); low temp = faithful to refs.
+    generationConfig: { responseModalities: ['IMAGE'], temperature: 0.3, imageConfig: { aspectRatio: '1:1' } },
   };
   const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   if (!res.ok) throw new Error(`${slug}: HTTP ${res.status} — ${(await res.text()).slice(0, 300)}`);
