@@ -49,3 +49,34 @@ Also reinforced: all-in-one works (Farmbrite/Tend); Tend = closest all-in-one th
 - **No change** to platform decision (farmOS headless) or the vision. Everything reinforces it.
 - **4 verification items** logged above (non-blocking; close opportunistically).
 - Schema enrichment: add LiteFarm crop-attribute depth as a second reference; add per-bed economic attributes + price-time-series (already in our plan).
+
+---
+
+# Round 2 — +OpenAI +Gemini (4 external reports total, 2026-06-05)
+
+Raw added: `SFA-S004-CI-EXTERNAL/EXTERNAL_REPORT_{3_OPENAI,4_GEMINI}.md`. **Quadruple-source** (internal + Perplexity + Claude-web + OpenAI + Gemini) → the 3 core findings now at **maximal confidence**, and all 4 Round-1 divergences RESOLVED.
+
+## Round-1 divergences — RESOLVED
+1. **MGI tool = Heirloom** (heirloom.ag) — confirmed by OpenAI + Gemini + Claude-web. (Perplexity's "Grounded Garden Planner beta" was imprecise.) **Heirloom standalone ≈ $475/yr** ($149/yr legacy upgrade), bundled in Crop Plan Accelerator **$699** / Masterclass $2,250–2,525 (Gemini).
+2. **Croptracker = $27.50/user/mo, 10-user minimum ≈ $275/mo practical floor** (OpenAI + Perplexity). The "$5.99/module" (Gemini/Claude-web) is a teaser base. → **Croptracker is ENTERPRISE-priced, not cheap** — corrects the D1 benchmark.
+3. **Tend Ultimate = $75/mo monthly / ~$50/mo billed annually**; Pro $30 / ~$20 annual. Reconciled.
+4. **AgriWebb (current) = $30 / $39 / $55 per mo** + add-ons (Grazing $300/yr, PastureKey $1,000/yr) — lower than the old $45–400 figure (Gemini/OpenAI).
+5. Local Line: 0% commission claim BUT processing fees scale by tier — confirmed (fees exist).
+
+## NEW competitors surfaced — NOT in our 8-set (⚠ candidates for a Round-2 CI WP)
+- **MarketGardenPlanner** (marketgardenplanner.com) — closest new **all-in-one**: beds/crops/schedule/auto-tasks/harvest/customers/orders/payments + expected-vs-actual. **Closest to our 5-pillar loop of anything seen.**
+- **MyGardenPlanner** (mygardenplanner.ca) — AI biointensive; Home $5/mo, **Market Gardener $19/mo ($179/yr)**.
+- **VeggieCropper** (veggiecropper.com) — farmer-built; free crop planning; crew/manager accounts.
+- **Solara** (solara.ag) — market-garden; succession + revenue tracking.
+- (Old Farmer's Almanac Garden Planner = GrowVeg engine.)
+**None has Hebrew/RTL or a live market-price index** (wedge + moat hold), but these are closer market-garden competitors than several we studied → warrant a focused Round-2 scan.
+
+## NEW for the build (from OpenAI + Gemini)
+- **Price-index data source identified:** Israeli **Wholesale Market Price Index (Ministry of Agriculture)** — concrete feed for the #1 wedge (Gemini).
+- **Schema field:** `water_source_salinity_index` (Israel irrigation/salinity) + `rtl_metadata`, `israeli_market_id`, `nursery_tray_cell_count` (Gemini).
+- **LiteFarm crop schema re-confirmed** as the best open-source crop-management reference (crop type → varietal → crop-management-plan; estimated yield + estimated value/yield + real-time P/L). Use as the 2nd schema reference (alongside Tend + farmOS).
+- Pain points reinforced & sharpened: Tend support-abandonment + hard-to-cancel; GrowVeg data-loss-on-cancel → SFA principles: **downgrade-not-delete, offline-first, transparent self-cancel, no setup fees, standard 2.9% processing**.
+- Harvie: bankruptcy/shutdown confirmed (OpenAI cites bankruptcy-protection filing) — reinforces the lock-in / build-don't-integrate lesson.
+
+## Net (4-source)
+No change to vision or platform (farmOS headless) — **wedge & moat reinforced at maximal confidence.** D4 fully resolved. D1: Croptracker re-priced to enterprise (~$275/mo), Heirloom standalone $475/yr; SFA commercial-tier target band still **~$25–40/mo** (Tend Pro $30, Farmbrite $29, MyGardenPlanner-MG $19). **One new finding requiring a decision: ~4 additional market-garden tools (esp. MarketGardenPlanner) to scan in a Round-2 CI** — recommend a small follow-up WP.
