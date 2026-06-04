@@ -4682,7 +4682,7 @@ work_packages:
 
 - id: SFA-S004-P001-WP003
   label: "Tend deep-dive — module + schema reference study (PRIMARY architecture reference)"
-  status: IN_PROGRESS
+  status: COMPLETE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_E
@@ -4707,7 +4707,7 @@ work_packages:
       lived experience (essential-vs-bloat modules, learning-curve + maintenance causes,
       keep/kill list), (b) deep mining of Tend public docs/help center. Deliverable: Tend
       module+schema reference map + ADOPT/SKIP/ADAPT recommendations for SFA."
-  notes: "IN_PROGRESS — deep-dive (public docs) COMPLETE 2026-06-04. Blueprint artifact:
+  notes: "COMPLETE 2026-06-05 — deep-dive (public docs) done 2026-06-04. Blueprint artifact:
     TEND_SCHEMA_REFERENCE_BLUEPRINT_*. 16 modules + ERD spine + calculator inventory +
     ADOPT/SKIP/ADAPT->farmOS map. ADOPT spine Crop->Template->Planting->Task->Harvest->
     Lot->Inventory. Beat Tend on: sub-bed/intercrop geometry + market-price economics +
@@ -4718,7 +4718,11 @@ work_packages:
     experiential extraction CAPTURED (gold loop = harvest-list->field-report->accumulated
     learning, both most-valuable + most-painful; speed = hard NFR; KEEP time+space color map
     + auto-tasks + auto-harvest-lists; REDO faster + simpler structured field reporting).
-    Disambiguation: tend.com (farm) != tend.io (CRM)."
+    Disambiguation: tend.com (farm) != tend.io (CRM). FIELD-EXACT MAPPING COMPLETE 2026-06-05
+    (TEND_FIELD_EXACT_MAPPING_*): schema byte-stable 2018->2021; 64-col CROP_PLAN mapped to
+    13-topic/14-calc/farmOS Asset-Log-Quantity-Term + 13-item Phase-0 importer TODO (per-planting
+    Logs, irrigation/labor/water telemetry, organic-cert, sales-channel link, SEED_LIST/NOTES
+    parsers). Build-ready data-model reference for Phase 0."
   profile: L0
 
 - id: SFA-S004-P001-WP004
