@@ -23,7 +23,14 @@
 >
 > **7. ACCEPTANCE TEST** — your one-line "same hand" check (reads beside `wc-radish.png`: wash, line, paper grain; no bright red; composites clean).
 >
-> Return all 7 as plain text/markdown I can paste straight into code. If any crop needs a special note (e.g. show whole vs cut, fruit vs plant), include it inline in its {SUBJECT} line.
+> **8. FIX THE DRIFT WE'RE SEEING (important).** We already ran a test through the API using the documented style block **with your 4 Devora masters attached as references** (radish primary + lettuce/dill/parsley). The crops were recognizable and the palette held (tomato/strawberry stayed tan-red, not bright red), BUT the output **drifted from your hand** in four specific ways:
+>   - **Too tight / too detailed / too centered** — it filled the frame like a polished illustration, instead of your **loose, airy, semi-abstract, off-center** wash with lots of quiet empty paper.
+>   - **Solid cream rectangle background** instead of the subject **floating in paper / fading to nothing** (your masters read as transparent/airy, not a filled cream block).
+>   - **A thin border/frame** appeared on some.
+>   - Edges were too defined — not the **feathered, undefined, bleeding** edges of your originals.
+>   Tell me **exactly how you prevent each of these** in your prompt + settings: the phrasing you use for negative space / "off-center, lots of empty paper", how you keep it from filling the frame, how you get **feathered edges fading to nothing**, how you avoid a border, and whether you output **transparent PNG** or paint-on-cream. If a specific aspect ratio, "subject occupies ~40% of frame", or a negative-prompt list is the trick, spell it out. (I can also send you the 4 test images — strawberry/mint/potato/okra — to critique directly if useful.)
+>
+> Return all 8 as plain text/markdown I can paste straight into code. If any crop needs a special note (e.g. show whole vs cut, fruit vs plant), include it inline in its {SUBJECT} line.
 
 ---
 
