@@ -4693,7 +4693,7 @@ work_packages:
 
 - id: SFA-S004-P001-WP004
   label: "Competitive Intelligence Round 2 — newly-surfaced market-garden tools"
-  status: IN_PROGRESS
+  status: COMPLETE
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_E
@@ -4720,6 +4720,14 @@ work_packages:
       MATCH-vs-BEAT for SFA. Deliverable: per-tool dossiers + merge into CI synthesis +
       ADOPT/BEAT updates. Hypothesis to test: none closes the price->profit loop or has RTL
       (wedge+moat hold)."
-  notes: "IN_PROGRESS — 4 background research agents dispatched 2026-06-05. Synthesis +
-    artifact + WP002 cross-reference to follow. Closest analogs to SFA's actual product."
+  notes: "COMPLETE 2026-06-05 — 4 dossiers + synthesis (CI_ROUND2_SYNTHESIS_*). HYPOTHESIS
+    HELD: none of the 4 closes market-price->profit loop, none has Hebrew/RTL (wedge+moat
+    confirmed vs ALL 12 competitors + 2 OSS). All 4 tiny/early/unproven (MarketGardenPlanner=
+    solopreneur Laravel, economics='coming soon' vaporware; VeggieCropper=bus-factor-1, KILLED
+    its free tier 2026 -> validates our cost-bounded free tier; Solara=likely synthetic/demo;
+    MyGardenPlanner=hobby w/ MG veneer, 'commercial' tier = just more beds). MATCH: backward-
+    from-harvest+bed-turnover, connected loop+order-forms, crew/manager accounts, CSA box-first
+    backward planning. BEAT: price->profit, RTL, curated KB+14 calcs, openness, commercial-tier=
+    capability-not-quantity. STEAL: programmatic-SEO (Hebrew per-region calendars) for free
+    brand-front. D4 fully closed; recommend proceed to Phase 0."
   profile: L0
