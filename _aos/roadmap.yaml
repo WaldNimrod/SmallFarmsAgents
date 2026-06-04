@@ -4587,7 +4587,7 @@ work_packages:
 
 - id: SFA-S004-P001-WP002
   label: "Competitive Intelligence — multi-system schema & white-space mapping (Team 80 lead)"
-  status: IN_PROGRESS
+  status: COMPLETE
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_E
@@ -4615,15 +4615,15 @@ work_packages:
       intel dossier; schema-comparison matrix (feeds SFA data model — D4 core);
       white-space analysis; pricing benchmark (feeds D1). Nimrod to add any
       Israeli/niche tools not surfaced by search."
-  notes: "IN_PROGRESS — internal CI pass COMPLETE 2026-06-04: 8 parallel sub-agents
-    (Tend, Seedtime, Heirloom/JM-Fortier, Farmbrite, AgriWebb, Croptracker, sales/CSA
-    cluster, home-garden cluster). Synthesis artifact: CI_SYNTHESIS_8COMPETITORS_*.
-    3 unanimous findings: (1) no one closes market-price->plan->profit loop (Heirloom
-    has it on roadmap, unshipped) = SFA #1 wedge; (2) zero Hebrew/RTL anywhere = moat;
-    (3) production<->sales loop industry-wide open. Pending: merge external multi-engine
-    outputs + triangulate; re-verify search-synthesized prices. Substantially resolves
-    D4; informs D1; D3 finding = BUILD Sell/Relate (no clean integration target).
-    Feeds detailed technical platform plan (Phase 0)."
+  notes: "COMPLETE 2026-06-04 — internal CI (8 parallel sub-agents: Tend, Seedtime,
+    Heirloom/JM-Fortier, Farmbrite, AgriWebb, Croptracker, sales/CSA cluster, home-garden
+    cluster; CI_SYNTHESIS_8COMPETITORS_*) + external triangulation (Perplexity + Claude-web;
+    CI_EXTERNAL_TRIANGULATION_*; raw in SFA-S004-CI-EXTERNAL/). 3 findings TRIPLE-confirmed:
+    (1) no one closes market-price->plan->profit loop (Heirloom roadmap-only) = SFA #1 wedge;
+    (2) zero Hebrew/RTL = moat; (3) production<->sales loop industry-wide open. NEW: LiteFarm
+    crop schema = deepest 2nd reference; 'soft schedules' UX; Israel-specific loc; light CSA
+    box. VERIFY: MGI tool id (Heirloom vs Grounded Garden Planner), Croptracker + Tend pricing.
+    D4 RESOLVED; D1 pricing benchmark consolidated; D3 = BUILD Sell/Relate. Feeds Phase 0."
   profile: L0
 
 - id: SFA-S004-P001-WP003
