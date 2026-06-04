@@ -69,7 +69,7 @@ final class FieldRegistry
         'days_in_nursery_cell'       => ['ימים במשתלה', 'כמה ימים השתיל גדל במשתלה לפני שתילה בשדה.', 'EN'],
         'succession_interval_weeks'  => ['מרווח רצף', 'כל כמה שבועות לזרוע מנה חדשה לקציר רציף.', 'EN'],
         'succession_interval'        => ['מרווח רצף', 'כל כמה שבועות לזרוע מנה חדשה לקציר רציף.', 'EN'],
-        'nutrient_removal_n_kg_per_ha' => ['צריכת חנקן (N)', 'כמות החנקן שהגידול מוציא, ק״ג להקטר.', 'EN'],
+        'nutrient_removal_n_kg_per_ha' => ['צריכת חנקן (N)', 'כמות החנקן שהגידול מוציא, ק״ג לדונם.', 'EN'],
         'nutrient_removal_N'         => ['צריכת חנקן (N)', 'כמות החנקן שהגידול מוציא.', 'EN'],
         'family'                     => ['משפחה בוטנית', 'המשפחה הבוטנית — בסיס לרמז מחזור הגידולים.', 'ID'],
         'needs_summer_shade'         => ['הצללה בקיץ', 'גידולים מסוימים זקוקים לרשת צל בקיץ. שלוש רמות: 30%/40%/50%.', 'AT'],
@@ -325,6 +325,10 @@ final class FieldRegistry
             return (string)$value;
         }
         $f = (float)$value;
+        // WI-7 Q3: stored values are per-hectare; display unit is per-dunam (÷10).
+        if (strtolower($unit) === 'kg_per_ha') {
+            $f = $f / 10.0;
+        }
         // Discrete units have no fractional meaning — render as a rounded integer so a
         // computed median like 59.043478 days shows as "59" (Board-A fidelity; LOD §1 D-1).
         if (in_array(strtolower($unit), ['days', 'count'], true)) {
@@ -363,7 +367,7 @@ final class FieldRegistry
             'count'           => '',           // omit — bare number
             'kg'              => 'ק״ג',
             'kg_per_bed_m'    => 'ק״ג/מ׳',
-            'kg_per_ha'       => 'ק״ג/הקטר',  // Q3: team_35 must confirm dunam vs hectare
+            'kg_per_ha'       => 'ק״ג/דונם',
             'kg_per_dunam'    => 'ק״ג/דונם',
             '°C'              => '°C',
             'celsius'         => '°C',

@@ -117,7 +117,7 @@ ob_start();
         <span class="modtile__glyph" aria-hidden="true"><?= $glyph ?></span>
       </div>
       <div class="modtile__body">
-        <div class="modtile__title"><?= $h($m_name) ?><small><?= $h(strtoupper($m_id)) ?></small></div>
+        <div class="modtile__title"><?= $h($m_name) ?></div>
         <p class="modtile__desc"><?= $h($m_sub) ?></p>
         <div class="modtile__foot">
           <?php if ($m_stat !== ''): ?>
@@ -134,7 +134,7 @@ ob_start();
         <span class="modtile__glyph" aria-hidden="true">📒</span>
       </div>
       <div class="modtile__body">
-        <div class="modtile__title">יומן השדה<small>FIELD-LOG</small></div>
+        <div class="modtile__title">יומן השדה</div>
         <p class="modtile__desc">תיעוד פעולות שדה — זריעה, השקיה, יבול ומשימות</p>
         <div class="modtile__foot">
           <span class="modtile__go">בפיתוח</span>

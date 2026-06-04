@@ -567,4 +567,153 @@ final class ClassBRouteTest extends TestCase
             'classb.css .pgraph__top must use flex-wrap:wrap so rangesel wraps on narrow screens (WI-7)'
         );
     }
+
+    // ── F-REA-001: basket unit labels ────────────────────────────────────────
+
+    /** F-REA-001: sfa_unit_label maps basket_large to לסל (not raw English) */
+    public function testSfaUnitLabelBasketLarge(): void
+    {
+        // Load the template into a subprocess scope by requiring it with the helper present.
+        // We call the function directly after inclusion. Guard against re-definition.
+        if (!function_exists('sfa_unit_label')) {
+            // Define the function from the source file — safe because PHPUnit runs each test
+            // in the same process; function_exists guard in template prevents redefinition.
+            require __DIR__ . '/../templates/pages/market_list.php';
+        }
+        $this->assertSame('לסל', sfa_unit_label('basket_large'),
+            'F-REA-001: basket_large must map to לסל');
+        $this->assertSame('לסל', sfa_unit_label('basket_medium'),
+            'F-REA-001: basket_medium must map to לסל');
+        $this->assertSame('לסל', sfa_unit_label('basket_small'),
+            'F-REA-001: basket_small must map to לסל');
+    }
+
+    /** F-REA-001: sfa_unit_label hardened default — raw English snake_case returns ליחידה not לXxx */
+    public function testSfaUnitLabelHardenedDefault(): void
+    {
+        if (!function_exists('sfa_unit_label')) {
+            require __DIR__ . '/../templates/pages/market_list.php';
+        }
+        $result = sfa_unit_label('some_english_token');
+        $this->assertSame('ליחידה', $result,
+            'F-REA-001: unmapped English snake_case unit must return ליחידה, not לsome_english_token');
+        // Existing Hebrew passthrough must still work
+        $this->assertSame('לסל גדול', sfa_unit_label('סל גדול'),
+            'Hebrew passthrough must still prepend ל');
+        // Known units still work
+        $this->assertSame('לק״ג', sfa_unit_label('kg'));
+    }
+
+    /** F-REA-001: market list page for a basket product does not leak raw English unit */
+    public function testMarketListBasketProductNoEnglishUnit(): void
+    {
+        // Seed a basket product
+        $this->pdo->exec("INSERT OR IGNORE INTO products
+            (id,slug,hebrew_name,category,unit,last_price,last_price_date,freshness_days,payload_json,last_pushed_at)
+            VALUES (50,'basket-mix','עשבי תיבול','baskets','basket_large',25.0,'2026-06-01',1,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringNotContainsString('לbasket_large', $body,
+            'F-REA-001: market list must not show raw לbasket_large');
+        $this->assertStringContainsString('לסל', $body,
+            'F-REA-001: market list must show לסל for basket_large products');
+    }
+
+    // ── F-REA-002: search results show watercolor art ────────────────────────
+
+    /** F-REA-002: /crop-book/search result for a crop with watercolor has icon_url set */
+    public function testSearchResultWatercolorPresentForKnownCrop(): void
+    {
+        // 'tomato' is in WC_ART map → icon_url should be populated
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at)
+            VALUES (2,'tomato','עגבנייה','Solanum lycopersicum','סולניים','vegetables','summer',70,95,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/search');
+        $req  = $req->withQueryParams(['q' => 'עגבנייה']);
+        $body = (string)$this->app->handle($req)->getBody();
+        // crop_card renders img.crop-card__art when icon_url is set
+        $this->assertStringContainsString('crop-card__art', $body,
+            'F-REA-002: search result for tomato must render watercolor img (crop-card__art)');
+        $this->assertStringContainsString('wc-tomato.png', $body,
+            'F-REA-002: search result for tomato must include wc-tomato.png');
+    }
+
+    /** F-REA-002: /crop-book/search result for a crop with NO watercolor still renders (glyph fallback) */
+    public function testSearchResultFallsBackToGlyphForUnknownCrop(): void
+    {
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at)
+            VALUES (99,'rare-herb','עשב נדיר','Rarus herbarius','','herbs','',null,null,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/search');
+        $req  = $req->withQueryParams(['q' => 'עשב נדיר']);
+        $body = (string)$this->app->handle($req)->getBody();
+        // Should NOT render crop-card__art (no watercolor), but page must still render
+        $this->assertStringNotContainsString('crop-card__art', $body,
+            'F-REA-002: crop with no watercolor must NOT render crop-card__art');
+        $this->assertStringContainsString('gj-cropcard', $body,
+            'F-REA-002: glyph fallback card must still render');
+    }
+
+    // ── F-REA-003: hub module tile eyebrows — no English mono module-id ───────
+
+    /** F-REA-003: hub home must not show English mono module-id in tile title (CROP-BOOK etc.) */
+    public function testHubHomeTileNoEnglishModuleId(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The <small>CROP-BOOK</small> etc. must have been removed from modtile__title
+        $this->assertDoesNotMatchRegularExpression(
+            '#modtile__title[^<]*<small>[A-Z\-]+</small>#',
+            $body,
+            'F-REA-003: modtile__title must not contain English-only <small> module-id badge'
+        );
+    }
+
+    // ── Item 5: legacy /crop-book/table redirects ────────────────────────────
+
+    /** Item 5: /crop-book/table?category=summer 301-redirects to /crop-book/?season=summer */
+    public function testTableViewLegacySummerRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'summer']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=summer must 301-redirect');
+        $this->assertStringContainsString('/crop-book/?season=summer', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/?season=summer');
+    }
+
+    /** Item 5: /crop-book/table?category=fast 301-redirects to /crop-book/?dtm_max=60 */
+    public function testTableViewLegacyFastRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'fast']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=fast must 301-redirect');
+        $this->assertStringContainsString('/crop-book/?dtm_max=60', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/?dtm_max=60');
+    }
+
+    /** Item 5: /crop-book/table?category=beginner 301-redirects to /crop-book/ */
+    public function testTableViewLegacyBeginnerRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'beginner']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=beginner must 301-redirect');
+        $this->assertStringContainsString('/crop-book/', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/');
+    }
+
+    /** Item 5: /crop-book/table?category=vegetables (real botanical) still returns 200 */
+    public function testTableViewRealCategoryNotRedirected(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'vegetables']);
+        $res = $this->app->handle($req);
+        $this->assertSame(200, $res->getStatusCode(),
+            'Item 5: real botanical category must still return 200 (not redirected)');
+    }
 }

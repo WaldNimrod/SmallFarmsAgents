@@ -229,6 +229,22 @@ final class CropBookViewController
     public function tableView(Request $request, Response $response): Response
     {
         $category = trim((string)($request->getQueryParams()['category'] ?? ''));
+
+        // Item 5: 301-redirect legacy semantic tokens that never matched botanical categories
+        // to the live equivalents backed by season/dtm filters (F-INFO-005).
+        static $legacyRedirects = [
+            'summer'      => '/crop-book/?season=summer',
+            'winter'      => '/crop-book/?season=winter',
+            'fast'        => '/crop-book/?dtm_max=60',
+            'beginner'    => '/crop-book/',
+            'small-space' => '/crop-book/',
+        ];
+        if ($category !== '' && isset($legacyRedirects[$category])) {
+            return $response
+                ->withStatus(301)
+                ->withHeader('Location', $legacyRedirects[$category]);
+        }
+
         $sql = 'SELECT id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max FROM crops';
         $params = [];
         if ($category !== '') {
@@ -271,13 +287,18 @@ final class CropBookViewController
             $stmt = $this->pdo->prepare('SELECT slug, hebrew_name, scientific_name, family_name_he, category, dtm_min, dtm_max FROM crops WHERE hebrew_name LIKE ? ORDER BY hebrew_name LIMIT 30');
             $stmt->execute(['%' . $q . '%']);
             foreach ($stmt->fetchAll() as $row) {
+                $slug   = (string)($row['slug'] ?? '');
+                // Resolve watercolor art the same way entry() / detail() do (F-REA-002).
+                $wcFile = self::WC_ART[$slug] ?? null;
+                $iconUrl = $wcFile !== null ? '/public_assets/img/crops/' . $wcFile : '';
                 $items[] = [
-                    'slug'          => (string)($row['slug'] ?? ''),
+                    'slug'          => $slug,
                     'name_he'       => (string)($row['hebrew_name'] ?? ''),
                     'en_name'       => (string)($row['scientific_name'] ?? ''),
                     'family_tag_he' => (string)($row['family_name_he'] ?? ''),
                     'dtm_days'      => isset($row['dtm_max']) ? (int)$row['dtm_max'] : null,
                     'icon_svg'      => '',
+                    'icon_url'      => $iconUrl,
                 ];
             }
         }

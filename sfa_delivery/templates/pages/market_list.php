@@ -28,11 +28,13 @@ $current_category = (string)($current_category ?? '');
 // Unit display helper (LOD400 §9a) — guarded for multi-test-run environments
 if (!function_exists('sfa_unit_label')) {
     function sfa_unit_label(string $unit): string {
-        return match(strtolower(trim($unit))) {
-            'kg', 'ק"ג', 'ק״ג' => 'לק״ג',
-            'unit', 'יח׳', 'יח\''  => 'ליחידה',
-            'bunch', 'אגודה'        => 'לאגודה',
-            default => $unit !== '' ? 'ל' . $unit : '',
+        $norm = strtolower(trim($unit));
+        return match($norm) {
+            'kg', 'ק"ג', 'ק״ג'                         => 'לק״ג',
+            'unit', 'יח׳', 'יח\''                       => 'ליחידה',
+            'bunch', 'אגודה'                             => 'לאגודה',
+            'basket_large', 'basket_medium', 'basket_small' => 'לסל',
+            default => (preg_match('/^[a-z][a-z_]*$/', $norm) ? 'ליחידה' : ($unit !== '' ? 'ל' . $unit : '')),
         };
     }
 }

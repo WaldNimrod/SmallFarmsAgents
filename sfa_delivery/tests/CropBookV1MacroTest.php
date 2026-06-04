@@ -142,6 +142,35 @@ final class CropBookV1MacroTest extends TestCase
     }
 
     // ────────────────────────────────────────────────────────────
+    // WI-7 Q3: kg_per_ha ÷10 display + unit label (F-REA-004)
+    // ────────────────────────────────────────────────────────────
+
+    /** WI-7 Q3: fmtNumber divides kg_per_ha values by 10 (ha→dunam) */
+    public function testFmtNumberKgPerHaDividedByTen(): void
+    {
+        $this->assertSame('8',  FieldRegistry::fmtNumber(80, 'kg_per_ha'),  'fmtNumber(80, kg_per_ha) must return 8 (÷10)');
+        $this->assertSame('6.7', FieldRegistry::fmtNumber(67, 'kg_per_ha'), 'fmtNumber(67, kg_per_ha) must return 6.7 (÷10)');
+        $this->assertSame('10', FieldRegistry::fmtNumber(100, 'kg_per_ha'), 'fmtNumber(100, kg_per_ha) must return 10 (÷10)');
+    }
+
+    /** WI-7 Q3: fmtNumber does NOT divide other units */
+    public function testFmtNumberOtherUnitsNotAffected(): void
+    {
+        $this->assertSame('80', FieldRegistry::fmtNumber(80, 'days'),          'days unit must not be divided');
+        $this->assertSame('80', FieldRegistry::fmtNumber(80, 'count'),         'count unit must not be divided');
+        $this->assertSame('80', FieldRegistry::fmtNumber(80, 'cm'),            'cm unit must not be divided');
+        $this->assertSame('80', FieldRegistry::fmtNumber(80, 'kg_per_bed_m'),  'kg_per_bed_m must not be divided');
+        $this->assertSame('80', FieldRegistry::fmtNumber(80, ''),              'empty unit must not be divided');
+    }
+
+    /** WI-7 Q3: unitLabel for kg_per_ha returns ק״ג/דונם */
+    public function testUnitLabelKgPerHaIsDunam(): void
+    {
+        $this->assertSame('ק״ג/דונם', FieldRegistry::unitLabel('kg_per_ha'),
+            'unitLabel(kg_per_ha) must return ק״ג/דונם (not הקטר)');
+    }
+
+    // ────────────────────────────────────────────────────────────
     // 3. calc_panel disabled when required field is MISSING
     // ────────────────────────────────────────────────────────────
 
