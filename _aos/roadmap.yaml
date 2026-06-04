@@ -4298,6 +4298,20 @@ work_packages:
       "12 שאלות"→3; team_35 owns the final/expanded set + "מתאים לקיץ" semantics (DESIGN_REQUEST pending). +end-to-end
       regression test testSeasonFilterReadsVarietyMonths; composer 168/168; validate 0 FAIL; +perf guard. Deploy
       target advanced to HEAD 4c9bab2. team_00 held deploy until A/B resolved — now resolved (B interim shippable).
+  - gate: DEPLOY
+    result: SUCCESS_WITH_1_FINDING
+    round: 1
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "4c9bab2"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 deployed 4c9bab2 (FIDELITY blockers + Decisions A+B + patch01 WI-1..9 subsumed) to sfa.nimrod.bio;
+      CSS ?v= 1780522574→1780532267; 4/5 smoke PASS. 1 finding (prov__srcval 59.043478 raw 6-decimal in drill
+      provenance) → team_100 DISPOSITIONED: FIXED (acca9b2, prov_table.php fmtNumber). ⚠ This deploy PREDATES the
+      crop-book visual remediation (cards 168px, centered crop page, toggle) + 70 crop icons + the prov fix — those
+      are committed (ea9b975/67195a4/8ce4fe1/acca9b2) but NOT live. SECOND deploy @acca9b2 routed to team_99
+      (MSG-team100-to-team99-...-DEPLOY2-...). L-GATE_V HELD until the full visual set is live.
   notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
     100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
     → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."

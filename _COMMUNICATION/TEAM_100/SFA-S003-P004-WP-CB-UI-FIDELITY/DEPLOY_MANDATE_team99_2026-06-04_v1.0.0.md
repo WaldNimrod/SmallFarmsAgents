@@ -2,7 +2,9 @@
 
 **Date:** 2026-06-04
 **From:** team_100 (Chief System Architect) · **To:** team_99 (server/deploy session) / team_00
-**Repo:** `/Users/nimrod/Documents/SmallFarmsAgents` · branch `claude/ui-polish-hub-cropbook-2026-06-03` · **deploy commit `8ce4fe1`** (current HEAD; FIDELITY blockers + visual quick-wins + 70 crop icons + patch01 WI-8/9) · **scope expanded — see What to deploy**
+**Repo:** `/Users/nimrod/Documents/SmallFarmsAgents` · branch `claude/ui-polish-hub-cropbook-2026-06-03` · **deploy commit `acca9b2`** (current HEAD) · **scope expanded — see What to deploy**
+
+**⚠ THIS IS A SECOND DEPLOY (supersedes the first).** team_99 already deployed **`4c9bab2`** (DEPLOY_REPORT SUCCESS_WITH_1_FINDING, 2026-06-04) — the FIDELITY **blocker** fixes are confirmed LIVE (Hebrew units, single hero, no `.000000`, Hebrew market chips; 4/5 smoke PASS). But the crop-book **visual remediation + 70 icons** (committed AFTER `4c9bab2`) and the **§4.1 prov fix** are NOT yet live. Deploy `acca9b2` to bring them. The one finding from the first deploy (`prov__srcval` raw 6-decimal) is **FIXED** in `acca9b2` (`templates/macros/prov_table.php`).
 **Why routed:** this Mac session is deploy-auth-gated (SSH to waldhomeserver blocked by the auto-mode classifier — `reference_prod_deploy_authorization`). Deploy runs from **waldhomeserver** (the uPress-allowlisted FTPS relay), not this Mac.
 
 ## Gate state
@@ -35,7 +37,8 @@ On the LIVE site, confirm the served assets advanced and the fixes are live:
 4. `/crop-book/` — **crop cards show watercolor art, not the generic 🌱** (spot-check e.g. עגבנייה/tomato, תפוח-אדמה/potato, תות/strawberry, חיטה/wheat); cards are the larger 168px size; the list is a centered column, not edge-to-edge.
 5. Spot-check served images load 200: `/public_assets/img/crops/wc-strawberry.png`, `wc-potato.png`, `wc-wheat.png` (the 43 new ones).
 6. Served CSS contains `.cb-paths{display:grid` (WI-5) and `.sh__mark` sizing (WI-6); served `classb.js` defines `window.fetchHistory`; served `crop-book-v1.css` has `.cards-grid` `minmax(168px` and `.cb-crop-detail` `max-width: 1120px`.
-7. Write `_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md` with the deployed SHA (`8ce4fe1`), the new `?v=` value, and confirmation the crop images uploaded (count of wc-*.png served).
+7. `/crop-book/lettuce/?depth=drill` — the provenance/source column shows **no raw 6-decimal** (`prov__srcval` now formatted: `59` not `59.043478`) — confirms the §4.1 finding is fixed.
+8. Write `_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v2.0.0.md` with the deployed SHA (`acca9b2`), the new `?v=` value, and confirmation the crop images uploaded (count of wc-*.png served).
 
 ## Then
 Notify team_100; team_100 routes **team_190 (non-Claude) L-GATE_V** design-vs-Board-A/B on the live site (the launch gate) + team_50 re-audit.
