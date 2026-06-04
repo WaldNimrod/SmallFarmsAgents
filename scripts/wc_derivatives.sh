@@ -37,6 +37,9 @@ for slug in "${slugs[@]}"; do
     continue
   fi
   sips -Z 720 "$master" --out "$out" >/dev/null
+  # Knock a filled cream ground out to alpha so the icon floats under mix-blend-mode:multiply
+  # (no pasted square). Idempotent + no-op on already-transparent masters. Best-effort.
+  python3 "$ROOT/scripts/wc_knockout.py" "$out" >/dev/null 2>&1 || true
   sz=$(stat -f%z "$out")
   echo "OK    wc-$slug.png (${sz} bytes)"
 done
