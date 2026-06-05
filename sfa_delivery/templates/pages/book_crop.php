@@ -302,13 +302,24 @@ ob_start();
     // irrigation_type, root_depth_class, common_pests, foliar_feeding_program,
     // days_to_maturity, harvest_window_max_days, succession_interval_weeks,
     // frost_tolerance_class, yield_per_bed_m, price_documented.
+    // Topic taxonomy MUST stay in strict parity (membership + order) with the
+    // canon SSoT organic_market_agent/crop_book/canon/topics.py (13 topics,
+    // AC-02 / test_crop_topics.py::test_php_parity). The 5 field-less topics
+    // (varieties/equipment/bedprep/care/storage) are listed for canon parity but
+    // skipped at render time by crop_topics.php (`if (empty($topic['fields']))`),
+    // so no empty cards appear. `varieties` is surfaced via the Deep variety table.
     $topics = [
-      ['key'=>'sowing',     'icon'=>'🌱', 'label'=>'משתלה / שתילה',  'class'=>'nursery', 'fields'=>['planting_method','days_in_nursery','seeds_per_g','sowing_months']],
+      ['key'=>'varieties',  'icon'=>'🌿', 'label'=>'זנים',            'class'=>'grow',    'fields'=>[]],
       ['key'=>'spacing',    'icon'=>'📏', 'label'=>'מרווח ופריסה',   'class'=>'grow',    'fields'=>['spacing_in_row_cm','rows_per_bed']],
-      ['key'=>'irrigation', 'icon'=>'💧', 'label'=>'השקיה ושורשים',  'class'=>'grow',    'fields'=>['irrigation_type','root_depth_class']],
+      ['key'=>'equipment',  'icon'=>'⚙',  'label'=>'ציוד וכיוונון',   'class'=>'grow',    'fields'=>[]],
       ['key'=>'soil',       'icon'=>'🪱', 'label'=>'קרקע ודישון',    'class'=>'inputs',  'fields'=>['nutrient_removal_n_kg_per_ha']],
+      ['key'=>'bedprep',    'icon'=>'🌾', 'label'=>'הכנת ערוגה',      'class'=>'grow',    'fields'=>[]],
+      ['key'=>'sowing',     'icon'=>'🌱', 'label'=>'משתלה / שתילה',  'class'=>'nursery', 'fields'=>['planting_method','days_in_nursery','seeds_per_g','sowing_months']],
+      ['key'=>'irrigation', 'icon'=>'💧', 'label'=>'השקיה ושורשים',  'class'=>'grow',    'fields'=>['irrigation_type','root_depth_class']],
+      ['key'=>'care',       'icon'=>'✋', 'label'=>'טיפוח ועישוב',    'class'=>'grow',    'fields'=>[]],
       ['key'=>'pest',       'icon'=>'🐛', 'label'=>'מזיקים ומחלות',  'class'=>'pest',    'fields'=>['common_pests','foliar_feeding_program']],
       ['key'=>'harvest',    'icon'=>'🥬', 'label'=>'קציר',           'class'=>'harvest', 'fields'=>['days_to_maturity','harvest_window_max_days']],
+      ['key'=>'storage',    'icon'=>'❄',  'label'=>'שטיפה ואחסון',    'class'=>'harvest', 'fields'=>[]],
       ['key'=>'succession', 'icon'=>'🔁', 'label'=>'רצף ועמידות',    'class'=>'yield',   'fields'=>['succession_interval_weeks','frost_tolerance_class']],
       ['key'=>'yield_inc',  'icon'=>'💰', 'label'=>'יבול והכנסה',    'class'=>'yield',   'fields'=>['yield_per_bed_m','price_documented']],
     ];
