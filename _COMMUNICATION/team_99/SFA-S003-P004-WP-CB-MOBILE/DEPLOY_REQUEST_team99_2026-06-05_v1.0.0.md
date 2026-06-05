@@ -1,13 +1,14 @@
 # DEPLOY REQUEST — WP-CB-MOBILE (single batch) — team_100 → team_99 — v1.0.0
 
 **Date:** 2026-06-05 · **From:** team_100 · **To:** team_99 (server-side deploy) · **Authorize:** team_00
-**WP:** SFA-S003-P004-WP-CB-MOBILE · **Branch:** `claude/ui-polish-hub-cropbook-2026-06-03` @ **`7fb…` → `7f4c105`**
+**WP:** SFA-S003-P004-WP-CB-MOBILE · **Branch:** `claude/ui-polish-hub-cropbook-2026-06-03` @ **`9cd077b`** (PUSHED to origin)
 
 ## What to deploy
-The full WP-CB-MOBILE v4 mobile remediation + the held IL_general quick-win, as **one batch** (team_00: "hold for mobile batch"). All UI code is on the shared branch at HEAD **`7f4c105`**. Commits in this batch (on top of the last live deploy `7fb3cf7`):
+The full WP-CB-MOBILE v4 mobile remediation + the held IL_general quick-win, as **one batch** (team_00: "hold for mobile batch"). All UI code is on the shared branch, **pushed to origin** at HEAD **`9cd077b`** — `git fetch` then deploy that commit. Commits in this batch (on top of the last live deploy `7fb3cf7`):
 - `bac5b69`, `9f60f56` — calendar region-map / IL_general leak fix
 - `bf473fb` — plan + design package
 - `0024059` (stage 1), `05d7610` (stage 2), `7f4c105` (stage 3) — the mobile build
+- `9cd077b` — restore 13-topic canon parity (regression caught by the pre-push pytest gate + fixed)
 
 ## Deploy path (per canon)
 UI code → uPress via FTPS. Runbook: `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md` (`scripts/ftp_deploy_sfa_ui.sh`). The deploy host = **waldhomeserver** (FTPS relay; its egress IP is uPress-allowlisted — the Mac's is not). This is why team_100/this Mac cannot push directly (auth-gated; see memory `reference_prod_deploy_authorization`).

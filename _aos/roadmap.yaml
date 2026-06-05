@@ -4495,9 +4495,24 @@ work_packages:
       not a fabricated number (pre-existing; not a regression). NEXT: team_99 single batch deploy (auth-gated
       off this Mac -> team_00/team_99) -> team_50 VISUAL QA @375 (CDP; external/non-Claude per IR#1/#5) ->
       team_100 record -> LOD500.
-  notes: "BUILT 2026-06-05, awaiting deploy + team_50 @375 QA. Mobile launch blocker. Scope=FULL v4 (one WP),
-    3 stages integrated to shared branch HEAD 7f4c105. D1+D2 ratified. Suite 215/215, validate 0 FAIL.
-    2 honest data gaps logged (Deep provenance; 6/14 calc client-math). Deploy held for this single batch."
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-05"
+    validator: team_100
+    notes: >
+      Post-build integration + push. Branch PUSHED to origin @ 9cd077b. The pre-push pytest gate (broader than
+      the PHP suite) caught a Stage-2 regression: book_crop.php topic array reduced 13->8, breaking strict
+      canon parity (AC-02 / test_crop_topics.py::test_php_parity vs crop_book/canon/topics.py). Fixed in
+      9cd077b — restored all 13 canon topics in order; the 5 field-less ones are skipped at render
+      (crop_topics.php empty-fields guard), no UI change. Python parity now 6/6; PHP suite 215/215.
+      3 PRE-EXISTING Python failures remain (baseline, OUT OF WP SCOPE, none touch sfa_delivery/):
+      test_ni_publisher_isolation §3.1 (publisher refs crop_knowledge_notes), test_source_registry UC weight
+      (None vs 0.15), test_admin_routes test_t09 (ingestion-run count) — the latter already documented baseline.
+      team_99 deploy from origin 9cd077b.
+  notes: "BUILT+PUSHED 2026-06-05 (origin @ 9cd077b), awaiting deploy + team_50 @375 QA. Mobile launch blocker.
+    Scope=FULL v4 (one WP). D1+D2 ratified. PHP suite 215/215; Python parity restored (pre-push gate caught a
+    13->8 topic regression, fixed in 9cd077b). validate 0 FAIL. 2 honest data gaps (Deep provenance; 6/14 calc
+    client-math) + 3 pre-existing out-of-scope Python failures logged. Deploy held for this single batch."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
