@@ -151,17 +151,12 @@ foreach ($raw_notes as $n) {
     $notes[] = $n;
 }
 
-// Build section anchors list for the sticky in-page nav.
-// Only include sections that have data.
-$sections = [];
-$sections[] = ['id' => 'identity',  'label' => 'מינים'];
-if (!empty($calendar))   $sections[] = ['id' => 'calendar',   'label' => 'לוח שנה'];
-if (!empty($agronomy))   $sections[] = ['id' => 'agronomy',   'label' => 'אגרונומיה'];
-if (!empty($harvest))    $sections[] = ['id' => 'harvest',    'label' => 'קטיף ויבול'];
-if (!empty($storage))    $sections[] = ['id' => 'storage',    'label' => 'אחסון'];
-if (!empty($companions)) $sections[] = ['id' => 'companions', 'label' => 'ליווי גידולים'];
-$sections[] = ['id' => 'notes',     'label' => 'הערות'];
-if (!empty($varieties))  $sections[] = ['id' => 'varieties',  'label' => 'זנים (' . count($varieties) . ')'];
+// WP-CB-MOBILE dedup: the legacy in-page anchor nav ($sections + nav.cb-section-nav)
+// and the standalone legacy `cb-section` / `cb-vars` body blocks were removed — the
+// Simple/Full/Deep depth panels (#depth-content) are now the single source of the
+// crop body. Calendar lives in Simple; the 17 enrichment fields in Full/Deep topics;
+// varieties in the Deep .vtable; agronomy/harvest/storage/companions + general notes
+// migrated into the Deep panel; the crop description into the .crophero lede.
 
 ob_start();
 ?>
@@ -224,6 +219,11 @@ ob_start();
       <h1><span class="gj-underline"><?= $h($name_he) ?></span></h1>
       <?php if ($name_lat !== ''): ?>
         <p class="crophero__sci"><em><?= $h($name_lat) ?></em></p>
+      <?php endif; ?>
+      <?php /* WP-CB-MOBILE dedup: crop description migrated here from the
+               removed .cb-crop-lede hero remnant, so it shows at all depths. */ ?>
+      <?php if ($desc_he !== ''): ?>
+        <p class="crophero__lede"><?= $h($desc_he) ?></p>
       <?php endif; ?>
     </div>
     <div class="crophero__state">
@@ -358,6 +358,30 @@ ob_start();
       $is_deep = false;
       include __DIR__ . '/../macros/crop_topics.php';
       ?>
+
+      <?php
+      // WP-CB-MOBILE dedup: general public notes migrated here from the removed
+      // legacy `notes` section. crop_topics.php only surfaces pest_disease /
+      // irrigation note types (in the pest topic), so the remaining public note
+      // types (general/tip/warning/nutrition/…) would otherwise be lost. Render
+      // them via the same crop_notes.php macro, scoped to the non-pest types.
+      $general_notes = array_values(array_filter($notes, static function ($n) {
+          return !in_array((string)($n['note_type'] ?? ''), ['pest_disease', 'irrigation'], true);
+      }));
+      if (!empty($general_notes)):
+      ?>
+      <h3 class="gj-h3">הערות</h3>
+      <div class="cb-block">
+        <?php
+        // crop_notes.php reads $notes from include scope — swap in the filtered
+        // general set for the render, then restore the page-level $notes (the
+        // Deep panel's crop_topics.php still needs the full list for its pest topic).
+        $notes_all = $notes; $notes = $general_notes;
+        include __DIR__ . '/../macros/crop_notes.php';
+        $notes = $notes_all;
+        ?>
+      </div>
+      <?php endif; ?>
     </div>
 
     <!-- ── DEEP depth (Full topics + per-datum range + EX/PR/WR sources
@@ -446,6 +470,61 @@ ob_start();
           <p>EX (מומחה) · PR (מקצועי) · WR (רשת). הערך הקובע נבחר לפי דירוג אמון — EX קודם ל-PR, ו-PR קודם ל-WR.</p>
         </div>
       </div>
+
+      <?php
+      // WP-CB-MOBILE dedup: the payload-driven sections (agronomy rollup, harvest,
+      // storage, companions) previously lived in standalone legacy `cb-section`
+      // blocks below #depth-content. Their data ($crop['agronomy'|'harvest'|
+      // 'storage'|'companions']) is NOT part of the $cb1_fields enrichment set the
+      // depth topics render, so to avoid content loss they are migrated here into
+      // Deep (the most-complete view). Each macro self-guards on empty, and each
+      // block is gated on !empty() so no empty cards appear.
+      ?>
+      <?php if (!empty($agronomy)): ?>
+      <div class="cb-block">
+        <h3 class="gj-h3">אגרונומיה</h3>
+        <?php include __DIR__ . '/../macros/crop_agronomy.php'; ?>
+      </div>
+      <?php endif; ?>
+
+      <?php if (!empty($harvest)): ?>
+      <div class="cb-block">
+        <h3 class="gj-h3">קטיף ויבול</h3>
+        <?php include __DIR__ . '/../macros/crop_harvest.php'; ?>
+      </div>
+      <?php endif; ?>
+
+      <?php if (!empty($storage)): ?>
+      <div class="cb-block">
+        <h3 class="gj-h3">אחסון לאחר קטיף</h3>
+        <?php include __DIR__ . '/../macros/crop_storage.php'; ?>
+      </div>
+      <?php endif; ?>
+
+      <?php if (!empty($companions)): ?>
+      <div class="cb-block">
+        <h3 class="gj-h3">ליווי גידולים</h3>
+        <?php include __DIR__ . '/../macros/crop_companions.php'; ?>
+      </div>
+      <?php endif; ?>
+
+      <?php
+      // General public notes (non-pest types) — also surfaced in Deep so the
+      // deepest view is a superset of Full. Same swap technique as Full.
+      $general_notes_deep = array_values(array_filter($notes, static function ($n) {
+          return !in_array((string)($n['note_type'] ?? ''), ['pest_disease', 'irrigation'], true);
+      }));
+      if (!empty($general_notes_deep)):
+      ?>
+      <div class="cb-block">
+        <h3 class="gj-h3">הערות</h3>
+        <?php
+        $notes_all = $notes; $notes = $general_notes_deep;
+        include __DIR__ . '/../macros/crop_notes.php';
+        $notes = $notes_all;
+        ?>
+      </div>
+      <?php endif; ?>
     </div>
 
   </div><!-- #depth-content -->
@@ -517,70 +596,14 @@ ob_start();
 
   <!-- ══ END WP-CB-1 ════════════════════════════════════════════════ -->
 
-  <!-- ── Crop lede + meta pills (WI-4: deduped hero; breadcrumb/h1/icon-box removed; lede+pills preserved) -->
-  <div class="cb-crop-lede">
-    <?php /* Always emit lede hook for deterministic grep. */ ?>
-    <p class="cb-crop-hero__lede">
-      <?php if ($desc_he !== ''): ?>
-        <?= $h($desc_he) ?>
-      <?php else: ?>
-        <span class="muted">תיאור הגידול יתווסף בקרוב.</span>
-      <?php endif; ?>
-    </p>
-
-    <?php if (!empty($crop['family_tag_he']) || !empty($crop['dtm_days'])): ?>
-      <div class="cb-crop-hero__meta">
-        <?php if (!empty($crop['family_tag_he'])):
-          // Strip any slug:variant debug-format (e.g. "asteraceae:compositae") — show
-          // only the Hebrew family name. The $family object (name_he) is the canonical
-          // source; family_tag_he may arrive as a raw payload slug on older records.
-          $fam_display = (string)$crop['family_tag_he'];
-          if ($family !== null && !empty($family['name_he'])) {
-              $fam_display = (string)$family['name_he'];
-          } elseif (strpos($fam_display, ':') !== false) {
-              // Fallback: strip everything after the colon (raw slug format).
-              $fam_display = trim(explode(':', $fam_display)[0]);
-          }
-        ?>
-          <span class="pill pill--soil"><?= $h($fam_display) ?></span>
-        <?php endif; ?>
-        <?php
-          $dtm = $crop['dtm_days'] ?? null;
-          if ($dtm !== null && $dtm !== '' && (int)$dtm !== -32768): ?>
-          <span class="pill pill--muted"><?= (int)$dtm ?> ימ׳</span>
-        <?php endif; ?>
-      </div>
-    <?php endif; ?>
-  </div>
-
-  <!-- ── Sticky in-page section anchor nav ─────────────────────── -->
-  <?php if (count($sections) > 1): ?>
-  <nav class="cb-section-nav" aria-label="מקטעים בדף">
-    <ul class="cb-section-nav__list" role="list">
-      <?php foreach ($sections as $sec): ?>
-        <li class="cb-section-nav__item">
-          <a class="cb-section-nav__link" href="#<?= $h($sec['id']) ?>"><?= $h($sec['label']) ?></a>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-  </nav>
-  <?php endif; ?>
-
-  <!-- ── Identity facts ─────────────────────────────────────────── -->
   <?php
-  // Show identity section when there is at least one metadata field beyond the hero.
-  $has_identity = !empty($identity) || !empty($crop['category']) || !empty($crop['growth_cycle']) || $family !== null;
-  if ($has_identity):
+  /* WP-CB-MOBILE dedup: the legacy .cb-crop-lede + .cb-crop-hero__meta hero
+     remnants, the .cb-section-nav in-page anchor nav, and the standalone
+     #identity-facts cb-section were removed. The crop description now renders in
+     the .crophero lede; family/DTM in the hero breadcrumb; identity facts via the
+     Full/Deep topic fields. Timeline + market crosslink (below) are NOT legacy
+     duplicates and are preserved. */
   ?>
-  <section class="cb-section" id="identity-facts">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">פרטי הגידול</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_identity.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
 
   <!-- ── Timeline (optional, patch03 carry-over) ───────────────── -->
   <?php
@@ -609,92 +632,15 @@ ob_start();
   endif;
   ?>
 
-  <!-- ── (2) Planting calendar ──────────────────────────────────── -->
-  <?php if (!empty($calendar)): ?>
-  <section class="cb-section" id="calendar">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">לוח שנה לזריעה ושתילה</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_calendar.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <!-- ── (3) Agronomy ───────────────────────────────────────────── -->
-  <?php if (!empty($agronomy)): ?>
-  <section class="cb-section" id="agronomy">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">אגרונומיה</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_agronomy.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <!-- ── (4) Harvest & yield ────────────────────────────────────── -->
-  <?php if (!empty($harvest)): ?>
-  <section class="cb-section" id="harvest">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">קטיף ויבול</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_harvest.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <!-- ── (5) Storage ────────────────────────────────────────────── -->
-  <?php if (!empty($storage)): ?>
-  <section class="cb-section" id="storage">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">אחסון לאחר קטיף</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_storage.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <!-- ── (6) Companions ─────────────────────────────────────────── -->
-  <?php if (!empty($companions)): ?>
-  <section class="cb-section" id="companions">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">ליווי גידולים</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_companions.php'; ?>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <!-- ── (7) Notes (always rendered; empty-state when no public notes) ── -->
-  <section class="cb-section" id="notes">
-    <div class="cb-section__head">
-      <h2 class="cb-section__title">הערות</h2>
-    </div>
-    <div class="cb-section__body">
-      <?php include __DIR__ . '/../macros/crop_notes.php'; ?>
-    </div>
-  </section>
-
-  <!-- ── (8) Varieties — LAST ───────────────────────────────────── -->
-  <section class="cb-vars" id="varieties">
-    <div class="cb-vars-head">
-      <h2 class="cb-section__title">זנים <small>(<?= (int)count($varieties) ?>)</small></h2>
-    </div>
-    <?php if (empty($varieties)): ?>
-      <p class="cb-qhint">אין עדיין זנים מתועדים לגידול זה.</p>
-    <?php else: ?>
-      <div class="cb-vars__list">
-        <?php foreach ($varieties as $variety):
-          $crop_slug = $slug;
-          include __DIR__ . '/../macros/variety_row.php';
-        endforeach; ?>
-      </div>
-    <?php endif; ?>
-  </section>
+  <?php
+  /* WP-CB-MOBILE dedup: the legacy standalone cb-section blocks (calendar,
+     agronomy, harvest, storage, companions, notes) and the cb-vars variety grid
+     were removed — they duplicated the depth panels. Their content now lives in
+     #depth-content: calendar in Simple (.pcal); the enrichment fields in Full/Deep
+     topics; varieties in the Deep .vtable (with full per-variety detail still on
+     each variety page); agronomy/harvest/storage/companions + general public notes
+     migrated into the Deep panel; the description into the .crophero lede. */
+  ?>
 
   <?php
   $context          = 'book.' . $slug;
