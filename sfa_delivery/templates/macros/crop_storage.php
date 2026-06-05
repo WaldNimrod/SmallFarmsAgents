@@ -23,7 +23,7 @@ if (empty($storage)): ?>
     $life  = is_array($storage['life_days'] ?? null) ? $storage['life_days'] : [];
     $eth_prod = (string)($storage['ethylene_production']  ?? '');
     $eth_sens = (string)($storage['ethylene_sensitivity'] ?? '');
-    $notes    = (string)($storage['notes']                ?? '');
+    $storage_notes = (string)($storage['notes'] ?? '');  // renamed from $notes: never clobber the page-level public-notes array (shared include scope) — WP-CB-MOBILE 500 fix
 
     // Ethylene Hebrew labels.
     $ETH_LABELS = [
@@ -64,8 +64,8 @@ if (empty($storage)): ?>
         <dd><?= $h((string)$value) ?></dd>
       <?php endforeach; ?>
     </dl>
-    <?php if ($notes !== ''): ?>
-      <p class="cb-storage__notes"><?= $h($notes) ?></p>
+    <?php if ($storage_notes !== ''): ?>
+      <p class="cb-storage__notes"><?= $h($storage_notes) ?></p>
     <?php endif; ?>
   </div>
 <?php endif; ?>

@@ -47,6 +47,30 @@ final class CropBookV1RouteTest extends TestCase
             (2,'radish','צנונית','Raphanus sativus','מצליבים','vegetables','spring',25,35,'{}','2026-05-31')");
 
         $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES (101,1,'Batavian','{}')");
+
+        // Rich-payload crop — exercises the migrated Deep-panel sections
+        // (companions/storage/harvest/agronomy + general notes + market_link +
+        // timeline). Regression guard for the WP-CB-MOBILE crop-page 500:
+        // crop_storage.php must NOT clobber the page-level $notes array (TypeError
+        // on array_filter). Empty-payload crops never hit this path.
+        $richPayload = json_encode([
+            'companions' => [
+                ['slug' => 'radishes', 'name_he' => 'צנונית', 'compatibility' => 'beneficial'],
+                ['slug' => 'fennel',   'name_he' => 'שומר',   'compatibility' => 'antagonistic', 'notes' => 'מתחרה'],
+            ],
+            'storage'    => ['temp' => ['min' => 0, 'max' => 4], 'life_days' => ['min' => 7, 'max' => 14], 'notes' => 'אחסון בקירור'],
+            'harvest'    => ['harvest_window_max_days' => 21],
+            'agronomy'   => ['planting_method' => 'direct'],
+            'notes'      => [
+                ['note_type' => 'tip',     'body_text' => 'גידול קל',      'trust_tier' => 'PR'],
+                ['note_type' => 'pest_disease', 'body_text' => 'כנימות', 'trust_tier' => 'WR'],
+            ],
+            'market_link' => ['slug' => 'richcrop', 'price_current' => 12.5, 'source_count' => 3],
+            'timeline'    => ['prep_pct' => 10, 'grow_pct' => 70, 'harv_pct' => 20, 'harv_days' => 14, 'week_labels' => ['1', '2', '3']],
+        ], JSON_UNESCAPED_UNICODE);
+        $st = $this->pdo->prepare("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES (3,'richcrop','חסה עשירה','Lactuca sativa','חסתיים','vegetables','winter',45,60,?,'2026-05-31')");
+        $st->execute([$richPayload]);
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES (301,3,'V1','{\"agronomy\":{\"days_to_maturity\":55}}')");
     }
 
     private function get(string $path): \Psr\Http\Message\ResponseInterface
@@ -205,6 +229,30 @@ final class CropBookV1RouteTest extends TestCase
     }
 
     // ── crop page depths ──────────────────────────────────────────
+
+    /**
+     * Regression: a crop carrying real payload (companions/storage/harvest/notes/
+     * market_link/timeline) must render 200 at every depth. Guards the WP-CB-MOBILE
+     * crop-page 500 (crop_storage.php clobbered the shared $notes array → array_filter
+     * TypeError). Empty-payload crops did not exercise this path.
+     */
+    public function testBookCropRichPayloadRendersAllDepths(): void
+    {
+        foreach (['', '?depth=simple', '?depth=full', '?depth=deep'] as $q) {
+            $res = $this->get('/crop-book/richcrop/' . $q);
+            $this->assertSame(200, $res->getStatusCode(), "richcrop must render 200 for '$q'");
+        }
+    }
+
+    public function testBookCropRichPayloadDeepShowsMigratedSections(): void
+    {
+        $res  = $this->get('/crop-book/richcrop/?depth=deep');
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('cb-storage', $html, 'storage section migrated into Deep');
+        $this->assertStringContainsString('cb-companions', $html, 'companions migrated into Deep');
+        $this->assertStringContainsString('אחסון בקירור', $html, 'storage notes render (not clobbering page notes)');
+        $this->assertStringContainsString('גידול קל', $html, 'general public note surfaced in Deep');
+    }
 
     public function testBookCropSimpleDepth(): void
     {
