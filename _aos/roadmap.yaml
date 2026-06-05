@@ -4438,7 +4438,7 @@ work_packages:
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: BUILT_AWAITING_DEPLOY_QA
+  lod_status: BUILT_DEPLOYED_AWAITING_QA
   assigned_builder: team_10
   assigned_validator: team_50
   created_at: "2026-06-05"
@@ -4446,7 +4446,7 @@ work_packages:
   depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
   spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md"
   design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-MOBILE/design_handoff_mobile_ui/MOBILE_DESIGN_v4.0.0.md"
-  branch: "claude/ui-polish-hub-cropbook-2026-06-03"
+  branch: "main (consolidated from claude/ui-polish-hub-cropbook-2026-06-03)"
   gate_history:
   - gate: L-GATE_E
     result: PASS
@@ -4509,7 +4509,22 @@ work_packages:
       test_ni_publisher_isolation §3.1 (publisher refs crop_knowledge_notes), test_source_registry UC weight
       (None vs 0.15), test_admin_routes test_t09 (ingestion-run count) — the latter already documented baseline.
       team_99 deploy from origin 9cd077b.
-  notes: "BUILT+PUSHED 2026-06-05 (origin @ 9cd077b), awaiting deploy + team_50 @375 QA. Mobile launch blocker.
+  - gate: L-GATE_V
+    result: DEPLOYED
+    date: "2026-06-06"
+    validator: team_100
+    notes: >
+      DEPLOYED to production by team_100 DIRECTLY from the Mac (not via team_99). Background: team_99's
+      deploy on the home server blocked on missing PHP/composer; root cause clarified by team_00 — uPress
+      FTPS allowlists by CURRENT external IP (dynamic, openable in seconds on request), and the Mac (which
+      has composer+lftp+php8.5+.env creds) was simply not allowlisted. team_00 opened the Mac IP
+      79.177.137.143; team_100 ran scripts/ftp_deploy_sfa_ui.sh (composer install --no-dev + lftp mirror).
+      Live verified: mobile-fixes.css HTTP 200 (44.6KB); asset ?v=1780691715; /market/ shows mkt-table +
+      collapsible mkt-disc + mchips + 65x t-price (D1 table-default); crop page shows crophero + .pcal +
+      sh__depths and ZERO raw IL_ token leak. ui-polish was consolidated into main (canonical). Deploy
+      topology drift fixed in CLAUDE.md + memory reference_sfa_deploy_topology (dynamic-IP allowlist; Mac
+      can deploy directly). NEXT: team_50 @375 visual QA -> team_100 LOD500.
+  notes: "DEPLOYED+LIVE 2026-06-06 (direct from Mac; ?v=1780691715), awaiting team_50 @375 QA. Mobile launch blocker.
     Scope=FULL v4 (one WP). D1+D2 ratified. PHP suite 215/215; Python parity restored (pre-push gate caught a
     13->8 topic regression, fixed in 9cd077b). validate 0 FAIL. 2 honest data gaps (Deep provenance; 6/14 calc
     client-math) + 3 pre-existing out-of-scope Python failures logged. Deploy held for this single batch."
