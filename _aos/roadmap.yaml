@@ -4524,7 +4524,23 @@ work_packages:
       sh__depths and ZERO raw IL_ token leak. ui-polish was consolidated into main (canonical). Deploy
       topology drift fixed in CLAUDE.md + memory reference_sfa_deploy_topology (dynamic-IP allowlist; Mac
       can deploy directly). NEXT: team_50 @375 visual QA -> team_100 LOD500.
-  notes: "DEPLOYED+LIVE 2026-06-06 (direct from Mac; ?v=1780691715), awaiting team_50 @375 QA. Mobile launch blocker.
+  - gate: L-GATE_V
+    result: GO_WITH_FIXES_RESOLVED
+    date: "2026-06-06"
+    validator: team_100
+    notes: >
+      team_100 live browser sweep (CDP qa_probe @desktop+375, 8 surfaces): market + entry cards GO (defects
+      #3/#4 fixed); 16/16 automated pass. BLOCKER found: crop page rendered the new Simple/Full/Deep depth IA
+      ON TOP OF the entire legacy page body (cb-section-nav + 7 cb-section + cb-vars) -> 9053px duplicated cram.
+      Fixed by dedup (depth IA is the single body; content migrated: desc->hero, general notes->Full/Deep,
+      agronomy/harvest/storage/companions->Deep, varieties->Deep vtable). First attempt 500'd in prod —
+      crop_storage.php used a local $notes in the shared include scope, clobbering the page notes ARRAY->STRING
+      -> array_filter TypeError; empty-payload tests missed it. Rolled back (service restored), reproduced
+      locally with rich payload, root-fixed crop_storage.php ($notes->$storage_notes) + book_crop.php stable
+      $public_notes guard + rich-payload regression tests (217/217). Re-deployed a18816c; verified live: crop
+      page 200, height @375 9053px->1366px, all depths 200, Deep renders vtable/storage/companions, no IL_ leak.
+      NEXT: team_50 @375 visual QA (now ready) -> team_100 LOD500.
+  notes: "DEPLOYED+LIVE 2026-06-06 (crop dedup + 500 fix landed a18816c; @375 9053px->1366px). Awaiting team_50 @375 QA. Mobile launch blocker.
     Scope=FULL v4 (one WP). D1+D2 ratified. PHP suite 215/215; Python parity restored (pre-push gate caught a
     13->8 topic regression, fixed in 9cd077b). validate 0 FAIL. 2 honest data gaps (Deep provenance; 6/14 calc
     client-math) + 3 pre-existing out-of-scope Python failures logged. Deploy held for this single batch."
