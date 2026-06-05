@@ -192,8 +192,10 @@ def _legacy_lookup(source_label: str, legacy_module) -> SourceSpec:
     elif source_label.startswith("WB:"):
         spec = legacy_module.SourceSpec(source_label, "WB", weight=0.30)
     elif source_label.startswith("UC:"):
+        # weight=None: excluded from blend until a moderator sets a per-candidate
+        # moderation_weight (mirrors DB SSOT seed UC:* → NULL, migration 056).
         spec = legacy_module.SourceSpec(
-            source_label, "UC", weight=0.15, requires_moderation=True
+            source_label, "UC", weight=None, requires_moderation=True
         )
     elif source_label.startswith("OP:"):
         spec = legacy_module.SourceSpec(source_label, "OP", weight=0.55)

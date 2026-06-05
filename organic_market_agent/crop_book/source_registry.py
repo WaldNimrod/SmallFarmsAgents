@@ -103,8 +103,11 @@ SOURCE_REGISTRY: dict[str, SourceSpec] = {
     "_WB_CLASS_SENTINEL": SourceSpec("_WB_CLASS_SENTINEL", "WB", weight=0.30),
 
     # --- UC: User-Community (design-registered; moderation gate required) ---
+    # weight=None by design — UC sources are excluded from the blend until a
+    # moderator assigns a per-candidate moderation_weight. Mirrors the DB SSOT
+    # seed (migration 056, UC:* → NULL). Do not set a numeric weight here.
     "_UC_CLASS_SENTINEL": SourceSpec(
-        "_UC_CLASS_SENTINEL", "UC", weight=0.15, requires_moderation=True
+        "_UC_CLASS_SENTINEL", "UC", weight=None, requires_moderation=True
     ),
 }
 
@@ -168,7 +171,9 @@ def _resolve_constants(source_label: str) -> SourceSpec:
     if source_label.startswith("WB:"):
         return SourceSpec(source_label, "WB", weight=0.30)
     if source_label.startswith("UC:"):
-        return SourceSpec(source_label, "UC", weight=0.15, requires_moderation=True)
+        # weight=None: excluded from blend until a moderator sets a per-candidate
+        # moderation_weight (mirrors DB SSOT seed UC:* → NULL, migration 056).
+        return SourceSpec(source_label, "UC", weight=None, requires_moderation=True)
     # Unknown source: treat as low-trust WB
     return SourceSpec(source_label, "WB", weight=0.20)
 
