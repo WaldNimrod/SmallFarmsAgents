@@ -4305,7 +4305,7 @@ work_packages:
     date: "2026-06-04"
     validator: team_99
     deployed_sha: "4c9bab2"
-    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md"
+    report_ref: "_archive/SFA-S003-P004-WP-CB-UI-FIDELITY/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md"
     notes: >
       team_99 deployed 4c9bab2 (FIDELITY blockers + Decisions A+B + patch01 WI-1..9 subsumed) to sfa.nimrod.bio;
       CSS ?v= 1780522574→1780532267; 4/5 smoke PASS. 1 finding (prov__srcval 59.043478 raw 6-decimal in drill
@@ -4319,7 +4319,7 @@ work_packages:
     date: "2026-06-04"
     validator: team_99
     deployed_sha: "acca9b2"
-    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v2.0.0.md"
+    report_ref: "_archive/SFA-S003-P004-WP-CB-UI-FIDELITY/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v2.0.0.md"
     notes: >
       team_99 SECOND deploy acca9b2 — 67 crop watercolors + CSS + templates (80 files; image gate met, not the
       10-file failure mode); CSS ?v= 1780532267→1780576560; all 5 smoke PASS; §4.1 prov finding RESOLVED. team_100

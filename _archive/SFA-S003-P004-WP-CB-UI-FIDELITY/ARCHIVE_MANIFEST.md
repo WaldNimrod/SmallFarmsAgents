@@ -45,10 +45,15 @@ served_asset_version: 1780576560
 |---|---|
 | `_COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-UI-FIDELITY/` (build reports v1.0–v1.3) | `…/TEAM_10/SFA-S003-P004-WP-CB-UI-FIDELITY/` |
 | `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-UI-FIDELITY/` (LOD-handoff mandates, L-GATE_B verdict, deploy mandate, design/decision/audit/visual-audit + audit_evidence + live_evidence_acca9b2 + Gemini-recipe request) | `…/TEAM_100/SFA-S003-P004-WP-CB-UI-FIDELITY/` |
+| `_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/` (DEPLOY_REPORT v1.0.0 + v2.0.0) | `…/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/` |
+
+> **Amendment 2026-06-05:** the team_99 DEPLOY_REPORT v1/v2 (originally noted "left in place")
+> were moved here to satisfy Iron Rule #15 / validate_aos Check 15 — a `_COMMUNICATION/team_*/`
+> dir named for a COMPLETE+LOD500 WP is a stale artifact. `roadmap.yaml` `report_ref`s for both
+> reports were updated to the archived paths in the same change.
 
 ## Left in place
 - `_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-FIDELITY/` (verdicts) — nested under `SFA-S003-P004`; cross-referenced.
-- team_99 DEPLOY_REPORT v1/v2 — on `origin/main` (team_99 OPS dir); referenced, not moved here.
 - Loose `MSG-team190-to-team100-…` / `MSG-team100-to-team99-…` in shared team dirs.
 
 ## Open INFO follow-ups (non-blocking — from L-GATE_V verdict)
