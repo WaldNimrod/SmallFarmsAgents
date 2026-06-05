@@ -97,14 +97,54 @@ final class CropCalendarMacroTest extends TestCase
             [
                 'activity_type' => 'seed',
                 'season'        => 'winter',
-                'region'        => 'צפון',
+                'region'        => 'IL_north',
                 'months'        => array_fill(0, 12, false),
                 'notes'         => 'זריעה תחת כיסוי בלבד',
             ],
         ]);
 
         $this->assertStringContainsString('זריעה תחת כיסוי בלבד', $html, 'Notes text must appear');
-        $this->assertStringContainsString('צפון', $html, 'Region label must appear');
+        $this->assertStringContainsString('צפון', $html, 'Zone region code must render its Hebrew label');
+        $this->assertStringNotContainsString('IL_north', $html, 'Raw region code must never leak to the page');
+    }
+
+    /**
+     * The generic default region (IL_general) is suppressed, and no raw IL_*
+     * token leaks to the page (mobile defect #2 — WP-CB-MOBILE).
+     */
+    public function testGenericRegionSuppressed(): void
+    {
+        $html = $this->render([
+            [
+                'activity_type' => 'seed',
+                'season'        => 'spring',
+                'region'        => 'IL_general',
+                'months'        => array_fill(0, 12, false),
+                'notes'         => '',
+            ],
+        ]);
+
+        $this->assertStringNotContainsString('IL_general', $html, 'Generic region token must not leak');
+        $this->assertStringNotContainsString('cb-calendar__region', $html, 'No region chip for the generic default');
+    }
+
+    /**
+     * An unknown region code is suppressed rather than leaked raw.
+     */
+    public function testUnknownRegionSuppressed(): void
+    {
+        $html = $this->render([
+            [
+                'activity_type' => 'seed',
+                'season'        => 'spring',
+                'region'        => 'IL_unmapped_zone',
+                'months'        => array_fill(0, 12, false),
+                'notes'         => '',
+            ],
+        ]);
+
+        $this->assertStringNotContainsString('IL_unmapped_zone', $html, 'Unknown region code must not leak raw');
+        $this->assertStringNotContainsString('cb-calendar__region', $html, 'No region chip for an unmapped code');
     }
 
     /**

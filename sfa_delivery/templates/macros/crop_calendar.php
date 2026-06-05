@@ -27,6 +27,17 @@ $ACTIVITY_LABELS = [
     'transplant' => 'שתילה',
 ];
 
+// Region code → Hebrew label. `IL_general` is the default (all-Israel) value and
+// carries no useful per-row signal, so it is suppressed (rendered as ''). Zone
+// overlays get a friendly label. Any unknown code is suppressed rather than
+// leaked raw — the planting calendar must never surface `IL_*` tokens to users.
+$REGION_LABELS = [
+    'IL_general' => '',
+    'IL_north'   => 'צפון',
+    'IL_center'  => 'מרכז',
+    'IL_south'   => 'דרום',
+];
+
 // Group entries by activity_type.
 $grouped = [];
 foreach ($calendar as $entry) {
@@ -45,7 +56,10 @@ if (empty($grouped)): ?>
         </div>
         <?php foreach ($entries as $entry):
             $months = is_array($entry['months'] ?? null) ? $entry['months'] : array_fill(0, 12, false);
-            $region  = (string)($entry['region'] ?? '');
+            $region_raw = (string)($entry['region'] ?? '');
+            // Map to a friendly Hebrew label; suppress the generic default and any
+            // unknown code so a raw `IL_*` token never reaches the page.
+            $region  = $REGION_LABELS[$region_raw] ?? '';
             $notes   = (string)($entry['notes']  ?? '');
             ?>
           <div class="cb-calendar__strip-wrap">
