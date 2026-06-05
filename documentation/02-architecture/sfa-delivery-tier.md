@@ -15,7 +15,7 @@ The word **"host"** has caused recurring drift (agents concluding the site is se
 |------|---------|--------------|---------------------|
 | **Web host** (the live site) | **uPress** shared LAMP — `sfa.nimrod.bio` (Cloudflare edge) | Serves ALL end-user HTTP; hosts the live **MySQL** read-mirror | — |
 | **Backend / pipeline host** | **waldhomeserver** | Canonical **Postgres** SSoT, scrapers, normalizer, agents, cron | **NEVER** serves end-user HTTP |
-| **Deploy / push origin** (relay) | **waldhomeserver** (egress IP uPress-allowlisted; Mac's Bezeq IP is not) | Runs `lftp mirror` (code) and/or `sfa_ingest_push.py` (data) **toward** uPress | Does **not** host or serve anything |
+| **Deploy / push origin** | **Mac OR waldhomeserver** — whichever's *current* external IP is allowlisted on uPress (dynamic; opened on request by team_00) | Runs `lftp mirror` (code) and/or `sfa_ingest_push.py` (data) **toward** uPress | Does **not** host or serve anything |
 
 **Therefore:** "waldhomeserver is the canonical OPS **deploy host**" (as written in deploy reports) means *the machine deploys are launched **from***. It does **NOT** mean the site runs there. **The live site MUST be served from the uPress subdomain `sfa.nimrod.bio`, never from waldhomeserver.** Code is deployed via [`../05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`](../05-admin-and-operations/UI_DEPLOY_RUNBOOK.md); data via the HMAC ingest API (§2b).
 
@@ -114,9 +114,11 @@ Two different transports with two different network constraints — do not confl
 | Artifact | Transport | Origin that works | Why |
 |----------|-----------|-------------------|-----|
 | **Data** (crop book + price index) | **HTTPS POST** `/api/v1/ingest` (HMAC) via Cloudflare | **Mac OR server** | HTTPS to Cloudflare needs no IP allowlist → the Mac can push crop-book data directly |
-| **Code** (PHP/CSS/JS) | **FTPS port 21** + `lftp mirror` | **waldhomeserver only** (relay) | uPress allowlists egress IPs on port 21; the Mac's Bezeq IP is port-21-blocked → must relay through the server |
+| **Code** (PHP/CSS/JS) | **FTPS port 21** + `lftp mirror` | **Mac OR server — whichever's external IP is allowlisted on uPress** | uPress FTPS allows only allowlisted **source IPs**, which are **dynamic**; open the deploying machine's *current* external IP on the uPress panel (seconds, ask team_00) and that machine deploys |
 
-So: **crop-book data → Mac → uPress** (HTTPS, fine). **UI code → waldhomeserver relay → uPress** (FTPS). The server's relay role for *code* does not imply it owns crop-book *data*.
+So: **crop-book data → Mac → uPress** (HTTPS, no allowlist). **UI code → FTPS `lftp mirror` → uPress** from whichever machine's IP is currently open.
+
+> **⚠ CORRECTED 2026-06-06 (anti-drift, team_00):** the prior "Mac's Bezeq IP is port-21-blocked → must relay through waldhomeserver" framing is **wrong**. uPress allowlists by **current external IP (dynamic)**; the Mac deploys **directly** once its IP is opened. **Verified:** WP-CB-MOBILE deployed straight from the Mac (`scripts/ftp_deploy_sfa_ui.sh`) after opening Mac IP `79.177.137.143` → live, `mobile-fixes.css` HTTP 200. waldhomeserver is **not** a mandatory relay. (An older S002/www-tier note claimed an ISP-wide Bezeq port-21 block — that was the retired `s887`/www era and is contradicted by this direct-from-Mac deploy; do not treat it as current.) Closed-IP symptom = TCP to `ftp.s1240.upress.link:21` **times out**. Full procedure: `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`.
 
 ### 1A.4 Backup posture (risk — team_00 flagged 2026-05-30)
 
@@ -260,7 +262,7 @@ No uPress-specific bindings exist. No proprietary file formats. No closed-source
 - HMAC secret: 32 bytes (256 bits) from `openssl rand -base64 32`, identical on waldhomeserver and uPress; rotated annually or on suspected leak
 - HMAC verified by `hash_equals()` (constant-time)
 - Ingest idempotency via `idempotency_key` (replay → `{duplicate: true}`, no double-apply)
-- FTPS IP allowlist enforced at uPress firewall (Mac dev IP + waldhomeserver IP only)
+- FTPS IP allowlist enforced at the uPress firewall, by **current external IP (dynamic)** — team_00 opens the deploying machine's IP on request (Mac and/or waldhomeserver)
 - No user write paths anywhere (S003 is read-only; S004 will introduce JWT-gated writes via separate POST routes)
 - No PII in MySQL (S003); S004 user data design will be a separate decision
 
