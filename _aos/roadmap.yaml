@@ -4432,19 +4432,20 @@ work_packages:
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-MOBILE
-  label: "ספר גידולים + מחירון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
-  status: OPEN
-  phase: design
+  label: "ספר גידולים + מחירון + מחשבון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
+  status: IN_PROGRESS
+  phase: build
   track: A
-  effort: MEDIUM
-  current_lean_gate: L-GATE_E
-  lod_status: MANDATE
+  effort: LARGE
+  current_lean_gate: L-GATE_S
+  lod_status: LOD400
   assigned_builder: team_10
   assigned_validator: team_50
   created_at: "2026-06-05"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/DESIGN_MANDATE_team35_mobile-ui_2026-06-05_v1.0.0.md"
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md"
+  design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-MOBILE/design_handoff_mobile_ui/MOBILE_DESIGN_v4.0.0.md"
   branch: "claude/ui-polish-hub-cropbook-2026-06-03"
   gate_history:
   - gate: L-GATE_E
@@ -4457,8 +4458,24 @@ work_packages:
       one-card-per-row (~12500px scroll); entry cards DTM-number dominates crop name; length/pagination. + /about
       too many tiers (active-vs-coming unclear). Flow: team_35 DESIGN (Claude Design env) -> team_10 BUILD ->
       team_99 deploy -> team_50 VISUAL QA @375 -> team_100. Desktop is launch-quality; do not regress it.
-  notes: "OPENED 2026-06-05. Mobile is the launch blocker. team_35 mobile design mandate issued. IL_general
-    raw-token leak is a quick win team_100 may fix independently."
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-06-05"
+    validator: team_100
+    notes: >
+      team_35 v4 design package RECEIVED (design_handoff_mobile_ui: MOBILE_DESIGN_v4.0.0.md + README +
+      8 surface prototypes @375 + mobile-fixes.css override layer). team_100 architect review: design's
+      codebase assumptions verified (module-*.png, mig 049 CropPlantingCalendar, AssumptionField exists,
+      CSS load point _layout.php). team_00 SCOPE DECISION: build FULL v4 in ONE WP (incl. calculator
+      rebuild FIX 6 + 3-depth crop IA). team_00 RATIFIED both desktop-reaching changes: D1 market
+      table-default + D2 type-minimum floor (the only sanctioned desktop diffs). team_100 LOD400 authored:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md.
+      IL_general raw-token leak quick-win already fixed + tested (crop_calendar.php, bac5b69/9f60f56,
+      207/207); calendar region map reconciled to design SSoT (IL_general->כל הארץ). NEXT: dispatch team_10
+      build (git-isolated; team_100 commits) -> team_99 single batch deploy -> team_50 visual QA @375.
+  notes: "IN BUILD 2026-06-05. Mobile launch blocker. Scope=FULL v4 (one WP). D1+D2 desktop changes
+    ratified by team_00. spec_ref=LOD400 build spec; design_ref=team_35 v4. Quick-win (IL_general leak)
+    done + held for the batch deploy. effort LARGE: hub/cards/crop-3-depth/market/calc-rebuild/about/CTA/density."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS

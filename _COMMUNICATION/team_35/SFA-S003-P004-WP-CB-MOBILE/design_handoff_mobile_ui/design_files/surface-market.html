@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>מחירון · טבלה · מובייל</title>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="cropbook-v1.css"/>
+<link rel="stylesheet" href="classb.css"/>
+<link rel="stylesheet" href="mobile-fixes.css"/>
+<style>
+  html,body{background:var(--gj-paper);} .sh{min-height:100vh;}
+  .mkthead{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .mkthead h1{font-family:var(--gj-font-head);font-weight:900;font-size:23px;margin:0;}
+  .mkthead .fresh{margin-inline-start:auto;}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+  <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+  <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+  <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+  <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+  <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+</symbol></svg>
+
+<div class="sh">
+  <div class="sh__bar">
+    <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+    <div class="sh__name">SFA<small>חקלאות קטנה</small></div>
+    <div class="sh__tools"><button class="sh__icon" title="חיפוש">⌕</button></div>
+  </div>
+
+  <div class="sh__body">
+    <div class="mkthead">
+      <h1>מחירון</h1>
+      <span class="fresh fresh--fresh"><span>עודכן 06:00</span></span>
+    </div>
+
+    <!-- collapsible disclaimer: title, opens on click -->
+    <details class="mkt-disc">
+      <summary><span class="mkt-disc__ic">ⓘ</span>מה זה המחירון? מאיפה? למה?<span class="chev">▾</span></summary>
+      <ul class="mkt-disc__list">
+        <li><b>מה:</b> ממוצעים מתגלגלים — 7 ימים אחרונים.</li>
+        <li><b>מאיפה:</b> סוכני סריקה ציבוריים של mezoo + תרומות חקלאים.</li>
+        <li><b>למה:</b> עוגן השוואה לתכנון — לא הצעת מחיר.</li>
+        <li><b>למה לא:</b> אינו תחליף לבדיקת שוק מקומית.</li>
+      </ul>
+    </details>
+
+    <!-- real category filters (incl. סלים / baskets) -->
+    <div class="mkt-aud" style="margin-bottom:12px">
+      <div class="mchips" style="flex:1">
+        <button class="fchip is-on" data-single="1">הכל</button>
+        <button class="fchip" data-single="1">עלים</button>
+        <button class="fchip" data-single="1">פירות-ירק</button>
+        <button class="fchip" data-single="1">שורש</button>
+        <button class="fchip" data-single="1">מצליבים</button>
+        <button class="fchip" data-single="1">בצליים</button>
+        <button class="fchip" data-single="1">דלועיים</button>
+        <button class="fchip" data-single="1">קטניות</button>
+        <button class="fchip" data-single="1">סלים</button>
+        <button class="fchip" data-single="1">פירות</button>
+        <button class="fchip" data-single="1">ביצים</button>
+      </div>
+      <div class="aud" data-aud-switch="mkt-scope">
+        <button class="aud__opt is-table is-active" data-view="table" title="טבלה"><span class="g">▤</span></button>
+        <button class="aud__opt is-cards" data-view="cards" title="כרטיסים"><span class="g">▦</span></button>
+      </div>
+    </div>
+
+    <div id="mkt-scope" data-mkt-view="table">
+      <!-- TABLE (default) — price = stacked number+unit (RTL-safe) -->
+      <div class="mkt-table-wrap">
+        <table class="mkt-table">
+          <thead><tr><th>מוצר</th><th>מחיר</th><th class="t-fresh">מצב</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="t-name"><img class="sw" src="assets/crops/wc-tomato.png" alt=""/><span>עגבנייה<small class="dir-ltr">9 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">12.40</span><small>₪ / ק״ג</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--fresh"><span>טרי</span></span></td>
+            </tr>
+            <tr>
+              <td><span class="t-name"><img class="sw" src="assets/wc-lettuce.png" alt=""/><span>חסה<small class="dir-ltr">6 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">4.90</span><small>₪ / יח׳</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--fresh"><span>טרי</span></span></td>
+            </tr>
+            <tr>
+              <td><span class="t-name"><img class="sw" src="assets/crops/wc-cucumber.png" alt=""/><span>מלפפון<small class="dir-ltr">5 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">7.20</span><small>₪ / ק״ג</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--fresh"><span>טרי</span></span></td>
+            </tr>
+            <tr class="is-stale">
+              <td><span class="t-name"><img class="sw" src="assets/crops/wc-carrot.png" alt=""/><span>גזר<small class="dir-ltr">3 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">5.10</span><small>₪ / ק״ג</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--aging"><span>מתיישן</span></span></td>
+            </tr>
+            <tr>
+              <td><span class="t-name"><img class="sw" src="assets/crops/wc-pepper.png" alt=""/><span>פלפל<small class="dir-ltr">7 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">10.80</span><small>₪ / ק״ג</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--fresh"><span>טרי</span></span></td>
+            </tr>
+            <tr>
+              <td><span class="t-name"><span class="sw sw--glyph">🧺</span><span>סל ירקות<small class="dir-ltr">סלים · 4 ספקים</small></span></span></td>
+              <td><span class="t-price"><span class="n">89.00</span><small>₪ / סל</small></span></td>
+              <td class="t-fresh"><span class="fresh fresh--fresh"><span>טרי</span></span></td>
+            </tr>
+            <tr class="is-empty">
+              <td><span class="t-name"><span class="sw sw--glyph">🥬</span><span>מנגולד<small class="dir-ltr">0 מקורות</small></span></span></td>
+              <td><span class="t-price"><span class="n">—</span></span></td>
+              <td class="t-fresh"><a class="reqinfo" href="#">◐ תרמו</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CARDS (toggle) -->
+      <div class="pcard-grid">
+        <a class="pcard" href="#">
+          <div class="pcard__top"><img class="pcard__sw" src="assets/crops/wc-tomato.png" alt=""/><div><div class="pcard__name">עגבנייה</div><div class="pcard__unit dir-ltr">₪ / kg</div></div></div>
+          <div class="pcard__price"><span class="big num">12.40</span><span class="cur">₪</span><span class="per">ל־ק״ג</span></div>
+          <div class="pcard__range num">9.80–14.50</div>
+          <div class="pcard__spark"><div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i class="hi" style="height:62%"></i><i style="height:58%"></i><i style="height:66%"></i></div></div>
+          <div class="pcard__foot"><span class="pcard__src"><b>9</b> מקורות</span><span class="fresh fresh--fresh"><span>טרי · אתמול</span></span></div>
+        </a>
+        <a class="pcard" href="#">
+          <div class="pcard__top"><img class="pcard__sw" src="assets/wc-lettuce.png" alt=""/><div><div class="pcard__name">חסה</div><div class="pcard__unit dir-ltr">₪ / unit</div></div></div>
+          <div class="pcard__price"><span class="big num">4.90</span><span class="cur">₪</span><span class="per">ליחידה</span></div>
+          <div class="pcard__range num">3.50–6.00</div>
+          <div class="pcard__spark"><div class="spark"><i style="height:60%"></i><i style="height:52%"></i><i style="height:64%"></i><i style="height:48%"></i><i class="hi" style="height:58%"></i><i style="height:54%"></i><i style="height:50%"></i></div></div>
+          <div class="pcard__foot"><span class="pcard__src"><b>6</b> מקורות</span><span class="fresh fresh--fresh"><span>טרי · אתמול</span></span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- CTA — contribute a price -->
+    <div class="cta">
+      <div class="cta__card cta--data">
+        <h3>יודעים מחיר עדכני? תרמו</h3>
+        <p>כל דיווח מחזק את הממוצע. ללא רישום, אנונימי.</p>
+        <a class="cta__btn" href="#">◐ תרומת מחיר ›</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sh__nav sh__nav--mobile">
+    <a href="#"><span class="g">▤</span>ספר</a>
+    <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+    <a class="is-market is-active" href="#"><span class="g">₪</span>מחירון</a>
+    <a href="#"><span class="g">◔</span>חשבון</a>
+  </nav>
+</div>
+<script>
+  (function(){
+    var scope = document.getElementById('mkt-scope');
+    var params = new URLSearchParams(location.search);
+    if (params.get('view') === 'cards') scope.setAttribute('data-mkt-view','cards');
+    function sync(v){ scope.setAttribute('data-mkt-view', v); document.querySelectorAll('.aud__opt').forEach(function(b){ b.classList.toggle('is-active', b.getAttribute('data-view')===v); }); }
+    sync(scope.getAttribute('data-mkt-view'));
+    document.querySelectorAll('.aud__opt').forEach(function(b){ b.addEventListener('click', function(){ sync(b.getAttribute('data-view')); }); });
+  })();
+</script>
+</body>
+</html>

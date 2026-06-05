@@ -1,0 +1,570 @@
+/* ============================================================
+   SFA — MOBILE FIX LAYER  ·  target 375px  ·  RTL Hebrew
+   WP: SFA-S003-P004-WP-CB-MOBILE · team_35 → team_10 (build)  ·  v2.0.0
+   EXTENDS tokens.css + cropbook-v1.css + classb.css. No new palette.
+   Load LAST. All overrides are mobile-scoped (≤480px) EXCEPT the new
+   layout-agnostic components: .pcal (calendar), .cparam (icon language).
+   Desktop (≥481px) untouched → no regression — with ONE intentional
+   exception: market default view = TABLE (also desktop) — see §F3.
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   0 · MOBILE SHELL
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .sh__body { padding: 14px; }
+  .sh__body--wide { padding: 14px; }
+  .sh__bar  { padding: 10px 14px; gap: 8px; }
+  .sh__bc   { font-size: 10px; }
+  .sh__bar .sh__nav { display: none; }   /* bottom-tab is canonical mobile nav (§24) */
+}
+
+/* ════════════════════════════════════════════════════════════
+   ICON LANGUAGE  ·  .cparam  ·  NEW, layout-agnostic
+   A compact, reusable vocabulary of key-parameter chips. One glyph +
+   value (+ optional mono unit). Used on crop rows, hub, calc context.
+   Glyph set (consistent with the brand's topic emoji):
+     ⏳ DTM · ⚖ yield · ☀/❄ season · ⇲ spacing · 💧 water · 🌱/🪴 method
+   Colour by family via --cp accent (defaults to ink).
+   ════════════════════════════════════════════════════════════ */
+.cparams { display: flex; flex-wrap: wrap; gap: 6px; }
+.cparam {
+  --cp: var(--gj-ink);
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--gj-font-body); font-weight: 700; font-size: 12px;
+  color: var(--cp); background: var(--gj-paper-2);
+  border-radius: var(--gj-r-pill); padding: 3px 9px 3px 8px; line-height: 1.3;
+}
+.cparam .g { font-size: 12px; opacity: .9; filter: saturate(.9); }
+.cparam small { font-weight: 400; color: var(--gj-ink-soft); font-family: var(--gj-font-mono); font-size: 9px; }
+.cparam--dtm   { --cp: var(--gj-leaf-deep); }
+.cparam--yield { --cp: var(--gj-soil-deep); }
+.cparam--water { --cp: var(--gj-code-deep); }
+.cparam--space { --cp: var(--gj-ink); }
+.cparam--method{ --cp: var(--gj-leaf-deep); }
+.cparam--season{ --cp: var(--gj-soil-deep); }
+
+/* ════════════════════════════════════════════════════════════
+   FIX 1 · CROP-BOOK ENTRY CARDS  →  ONE PER ROW, richer, icon language
+   (client revision: 1-up rows; more info in the featured first card;
+    DTM is now just one chip in the .cparam vocabulary, not a headline.)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .cards-grid { grid-template-columns: 1fr; gap: 8px; }
+
+  /* Compact ROW card: small thumbnail (not a big block, not a faint wash),
+     text-led, tight margins so it doesn't eat valuable space (client). */
+  .ccard { flex-direction: row; align-items: stretch; gap: 0; }
+  .ccard__art {
+    width: 66px; flex: none; aspect-ratio: auto;
+    border-bottom: 0; border-inline-end: 1px solid var(--gj-line);
+  }
+  .ccard__art img { width: 74%; height: 74%; }
+  .ccard__state { top: 5px; inset-inline-start: 5px; width: 15px; height: 15px; }
+  .ccard__body { padding: 9px 12px; gap: 4px; justify-content: center; }
+  .ccard__name { font-size: 17px; }
+  .ccard__en   { font-size: 11px; margin-top: -2px; }
+  .ccard__season { align-self: flex-start; }
+  /* the old .ccard__meta (pips + giant DTM) is replaced by .cparams in markup */
+  .ccard__meta { display: none; }
+
+  /* IN-SEASON NOW — clear, on the list, for sow/transplant this month */
+  .ccard__now {
+    display: inline-flex; align-items: center; gap: 5px; align-self: flex-start;
+    font-size: 11px; font-weight: 700; color: var(--gj-leaf-deep);
+    background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper));
+    border-radius: var(--gj-r-pill); padding: 2px 9px;
+  }
+  .ccard__now .g { font-size: 11px; }
+
+  /* FEATURED first card: slightly bigger thumb + a one-line description. */
+  .ccard--feat .ccard__art { width: 88px; }
+  .ccard--feat .ccard__body { padding: 11px 13px; }
+  .ccard--feat .ccard__name { font-size: 20px; }
+  .ccard__feattag {
+    display: inline-flex; align-items: center; gap: 5px; align-self: flex-start;
+    font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--gj-leaf-deep);
+    background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper));
+    border-radius: var(--gj-r-pill); padding: 2px 9px;
+  }
+  .ccard__desc { font-size: 12.5px; line-height: 1.45; color: var(--gj-ink-soft); margin: 1px 0; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX 2a · CROP PAGE HERO  (.crophero) — 2-col, badge own row (kept)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .crophero {
+    grid-template-columns: 56px 1fr; gap: 12px; align-items: start;
+    padding-bottom: 12px; margin-bottom: 12px;
+  }
+  .crophero__art { width: 56px; height: 56px; }
+  .crophero h1 { font-size: 26px; line-height: 1.02; }
+  .crophero__bc { font-size: 9.5px; }
+  .crophero__sci { font-size: 12px; }
+  .crophero__state {
+    grid-column: 1 / -1; flex-direction: row; align-items: center;
+    gap: 8px; flex-wrap: wrap; margin-top: 2px;
+  }
+  .statebadge { font-size: 12px; }
+  .statebadge__cov { font-size: 10px; }
+}
+
+/* ── FIX 2a' · DEPTH MODES → icon segmented control IN the header ──
+   (client: move פשוט/מלא/העמקה up into the title bar to save space.)
+   .sh__depths is a compact icon toggle placed inside .sh__bar. */
+.sh__depths { display: inline-flex; background: var(--gj-paper-2); border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 2px; gap: 1px; }
+.sh__depths button {
+  appearance: none; border: 0; background: transparent; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 9px; border-radius: var(--gj-r-pill);
+  font-size: 11px; font-weight: 700; color: var(--gj-ink-soft);
+}
+.sh__depths button .g { font-size: 13px; }
+.sh__depths button span { display: none; }                 /* labels collapse to icons */
+.sh__depths button.is-active { background: var(--gj-leaf-deep); color: #fff; box-shadow: var(--gj-shadow-s); }
+.sh__depths button.is-active span { display: inline; }      /* active mode shows its label */
+@media (max-width: 360px) { .sh__depths button.is-active span { display: none; } }
+
+/* ── FIX 2a'' · HEADLINE VALUES → ONE consolidated card ──
+   (client: data centralised in a single card, not 4 separate boxes.) */
+.hv-card { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); box-shadow: var(--gj-shadow-s); overflow: hidden; margin-bottom: 14px; }
+.hv-card__grid { display: grid; grid-template-columns: 1fr 1fr; }
+.hv-card .hv { border: 0; border-radius: 0; box-shadow: none; padding: 12px 14px; }
+.hv-card .hv:nth-child(odd)  { border-inline-end: 1px solid var(--gj-line); }
+.hv-card .hv:nth-child(-n+2) { border-bottom: 1px solid var(--gj-line); }
+.hv-card .hv__val { font-size: 22px; }
+
+/* ════════════════════════════════════════════════════════════
+   FIX 2b · PLANTING CALENDAR  (.pcal)  ·  NEW (kept from v1)
+   Two activity tracks · Hebrew region/activity labels · no raw keys.
+   See MOBILE_DESIGN §2b for the region/activity/season → Hebrew maps.
+   ════════════════════════════════════════════════════════════ */
+.pcal { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); box-shadow: var(--gj-shadow-s); padding: 14px; margin-bottom: 12px; }
+.pcal__head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.pcal__title { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 7px; }
+.pcal__title .g { font-size: 15px; }
+.pcal__region { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--gj-soil-deep); background: color-mix(in oklch, var(--gj-soil) 14%, var(--gj-paper)); border-radius: var(--gj-r-pill); padding: 3px 10px; }
+.pcal__region .g { font-size: 11px; }
+.pcal__legend { display: flex; gap: 14px; margin-bottom: 8px; }
+.pcal__legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--gj-ink-soft); }
+.pcal__legend i { width: 11px; height: 11px; border-radius: 3px; }
+.pcal__legend i.is-seed  { background: var(--gj-leaf); }
+.pcal__legend i.is-trans { background: var(--gj-sun); }
+.pcal__track { display: grid; grid-template-columns: 52px 1fr; align-items: center; gap: 8px; margin-bottom: 6px; }
+.pcal__tracklbl { font-size: 12px; font-weight: 700; color: var(--gj-ink); display: flex; align-items: center; gap: 5px; }
+.pcal__cells { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; }
+.pcal__cells i { height: 22px; border-radius: 4px; background: var(--gj-paper-2); }
+.pcal__track--seed  .pcal__cells i.on { background: var(--gj-leaf-soft); }
+.pcal__track--seed  .pcal__cells i.peak { background: var(--gj-leaf); }
+.pcal__track--trans .pcal__cells i.on { background: color-mix(in oklch, var(--gj-sun) 55%, var(--gj-paper)); }
+.pcal__track--trans .pcal__cells i.peak { background: var(--gj-sun); }
+.pcal__months { display: grid; grid-template-columns: 52px 1fr; gap: 8px; margin-top: 4px; }
+.pcal__months .nums { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; font-family: var(--gj-font-mono); font-size: 9px; color: var(--gj-ink-soft); text-align: center; }
+.pcal__cells i.now { box-shadow: inset 0 0 0 2px var(--gj-ink); }
+.pcal__note { margin: 8px 0 0; font-size: 11px; line-height: 1.5; color: var(--gj-ink-soft); }
+.pcal__note b { color: var(--gj-ink); }
+@media (max-width: 480px) {
+  .pcal { padding: 12px; }
+  .pcal__track, .pcal__months { grid-template-columns: 44px 1fr; gap: 6px; }
+  .pcal__cells i { height: 20px; }
+  .pcal__tracklbl { font-size: 11px; }
+  .pcal__months .nums { font-size: 8px; }
+}
+
+/* ── FIX 2c · TOPIC OVERVIEW → one topic per row (horizontal) ──
+   (client: each subject on its own row.) */
+@media (max-width: 480px) {
+  .tsum { grid-template-columns: 1fr; gap: 8px; }
+  .tcard {
+    display: grid; grid-template-columns: 128px 1fr; align-items: center;
+    gap: 10px; border-top: 0; border-inline-start: 3px solid var(--gj-line); padding: 11px 13px;
+  }
+  .tcard--nursery { border-inline-start-color: var(--t-nursery); }
+  .tcard--grow    { border-inline-start-color: var(--t-grow); }
+  .tcard--harvest { border-inline-start-color: var(--t-harvest); }
+  .tcard--yield   { border-inline-start-color: var(--t-yield); }
+  .tcard--inputs  { border-inline-start-color: var(--t-inputs); }
+  .tcard--pest    { border-inline-start-color: var(--t-pest); }
+  .tcard__head { margin-bottom: 0; }
+  .tcard__rows { gap: 3px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX 3 · MARKET  →  DEFAULT VIEW = TABLE  (also desktop, per client)
+   The cards⇄table toggle keeps both; default flips to table. The
+   mobile table is a compact 3-col ptable (מוצר · מחיר · מצב).
+   ════════════════════════════════════════════════════════════ */
+.mkt-table-wrap { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); overflow: hidden; background: var(--gj-paper); }
+.mkt-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.mkt-table thead th { text-align: start; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--gj-ink-soft); background: var(--gj-paper-2); padding: 9px 12px; border-bottom: 1px solid var(--gj-line); }
+.mkt-table tbody td { padding: 10px 12px; border-bottom: 1px solid var(--gj-line); font-size: 13px; vertical-align: middle; }
+.mkt-table tbody tr:last-child td { border-bottom: 0; }
+.mkt-table .t-name { font-family: var(--gj-font-head); font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 9px; }
+.mkt-table .t-name .sw { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; mix-blend-mode: multiply; background: #fff; border: 1px solid var(--gj-line); flex: none; }
+.mkt-table .t-name .sw--glyph { display: grid; place-items: center; font-size: 16px; }
+.mkt-table .t-name small { display: block; font-family: var(--gj-font-mono); font-size: 9px; font-weight: 400; color: var(--gj-ink-soft); }
+.mkt-table .t-price { font-family: var(--gj-font-head); font-weight: 900; font-size: 18px; color: var(--gj-tomato-deep); white-space: nowrap; text-align: start; }
+.mkt-table .t-price small { font-size: 9px; font-weight: 600; color: var(--gj-ink-soft); font-family: var(--gj-font-body); margin-inline-start: 2px; }
+.mkt-table tr.is-empty .t-price { color: var(--gj-paper-3); }
+.mkt-table tr.is-stale .t-price { color: var(--gj-ink-soft); }
+.mkt-table .t-fresh { text-align: end; }
+/* density toggle: which view shows */
+[data-mkt-view="cards"] .mkt-table-wrap { display: none; }
+[data-mkt-view="table"] .pcard-grid    { display: none; }
+
+@media (max-width: 480px) {
+  .mkt-table thead th, .mkt-table tbody td { padding: 9px 10px; }
+  .mkt-table .t-name { font-size: 13px; gap: 8px; }
+  .mkt-table .t-price { font-size: 16px; }
+  /* freshness collapses to a dot on mobile to keep 3 columns at 375 */
+  .mkt-table .t-fresh .fresh { gap: 0; padding: 3px; }
+  .mkt-table .t-fresh .fresh span { display: none; }
+  .mkt-table .t-fresh .fresh::before { width: 9px; height: 9px; }
+}
+
+/* compact price CARDS (kept for the toggle's cards view) */
+@media (max-width: 480px) {
+  .pcard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pcard__top { padding: 10px 11px 0; gap: 8px; }
+  .pcard__sw  { width: 34px; height: 34px; border-radius: 8px; }
+  .pcard__sw--glyph { font-size: 18px; }
+  .pcard__name { font-size: 14px; }
+  .pcard__unit { font-size: 9px; }
+  .pcard__price { padding: 6px 11px 2px; }
+  .pcard__price .big { font-size: 24px; }
+  .pcard__price .cur { font-size: 12px; }
+  .pcard__price .per { font-size: 10px; }
+  .pcard__range { padding: 0 11px 8px; font-size: 10px; }
+  .pcard__spark { display: none; }
+  .pcard__foot { padding: 7px 11px; gap: 6px; }
+  .pcard__src  { font-size: 9px; }
+  .pcard__foot .fresh { gap: 0; padding: 3px; }
+  .pcard__foot .fresh span { display: none; }
+  .pcard__foot .fresh::before { width: 8px; height: 8px; }
+}
+
+/* market density toggle control (reuses the book .aud switch look) */
+.mkt-aud { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.mkt-aud .aud { margin-inline-start: auto; }
+
+/* ════════════════════════════════════════════════════════════
+   FIX 4 · ABOUT / TIERS — two groups + status chip (kept from v1)
+   ════════════════════════════════════════════════════════════ */
+.tier-group { margin-bottom: 22px; }
+.tier-group__head { display: flex; align-items: center; gap: 9px; margin: 0 2px 12px; }
+.tier-group__head h2 { font-family: var(--gj-font-head); font-weight: 700; font-size: 17px; margin: 0; }
+.tier-group__head .count { font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-ink-soft); }
+.tier-group__head .rule { flex: 1; height: 1px; background: var(--gj-line); }
+.tier-row__status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; line-height: 1; padding: 3px 9px; border-radius: var(--gj-r-pill); white-space: nowrap; }
+.tier-row__status--live { background: color-mix(in oklch, var(--gj-leaf) 18%, var(--gj-paper)); color: var(--gj-leaf-deep); }
+.tier-row__status--soon { background: var(--gj-paper-2); color: var(--gj-ink-soft); }
+.tier-row__status .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.tier-group--soon .tier-row { background: var(--gj-paper-2); box-shadow: none; }
+.tier-group--soon .tier-row__txt h3 { color: var(--gj-ink-soft); }
+@media (max-width: 480px) {
+  .tier-hero h1 { font-size: 26px; }
+  .tier-hero p  { font-size: 14px; }
+  .tier-list { gap: 10px; }
+  .tier-row { grid-template-columns: 1fr auto; gap: 8px 10px; padding: 14px 16px; }
+  .tier-row__badge { grid-row: 1; }
+  .tier-row__status { grid-row: 1; justify-self: end; align-self: start; }
+  .tier-row__txt { grid-row: 2; grid-column: 1 / -1; }
+  .tier-row__txt h3 { font-size: 17px; }
+  .tier-row__eg { display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX 5 · HUB / HOME (עמוד השער) — compact row launchers on mobile
+   .modtile--row = side-thumbnail tile (≈⅓ height), single column.
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .hub-intro { gap: 12px; margin-bottom: 16px; }
+  .hub-intro h1 { font-size: 25px; }
+  .hub-intro p { font-size: 13.5px; }
+  .hub-groupbar { margin: 18px 2px 12px; }
+  .hub-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .modtile--row { flex-direction: row; align-items: stretch; }
+  .modtile--row .modtile__art {
+    width: 104px; flex: none; aspect-ratio: auto;
+    border-bottom: 0; border-inline-end: 1px solid var(--gj-line);
+  }
+  .modtile--row .modtile__glyph { width: 26px; height: 26px; font-size: 13px; top: 7px; inset-inline-end: 7px; }
+  .modtile--row .modtile__tier  { top: 7px; inset-inline-start: 7px; }
+  .modtile--row .modtile__body  { padding: 11px 13px; gap: 4px; }
+  .modtile--row .modtile__title { font-size: 17px; }
+  .modtile--row .modtile__desc  { font-size: 12px; }
+  .modtile--row .modtile__foot  { padding-top: 9px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   FIX 6 · CALCULATOR (עמוד המחשבון) — stacked dashboard on mobile
+   dark context strip → 1-col wired modcards → summary card → export.
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .calc-context { gap: 10px; padding: 13px 14px; }
+  .calc-context .ipt { flex: 1 1 46%; }
+  .calc-context__tag { margin-inline-start: 0; max-width: none; flex-basis: 100%; }
+  .calc-dash { grid-template-columns: 1fr; gap: 10px; }
+  .modcard__t { font-size: 14px; }
+  .modcard__res { font-size: 22px; }
+  .calc-summary { padding: 14px; }
+  .calc-summary__row.is-total b { font-size: 20px; }
+  .calc-export__btns { grid-template-columns: 1fr 1fr; }
+}
+.calc-mwrap { display: flex; flex-direction: column; gap: 12px; }
+
+/* ════════════════════════════════════════════════════════════
+   TYPE MINIMUMS  ·  global (desktop + mobile), per client
+   "none of our fonts should be too small — desktop is too small."
+   Raises the smallest micro-text to a readable floor: ~11px for mono
+   micro-labels, ~12px for body-ish text. Targeted (not blanket) so
+   layout holds. This is a sanctioned change to the desktop type scale.
+   ════════════════════════════════════════════════════════════ */
+.gj-eyebrow { font-size: 11px; }
+.ccard__en { font-size: 11px; }
+.cparam small { font-size: 10px; }
+.pcal__months .nums { font-size: 10px; }
+.fresh { font-size: 11px; }
+.pcard__unit, .pcard__src { font-size: 11px; }
+.pcard__range { font-size: 11px; }
+.modtile__title small, .modtile__stat small, .modtile__desc { font-size: 12px; }
+.modtile__go { font-size: 12.5px; }
+.statebadge__cov { font-size: 11px; }
+.crophero__bc { font-size: 11px; }
+.hv__val small { font-size: 12px; }
+.tcard__t small, .topic__t small, .topic__meta, .topic__chev { font-size: 12px; }
+.mkt-table .t-name small, .mkt-table .t-price small { font-size: 10px; }
+.calc-summary__row small, .modcard__feed { font-size: 11px; }
+.vtable th, .vtable tfoot td .avg-lbl { font-size: 11px; }
+.fg dt { font-size: 13px; }
+.fg dd { font-size: 14px; }
+/* mobile keeps the same floor (overrides any tighter mobile rule above) */
+@media (max-width: 480px) {
+  .crophero__bc { font-size: 11px; }
+  .ccard__en { font-size: 11px; }
+  .pcal__months .nums { font-size: 9.5px; }   /* 12 cols at 375 — one notch down, still legible */
+}
+
+/* ════════════════════════════════════════════════════════════
+   COMPLEMENTARY DEPTH VIEWS  ·  Full (מלא) + Deep (העמקה) on mobile
+   Components already exist (.topic / .fieldgrid / .vtable / .refsheet);
+   these are only the 375px adjustments.
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* Full: field grid → single column so dt/dd don't crush */
+  .fieldgrid { grid-template-columns: 1fr; gap: 0; }
+  .topic__t { font-size: 15px; }
+  .topic__head { padding: 11px 12px; gap: 9px; }
+  .topic__body { padding: 0 12px 12px; }
+  /* Deep: variety table scrolls horizontally inside its rounded frame */
+  .vtable-wrap { -webkit-overflow-scrolling: touch; }
+  .vtable th, .vtable td { white-space: nowrap; }
+  .refsheet { font-size: 13px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   CALCULATOR — "DEFINE THE QUESTION" builder  ·  .qb  ·  NEW
+   (client: we don't always compute by area, dates aren't always a
+    target date. Build a flexible question-builder; show explanation +
+    the builder first; compute → results on click.)
+   Two states on one page, toggled by [data-calc-state="ask|result"].
+   ════════════════════════════════════════════════════════════ */
+.qb-intro {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: color-mix(in oklch, var(--gj-code) 8%, var(--gj-paper));
+  border: 1px solid color-mix(in oklch, var(--gj-code) 22%, var(--gj-paper));
+  border-radius: var(--gj-r-l); padding: 14px 16px; margin-bottom: 14px;
+}
+.qb-intro__ic { width: 34px; height: 34px; border-radius: 10px; background: var(--gj-code-deep); color: #fff; display: grid; place-items: center; font-size: 17px; flex: none; }
+.qb-intro h2 { font-family: var(--gj-font-head); font-weight: 700; font-size: 17px; margin: 0 0 3px; }
+.qb-intro p { font-size: 13px; line-height: 1.55; color: var(--gj-ink-soft); margin: 0; }
+
+.qb { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); box-shadow: var(--gj-shadow-s); overflow: hidden; }
+.qb__step { padding: 14px 16px; border-bottom: 1px solid var(--gj-line); }
+.qb__steplbl { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.qb__stepno { width: 20px; height: 20px; border-radius: 6px; background: var(--gj-code-deep); color: #fff; display: grid; place-items: center; font-family: var(--gj-font-mono); font-size: 11px; font-weight: 700; flex: none; }
+.qb__steplbl h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 15px; margin: 0; }
+.qb__steplbl .opt { margin-inline-start: auto; font-size: 11px; color: var(--gj-ink-soft); }
+
+/* goal chips — what to solve for (single-select) */
+.qb-goal { display: flex; flex-wrap: wrap; gap: 7px; }
+.qb-goal button {
+  appearance: none; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700; padding: 8px 13px; border-radius: var(--gj-r-pill);
+  border: 1px solid var(--gj-line); background: var(--gj-paper); color: var(--gj-ink);
+}
+.qb-goal button .g { font-size: 14px; }
+.qb-goal button.is-on { background: var(--gj-code-deep); border-color: var(--gj-code-deep); color: #fff; }
+
+/* basis segmented toggle — flexible "by what?" (area / beds / seedlings, etc.) */
+.qb-basis { display: inline-flex; background: var(--gj-paper-2); border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 3px; gap: 2px; flex-wrap: wrap; }
+.qb-basis button { appearance: none; border: 0; cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--gj-ink-soft); background: transparent; padding: 7px 13px; border-radius: var(--gj-r-pill); }
+.qb-basis button.is-on { background: var(--gj-paper); color: var(--gj-code-deep); box-shadow: var(--gj-shadow-s); }
+.qb-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.qb-row > .ipt { flex: 1; min-width: 130px; }
+
+/* natural-language echo of the assembled question */
+.qb__echo { padding: 13px 16px; background: var(--gj-paper-2); font-size: 13.5px; line-height: 1.6; color: var(--gj-ink-soft); }
+.qb__echo b { color: var(--gj-code-deep); font-family: var(--gj-font-head); font-weight: 700; }
+.qb__go {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; border: 0; cursor: pointer; font-family: inherit;
+  background: var(--gj-leaf-deep); color: #fff; font-weight: 700; font-size: 16px;
+  padding: 14px; border-radius: 0;
+}
+
+/* state machine: ask vs result */
+[data-calc-state="ask"]    .qb-result { display: none; }
+[data-calc-state="result"] .qb-ask    { display: none; }
+
+/* result panel */
+.qb-result__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.qb-result__back { appearance: none; border: 1px solid var(--gj-line); background: var(--gj-paper); border-radius: var(--gj-r-pill); padding: 7px 13px; font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--gj-ink); cursor: pointer; }
+.qb-result__q { font-size: 12.5px; color: var(--gj-ink-soft); }
+.qb-answer { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: color-mix(in oklch, var(--gj-leaf) 7%, var(--gj-paper)); padding: 18px; text-align: center; margin-bottom: 12px; }
+.qb-answer__lbl { font-size: 13px; font-weight: 700; color: var(--gj-ink-soft); margin-bottom: 6px; }
+.qb-answer__big { font-family: var(--gj-font-head); font-weight: 900; font-size: 44px; line-height: 1; color: var(--gj-leaf-deep); }
+.qb-answer__big small { font-size: 16px; font-weight: 600; color: var(--gj-ink-soft); font-family: var(--gj-font-body); margin-inline-start: 4px; }
+.qb-break { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); overflow: hidden; margin-bottom: 12px; }
+.qb-break__row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--gj-line); font-size: 13px; }
+.qb-break__row:last-child { border-bottom: 0; }
+.qb-break__row .k { color: var(--gj-ink-soft); }
+.qb-break__row .v { font-family: var(--gj-font-head); font-weight: 700; }
+.qb-break__row .src { font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); }
+
+/* ════════════════════════════════════════════════════════════
+   DENSITY  ·  tighten margins/padding across interfaces (client:
+   "don't take valuable space — reduce the margins everywhere")
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .sh__body { padding: 12px; }
+  .sh__body--wide { padding: 12px; }
+  .gj-h1 { margin-bottom: 6px; }
+  .gj-h3 { margin: 12px 0 8px !important; }
+  .hv-card { margin-bottom: 10px; }
+  .pcal { margin-bottom: 10px; }
+  .tsum { gap: 6px; }
+  .topic { margin-bottom: 8px; }
+  .hub-grid { gap: 8px; }
+  .hub-groupbar { margin: 14px 2px 10px; }
+  .hub-intro { margin-bottom: 12px; }
+  .tier-list { gap: 8px; }
+  .tier-group { margin-bottom: 16px; }
+  .mkt-disc { margin-bottom: 12px; }
+  .crophero { padding-bottom: 10px; margin-bottom: 10px; }
+  .rothint { margin-top: 10px; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   CTA SYSTEM  ·  .cta  ·  NEW  (client: every interface needs a CTA
+   that "shouts". Priority order:
+     1) help complete missing data        → primary, filled, loud
+     2) share a suggestion / request      → FORM (never WhatsApp)
+     3) order something custom for a farm  → WhatsApp
+   No users yet, so the everyday ask is contribute-data + suggest-form;
+   WhatsApp is reserved for paid/custom farm work only.)
+   ════════════════════════════════════════════════════════════ */
+.cta { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
+.cta__card {
+  border-radius: var(--gj-r-l); padding: 16px; position: relative; overflow: hidden;
+}
+/* 1 · primary — complete missing data (loud, filled leaf) */
+.cta--data { background: var(--gj-leaf-deep); color: #fff; box-shadow: var(--gj-shadow-m); }
+.cta--data h3 { font-family: var(--gj-font-head); font-weight: 800; font-size: 19px; margin: 0 0 4px; color: #fff; }
+.cta--data p { font-size: 13px; line-height: 1.5; margin: 0 0 12px; color: color-mix(in oklch, #fff 82%, var(--gj-leaf)); }
+.cta--data .cta__btn { background: #fff; color: var(--gj-leaf-deep); }
+/* 2 · suggestion FORM (quiet, outlined) */
+.cta--suggest { background: var(--gj-paper); border: 1px solid var(--gj-line); }
+.cta--suggest h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; margin: 0 0 3px; }
+.cta--suggest p { font-size: 12.5px; color: var(--gj-ink-soft); margin: 0 0 10px; }
+.cta__field { display: flex; gap: 8px; }
+.cta__field input { flex: 1; border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 10px 14px; font-family: inherit; font-size: 13px; background: var(--gj-paper); }
+.cta__field input:focus { outline: none; border-color: var(--gj-leaf); }
+.cta__send { border: 0; background: var(--gj-ink); color: #fff; font-family: inherit; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: var(--gj-r-pill); cursor: pointer; white-space: nowrap; }
+/* 3 · WhatsApp — custom-for-your-farm ONLY (soil) */
+.cta--wa { display: flex; align-items: center; gap: 12px; background: color-mix(in oklch, var(--gj-soil) 10%, var(--gj-paper)); border: 1px solid color-mix(in oklch, var(--gj-soil) 26%, var(--gj-paper)); }
+.cta--wa .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--gj-soil-deep); color: #fff; display: grid; place-items: center; font-size: 18px; flex: none; }
+.cta--wa h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 15px; margin: 0 0 2px; }
+.cta--wa p { font-size: 12px; color: var(--gj-ink-soft); margin: 0; }
+.cta--wa .cta__btn { margin-inline-start: auto; background: var(--gj-soil-deep); color: #fff; padding: 9px 15px; }
+.cta__btn { display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-weight: 700; font-size: 14px; padding: 11px 18px; border-radius: var(--gj-r-pill); border: 0; cursor: pointer; text-decoration: none; }
+
+/* ════════════════════════════════════════════════════════════
+   MARKET · collapsible disclaimer  (client: the top note is too big —
+   make it a title that opens on click)
+   ════════════════════════════════════════════════════════════ */
+details.mkt-disc { display: block; padding: 0; border-inline-start-width: 4px; }
+details.mkt-disc > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; font-family: var(--gj-font-head); font-weight: 700; font-size: 14px;
+}
+details.mkt-disc > summary::-webkit-details-marker { display: none; }
+details.mkt-disc > summary .mkt-disc__ic { width: 26px; height: 26px; font-size: 14px; }
+details.mkt-disc > summary .chev { margin-inline-start: auto; font-size: 12px; color: var(--gj-ink-soft); transition: transform .2s; }
+details.mkt-disc[open] > summary .chev { transform: rotate(180deg); }
+details.mkt-disc .mkt-disc__list { padding: 0 16px 14px; }
+
+/* ── MARKET · price/number/unit RTL fix ──
+   Stack the LTR number over the Hebrew unit so bidi never reorders them. */
+.mkt-table .t-price { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.mkt-table .t-price .n { direction: ltr; unicode-bidi: isolate; font-family: var(--gj-font-head); font-weight: 900; font-size: 18px; color: var(--gj-tomato-deep); }
+.mkt-table .t-price small { font-family: var(--gj-font-mono); font-size: 10px; font-weight: 600; color: var(--gj-ink-soft); margin: 1px 0 0; }
+.mkt-table tr.is-empty .t-price .n { color: var(--gj-paper-3); }
+.mkt-table tr.is-stale .t-price .n { color: var(--gj-ink-soft); }
+.mchips { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+.mchips .fchip { white-space: nowrap; flex: none; }
+
+/* ════════════════════════════════════════════════════════════
+   CALC EXTRAS  ·  6 main buttons + "more" dropdown · session results
+   · editable base assumptions
+   ════════════════════════════════════════════════════════════ */
+/* goal step: a 2-col grid of 6 primary calculators + a "more" select */
+.qb-goal--grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.qb-goal--grid button { justify-content: flex-start; }
+.qb-more { margin-top: 8px; position: relative; }
+.qb-more select {
+  width: 100%; appearance: none; font-family: inherit; font-size: 13px; font-weight: 700;
+  color: var(--gj-ink); background: var(--gj-paper); border: 1px dashed var(--gj-line);
+  border-radius: var(--gj-r-m); padding: 11px 14px; cursor: pointer;
+}
+.qb-more::after { content: '▾'; position: absolute; inset-inline-start: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--gj-ink-soft); font-size: 12px; }
+
+/* session: accumulated results + export-all */
+.qb-session { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); background: var(--gj-paper); overflow: hidden; margin-bottom: 12px; }
+.qb-session__head { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: var(--gj-paper-2); border-bottom: 1px solid var(--gj-line); }
+.qb-session__head h4 { font-family: var(--gj-font-head); font-weight: 700; font-size: 14px; margin: 0; }
+.qb-session__head .badge { margin-inline-start: auto; font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); background: var(--gj-paper); border: 1px solid var(--gj-line); border-radius: var(--gj-r-pill); padding: 2px 8px; }
+.qb-session__row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--gj-line); font-size: 13px; }
+.qb-session__row:last-child { border-bottom: 0; }
+.qb-session__row .k { color: var(--gj-ink-soft); }
+.qb-session__row .k b { color: var(--gj-ink); font-family: var(--gj-font-head); display: block; font-size: 13.5px; }
+.qb-session__row .v { font-family: var(--gj-font-head); font-weight: 900; color: var(--gj-leaf-deep); white-space: nowrap; }
+.qb-session__row.is-current { background: color-mix(in oklch, var(--gj-leaf) 7%, var(--gj-paper)); }
+
+/* editable base assumptions — link/CTA into the AssumptionField editor */
+.qb-assum { display: flex; align-items: center; gap: 10px; border: 1px solid color-mix(in oklch, var(--gj-code) 24%, var(--gj-paper)); background: color-mix(in oklch, var(--gj-code) 7%, var(--gj-paper)); border-radius: var(--gj-r-m); padding: 11px 13px; margin-bottom: 12px; }
+.qb-assum .ic { width: 30px; height: 30px; border-radius: 8px; background: var(--cb-assume, var(--gj-code)); color: #fff; display: grid; place-items: center; font-size: 15px; flex: none; }
+.qb-assum__txt { flex: 1; }
+.qb-assum__txt b { font-family: var(--gj-font-head); font-size: 13.5px; display: block; }
+.qb-assum__txt span { font-size: 11.5px; color: var(--gj-ink-soft); }
+.qb-assum__edit { font-family: inherit; font-weight: 700; font-size: 12.5px; color: var(--gj-code-deep); background: var(--gj-paper); border: 1px solid color-mix(in oklch, var(--gj-code) 30%, var(--gj-paper)); border-radius: var(--gj-r-pill); padding: 7px 13px; cursor: pointer; white-space: nowrap; }
+
+/* ════════════════════════════════════════════════════════════
+   ABOUT · lead with real content; tiers are an EXPANSION below
+   ════════════════════════════════════════════════════════════ */
+.about-intro { margin-bottom: 18px; }
+.about-intro h1 { font-family: var(--gj-font-head); font-weight: 900; font-size: 27px; line-height: 1.06; letter-spacing: -.015em; margin: 0 0 10px; }
+.about-lead { font-size: 14.5px; line-height: 1.6; color: var(--gj-ink); margin: 0 0 14px; }
+.about-points { display: flex; flex-direction: column; gap: 10px; }
+.about-point { display: flex; gap: 11px; align-items: flex-start; }
+.about-point .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15px; flex: none; background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper)); color: var(--gj-leaf-deep); }
+.about-point h4 { font-family: var(--gj-font-head); font-weight: 700; font-size: 15px; margin: 0 0 2px; }
+.about-point p { font-size: 13px; line-height: 1.5; color: var(--gj-ink-soft); margin: 0; }
+.about-tiers-h { display: flex; align-items: center; gap: 9px; margin: 22px 2px 12px; }
+.about-tiers-h h2 { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; margin: 0; }
+.about-tiers-h .rule { flex: 1; height: 1px; background: var(--gj-line); }
+.about-tiers-h .sub { font-size: 11.5px; color: var(--gj-ink-soft); }

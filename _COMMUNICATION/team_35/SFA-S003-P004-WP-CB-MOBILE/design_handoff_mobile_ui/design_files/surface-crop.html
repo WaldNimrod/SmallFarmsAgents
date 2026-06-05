@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>עמוד גידול · פשוט · מובייל</title>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="cropbook-v1.css"/>
+<link rel="stylesheet" href="classb.css"/>
+<link rel="stylesheet" href="mobile-fixes.css"/>
+<style> html,body{background:var(--gj-paper);} .sh{min-height:100vh;}
+  .ess{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;}
+  .keylist{display:flex;flex-direction:column;gap:0;border:1px solid var(--gj-line);border-radius:var(--gj-r-l);overflow:hidden;background:var(--gj-paper);}
+  .keyrow{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--gj-line);}
+  .keyrow:last-child{border-bottom:0;}
+  .keyrow .ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:14px;flex:none;color:#fff;}
+  .keyrow .k{font-weight:700;font-size:13.5px;}
+  .keyrow .v{margin-inline-start:auto;font-family:var(--gj-font-head);font-weight:700;font-size:14px;color:var(--gj-ink);}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+  <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+  <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+  <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+  <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+  <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+</symbol></svg>
+
+<div class="sh">
+  <div class="sh__bar">
+    <button class="sh__icon" title="חזרה">→</button>
+    <div class="sh__depths" role="tablist" aria-label="עומק תצוגה">
+      <button class="is-active" title="פשוט"><span class="g">◔</span><span>פשוט</span></button>
+      <button title="מלא"><span class="g">▤</span><span>מלא</span></button>
+      <button title="העמקה"><span class="g">⌖</span><span>העמקה</span></button>
+    </div>
+    <div class="sh__tools"><button class="sh__icon" title="חיפוש">⌕</button></div>
+  </div>
+  <div class="sh__bc" style="padding:8px 14px;border-bottom:1px solid var(--gj-line)"><a href="#">ספר</a> › <a href="#">חסתיים</a> › <strong>חסה</strong></div>
+
+  <div class="sh__body">
+    <div class="crophero">
+      <div class="crophero__art"><img src="assets/wc-lettuce.png" alt="חסה"/></div>
+      <div>
+        <div class="crophero__bc dir-ltr">Lactuca sativa · חסתיים</div>
+        <h1><span class="gj-underline">חסה</span></h1>
+        <p class="crophero__sci">Lactuca sativa</p>
+      </div>
+      <div class="crophero__state">
+        <span class="statebadge statebadge--complete"><span class="d"></span>ספר שלם</span>
+      </div>
+    </div>
+
+    <!-- essentials a home gardener needs: spacing · timing · water -->
+    <div class="ess">
+      <span class="cparam cparam--space"><span class="g">⇲</span>מרווח 30×25<small>ס״מ</small></span>
+      <span class="cparam cparam--dtm"><span class="g">⏳</span>55<small>ימים לקטיף</small></span>
+      <span class="cparam cparam--water"><span class="g">💧</span>השקיה ×4<small>שבוע</small></span>
+      <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+    </div>
+
+    <!-- seasons → calendar -->
+    <div class="pcal">
+      <div class="pcal__head">
+        <h4 class="pcal__title"><span class="g">📅</span>מתי לשתול</h4>
+        <span class="pcal__region"><span class="g">📍</span>כל הארץ</span>
+      </div>
+      <div class="pcal__legend"><span><i class="is-seed"></i>זריעה</span><span><i class="is-trans"></i>שתילה</span></div>
+      <div class="pcal__track pcal__track--seed"><span class="pcal__tracklbl">זריעה</span><div class="pcal__cells"><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="now"></i><i></i><i></i><i class="peak"></i><i class="peak"></i><i class="on"></i><i></i></div></div>
+      <div class="pcal__track pcal__track--trans"><span class="pcal__tracklbl">שתילה</span><div class="pcal__cells"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="now"></i><i></i><i></i><i class="on"></i><i class="peak"></i><i class="peak"></i><i class="on"></i></div></div>
+      <div class="pcal__months"><span></span><div class="nums"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div></div>
+      <p class="pcal__note">היום <b>יוני</b> — מחוץ לעונה. בקיץ זקוקה ל<b>הצללה</b>. החלון הקרוב: <b>ספטמבר</b>.</p>
+    </div>
+
+    <!-- one key per topic -->
+    <h3 class="gj-h3">העיקר, לפי נושא</h3>
+    <div class="keylist">
+      <div class="keyrow"><span class="ic" style="background:var(--t-nursery)">🌱</span><span class="k">משתלה</span><span class="v">שתיל · 21 יום</span></div>
+      <div class="keyrow"><span class="ic" style="background:var(--t-grow)">🌿</span><span class="k">גידול</span><span class="v">טפטוף ×4/שבוע</span></div>
+      <div class="keyrow"><span class="ic" style="background:var(--t-harvest)">🧺</span><span class="k">קציר</span><span class="v">חלון 14 יום</span></div>
+      <div class="keyrow"><span class="ic" style="background:var(--t-yield)">⚖</span><span class="k">יבול</span><span class="v">3.4 ק״ג/מ׳</span></div>
+    </div>
+
+    <p class="muted" style="font-size:12.5px;color:var(--gj-ink-soft);margin:12px 0 0">רוצים את כל הנתונים? עברו ל<b>מלא</b> · להשוואת זנים ומקורות — <b>העמקה</b>.</p>
+
+    <div class="cta">
+      <div class="cta__card cta--data">
+        <h3>מגדלים חסה? עזרו לדייק</h3>
+        <p>ידע מהשטח משפר את הספר לכולם.</p>
+        <a class="cta__btn" href="#">◐ תרמו ניסיון ›</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sh__nav sh__nav--mobile">
+    <a class="is-active" href="#"><span class="g">▤</span>ספר</a>
+    <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+    <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+    <a href="#"><span class="g">◔</span>חשבון</a>
+  </nav>
+</div>
+</body>
+</html>
