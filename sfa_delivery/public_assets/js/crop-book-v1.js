@@ -241,26 +241,49 @@
     recomputeAll();
   }
 
-  /* ── Audience switch (Cards ⇄ Table) ── */
+  /* ── Audience switch (Cards ⇄ Table) ──
+     WP-CB-MOBILE D1: optional `data-aud-persist="<key>"` on the switch enables
+     localStorage persistence of the user's chosen view. When present, the saved
+     view (if any) is applied on load — otherwise the server-rendered default is
+     kept (market default = table). The crop-book list omits the attribute and
+     keeps its server cards default + no persistence. */
   function wireAudience() {
     document.querySelectorAll('[data-aud-switch]').forEach(function (sw) {
-      var scopeId = sw.getAttribute('data-aud-switch');
-      var scope   = scopeId ? document.getElementById(scopeId) : null;
+      var scopeId    = sw.getAttribute('data-aud-switch');
+      var scope      = scopeId ? document.getElementById(scopeId) : null;
+      var persistKey = sw.getAttribute('data-aud-persist');
+
+      function applyView(view) {
+        sw.querySelectorAll('.aud__opt').forEach(function (o) {
+          o.classList.toggle('is-active', o.getAttribute('data-view') === view);
+        });
+        if (!scope) return;
+        scope.querySelectorAll('[data-aud-view]').forEach(function (v) {
+          v.style.display = v.getAttribute('data-aud-view') === view ? '' : 'none';
+        });
+      }
+
       sw.querySelectorAll('.aud__opt').forEach(function (opt) {
         opt.addEventListener('click', function () {
-          sw.querySelectorAll('.aud__opt').forEach(function (o) { o.classList.remove('is-active'); });
-          opt.classList.add('is-active');
           var view = opt.getAttribute('data-view');
-          if (!scope) return;
-          scope.querySelectorAll('[data-aud-view]').forEach(function (v) {
-            v.style.display = v.getAttribute('data-aud-view') === view ? '' : 'none';
-          });
+          applyView(view);
+          if (persistKey) {
+            try { localStorage.setItem(persistKey, view); } catch (e) {}
+          }
         });
       });
-      /* apply default: show cards, hide table */
-      if (scope) {
-        scope.querySelectorAll('[data-aud-view="table"]').forEach(function (v) { v.style.display = 'none'; });
+
+      /* Initial view: persisted choice (if any + persistence enabled) wins;
+         otherwise honor the server-rendered active option, falling back to cards. */
+      var initial = null;
+      if (persistKey) {
+        try { initial = localStorage.getItem(persistKey); } catch (e) {}
       }
+      if (initial !== 'cards' && initial !== 'table') {
+        var act = sw.querySelector('.aud__opt.is-active');
+        initial = act ? act.getAttribute('data-view') : 'cards';
+      }
+      applyView(initial);
     });
   }
 

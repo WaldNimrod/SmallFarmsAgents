@@ -39,16 +39,21 @@ if (!function_exists('sfa_unit_label')) {
     }
 }
 
+// WP-CB-MOBILE D1: market default view = TABLE (desktop + mobile). The user's
+// cards⇄table choice persists client-side (localStorage key 'sfa.marketView');
+// the audience_switch JS applies the saved choice over this server default.
+$market_view = 'table';
 ob_start();
 ?>
 <div class="sh__body--wide">
 
-  <?php /* Disclaimer — MANDATORY, never suppressed (MINOR F-01: .mkt-disc class) */ ?>
-  <?php include __DIR__ . '/../macros/market_disclaimer.php'; ?>
+  <?php /* Disclaimer — MANDATORY, never suppressed (LOCKED copy). FIX 3: collapsible, CLOSED default. */ ?>
+  <?php $collapsible = true; include __DIR__ . '/../macros/market_disclaimer.php'; $collapsible = false; ?>
 
-  <?php /* Toolbar: category chips + freshness legend */ ?>
+  <?php /* Toolbar: category chips (.mchips, horizontal scroll) + freshness legend.
+           Chips bind to products.category, Hebrew-mapped via FieldRegistry (incl. baskets→סלים). */ ?>
   <div class="mkt-tools">
-    <div class="fchips" role="group" aria-label="סינון לפי קטגוריה">
+    <div class="mchips" role="group" aria-label="סינון לפי קטגוריה">
       <a class="fchip<?= empty($current_category) ? ' is-on' : '' ?>" href="/market/">הכל</a>
       <?php foreach ($categories as $cat):
         $cat_slug = (string)($cat['slug'] ?? '');
@@ -65,18 +70,21 @@ ob_start();
     </div>
   </div>
 
-  <?php /* Cards ⇄ table toggle header */ ?>
-  <div class="mkt-aud-head">
+  <?php /* Cards ⇄ table toggle header — uses the shared audience_switch (the
+           functional [data-aud-switch] JS). Default = table (D1), persisted. */ ?>
+  <div class="mkt-aud">
     <div class="mkt-aud-head__n"><b><?= count($products) ?></b> מוצרים</div>
-    <div class="aud" role="group" aria-label="תצוגה">
-      <button class="aud__btn is-on" data-aud="cards" type="button">כרטיסיות</button>
-      <button class="aud__btn" data-aud="table" type="button">טבלה</button>
-    </div>
+    <?php
+      $active_view = $market_view;
+      $scope_id    = 'mkt-scope';
+      $persist_key = 'sfa.marketView';
+      include __DIR__ . '/../macros/audience_switch.php';
+    ?>
   </div>
 
-  <?php /* Card grid (default view) */ ?>
-  <div id="mkt-scope" data-aud-view="cards">
-    <div class="pcard-grid" data-view="cards">
+  <?php /* View scope: cards + table, toggled by [data-aud-view] (JS). */ ?>
+  <div id="mkt-scope">
+    <div class="pcard-grid" data-aud-view="cards" style="<?= $market_view !== 'cards' ? 'display:none' : '' ?>">
       <?php if (empty($products)): ?>
         <div class="emptybox" style="grid-column:1/-1">
           <div class="emptybox__ic">📭</div>
@@ -165,15 +173,17 @@ ob_start();
       <?php endif; ?>
     </div>
 
-    <?php /* Table view (hidden by default via CSS / JS toggle) */ ?>
+    <?php /* Table view — FIX 3: dense 3-col .mkt-table (מוצר / מחיר / מצב).
+             D1: this is the DEFAULT view. RTL price: LTR number stacked over the
+             Hebrew unit (.t-price .n[dir=ltr]) so bidi never reorders them. */ ?>
     <?php if (!empty($products)): ?>
-    <div data-view="table" style="display:none">
-      <table class="ptable" style="width:100%;border-collapse:collapse">
+    <div class="mkt-table-wrap" data-aud-view="table" style="<?= $market_view !== 'table' ? 'display:none' : '' ?>">
+      <table class="mkt-table">
         <thead>
           <tr>
-            <th class="ptable__th ptable__th--start">מוצר</th>
-            <th class="ptable__th">מחיר</th>
-            <th class="ptable__th">טריות</th>
+            <th>מוצר</th>
+            <th>מחיר</th>
+            <th class="t-fresh">מצב</th>
           </tr>
         </thead>
         <tbody>
@@ -182,10 +192,12 @@ ob_start();
             $slug       = (string)($row['slug'] ?? '');
             $unit       = (string)($row['unit_he'] ?? $row['unit'] ?? '');
             $unit_lbl   = sfa_unit_label($unit);
+            $glyph      = $name_he !== '' ? mb_substr($name_he, 0, 1, 'UTF-8') : '?';
             $last_price = isset($row['last_price']) && $row['last_price'] !== null ? (float)$row['last_price'] : null;
             $price_current = isset($row['price_current']) && $row['price_current'] !== null ? (float)$row['price_current'] : $last_price;
             $freshness  = isset($row['freshness_days']) ? (int)$row['freshness_days'] : null;
             $is_empty   = ($price_current === null || $price_current <= 0);
+            $is_stale   = !$is_empty && ($freshness !== null && $freshness > 7);
 
             if ($freshness === null) {
                 $fresh_cls = 'fresh--stale'; $fresh_lbl = 'אין דיווח';
@@ -196,20 +208,28 @@ ob_start();
             } else {
                 $fresh_cls = 'fresh--stale'; $fresh_lbl = 'ישן';
             }
+            $tr_cls = $is_empty ? ' is-empty' : ($is_stale ? ' is-stale' : '');
           ?>
-          <tr>
-            <td style="padding:9px 10px;border-bottom:1px solid var(--gj-line)">
-              <a href="/market/<?= $h($slug) ?>"><?= $h($name_he) ?></a>
+          <tr class="<?= trim($tr_cls) ?>">
+            <td>
+              <a class="t-name" href="/market/<?= $h($slug) ?>">
+                <span class="sw sw--glyph" aria-hidden="true"><?= $h($glyph) ?></span>
+                <span><?= $h($name_he) ?><?php if ($unit_lbl !== ''): ?><small><?= $h($unit_lbl) ?></small><?php endif; ?></span>
+              </a>
             </td>
-            <td class="t-price<?= $is_empty ? ' t-stale' : '' ?>" style="padding:9px 10px;border-bottom:1px solid var(--gj-line)">
-              <?php if (!$is_empty): ?>
-                <?= number_format($price_current, 2) ?> ₪<?php if ($unit_lbl !== ''): ?><small> <?= $h($unit_lbl) ?></small><?php endif; ?>
-              <?php else: ?>
-                <span class="t-stale">—</span>
-              <?php endif; ?>
+            <td>
+              <span class="t-price">
+                <?php if (!$is_empty): ?>
+                  <span class="n" dir="ltr"><?= number_format($price_current, 2) ?></span>
+                  <small>₪<?= $unit_lbl !== '' ? ' ' . $h($unit_lbl) : '' ?></small>
+                <?php else: ?>
+                  <span class="n" dir="ltr">—</span>
+                  <small>אין דיווח</small>
+                <?php endif; ?>
+              </span>
             </td>
-            <td style="padding:9px 10px;border-bottom:1px solid var(--gj-line)">
-              <span class="fresh <?= $h($fresh_cls) ?>"><?= $h($fresh_lbl) ?></span>
+            <td class="t-fresh">
+              <span class="fresh <?= $h($fresh_cls) ?>"><span><?= $h($fresh_lbl) ?></span></span>
             </td>
           </tr>
           <?php endforeach; ?>
@@ -217,6 +237,15 @@ ob_start();
       </table>
     </div>
     <?php endif; ?>
+  </div>
+
+  <?php /* CTA foot — complete missing data (primary). */ ?>
+  <div class="cta">
+    <div class="cta__card cta--data">
+      <h3>חסר מחיר? עזרו להשלים</h3>
+      <p>המחירון נבנה מסריקות ציבוריות ותרומות. דווחו מחיר מהשוק — וזה יידלק לכולם.</p>
+      <a class="cta__btn" href="/community">◐ דווחו מחיר ›</a>
+    </div>
   </div>
 
 </div>

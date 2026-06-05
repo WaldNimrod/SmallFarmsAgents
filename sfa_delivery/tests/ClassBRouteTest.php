@@ -299,19 +299,59 @@ final class ClassBRouteTest extends TestCase
 
     // ── F-5 FIX: market table <th> has no inline style= ─────────────────────
 
-    /** F-5 fix: market list table headers use CSS classes, not inline style= */
+    /** F-5 fix / WP-CB-MOBILE FIX 3: market list table is the .mkt-table 3-col,
+     *  styled via CSS classes (no inline style= on <th>). */
     public function testMarketTableThHasNoInlineStyle(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
         $body = (string)$this->app->handle($req)->getBody();
-        // Should have the new CSS class
-        $this->assertStringContainsString('ptable__th', $body, 'Market table <th> must use .ptable__th class (F-5 fix)');
+        // FIX 3: dense 3-col .mkt-table replaces the old .ptable on the market list.
+        $this->assertStringContainsString('mkt-table', $body, 'Market list table must use the .mkt-table 3-col (FIX 3)');
         // Must NOT have inline style on <th>
         $this->assertDoesNotMatchRegularExpression(
             '#<th\s[^>]*style=#',
             $body,
             'Market table <th> must not use inline style= attribute (F-5 fix)'
         );
+    }
+
+    /** WP-CB-MOBILE D1: market list default view is TABLE (server-rendered). */
+    public function testMarketListDefaultsToTableView(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The audience switch must mark the table option active by default (D1).
+        $this->assertMatchesRegularExpression(
+            '#is-table[^"]*is-active#',
+            $body,
+            'Market default view must be TABLE — table option active server-side (D1)'
+        );
+        // The cards grid must be hidden by default (display:none) and table visible.
+        $this->assertMatchesRegularExpression(
+            '#pcard-grid"\s+data-aud-view="cards"\s+style="display:none#',
+            $body,
+            'Cards grid must be hidden by default when the table view is the default (D1)'
+        );
+    }
+
+    /** WP-CB-MOBILE FIX 3: the market list disclaimer is a collapsible <details> (closed default). */
+    public function testMarketListDisclaimerCollapsible(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertMatchesRegularExpression(
+            '#<details class="mkt-disc#',
+            $body,
+            'Market list disclaimer must render as a collapsible <details class="mkt-disc"> (FIX 3)'
+        );
+        // CLOSED by default → the <details> must not carry the `open` attribute.
+        $this->assertDoesNotMatchRegularExpression(
+            '#<details class="mkt-disc[^"]*"[^>]*\sopen#',
+            $body,
+            'Market list disclaimer must be CLOSED by default (no open attribute)'
+        );
+        // LOCKED copy preserved verbatim.
+        $this->assertStringContainsString('מה זה? מאיפה זה? למה זה?', $body, 'Disclaimer LOCKED heading must be preserved');
     }
 
     // ── F-7 FIX: nav class has no trailing space ─────────────────────────────
@@ -474,65 +514,72 @@ final class ClassBRouteTest extends TestCase
 
     // ── WP-CB-UI-patch01 WI-4: hub CTA section ───────────────────────────────
 
-    /** WI-4: hub home has .hub-cta section */
+    /** WI-4 / WP-CB-MOBILE FIX 5: hub home has the .cta CTA-system section */
     public function testHubHomeHasCtaSection(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('hub-cta', $body,
-            'Hub home must have the .hub-cta section (WI-4)');
+        $this->assertStringContainsString('class="cta"', $body,
+            'Hub home must have the .cta CTA-system section (FIX 5)');
+        // All three CTA flavors present: data (primary) · suggest (form) · WhatsApp.
+        $this->assertStringContainsString('cta--data', $body, 'Hub CTA must include the primary data card');
+        $this->assertStringContainsString('cta--suggest', $body, 'Hub CTA must include the suggestion form card');
+        $this->assertStringContainsString('cta--wa', $body, 'Hub CTA must include the WhatsApp (custom) card');
     }
 
-    /** WI-4: hub CTA section has /community link (secondary offer) */
+    /** WI-4: the primary data CTA links to /community (complete-missing-data offer) */
     public function testHubCtaHasCommunityLink(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        // The secondary CTA card links to /community
         $this->assertMatchesRegularExpression(
-            '#hub-cta[^<]*.*href="/community"#s',
+            '#cta--data.*href="/community"#s',
             $body,
-            'Hub CTA must contain a link to /community'
+            'Hub primary data CTA must link to /community'
         );
     }
 
-    /** WI-4: hub CTA section has wa.me WhatsApp link (primary offer) */
+    /** WI-4: the WhatsApp CTA (custom/paid only) uses a wa.me link */
     public function testHubCtaHasWhatsAppLink(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
         $this->assertMatchesRegularExpression(
-            '#hub-cta[^<]*.*wa\.me#s',
+            '#cta--wa.*wa\.me#s',
             $body,
-            'Hub CTA must contain a wa.me WhatsApp link (primary CTA)'
+            'Hub CTA must contain a wa.me WhatsApp link in the custom (.cta--wa) card'
         );
     }
 
-    /** WI-4: hub CTA primary card has hub-cta__card--primary class */
-    public function testHubCtaHasPrimaryCard(): void
+    /** WI-4 / CTA SYSTEM: the suggestion CTA is an inline FORM, never WhatsApp */
+    public function testHubCtaSuggestIsForm(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('hub-cta__card--primary', $body,
-            'Hub CTA must have a prominently-styled primary card');
+        // The .cta--suggest card must contain a <form>, not a wa.me link.
+        $this->assertMatchesRegularExpression(
+            '#cta--suggest.*<form#s',
+            $body,
+            'Suggestion CTA must be an inline form (never WhatsApp)'
+        );
     }
 
-    /** WI-4: hub CTA has contribution copy (secondary offer text) */
+    /** WI-4: hub CTA has the complete-missing-data primary copy */
     public function testHubCtaHasContributionText(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('שתפו אותנו במידע', $body,
-            'Hub CTA must include the secondary contribution offer text');
+        $this->assertStringContainsString('עזרו להשלים את המידע', $body,
+            'Hub primary CTA must include the complete-missing-data offer text');
     }
 
-    /** WI-4: hub CTA has feature-request copy (primary offer text) */
+    /** WI-4: hub CTA has the custom-solution (WhatsApp) copy */
     public function testHubCtaHasFeatureRequestText(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('ספרו לנו מה תרצו שנפתח', $body,
-            'Hub CTA must include the primary feature-request offer text');
+        $this->assertStringContainsString('פתרון מותאם לחווה', $body,
+            'Hub CTA must include the custom-solution (WhatsApp) offer text');
     }
 
     // ── WP-CB-UI-patch01 WI-7: mobile horizontal overflow fixes ─────────────

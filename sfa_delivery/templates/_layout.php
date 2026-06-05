@@ -24,7 +24,7 @@ if (!isset($asset_ver)) {
     $_css_dir = __DIR__ . '/../public_assets/css';
     $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
     $_mtimes  = [];
-    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras', 'classb'] as $_n) {
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras', 'classb', 'mobile-fixes'] as $_n) {
         $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
         if ($_mt) { $_mtimes[] = $_mt; }
     }
@@ -80,6 +80,11 @@ $_is_classb = (
 <?php if ($_is_classb): ?>
 <link rel="stylesheet" href="/public_assets/css/classb.css?v=<?= $h($asset_ver) ?>">
 <?php endif; ?>
+<?php /* Mobile fix layer (WP-CB-MOBILE) — MUST load LAST so its overrides win.
+       Loaded on every page: it carries layout-agnostic components (.pcal,
+       .cparam, .cta, .tier-*, .qb-*) used on crop/calc pages too, plus the
+       two ratified desktop-reaching sections (D1 market table, D2 type floor). */ ?>
+<link rel="stylesheet" href="/public_assets/css/mobile-fixes.css?v=<?= $h($asset_ver) ?>">
 
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
 <?php if (isset($active) && in_array($active, ['crop-book', 'calc'], true)): ?>

@@ -93,9 +93,17 @@ final class CropBookViewController
             return [];
         };
 
-        // Only fetch variety months when a season filter is active (avoids decoding every
-        // variety payload on the default list view — team_100 L-GATE_B perf guard).
-        $cropIds = $season !== '' ? array_filter(array_map(static fn ($r) => (int)($r['id'] ?? 0), $rows)) : [];
+        // WP-CB-MOBILE FIX 1: the in-season "now" badge needs sow/transplant months
+        // per crop for the CURRENT month, so we fetch the batched variety months for
+        // the whole result set on every list view (was season-filter-only). Still ONE
+        // query over the result-set ids (team_100 L-GATE_B perf guard preserved: a
+        // single IN(...) query, not per-crop). Sow vs transplant are tracked separately
+        // so the badge can say "עכשיו לזריעה" vs "עכשיו לשתילה".
+        /** @var array<int,int[]> */
+        $sowMonthsByCrop = [];
+        /** @var array<int,int[]> */
+        $transMonthsByCrop = [];
+        $cropIds = array_filter(array_map(static fn ($r) => (int)($r['id'] ?? 0), $rows));
         if (!empty($cropIds)) {
             try {
                 $placeholders = implode(',', array_fill(0, count($cropIds), '?'));
@@ -110,6 +118,8 @@ final class CropBookViewController
                     $agro    = is_array($vPayload['agronomy'] ?? null) ? $vPayload['agronomy'] : [];
                     $sowM    = $normalizeMonths($agro['sowing_months']     ?? null);
                     $transM  = $normalizeMonths($agro['transplant_months'] ?? null);
+                    $sowMonthsByCrop[$cid]   = array_values(array_unique(array_merge($sowMonthsByCrop[$cid]   ?? [], $sowM)));
+                    $transMonthsByCrop[$cid] = array_values(array_unique(array_merge($transMonthsByCrop[$cid] ?? [], $transM)));
                     $merged  = array_values(array_unique(array_merge(
                         $monthsByCrop[$cid] ?? [],
                         $sowM,
@@ -118,11 +128,16 @@ final class CropBookViewController
                     $monthsByCrop[$cid] = $merged;
                 }
             } catch (\Throwable) {
-                // crop_varieties table absent or query failure — degrade to empty map.
+                // crop_varieties table absent or query failure — degrade to empty maps.
                 // Season filter will exclude all crops when season is selected (no data → no match).
                 $monthsByCrop = [];
+                $sowMonthsByCrop = [];
+                $transMonthsByCrop = [];
             }
         }
+
+        // Current month (1..12) for the in-season badge.
+        $nowMonth = (int)date('n');
 
         $crops = [];
         foreach ($rows as $row) {
@@ -156,16 +171,27 @@ final class CropBookViewController
                 ? (int)$row['dtm_max']
                 : (isset($row['dtm_min']) && $row['dtm_min'] !== null ? (int)$row['dtm_min'] : null);
 
+            // WP-CB-MOBILE FIX 1: derive the in-season "now" badge for the CURRENT month.
+            // 'transplant' wins over 'seed' when the crop is plantable both ways this
+            // month (transplant is the more actionable signal). Values consumed by
+            // book_entry.php → .ccard__now ('seed' → 🌱 עכשיו לזריעה / 'transplant' → 🪴 עכשיו לשתילה).
+            $cid          = (int)($row['id'] ?? 0);
+            $sowNow       = in_array($nowMonth, $sowMonthsByCrop[$cid]   ?? [], true);
+            $transNow     = in_array($nowMonth, $transMonthsByCrop[$cid] ?? [], true);
+            $inSeasonAct  = $transNow ? 'transplant' : ($sowNow ? 'seed' : '');
+
             $crops[] = [
-                'slug'          => $slug,
-                'name_he'       => (string)($row['hebrew_name'] ?? ''),
-                'en_name'       => (string)($payload['name_en'] ?? ($row['scientific_name'] ?? '')),
-                'icon_slug'     => self::ICON_MAP[$slug] ?? 'leaf',
-                'icon_svg'      => '<svg viewBox="0 0 24 24"><use href="#icon-' . htmlspecialchars(self::ICON_MAP[$slug] ?? 'leaf', ENT_QUOTES, 'UTF-8') . '"></use></svg>',
-                'icon_url'      => (string)($payload['icon_url'] ?? ''),
-                'family_tag_he' => (string)($payload['family_tag_he'] ?? ''),
-                'category'      => (string)($row['category'] ?? ''),
-                'dtm_days'      => $dtm,
+                'slug'             => $slug,
+                'name_he'          => (string)($row['hebrew_name'] ?? ''),
+                'en_name'          => (string)($payload['name_en'] ?? ($row['scientific_name'] ?? '')),
+                'icon_slug'        => self::ICON_MAP[$slug] ?? 'leaf',
+                'icon_svg'         => '<svg viewBox="0 0 24 24"><use href="#icon-' . htmlspecialchars(self::ICON_MAP[$slug] ?? 'leaf', ENT_QUOTES, 'UTF-8') . '"></use></svg>',
+                'icon_url'         => (string)($payload['icon_url'] ?? ''),
+                'family_tag_he'    => (string)($payload['family_tag_he'] ?? ''),
+                'category'         => (string)($row['category'] ?? ''),
+                'dtm_days'         => $dtm,
+                'in_season'        => $inSeasonAct !== '',
+                'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
             ];
         }
 

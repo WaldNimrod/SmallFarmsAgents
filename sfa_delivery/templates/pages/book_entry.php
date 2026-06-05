@@ -301,39 +301,86 @@ ob_start();
       <a class="filters__clear" href="/crop-book/?view=<?= $h($view) ?>">↺ נקו סינון</a>
     </div>
     <?php else: ?>
-    <!-- Cards view -->
+    <!-- Cards view — WP-CB-MOBILE FIX 1: compact 1-up ROW cards, no wash,
+         in-season "now" badge (server-derived, current month), .cparam chips. -->
     <div data-aud-view="cards" style="<?= $view !== 'cards' ? 'display:none' : '' ?>">
+      <?php
+        // In-season count for the current month (server-derived in_season flag).
+        $in_season_n = 0;
+        foreach ($crops as $c) { if (!empty($c['in_season'])) { $in_season_n++; } }
+        // Hebrew month name for the count line.
+        $MONTH_HE_FULL = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+        $now_he = $MONTH_HE_FULL[(int)date('n') - 1];
+        // Activity → in-season badge label + glyph (NEVER leak the raw key).
+        $now_badge = [
+          'seed'       => ['g' => '🌱', 'label' => 'עכשיו לזריעה'],
+          'transplant' => ['g' => '🪴', 'label' => 'עכשיו לשתילה'],
+        ];
+      ?>
+      <div class="seasonchips" role="group" aria-label="סינון לפי עונה">
+        <button class="fchip is-on" type="button">🌱 עכשיו בעונה</button>
+        <button class="fchip" type="button">הכל</button>
+      </div>
+      <?php if ($in_season_n > 0): ?>
+      <p class="mcount"><b><?= (int)$in_season_n ?></b> גידולים מתאימים לשתילה/זריעה ב<?= $h($now_he) ?></p>
+      <?php endif; ?>
+
       <div class="cards-grid">
-        <?php foreach ($crops as $c):
-          $cslug = (string)($c['slug'] ?? '');
-          $wc = $wc_art_map[$cslug] ?? null;
+        <?php
+          $first = true;
+          foreach ($crops as $c):
+            $cslug = (string)($c['slug'] ?? '');
+            $wc    = $wc_art_map[$cslug] ?? null;
+            $act   = (string)($c['in_season_activity'] ?? '');
+            $badge = $now_badge[$act] ?? null;
+            $feat  = $first; // featured first card
+            $first = false;
         ?>
-        <a class="ccard" href="/crop-book/<?= $h($cslug) ?>/">
+        <a class="ccard<?= $feat ? ' ccard--feat' : '' ?>" href="/crop-book/<?= $h($cslug) ?>/">
           <div class="ccard__art">
             <?php if ($wc !== null): ?>
               <img src="/public_assets/img/crops/<?= $h($wc) ?>" alt="<?= $h((string)($c['name_he'] ?? '')) ?>" loading="lazy"/>
             <?php else: ?>
               <span class="veg" aria-hidden="true">🌱</span>
             <?php endif; ?>
-            <!-- state dot: no enrichment data at list level — show neutral -->
+            <!-- state dot: no completeness signal at index level → omitted (honest) -->
           </div>
           <div class="ccard__body">
+            <?php if ($feat): ?>
+              <span class="ccard__feattag">מומלץ</span>
+            <?php endif; ?>
+            <?php if ($badge !== null): ?>
+              <span class="ccard__now"><span class="g"><?= $badge['g'] ?></span><?= $h($badge['label']) ?></span>
+            <?php endif; ?>
             <div class="ccard__name"><?= $h((string)($c['name_he'] ?? '')) ?></div>
             <?php if (!empty($c['en_name'])): ?>
-              <div class="ccard__en"><?= $h((string)$c['en_name']) ?></div>
+              <div class="ccard__en" dir="ltr"><?= $h((string)$c['en_name']) ?></div>
             <?php endif; ?>
-            <div class="ccard__meta">
-              <div class="ccard__calcs">
-                <!-- calc pips: dim by default (no live enrichment at index level) -->
-                <?php for ($pi = 0; $pi < 6; $pi++): ?><i class="off"></i><?php endfor; ?>
-              </div>
+            <div class="cparams">
               <?php if (!empty($c['dtm_days'])): ?>
-              <div class="ccard__dtm"><?= (int)$c['dtm_days'] ?><small>ימ׳</small></div>
+              <span class="cparam cparam--dtm"><span class="g">⏳</span><span dir="ltr"><?= (int)$c['dtm_days'] ?></span><small>ימים</small></span>
+              <?php endif; ?>
+              <?php if ($act === 'seed'): ?>
+              <span class="cparam cparam--method"><span class="g">🌱</span>זריעה</span>
+              <?php elseif ($act === 'transplant'): ?>
+              <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+              <?php endif; ?>
+              <?php if (!empty($c['family_tag_he'])): ?>
+              <span class="cparam"><span class="g">🌿</span><?= $h((string)$c['family_tag_he']) ?></span>
               <?php endif; ?>
             </div>
           </div>
         </a>
         <?php endforeach; ?>
+      </div>
+
+      <!-- CTA foot — complete missing data (primary). -->
+      <div class="cta">
+        <div class="cta__card cta--data">
+          <h3>חסר מידע על גידול?</h3>
+          <p>הספר נבנה בשיתוף הקהילה. אם גידלתם — תרמו נתון, וזה יידלק לכולם.</p>
+          <a class="cta__btn" href="/community">◐ תרמו נתון ›</a>
+        </div>
       </div>
     </div>
 
