@@ -518,6 +518,325 @@
     });
   }
 
+  /* ══════════════════════════════════════════════════════════════
+     WP-CB-MOBILE FIX 6 — "define the question" builder + session.
+     Reuses the EXISTING CALC registry + recompute() above (no math is
+     duplicated). The builder configures the hidden #qb-engine [data-calc]
+     panel, dispatches input → recompute(), then reads [data-result] and
+     surfaces it as .qb-answer + .qb-break, accumulating into .qb-session
+     (sessionStorage, per-device for v1 per team_100 decision).
+     ══════════════════════════════════════════════════════════════ */
+
+  /* book field_name → engine data-book key (mirrors calc_dash BOOK_ALIAS) */
+  var QB_BOOK_ALIAS = {
+    spacing_in_row_cm: 'spacing', in_row_spacing_cm: 'spacing',
+    rows_per_bed: 'rows',
+    seeds_per_g: 'seeds_per_gram', seeds_per_gram: 'seeds_per_gram',
+    yield_per_bed_m: 'yield_per_m', avg_yield_per_bed_m: 'yield_per_m',
+    price_documented: 'price', documented_price: 'price',
+    nutrient_removal_n_kg_per_ha: 'n', nutrient_removal_N: 'n',
+    nutrient_removal_p_kg_per_ha: 'p',
+    nutrient_removal_k_kg_per_ha: 'k'
+  };
+
+  var QB_STORE_KEY = 'sfa_calc_session_v1';
+
+  function qbReadSession() {
+    try { return JSON.parse(sessionStorage.getItem(QB_STORE_KEY) || '[]') || []; }
+    catch (e) { return []; }
+  }
+  function qbWriteSession(list) {
+    try { sessionStorage.setItem(QB_STORE_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function wireQuestionBuilder() {
+    var scope = document.getElementById('calc-scope');
+    if (!scope) return;
+    var engine = document.getElementById('qb-engine');
+
+    var goals = {};
+    try { (JSON.parse(scope.getAttribute('data-calc-goals') || '[]') || []).forEach(function (g) { goals[g.key] = g; }); }
+    catch (e) { goals = {}; }
+
+    var state = {
+      goal:   'seed',
+      basis:  'area',
+      anchor: 'target'
+    };
+
+    var goalGrid  = document.getElementById('qb-goal');
+    var moreSel   = document.getElementById('qb-more');
+    var cropSel   = document.getElementById('qb-crop');
+    var basisGrp  = document.getElementById('qb-basis');
+    var anchorGrp = document.getElementById('qb-anchor');
+    var echo      = document.getElementById('qb-echo');
+
+    function basisInputs() { return scope.querySelectorAll('[data-basis-input]'); }
+    function anchorInputs() { return scope.querySelectorAll('[data-anchor-input]'); }
+
+    /* a goal's basis is mostly user-choosable, but "beds for target yield"
+       forces the target-kg input regardless of the basis chips. */
+    function effectiveBasisInput() {
+      var g = goals[state.goal] || {};
+      if (g.basis === 'target') return 'target';
+      return state.basis;
+    }
+
+    function showBasisInput() {
+      var want = effectiveBasisInput();
+      basisInputs().forEach(function (el) {
+        el.style.display = el.getAttribute('data-basis-input') === want ? '' : 'none';
+      });
+      // when a goal forces target, dim the basis chip group (informational)
+      var g = goals[state.goal] || {};
+      if (basisGrp) basisGrp.style.opacity = (g.basis === 'target') ? '0.5' : '';
+    }
+    function showAnchorInput() {
+      anchorInputs().forEach(function (el) {
+        el.style.display = el.getAttribute('data-anchor-input') === state.anchor ? '' : 'none';
+      });
+    }
+
+    function cropName() {
+      if (!cropSel) return '';
+      var opt = cropSel.options[cropSel.selectedIndex];
+      return opt ? (opt.text || '') : '';
+    }
+
+    function basisPhrase() {
+      var inp = scope.querySelector('[data-basis-input="' + effectiveBasisInput() + '"]:not([style*="display: none"])');
+      var num = inp ? (inp.querySelector('input') || {}).value : '';
+      var map = { area: 'שטח', beds: 'מס׳ ערוגות', seedlings: 'מס׳ שתילים', target: 'יעד יבול' };
+      var lbl = map[effectiveBasisInput()] || '';
+      return lbl + (num ? ' ' + num : '');
+    }
+
+    function updateEcho() {
+      if (!echo) return;
+      var g = goals[state.goal] || {};
+      var cn = cropName();
+      echo.innerHTML = 'השאלה שלך: אחשב <b>' + (g.label || '') + '</b> עבור <b>' +
+        (cn || '—') + '</b>, לפי <b>' + basisPhrase() + '</b>.';
+    }
+
+    /* configure + run the hidden engine for the current goal; returns
+       { main, unit, ok } where ok=false means no live math (soon). */
+    function runEngine() {
+      var g = goals[state.goal] || {};
+      if (!g.kind || g.soon) return { ok: false };
+      if (!engine) return { ok: false };
+
+      // 1 · push book values for the selected crop into the engine chips.
+      var slug = cropSel ? cropSel.value : '';
+      var bookData = (window.SFA_CROP_BOOK && slug) ? (window.SFA_CROP_BOOK[slug] || {}) : {};
+      var flat = {};
+      Object.keys(bookData).forEach(function (fn) {
+        var key = QB_BOOK_ALIAS[fn];
+        if (key) { var v = parseFloat(bookData[fn]); if (isFinite(v)) flat[key] = v; }
+      });
+      engine.querySelectorAll('[data-book]').forEach(function (el) {
+        var k = el.getAttribute('data-book');
+        if (flat[k] != null) el.setAttribute('data-val', flat[k]);
+      });
+
+      // 2 · map the chosen basis number onto the operand(s) the CALC reads.
+      var basisInp = scope.querySelector('[data-basis-input="' + effectiveBasisInput() + '"] input');
+      var basisVal = basisInp ? parseFloat(basisInp.value) : NaN;
+      var std = (window.SFA_ASSUMPTIONS && window.SFA_ASSUMPTIONS.std_bed_length_m) || 30;
+      // area in running-metres of bed; if basis=beds, area = beds × std bed length.
+      var meters = isFinite(basisVal) ? basisVal : 0;
+      if (effectiveBasisInput() === 'beds') meters = basisVal * std;
+      function setK(k, v) { var el = engine.querySelector('[data-k="' + k + '"]'); if (el) el.value = v; }
+      setK('bed_len', meters);
+      setK('area', meters);
+      setK('area_m2', meters);
+      if (effectiveBasisInput() === 'target' && isFinite(basisVal)) setK('target_kg', basisVal);
+
+      // 3 · set the kind + recompute via the EXISTING engine, then read result.
+      engine.setAttribute('data-calc', g.kind);
+      recompute(engine);
+      var rEl = engine.querySelector('[data-result]');
+      var main = rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : '';
+      // strip the trailing unit word recompute() appended (we re-add g.runit)
+      return { ok: true, main: main, unit: g.runit || '', goal: g };
+    }
+
+    function breakRow(k, v, src) {
+      return '<div class="qb-break__row"><span class="k">' + k +
+        '</span><span><span class="v num" dir="ltr" style="unicode-bidi:isolate">' + v +
+        '</span> <span class="src dir-ltr">' + src + '</span></span></div>';
+    }
+
+    function renderBreakdown(g) {
+      var box = document.getElementById('qb-break');
+      if (!box) return;
+      var rows = '';
+      var basisLbl = { area: 'שטח לגידול', beds: 'מספר ערוגות', seedlings: 'מספר שתילים', target: 'יעד יבול' }[effectiveBasisInput()] || 'בסיס';
+      var basisInp = scope.querySelector('[data-basis-input="' + effectiveBasisInput() + '"] input');
+      rows += breakRow(basisLbl, basisInp ? basisInp.value : '—', 'קלט');
+      var slug = cropSel ? cropSel.value : '';
+      var bookData = (window.SFA_CROP_BOOK && slug) ? (window.SFA_CROP_BOOK[slug] || {}) : {};
+      var bookLabels = {
+        rows_per_bed: 'שורות לערוגה', spacing_in_row_cm: 'מרווח בשורה',
+        seeds_per_g: 'זרעים לגרם', yield_per_bed_m: 'יבול למ׳',
+        price_documented: 'מחיר מתועד', nutrient_removal_n_kg_per_ha: 'צריכת חנקן'
+      };
+      Object.keys(bookData).forEach(function (fn) {
+        if (bookLabels[fn] != null) rows += breakRow(bookLabels[fn], bookData[fn], 'ספר');
+      });
+      var A = window.SFA_ASSUMPTIONS || {};
+      if (g.kind === 'seed') {
+        rows += breakRow('שיעור נביטה', Math.round((A.germination_rate || 0.9) * 100) + '%', 'הנחה');
+        rows += breakRow('תוספת ביטחון', '+' + Math.round(((A.oversow || 1.1) - 1) * 100) + '%', 'הנחה');
+      }
+      box.innerHTML = rows;
+    }
+
+    function renderSession() {
+      var list = qbReadSession();
+      var box = document.getElementById('qb-session');
+      var rowsEl = document.getElementById('qb-session-rows');
+      var badge = document.getElementById('qb-session-badge');
+      if (!box || !rowsEl) return;
+      if (!list.length) { box.hidden = true; return; }
+      box.hidden = false;
+      if (badge) badge.textContent = list.length + ' חישובים · נשמר';
+      rowsEl.innerHTML = list.map(function (r, i) {
+        var cur = (i === list.length - 1) ? ' is-current' : '';
+        return '<div class="qb-session__row' + cur + '"><span class="k"><b>' +
+          r.label + '</b>' + r.sub + '</span><span class="v">' + r.value + '</span></div>';
+      }).join('');
+    }
+
+    function pushSession(entry) {
+      var list = qbReadSession();
+      list.push(entry);
+      if (list.length > 30) list = list.slice(-30);
+      qbWriteSession(list);
+      renderSession();
+    }
+
+    function showResult() {
+      var g = goals[state.goal] || {};
+      var soonBox = document.getElementById('qb-soon');
+      var answer  = document.getElementById('qb-answer');
+      var breakBox = document.getElementById('qb-break');
+      var qEl = document.getElementById('qb-result-q');
+      var cn = cropName();
+      if (qEl) qEl.textContent = [g.label, cn, basisPhrase()].filter(Boolean).join(' · ');
+
+      var out = runEngine();
+      if (!out.ok) {
+        if (soonBox) { soonBox.hidden = false; var nm = document.getElementById('qb-soon-name'); if (nm) nm.textContent = '«' + (g.label || '') + '»'; }
+        if (answer) answer.hidden = true;
+        if (breakBox) breakBox.hidden = true;
+        scope.setAttribute('data-calc-state', 'result');
+        renderSession();
+        try { window.scrollTo(0, 0); } catch (e) {}
+        return;
+      }
+      if (soonBox) soonBox.hidden = true;
+      if (answer) answer.hidden = false;
+      if (breakBox) breakBox.hidden = false;
+
+      var lbl = document.getElementById('qb-answer-lbl');
+      var big = document.getElementById('qb-answer-big');
+      if (lbl) lbl.textContent = g.rlabel || 'תוצאה';
+      // recompute() already wrote "<value> <small>unit</small>" into [data-result];
+      // re-render in the big answer style.
+      var rEl = engine.querySelector('[data-result]');
+      if (big) big.innerHTML = rEl ? rEl.innerHTML : (out.main || '—');
+
+      renderBreakdown(g);
+
+      pushSession({
+        label: g.rlabel || g.label,
+        sub:   [cn, basisPhrase()].filter(Boolean).join(' · '),
+        value: (rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : out.main) || '—'
+      });
+
+      scope.setAttribute('data-calc-state', 'result');
+      try { window.scrollTo(0, 0); } catch (e) {}
+    }
+
+    /* ── single-select chip groups ── */
+    function wireGroup(grp, attr, onPick) {
+      if (!grp) return;
+      grp.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b) return;
+        grp.querySelectorAll('button').forEach(function (x) { x.classList.remove('is-on'); });
+        b.classList.add('is-on');
+        onPick(b.getAttribute(attr));
+      });
+    }
+
+    wireGroup(goalGrid, 'data-goal', function (v) {
+      state.goal = v;
+      if (moreSel) moreSel.value = '';   // primary pick clears the dropdown
+      showBasisInput(); updateEcho();
+    });
+    wireGroup(basisGrp, 'data-basis', function (v) { state.basis = v; showBasisInput(); updateEcho(); });
+    wireGroup(anchorGrp, 'data-anchor', function (v) { state.anchor = v; showAnchorInput(); updateEcho(); });
+
+    if (moreSel) {
+      moreSel.addEventListener('change', function () {
+        if (!moreSel.value) return;
+        state.goal = moreSel.value;
+        if (goalGrid) goalGrid.querySelectorAll('button').forEach(function (x) { x.classList.remove('is-on'); });
+        showBasisInput(); updateEcho();
+      });
+    }
+    if (cropSel) cropSel.addEventListener('change', updateEcho);
+    scope.querySelectorAll('[data-basis-input] input, [data-anchor-input] input').forEach(function (el) {
+      el.addEventListener('input', updateEcho);
+    });
+
+    var go = document.getElementById('qb-go');
+    if (go) go.addEventListener('click', showResult);
+    var back = document.getElementById('qb-back');
+    if (back) back.addEventListener('click', function () {
+      scope.setAttribute('data-calc-state', 'ask');
+      try { window.scrollTo(0, 0); } catch (e) {}
+    });
+
+    /* ── assumptions editor: open the EXISTING AssumptionField block ── */
+    var assumEdit = document.getElementById('qb-assum-edit');
+    var assumEditor = document.getElementById('qb-assum-editor');
+    if (assumEdit && assumEditor) {
+      assumEdit.addEventListener('click', function () {
+        var open = assumEditor.hidden;
+        assumEditor.hidden = !open;
+        assumEdit.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) try { assumEditor.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+      });
+    }
+
+    /* ── export = WHOLE session → existing /calc/print + /calc/export.csv ── */
+    function exportHref(base) {
+      var list = qbReadSession();
+      var p = [];
+      list.forEach(function (r, i) {
+        var label = (i + 1) + '. ' + r.label + (r.sub ? ' (' + r.sub + ')' : '');
+        p.push('rows[' + encodeURIComponent(label) + ']=' + encodeURIComponent(r.value));
+      });
+      return p.length ? base + '?' + p.join('&') : base;
+    }
+    ['qb-export-pdf', 'qb-export-csv'].forEach(function (id) {
+      var a = document.getElementById(id);
+      if (!a) return;
+      var base = a.getAttribute('href');
+      a.addEventListener('click', function () { a.setAttribute('href', exportHref(base)); });
+    });
+
+    /* ── deep-link ?state=result + initial paint ── */
+    showBasisInput(); showAnchorInput(); updateEcho(); renderSession();
+    try {
+      var params = new URLSearchParams(location.search);
+      if (params.get('state') === 'result') scope.setAttribute('data-calc-state', 'result');
+    } catch (e) {}
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     wireAssumptions();
     wireCalcs();
@@ -532,5 +851,6 @@
     wireCalcModals();
     wireReqInfo();
     wireCalcExport();
+    wireQuestionBuilder();
   });
 })();

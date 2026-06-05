@@ -369,13 +369,45 @@ final class CropBookV1RouteTest extends TestCase
 
     // ── calculator dashboard ──────────────────────────────────────
 
+    /**
+     * WP-CB-MOBILE FIX 6: /calc/ is the "define the question" builder.
+     * The scope carries both states (ask|result) and the goal catalog.
+     */
     public function testCalcDashReturns200(): void
     {
         $res  = $this->get('/calc/');
         $this->assertSame(200, $res->getStatusCode(), '/calc/ must return 200');
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('calc-page', $html, 'Calc dashboard must include .calc-page');
-        $this->assertStringContainsString('calc-dash', $html, 'Calc dashboard must include .calc-dash');
+        // scope + state machine
+        $this->assertStringContainsString('id="calc-scope"', $html, 'Calc page must render the #calc-scope builder');
+        $this->assertStringContainsString('data-calc-state="ask"', $html, 'Calc scope must start in the ask state');
+        // ASK builder: 6-button goal grid + the "more" dropdown
+        $this->assertStringContainsString('qb-goal--grid', $html, 'Calc ask state must render the .qb-goal--grid');
+        $this->assertStringContainsString('id="qb-more"', $html, 'Calc ask state must render the .qb-more <select>');
+        $this->assertStringContainsString('id="qb-go"', $html, 'Calc ask state must render the compute (.qb__go) button');
+        // RESULT state: session, answer, breakdown, assumptions entry, export-all
+        $this->assertStringContainsString('id="qb-session"', $html, 'Calc result state must render the .qb-session');
+        $this->assertStringContainsString('id="qb-answer"', $html, 'Calc result state must render the .qb-answer');
+        $this->assertStringContainsString('qb-assum__edit', $html, 'Calc result must expose the AssumptionField edit entry point');
+        $this->assertStringContainsString('id="qb-export-pdf"', $html, 'Calc result must render the session export-all (PDF)');
+        // hidden compute engine reuses the existing CALC registry
+        $this->assertStringContainsString('id="qb-engine"', $html, 'Calc page must render the hidden #qb-engine compute panel');
+    }
+
+    /** FIX 6: the goal catalog must map all 14 calculators (6 primary + 8 dropdown). */
+    public function testCalcGoalCatalogHasAllFourteen(): void
+    {
+        $html = (string)$this->get('/calc/')->getBody();
+        $this->assertMatchesRegularExpression('#data-calc-goals=\'[^\']+\'#', $html,
+            'Calc scope must carry the data-calc-goals catalog');
+        if (preg_match('#data-calc-goals=\'([^\']+)\'#', $html, $m)) {
+            $goals = json_decode(html_entity_decode($m[1], ENT_QUOTES), true);
+            $this->assertIsArray($goals);
+            $this->assertCount(14, $goals, 'Goal catalog must cover all 14 calculators');
+            // the 6 calculators with live client-side CALC math must be flagged not-soon
+            $live = array_values(array_filter($goals, static fn ($g) => !($g['soon'] ?? true) && ($g['kind'] ?? '') !== ''));
+            $this->assertCount(6, $live, 'Exactly 6 goals have live CALC[kind] math (seed/yield/revenue/pop/fert/beds)');
+        }
     }
 
     // ── Decision A regression: season filter reads variety months, not crop payload ──
