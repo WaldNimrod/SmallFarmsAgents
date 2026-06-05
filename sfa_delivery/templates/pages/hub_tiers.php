@@ -47,49 +47,98 @@ $page_title = 'מה זה SFA';
 $page_sub   = 'איך הכלים מסודרים';
 $active     = 'home';
 
+$wa_custom = 'https://wa.me/972547776770?text=' . rawurlencode('בדיוק לחווה שלי — דברו איתי');
 ob_start();
 ?>
 <div style="max-width:800px;margin:0 auto;padding:20px clamp(16px,3vw,28px)">
 
-  <div class="tier-hero">
-    <h1>חמש שכבות של כלים</h1>
-    <p>מהקהילתי הפתוח ועד לבדיוק-בשבילך — כל שכבה בנויה על הקודמת. רוב הכלים חינמיים לגמרי.</p>
-  </div>
-
-  <div class="tier-list">
-    <?php foreach ($tier_order as $tier_key):
-      $entry  = $tiers_in[$tier_key] ?? [];
-      $color  = $tier_colors[$tier_key] ?? 'leaf';
-      $copy   = (string)($entry['description_he'] ?? $fallback_copy[$tier_key] ?? '');
-      $label  = (string)($entry['label_he'] ?? $tier_key);
-      $eg     = $tier_examples[$tier_key] ?? [];
-    ?>
-    <div class="tier-row tier-row--<?= $h($color) ?>">
-      <div class="tier-row__badge">
-        <?php $tier = $tier_key; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
-        <span class="tier-row__badge-en en"><?= strtoupper($tier_key) ?></span>
-      </div>
-      <div class="tier-row__txt">
-        <h3><?= $h($label) ?></h3>
-        <p><?= $h($copy) ?>
-          <?php if ($tier_key === 'custom'): ?>
-            <a href="https://wa.me/972547776770?text=<?= rawurlencode('בדיוק לחווה שלי — דברו איתי') ?>">דברו איתנו ←</a>
-          <?php endif; ?>
-        </p>
-      </div>
-      <?php if (!empty($eg)): ?>
-      <div class="tier-row__eg">
-        <b><?= $h($eg['title']) ?></b>
-        <?= $h($eg['sub']) ?>
-      </div>
-      <?php endif; ?>
+  <?php /* FIX 4: content-first — lead with what SFA is + the four value points. */ ?>
+  <div class="about-intro">
+    <h1>כלים פתוחים לחקלאות קטנה</h1>
+    <p class="about-lead">SFA מרכז ידע חקלאי, מחירי שוק וכלי תכנון — חינמיים ופתוחים לכל גנן וחקלאי. נבנה בשיתוף הקהילה, על בסיס ניסיון מהשטח ומחקר.</p>
+    <div class="about-points">
+      <div class="about-point"><span class="ic">📖</span><div><h4>ידע פתוח</h4><p>מאגר גידולים — זנים, מרווחים, מחזורי גידול ומקורות מתועדים.</p></div></div>
+      <div class="about-point"><span class="ic">₪</span><div><h4>מחירי שוק שקופים</h4><p>ממוצעים מתגלגלים מתוצרת טרייה, מתעדכנים יומית.</p></div></div>
+      <div class="about-point"><span class="ic">🧮</span><div><h4>כלי תכנון</h4><p>מחשבונים מנומקים — מהזרע ועד היבול וההכנסה.</p></div></div>
+      <div class="about-point"><span class="ic">🤝</span><div><h4>נבנה בשיתוף</h4><p>הליבה תמיד פתוחה; הקהילה משלימה נתונים ומשפרת.</p></div></div>
     </div>
-    <?php endforeach; ?>
   </div>
 
-  <div style="margin-top:28px;text-align:center;font-size:13.5px;color:var(--gj-ink-soft)">
-    שאלות? <a href="/community" style="color:var(--gj-leaf-deep);font-weight:700">דברו עם הקהילה</a>
-    או <a href="https://wa.me/972547776770" target="_blank" rel="noopener" style="color:var(--gj-leaf-deep);font-weight:700">בוואטסאפ</a>.
+  <?php /* Tier ladder — secondary expansion below the content (2 live / 3 soon). */ ?>
+  <div class="about-tiers-h"><h2>השכבות</h2><span class="rule"></span><span class="sub">מה פתוח · מה בקרוב</span></div>
+
+  <div class="tier-group tier-group--live">
+    <div class="tier-group__head"><h2 style="font-size:15px">פעיל עכשיו</h2><span class="count">2</span><span class="rule"></span></div>
+    <div class="tier-list">
+      <div class="tier-row tier-row--leaf">
+        <div class="tier-row__badge">
+          <?php $tier = 'open'; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
+          <span class="en dir-ltr">OPEN CORE</span>
+        </div>
+        <div class="tier-row__txt"><h3>ספר + מחירון</h3><p>כל הידע, החיפוש, לוחות הזריעה והמחשבונים — חינם, ללא חשבון.</p></div>
+        <span class="tier-row__status tier-row__status--live"><span class="dot"></span>זמין</span>
+      </div>
+      <div class="tier-row tier-row--sun">
+        <div class="tier-row__badge">
+          <?php $tier = 'beta'; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
+          <span class="en dir-ltr">BETA</span>
+        </div>
+        <div class="tier-row__txt"><h3>מחשבון מלא</h3><p>דשבורד מודולים עם סיכום וייצוא — פתוח לניסיון.</p></div>
+        <span class="tier-row__status tier-row__status--live"><span class="dot"></span>זמין</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-group tier-group--soon">
+    <div class="tier-group__head"><h2 style="font-size:15px">בקרוב</h2><span class="count">3</span><span class="rule"></span></div>
+    <div class="tier-list">
+      <div class="tier-row tier-row--paper">
+        <div class="tier-row__badge">
+          <?php $tier = 'coming'; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
+          <span class="en dir-ltr">COMING</span>
+        </div>
+        <div class="tier-row__txt"><h3>מתכנן עונה ומשימות</h3><p>תכנון ערוגות ולוח משימות שבועי.</p></div>
+        <span class="tier-row__status tier-row__status--soon"><span class="dot"></span>בפיתוח</span>
+      </div>
+      <div class="tier-row tier-row--soil">
+        <div class="tier-row__badge">
+          <?php $tier = 'paid'; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
+          <span class="en dir-ltr">PAID</span>
+        </div>
+        <div class="tier-row__txt"><h3>ניהול לקוחות ומלאי</h3><p>מודולים מסחריים לחווה — מנוי.</p></div>
+        <span class="tier-row__status tier-row__status--soon"><span class="dot"></span>בקרוב</span>
+      </div>
+      <div class="tier-row tier-row--tomato">
+        <div class="tier-row__badge">
+          <?php $tier = 'custom'; $size = 'lg'; include __DIR__ . '/../macros/tier_badge.php'; ?>
+          <span class="en dir-ltr">CUSTOM</span>
+        </div>
+        <div class="tier-row__txt"><h3>פתרונות מותאמים</h3><p>אינטגרציות ופיתוח ייעודי לחוות וארגונים.</p></div>
+        <span class="tier-row__status tier-row__status--soon"><span class="dot"></span>בתיאום</span>
+      </div>
+    </div>
+  </div>
+
+  <?php /* CTA system (FIX 4 + CTA SYSTEM): data (primary) · suggest (inline FORM) · WhatsApp (custom only). */ ?>
+  <div class="cta">
+    <div class="cta__card cta--data">
+      <h3>הצטרפו לבנייה — השלימו מידע</h3>
+      <p>הספר גדל מתרומות. שדה חסר שאתם מכירים? ספרו לנו.</p>
+      <a class="cta__btn" href="/community">◐ השלמת מידע ›</a>
+    </div>
+    <div class="cta__card cta--suggest">
+      <h3>הצעה או בקשה?</h3>
+      <p>אין צ׳אט — טופס קצר.</p>
+      <form class="cta__field" method="post" action="/community#suggest">
+        <input type="text" name="suggestion" placeholder="מה תרצו לראות?" aria-label="הצעה"/>
+        <button class="cta__send" type="submit">שליחה</button>
+      </form>
+    </div>
+    <div class="cta__card cta--wa">
+      <span class="ic" aria-hidden="true">✆</span>
+      <div><h3>פתרון מותאם לחווה?</h3><p>פנייה ישירה בוואטסאפ</p></div>
+      <a class="cta__btn" href="<?= $h($wa_custom) ?>" target="_blank" rel="noopener">וואטסאפ</a>
+    </div>
   </div>
 
 </div>

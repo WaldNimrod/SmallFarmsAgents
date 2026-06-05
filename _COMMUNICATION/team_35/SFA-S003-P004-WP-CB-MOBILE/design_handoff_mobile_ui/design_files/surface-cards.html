@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ספר גידולים · כרטיסים · מובייל</title>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="cropbook-v1.css"/>
+<link rel="stylesheet" href="classb.css"/>
+<link rel="stylesheet" href="mobile-fixes.css"/>
+<style>
+  html,body{background:var(--gj-paper);} .sh{min-height:100vh;}
+  .mfilt{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .mfilt__search{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--gj-line);border-radius:var(--gj-r-pill);padding:9px 14px;background:var(--gj-paper);color:var(--gj-ink-soft);font-size:13px;}
+  .mfilt__btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--gj-line);border-radius:var(--gj-r-pill);padding:9px 13px;background:var(--gj-paper);font-family:inherit;font-size:12px;font-weight:700;color:var(--gj-ink);}
+  /* in-season filter chips */
+  .seasonchips{display:flex;gap:7px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px;}
+  .seasonchips .fchip{white-space:nowrap;flex:none;}
+  .mcount{font-size:12px;color:var(--gj-ink-soft);margin:0 2px 10px;}
+  .mcount b{color:var(--gj-leaf-deep);font-family:var(--gj-font-head);font-size:15px;}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
+  <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
+  <g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g>
+  <path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/>
+  <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
+  <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
+</symbol></svg>
+
+<div class="sh">
+  <div class="sh__bar">
+    <svg class="sh__mark"><use href="#sfa-logo"/></svg>
+    <div class="sh__name">SFA<small>חקלאות קטנה</small></div>
+    <div class="sh__tools"><button class="sh__icon" title="חיפוש">⌕</button></div>
+  </div>
+
+  <div class="sh__body">
+    <div class="mfilt">
+      <div class="mfilt__search"><span>⌕</span><span>חיפוש גידול…</span></div>
+      <button class="mfilt__btn">סינון <span>▾</span></button>
+    </div>
+    <div class="seasonchips">
+      <button class="fchip is-on">🌱 עכשיו בעונה</button>
+      <button class="fchip">הכל</button>
+      <button class="fchip">עלים</button>
+      <button class="fchip">פירות-ירק</button>
+      <button class="fchip">תבלין</button>
+    </div>
+    <p class="mcount"><b>9</b> גידולים מתאימים לשתילה/זריעה ביוני</p>
+
+    <div class="cards-grid">
+      <!-- FEATURED — in-season summer crop -->
+      <a class="ccard ccard--feat" href="#">
+        <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/crops/wc-cucumber.png" alt="מלפפון"/></div>
+        <div class="ccard__body">
+          <span class="ccard__now"><span class="g">🌱</span>עכשיו לזריעה</span>
+          <div class="ccard__name">מלפפון</div><div class="ccard__en">Cucumber</div>
+          <p class="ccard__desc">גידול קיץ מהיר ומתגמל — זריעה ישירה מאפריל עד יולי.</p>
+          <div class="cparams">
+            <span class="cparam cparam--dtm"><span class="g">⏳</span>55<small>ימים</small></span>
+            <span class="cparam cparam--yield"><span class="g">⚖</span>5.2<small>ק״ג/מ׳</small></span>
+            <span class="cparam cparam--space"><span class="g">⇲</span>40×30<small>ס״מ</small></span>
+            <span class="cparam cparam--method"><span class="g">🌱</span>זריעה</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ccard" href="#">
+        <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/crops/wc-tomato.png" alt="עגבנייה"/></div>
+        <div class="ccard__body">
+          <span class="ccard__now"><span class="g">🪴</span>עכשיו לשתילה</span>
+          <div class="ccard__name">עגבנייה</div><div class="ccard__en">Tomato</div>
+          <div class="cparams">
+            <span class="cparam cparam--dtm"><span class="g">⏳</span>70<small>ימים</small></span>
+            <span class="cparam cparam--yield"><span class="g">⚖</span>6.0<small>ק״ג/מ׳</small></span>
+            <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ccard" href="#">
+        <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/crops/wc-pepper.png" alt="פלפל"/></div>
+        <div class="ccard__body">
+          <span class="ccard__now"><span class="g">🪴</span>עכשיו לשתילה</span>
+          <div class="ccard__name">פלפל</div><div class="ccard__en">Pepper</div>
+          <div class="cparams">
+            <span class="cparam cparam--dtm"><span class="g">⏳</span>90<small>ימים</small></span>
+            <span class="cparam cparam--yield"><span class="g">⚖</span>4.5<small>ק״ג/מ׳</small></span>
+            <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ccard" href="#">
+        <div class="ccard__art"><span class="ccard__state ccard__state--partial" title="ספר חלקי">!</span><img src="assets/crops/wc-eggplant.png" alt="חציל"/></div>
+        <div class="ccard__body">
+          <span class="ccard__now"><span class="g">🪴</span>עכשיו לשתילה</span>
+          <div class="ccard__name">חציל</div><div class="ccard__en">Eggplant</div>
+          <div class="cparams">
+            <span class="cparam cparam--dtm"><span class="g">⏳</span>80<small>ימים</small></span>
+            <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="ccard" href="#">
+        <div class="ccard__art"><span class="ccard__state ccard__state--complete" title="ספר שלם">✓</span><img src="assets/crops/wc-zucchini.png" alt="קישוא"/></div>
+        <div class="ccard__body">
+          <span class="ccard__now"><span class="g">🌱</span>עכשיו לזריעה</span>
+          <div class="ccard__name">קישוא</div><div class="ccard__en">Zucchini</div>
+          <div class="cparams">
+            <span class="cparam cparam--dtm"><span class="g">⏳</span>50<small>ימים</small></span>
+            <span class="cparam cparam--yield"><span class="g">⚖</span>4.8<small>ק״ג/מ׳</small></span>
+            <span class="cparam cparam--method"><span class="g">🌱</span>זריעה</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- CTA — complete missing data (some crops are partial) -->
+    <div class="cta">
+      <div class="cta__card cta--data">
+        <h3>גידול שמסומן «חלקי»? עזרו להשלים</h3>
+        <p>חציל עדיין חסר שדות. אם גידלתם — דעו לתרום מספר, וזה יידלק לכולם.</p>
+        <a class="cta__btn" href="#">◐ תרמו נתון ›</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sh__nav sh__nav--mobile">
+    <a class="is-active" href="#"><span class="g">▤</span>ספר</a>
+    <a class="is-calc" href="#"><span class="g">∑</span>מחשבון</a>
+    <a class="is-market" href="#"><span class="g">₪</span>מחירון</a>
+    <a href="#"><span class="g">◔</span>חשבון</a>
+  </nav>
+</div>
+</body>
+</html>

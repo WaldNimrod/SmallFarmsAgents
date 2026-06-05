@@ -208,11 +208,16 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropSimpleDepth(): void
     {
+        // WP-CB-MOBILE Stage 2: Simple is now genuinely minimal — essentials
+        // strip + calendar + one-key-per-topic keylist; the full stat block
+        // (headvals) was intentionally removed (Simple ⊂ Full ⊂ Deep).
         $res  = $this->get('/crop-book/lettuce/?depth=simple');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('depths', $html, 'Must include depth tabs');
-        $this->assertStringContainsString('headvals', $html, 'Simple depth must include headline values');
+        $this->assertStringContainsString('sh__depths', $html, 'Must include the header depth segmented control');
+        $this->assertStringContainsString('class="ess"', $html, 'Simple depth must include the essentials chip strip');
+        $this->assertStringContainsString('class="keylist"', $html, 'Simple depth must include the one-key-per-topic list');
+        $this->assertStringNotContainsString('class="headvals"', $html, 'Simple depth must NOT carry the full stat block (Stage 2 IA)');
     }
 
     public function testBookCropFullDepth(): void
@@ -247,10 +252,25 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropDrillDepth(): void
     {
+        // WP-CB-MOBILE Stage 2: legacy ?depth=drill is a back-compat alias for the
+        // deepest view; controller normalises it to 'deep'. Still 200 + vtable.
         $res  = $this->get('/crop-book/lettuce/?depth=drill');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('vtable', $html, 'Drill depth must include variety table');
+        $this->assertStringContainsString('vtable', $html, 'Drill (→deep) depth must include variety table');
+    }
+
+    public function testBookCropDeepDepth(): void
+    {
+        // WP-CB-MOBILE Stage 2: Deep is the canonical third state. Same topic
+        // structure as Full (.topic) + the variety comparison table (.vtable)
+        // + the EX/PR/WR source trust-hierarchy explainer.
+        $res  = $this->get('/crop-book/lettuce/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('vtable', $html, 'Deep depth must include the variety comparison table');
+        $this->assertStringContainsString('data-depth-view="deep"', $html, 'Deep depth view container must render');
+        $this->assertStringContainsString('היררכיית מקורות', $html, 'Deep depth must include the source trust-hierarchy explainer');
     }
 
     public function testBookCropDefaultDepth(): void
@@ -258,6 +278,38 @@ final class CropBookV1RouteTest extends TestCase
         // No depth param — should default to simple
         $res  = $this->get('/crop-book/lettuce/');
         $this->assertSame(200, $res->getStatusCode());
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2: Deep depth renders the per-datum variety range
+     * (.rng) when ≥2 varieties carry distinct numeric values. The EX/PR/WR
+     * source pill row is HONEST — it only renders when the crop's fields carry
+     * a real winning_source_class. With the MySQL-mirror reality (values come
+     * from the variety payload, source class ''), the source row is correctly
+     * OMITTED rather than fabricated. This locks the no-fabrication contract.
+     */
+    public function testDeepDepthRendersVarietyRangeAndHonestSources(): void
+    {
+        $this->pdo->exec("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES
+            (7,'deep-crop','עומק','Deepus sp.','חסתיים','vegetables','winter',40,58,'{}','2026-06-01')");
+        // Two varieties with DISTINCT days_to_maturity → a real range 52–58.
+        $v1 = json_encode([
+            'is_default'  => true,
+            'agronomy'    => ['days_to_maturity' => 52, 'yield_per_bed_m' => 3.6],
+            'field_state' => ['days_to_maturity' => 'VALIDATED', 'yield_per_bed_m' => 'VALIDATED'],
+        ], JSON_UNESCAPED_UNICODE);
+        $v2 = json_encode(['agronomy' => ['days_to_maturity' => 58, 'yield_per_bed_m' => 3.2]], JSON_UNESCAPED_UNICODE);
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES
+            (701,7,'נח 408'," . $this->pdo->quote($v1) . "),(702,7,'קייטנית'," . $this->pdo->quote($v2) . ")");
+
+        $res  = $this->get('/crop-book/deep-crop/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // Range line present with the across-variety span (52–58 for DTM).
+        $this->assertStringContainsString('class="rng"', $html, 'Deep depth must render the variety-range line when ≥2 varieties differ');
+        $this->assertStringContainsString('52–58', $html, 'Deep range must reflect the across-variety min–max');
+        // No fabricated provenance: payload-sourced values carry source class '' → no pill row.
+        $this->assertStringNotContainsString('srcpill', $html, 'Source pills must NOT be fabricated when no winning_source_class exists');
     }
 
     // ── WI-7: mobile horizontal overflow responsive wrappers ──────
@@ -317,12 +369,111 @@ final class CropBookV1RouteTest extends TestCase
 
     // ── calculator dashboard ──────────────────────────────────────
 
+    /**
+     * WP-CB-MOBILE FIX 6: /calc/ is the "define the question" builder.
+     * The scope carries both states (ask|result) and the goal catalog.
+     */
     public function testCalcDashReturns200(): void
     {
         $res  = $this->get('/calc/');
         $this->assertSame(200, $res->getStatusCode(), '/calc/ must return 200');
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('calc-page', $html, 'Calc dashboard must include .calc-page');
-        $this->assertStringContainsString('calc-dash', $html, 'Calc dashboard must include .calc-dash');
+        // scope + state machine
+        $this->assertStringContainsString('id="calc-scope"', $html, 'Calc page must render the #calc-scope builder');
+        $this->assertStringContainsString('data-calc-state="ask"', $html, 'Calc scope must start in the ask state');
+        // ASK builder: 6-button goal grid + the "more" dropdown
+        $this->assertStringContainsString('qb-goal--grid', $html, 'Calc ask state must render the .qb-goal--grid');
+        $this->assertStringContainsString('id="qb-more"', $html, 'Calc ask state must render the .qb-more <select>');
+        $this->assertStringContainsString('id="qb-go"', $html, 'Calc ask state must render the compute (.qb__go) button');
+        // RESULT state: session, answer, breakdown, assumptions entry, export-all
+        $this->assertStringContainsString('id="qb-session"', $html, 'Calc result state must render the .qb-session');
+        $this->assertStringContainsString('id="qb-answer"', $html, 'Calc result state must render the .qb-answer');
+        $this->assertStringContainsString('qb-assum__edit', $html, 'Calc result must expose the AssumptionField edit entry point');
+        $this->assertStringContainsString('id="qb-export-pdf"', $html, 'Calc result must render the session export-all (PDF)');
+        // hidden compute engine reuses the existing CALC registry
+        $this->assertStringContainsString('id="qb-engine"', $html, 'Calc page must render the hidden #qb-engine compute panel');
+    }
+
+    /** FIX 6: the goal catalog must map all 14 calculators (6 primary + 8 dropdown). */
+    public function testCalcGoalCatalogHasAllFourteen(): void
+    {
+        $html = (string)$this->get('/calc/')->getBody();
+        $this->assertMatchesRegularExpression('#data-calc-goals=\'[^\']+\'#', $html,
+            'Calc scope must carry the data-calc-goals catalog');
+        if (preg_match('#data-calc-goals=\'([^\']+)\'#', $html, $m)) {
+            $goals = json_decode(html_entity_decode($m[1], ENT_QUOTES), true);
+            $this->assertIsArray($goals);
+            $this->assertCount(14, $goals, 'Goal catalog must cover all 14 calculators');
+            // the 6 calculators with live client-side CALC math must be flagged not-soon
+            $live = array_values(array_filter($goals, static fn ($g) => !($g['soon'] ?? true) && ($g['kind'] ?? '') !== ''));
+            $this->assertCount(6, $live, 'Exactly 6 goals have live CALC[kind] math (seed/yield/revenue/pop/fert/beds)');
+        }
+    }
+
+    // ── Decision A regression: season filter reads variety months, not crop payload ──
+
+    /**
+     * Regression test for Decision A bug fix (2026-06-04):
+     * sowing_months lives in crop_varieties.payload_json['agronomy'], NOT in
+     * crops.payload_json. Before the fix, season filter always returned 0 crops.
+     *
+     * Seeds:
+     *   crop A (pepper, id=10)  → variety months [3,4,5]  → spring
+     *   crop B (tomato, id=11)  → variety months [6,7,8]  → summer
+     *   crop C (basil,  id=12)  → no variety month data   → no season match
+     *
+     * Asserts:
+     *   ?season=summer → B present, A absent, C absent
+     *   ?season=spring → A present, B absent, C absent
+     */
+    public function testSeasonFilterReadsVarietyMonths(): void
+    {
+        // Seed 3 extra crops with empty crop-level payload (months NOT in crop payload — mirrors real data).
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json, last_pushed_at)
+            VALUES
+            (10, 'pepper', 'פלפל',   'Capsicum annuum',  'סולניים', 'vegetables', 'annual', 60, 90, '{}', '2026-06-04'),
+            (11, 'tomato', 'עגבנייה','Solanum lycopersicum','סולניים','vegetables','annual', 60, 90, '{}', '2026-06-04'),
+            (12, 'basil',  'בזיליקום','Ocimum basilicum', 'שפתניים','herbs',       'annual', 60, 90, '{}', '2026-06-04')");
+
+        // Variety for crop A (pepper): spring months [3,4,5] in agronomy.sowing_months.
+        $springPayload = json_encode(['agronomy' => ['sowing_months' => [3, 4, 5]]]);
+        // Variety for crop B (tomato): summer months [6,7,8].
+        $summerPayload = json_encode(['agronomy' => ['sowing_months' => [6, 7, 8]]]);
+        // crop C (basil): variety exists but has NO month data (empty agronomy).
+        $noMonthPayload = json_encode(['agronomy' => []]);
+
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id, crop_id, name, payload_json) VALUES
+            (201, 10, 'Standard', " . $this->pdo->quote($springPayload) . "),
+            (202, 11, 'Cherry',   " . $this->pdo->quote($summerPayload) . "),
+            (203, 12, 'Genovese', " . $this->pdo->quote($noMonthPayload) . ")");
+
+        // ── season=summer ──────────────────────────────────────────────────────────
+        $resSummer = $this->get('/crop-book/?season=summer');
+        $this->assertSame(200, $resSummer->getStatusCode());
+        $htmlSummer = (string)$resSummer->getBody();
+        // Crop B (tomato) must be present.
+        $this->assertStringContainsString('/crop-book/tomato/', $htmlSummer,
+            'season=summer: tomato (months [6,7,8]) must be in results');
+        // Crop A (pepper, spring) must be absent.
+        $this->assertStringNotContainsString('/crop-book/pepper/', $htmlSummer,
+            'season=summer: pepper (months [3,4,5]) must NOT be in results');
+        // Crop C (basil, no data) must be absent.
+        $this->assertStringNotContainsString('/crop-book/basil/', $htmlSummer,
+            'season=summer: basil (no month data) must NOT be in results');
+
+        // ── season=spring ──────────────────────────────────────────────────────────
+        $resSpring = $this->get('/crop-book/?season=spring');
+        $this->assertSame(200, $resSpring->getStatusCode());
+        $htmlSpring = (string)$resSpring->getBody();
+        // Crop A (pepper) must be present.
+        $this->assertStringContainsString('/crop-book/pepper/', $htmlSpring,
+            'season=spring: pepper (months [3,4,5]) must be in results');
+        // Crop B (tomato, summer) must be absent.
+        $this->assertStringNotContainsString('/crop-book/tomato/', $htmlSpring,
+            'season=spring: tomato (months [6,7,8]) must NOT be in results');
+        // Crop C (basil, no data) must be absent.
+        $this->assertStringNotContainsString('/crop-book/basil/', $htmlSpring,
+            'season=spring: basil (no month data) must NOT be in results');
     }
 }

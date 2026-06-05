@@ -6,6 +6,7 @@ namespace SFA\Controllers;
 use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use SFA\Lib\FieldRegistry;
 use SFA\Lib\Template;
 
 final class MarketViewController
@@ -362,7 +363,8 @@ final class MarketViewController
             foreach ($stmt->fetchAll() as $r) {
                 $cat = (string)($r['category'] ?? '');
                 if ($cat === '') continue;
-                $out[] = ['slug' => $cat, 'name_he' => $cat];
+                // WI-3 / D-3: map category slug → Hebrew via FieldRegistry::enumLabel
+                $out[] = ['slug' => $cat, 'name_he' => FieldRegistry::enumLabel('category', $cat)];
             }
             return $out;
         } catch (\Throwable $e) {

@@ -46,11 +46,13 @@ $book_label_he = (string)($product['book_label_he']?? $name_he);
 $hist_rows = !empty($product['history']) ? $product['history'] : $history;
 
 // Unit label (§9a)
-$unit_lbl = match(strtolower(trim($unit))) {
-    'kg', 'ק"ג', 'ק״ג' => 'לק״ג',
-    'unit', 'יח׳', 'יח\'' => 'ליחידה',
-    'bunch', 'אגודה' => 'לאגודה',
-    default => $unit !== '' ? 'ל' . $unit : '',
+$_unit_norm = strtolower(trim($unit));
+$unit_lbl = match($_unit_norm) {
+    'kg', 'ק"ג', 'ק״ג'                         => 'לק״ג',
+    'unit', 'יח׳', 'יח\''                       => 'ליחידה',
+    'bunch', 'אגודה'                             => 'לאגודה',
+    'basket_large', 'basket_medium', 'basket_small' => 'לסל',
+    default => (preg_match('/^[a-z][a-z_]*$/', $_unit_norm) ? 'ליחידה' : ($unit !== '' ? 'ל' . $unit : '')),
 };
 
 // Freshness pill (§9a — LOCKED thresholds)
@@ -160,9 +162,9 @@ ob_start();
       </div>
 
       <?php /* Price graph — 28-day (MINOR F-02: range selector shows 28י not 30) */ ?>
-      <div class="pgraph">
+      <div class="pgraph" data-slug="<?= $h($slug) ?>">
         <div class="pgraph__top">
-          <h3>מחיר — 28 ימים אחרונים</h3>
+          <h3 class="pgraph__title">מחיר — 28 ימים אחרונים</h3>
           <?php if ($delta !== null): ?>
             <span class="pgraph__chg <?= $delta >= 0 ? 'up' : 'dn' ?>">
               <?= $delta >= 0 ? '▲' : '▼' ?><?= number_format(abs($delta), 1) ?>%

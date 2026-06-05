@@ -519,13 +519,8 @@
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 4px;
 }
-.cb-crop-hero__icon {
-  width: 80px; height: 80px;
-  display: grid; place-items: center;
-  background: color-mix(in oklch, var(--gj-leaf) 14%, var(--gj-paper));
-  border-radius: 16px;
-  flex: none;
-}
+/* .cb-crop-hero__icon removed — WI-4 hero dedup; icon art box was the "green blob"
+   (svg zero-bbox → empty green box). The .crophero section is now the single hero. */
 .cb-crop-hero__sci {
   font-size: 12px;
   font-style: italic;
@@ -727,3 +722,13 @@
   gap: 10px;
   margin-top: 12px;
 }
+
+/* ── WP-CB-UI-patch01 WI-9: responsive table toggle (THE root-cause fix) ──────
+   /crop-book/table renders TWO views — .cb-table (compact mobile grid) AND
+   .dt-table-wrap > .dt-table (wide 560px+ desktop table). There was NO toggle,
+   so both rendered at every width → the wide table overflowed on mobile (the
+   real cause behind F-PRE-004; WI-7 wrapper + WI-8 clip only masked it). Show
+   the compact list on mobile + the wide table on desktop (also removes the
+   duplicate render on desktop). */
+@media (max-width: 720px) { .cb-table-page .dt-table-wrap { display: none; } }
+@media (min-width: 721px) { .cb-table-page .cb-table { display: none; } }

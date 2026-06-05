@@ -106,7 +106,7 @@ ob_start();
       $tile_mod  = $tier_color_map[$m_color] ?? '';
       $glyph     = $icon_sprite_map[$m_icon] ?? '📋';
     ?>
-    <a class="modtile<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?>" href="<?= $h($m_route) ?>">
+    <a class="modtile modtile--row<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?>" href="<?= $h($m_route) ?>">
       <div class="modtile__art">
         <?php if ($hero_url !== ''): ?>
           <img src="<?= $h($hero_url) ?>" alt="" loading="lazy" decoding="async">
@@ -117,7 +117,7 @@ ob_start();
         <span class="modtile__glyph" aria-hidden="true"><?= $glyph ?></span>
       </div>
       <div class="modtile__body">
-        <div class="modtile__title"><?= $h($m_name) ?><small><?= $h(strtoupper($m_id)) ?></small></div>
+        <div class="modtile__title"><?= $h($m_name) ?></div>
         <p class="modtile__desc"><?= $h($m_sub) ?></p>
         <div class="modtile__foot">
           <?php if ($m_stat !== ''): ?>
@@ -129,12 +129,12 @@ ob_start();
     </a>
     <?php endforeach; ?>
     <?php /* ── WP-CB-UI-patch01: Field Log in-development teaser tile ── */ ?>
-    <div class="modtile modtile--soil is-dev" aria-disabled="true">
+    <div class="modtile modtile--row modtile--soil is-dev" aria-disabled="true">
       <div class="modtile__art">
         <span class="modtile__glyph" aria-hidden="true">📒</span>
       </div>
       <div class="modtile__body">
-        <div class="modtile__title">יומן השדה<small>FIELD-LOG</small></div>
+        <div class="modtile__title">יומן השדה</div>
         <p class="modtile__desc">תיעוד פעולות שדה — זריעה, השקיה, יבול ומשימות</p>
         <div class="modtile__foot">
           <span class="modtile__go">בפיתוח</span>
@@ -210,7 +210,7 @@ ob_start();
       $tile_mod  = $tier_color_map[$m_color] ?? '';
       $glyph     = $icon_sprite_map[$m_icon] ?? '📋';
     ?>
-    <div class="modtile<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?> is-soon" aria-disabled="true">
+    <div class="modtile modtile--row<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?> is-soon" aria-disabled="true">
       <div class="modtile__art">
         <?php if ($hero_url !== ''): ?>
           <img src="<?= $h($hero_url) ?>" alt="" loading="lazy" decoding="async">
@@ -233,32 +233,35 @@ ob_start();
   <?php endif; ?>
 
 
-  <?php /* ── Hub CTA ── */ ?>
+  <?php /* ── Hub CTA system (FIX 5 + CTA SYSTEM) ──
+           data (primary, complete missing data) · suggest (inline FORM, never
+           WhatsApp) · WhatsApp (custom/paid only). */ ?>
   <?php
-  $cta_wa_num  = '';
-  $cta_wa_link = 'https://wa.me/972547776770';
+  $cta_wa_num  = '972547776770';
   if (!empty($contact) && is_array($contact)) {
-      $cta_wa_num  = (string)($contact['whatsapp'] ?? '972547776770');
-      $cta_wa_link = 'https://wa.me/' . preg_replace('/\D/', '', $cta_wa_num);
+      $cta_wa_num = preg_replace('/\D/', '', (string)($contact['whatsapp'] ?? '972547776770'));
   }
+  $cta_wa_link = 'https://wa.me/' . $cta_wa_num . '?text=' . rawurlencode('פתרון מותאם לחווה שלי — דברו איתי');
   ?>
-  <div class="hub-cta">
-    <a class="hub-cta__card hub-cta__card--secondary" href="/community">
-      <div class="hub-cta__icon" aria-hidden="true">📖</div>
-      <div class="hub-cta__body">
-        <div class="hub-cta__title">שתפו אותנו במידע והשלמות לספר</div>
-        <p class="hub-cta__sub">מצאתם נתון חסר או שגוי? עזרו לנו להשלים את הספר</p>
-      </div>
-      <span class="hub-cta__go">לקהילה ←</span>
-    </a>
-    <a class="hub-cta__card hub-cta__card--primary" href="<?= $h($cta_wa_link) ?>" target="_blank" rel="noopener">
-      <div class="hub-cta__icon" aria-hidden="true">💬</div>
-      <div class="hub-cta__body">
-        <div class="hub-cta__title">ספרו לנו מה תרצו שנפתח לחווה שלכם</div>
-        <p class="hub-cta__sub">בקשות לפיצ׳רים, רעיונות ופיתוחים ייעודיים — נשמח לבנות יחד</p>
-      </div>
-      <span class="hub-cta__go">בוואטסאפ ←</span>
-    </a>
+  <div class="cta">
+    <div class="cta__card cta--data">
+      <h3>עזרו להשלים את המידע</h3>
+      <p>הספר והמחירון גדלים מתרומות הקהילה. מצאתם נתון חסר או שגוי? ספרו לנו.</p>
+      <a class="cta__btn" href="/community">◐ השלמת מידע ›</a>
+    </div>
+    <div class="cta__card cta--suggest">
+      <h3>הצעה או בקשה?</h3>
+      <p>אין צ׳אט — טופס קצר.</p>
+      <form class="cta__field" method="post" action="/community#suggest">
+        <input type="text" name="suggestion" placeholder="מה תרצו שנפתח?" aria-label="הצעה"/>
+        <button class="cta__send" type="submit">שליחה</button>
+      </form>
+    </div>
+    <div class="cta__card cta--wa">
+      <span class="ic" aria-hidden="true">✆</span>
+      <div><h3>פתרון מותאם לחווה?</h3><p>פנייה ישירה בוואטסאפ</p></div>
+      <a class="cta__btn" href="<?= $h($cta_wa_link) ?>" target="_blank" rel="noopener">וואטסאפ</a>
+    </div>
   </div>
 
 </div><!-- /hub-home__inner -->

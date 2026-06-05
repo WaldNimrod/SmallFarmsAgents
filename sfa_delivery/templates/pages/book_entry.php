@@ -26,7 +26,7 @@ $active     = 'crop-book';
 $crop_total     = (int)($crop_total     ?? 66);
 $family_total   = (int)($family_total   ?? 8);
 $variety_total  = (int)($variety_total  ?? 242);
-$question_total = (int)($question_total ?? 12);
+$question_total = (int)($question_total ?? 3);
 
 $paths = [
   [
@@ -76,7 +76,97 @@ $view  = (string)($view  ?? 'cards');
 $total = (int)($total ?? count($crops));
 
 // Watercolor art mapping
-$wc_art_map = ['basil'=>'wc-basil.png', 'beet'=>'wc-beet.png', 'broccoli'=>'wc-broccoli.png', 'bush-bean'=>'wc-bush-bean.png', 'cabbage'=>'wc-cabbage.png', 'carrot'=>'wc-carrot.png', 'chard'=>'wc-chard.png', 'cucumber'=>'wc-cucumber.png', 'dill'=>'wc-dill.png', 'eggplant'=>'wc-eggplant.png', 'fennel'=>'wc-fennel.png', 'garlic'=>'wc-garlic.png', 'ginger'=>'wc-ginger.png', 'kale'=>'wc-kale.png', 'leek'=>'wc-leek.png', 'lettuce'=>'wc-lettuce.png', 'melon'=>'wc-melon.png', 'onion'=>'wc-onion.png', 'parsley'=>'wc-parsley.png', 'pea'=>'wc-pea.png', 'pepper'=>'wc-pepper.png', 'pole-bean'=>'wc-pole-bean.png', 'radish'=>'wc-radish.png', 'scallion'=>'wc-scallion.png', 'spinach'=>'wc-spinach.png', 'tomato'=>'wc-tomato.png', 'turmeric'=>'wc-turmeric.png', 'zucchini'=>'wc-zucchini.png'];
+// Watercolor art mapping — original singular keys + C1 plural DB-slug aliases (patch01 recovery)
+$wc_art_map = [
+    // original singular keys (14 masters)
+    'basil'      => 'wc-basil.png',
+    'beet'       => 'wc-beet.png',
+    'broccoli'   => 'wc-broccoli.png',
+    'bush-bean'  => 'wc-bush-bean.png',
+    'cabbage'    => 'wc-cabbage.png',
+    'carrot'     => 'wc-carrot.png',
+    'chard'      => 'wc-chard.png',
+    'cucumber'   => 'wc-cucumber.png',
+    'dill'       => 'wc-dill.png',
+    'eggplant'   => 'wc-eggplant.png',
+    'fennel'     => 'wc-fennel.png',
+    'garlic'     => 'wc-garlic.png',
+    'ginger'     => 'wc-ginger.png',
+    'kale'       => 'wc-kale.png',
+    'leek'       => 'wc-leek.png',
+    'lettuce'    => 'wc-lettuce.png',
+    'melon'      => 'wc-melon.png',
+    'onion'      => 'wc-onion.png',
+    'parsley'    => 'wc-parsley.png',
+    'pea'        => 'wc-pea.png',
+    'pepper'     => 'wc-pepper.png',
+    'pole-bean'  => 'wc-pole-bean.png',
+    'radish'     => 'wc-radish.png',
+    'scallion'   => 'wc-scallion.png',
+    'spinach'    => 'wc-spinach.png',
+    'tomato'     => 'wc-tomato.png',
+    'turmeric'   => 'wc-turmeric.png',
+    'zucchini'   => 'wc-zucchini.png',
+    // C1: plural DB-slug aliases (patch01 recovery)
+    'carrots'                      => 'wc-carrot.png',
+    'tomatoes'                     => 'wc-tomato.png',
+    'cucumbers'                    => 'wc-cucumber.png',
+    'onions'                       => 'wc-onion.png',
+    'peppers'                      => 'wc-pepper.png',
+    'peas'                         => 'wc-pea.png',
+    'beets'                        => 'wc-beet.png',
+    'radishes'                     => 'wc-radish.png',
+    'melons'                       => 'wc-melon.png',
+    'leeks'                        => 'wc-leek.png',
+    'cherry-tomato'                => 'wc-tomato.png',
+    'summer-squash'                => 'wc-zucchini.png',
+    'onions-scallions'             => 'wc-scallion.png',
+    'beans-default-pole-climbing-' => 'wc-pole-bean.png',
+    // C2: 43 new watercolor identity slugs (WP-CB-UI-FIDELITY batch)
+    'anise-hyssop'                 => 'wc-anise-hyssop.png',
+    'artichokes'                   => 'wc-artichokes.png',
+    'arugula'                      => 'wc-arugula.png',
+    'bay'                          => 'wc-bay.png',
+    'beans-default-pole-climbing'  => 'wc-beans-default-pole-climbing.png',
+    'blackberry'                   => 'wc-blackberry.png',
+    'cauliflower'                  => 'wc-cauliflower.png',
+    'celery'                       => 'wc-celery.png',
+    'chickpea'                     => 'wc-chickpea.png',
+    'chicory'                      => 'wc-chicory.png',
+    'chinese-lantern'              => 'wc-chinese-lantern.png',
+    'chives'                       => 'wc-chives.png',
+    'cilantro'                     => 'wc-cilantro.png',
+    'cress'                        => 'wc-cress.png',
+    'edamame'                      => 'wc-edamame.png',
+    'fava-bean'                    => 'wc-fava-bean.png',
+    'hibiscus'                     => 'wc-hibiscus.png',
+    'jerusalem-artichokes'         => 'wc-jerusalem-artichokes.png',
+    'jicama'                       => 'wc-jicama.png',
+    'kohlrabi'                     => 'wc-kohlrabi.png',
+    'lemon-balm'                   => 'wc-lemon-balm.png',
+    'lemon-verbena'                => 'wc-lemon-verbena.png',
+    'lettuce-salad-mix'            => 'wc-lettuce-salad-mix.png',
+    'lovage'                       => 'wc-lovage.png',
+    'mint'                         => 'wc-mint.png',
+    'new-zealand-spinach'          => 'wc-new-zealand-spinach.png',
+    'okra'                         => 'wc-okra.png',
+    'oranges'                      => 'wc-oranges.png',
+    'pac-choi-bok-choy'            => 'wc-pac-choi-bok-choy.png',
+    'potato'                       => 'wc-potato.png',
+    'sage'                         => 'wc-sage.png',
+    'sesame'                       => 'wc-sesame.png',
+    'soybean'                      => 'wc-soybean.png',
+    'strawberry'                   => 'wc-strawberry.png',
+    'sunflower'                    => 'wc-sunflower.png',
+    'sweet-corn'                   => 'wc-sweet-corn.png',
+    'sweet-potato'                 => 'wc-sweet-potato.png',
+    'tarragon'                     => 'wc-tarragon.png',
+    'thyme'                        => 'wc-thyme.png',
+    'turnips'                      => 'wc-turnips.png',
+    'watermelon'                   => 'wc-watermelon.png',
+    'wheat'                        => 'wc-wheat.png',
+    'winter-squash'                => 'wc-winter-squash.png',
+];
 
 ob_start();
 ?>
@@ -155,7 +245,23 @@ ob_start();
         </div>
         <div class="fset">
           <label class="fset__lbl" for="f-season">עונה</label>
-          <input id="f-season" type="text" name="season" value="<?= $h($fseason) ?>" placeholder="קיץ / חורף / אביב…">
+          <?php
+          // Decision A (2026-06-04): real planting-season filter, derived from
+          // sowing_months ∪ transplant_months in payload_json['agronomy'] (PHP post-filter).
+          // Coverage: ~39–44/70 crops have month data; unmatched crops are excluded honestly.
+          $season_opts = [
+              ''       => 'הכל',
+              'summer' => 'קיץ',
+              'winter' => 'חורף',
+              'spring' => 'אביב',
+              'autumn' => 'סתיו',
+          ];
+          ?>
+          <select id="f-season" name="season">
+            <?php foreach ($season_opts as $val => $lbl): ?>
+            <option value="<?= $h($val) ?>"<?= $sel($fseason, $val) ?>><?= $h($lbl) ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
         <div class="fset">
           <label class="fset__lbl" for="f-dtm">ימים להבשלה (עד)</label>
@@ -195,39 +301,86 @@ ob_start();
       <a class="filters__clear" href="/crop-book/?view=<?= $h($view) ?>">↺ נקו סינון</a>
     </div>
     <?php else: ?>
-    <!-- Cards view -->
+    <!-- Cards view — WP-CB-MOBILE FIX 1: compact 1-up ROW cards, no wash,
+         in-season "now" badge (server-derived, current month), .cparam chips. -->
     <div data-aud-view="cards" style="<?= $view !== 'cards' ? 'display:none' : '' ?>">
+      <?php
+        // In-season count for the current month (server-derived in_season flag).
+        $in_season_n = 0;
+        foreach ($crops as $c) { if (!empty($c['in_season'])) { $in_season_n++; } }
+        // Hebrew month name for the count line.
+        $MONTH_HE_FULL = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+        $now_he = $MONTH_HE_FULL[(int)date('n') - 1];
+        // Activity → in-season badge label + glyph (NEVER leak the raw key).
+        $now_badge = [
+          'seed'       => ['g' => '🌱', 'label' => 'עכשיו לזריעה'],
+          'transplant' => ['g' => '🪴', 'label' => 'עכשיו לשתילה'],
+        ];
+      ?>
+      <div class="seasonchips" role="group" aria-label="סינון לפי עונה">
+        <button class="fchip is-on" type="button">🌱 עכשיו בעונה</button>
+        <button class="fchip" type="button">הכל</button>
+      </div>
+      <?php if ($in_season_n > 0): ?>
+      <p class="mcount"><b><?= (int)$in_season_n ?></b> גידולים מתאימים לשתילה/זריעה ב<?= $h($now_he) ?></p>
+      <?php endif; ?>
+
       <div class="cards-grid">
-        <?php foreach ($crops as $c):
-          $cslug = (string)($c['slug'] ?? '');
-          $wc = $wc_art_map[$cslug] ?? null;
+        <?php
+          $first = true;
+          foreach ($crops as $c):
+            $cslug = (string)($c['slug'] ?? '');
+            $wc    = $wc_art_map[$cslug] ?? null;
+            $act   = (string)($c['in_season_activity'] ?? '');
+            $badge = $now_badge[$act] ?? null;
+            $feat  = $first; // featured first card
+            $first = false;
         ?>
-        <a class="ccard" href="/crop-book/<?= $h($cslug) ?>/">
+        <a class="ccard<?= $feat ? ' ccard--feat' : '' ?>" href="/crop-book/<?= $h($cslug) ?>/">
           <div class="ccard__art">
             <?php if ($wc !== null): ?>
               <img src="/public_assets/img/crops/<?= $h($wc) ?>" alt="<?= $h((string)($c['name_he'] ?? '')) ?>" loading="lazy"/>
             <?php else: ?>
               <span class="veg" aria-hidden="true">🌱</span>
             <?php endif; ?>
-            <!-- state dot: no enrichment data at list level — show neutral -->
+            <!-- state dot: no completeness signal at index level → omitted (honest) -->
           </div>
           <div class="ccard__body">
+            <?php if ($feat): ?>
+              <span class="ccard__feattag">מומלץ</span>
+            <?php endif; ?>
+            <?php if ($badge !== null): ?>
+              <span class="ccard__now"><span class="g"><?= $badge['g'] ?></span><?= $h($badge['label']) ?></span>
+            <?php endif; ?>
             <div class="ccard__name"><?= $h((string)($c['name_he'] ?? '')) ?></div>
             <?php if (!empty($c['en_name'])): ?>
-              <div class="ccard__en"><?= $h((string)$c['en_name']) ?></div>
+              <div class="ccard__en" dir="ltr"><?= $h((string)$c['en_name']) ?></div>
             <?php endif; ?>
-            <div class="ccard__meta">
-              <div class="ccard__calcs">
-                <!-- calc pips: dim by default (no live enrichment at index level) -->
-                <?php for ($pi = 0; $pi < 6; $pi++): ?><i class="off"></i><?php endfor; ?>
-              </div>
+            <div class="cparams">
               <?php if (!empty($c['dtm_days'])): ?>
-              <div class="ccard__dtm"><?= (int)$c['dtm_days'] ?><small>ימ׳</small></div>
+              <span class="cparam cparam--dtm"><span class="g">⏳</span><span dir="ltr"><?= (int)$c['dtm_days'] ?></span><small>ימים</small></span>
+              <?php endif; ?>
+              <?php if ($act === 'seed'): ?>
+              <span class="cparam cparam--method"><span class="g">🌱</span>זריעה</span>
+              <?php elseif ($act === 'transplant'): ?>
+              <span class="cparam cparam--method"><span class="g">🪴</span>שתיל</span>
+              <?php endif; ?>
+              <?php if (!empty($c['family_tag_he'])): ?>
+              <span class="cparam"><span class="g">🌿</span><?= $h((string)$c['family_tag_he']) ?></span>
               <?php endif; ?>
             </div>
           </div>
         </a>
         <?php endforeach; ?>
+      </div>
+
+      <!-- CTA foot — complete missing data (primary). -->
+      <div class="cta">
+        <div class="cta__card cta--data">
+          <h3>חסר מידע על גידול?</h3>
+          <p>הספר נבנה בשיתוף הקהילה. אם גידלתם — תרמו נתון, וזה יידלק לכולם.</p>
+          <a class="cta__btn" href="/community">◐ תרמו נתון ›</a>
+        </div>
       </div>
     </div>
 

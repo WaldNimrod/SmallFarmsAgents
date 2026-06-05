@@ -1,504 +1,301 @@
 <?php
 /**
- * calc_dash.php — Calculator dashboard (/calc/) — WP-CB-1.
+ * calc_dash.php — Calculator page (/calc/) — WP-CB-MOBILE FIX 6 rebuild.
  *
- * Dashboard of connected calculator modules (#1→#14).
- * Shared dark context strip feeds every module.
- * Modules are grouped by topic.
- * Sticky summary + PDF/CSV export hooks (stubs).
+ * "Define the question" builder. One scope (#calc-scope[data-calc-state]) with
+ * two states: ASK (question builder) and RESULT (answer + session + export).
  *
- * Architecture: one calculator = one module (data-calc key).
- * Same module embeds standalone in crop pages via .calcmodal.
+ * Compute REUSES the existing client-side CALC registry in crop-book-v1.js
+ * (window.SFA_CALC) — no math is duplicated here. The builder configures a
+ * hidden [data-calc] engine panel, dispatches `input` to trigger the existing
+ * recompute(), reads the rendered result, and surfaces it as .qb-answer +
+ * .qb-break, accumulating each calculation into .qb-session (sessionStorage).
+ *
+ * Only 6 of the 14 calculators have client-side CALC math implemented
+ * (seed/beds/yield/revenue/pop/fert). The other 8 are exposed in the builder
+ * but flagged "בקרוב" (no fabricated result) — see CALC_GOALS data-soon below.
+ *
+ * Assumptions are edited via the EXISTING AssumptionField editor
+ * (macros/assumption_field.php) — opened from .qb-assum (primary entry point).
+ *
+ * Export = the WHOLE session: the session rows are posted to the existing
+ * /calc/print + /calc/export.csv endpoints as rows[label]=value (HubController
+ * already accepts arbitrary rows[] pairs).
  *
  * Variables from controller:
- *   $contact  array — contact info (from HubController)
+ *   $crop_list         array  — [{slug, name_he}]
+ *   $crop_book_values  array  — {slug: {field_name: value_best}}
  *
- * @see COMPONENTS-delta.md §29
- * @see TEMPLATES-delta.md §1 (route /calc/)
+ * @see _COMMUNICATION/team_35/.../design_files/surface-calc.html
+ * @see _COMMUNICATION/team_100/.../LOD400_team10_mobile-build_2026-06-05_v1.0.0.md §3 row 5
  */
 use SFA\Lib\Template;
-use SFA\Lib\FieldRegistry;
 use SFA\Controllers\AssumptionsController;
 
 $h = [Template::class, 'h'];
 
 $page_title = 'מחשבון';
-$page_sub   = 'תכנון גידולים · 14 מודולים';
+$page_sub   = 'תכנון גידולים · הגדרת השאלה';
 $active     = 'calc';
 $back_url   = '/';
 
 $assumptions = AssumptionsController::getAssumptions();
-$germRate    = (float)($assumptions['germination_rate']['default'] ?? 0.90);
-$bedWidth    = (float)($assumptions['bed_width']['default']        ?? 0.80);
-$stdLen      = (float)($assumptions['std_bed_length_m']['default'] ?? 30);
-$oversow     = (float)($assumptions['oversow']['default']          ?? 1.10);
-$compostN    = (float)($assumptions['compost_N_pct']['default']    ?? 0.015);
-$appEff      = (float)($assumptions['application_efficiency']['default'] ?? 0.50);
 
-// V03: crop list for the context-strip <select> + book values for JS calc binding.
+// V03: crop list for the picker + book values for JS calc binding.
 $crop_list        = is_array($crop_list        ?? null) ? $crop_list        : [];
 $crop_book_values = is_array($crop_book_values ?? null) ? $crop_book_values : [];
 
+/**
+ * Goal catalog — the 14 calculators mapped to the existing CALC[kind] registry.
+ * `kind` !== '' && not `soon` => computes live via window.SFA_CALC[kind].
+ * `soon` => UI exposes it (catalog completeness) but no client math exists yet;
+ *           the builder shows a "בקרוב" notice instead of fabricating a number.
+ *
+ *  primary[] renders as the 6 .qb-goal--grid buttons.
+ *  more[]    renders as the .qb-more <select> (the other 8).
+ */
+$CALC_GOALS = [
+    // id, key, label_he, icon, kind (JS CALC), soon, basis_default, result_label, result_unit
+    'seed'        => ['id'=>1,  'label'=>'זרעים לקנות',   'ic'=>'🌱', 'kind'=>'seed',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'כמות לקנייה',  'runit'=>'גרם'],
+    'sow_date'    => ['id'=>4,  'label'=>'תאריך זריעה',   'ic'=>'📅', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'תאריך זריעה',  'runit'=>''],
+    'yield'       => ['id'=>8,  'label'=>'יבול צפוי',     'ic'=>'⚖', 'kind'=>'yield',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'יבול צפוי',    'runit'=>'ק״ג'],
+    'revenue'     => ['id'=>9,  'label'=>'הכנסה צפויה',   'ic'=>'₪', 'kind'=>'revenue', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'הכנסה צפויה',  'runit'=>'₪'],
+    'transplants' => ['id'=>2,  'label'=>'כמות שתילים',   'ic'=>'🪴', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'כמות שתילים',  'runit'=>'שתילים'],
+    'pop'         => ['id'=>10, 'label'=>'צפיפות שתילה',  'ic'=>'▦', 'kind'=>'pop',     'soon'=>false, 'basis'=>'area',     'rlabel'=>'צפיפות',       'runit'=>'צמ׳/מ״ר'],
+    // ── the other 8 (dropdown) ──
+    'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>''],
+    'fert'        => ['id'=>12, 'label'=>'כמות דישון',    'ic'=>'🪱', 'kind'=>'fert',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'קומפוסט',      'runit'=>'ק״ג קומפוסט'],
+    'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>''],
+    'profit'      => ['id'=>13, 'label'=>'רווח גולמי',    'ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'רווח למטר',    'runit'=>'₪/מ׳'],
+    'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות'],
+    'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪'],
+    'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>''],
+    'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>''],
+];
+$primary_keys = ['seed', 'sow_date', 'yield', 'revenue', 'transplants', 'pop'];
+$more_keys    = ['frost', 'fert', 'water', 'profit', 'beds', 'seed_cost', 'succession', 'nursery'];
+
+$default_goal = 'seed';
+$default_goal_def = $CALC_GOALS[$default_goal];
+
+// Assumptions surfaced on the result (germination % + safety margin / oversow).
+$germPct  = (string)round((float)($assumptions['germination_rate']['default'] ?? 0.90) * 100);
+$oversow  = (float)($assumptions['oversow']['default'] ?? 1.10);
+$oversowPct = '+' . (string)round(($oversow - 1) * 100) . '%';
+
 ob_start();
 ?>
-<div class="calc-page">
-  <div class="calc-main">
-    <header style="margin-bottom:4px">
-      <div class="gj-eyebrow" style="font-family:var(--gj-font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gj-sun-deep);margin-bottom:6px;">מחשבון</div>
-      <h1 class="gj-h1">לוח מחשבונים</h1>
-      <p class="gj-lede">14 מחשבוני תכנון — זרעים, לוחות זמנים, יבול, הכנסה ודישון.</p>
-    </header>
+<div class="sh__body" id="calc-scope" data-calc-state="ask"
+     data-calc-goals='<?= $h(json_encode(array_map(static function ($k, $g) {
+        return [
+            'key'   => $k,
+            'label' => $g['label'],
+            'kind'  => $g['kind'],
+            'soon'  => (bool)$g['soon'],
+            'basis' => $g['basis'],
+            'rlabel'=> $g['rlabel'],
+            'runit' => $g['runit'],
+        ];
+     }, array_keys($CALC_GOALS), $CALC_GOALS), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)) ?>'>
+  <h1 class="gj-h1" style="font-size:23px">מחשבון התכנון</h1>
 
-    <!-- Shared context strip -->
-    <div class="calc-context">
-      <label class="ipt">
-        <label>גידול</label>
-        <span class="ipt__box">
-          <select data-k="crop_slug" aria-label="בחר גידול" id="ctx-crop-slug">
-            <option value="">בחר גידול…</option>
-            <?php foreach ($crop_list as $crop_opt): ?>
-              <option value="<?= $h((string)($crop_opt['slug'] ?? '')) ?>"><?= $h((string)($crop_opt['name_he'] ?? '')) ?></option>
+  <!-- ░░ ASK ░░ -->
+  <div class="qb-ask">
+    <div class="qb-intro">
+      <span class="qb-intro__ic">🧮</span>
+      <div>
+        <h2>מה נחשב היום?</h2>
+        <p>בוחרים <b style="color:var(--gj-code-deep)">מה</b> רוצים לדעת ו<b style="color:var(--gj-code-deep)">לפי מה</b>, ולוחצים «חשב». אפשר לחשב כמה דברים — הסשן שומר הכול.</p>
+      </div>
+    </div>
+
+    <div class="qb">
+      <!-- Step 1 — what to calculate -->
+      <div class="qb__step">
+        <div class="qb__steplbl"><span class="qb__stepno">1</span><h3>מה תרצו לחשב?</h3><span class="opt">14 מחשבונים</span></div>
+        <div class="qb-goal qb-goal--grid" id="qb-goal">
+          <?php foreach ($primary_keys as $gk): $g = $CALC_GOALS[$gk]; ?>
+          <button type="button" data-goal="<?= $h($gk) ?>"<?= $gk === $default_goal ? ' class="is-on"' : '' ?>>
+            <span class="g"><?= $h($g['ic']) ?></span><?= $h($g['label']) ?>
+          </button>
+          <?php endforeach; ?>
+        </div>
+        <div class="qb-more">
+          <select aria-label="עוד מחשבונים" id="qb-more">
+            <option value="">עוד מחשבונים… (8)</option>
+            <?php foreach ($more_keys as $gk): $g = $CALC_GOALS[$gk]; ?>
+            <option value="<?= $h($gk) ?>"><?= $h($g['label']) ?></option>
             <?php endforeach; ?>
           </select>
-        </span>
-      </label>
-      <label class="ipt">
-        <label>מספר ערוגות</label>
-        <span class="ipt__box">
-          <input type="number" data-k="num_beds" value="10" min="1"/>
-          <span class="u">ערוגות</span>
-        </span>
-      </label>
-      <label class="ipt">
-        <label>תאריך יעד</label>
-        <span class="ipt__box">
-          <input type="date" data-k="target_date"/>
-        </span>
-      </label>
-      <div class="calc-context__tag">
-        <b>SSoT:</b> ערכי הספר נשלפים מהגידול שנבחר. שנה הנחות דרך ◇ הנחה.
-      </div>
-    </div>
-
-    <!-- ── Group 1: זרעים וזריעה ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-leaf-deep)">🌱</span>
-      <b>זרעים וזריעה</b>
-      <span>מחשבונים 1–3</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #1: seed quantity — INTERACTIVE -->
-      <div class="modcard" data-calc="seed">
-        <div class="modcard__head">
-          <span class="modcard__no">1</span>
-          <span class="modcard__t">כמות זרעים לקנייה</span>
-          <span class="modcard__feed">→ מ-3</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">
-            קלט: <b>מרווח בשורה, שורות, זרעים/גרם</b>
-          </div>
-          <div class="cv__inputs" style="grid-template-columns:1fr 1fr">
-            <label class="ipt"><label>אורך ערוגה</label>
-              <span class="ipt__box"><input type="number" data-k="bed_len" value="30" min="1"/><span class="u">מ׳</span></span></label>
-            <label class="ipt"><label>זרעים לחור</label>
-              <span class="ipt__box"><input type="number" data-k="seeds_per_hole" value="1" min="1"/></span></label>
-          </div>
-          <div class="modcard__res" data-result>—<small> גרם</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-          <div data-extra style="font-size:10px;color:var(--gj-ink-soft)"></div>
         </div>
       </div>
 
-      <!-- Module #2: transplants needed — DISABLED (requires: rows_per_bed, in_row_spacing_cm) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">2</span>
-          <span class="modcard__t">ספיגים / שתילים נדרשים</span>
-          <span class="modcard__soon">בקרוב</span>
+      <!-- Step 2 — crop -->
+      <div class="qb__step">
+        <div class="qb__steplbl"><span class="qb__stepno">2</span><h3>עבור איזה גידול?</h3></div>
+        <label class="ipt" style="max-width:240px">
+          <label>גידול</label>
+          <span class="ipt__box">
+            <select data-k="crop_slug" aria-label="בחר גידול" id="qb-crop">
+              <option value="">בחר גידול…</option>
+              <?php foreach ($crop_list as $crop_opt): ?>
+              <option value="<?= $h((string)($crop_opt['slug'] ?? '')) ?>"><?= $h((string)($crop_opt['name_he'] ?? '')) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </span>
+        </label>
+      </div>
+
+      <!-- Step 3 — basis -->
+      <div class="qb__step">
+        <div class="qb__steplbl"><span class="qb__stepno">3</span><h3>לפי מה לחשב כמות?</h3><span class="opt">בחירה</span></div>
+        <div class="qb-basis" id="qb-basis">
+          <button type="button" data-basis="area" class="is-on">לפי שטח</button>
+          <button type="button" data-basis="beds">מס׳ ערוגות</button>
+          <button type="button" data-basis="seedlings">מס׳ שתילים</button>
         </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('rows_per_bed')[0] ?> · <?= FieldRegistry::label('spacing_in_row_cm')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">מחשבון זה יופעל כאשר נתוני הגידול הנבחר יכללו מרווח ושורות בערוגה.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#2+ספיגים" target="_blank" rel="noopener">← בקש/י מידע</a>
+        <div class="qb-row" id="qb-basis-row">
+          <!-- basis input — swapped by JS per the chosen basis -->
+          <label class="ipt" data-basis-input="area">
+            <label>שטח לגידול</label>
+            <span class="ipt__box"><input type="number" data-k="area" value="30" min="1"/><span class="u">מ׳</span></span>
+          </label>
+          <label class="ipt" data-basis-input="beds" style="display:none">
+            <label>מספר ערוגות</label>
+            <span class="ipt__box"><input type="number" data-k="num_beds" value="10" min="1"/><span class="u">ערוגות</span></span>
+          </label>
+          <label class="ipt" data-basis-input="seedlings" style="display:none">
+            <label>מספר שתילים</label>
+            <span class="ipt__box"><input type="number" data-k="num_seedlings" value="100" min="1"/><span class="u">שתילים</span></span>
+          </label>
+          <!-- target-kg input — only for the "beds for target yield" goal -->
+          <label class="ipt" data-basis-input="target" style="display:none">
+            <label>יעד יבול</label>
+            <span class="ipt__box"><input type="number" data-k="target_kg" value="100" min="1"/><span class="u">ק״ג</span></span>
+          </label>
         </div>
       </div>
 
-      <!-- Module #3: nursery trays + sow date — DISABLED (requires: days_in_nursery) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">3</span>
-          <span class="modcard__t">מגשי משתלה + תאריך זריעה</span>
-          <span class="modcard__soon">בקרוב</span>
+      <!-- Step 4 — time anchor (optional) -->
+      <div class="qb__step">
+        <div class="qb__steplbl"><span class="qb__stepno">4</span><h3>עוגן זמן</h3><span class="opt">רשות</span></div>
+        <div class="qb-basis" id="qb-anchor">
+          <button type="button" data-anchor="target" class="is-on">תאריך יעד</button>
+          <button type="button" data-anchor="sow">תאריך זריעה</button>
+          <button type="button" data-anchor="now">עכשיו</button>
         </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('days_in_nursery')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">ממתין להעשרת שדה ימים במשתלה — בביצוע בWP-CB-DATA.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#3+מגשים" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Group 2: לוחות זמנים ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-code-deep)">📅</span>
-      <b>לוחות זמנים</b>
-      <span>מחשבונים 4–6</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #4: sowing date back-calc — DISABLED (requires: days_to_maturity) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">4</span>
-          <span class="modcard__t">תאריך זריעה (חישוב לאחור)</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('days_to_maturity')[0] ?> · <?= FieldRegistry::label('days_in_nursery')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">יחשב מתאריך קציר יעד לאחור — ימי גידול + משתלה.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#4+זריעה" target="_blank" rel="noopener">← בקש/י מידע</a>
+        <div class="qb-row" id="qb-anchor-row">
+          <label class="ipt" data-anchor-input="target">
+            <label>תאריך יעד לקטיף</label>
+            <span class="ipt__box"><input type="date" data-k="target_date"/><span class="u">📅</span></span>
+          </label>
+          <label class="ipt" data-anchor-input="sow" style="display:none">
+            <label>תאריך זריעה</label>
+            <span class="ipt__box"><input type="date" data-k="sow_date"/><span class="u">📅</span></span>
+          </label>
         </div>
       </div>
 
-      <!-- Module #5: harvest date forward — DISABLED (requires: days_to_maturity, harvest_window_max_days) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">5</span>
-          <span class="modcard__t">תאריך קציר + חלון</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('days_to_maturity')[0] ?> · <?= FieldRegistry::label('harvest_window_max_days')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">יחשב מתאריך זריעה קדימה — התחלה וסיום חלון קציר.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#5+קציר" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-      <!-- Module #6: succession schedule — DISABLED (requires: succession_interval_weeks) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">6</span>
-          <span class="modcard__t">לוח זריעות מדורגות</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('succession_interval_weeks')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">ממתין להעשרת שדה מחזור זריעה.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+נתון+#6+מחזור" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Group 3: יבול והכנסה ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-sun-deep)">💰</span>
-      <b>יבול והכנסה</b>
-      <span>מחשבונים 7–9</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #7: beds for target yield — INTERACTIVE -->
-      <div class="modcard" data-calc="beds">
-        <div class="modcard__head">
-          <span class="modcard__no">7</span>
-          <span class="modcard__t">ערוגות ליעד יבול</span>
-          <span class="modcard__feed to-sum">→ סיכום</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">קלט: <b>יעד ק״ג, יבול/מ׳</b></div>
-          <div class="cv__inputs" style="grid-template-columns:1fr">
-            <label class="ipt"><label>יעד יבול</label>
-              <span class="ipt__box"><input type="number" data-k="target_kg" value="100" min="1"/><span class="u">ק״ג</span></span></label>
-          </div>
-          <div class="modcard__res" data-result>—<small> ערוגות</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-          <div data-extra style="font-size:10px;color:var(--gj-ink-soft)"></div>
-        </div>
-      </div>
-
-      <!-- Module #8: expected yield — INTERACTIVE -->
-      <div class="modcard" data-calc="yield">
-        <div class="modcard__head">
-          <span class="modcard__no">8</span>
-          <span class="modcard__t">יבול צפוי</span>
-          <span class="modcard__feed to-sum">→ סיכום</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">קלט: <b>יבול/מ׳</b></div>
-          <div class="cv__inputs" style="grid-template-columns:1fr">
-            <label class="ipt"><label>אורך ערוגה</label>
-              <span class="ipt__box"><input type="number" data-k="bed_len" value="30" min="1"/><span class="u">מ׳</span></span></label>
-          </div>
-          <div class="modcard__res" data-result>—<small> ק״ג</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-        </div>
-      </div>
-
-      <!-- Module #9: revenue — INTERACTIVE -->
-      <div class="modcard" data-calc="revenue">
-        <div class="modcard__head">
-          <span class="modcard__no">9</span>
-          <span class="modcard__t">הכנסה צפויה</span>
-          <span class="modcard__feed to-sum">→ סיכום</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">קלט: <b>יבול/מ׳, מחיר</b></div>
-          <div class="cv__inputs" style="grid-template-columns:1fr">
-            <label class="ipt"><label>שטח</label>
-              <span class="ipt__box"><input type="number" data-k="area" value="300" min="1"/><span class="u">מ׳</span></span></label>
-          </div>
-          <div class="modcard__res" data-result>—<small> ₪</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Group 4: צפיפות וצמחים ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-leaf)">🌿</span>
-      <b>צפיפות וצמחים</b>
-      <span>מחשבון 10</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #10: plant population — INTERACTIVE -->
-      <div class="modcard" data-calc="pop">
-        <div class="modcard__head">
-          <span class="modcard__no">10</span>
-          <span class="modcard__t">צפיפות צמחים</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">קלט: <b>מרווח, שורות</b></div>
-          <div class="modcard__res" data-result>—<small> צמ׳/מ״ר</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-          <div class="popgrid" data-popgrid style="grid-template-columns:repeat(4,1fr);max-width:200px"></div>
-        </div>
-      </div>
-
-      <!-- Module #11: frost / planting window — DISABLED (requires: frost_tolerance_class, days_to_maturity) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">11</span>
-          <span class="modcard__t">חלון שתילה (כפור)</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש מספר הגידול:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('frost_tolerance_class')[0] ?> · <?= FieldRegistry::label('days_to_maturity')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">יחשב מתי בטוח לשתול לפי סבילות לכפור ותאריכי הכפור האחרון והראשון.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#11+כפור" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Group 5: דישון ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-soil-deep)">🪱</span>
-      <b>דישון</b>
-      <span>מחשבון 12</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #12: fertiliser — INTERACTIVE -->
-      <div class="modcard" data-calc="fert">
-        <div class="modcard__head">
-          <span class="modcard__no">12</span>
-          <span class="modcard__t">כמות קומפוסט</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__src">קלט: <b>צריכת N, שטח</b></div>
-          <div class="cv__inputs" style="grid-template-columns:1fr">
-            <label class="ipt"><label>שטח</label>
-              <span class="ipt__box"><input type="number" data-k="area_m2" value="300" min="1"/><span class="u">מ״ר</span></span></label>
-          </div>
-          <div class="modcard__res" data-result>—<small> ק״ג קומפוסט</small></div>
-          <div class="cv__formula" data-formula style="font-size:9px;direction:ltr"></div>
-          <div data-extra style="font-size:10px;color:var(--gj-ink-soft)"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ── Group 6: כלכלה ── -->
-    <div class="dash-group">
-      <span class="dash-group__ic" style="background:var(--gj-tomato-deep)">📊</span>
-      <b>כלכלה</b>
-      <span>מחשבונים 13–14</span>
-    </div>
-    <div class="calc-dash">
-
-      <!-- Module #13: crop profit comparison — DISABLED (requires: avg_yield_per_bed_m, documented_price) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">13</span>
-          <span class="modcard__t">השוואת רווח גידולים</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field"><?= FieldRegistry::label('avg_yield_per_bed_m')[0] ?> · <?= FieldRegistry::label('documented_price')[0] ?></span>
-          </div>
-          <p class="modcard__disabled-msg">ידרג גידולים לפי הכנסה למטר — ממתין למחשבון #14 לחישוב שולי רווח.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#13+רווח" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-      <!-- Module #14: seed / input cost — DISABLED (requires: user input seed price) -->
-      <div class="modcard modcard--disabled">
-        <div class="modcard__head">
-          <span class="modcard__no">14</span>
-          <span class="modcard__t">עלות זרעים / תשומות</span>
-          <span class="modcard__soon">בקרוב</span>
-        </div>
-        <div class="modcard__body">
-          <div class="modcard__needs">
-            <span class="modcard__needs-lbl">נדרש:</span>
-            <span class="modcard__needs-field">מחיר זרעים לגרם (מהמשתמש)</span>
-          </div>
-          <p class="modcard__disabled-msg">יחשב עלות זרעים מכמות #1. מזין את שולי הרווח ב-#13.</p>
-          <a class="modcard__req-link" href="https://wa.me/972547776770?text=בקשת+מחשבון+#14+עלות" target="_blank" rel="noopener">← בקש/י מידע</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Assumptions section -->
-    <div class="cb-block" style="margin-top:18px">
-      <h3>הנחות תכנון</h3>
-      <?php
-      $assumption_keys_to_show = ['germination_rate', 'bed_width', 'oversow', 'std_bed_length_m', 'compost_N_pct', 'application_efficiency'];
-      foreach ($assumption_keys_to_show as $key):
-        $assump       = $assumptions[$key] ?? [];
-        $display_value = (string)($assump['default'] ?? '');
-        $display_unit  = (string)($assump['unit']    ?? '');
-        if ($display_unit === 'fraction') { $display_value = (string)round((float)$display_value * 100); $display_unit = '%'; $data_scale = 0.01; }
-        else { $data_scale = 1; }
-        include __DIR__ . '/../macros/assumption_field.php';
-      endforeach;
-      ?>
+      <div class="qb__echo" id="qb-echo">השאלה שלך: אחשב <b><?= $h($default_goal_def['label']) ?></b> עבור <b>—</b>, לפי <b>שטח</b>.</div>
+      <button class="qb__go" type="button" id="qb-go">חשב ›</button>
     </div>
   </div>
 
-  <!-- Sticky rail: summary + export -->
-  <div class="calc-rail">
-    <div class="calc-summary">
-      <h4>סיכום תכנון</h4>
-      <div class="calc-summary__row">
-        <span>יבול כולל</span><b data-summary-yield>—</b>
+  <!-- ░░ RESULT ░░ -->
+  <div class="qb-result">
+    <div class="qb-result__head">
+      <button class="qb-result__back" type="button" id="qb-back">‹ שאלה חדשה</button>
+      <span class="qb-result__q" id="qb-result-q"></span>
+    </div>
+
+    <!-- session — accumulated, saved (sessionStorage, per-device for v1) -->
+    <div class="qb-session" id="qb-session" hidden>
+      <div class="qb-session__head">
+        <span>💾</span><h4>תוצאות הסשן</h4>
+        <span class="badge" id="qb-session-badge">0 חישובים · נשמר</span>
       </div>
-      <div class="calc-summary__row">
-        <span>הכנסה כוללת</span><b data-summary-revenue>—</b>
+      <div id="qb-session-rows"></div>
+    </div>
+
+    <!-- a soon/unavailable goal renders this notice instead of a fabricated number -->
+    <div class="qb-soon" id="qb-soon" hidden style="border:1px solid color-mix(in oklch, var(--gj-sun) 28%, var(--gj-paper));background:color-mix(in oklch, var(--gj-sun) 9%, var(--gj-paper));border-radius:var(--gj-r-l);padding:16px;margin-bottom:12px">
+      <b style="font-family:var(--gj-font-head);font-size:15px;display:block;margin-bottom:4px">מחשבון זה בפיתוח</b>
+      <p style="font-size:13px;color:var(--gj-ink-soft);margin:0 0 10px;line-height:1.5">המחשבון <span id="qb-soon-name"></span> ידלק כשנתוני הספר הדרושים יושלמו. נשמח שתבקשו אותו.</p>
+      <a class="qb-assum__edit" href="https://wa.me/972547776770?text=בקשת+מחשבון+SFA" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none">← בקשו מחשבון זה</a>
+    </div>
+
+    <div class="qb-answer" id="qb-answer">
+      <div class="qb-answer__lbl" id="qb-answer-lbl">תוצאה</div>
+      <div class="qb-answer__big" id="qb-answer-big">—</div>
+    </div>
+
+    <div class="qb-break" id="qb-break"><!-- breakdown rows injected by JS --></div>
+
+    <!-- editable base assumptions — opens the EXISTING AssumptionField editor -->
+    <div class="qb-assum">
+      <span class="ic">◇</span>
+      <div class="qb-assum__txt">
+        <b>הנחות יסוד בשימוש</b>
+        <span>נביטה <?= $h($germPct) ?>% · ביטחון <?= $h($oversowPct) ?> — ניתן לדייק</span>
       </div>
-      <div class="calc-summary__row">
-        <span>קומפוסט</span><b data-summary-compost>—</b>
-      </div>
-      <div class="calc-summary__row is-total">
-        <span>סיכום יבול</span><b>—</b>
+      <button class="qb-assum__edit" type="button" id="qb-assum-edit" aria-expanded="false" aria-controls="qb-assum-editor">✎ ערוך הנחות</button>
+    </div>
+
+    <!-- AssumptionField editors (the EXISTING macro) — toggled open by .qb-assum__edit -->
+    <div class="cb-block" id="qb-assum-editor" hidden style="margin-bottom:12px">
+      <h3>הנחות תכנון</h3>
+      <?php
+      $assumption_keys_to_show = ['germination_rate', 'oversow', 'bed_width', 'std_bed_length_m', 'compost_N_pct', 'application_efficiency'];
+      foreach ($assumption_keys_to_show as $akey):
+          $assump        = $assumptions[$akey] ?? [];
+          $key           = $akey;
+          $assumption    = $assump;
+          $display_value = (string)($assump['default'] ?? '');
+          $display_unit  = (string)($assump['unit']    ?? '');
+          if ($display_unit === 'fraction') { $display_value = (string)round((float)$display_value * 100); $display_unit = '%'; $data_scale = 0.01; }
+          else { $data_scale = 1; }
+          include __DIR__ . '/../macros/assumption_field.php';
+      endforeach;
+      ?>
+    </div>
+
+    <!-- export = WHOLE session -->
+    <div class="calc-export" style="margin:0">
+      <h4>הורדת כל הסשן</h4>
+      <p>כל החישובים יחד — קובץ אחד לשיתוף או הדפסה.</p>
+      <div class="calc-export__btns" style="grid-template-columns:1fr 1fr">
+        <a class="calc-export__btn" id="qb-export-pdf" href="/calc/print" target="_blank" rel="noopener">⤓ PDF · הסשן</a>
+        <a class="calc-export__btn calc-export__btn--ghost" id="qb-export-csv" href="/calc/export.csv">⤓ CSV · הסשן</a>
       </div>
     </div>
-    <div class="calc-export">
-      <h4>יצוא תכנון</h4>
-      <p>שמרו, שתפו, ייבאו.</p>
-      <div class="calc-export__btns">
-        <a class="calc-export__btn" href="/calc/print" data-calc-export="pdf" target="_blank" rel="noopener">⬇ PDF</a>
-        <a class="calc-export__btn calc-export__btn--ghost" href="/calc/export.csv" data-calc-export="csv">⬇ CSV</a>
-      </div>
-    </div>
+  </div>
+
+  <!-- ── Hidden compute engine: reuses the EXISTING CALC[kind] recompute().
+       The builder writes data-calc + [data-k]/[data-book] here, dispatches
+       `input`, then reads [data-result]. No math is duplicated. ── -->
+  <div id="qb-engine" data-calc="" style="display:none" aria-hidden="true">
+    <span class="bv" data-book="spacing" data-val="0"></span>
+    <span class="bv" data-book="rows" data-val="0"></span>
+    <span class="bv" data-book="seeds_per_gram" data-val="0"></span>
+    <span class="bv" data-book="yield_per_m" data-val="0"></span>
+    <span class="bv" data-book="price" data-val="0"></span>
+    <span class="bv" data-book="n" data-val="0"></span>
+    <span class="bv" data-book="p" data-val="0"></span>
+    <span class="bv" data-book="k" data-val="0"></span>
+    <input type="hidden" data-k="bed_len" value="30"/>
+    <input type="hidden" data-k="seeds_per_hole" value="1"/>
+    <input type="hidden" data-k="target_kg" value="100"/>
+    <input type="hidden" data-k="area" value="300"/>
+    <input type="hidden" data-k="area_m2" value="300"/>
+    <span data-result></span><span data-formula></span><span data-extra></span>
   </div>
 </div>
 
 <?php if (!empty($crop_book_values)): ?>
-<!-- V03: per-crop book values for SFA_CALC binding on crop selection.
-     Field aliases mirror FieldRegistry::CANON + CALC operand names in crop-book-v1.js.
-     Only numeric/measurable fields are embedded; enum fields (planting_method etc.) are omitted. -->
 <script>
 window.SFA_CROP_BOOK = <?= json_encode($crop_book_values, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 </script>
 <?php endif; ?>
-
-<!-- V03: wire crop <select> → populate [data-book] chips in every active calc panel. -->
-<script>
-(function () {
-  'use strict';
-  // Field alias map: maps SFA_CROP_BOOK field_name variants → the data-book key
-  // that crop-book-v1.js CALC functions read.
-  var BOOK_ALIAS = {
-    spacing_in_row_cm:            'spacing',
-    in_row_spacing_cm:            'spacing',
-    rows_per_bed:                 'rows',
-    seeds_per_g:                  'seeds_per_gram',
-    seeds_per_gram:               'seeds_per_gram',
-    yield_per_bed_m:              'yield_per_m',
-    avg_yield_per_bed_m:          'yield_per_m',
-    price_documented:             'price',
-    documented_price:             'price',
-    nutrient_removal_n_kg_per_ha: 'n',
-    'nutrient_removal_N':         'n',
-    nutrient_removal_p_kg_per_ha: 'p',
-    nutrient_removal_k_kg_per_ha: 'k'
-  };
-
-  function applyBookValues(slug) {
-    var bookData = (window.SFA_CROP_BOOK && slug) ? (window.SFA_CROP_BOOK[slug] || {}) : {};
-    // Build a flat map: data-book key → numeric value
-    var flat = {};
-    Object.keys(bookData).forEach(function (fn) {
-      var key = BOOK_ALIAS[fn];
-      if (key) {
-        var v = parseFloat(bookData[fn]);
-        if (isFinite(v)) flat[key] = v;
-      }
-    });
-    // Update all [data-book] elements across active calc panels.
-    document.querySelectorAll('[data-calc]:not(.modcard--disabled) [data-book]').forEach(function (el) {
-      var bookKey = el.getAttribute('data-book');
-      if (bookKey && flat[bookKey] != null) {
-        el.setAttribute('data-val', flat[bookKey]);
-        // Also update any editable input inside this chip.
-        var inp = el.querySelector('.bv__in');
-        if (inp) { inp.value = flat[bookKey]; inp.setAttribute('data-orig', flat[bookKey]); }
-      }
-    });
-    // Trigger recompute across all calc panels via the global SFA_CALC / crop-book-v1.js.
-    // crop-book-v1.js exposes no public recomputeAll; dispatch input events on all data-k inputs.
-    document.querySelectorAll('[data-calc]:not(.modcard--disabled) [data-k]').forEach(function (el) {
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    var sel = document.getElementById('ctx-crop-slug');
-    if (!sel) return;
-    sel.addEventListener('change', function () {
-      applyBookValues(sel.value);
-    });
-  });
-})();
-</script>
 <?php
 $content = ob_get_clean();
 echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active', 'back_url'));

@@ -241,21 +241,13 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
         }
         companions_by_crop.setdefault(bid, []).append(partner_a)
 
-    # knowledge notes — public only (is_internal_farm_use_only = FALSE), HARD GATE
-    cur.execute("""
-        SELECT crop_id, note_type, body_text, trust_tier
-        FROM crop_knowledge_notes
-        WHERE is_internal_farm_use_only = FALSE
-        ORDER BY crop_id, id
-    """)
-    notes_by_crop: dict[int, list[dict[str, Any]]] = {}
-    for row in cur.fetchall():
-        cid = row["crop_id"]
-        notes_by_crop.setdefault(cid, []).append({
-            "note_type": row["note_type"],
-            "body_text": row["body_text"],
-            "trust_tier": row["trust_tier"],
-        })
+    # NOTE: the internal crop-knowledge narrative table is INTENTIONALLY NOT
+    # read here. Per LOD400 WP-B2 §3.1 OPERATIVE LICENSING INVARIANT (binding),
+    # it holds copyrighted JMF MasterClass fair-use snippets licensed for
+    # INTERNAL farm-operator use only — no publisher file may query it and no
+    # upload payload may include its content (Prohibitions §3.1.1 #1 & #2).
+    # The `is_internal_farm_use_only` flag is a farm-internal subdivision, NOT a
+    # publication license. Enforced by test_ni_publisher_isolation.py (AC-21b).
 
     now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     out = []
@@ -297,7 +289,8 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
             "harvest": harvest_by_crop.get(cid, []),
             "storage": storage_by_crop.get(cid),
             "companions": companions_by_crop.get(cid, []),
-            "notes": notes_by_crop.get(cid, []),  # public-only; empty until public notes exist
+            # "notes" deliberately omitted — internal crop-knowledge narrative is
+            # internal-only per LOD400 WP-B2 §3.1 licensing invariant (see above).
         }
         out.append({
             "id": cid,

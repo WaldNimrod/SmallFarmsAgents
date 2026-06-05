@@ -1,0 +1,143 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "ts": "2026-06-04T00:56:28.476Z",
+  "total": 10,
+  "failures": 2,
+  "verdict": "FAIL",
+  "results": [
+    {
+      "viewport": "mobile375",
+      "page": "hub",
+      "url": "/",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [
+        "Tend"
+      ],
+      "title": "SFA · SFA",
+      "screenshot": null,
+      "pass": false
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-book",
+      "url": "/crop-book/",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "ספר גידולים · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-book-table",
+      "url": "/crop-book/table",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "טבלת גידולים · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-book-lettuce",
+      "url": "/crop-book/lettuce/",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "חסה · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "mobile375",
+      "page": "market-prd059",
+      "url": "/market/prd059",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "אבוקדו · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "hub",
+      "url": "/",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [
+        "Tend"
+      ],
+      "title": "SFA · SFA",
+      "screenshot": null,
+      "pass": false
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-book",
+      "url": "/crop-book/",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "ספר גידולים · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-book-table",
+      "url": "/crop-book/table",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "טבלת גידולים · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-book-lettuce",
+      "url": "/crop-book/lettuce/",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "חסה · SFA",
+      "screenshot": null,
+      "pass": true
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "market-prd059",
+      "url": "/market/prd059",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "אבוקדו · SFA",
+      "screenshot": null,
+      "pass": true
+    }
+  ]
+}

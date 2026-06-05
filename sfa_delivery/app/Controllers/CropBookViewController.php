@@ -46,12 +46,25 @@ final class CropBookViewController
         $sow       = trim((string)($qp['sow']    ?? ''));   // planting_method (payload)
         $frost     = trim((string)($qp['frost']  ?? ''));   // frost_tolerance_class (payload)
 
-        $sql    = 'SELECT slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
+        // Decision A (2026-06-04): season is a PHP post-filter derived from
+        // sowing_months ∪ transplant_months in payload_json['agronomy'].
+        // crops.season stores growth-cycle tokens (annual/year-round/biennial) — NOT planting season.
+        // Season→months map (meteorological, Israel):
+        /** @var array<string,int[]> */
+        $seasonMonthsMap = [
+            'summer' => [6, 7, 8],
+            'autumn' => [9, 10, 11],
+            'winter' => [12, 1, 2],
+            'spring' => [3, 4, 5],
+        ];
+
+        // Decision A fix (2026-06-04): id required to join crop_varieties for month data.
+        $sql    = 'SELECT id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max, payload_json FROM crops';
         $where  = [];
         $params = [];
         if ($q !== '')      { $where[] = '(hebrew_name LIKE ? OR scientific_name LIKE ?)'; $params[] = "%$q%"; $params[] = "%$q%"; }
         if ($family !== '') { $where[] = 'family_name_he = ?'; $params[] = $family; }
-        if ($season !== '') { $where[] = 'season LIKE ?';      $params[] = "%$season%"; }
+        // NOTE: season filter is NOT in SQL — handled as PHP post-filter below (Decision A).
         if ($dtmMax !== null) { $where[] = '(dtm_max IS NULL OR dtm_max <= ?)'; $params[] = $dtmMax; }
         if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
         $sql .= ' ORDER BY hebrew_name';
@@ -59,6 +72,72 @@ final class CropBookViewController
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $rows = $stmt->fetchAll() ?: [];
+
+        // Decision A fix: months data lives in crop_varieties.payload_json['agronomy'],
+        // NOT in crops.payload_json (the crop-level payload has only numeric medians).
+        // Build crop_id → int[] months map via ONE batched query across all result crops.
+        /** @var array<int,int[]> */
+        $monthsByCrop = [];
+
+        // Normalize a months value from payload: may be a JSON string, an array, or absent.
+        $normalizeMonths = static function (mixed $raw): array {
+            if (is_array($raw)) {
+                return array_map('intval', $raw);
+            }
+            if (is_string($raw) && $raw !== '') {
+                $decoded = json_decode($raw, true);
+                if (is_array($decoded)) {
+                    return array_map('intval', $decoded);
+                }
+            }
+            return [];
+        };
+
+        // WP-CB-MOBILE FIX 1: the in-season "now" badge needs sow/transplant months
+        // per crop for the CURRENT month, so we fetch the batched variety months for
+        // the whole result set on every list view (was season-filter-only). Still ONE
+        // query over the result-set ids (team_100 L-GATE_B perf guard preserved: a
+        // single IN(...) query, not per-crop). Sow vs transplant are tracked separately
+        // so the badge can say "עכשיו לזריעה" vs "עכשיו לשתילה".
+        /** @var array<int,int[]> */
+        $sowMonthsByCrop = [];
+        /** @var array<int,int[]> */
+        $transMonthsByCrop = [];
+        $cropIds = array_filter(array_map(static fn ($r) => (int)($r['id'] ?? 0), $rows));
+        if (!empty($cropIds)) {
+            try {
+                $placeholders = implode(',', array_fill(0, count($cropIds), '?'));
+                $varStmt = $this->pdo->prepare(
+                    "SELECT crop_id, payload_json FROM crop_varieties WHERE crop_id IN ($placeholders)"
+                );
+                $varStmt->execute(array_values($cropIds));
+                foreach ($varStmt->fetchAll() as $vRow) {
+                    $cid     = (int)$vRow['crop_id'];
+                    $vPayload = json_decode((string)($vRow['payload_json'] ?? '{}'), true);
+                    $vPayload = is_array($vPayload) ? $vPayload : [];
+                    $agro    = is_array($vPayload['agronomy'] ?? null) ? $vPayload['agronomy'] : [];
+                    $sowM    = $normalizeMonths($agro['sowing_months']     ?? null);
+                    $transM  = $normalizeMonths($agro['transplant_months'] ?? null);
+                    $sowMonthsByCrop[$cid]   = array_values(array_unique(array_merge($sowMonthsByCrop[$cid]   ?? [], $sowM)));
+                    $transMonthsByCrop[$cid] = array_values(array_unique(array_merge($transMonthsByCrop[$cid] ?? [], $transM)));
+                    $merged  = array_values(array_unique(array_merge(
+                        $monthsByCrop[$cid] ?? [],
+                        $sowM,
+                        $transM
+                    )));
+                    $monthsByCrop[$cid] = $merged;
+                }
+            } catch (\Throwable) {
+                // crop_varieties table absent or query failure — degrade to empty maps.
+                // Season filter will exclude all crops when season is selected (no data → no match).
+                $monthsByCrop = [];
+                $sowMonthsByCrop = [];
+                $transMonthsByCrop = [];
+            }
+        }
+
+        // Current month (1..12) for the in-season badge.
+        $nowMonth = (int)date('n');
 
         $crops = [];
         foreach ($rows as $row) {
@@ -76,20 +155,43 @@ final class CropBookViewController
                 if ($ft !== $frost) { continue; }
             }
 
+            // Decision A (2026-06-04): season post-filter — derive season from sowing_months ∪ transplant_months.
+            // Source: crop_varieties.payload_json['agronomy'] (batched above into $monthsByCrop).
+            // Crops lacking month data simply don't match any season (honest partial coverage).
+            if ($season !== '' && isset($seasonMonthsMap[$season])) {
+                $targetMonths = $seasonMonthsMap[$season];
+                $cropMonths   = $monthsByCrop[(int)($row['id'] ?? 0)] ?? [];
+
+                if (empty($cropMonths) || empty(array_intersect($cropMonths, $targetMonths))) {
+                    continue; // no month data, or months don't intersect the requested season
+                }
+            }
+
             $dtm = isset($row['dtm_max']) && $row['dtm_max'] !== null
                 ? (int)$row['dtm_max']
                 : (isset($row['dtm_min']) && $row['dtm_min'] !== null ? (int)$row['dtm_min'] : null);
 
+            // WP-CB-MOBILE FIX 1: derive the in-season "now" badge for the CURRENT month.
+            // 'transplant' wins over 'seed' when the crop is plantable both ways this
+            // month (transplant is the more actionable signal). Values consumed by
+            // book_entry.php → .ccard__now ('seed' → 🌱 עכשיו לזריעה / 'transplant' → 🪴 עכשיו לשתילה).
+            $cid          = (int)($row['id'] ?? 0);
+            $sowNow       = in_array($nowMonth, $sowMonthsByCrop[$cid]   ?? [], true);
+            $transNow     = in_array($nowMonth, $transMonthsByCrop[$cid] ?? [], true);
+            $inSeasonAct  = $transNow ? 'transplant' : ($sowNow ? 'seed' : '');
+
             $crops[] = [
-                'slug'          => $slug,
-                'name_he'       => (string)($row['hebrew_name'] ?? ''),
-                'en_name'       => (string)($payload['name_en'] ?? ($row['scientific_name'] ?? '')),
-                'icon_slug'     => self::ICON_MAP[$slug] ?? 'leaf',
-                'icon_svg'      => '<svg viewBox="0 0 24 24"><use href="#icon-' . htmlspecialchars(self::ICON_MAP[$slug] ?? 'leaf', ENT_QUOTES, 'UTF-8') . '"></use></svg>',
-                'icon_url'      => (string)($payload['icon_url'] ?? ''),
-                'family_tag_he' => (string)($payload['family_tag_he'] ?? ''),
-                'category'      => (string)($row['category'] ?? ''),
-                'dtm_days'      => $dtm,
+                'slug'             => $slug,
+                'name_he'          => (string)($row['hebrew_name'] ?? ''),
+                'en_name'          => (string)($payload['name_en'] ?? ($row['scientific_name'] ?? '')),
+                'icon_slug'        => self::ICON_MAP[$slug] ?? 'leaf',
+                'icon_svg'         => '<svg viewBox="0 0 24 24"><use href="#icon-' . htmlspecialchars(self::ICON_MAP[$slug] ?? 'leaf', ENT_QUOTES, 'UTF-8') . '"></use></svg>',
+                'icon_url'         => (string)($payload['icon_url'] ?? ''),
+                'family_tag_he'    => (string)($payload['family_tag_he'] ?? ''),
+                'category'         => (string)($row['category'] ?? ''),
+                'dtm_days'         => $dtm,
+                'in_season'        => $inSeasonAct !== '',
+                'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
             ];
         }
 
@@ -119,13 +221,14 @@ final class CropBookViewController
 
     public function questions(Request $request, Response $response): Response
     {
-        // Template (book_questions.php) expects q_he/sub_he/href shape.
+        // Decision B (2026-06-04): restore data-backed leading questions.
+        // summer/winter now route to the season filter backed by sowing_months ∪ transplant_months
+        // (Decision A). 'fast' routes to dtm_max=60 (≤60 days to maturity).
+        // team_35 owns the final/expanded set + exact "מתאים לקיץ" semantics via DESIGN_REQUEST_team35_v1.0.0.md (Q4).
         $questions = [
-            ['slug' => 'summer',      'q_he' => 'מה מתאים לקיץ?',     'sub_he' => 'גידולי קיץ פוריים',     'href' => '/crop-book/table?category=summer'],
-            ['slug' => 'winter',      'q_he' => 'מה זורעים לחורף?',   'sub_he' => 'גידולי חורף קלים',     'href' => '/crop-book/table?category=winter'],
-            ['slug' => 'fast',        'q_he' => 'מה גדל מהר?',        'sub_he' => 'DTM קצר',              'href' => '/crop-book/table?category=fast'],
-            ['slug' => 'beginner',    'q_he' => 'מה מתאים למתחילים?', 'sub_he' => 'התחלה רכה',            'href' => '/crop-book/table?category=beginner'],
-            ['slug' => 'small-space', 'q_he' => 'מה מתאים לשטח קטן?',  'sub_he' => 'כדים, מרפסות, מ״ר',    'href' => '/crop-book/table?category=small-space'],
+            ['slug' => 'summer', 'q_he' => 'מה מתאים לקיץ?',    'sub_he' => 'זריעה בחודשי הקיץ',   'href' => '/crop-book/?season=summer'],
+            ['slug' => 'winter', 'q_he' => 'מה זורעים לחורף?',  'sub_he' => 'זריעה בחודשי החורף', 'href' => '/crop-book/?season=winter'],
+            ['slug' => 'fast',   'q_he' => 'מה גדל מהר?',        'sub_he' => 'עד 60 ימ׳ להבשלה',   'href' => '/crop-book/?dtm_max=60'],
         ];
         return $this->html($response, Template::render('pages/book_questions', ['questions' => $questions]));
     }
@@ -152,6 +255,22 @@ final class CropBookViewController
     public function tableView(Request $request, Response $response): Response
     {
         $category = trim((string)($request->getQueryParams()['category'] ?? ''));
+
+        // Item 5: 301-redirect legacy semantic tokens that never matched botanical categories
+        // to the live equivalents backed by season/dtm filters (F-INFO-005).
+        static $legacyRedirects = [
+            'summer'      => '/crop-book/?season=summer',
+            'winter'      => '/crop-book/?season=winter',
+            'fast'        => '/crop-book/?dtm_max=60',
+            'beginner'    => '/crop-book/',
+            'small-space' => '/crop-book/',
+        ];
+        if ($category !== '' && isset($legacyRedirects[$category])) {
+            return $response
+                ->withStatus(301)
+                ->withHeader('Location', $legacyRedirects[$category]);
+        }
+
         $sql = 'SELECT id, slug, hebrew_name, scientific_name, family_name_he, category, season, dtm_min, dtm_max FROM crops';
         $params = [];
         if ($category !== '') {
@@ -194,13 +313,18 @@ final class CropBookViewController
             $stmt = $this->pdo->prepare('SELECT slug, hebrew_name, scientific_name, family_name_he, category, dtm_min, dtm_max FROM crops WHERE hebrew_name LIKE ? ORDER BY hebrew_name LIMIT 30');
             $stmt->execute(['%' . $q . '%']);
             foreach ($stmt->fetchAll() as $row) {
+                $slug   = (string)($row['slug'] ?? '');
+                // Resolve watercolor art the same way entry() / detail() do (F-REA-002).
+                $wcFile = self::WC_ART[$slug] ?? null;
+                $iconUrl = $wcFile !== null ? '/public_assets/img/crops/' . $wcFile : '';
                 $items[] = [
-                    'slug'          => (string)($row['slug'] ?? ''),
+                    'slug'          => $slug,
                     'name_he'       => (string)($row['hebrew_name'] ?? ''),
                     'en_name'       => (string)($row['scientific_name'] ?? ''),
                     'family_tag_he' => (string)($row['family_name_he'] ?? ''),
                     'dtm_days'      => isset($row['dtm_max']) ? (int)$row['dtm_max'] : null,
                     'icon_svg'      => '',
+                    'icon_url'      => $iconUrl,
                 ];
             }
         }
@@ -214,34 +338,94 @@ final class CropBookViewController
     }
     /** WP-CB-1-patch01: watercolor art mapping (crop slug -> wc-*.png). Only slugs with a real served PNG; others fall back to the icon sprite. */
     private const WC_ART = [
-        'basil' => 'wc-basil.png',
-        'beet' => 'wc-beet.png',
-        'broccoli' => 'wc-broccoli.png',
-        'bush-bean' => 'wc-bush-bean.png',
-        'cabbage' => 'wc-cabbage.png',
-        'carrot' => 'wc-carrot.png',
-        'chard' => 'wc-chard.png',
-        'cucumber' => 'wc-cucumber.png',
-        'dill' => 'wc-dill.png',
-        'eggplant' => 'wc-eggplant.png',
-        'fennel' => 'wc-fennel.png',
-        'garlic' => 'wc-garlic.png',
-        'ginger' => 'wc-ginger.png',
-        'kale' => 'wc-kale.png',
-        'leek' => 'wc-leek.png',
-        'lettuce' => 'wc-lettuce.png',
-        'melon' => 'wc-melon.png',
-        'onion' => 'wc-onion.png',
-        'parsley' => 'wc-parsley.png',
-        'pea' => 'wc-pea.png',
-        'pepper' => 'wc-pepper.png',
-        'pole-bean' => 'wc-pole-bean.png',
-        'radish' => 'wc-radish.png',
-        'scallion' => 'wc-scallion.png',
-        'spinach' => 'wc-spinach.png',
-        'tomato' => 'wc-tomato.png',
-        'turmeric' => 'wc-turmeric.png',
-        'zucchini' => 'wc-zucchini.png',
+        // ── original singular keys (14 masters) ──────────────────────────────
+        'basil'      => 'wc-basil.png',
+        'beet'       => 'wc-beet.png',
+        'broccoli'   => 'wc-broccoli.png',
+        'bush-bean'  => 'wc-bush-bean.png',
+        'cabbage'    => 'wc-cabbage.png',
+        'carrot'     => 'wc-carrot.png',
+        'chard'      => 'wc-chard.png',
+        'cucumber'   => 'wc-cucumber.png',
+        'dill'       => 'wc-dill.png',
+        'eggplant'   => 'wc-eggplant.png',
+        'fennel'     => 'wc-fennel.png',
+        'garlic'     => 'wc-garlic.png',
+        'ginger'     => 'wc-ginger.png',
+        'kale'       => 'wc-kale.png',
+        'leek'       => 'wc-leek.png',
+        'lettuce'    => 'wc-lettuce.png',
+        'melon'      => 'wc-melon.png',
+        'onion'      => 'wc-onion.png',
+        'parsley'    => 'wc-parsley.png',
+        'pea'        => 'wc-pea.png',
+        'pepper'     => 'wc-pepper.png',
+        'pole-bean'  => 'wc-pole-bean.png',
+        'radish'     => 'wc-radish.png',
+        'scallion'   => 'wc-scallion.png',
+        'spinach'    => 'wc-spinach.png',
+        'tomato'     => 'wc-tomato.png',
+        'turmeric'   => 'wc-turmeric.png',
+        'zucchini'   => 'wc-zucchini.png',
+        // ── C1: plural DB-slug aliases (patch01 recovery) ────────────────────
+        'carrots'                    => 'wc-carrot.png',
+        'tomatoes'                   => 'wc-tomato.png',
+        'cucumbers'                  => 'wc-cucumber.png',
+        'onions'                     => 'wc-onion.png',
+        'peppers'                    => 'wc-pepper.png',
+        'peas'                       => 'wc-pea.png',
+        'beets'                      => 'wc-beet.png',
+        'radishes'                   => 'wc-radish.png',
+        'melons'                     => 'wc-melon.png',
+        'leeks'                      => 'wc-leek.png',
+        'cherry-tomato'              => 'wc-tomato.png',
+        'summer-squash'              => 'wc-zucchini.png',
+        'onions-scallions'           => 'wc-scallion.png',
+        'beans-default-pole-climbing-' => 'wc-pole-bean.png',
+        // ── C2: 43 new watercolor identity slugs (WP-CB-UI-FIDELITY batch) ──
+        'anise-hyssop'               => 'wc-anise-hyssop.png',
+        'artichokes'                 => 'wc-artichokes.png',
+        'arugula'                    => 'wc-arugula.png',
+        'bay'                        => 'wc-bay.png',
+        'beans-default-pole-climbing' => 'wc-beans-default-pole-climbing.png',
+        'blackberry'                 => 'wc-blackberry.png',
+        'cauliflower'                => 'wc-cauliflower.png',
+        'celery'                     => 'wc-celery.png',
+        'chickpea'                   => 'wc-chickpea.png',
+        'chicory'                    => 'wc-chicory.png',
+        'chinese-lantern'            => 'wc-chinese-lantern.png',
+        'chives'                     => 'wc-chives.png',
+        'cilantro'                   => 'wc-cilantro.png',
+        'cress'                      => 'wc-cress.png',
+        'edamame'                    => 'wc-edamame.png',
+        'fava-bean'                  => 'wc-fava-bean.png',
+        'hibiscus'                   => 'wc-hibiscus.png',
+        'jerusalem-artichokes'       => 'wc-jerusalem-artichokes.png',
+        'jicama'                     => 'wc-jicama.png',
+        'kohlrabi'                   => 'wc-kohlrabi.png',
+        'lemon-balm'                 => 'wc-lemon-balm.png',
+        'lemon-verbena'              => 'wc-lemon-verbena.png',
+        'lettuce-salad-mix'          => 'wc-lettuce-salad-mix.png',
+        'lovage'                     => 'wc-lovage.png',
+        'mint'                       => 'wc-mint.png',
+        'new-zealand-spinach'        => 'wc-new-zealand-spinach.png',
+        'okra'                       => 'wc-okra.png',
+        'oranges'                    => 'wc-oranges.png',
+        'pac-choi-bok-choy'          => 'wc-pac-choi-bok-choy.png',
+        'potato'                     => 'wc-potato.png',
+        'sage'                       => 'wc-sage.png',
+        'sesame'                     => 'wc-sesame.png',
+        'soybean'                    => 'wc-soybean.png',
+        'strawberry'                 => 'wc-strawberry.png',
+        'sunflower'                  => 'wc-sunflower.png',
+        'sweet-corn'                 => 'wc-sweet-corn.png',
+        'sweet-potato'               => 'wc-sweet-potato.png',
+        'tarragon'                   => 'wc-tarragon.png',
+        'thyme'                      => 'wc-thyme.png',
+        'turnips'                    => 'wc-turnips.png',
+        'watermelon'                 => 'wc-watermelon.png',
+        'wheat'                      => 'wc-wheat.png',
+        'winter-squash'              => 'wc-winter-squash.png',
     ];
 
     public function detail(Request $request, Response $response, array $args): Response
@@ -465,8 +649,14 @@ final class CropBookViewController
         }
 
         // ── WP-CB-1: depth param + enrichment + assumptions ──────────
+        // WP-CB-MOBILE Stage 2: the 3-depth IA is simple|full|deep. 'drill' is
+        // kept as a back-compat alias for the deepest view (legacy ?depth=drill
+        // links + earlier tests) and normalised to 'deep' for the template.
         $depth = trim((string)($request->getQueryParams()['depth'] ?? 'simple'));
-        if (!in_array($depth, ['simple', 'full', 'drill'], true)) {
+        if ($depth === 'drill') {
+            $depth = 'deep';
+        }
+        if (!in_array($depth, ['simple', 'full', 'deep'], true)) {
             $depth = 'simple';
         }
 
@@ -526,6 +716,19 @@ final class CropBookViewController
         // Family for rotation hint
         $family_name_he = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
 
+        // WP-CB-MOBILE Stage 2 — Deep depth provenance/range data (NO fabrication).
+        // (a) per-agronomy-field range across the crop's varieties: {min,max,count}.
+        //     Only numeric agronomy values count toward the range; fields with a
+        //     single reporting variety yield count=1 and equal min/max (template
+        //     suppresses the range line then). Built from the same $varieties the
+        //     vtable already renders — no new query.
+        $variety_ranges = self::buildVarietyRanges($varieties);
+        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by
+        //     trust. Derived from the winning_source_class the enrichment/payload
+        //     already exposes via $cb1_fields — never invented. Empty when the
+        //     mirror carries no provenance (template then omits the source row).
+        $source_classes = self::buildSourceClasses($cb1_fields);
+
         return $this->html($response, Template::render('pages/book_crop', [
             'crop'             => $crop,
             'varieties'        => $varieties,
@@ -538,6 +741,10 @@ final class CropBookViewController
             'wc_art'           => $wc_art,
             'family_name_he'   => $family_name_he,
             'assumptions'      => AssumptionsController::getAssumptions(),
+            // WP-CB-MOBILE Stage 2 (Deep depth)
+            'variety_ranges'   => $variety_ranges,
+            'source_classes'   => $source_classes,
+            'variety_count'    => count($varieties),
         ]));
     }
 
@@ -752,6 +959,75 @@ final class CropBookViewController
         }
 
         return $out;
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2 (Deep depth): build per-agronomy-field numeric ranges
+     * across all varieties of a crop. Returns [field => {min,max,count}] using
+     * only numeric values that are actually present in variety payloads — no
+     * synthesised data. Consumed by book_crop.php Deep view to render the
+     * "value · טווח min–max · N זנים" line under each datum.
+     *
+     * @param array<int,array<string,mixed>> $varieties
+     * @return array<string,array{min:float,max:float,count:int}>
+     */
+    private static function buildVarietyRanges(array $varieties): array
+    {
+        $acc = []; // field => list<float>
+        foreach ($varieties as $v) {
+            $agro = is_array($v['agronomy'] ?? null) ? $v['agronomy'] : [];
+            foreach ($agro as $field => $val) {
+                if ($val === null || $val === '' || !is_numeric($val)) {
+                    continue;
+                }
+                $acc[(string)$field][] = (float)$val;
+            }
+        }
+        $out = [];
+        foreach ($acc as $field => $vals) {
+            if (empty($vals)) {
+                continue;
+            }
+            $out[$field] = [
+                'min'   => min($vals),
+                'max'   => max($vals),
+                'count' => count($vals),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2 (Deep depth): collect the distinct source classes that
+     * actually back this crop's fields, ranked by trust EX > PR > WR. Source is
+     * the winning_source_class already on $cb1_fields (enrichment row or variety
+     * payload) — never invented. Returns an ordered list of canonical codes
+     * (subset of ['EX','PR','WR']); empty when the mirror has no provenance.
+     *
+     * @param array<string,array<string,mixed>> $cb1_fields
+     * @return string[]
+     */
+    private static function buildSourceClasses(array $cb1_fields): array
+    {
+        // Normalise the variety of source-class tokens the pipeline emits into the
+        // three farmer-facing trust tiers. Anything unrecognised is dropped (no leak).
+        static $rank = ['EX' => 0, 'PR' => 1, 'WR' => 2];
+        static $alias = [
+            'EX' => 'EX', 'EXPERT' => 'EX',
+            'PR' => 'PR', 'PROFESSIONAL' => 'PR', 'NI' => 'PR',
+            'WR' => 'WR', 'WEB' => 'WR', 'NET' => 'WR',
+        ];
+        $seen = [];
+        foreach ($cb1_fields as $field) {
+            $raw = strtoupper((string)($field['winning_source_class'] ?? ''));
+            if ($raw === '' || !isset($alias[$raw])) {
+                continue;
+            }
+            $seen[$alias[$raw]] = true;
+        }
+        $codes = array_keys($seen);
+        usort($codes, static fn ($a, $b) => ($rank[$a] ?? 9) <=> ($rank[$b] ?? 9));
+        return $codes;
     }
 
     private function html(Response $response, string $body, int $status = 200): Response

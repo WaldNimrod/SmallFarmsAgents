@@ -4087,18 +4087,19 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-patch01
   label: "ספר גידולים: UI polish — crop-book entry density + hub full-width / Field-Log tile (יומן השדה בפיתוח)"
-  status: BUILDING
+  status: COMPLETE
   phase: ui_polish
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_B
-  lod_status: LOD400_LOCKED
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-06-03"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-CLASSB"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-patch01/LOD400_spec.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/ARCHIVE_MANIFEST.md"
   branch: "claude/ui-polish-hub-cropbook-2026-06-03"
   gate_history:
   - gate: L-GATE_E
@@ -4142,9 +4143,34 @@ work_packages:
       hub 4 tiles incl. 'יומן השדה' is-dev/aria-disabled non-clickable; 'גנן'=1, 'חקלאות מקומית'=1,
       'חקלאות קטנה'=0; .hub-cta dual CTA (→/community + primary →wa.me); /crop-book/ dense grid (74 crop
       anchors, no inline style); /about Tend=0; 6 routes 200. L-GATE_V R2 executable (live matches branch).
-  notes: "OPENED 2026-06-03 (team_00 live UI feedback; round-2 folded in). BUILT + team_100 L-GATE_B PASS (08f529d).
-    L-GATE_V R1 FAIL = deploy-precondition only (live still pre-patch01; branch ready). NEXT: team_99 deploy
-    08f529d → DEPLOY_REPORT → team_190 L-GATE_V R2 (C1–C9) → LOD500_LOCKED. Branch claude/ui-polish-hub-cropbook-2026-06-03."
+  - gate: DEPLOY
+    result: SUCCESS
+    round: FINAL
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "6703313"
+    report_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/team_99/SFA-S003-P004-WP-CB-UI-patch01/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 FINAL deploy 6703313 to sfa.nimrod.bio (FTPS; 12 transferred / exit 0). WI-1..WI-7 served; CSS ?v=
+      1780515224→1780520599; smoke 4/4 PASS. Supersedes the 08f529d partial. team_100 independently verified live
+      CSS byte-identical to branch (re-audit 2026-06-04); a prior team_50 'NO-GO' was a false wrong-file/stale-cache
+      read (rejected). WI-8/WI-9 (/crop-book/table @375 overflow, c7b4368/e798bc8) NOT in 6703313 — deploy with FIDELITY.
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    round: 2
+    date: "2026-06-04"
+    validator: team_190
+    validator_engine: "Cursor Agent (GPT-5.x — non-Claude, IR#1/#5)"
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-patch01/WP-CB-UI-patch01_LGATE-V_R2_VERDICT_v1.0.0.md"
+    mandate_ref: "_archive/SFA-S003-P004-WP-CB-UI-patch01/TEAM_100/SFA-S003-P004-WP-CB-UI-patch01/VALIDATION_MANDATE_team190_LGATE-V_R2_2026-06-04_v1.0.0.md"
+    notes: >
+      9/9 C1–C9 PASS on live 6703313 @ ?v=1780520599 (cache-busted, correct CSS file per marker). 1 INFO
+      (F-190-PATCH01-V-R2-01: /crop-book/table @375 overflow — WI-8/9 undeployed, deferred to FIDELITY deploy +
+      team_50 PRELAUNCH-QA; per mandate §3 carve-out, NOT a C1–C9 failure). CLOSING verdict → team_100 LOD500_LOCKED.
+  notes: "CLOSED 2026-06-04 — LOD500_LOCKED per ADR042 (L-GATE_V R2 PASS_WITH_FINDINGS, team_190/GPT-5.x non-Claude,
+    9/9 on live 6703313). Self-archived (ADR034 R9 L2 spoke): _archive/SFA-S003-P004-WP-CB-UI-patch01/ARCHIVE_MANIFEST.md.
+    DEFERRED CARRY: WI-8/WI-9 (/crop-book/table overflow, c7b4368/e798bc8) deploy with WP-CB-UI-FIDELITY; tracked by
+    team_50 PRELAUNCH-QA. Branch claude/ui-polish-hub-cropbook-2026-06-03."
   profile: L0
 
 - id: SFA-S003-P004-WP-PRELAUNCH-QA
@@ -4191,6 +4217,302 @@ work_packages:
       WI-7); (3) team_50 re-audit → team_190 L-GATE_V → GO.
   notes: "OPENED 2026-06-03 (pre-launch readiness audit). team_50 NO-GO (deploy-pending + mobile overflow).
     NEXT: team_99 deploy patch01 final tip + team_10 overflow fix → team_50 re-audit → team_190 L-GATE_V → launch."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-UI-FIDELITY
+  label: "ספר גידולים: UI fidelity & Hebrew localization remediation — crop-book/market raw numbers + English tokens + broken hero/filters (pre-launch)"
+  status: COMPLETE
+  phase: validate
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-FIDELITY/ARCHIVE_MANIFEST.md"
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-04"
+  milestone_ref: "S003"
+  spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-UI-FIDELITY/LOD400_spec.md"
+  evidence_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/audit_evidence/"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-04"
+    notes: >
+      team_00: live site far from team_35 mockups (raw numbers, English text, broken interfaces). team_100 CDP
+      audit confirmed launch-blocking defects on the CORE crop pages that passed composer/validate AND prior
+      L-GATE_V (structural gates miss rendered formatting/localization/fidelity; team_50 Haiku QA was unreliable).
+      team_00 directs a full remediation WP + repeat visual validation + team_35 completions, handed to a fresh
+      session via aos_handoff full 100 that must review/improve + externally validate (team_190) BEFORE execution.
+    validator: team_00
+  - gate: L-GATE_S
+    result: DRAFT
+    date: "2026-06-04"
+    validator: team_100
+    notes: >
+      team_100 authored LOD400 DRAFT (characterization). 5 BLOCKERS: D-1 raw 6-decimal floats on crop pages
+      (book_crop.php/prov_value.php), D-2 English unit codes cm/days/weeks/count (no unit→Hebrew map in
+      FieldRegistry), D-3 market category chips = raw English keys (root_vegetables/leafy_greens/…), D-4 crop-book
+      filters return 0 (season token vs data mismatch), D-5 broken/duplicated oversized crop hero (.crophero +
+      .cb-crop-hero). 3 MAJOR: classb.js not on crop-book/calc; English <small> eyebrows; full mockup-fidelity
+      sweep. 7 ACs (CDP visual + functional). Evidence: audit_evidence/ (live + Board-A/B screenshots, cdp_facts).
+      NOT self-certified — executing session improves it + routes external L-GATE_S (team_190) before build.
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-04"
+    validator: team_190
+    validator_engine: "Cursor Composer (GPT-5.x) — non-Claude (IR#1/#5)"
+    authorize_build: true
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-FIDELITY/WP-CB-UI-FIDELITY_LGATE-S_VERDICT_v1.0.0.md"
+    notes: >
+      team_100 improved LOD to v1.1.0 (all 5 blockers pinned to file:line; +D-1b double-unit, +D-4b mis-routed
+      leading-questions, +D-5b #identity anchor guard; design Q1 decided, Q2-Q5 → team_35 via WI-7; patch01 WI-9
+      folded). team_190 (GPT-5.x) verified every pin against source: rootcause 5/5, precision 5/5, constitutional
+      5/5. One MINOR F-190-FID-S-01 (AC-7 IR#4 should name roadmap.yaml) — folded inline by team_100. Build
+      authorized. Next: team_10 (Sonnet) L-GATE_B build → team_100 independent CDP verification.
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-04"
+    validator: team_100
+    build_commit: "0cbd5b8"
+    verdict_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/LGATE-B_VERDICT_team100_2026-06-04_v1.0.0.md"
+    notes: >
+      team_10 (Sonnet) built WI-1..WI-9. team_100 independent L-GATE_B: full diff review + deterministic render
+      harness 19/19 (no raw floats; Hebrew units; single hero; #identity retarget; no green blob; enum xlate) +
+      static integration checks (graph route/selectors, classb gate). Inline polish: discrete units days/count
+      round to int (59.043478→59, Board-A). composer 167/167, php -l clean, validate 29/19/0, delivery-tier only,
+      IR#4 clean. SURFACED (non-blocking): D-4a season = growth-cycle data gap (honest "מחזור גידול" filter shipped;
+      true season filter needs a data WP); D-4b leading-questions reduced to `fast` (team_35 Q4). AC-3/5/6 deferred
+      to live L-GATE_V CDP. Next: team_99 deploy HEAD 0cbd5b8 (subsumes 5 undeployed commits + team_50 deploy-lag
+      NO-GO) → team_190 (non-Claude) L-GATE_V design-vs-mockup on live → LOD500_LOCKED.
+  - gate: L-GATE_B
+    result: PASS-amended
+    date: "2026-06-04"
+    validator: team_100
+    build_commit: "4c9bab2"
+    decision_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-FIDELITY/DECISION_team00_season-and-questions_2026-06-04_v1.0.0.md"
+    notes: >
+      team_00 Decision A (in-session): derive season from existing sowing_months — NO data WP. D-4a now a real
+      "עונה" filter (PHP post-filter on crop_varieties.payload_json.agronomy.sowing_months ∪ transplant_months ∩
+      season-months). Correctness fix: months live in the VARIETY payload, not the crop payload (batched lookup) —
+      caught + fixed before deploy. Decision B: leading-questions restored (summer/winter→season, fast→dtm_max),
+      "12 שאלות"→3; team_35 owns the final/expanded set + "מתאים לקיץ" semantics (DESIGN_REQUEST pending). +end-to-end
+      regression test testSeasonFilterReadsVarietyMonths; composer 168/168; validate 0 FAIL; +perf guard. Deploy
+      target advanced to HEAD 4c9bab2. team_00 held deploy until A/B resolved — now resolved (B interim shippable).
+  - gate: DEPLOY
+    result: SUCCESS_WITH_1_FINDING
+    round: 1
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "4c9bab2"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 deployed 4c9bab2 (FIDELITY blockers + Decisions A+B + patch01 WI-1..9 subsumed) to sfa.nimrod.bio;
+      CSS ?v= 1780522574→1780532267; 4/5 smoke PASS. 1 finding (prov__srcval 59.043478 raw 6-decimal in drill
+      provenance) → team_100 DISPOSITIONED: FIXED (acca9b2, prov_table.php fmtNumber). ⚠ This deploy PREDATES the
+      crop-book visual remediation (cards 168px, centered crop page, toggle) + 70 crop icons + the prov fix — those
+      are committed (ea9b975/67195a4/8ce4fe1/acca9b2) but NOT live. SECOND deploy @acca9b2 routed to team_99
+      (MSG-team100-to-team99-...-DEPLOY2-...). L-GATE_V HELD until the full visual set is live.
+  - gate: DEPLOY
+    result: SUCCESS
+    round: 2
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "acca9b2"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-FIDELITY/DEPLOY_REPORT_v2.0.0.md"
+    notes: >
+      team_99 SECOND deploy acca9b2 — 67 crop watercolors + CSS + templates (80 files; image gate met, not the
+      10-file failure mode); CSS ?v= 1780532267→1780576560; all 5 smoke PASS; §4.1 prov finding RESOLVED. team_100
+      independent live verification PASS (evidence live_evidence_acca9b2/): 70 crops render art (69 distinct wc-*.png
+      served), served CSS minmax(168px)+cb-crop-detail max-width:1120px+aud-head flex-start (cache-busted), single
+      hero, 0 raw 6-decimals incl. drill, 0 English units, CDP no-overflow. Crop-book visual round LIVE.
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-04"
+    validator: team_190
+    validator_engine: "Cursor Agent (GPT-5.x — non-Claude, IR#1/#5)"
+    live_sha: "acca9b2"
+    served_asset_version: 1780576560
+    verdict_ref: "_COMMUNICATION/team_190/SFA-S003-P004/WP-CB-UI-FIDELITY/WP-CB-UI-FIDELITY_LGATE-V_VERDICT_v1.0.0.md"
+    notes: >
+      LAUNCH GATE PASS — AC-1..AC-7 all pass on live acca9b2 (@?v=1780576560); 0 BLOCKER/0 MAJOR; 3 INFO
+      (mono eyebrows→WI-7, calc JSON English keys non-user-visible, dead legacy table?category route). Crop-book
+      entry 70/70 wc-*.png cards @168px + toggle aligned; crop page single hero + centered 1120px; blockers
+      D-1..D-5 hold; 375 overflow clean incl. /crop-book/table; patch01 C1-C9 hold (C3 superseded by Board-A 168px,
+      INFO). team_100 evidence corroborated. → LOD500_LOCKED (ADR042 self-archive). WI-7 design completions separate.
+  notes: "OPENED 2026-06-04 (pre-launch fidelity remediation; team_00). LOD400 DRAFT for handoff (aos_handoff full
+    100). Executing session: review/improve LOD → team_190 L-GATE_S → team_10 build → team_100 CDP visual L-GATE_B
+    → team_99 deploy → team_190 L-GATE_V design-vs-mockup → LOD500. team_35 design completions per WI-7."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-UI-WI7
+  label: "ספר גידולים: WI-7 design completions (team_35 Q2-Q5) + 2 INFO cleanups — FIDELITY follow-up polish"
+  status: VALIDATE
+  phase: validate
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_V
+  lod_status: BUILT_DEPLOYED_VERIFIED
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-04"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-FIDELITY"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/DESIGN_MANDATE_team35_2026-06-04_v1.0.0.md"
+  branch: "claude/ui-polish-hub-cropbook-2026-06-03"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-04"
+    validator: team_100
+    notes: >
+      Carved from WP-CB-UI-FIDELITY (LOD500_LOCKED) closing verdict — 3 INFO findings + WI-7 design completions,
+      all non-blocking, deferred per mandate. team_00 directs issuing the completion mandates. Scope: Q2 category
+      chip wording, Q3 dunam-vs-hectare yield unit (needs data-basis confirm), Q4 leading-question set + "מתאים
+      לקיץ" semantics, Q5 English mono eyebrows; +INFO calc-JSON English keys (machine), +INFO dead legacy
+      /crop-book/table?category= route. Flow: team_35 DESIGN (text-only — NO screenshots) → team_10 BUILD → team_99
+      deploy → team_50 VISUAL QA (CDP — team_35 cannot screenshot, per team_00) → team_100 record. Delivery-tier.
+  - gate: L-GATE_B
+    result: PASS
+    date: "2026-06-04"
+    validator: team_100
+    builder: team_10
+    commit: "7fb3cf7"
+    notes: >
+      team_00 decided Q2-Q5 directly via /AOS_decide (DECISION_WI7_*); team_35 step skipped. Plus team_50
+      full-system re-audit (GO-WITH-FIXES) cross-checked vs team_100's own sweep — agreement on all but F-REA-001
+      (basket unit English, MAJOR) which team_50 caught + team_100 missed (value of dual-engine QA). Consolidated
+      build: F-REA-001 basket units→לסל + hardened default; F-REA-002 search watercolor; F-REA-003/Q5 hub eyebrows;
+      Q3 kg_per_ha ÷10→ק״ג/דונם (single choke point fmtNumber); legacy table?category→301. composer 205/205.
+  - gate: DEPLOY
+    result: SUCCESS
+    date: "2026-06-04"
+    validator: team_99
+    deployed_sha: "7fb3cf7"
+    report_ref: "_COMMUNICATION/team_99/SFA-S003-P004-WP-CB-UI-WI7/DEPLOY_REPORT_v1.0.0.md"
+    notes: >
+      team_99 THIRD deploy 7fb3cf7 (5 PHP files on top of FIDELITY acca9b2; 82 mtime re-mirror). All 5 smoke PASS.
+      team_100 INDEPENDENT live re-verify PASS: basket_large=0 + לסל present + 0 unit leaks (F-REA-001 fixed —
+      the missed MAJOR confirmed gone); ק״ג/דונם live; search wc-img; no hub English eyebrows; legacy 301.
+      cf-cache DYNAMIC. OPEN (non-blocking): /about tier badges (OPEN/BETA/…) left pending decision; calc Board-A
+      pixel-polish deferred. team_50 spot-check (market-list לסל) to formally confirm → then LOD500.
+  notes: "OPENED 2026-06-04 (FIDELITY follow-up). team_35 design decisions are TEXT/SPEC only (no visual QA
+    capability); team_50 owns the visual screenshot-vs-Board verification per team_00 ruling. Mandates:
+    _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/. NOTE 2026-06-04: Q4 elevated by team_00 to a 4-level
+    graded seasonal-suitability model + new visual interface → split out to WP-CB-SEASON-VIZ (future)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-SEASON-VIZ
+  label: "ספר גידולים: דירוג התאמה עונתית (4 רמות) + ממשק עונות חזותי לכל גידול עם איקונים — פיצ'ר עתידי"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-04"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-SEASON-VIZ/REGISTER_seasonal-suitability_2026-06-04_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-04"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-04): elevate the crop-book season concept from a binary filter to a 4-level graded
+      suitability (מועדף/מתאים/אפשרי/לא-מתאים, derived from sow∪transplant month-coverage per season) + a new
+      crop-page visual interface using the crop watercolor icons (per-season fill by level) + entry-card mini
+      indicator. Data model DECIDED + the 45-crop matrix approved; build deferred. "יש לרשום כחבילת עבודה עתידית".
+  notes: "REGISTERED 2026-06-04 (future feature, team_00). Data model + 45-crop graded matrix + visual direction
+    DECIDED — see REGISTER artifact. Needs LOD + build + team_50 visual QA when scheduled. Render-layer (levels
+    computed from existing month data; no DB change)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-MOBILE
+  label: "ספר גידולים + מחירון + מחשבון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
+  status: IN_PROGRESS
+  phase: validate
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_V
+  lod_status: BUILT_AWAITING_DEPLOY_QA
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-05"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md"
+  design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-MOBILE/design_handoff_mobile_ui/MOBILE_DESIGN_v4.0.0.md"
+  branch: "claude/ui-polish-hub-cropbook-2026-06-03"
+  gate_history:
+  - gate: L-GATE_E
+    result: PASS
+    date: "2026-06-05"
+    validator: team_00
+    notes: >
+      team_00 LAUNCH BLOCKER: crop-book + market not good enough on MOBILE (375). team_100 CDP audit found:
+      crop-page hero overlaps; planting calendar unreadable + leaks raw IL_general region codes; market list
+      one-card-per-row (~12500px scroll); entry cards DTM-number dominates crop name; length/pagination. + /about
+      too many tiers (active-vs-coming unclear). Flow: team_35 DESIGN (Claude Design env) -> team_10 BUILD ->
+      team_99 deploy -> team_50 VISUAL QA @375 -> team_100. Desktop is launch-quality; do not regress it.
+  - gate: L-GATE_S
+    result: PASS
+    date: "2026-06-05"
+    validator: team_100
+    notes: >
+      team_35 v4 design package RECEIVED (design_handoff_mobile_ui: MOBILE_DESIGN_v4.0.0.md + README +
+      8 surface prototypes @375 + mobile-fixes.css override layer). team_100 architect review: design's
+      codebase assumptions verified (module-*.png, mig 049 CropPlantingCalendar, AssumptionField exists,
+      CSS load point _layout.php). team_00 SCOPE DECISION: build FULL v4 in ONE WP (incl. calculator
+      rebuild FIX 6 + 3-depth crop IA). team_00 RATIFIED both desktop-reaching changes: D1 market
+      table-default + D2 type-minimum floor (the only sanctioned desktop diffs). team_100 LOD400 authored:
+      _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md.
+      IL_general raw-token leak quick-win already fixed + tested (crop_calendar.php, bac5b69/9f60f56,
+      207/207); calendar region map reconciled to design SSoT (IL_general->כל הארץ). NEXT: dispatch team_10
+      build (git-isolated; team_100 commits) -> team_99 single batch deploy -> team_50 visual QA @375.
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-05"
+    validator: team_100
+    notes: >
+      team_10 build COMPLETE in 3 git-isolated worktree stages, team_100-integrated by FF-merge onto the
+      shared branch (commits 0024059 stage1, 05d7610 stage2, 7f4c105 stage3; base bf473fb). Stage 1: override
+      layer wired (mobile-fixes.css loads last) + global density + type-floor (D2) + .pcal calendar grid w/
+      activity/season Hebrew maps + crop entry cards (name-dominant row, in-season .ccard__now badge wired
+      from CropPlantingCalendar) + market (collapsible disclaimer, 11 product-category chips incl. סלים,
+      D1 default-table + persisted toggle, RTL stacked .t-price) + about content-first + hub module-*.png
+      launchers + CTA system. Stage 2: stacked .crophero (kills overlap defect #1) + header .sh__depths +
+      Simple/Full/Deep crop IA (crop_topics.php macro). Stage 3: calculator 'define the question' builder
+      (.qb-goal 6+8 goals) + sessionStorage session accumulation + export-all (existing /calc endpoints) +
+      AssumptionField entry point (existing macro). Full PHP suite 215/215 (worktree-rooted autoload verified;
+      +8 net tests). validate_aos 0 FAIL. NO desktop regression beyond ratified D1/D2.
+      TWO HONEST DATA GAPS (no fabrication, flagged to team_00): (1) Deep crop view omits EX/PR/WR source
+      pills where the MySQL mirror lacks provenance (variety ranges still render w/ >=2 varieties);
+      (2) only 6/14 calculators have client math — the 8 server-stub goals show a 'בפיתוח' notice on compute,
+      not a fabricated number (pre-existing; not a regression). NEXT: team_99 single batch deploy (auth-gated
+      off this Mac -> team_00/team_99) -> team_50 VISUAL QA @375 (CDP; external/non-Claude per IR#1/#5) ->
+      team_100 record -> LOD500.
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-05"
+    validator: team_100
+    notes: >
+      Post-build integration + push. Branch PUSHED to origin @ 9cd077b. The pre-push pytest gate (broader than
+      the PHP suite) caught a Stage-2 regression: book_crop.php topic array reduced 13->8, breaking strict
+      canon parity (AC-02 / test_crop_topics.py::test_php_parity vs crop_book/canon/topics.py). Fixed in
+      9cd077b — restored all 13 canon topics in order; the 5 field-less ones are skipped at render
+      (crop_topics.php empty-fields guard), no UI change. Python parity now 6/6; PHP suite 215/215.
+      3 PRE-EXISTING Python failures remain (baseline, OUT OF WP SCOPE, none touch sfa_delivery/):
+      test_ni_publisher_isolation §3.1 (publisher refs crop_knowledge_notes), test_source_registry UC weight
+      (None vs 0.15), test_admin_routes test_t09 (ingestion-run count) — the latter already documented baseline.
+      team_99 deploy from origin 9cd077b.
+  notes: "BUILT+PUSHED 2026-06-05 (origin @ 9cd077b), awaiting deploy + team_50 @375 QA. Mobile launch blocker.
+    Scope=FULL v4 (one WP). D1+D2 ratified. PHP suite 215/215; Python parity restored (pre-push gate caught a
+    13->8 topic regression, fixed in 9cd077b). validate 0 FAIL. 2 honest data gaps (Deep provenance; 6/14 calc
+    client-math) + 3 pre-existing out-of-scope Python failures logged. Deploy held for this single batch."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS

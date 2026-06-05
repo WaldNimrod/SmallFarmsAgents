@@ -230,6 +230,20 @@ def test_t09_runs_trigger_creates_ingestion_run(logged_in_client, db_session):
     if not _get_active_sources_with_profiles(db_session):
         pytest.skip("No active sources with fetch profiles")
 
+    # Integration-DB hygiene (this suite runs against a live, accumulated Postgres
+    # DB — no per-test rollback). /runs/trigger has a concurrency guard that
+    # redirects WITHOUT creating a run when any IngestionRun is still "running"
+    # (runs.py runs_trigger §n_running). Because this test patches out run_pipeline,
+    # the run it creates never transitions out of "running", so a prior interrupted
+    # invocation can leave a stuck row that blocks every later run. Finalize any
+    # such leftovers up front so the assertion reflects this trigger, not DB state.
+    db_session.execute(
+        sa.update(IngestionRun)
+        .where(IngestionRun.status == "running")
+        .values(status="failed", finished_at=datetime.now(timezone.utc))
+    )
+    db_session.commit()
+
     before = db_session.execute(sa.select(sa.func.count()).select_from(IngestionRun)).scalar_one()
     with patch("organic_market_agent.admin.routes.runs.run_pipeline"):
         r = logged_in_client.post("/runs/trigger", follow_redirects=False)

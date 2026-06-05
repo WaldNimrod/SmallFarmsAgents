@@ -101,7 +101,12 @@ final class CropCardIconTest extends TestCase
     // ── book_crop.php (detail page) tests ───────────────────────────────────
 
     /**
-     * AC-U2-03 (detail): when icon_url is set, detail hero renders a watercolor <img>.
+     * AC-U2-03 (detail): detail hero renders the single .crophero section with crop name.
+     *
+     * WI-4 update: The legacy .cb-crop-hero section (with .cb-crop-hero__art / .cb-crop-hero__icon)
+     * was removed in WP-CB-UI-FIDELITY. The new single hero is .crophero (class="crophero").
+     * Art is controlled by $wc_art (watercolor PNG) or emoji fallback (.veg span) — NOT icon_url.
+     * icon_url was only used in the removed legacy hero.
      */
     public function testDetailPageRendersImgWhenIconUrlSet(): void
     {
@@ -113,13 +118,18 @@ final class CropCardIconTest extends TestCase
             'icon_slug' => 'leaf',
         ]);
 
-        $this->assertStringContainsString('class="crop-card__art', $html, 'AC-U2-03: crop-card__art img must be present in detail hero');
-        $this->assertStringContainsString('<img', $html, 'AC-U2-03: detail hero must use <img>');
-        $this->assertStringContainsString(htmlspecialchars($iconUrl, ENT_QUOTES, 'UTF-8'), $html, 'AC-U2-03: detail img src must match icon_url');
+        // WI-4: single crophero section present with h1 crop name
+        $this->assertStringContainsString('class="crophero"', $html, 'AC-U2-03: single .crophero section must be present in detail hero');
+        $this->assertStringContainsString('<h1>', $html, 'AC-U2-03: detail hero must have h1 crop name');
+        $this->assertStringContainsString('בזיליקום', $html, 'AC-U2-03: detail hero must render the Hebrew crop name');
     }
 
     /**
-     * AC-U2-04 (detail): when icon_url is empty, detail hero falls back to SVG sprite.
+     * AC-U2-04 (detail): when icon_url is empty, the single hero still renders.
+     *
+     * WI-4 update: The old .cb-crop-hero__icon fallback (SVG sprite) was removed.
+     * Art fallback is now an emoji <span class="veg"> (via $art_html_v1 in crophero__art).
+     * The legacy .cb-crop-hero section is gone — only .crophero remains.
      */
     public function testDetailPageFallsBackToSvgWhenIconUrlEmpty(): void
     {
@@ -130,9 +140,87 @@ final class CropCardIconTest extends TestCase
             'icon_slug' => 'leaf',
         ]);
 
-        $this->assertStringNotContainsString('class="crop-card__art cb-crop-hero__art"', $html, 'AC-U2-04: detail watercolor img must NOT appear when icon_url empty');
-        $this->assertStringContainsString('cb-crop-hero__icon', $html, 'AC-U2-04: SVG sprite span must be present as fallback');
-        $this->assertStringContainsString('#icon-leaf', $html, 'AC-U2-04: SVG href must reference leaf icon');
+        // WI-4: single hero present; legacy icon box removed (no .cb-crop-hero__icon)
+        $this->assertStringContainsString('class="crophero"', $html, 'AC-U2-04: .crophero single hero must be present');
+        $this->assertStringNotContainsString('cb-crop-hero__icon', $html, 'AC-U2-04: legacy green icon box must NOT be present (WI-4 dedup)');
+        // Art fallback: emoji span OR watercolor img in crophero__art
+        $this->assertStringContainsString('crophero__art', $html, 'AC-U2-04: crophero__art art container must be present');
+    }
+
+    // ── C1: plural-slug art regression (patch01 recovery) ───────────────────
+
+    /**
+     * C1-regression: plural DB slugs must resolve to their watercolor PNG, not fall back
+     * to the generic glyph. Guards against the patch01 singular-only map regression.
+     *
+     * We test by asserting the WC_ART constant directly via ReflectionClass so this
+     * does NOT require a running DB or rendered template.
+     *
+     * @dataProvider pluralSlugArtProvider
+     */
+    public function testPluralSlugResolvesToWcArt(string $slug, string $expectedFile): void
+    {
+        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
+        $map = $rc->getConstant('WC_ART');
+        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $this->assertArrayHasKey($slug, $map, "C1: plural slug '{$slug}' must be present in WC_ART");
+        $this->assertSame($expectedFile, $map[$slug], "C1: '{$slug}' must map to '{$expectedFile}'");
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function pluralSlugArtProvider(): array
+    {
+        return [
+            'carrots'              => ['carrots',                      'wc-carrot.png'],
+            'tomatoes'             => ['tomatoes',                     'wc-tomato.png'],
+            'cucumbers'            => ['cucumbers',                    'wc-cucumber.png'],
+            'onions'               => ['onions',                       'wc-onion.png'],
+            'peppers'              => ['peppers',                      'wc-pepper.png'],
+            'peas'                 => ['peas',                         'wc-pea.png'],
+            'beets'                => ['beets',                        'wc-beet.png'],
+            'radishes'             => ['radishes',                     'wc-radish.png'],
+            'melons'               => ['melons',                       'wc-melon.png'],
+            'leeks'                => ['leeks',                        'wc-leek.png'],
+            'cherry-tomato'        => ['cherry-tomato',                'wc-tomato.png'],
+            'summer-squash'        => ['summer-squash',                'wc-zucchini.png'],
+            'onions-scallions'     => ['onions-scallions',             'wc-scallion.png'],
+            'beans-default-pole-climbing-' => ['beans-default-pole-climbing-', 'wc-pole-bean.png'],
+        ];
+    }
+
+    // ── C2: generated crop art regression (WP-CB-UI-FIDELITY batch) ────────
+
+    /**
+     * C2-regression: a sample of the 43 new identity-slug→art entries must be
+     * present in WC_ART. Guards against the map silently losing entries on
+     * future edits. Uses ReflectionClass — no DB or rendered template required.
+     *
+     * @dataProvider generatedCropArtProvider
+     */
+    public function testGeneratedCropArtWired(string $slug, string $expectedFile): void
+    {
+        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
+        $map = $rc->getConstant('WC_ART');
+        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $this->assertArrayHasKey($slug, $map, "C2: slug '{$slug}' must be present in WC_ART");
+        $this->assertSame($expectedFile, $map[$slug], "C2: '{$slug}' must map to '{$expectedFile}'");
+    }
+
+    /** @return array<string, array{string, string}> */
+    public static function generatedCropArtProvider(): array
+    {
+        return [
+            'strawberry'        => ['strawberry',         'wc-strawberry.png'],
+            'potato'            => ['potato',             'wc-potato.png'],
+            'wheat'             => ['wheat',              'wc-wheat.png'],
+            'mint'              => ['mint',               'wc-mint.png'],
+            'okra'              => ['okra',               'wc-okra.png'],
+            'cauliflower'       => ['cauliflower',        'wc-cauliflower.png'],
+            'arugula'           => ['arugula',            'wc-arugula.png'],
+            'sweet-corn'        => ['sweet-corn',         'wc-sweet-corn.png'],
+            'winter-squash'     => ['winter-squash',      'wc-winter-squash.png'],
+            'pac-choi-bok-choy' => ['pac-choi-bok-choy',  'wc-pac-choi-bok-choy.png'],
+        ];
     }
 
     // ── Render helpers ───────────────────────────────────────────────────────

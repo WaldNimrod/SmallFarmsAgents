@@ -299,19 +299,59 @@ final class ClassBRouteTest extends TestCase
 
     // ── F-5 FIX: market table <th> has no inline style= ─────────────────────
 
-    /** F-5 fix: market list table headers use CSS classes, not inline style= */
+    /** F-5 fix / WP-CB-MOBILE FIX 3: market list table is the .mkt-table 3-col,
+     *  styled via CSS classes (no inline style= on <th>). */
     public function testMarketTableThHasNoInlineStyle(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
         $body = (string)$this->app->handle($req)->getBody();
-        // Should have the new CSS class
-        $this->assertStringContainsString('ptable__th', $body, 'Market table <th> must use .ptable__th class (F-5 fix)');
+        // FIX 3: dense 3-col .mkt-table replaces the old .ptable on the market list.
+        $this->assertStringContainsString('mkt-table', $body, 'Market list table must use the .mkt-table 3-col (FIX 3)');
         // Must NOT have inline style on <th>
         $this->assertDoesNotMatchRegularExpression(
             '#<th\s[^>]*style=#',
             $body,
             'Market table <th> must not use inline style= attribute (F-5 fix)'
         );
+    }
+
+    /** WP-CB-MOBILE D1: market list default view is TABLE (server-rendered). */
+    public function testMarketListDefaultsToTableView(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The audience switch must mark the table option active by default (D1).
+        $this->assertMatchesRegularExpression(
+            '#is-table[^"]*is-active#',
+            $body,
+            'Market default view must be TABLE — table option active server-side (D1)'
+        );
+        // The cards grid must be hidden by default (display:none) and table visible.
+        $this->assertMatchesRegularExpression(
+            '#pcard-grid"\s+data-aud-view="cards"\s+style="display:none#',
+            $body,
+            'Cards grid must be hidden by default when the table view is the default (D1)'
+        );
+    }
+
+    /** WP-CB-MOBILE FIX 3: the market list disclaimer is a collapsible <details> (closed default). */
+    public function testMarketListDisclaimerCollapsible(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertMatchesRegularExpression(
+            '#<details class="mkt-disc#',
+            $body,
+            'Market list disclaimer must render as a collapsible <details class="mkt-disc"> (FIX 3)'
+        );
+        // CLOSED by default → the <details> must not carry the `open` attribute.
+        $this->assertDoesNotMatchRegularExpression(
+            '#<details class="mkt-disc[^"]*"[^>]*\sopen#',
+            $body,
+            'Market list disclaimer must be CLOSED by default (no open attribute)'
+        );
+        // LOCKED copy preserved verbatim.
+        $this->assertStringContainsString('מה זה? מאיפה זה? למה זה?', $body, 'Disclaimer LOCKED heading must be preserved');
     }
 
     // ── F-7 FIX: nav class has no trailing space ─────────────────────────────
@@ -412,15 +452,17 @@ final class ClassBRouteTest extends TestCase
             '/crop-book/ must still render .cb-paths (WI-1 kept functionality)');
     }
 
-    /** WI-1: crop-book-v1.css uses compact minmax (≤128px) for .cards-grid */
+    /** A1: crop-book-v1.css .cards-grid uses team_35 restored minmax(168px,1fr) */
     public function testCropBookCssUsesCompactGrid(): void
     {
         $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-v1.css');
-        // Assert minmax track is ≤128px (compact) — pattern: minmax(NNNpx where NNN<=128
-        $this->assertMatchesRegularExpression(
-            '#cards-grid[^}]*minmax\(1[01]\d|minmax\([0-9]{2}px#',
+        // A1 (patch01 regression restore): team_35 canonical value is minmax(168px,1fr).
+        // The old assertion (≤128px) was enforcing the shrunken patch01 size — updated to
+        // assert the restored team_35 value per WP-CB-UI-FIDELITY fix A1.
+        $this->assertStringContainsString(
+            'minmax(168px, 1fr)',
             $css,
-            'crop-book-v1.css .cards-grid must use a compact minmax track (≤128px)'
+            'crop-book-v1.css .cards-grid must use team_35 restored minmax(168px, 1fr) track'
         );
     }
 
@@ -472,65 +514,72 @@ final class ClassBRouteTest extends TestCase
 
     // ── WP-CB-UI-patch01 WI-4: hub CTA section ───────────────────────────────
 
-    /** WI-4: hub home has .hub-cta section */
+    /** WI-4 / WP-CB-MOBILE FIX 5: hub home has the .cta CTA-system section */
     public function testHubHomeHasCtaSection(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('hub-cta', $body,
-            'Hub home must have the .hub-cta section (WI-4)');
+        $this->assertStringContainsString('class="cta"', $body,
+            'Hub home must have the .cta CTA-system section (FIX 5)');
+        // All three CTA flavors present: data (primary) · suggest (form) · WhatsApp.
+        $this->assertStringContainsString('cta--data', $body, 'Hub CTA must include the primary data card');
+        $this->assertStringContainsString('cta--suggest', $body, 'Hub CTA must include the suggestion form card');
+        $this->assertStringContainsString('cta--wa', $body, 'Hub CTA must include the WhatsApp (custom) card');
     }
 
-    /** WI-4: hub CTA section has /community link (secondary offer) */
+    /** WI-4: the primary data CTA links to /community (complete-missing-data offer) */
     public function testHubCtaHasCommunityLink(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        // The secondary CTA card links to /community
         $this->assertMatchesRegularExpression(
-            '#hub-cta[^<]*.*href="/community"#s',
+            '#cta--data.*href="/community"#s',
             $body,
-            'Hub CTA must contain a link to /community'
+            'Hub primary data CTA must link to /community'
         );
     }
 
-    /** WI-4: hub CTA section has wa.me WhatsApp link (primary offer) */
+    /** WI-4: the WhatsApp CTA (custom/paid only) uses a wa.me link */
     public function testHubCtaHasWhatsAppLink(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
         $this->assertMatchesRegularExpression(
-            '#hub-cta[^<]*.*wa\.me#s',
+            '#cta--wa.*wa\.me#s',
             $body,
-            'Hub CTA must contain a wa.me WhatsApp link (primary CTA)'
+            'Hub CTA must contain a wa.me WhatsApp link in the custom (.cta--wa) card'
         );
     }
 
-    /** WI-4: hub CTA primary card has hub-cta__card--primary class */
-    public function testHubCtaHasPrimaryCard(): void
+    /** WI-4 / CTA SYSTEM: the suggestion CTA is an inline FORM, never WhatsApp */
+    public function testHubCtaSuggestIsForm(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('hub-cta__card--primary', $body,
-            'Hub CTA must have a prominently-styled primary card');
+        // The .cta--suggest card must contain a <form>, not a wa.me link.
+        $this->assertMatchesRegularExpression(
+            '#cta--suggest.*<form#s',
+            $body,
+            'Suggestion CTA must be an inline form (never WhatsApp)'
+        );
     }
 
-    /** WI-4: hub CTA has contribution copy (secondary offer text) */
+    /** WI-4: hub CTA has the complete-missing-data primary copy */
     public function testHubCtaHasContributionText(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('שתפו אותנו במידע', $body,
-            'Hub CTA must include the secondary contribution offer text');
+        $this->assertStringContainsString('עזרו להשלים את המידע', $body,
+            'Hub primary CTA must include the complete-missing-data offer text');
     }
 
-    /** WI-4: hub CTA has feature-request copy (primary offer text) */
+    /** WI-4: hub CTA has the custom-solution (WhatsApp) copy */
     public function testHubCtaHasFeatureRequestText(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('ספרו לנו מה תרצו שנפתח', $body,
-            'Hub CTA must include the primary feature-request offer text');
+        $this->assertStringContainsString('פתרון מותאם לחווה', $body,
+            'Hub CTA must include the custom-solution (WhatsApp) offer text');
     }
 
     // ── WP-CB-UI-patch01 WI-7: mobile horizontal overflow fixes ─────────────
@@ -564,5 +613,154 @@ final class ClassBRouteTest extends TestCase
             $css,
             'classb.css .pgraph__top must use flex-wrap:wrap so rangesel wraps on narrow screens (WI-7)'
         );
+    }
+
+    // ── F-REA-001: basket unit labels ────────────────────────────────────────
+
+    /** F-REA-001: sfa_unit_label maps basket_large to לסל (not raw English) */
+    public function testSfaUnitLabelBasketLarge(): void
+    {
+        // Load the template into a subprocess scope by requiring it with the helper present.
+        // We call the function directly after inclusion. Guard against re-definition.
+        if (!function_exists('sfa_unit_label')) {
+            // Define the function from the source file — safe because PHPUnit runs each test
+            // in the same process; function_exists guard in template prevents redefinition.
+            require __DIR__ . '/../templates/pages/market_list.php';
+        }
+        $this->assertSame('לסל', sfa_unit_label('basket_large'),
+            'F-REA-001: basket_large must map to לסל');
+        $this->assertSame('לסל', sfa_unit_label('basket_medium'),
+            'F-REA-001: basket_medium must map to לסל');
+        $this->assertSame('לסל', sfa_unit_label('basket_small'),
+            'F-REA-001: basket_small must map to לסל');
+    }
+
+    /** F-REA-001: sfa_unit_label hardened default — raw English snake_case returns ליחידה not לXxx */
+    public function testSfaUnitLabelHardenedDefault(): void
+    {
+        if (!function_exists('sfa_unit_label')) {
+            require __DIR__ . '/../templates/pages/market_list.php';
+        }
+        $result = sfa_unit_label('some_english_token');
+        $this->assertSame('ליחידה', $result,
+            'F-REA-001: unmapped English snake_case unit must return ליחידה, not לsome_english_token');
+        // Existing Hebrew passthrough must still work
+        $this->assertSame('לסל גדול', sfa_unit_label('סל גדול'),
+            'Hebrew passthrough must still prepend ל');
+        // Known units still work
+        $this->assertSame('לק״ג', sfa_unit_label('kg'));
+    }
+
+    /** F-REA-001: market list page for a basket product does not leak raw English unit */
+    public function testMarketListBasketProductNoEnglishUnit(): void
+    {
+        // Seed a basket product
+        $this->pdo->exec("INSERT OR IGNORE INTO products
+            (id,slug,hebrew_name,category,unit,last_price,last_price_date,freshness_days,payload_json,last_pushed_at)
+            VALUES (50,'basket-mix','עשבי תיבול','baskets','basket_large',25.0,'2026-06-01',1,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
+        $body = (string)$this->app->handle($req)->getBody();
+        $this->assertStringNotContainsString('לbasket_large', $body,
+            'F-REA-001: market list must not show raw לbasket_large');
+        $this->assertStringContainsString('לסל', $body,
+            'F-REA-001: market list must show לסל for basket_large products');
+    }
+
+    // ── F-REA-002: search results show watercolor art ────────────────────────
+
+    /** F-REA-002: /crop-book/search result for a crop with watercolor has icon_url set */
+    public function testSearchResultWatercolorPresentForKnownCrop(): void
+    {
+        // 'tomato' is in WC_ART map → icon_url should be populated
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at)
+            VALUES (2,'tomato','עגבנייה','Solanum lycopersicum','סולניים','vegetables','summer',70,95,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/search');
+        $req  = $req->withQueryParams(['q' => 'עגבנייה']);
+        $body = (string)$this->app->handle($req)->getBody();
+        // crop_card renders img.crop-card__art when icon_url is set
+        $this->assertStringContainsString('crop-card__art', $body,
+            'F-REA-002: search result for tomato must render watercolor img (crop-card__art)');
+        $this->assertStringContainsString('wc-tomato.png', $body,
+            'F-REA-002: search result for tomato must include wc-tomato.png');
+    }
+
+    /** F-REA-002: /crop-book/search result for a crop with NO watercolor still renders (glyph fallback) */
+    public function testSearchResultFallsBackToGlyphForUnknownCrop(): void
+    {
+        $this->pdo->exec("INSERT OR IGNORE INTO crops
+            (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at)
+            VALUES (99,'rare-herb','עשב נדיר','Rarus herbarius','','herbs','',null,null,'{}','2026-06-01')");
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/search');
+        $req  = $req->withQueryParams(['q' => 'עשב נדיר']);
+        $body = (string)$this->app->handle($req)->getBody();
+        // Should NOT render crop-card__art (no watercolor), but page must still render
+        $this->assertStringNotContainsString('crop-card__art', $body,
+            'F-REA-002: crop with no watercolor must NOT render crop-card__art');
+        $this->assertStringContainsString('gj-cropcard', $body,
+            'F-REA-002: glyph fallback card must still render');
+    }
+
+    // ── F-REA-003: hub module tile eyebrows — no English mono module-id ───────
+
+    /** F-REA-003: hub home must not show English mono module-id in tile title (CROP-BOOK etc.) */
+    public function testHubHomeTileNoEnglishModuleId(): void
+    {
+        $req  = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $body = (string)$this->app->handle($req)->getBody();
+        // The <small>CROP-BOOK</small> etc. must have been removed from modtile__title
+        $this->assertDoesNotMatchRegularExpression(
+            '#modtile__title[^<]*<small>[A-Z\-]+</small>#',
+            $body,
+            'F-REA-003: modtile__title must not contain English-only <small> module-id badge'
+        );
+    }
+
+    // ── Item 5: legacy /crop-book/table redirects ────────────────────────────
+
+    /** Item 5: /crop-book/table?category=summer 301-redirects to /crop-book/?season=summer */
+    public function testTableViewLegacySummerRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'summer']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=summer must 301-redirect');
+        $this->assertStringContainsString('/crop-book/?season=summer', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/?season=summer');
+    }
+
+    /** Item 5: /crop-book/table?category=fast 301-redirects to /crop-book/?dtm_max=60 */
+    public function testTableViewLegacyFastRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'fast']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=fast must 301-redirect');
+        $this->assertStringContainsString('/crop-book/?dtm_max=60', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/?dtm_max=60');
+    }
+
+    /** Item 5: /crop-book/table?category=beginner 301-redirects to /crop-book/ */
+    public function testTableViewLegacyBeginnerRedirects(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'beginner']);
+        $res = $this->app->handle($req);
+        $this->assertSame(301, $res->getStatusCode(),
+            'Item 5: /crop-book/table?category=beginner must 301-redirect');
+        $this->assertStringContainsString('/crop-book/', $res->getHeaderLine('Location'),
+            'Item 5: redirect must go to /crop-book/');
+    }
+
+    /** Item 5: /crop-book/table?category=vegetables (real botanical) still returns 200 */
+    public function testTableViewRealCategoryNotRedirected(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/table');
+        $req = $req->withQueryParams(['category' => 'vegetables']);
+        $res = $this->app->handle($req);
+        $this->assertSame(200, $res->getStatusCode(),
+            'Item 5: real botanical category must still return 200 (not redirected)');
     }
 }

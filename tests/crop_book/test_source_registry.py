@@ -63,7 +63,12 @@ def test_uc_prefix_requires_moderation() -> None:
     spec = get_source_spec("UC:user123")
     assert spec.cls == "UC"
     assert spec.requires_moderation is True
-    assert spec.weight == 0.15
+    # UC weight is NULL by design (DB SSOT seed, migration 056): user-community
+    # sources are "excluded from blend until a moderator sets a weight". The blend
+    # uses a per-candidate moderation_weight, not this registry placeholder
+    # (reconciler.py §requires_moderation). WP-C5 Decision 5 made the DB the SSOT;
+    # the prior 0.15 constant was stale once UC:* was seeded NULL.
+    assert spec.weight is None
 
 
 def test_unknown_source_falls_back_to_low_trust_wb() -> None:

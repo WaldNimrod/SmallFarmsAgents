@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SFA · לוח עיצוב מובייל (375) · team_35</title>
+<link rel="stylesheet" href="tokens.css"/>
+<style>
+  :root{ --bezel:#1d2820; }
+  html,body{margin:0;background:#e9efe8;color:var(--gj-ink);}
+  body{font-family:var(--gj-font-body);}
+  .board{padding:28px 28px 60px;}
+  .board__top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .board__brand{display:flex;align-items:center;gap:10px;}
+  .board__brand b{font-family:var(--gj-font-brand);font-size:26px;}
+  .meta{font-family:var(--gj-font-mono);font-size:11px;color:var(--gj-ink-soft);line-height:1.6;}
+  .meta b{color:var(--gj-ink);}
+  .board__title{font-family:var(--gj-font-head);font-weight:900;font-size:30px;letter-spacing:-.01em;margin:14px 0 4px;}
+  .board__lede{font-size:14px;color:var(--gj-ink-soft);max-width:84ch;line-height:1.6;margin:0 0 4px;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 4px;font-size:12px;color:var(--gj-ink-soft);}
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .legend i{width:12px;height:12px;border-radius:3px;}
+
+  .group{font-family:var(--gj-font-head);font-weight:700;font-size:15px;color:var(--gj-ink-soft);margin:30px 4px 0;padding-top:14px;border-top:1px dashed var(--gj-line);}
+  .rail{display:flex;gap:30px;align-items:flex-start;overflow-x:auto;padding:18px 4px 10px;-webkit-overflow-scrolling:touch;}
+  .frame{flex:none;display:flex;flex-direction:column;gap:12px;width:397px;}
+  .frame__cap{display:flex;flex-direction:column;gap:6px;min-height:104px;}
+  .frame__n{display:flex;align-items:center;gap:9px;}
+  .frame__no{width:24px;height:24px;border-radius:7px;background:var(--gj-leaf-deep);color:#fff;display:grid;place-items:center;font-family:var(--gj-font-head);font-weight:900;font-size:13px;flex:none;}
+  .frame__t{font-family:var(--gj-font-head);font-weight:700;font-size:17px;}
+  .frame__route{font-family:var(--gj-font-mono);font-size:10px;color:var(--gj-ink-soft);}
+  .fixrow{display:flex;flex-direction:column;gap:5px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:10px;padding:10px 12px;}
+  .fix{font-size:11.5px;line-height:1.45;color:var(--gj-ink-soft);display:flex;gap:7px;}
+  .fix b{color:var(--gj-ink);}
+  .fix .tag{flex:none;font-family:var(--gj-font-mono);font-size:9px;font-weight:700;padding:1px 6px;border-radius:5px;height:fit-content;margin-top:1px;}
+  .tag--now{background:color-mix(in oklch,var(--gj-leaf) 18%,#fff);color:var(--gj-leaf-deep);}
+  .tag--new{background:color-mix(in oklch,var(--gj-code) 18%,#fff);color:var(--gj-code-deep);}
+
+  .device{width:397px;background:var(--bezel);border-radius:38px;padding:11px;box-shadow:0 18px 50px rgba(20,40,25,.22);position:relative;}
+  .device::before{content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);width:120px;height:6px;border-radius:99px;background:rgba(255,255,255,.16);z-index:3;}
+  .device__screen{width:375px;border-radius:28px;overflow:hidden;background:var(--gj-paper);position:relative;}
+  .device__status{height:34px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 20px 5px;font-family:var(--gj-font-mono);font-size:11px;font-weight:600;color:var(--gj-ink);background:var(--gj-paper);}
+  .device iframe{display:block;width:375px;border:0;background:var(--gj-paper);}
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="board__top">
+    <div class="board__brand">
+      <svg width="34" height="34" viewBox="0 0 48 48"><rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/><g fill="#9bb172"><rect x="12" y="34" width="6" height="4" rx="1.2"/><rect x="21" y="34" width="6" height="4" rx="1.2"/><rect x="30" y="34" width="6" height="4" rx="1.2"/></g><path d="M24 33 V18.5" stroke="#f6f1e3" stroke-width="2.6" stroke-linecap="round"/><path d="M24 24.5 C 19 24.5 15 21.5 14 16.5 C 20 16.5 24 19.5 24 24.5 Z" fill="#f6f1e3"/><path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/><circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/></svg>
+      <b>SFA</b>
+    </div>
+    <div class="meta dir-ltr">
+      <div><b>LOD300 · MOBILE DESIGN BOARD</b> · viewport 375px · RTL</div>
+      <div>SFA-S003-P004-WP-CB-MOBILE · team_35 → team_10 · v4.0.0 · 2026-06-05</div>
+    </div>
+  </div>
+
+  <h1 class="board__title">תיקוני מובייל — סבב לקוח #3</h1>
+  <p class="board__lede">עשרה מסכי־375. סבב זה: איורי הכלים <b>הנכונים מהקוד</b> (module-*.png), כרטיס גידול עם תמונה קטנה + תג <b>«עכשיו בעונה»</b>, מרווחים צפופים, <b>CTA בכל מסך</b> (השלמת מידע · טופס הצעות · וואטסאפ למותאם), עומק מאוזן (פשוט→מלא→העמקה), מחירון עם הערה נפתחת + פילטרים אמיתיים + תיקון RTL, ומחשבון «6 + עוד» עם סשן שמור והנחות לעריכה. <code>mobile-fixes.css</code> v4.</p>
+
+  <div class="legend dir-ltr">
+    <span><i style="background:#6f8a45"></i>leaf · book / seed</span>
+    <span><i style="background:#d39a32"></i>sun · transplant / beta</span>
+    <span><i style="background:#c24f2c"></i>tomato · market</span>
+    <span><i style="background:#2d8a8c"></i>code · calculator</span>
+    <span><i style="background:#8b5d2f"></i>soil · paid</span>
+  </div>
+
+  <div class="group">בית · ספר גידולים</div>
+  <div class="rail">
+    <!-- 1 HUB -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no">1</span><span class="frame__t">עמוד השער / Hub</span></div>
+        <div class="frame__route dir-ltr">/ · hub-home</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span>איורי הכלים <b>הנכונים מהקוד</b> (module-crop-book/market/calc.png) + <b>CTA</b>: השלמת מידע · טופס · וואטסאפ.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-hub.html" scrolling="no" title="עמוד השער"></iframe></div></div>
+    </div>
+
+    <!-- 2 CARDS -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no">2</span><span class="frame__t">כרטיסי גידול</span></div>
+        <div class="frame__route dir-ltr">/crop-book/ · book-entry</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span>תמונה <b>קטנה</b> (לא רקע דהוי); תג <b>«עכשיו לזריעה/שתילה»</b> ברשימה; מרווחים צפופים.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-cards.html" scrolling="no" title="כרטיסי גידול"></iframe></div></div>
+    </div>
+  </div>
+
+  <div class="group">עמוד גידול · שלוש רמות עומק</div>
+  <div class="rail">
+    <!-- 3 SIMPLE -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no">3</span><span class="frame__t">פשוט</span></div>
+        <div class="frame__route dir-ltr">/crop-book/{slug} · depth=simple</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span><b>פשוט יותר</b> לגנן: עיקר (מרווח·זמן·מים) → לוח שתילה → <b>נתון מרכזי אחד לכל נושא</b>.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-crop.html" scrolling="no" title="פשוט"></iframe></div></div>
+    </div>
+
+    <!-- 4 FULL -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-code-deep)">4</span><span class="frame__t">מלא</span></div>
+        <div class="frame__route dir-ltr">/crop-book/{slug} · depth=full</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span>עכשיו <b>יותר</b> מפשוט: סקירה לפי נושא + <b>כל הנתונים</b> (17 שדות) מסודרים לפי נושא.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-crop-full.html" scrolling="no" title="מלא"></iframe></div></div>
+    </div>
+
+    <!-- 5 DEEP -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-code-deep)">5</span><span class="frame__t">העמקה</span></div>
+        <div class="frame__route dir-ltr">/crop-book/{slug} · depth=drill</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span>כמו «מלא» — אך לכל נתון <b>טווח בין הזנים</b> + מקורות (EX/PR/WR) + טבלת השוואה.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-crop-deep.html" scrolling="no" title="העמקה"></iframe></div></div>
+    </div>
+  </div>
+
+  <div class="group">מחירון · טבלה מול כרטיסים</div>
+  <div class="rail">
+    <!-- 6 MARKET TABLE -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-tomato-deep)">6</span><span class="frame__t">מחירון · טבלה</span></div>
+        <div class="frame__route dir-ltr">/market/ · view=table (ברירת מחדל)</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span>הערה <b>נפתחת בלחיצה</b>; <b>פילטרים אמיתיים</b> (כולל «סלים»); תיקון <b>RTL</b> במחיר/יחידה.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-market.html" scrolling="no" title="מחירון טבלה"></iframe></div></div>
+    </div>
+
+    <!-- 7 MARKET CARDS -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-tomato-deep)">7</span><span class="frame__t">מחירון · כרטיסים</span></div>
+        <div class="frame__route dir-ltr">/market/ · view=cards</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--new">חדש</span><span>התצוגה המשלימה — מתג מעביר ל<b>כרטיסים</b> 2-up קומפקטיים (אותו מתג טבלה⇄כרטיסים).</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-market.html?view=cards" scrolling="no" title="מחירון כרטיסים"></iframe></div></div>
+    </div>
+  </div>
+
+  <div class="group">מחשבון · «הגדרת השאלה» → תוצאות</div>
+  <div class="rail">
+    <!-- 8 CALC ASK -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-code-deep)">8</span><span class="frame__t">הגדרת השאלה</span></div>
+        <div class="frame__route dir-ltr">/calc/ · state=ask (ברירת מחדל)</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span><b>6 כפתורים</b> למחשבונים מרכזיים + <b>דרופדאון</b> ל-8 הנוספים (14 בסה״כ); בונה שאלה גמיש.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-calc.html" scrolling="no" title="הגדרת השאלה"></iframe></div></div>
+    </div>
+
+    <!-- 9 CALC RESULT -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-code-deep)">9</span><span class="frame__t">תוצאות</span></div>
+        <div class="frame__route dir-ltr">/calc/ · state=result (אחרי «חשב»)</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span><b>הסשן שומר</b> את כל החישובים; ייצוא = <b>כל הסשן</b>; <b>הנחות יסוד לעריכה</b> מהתוצאה.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-calc.html?state=result" scrolling="no" title="תוצאות"></iframe></div></div>
+    </div>
+  </div>
+
+  <div class="group">אודות</div>
+  <div class="rail">
+    <!-- 10 ABOUT -->
+    <div class="frame">
+      <div class="frame__cap">
+        <div class="frame__n"><span class="frame__no" style="background:var(--gj-soil-deep)">10</span><span class="frame__t">אודות — שכבות</span></div>
+        <div class="frame__route dir-ltr">/about · about-tiers</div>
+        <div class="fixrow"><div class="fix"><span class="tag tag--now">עודכן</span><span><b>תוכן אמיתי קודם</b> (מה זה SFA, 4 עקרונות); השכבות הן הרחבה; + CTA.</span></div></div>
+      </div>
+      <div class="device"><div class="device__screen"><div class="device__status dir-ltr"><span>9:41</span><span>✦ ▦ ▮</span></div><iframe src="surface-about.html" scrolling="no" title="אודות"></iframe></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function sizeFrames(){
+    document.querySelectorAll('.device iframe').forEach(function(f){
+      try{
+        var d = f.contentDocument || f.contentWindow.document;
+        var h = Math.max(d.body.scrollHeight, d.documentElement.scrollHeight);
+        if(h > 0) f.style.height = h + 'px';
+      }catch(e){}
+    });
+  }
+  window.addEventListener('load', function(){ sizeFrames(); setTimeout(sizeFrames, 400); setTimeout(sizeFrames, 1200); });
+  window.addEventListener('resize', sizeFrames);
+</script>
+</body>
+</html>
