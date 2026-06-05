@@ -649,8 +649,14 @@ final class CropBookViewController
         }
 
         // ── WP-CB-1: depth param + enrichment + assumptions ──────────
+        // WP-CB-MOBILE Stage 2: the 3-depth IA is simple|full|deep. 'drill' is
+        // kept as a back-compat alias for the deepest view (legacy ?depth=drill
+        // links + earlier tests) and normalised to 'deep' for the template.
         $depth = trim((string)($request->getQueryParams()['depth'] ?? 'simple'));
-        if (!in_array($depth, ['simple', 'full', 'drill'], true)) {
+        if ($depth === 'drill') {
+            $depth = 'deep';
+        }
+        if (!in_array($depth, ['simple', 'full', 'deep'], true)) {
             $depth = 'simple';
         }
 
@@ -710,6 +716,19 @@ final class CropBookViewController
         // Family for rotation hint
         $family_name_he = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
 
+        // WP-CB-MOBILE Stage 2 — Deep depth provenance/range data (NO fabrication).
+        // (a) per-agronomy-field range across the crop's varieties: {min,max,count}.
+        //     Only numeric agronomy values count toward the range; fields with a
+        //     single reporting variety yield count=1 and equal min/max (template
+        //     suppresses the range line then). Built from the same $varieties the
+        //     vtable already renders — no new query.
+        $variety_ranges = self::buildVarietyRanges($varieties);
+        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by
+        //     trust. Derived from the winning_source_class the enrichment/payload
+        //     already exposes via $cb1_fields — never invented. Empty when the
+        //     mirror carries no provenance (template then omits the source row).
+        $source_classes = self::buildSourceClasses($cb1_fields);
+
         return $this->html($response, Template::render('pages/book_crop', [
             'crop'             => $crop,
             'varieties'        => $varieties,
@@ -722,6 +741,10 @@ final class CropBookViewController
             'wc_art'           => $wc_art,
             'family_name_he'   => $family_name_he,
             'assumptions'      => AssumptionsController::getAssumptions(),
+            // WP-CB-MOBILE Stage 2 (Deep depth)
+            'variety_ranges'   => $variety_ranges,
+            'source_classes'   => $source_classes,
+            'variety_count'    => count($varieties),
         ]));
     }
 
@@ -936,6 +959,75 @@ final class CropBookViewController
         }
 
         return $out;
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2 (Deep depth): build per-agronomy-field numeric ranges
+     * across all varieties of a crop. Returns [field => {min,max,count}] using
+     * only numeric values that are actually present in variety payloads — no
+     * synthesised data. Consumed by book_crop.php Deep view to render the
+     * "value · טווח min–max · N זנים" line under each datum.
+     *
+     * @param array<int,array<string,mixed>> $varieties
+     * @return array<string,array{min:float,max:float,count:int}>
+     */
+    private static function buildVarietyRanges(array $varieties): array
+    {
+        $acc = []; // field => list<float>
+        foreach ($varieties as $v) {
+            $agro = is_array($v['agronomy'] ?? null) ? $v['agronomy'] : [];
+            foreach ($agro as $field => $val) {
+                if ($val === null || $val === '' || !is_numeric($val)) {
+                    continue;
+                }
+                $acc[(string)$field][] = (float)$val;
+            }
+        }
+        $out = [];
+        foreach ($acc as $field => $vals) {
+            if (empty($vals)) {
+                continue;
+            }
+            $out[$field] = [
+                'min'   => min($vals),
+                'max'   => max($vals),
+                'count' => count($vals),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2 (Deep depth): collect the distinct source classes that
+     * actually back this crop's fields, ranked by trust EX > PR > WR. Source is
+     * the winning_source_class already on $cb1_fields (enrichment row or variety
+     * payload) — never invented. Returns an ordered list of canonical codes
+     * (subset of ['EX','PR','WR']); empty when the mirror has no provenance.
+     *
+     * @param array<string,array<string,mixed>> $cb1_fields
+     * @return string[]
+     */
+    private static function buildSourceClasses(array $cb1_fields): array
+    {
+        // Normalise the variety of source-class tokens the pipeline emits into the
+        // three farmer-facing trust tiers. Anything unrecognised is dropped (no leak).
+        static $rank = ['EX' => 0, 'PR' => 1, 'WR' => 2];
+        static $alias = [
+            'EX' => 'EX', 'EXPERT' => 'EX',
+            'PR' => 'PR', 'PROFESSIONAL' => 'PR', 'NI' => 'PR',
+            'WR' => 'WR', 'WEB' => 'WR', 'NET' => 'WR',
+        ];
+        $seen = [];
+        foreach ($cb1_fields as $field) {
+            $raw = strtoupper((string)($field['winning_source_class'] ?? ''));
+            if ($raw === '' || !isset($alias[$raw])) {
+                continue;
+            }
+            $seen[$alias[$raw]] = true;
+        }
+        $codes = array_keys($seen);
+        usort($codes, static fn ($a, $b) => ($rank[$a] ?? 9) <=> ($rank[$b] ?? 9));
+        return $codes;
     }
 
     private function html(Response $response, string $body, int $status = 200): Response

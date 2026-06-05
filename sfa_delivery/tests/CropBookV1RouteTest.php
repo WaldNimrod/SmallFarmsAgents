@@ -208,11 +208,16 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropSimpleDepth(): void
     {
+        // WP-CB-MOBILE Stage 2: Simple is now genuinely minimal — essentials
+        // strip + calendar + one-key-per-topic keylist; the full stat block
+        // (headvals) was intentionally removed (Simple ⊂ Full ⊂ Deep).
         $res  = $this->get('/crop-book/lettuce/?depth=simple');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('depths', $html, 'Must include depth tabs');
-        $this->assertStringContainsString('headvals', $html, 'Simple depth must include headline values');
+        $this->assertStringContainsString('sh__depths', $html, 'Must include the header depth segmented control');
+        $this->assertStringContainsString('class="ess"', $html, 'Simple depth must include the essentials chip strip');
+        $this->assertStringContainsString('class="keylist"', $html, 'Simple depth must include the one-key-per-topic list');
+        $this->assertStringNotContainsString('class="headvals"', $html, 'Simple depth must NOT carry the full stat block (Stage 2 IA)');
     }
 
     public function testBookCropFullDepth(): void
@@ -247,10 +252,25 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropDrillDepth(): void
     {
+        // WP-CB-MOBILE Stage 2: legacy ?depth=drill is a back-compat alias for the
+        // deepest view; controller normalises it to 'deep'. Still 200 + vtable.
         $res  = $this->get('/crop-book/lettuce/?depth=drill');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('vtable', $html, 'Drill depth must include variety table');
+        $this->assertStringContainsString('vtable', $html, 'Drill (→deep) depth must include variety table');
+    }
+
+    public function testBookCropDeepDepth(): void
+    {
+        // WP-CB-MOBILE Stage 2: Deep is the canonical third state. Same topic
+        // structure as Full (.topic) + the variety comparison table (.vtable)
+        // + the EX/PR/WR source trust-hierarchy explainer.
+        $res  = $this->get('/crop-book/lettuce/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('vtable', $html, 'Deep depth must include the variety comparison table');
+        $this->assertStringContainsString('data-depth-view="deep"', $html, 'Deep depth view container must render');
+        $this->assertStringContainsString('היררכיית מקורות', $html, 'Deep depth must include the source trust-hierarchy explainer');
     }
 
     public function testBookCropDefaultDepth(): void
@@ -258,6 +278,38 @@ final class CropBookV1RouteTest extends TestCase
         // No depth param — should default to simple
         $res  = $this->get('/crop-book/lettuce/');
         $this->assertSame(200, $res->getStatusCode());
+    }
+
+    /**
+     * WP-CB-MOBILE Stage 2: Deep depth renders the per-datum variety range
+     * (.rng) when ≥2 varieties carry distinct numeric values. The EX/PR/WR
+     * source pill row is HONEST — it only renders when the crop's fields carry
+     * a real winning_source_class. With the MySQL-mirror reality (values come
+     * from the variety payload, source class ''), the source row is correctly
+     * OMITTED rather than fabricated. This locks the no-fabrication contract.
+     */
+    public function testDeepDepthRendersVarietyRangeAndHonestSources(): void
+    {
+        $this->pdo->exec("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES
+            (7,'deep-crop','עומק','Deepus sp.','חסתיים','vegetables','winter',40,58,'{}','2026-06-01')");
+        // Two varieties with DISTINCT days_to_maturity → a real range 52–58.
+        $v1 = json_encode([
+            'is_default'  => true,
+            'agronomy'    => ['days_to_maturity' => 52, 'yield_per_bed_m' => 3.6],
+            'field_state' => ['days_to_maturity' => 'VALIDATED', 'yield_per_bed_m' => 'VALIDATED'],
+        ], JSON_UNESCAPED_UNICODE);
+        $v2 = json_encode(['agronomy' => ['days_to_maturity' => 58, 'yield_per_bed_m' => 3.2]], JSON_UNESCAPED_UNICODE);
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES
+            (701,7,'נח 408'," . $this->pdo->quote($v1) . "),(702,7,'קייטנית'," . $this->pdo->quote($v2) . ")");
+
+        $res  = $this->get('/crop-book/deep-crop/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // Range line present with the across-variety span (52–58 for DTM).
+        $this->assertStringContainsString('class="rng"', $html, 'Deep depth must render the variety-range line when ≥2 varieties differ');
+        $this->assertStringContainsString('52–58', $html, 'Deep range must reflect the across-variety min–max');
+        // No fabricated provenance: payload-sourced values carry source class '' → no pill row.
+        $this->assertStringNotContainsString('srcpill', $html, 'Source pills must NOT be fabricated when no winning_source_class exists');
     }
 
     // ── WI-7: mobile horizontal overflow responsive wrappers ──────

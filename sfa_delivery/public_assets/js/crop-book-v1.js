@@ -301,6 +301,13 @@
           scope.querySelectorAll('[data-depth-view]').forEach(function (v) {
             v.style.display = v.getAttribute('data-depth-view') === d ? '' : 'none';
           });
+          /* WP-CB-MOBILE Stage 2: depth switch resets scroll to the top so the
+             reader starts from the hero/essentials of the newly-chosen depth. */
+          try {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+          } catch (e) {
+            window.scrollTo(0, 0);
+          }
         });
       });
     });

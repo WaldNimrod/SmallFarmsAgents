@@ -376,6 +376,45 @@
 }
 
 /* ════════════════════════════════════════════════════════════
+   CROP DEPTHS  ·  Simple essentials/keylist + Deep range/source rows
+   (recreated from the team_35 surface-crop{,-deep} prototypes; these
+   classes lived in the prototype <style> blocks, not the base sheets.)
+   ════════════════════════════════════════════════════════════ */
+/* section heading used across the depth views (no .gj-h3 base in gj.css) */
+.gj-h3 { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; color: var(--gj-ink); margin: 16px 0 10px; }
+
+/* depth control toolbar — right-aligns the .sh__depths segmented control
+   to the top of the crop page (the control itself is styled in FIX 2a'). */
+.cb-crop-toolbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+
+/* Simple · essentials chip strip (spacing · DTM · water · method) */
+.ess { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.ess .cparam .num { font-family: var(--gj-font-head); font-weight: 700; }
+
+/* Simple · one key value per topic */
+.keylist { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); overflow: hidden; background: var(--gj-paper); }
+.keyrow { display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-bottom: 1px solid var(--gj-line); }
+.keyrow:last-child { border-bottom: 0; }
+.keyrow .ic { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font-size: 14px; flex: none; color: #fff; }
+.keyrow .k { font-weight: 700; font-size: 13.5px; }
+.keyrow .v { margin-inline-start: auto; font-family: var(--gj-font-head); font-weight: 700; font-size: 14px; color: var(--gj-ink); }
+.keyrow .v .num { font-family: var(--gj-font-head); }
+.keyrow .v small { font-family: var(--gj-font-body); font-weight: 600; font-size: 11px; color: var(--gj-ink-soft); }
+.simple-more { font-size: 12.5px; color: var(--gj-ink-soft); margin: 12px 0 0; }
+.deep-lede { margin: 0 0 12px; }
+
+/* Deep · per-datum variety range under each .fg dd */
+.fg dd .rng { display: block; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 400; color: var(--gj-ink-soft); margin-top: 1px; }
+.fg dd .rng .num { font-family: var(--gj-font-mono); }
+/* Deep · per-topic EX/PR/WR source pill row (trust rank EX > PR > WR) */
+.srcline { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.srcpill { font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+.srcpill--ex { background: color-mix(in oklch, var(--gj-leaf) 18%, var(--gj-paper)); color: var(--gj-leaf-deep); }
+.srcpill--pr { background: color-mix(in oklch, var(--gj-sun) 24%, var(--gj-paper)); color: #7a4a08; }
+.srcpill--wr { background: var(--gj-paper-2); color: var(--gj-ink-soft); }
+.srchier { margin-top: 12px; }
+
+/* ════════════════════════════════════════════════════════════
    CALCULATOR — "DEFINE THE QUESTION" builder  ·  .qb  ·  NEW
    (client: we don't always compute by area, dates aren't always a
     target date. Build a flexible question-builder; show explanation +
