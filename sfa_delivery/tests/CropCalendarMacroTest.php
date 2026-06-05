@@ -109,10 +109,11 @@ final class CropCalendarMacroTest extends TestCase
     }
 
     /**
-     * The generic default region (IL_general) is suppressed, and no raw IL_*
-     * token leaks to the page (mobile defect #2 — WP-CB-MOBILE).
+     * The generic default region (IL_general) renders its Hebrew label and the
+     * raw token never leaks (mobile defect #2 — WP-CB-MOBILE v4 FIX 2 maps it
+     * to "כל הארץ" rather than suppressing it).
      */
-    public function testGenericRegionSuppressed(): void
+    public function testGenericRegionMapped(): void
     {
         $html = $this->render([
             [
@@ -124,8 +125,8 @@ final class CropCalendarMacroTest extends TestCase
             ],
         ]);
 
-        $this->assertStringNotContainsString('IL_general', $html, 'Generic region token must not leak');
-        $this->assertStringNotContainsString('cb-calendar__region', $html, 'No region chip for the generic default');
+        $this->assertStringNotContainsString('IL_general', $html, 'Generic region token must not leak raw');
+        $this->assertStringContainsString('כל הארץ', $html, 'IL_general must render its Hebrew label');
     }
 
     /**

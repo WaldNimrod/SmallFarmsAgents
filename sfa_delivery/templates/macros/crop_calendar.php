@@ -27,15 +27,16 @@ $ACTIVITY_LABELS = [
     'transplant' => 'שתילה',
 ];
 
-// Region code → Hebrew label. `IL_general` is the default (all-Israel) value and
-// carries no useful per-row signal, so it is suppressed (rendered as ''). Zone
-// overlays get a friendly label. Any unknown code is suppressed rather than
-// leaked raw — the planting calendar must never surface `IL_*` tokens to users.
+// Region code → Hebrew label (team_35 WP-CB-MOBILE v4, FIX 2). The planting
+// calendar must never surface raw `IL_*`/`MED_*` tokens to users. Known codes
+// map to friendly Hebrew; any unknown code is suppressed (rendered '') rather
+// than leaked raw.
 $REGION_LABELS = [
-    'IL_general' => '',
-    'IL_north'   => 'צפון',
-    'IL_center'  => 'מרכז',
-    'IL_south'   => 'דרום',
+    'IL_general'  => 'כל הארץ',
+    'IL_north'    => 'צפון',
+    'IL_center'   => 'מרכז',
+    'IL_south'    => 'דרום',
+    'MED_general' => 'אגן הים התיכון',
 ];
 
 // Group entries by activity_type.
