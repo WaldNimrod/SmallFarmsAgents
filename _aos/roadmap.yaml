@@ -4620,7 +4620,9 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
   label: "ספר גידולים: כיסוי מקורות EX/PR/WR בתצוגת העמקה (כיסוי-נתונים + ניקוי הערה ישנה)"
-  status: OPEN
+  status: DEFERRED
+  deferred_at: "2026-06-07"
+  deferred_reason: "team_00 directive 2026-06-07 — revisit later; pills already work in production, not urgent."
   phase: register
   track: A
   effort: SMALL
@@ -4666,7 +4668,9 @@ work_packages:
 # WP-CB-CALC LOD_DESIGN. See _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md §9.
 - id: SFA-S003-P004-WP-CB-WATER
   label: "ספר גידולים: מחשבון צריכת מים (#0) — מודל ET₀×Kc + נתוני Kc/ET₀ (מודל+נתונים, נפרד מ-CALC)"
-  status: OPEN
+  status: DEFERRED
+  deferred_at: "2026-06-07"
+  deferred_reason: "team_00 directive 2026-06-07 — revisit later; needs a new model + agronomy data (Kc/ET0), not near-term."
   phase: register
   track: A
   effort: LARGE
