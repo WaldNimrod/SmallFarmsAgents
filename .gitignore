@@ -51,3 +51,10 @@ data/external_sources/**/*.csv
 !data/external_sources/tend_multi_year/Tend_2020_*.csv
 !data/external_sources/tend_multi_year/Tend_2021_*.csv
 .claude/worktrees/
+
+# ── AOS-GOV-CACHE (Model B / ADR054) — git-ignored governance cache; refreshed by sync, never committed ──
+# Hub is the audit SSoT; version held is recorded in tracked _aos/AOS_GOVERNANCE_VERSION.yaml.
+/_aos/governance/
+/_aos/methodology/
+/_aos/lean-kit/
+# ── /AOS-GOV-CACHE ──
