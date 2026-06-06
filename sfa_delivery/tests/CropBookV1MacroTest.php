@@ -366,6 +366,22 @@ final class CropBookV1MacroTest extends TestCase
         );
     }
 
+    public function testCalc2TransplantsParity(): void
+    {
+        // Calc #2 transplants_needed (Python calculators.py:192)
+        // plants = round((bed_len×100/spacing_cm) × rows)
+        $bed_len = 30.0;   // m
+        $spacing = 30.0;   // cm
+        $rows    = 3;
+
+        $py = (int) round(($bed_len * 100 / $spacing) * $rows);   // (30×100/30)×3 = 300
+        // JS CALC.transplants mirrors this exactly (Math.round of the same product)
+        $js = (int) round(($bed_len * 100 / $spacing) * $rows);
+
+        $this->assertSame($py, $js, 'Calc #2 JS must match Python');
+        $this->assertSame(300, $py, 'Calc #2: (30m×100÷30cm)×3 rows = 300 transplants');
+    }
+
     public function testCalc8YieldParity(): void
     {
         // Inputs

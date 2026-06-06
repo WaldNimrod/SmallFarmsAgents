@@ -50,6 +50,20 @@
       };
     },
 
+    /* #2 transplants / seedlings needed (audience=B)
+       plants = round((bed_len_cm / spacing_cm) × rows)  — mirrors calculators.py transplants_needed */
+    transplants: function (g, book) {
+      var len     = parseFloat(g.bed_len) || 0;
+      var spacing = parseFloat(book.spacing) || 1;
+      var rows    = parseFloat(book.rows) || 1;
+      var plants  = Math.round((len * 100 / spacing) * rows);
+      return {
+        main:    fmt(plants),
+        unit:    'שתילים',
+        formula: '(' + len + ' m × 100 ÷ ' + spacing + ' cm) × ' + rows + ' שורות'
+      };
+    },
+
     /* #7 beds needed (audience=F)
        beds = target_kg / (yield_per_m × std_bed_length_m) */
     beds: function (g, book) {

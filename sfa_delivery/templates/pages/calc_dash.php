@@ -60,7 +60,7 @@ $CALC_GOALS = [
     'sow_date'    => ['id'=>4,  'label'=>'תאריך זריעה',   'ic'=>'📅', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'תאריך זריעה',  'runit'=>''],
     'yield'       => ['id'=>8,  'label'=>'יבול צפוי',     'ic'=>'⚖', 'kind'=>'yield',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'יבול צפוי',    'runit'=>'ק״ג'],
     'revenue'     => ['id'=>9,  'label'=>'הכנסה צפויה',   'ic'=>'₪', 'kind'=>'revenue', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'הכנסה צפויה',  'runit'=>'₪'],
-    'transplants' => ['id'=>2,  'label'=>'כמות שתילים',   'ic'=>'🪴', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'כמות שתילים',  'runit'=>'שתילים'],
+    'transplants' => ['id'=>2,  'label'=>'כמות שתילים',   'ic'=>'🪴', 'kind'=>'transplants','soon'=>false, 'basis'=>'area',     'rlabel'=>'כמות שתילים',  'runit'=>'שתילים'],
     'pop'         => ['id'=>10, 'label'=>'צפיפות שתילה',  'ic'=>'▦', 'kind'=>'pop',     'soon'=>false, 'basis'=>'area',     'rlabel'=>'צפיפות',       'runit'=>'צמ׳/מ״ר'],
     // ── the other 8 (dropdown) ──
     'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>''],

@@ -452,9 +452,16 @@ final class CropBookV1RouteTest extends TestCase
             $goals = json_decode(html_entity_decode($m[1], ENT_QUOTES), true);
             $this->assertIsArray($goals);
             $this->assertCount(14, $goals, 'Goal catalog must cover all 14 calculators');
-            // the 6 calculators with live client-side CALC math must be flagged not-soon
+            // Goals with live client-side CALC math are flagged not-soon with a non-empty kind.
+            // WP-CB-CALC Phase A: transplants(#2) ported -> 7 live (was 6: seed/yield/revenue/pop/fert/beds).
             $live = array_values(array_filter($goals, static fn ($g) => !($g['soon'] ?? true) && ($g['kind'] ?? '') !== ''));
-            $this->assertCount(6, $live, 'Exactly 6 goals have live CALC[kind] math (seed/yield/revenue/pop/fert/beds)');
+            $liveKinds = array_map(static fn ($g) => $g['kind'], $live);
+            sort($liveKinds);
+            $this->assertSame(
+                ['beds', 'fert', 'pop', 'revenue', 'seed', 'transplants', 'yield'],
+                $liveKinds,
+                'Live CALC[kind] goals (WP-CB-CALC Phase A added transplants)'
+            );
         }
     }
 
