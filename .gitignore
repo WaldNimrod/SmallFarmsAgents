@@ -58,3 +58,6 @@ data/external_sources/**/*.csv
 /_aos/methodology/
 /_aos/lean-kit/
 # ── /AOS-GOV-CACHE ──
+
+# Browser-QA (qa_probe.mjs) default output dir — transient screenshots/probes, never committed
+docs/qa/
