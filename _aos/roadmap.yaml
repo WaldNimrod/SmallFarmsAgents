@@ -4433,7 +4433,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MOBILE
   label: "ספר גידולים + מחירון + מחשבון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
-  status: VALIDATE
+  status: COMPLETE
   phase: done
   track: A
   effort: LARGE
@@ -4444,8 +4444,8 @@ work_packages:
   created_at: "2026-06-05"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MOBILE/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md"
-  design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-MOBILE/design_handoff_mobile_ui/MOBILE_DESIGN_v4.0.0.md"
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-MOBILE/team_100/LOD400_team10_mobile-build_2026-06-05_v1.0.0.md"
+  design_ref: "_archive/SFA-S003-P004-WP-CB-MOBILE/team_35/design_handoff_mobile_ui/MOBILE_DESIGN_v4.0.0.md"
   branch: "main (consolidated from claude/ui-polish-hub-cropbook-2026-06-03)"
   gate_history:
   - gate: L-GATE_E

@@ -1,0 +1,537 @@
+{
+  "ts": "2026-06-03T20:39:52.058810+00:00",
+  "link_crawl": {
+    "checked": 120,
+    "results": [
+      {
+        "path": "/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/",
+        "code": 200
+      },
+      {
+        "path": "/market/",
+        "code": 200
+      },
+      {
+        "path": "/calc/",
+        "code": 200
+      },
+      {
+        "path": "/community",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/img/favicon-32.png?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/img/apple-touch-icon.png?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/tokens.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/gj.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/hub.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/community.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/crop-book-deep.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/crop-book-v1.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/desktop-extras.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/public_assets/css/classb.css?v=1780515224",
+        "code": 200
+      },
+      {
+        "path": "/search",
+        "code": 200
+      },
+      {
+        "path": "/account",
+        "code": 200
+      },
+      {
+        "path": "/about",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/questions",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/family",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/table",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/search",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/?view=cards",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/watermelon/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/edamame/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/blackberry/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/anise-hyssop/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/peas/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/arugula/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/artichokes/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/jerusalem-artichokes/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/basil/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/sweet-potato/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/okra/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/onions/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/onions-scallions/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/broccoli/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/ginger/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/jicama/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/carrots/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cress/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/winter-squash/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/bay/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/hibiscus/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/chickpea/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/wheat/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/sunflower/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/lettuce/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/eggplant/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/thyme/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/tarragon/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cilantro/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/turmeric/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cabbage/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cauliflower/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/leeks/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/lovage/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/lemon-balm/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/lemon-verbena/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/turnips/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/melons/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cucumbers/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/chard/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/sage/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/mint/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/soybean/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/beets/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/celery/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/tomatoes/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/cherry-tomato/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/chives/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/lettuce-salad-mix/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/pac-choi-bok-choy/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/fava-bean/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/parsley/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/peppers/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/chinese-lantern/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/chicory/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/radishes/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/kohlrabi/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/kale/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/summer-squash/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/garlic/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/fennel/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/sesame/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/dill/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/beans-default-pole-climbing/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/strawberry/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/sweet-corn/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/oranges/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/potato/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/spinach/",
+        "code": 200
+      },
+      {
+        "path": "/crop-book/new-zealand-spinach/",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=alliums",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=baskets",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=brassicas",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=cucurbits",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=eggs",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=fruiting_vegetables",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=fruits",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=leafy_greens",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=legumes_fresh",
+        "code": 200
+      },
+      {
+        "path": "/market/?category=root_vegetables",
+        "code": 200
+      },
+      {
+        "path": "/market/prd059",
+        "code": 200
+      },
+      {
+        "path": "/market/prd066",
+        "code": 200
+      },
+      {
+        "path": "/market/prd052",
+        "code": 200
+      },
+      {
+        "path": "/market/prd043",
+        "code": 200
+      },
+      {
+        "path": "/market/prd035",
+        "code": 200
+      },
+      {
+        "path": "/market/prd057",
+        "code": 200
+      },
+      {
+        "path": "/market/prd065",
+        "code": 200
+      },
+      {
+        "path": "/market/prd058",
+        "code": 200
+      },
+      {
+        "path": "/market/prd062",
+        "code": 200
+      },
+      {
+        "path": "/market/prd063",
+        "code": 200
+      },
+      {
+        "path": "/market/prd060",
+        "code": 200
+      },
+      {
+        "path": "/market/prd067",
+        "code": 200
+      },
+      {
+        "path": "/market/prd046",
+        "code": 200
+      },
+      {
+        "path": "/market/prd017",
+        "code": 200
+      },
+      {
+        "path": "/market/prd018",
+        "code": 200
+      },
+      {
+        "path": "/market/prd023",
+        "code": 200
+      },
+      {
+        "path": "/market/prd013",
+        "code": 200
+      }
+    ],
+    "broken": []
+  },
+  "contribute": {
+    "code": 200,
+    "body": "{\"ok\":true}",
+    "content_type": "application/json; charset=utf-8"
+  },
+  "extras": {
+    "/": {
+      "code": 200,
+      "title": "SFA · SFA",
+      "og_title": "SFA",
+      "description": "Small Farms Agents — אינדקס פתוח של גידולים ומחירי שוק קהילתי"
+    },
+    "/crop-book/": {
+      "code": 200,
+      "title": "ספר גידולים · SFA",
+      "og_title": "ספר גידולים",
+      "description": "Small Farms Agents — אינדקס פתוח של גידולים ומחירי שוק קהילתי"
+    },
+    "/calc/": {
+      "code": 200,
+      "title": "מחשבון · SFA",
+      "og_title": "מחשבון",
+      "description": "Small Farms Agents — אינדקס פתוח של גידולים ומחירי שוק קהילתי"
+    },
+    "/robots.txt": {
+      "code": 200,
+      "title": null,
+      "og_title": null,
+      "description": null
+    },
+    "404_crop": {
+      "code": 404,
+      "has_error_shell": true
+    },
+    "security_headers": {
+      "Strict-Transport-Security": null,
+      "X-Frame-Options": null,
+      "Content-Security-Policy": null,
+      "X-Content-Type-Options": null
+    },
+    "calc_assets": {
+      "crop_book_v1_js": true,
+      "sfa_calc": true,
+      "modcard_count": 144,
+      "modcard_disabled": 10,
+      "data_calc": 6
+    }
+  }
+}

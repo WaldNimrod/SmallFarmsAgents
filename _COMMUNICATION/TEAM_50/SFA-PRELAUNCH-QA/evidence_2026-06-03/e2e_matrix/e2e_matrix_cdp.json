@@ -1,0 +1,91 @@
+{
+  "results": [
+    {
+      "id": "shell_logo_href",
+      "url": "/crop-book/",
+      "pass": true,
+      "val": "/",
+      "note": "expected \"/\" got \"/\""
+    },
+    {
+      "id": "hub_field_log_disabled",
+      "url": "/",
+      "pass": false,
+      "val": {
+        "tag": "DIV",
+        "aria": "true",
+        "href": null
+      },
+      "note": "expected {\"tag\":\"DIV\",\"aria\":\"true\"} got {\"tag\":\"DIV\",\"aria\":\"true\",\"href\":null}"
+    },
+    {
+      "id": "hub_whatsapp_cta",
+      "url": "/",
+      "pass": true,
+      "val": 1,
+      "note": ""
+    },
+    {
+      "id": "crop_entry_card_heights",
+      "url": "/crop-book/",
+      "pass": false,
+      "val": [
+        786,
+        786,
+        786,
+        786
+      ],
+      "note": "heights=[786,786,786,786]"
+    },
+    {
+      "id": "market_range_disabled",
+      "url": "/market/prd017",
+      "pass": true,
+      "val": [
+        {
+          "t": "90י",
+          "dis": true,
+          "cls": "is-disabled"
+        },
+        {
+          "t": "שנה",
+          "dis": true,
+          "cls": "is-disabled"
+        }
+      ],
+      "note": "[{\"t\":\"90י\",\"dis\":true,\"cls\":\"is-disabled\"},{\"t\":\"שנה\",\"dis\":true,\"cls\":\"is-disabled\"}]"
+    },
+    {
+      "id": "search_nomatch_reqinfo_href",
+      "url": "/search?q=zzznomatch190",
+      "pass": true,
+      "val": "/community",
+      "note": "expected \"/community\" got \"/community\""
+    },
+    {
+      "id": "community_footer_aria",
+      "url": "/community",
+      "pass": true,
+      "val": "קהילה",
+      "note": ""
+    },
+    {
+      "id": "calc_export_csv",
+      "url": "/calc/",
+      "pass": true,
+      "val": true,
+      "note": "expected true got true"
+    },
+    {
+      "id": "calc_modcards",
+      "url": "/calc/",
+      "pass": true,
+      "val": {
+        "total": 14,
+        "disabled": 8,
+        "live": 6
+      },
+      "note": ""
+    }
+  ]
+}

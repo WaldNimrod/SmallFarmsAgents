@@ -1,0 +1,1088 @@
+{
+  "summary": {
+    "ts": "2026-06-04T17:10:49.998Z",
+    "live_sha": "acca9b2",
+    "served_v": "1780576560",
+    "overflow": [],
+    "bbox_offenders": [
+      {
+        "page": "crop-book-entry",
+        "vp": "mobile375",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ]
+      },
+      {
+        "page": "crop-simple",
+        "vp": "mobile375",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ]
+      },
+      {
+        "page": "crop-full",
+        "vp": "mobile375",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ]
+      },
+      {
+        "page": "calc",
+        "vp": "mobile375",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ]
+      }
+    ],
+    "visible_leaks": [],
+    "eng_units_visible": [
+      {
+        "page": "calc",
+        "vp": "desktop1440",
+        "count": 1
+      },
+      {
+        "page": "calc",
+        "vp": "tablet768",
+        "count": 1
+      },
+      {
+        "page": "calc",
+        "vp": "mobile375",
+        "count": 1
+      }
+    ],
+    "raw_decimals": [],
+    "double_h1_crop": [],
+    "console_error_pages": [],
+    "calc_modules_desktop": {
+      "dir": "rtl",
+      "bg": "rgb(248, 251, 248)",
+      "offenders": [],
+      "leak": [],
+      "engUnits": 1,
+      "rawDecimals": [],
+      "h1s": [
+        "לוח מחשבונים"
+      ],
+      "cropHeroes": 0,
+      "wcImgs": 0,
+      "glyphCards": 0,
+      "modcards": 14,
+      "calcLive": 6,
+      "chips": [],
+      "engChips": [],
+      "sw": 1440,
+      "cw": 1440
+    },
+    "market_chips": [],
+    "market_eng_chips": []
+  },
+  "results": [
+    {
+      "viewport": "desktop1440",
+      "page": "hub",
+      "path": "/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "כלים פתוחים לחקלאות מקומית"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-book-entry",
+      "path": "/crop-book/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ספר הגידולים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 71,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-simple",
+      "path": "/crop-book/lettuce/?depth=simple&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חסה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "crop-full",
+      "path": "/crop-book/tomatoes/?depth=full&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "עגבנייה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "calc",
+      "path": "/calc/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 1,
+        "rawDecimals": [],
+        "h1s": [
+          "לוח מחשבונים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 14,
+        "calcLive": 6,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "market-list",
+      "path": "/market/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "market-detail",
+      "path": "/market/prd017?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "בצל יבש"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "global-search-hit",
+      "path": "/search?q=%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%94&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "global-search-miss",
+      "path": "/search?q=zzznomatch190&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "community",
+      "path": "/community?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "about",
+      "path": "/about?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חמש שכבות של כלים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "desktop1440",
+      "page": "account",
+      "path": "/account?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ברוכים הבאים ל-SFA"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 1440,
+        "cw": 1440
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "hub",
+      "path": "/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "כלים פתוחים לחקלאות מקומית"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "crop-book-entry",
+      "path": "/crop-book/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ספר הגידולים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 71,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "crop-simple",
+      "path": "/crop-book/lettuce/?depth=simple&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חסה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "crop-full",
+      "path": "/crop-book/tomatoes/?depth=full&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "עגבנייה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "calc",
+      "path": "/calc/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 1,
+        "rawDecimals": [],
+        "h1s": [
+          "לוח מחשבונים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 14,
+        "calcLive": 6,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "market-list",
+      "path": "/market/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "market-detail",
+      "path": "/market/prd017?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "בצל יבש"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "global-search-hit",
+      "path": "/search?q=%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%94&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "global-search-miss",
+      "path": "/search?q=zzznomatch190&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "community",
+      "path": "/community?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "about",
+      "path": "/about?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חמש שכבות של כלים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "tablet768",
+      "page": "account",
+      "path": "/account?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ברוכים הבאים ל-SFA"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 768,
+        "cw": 768
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "hub",
+      "path": "/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "כלים פתוחים לחקלאות מקומית"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-book-entry",
+      "path": "/crop-book/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ספר הגידולים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 71,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-simple",
+      "path": "/crop-book/lettuce/?depth=simple&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חסה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "crop-full",
+      "path": "/crop-book/tomatoes/?depth=full&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "עגבנייה"
+        ],
+        "cropHeroes": 1,
+        "wcImgs": 1,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 1,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "calc",
+      "path": "/calc/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [
+          {
+            "sel": ".sh__mark svg",
+            "i": 0,
+            "w": 300,
+            "h": 150,
+            "tag": "svg"
+          }
+        ],
+        "leak": [],
+        "engUnits": 1,
+        "rawDecimals": [],
+        "h1s": [
+          "לוח מחשבונים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 14,
+        "calcLive": 6,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "market-list",
+      "path": "/market/?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "market-detail",
+      "path": "/market/prd017?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "בצל יבש"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "global-search-hit",
+      "path": "/search?q=%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%94&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "global-search-miss",
+      "path": "/search?q=zzznomatch190&v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "community",
+      "path": "/community?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "about",
+      "path": "/about?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "חמש שכבות של כלים"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    },
+    {
+      "viewport": "mobile375",
+      "page": "account",
+      "path": "/account?v=1780576560",
+      "overflow": false,
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "offenders": [],
+        "leak": [],
+        "engUnits": 0,
+        "rawDecimals": [],
+        "h1s": [
+          "ברוכים הבאים ל-SFA"
+        ],
+        "cropHeroes": 0,
+        "wcImgs": 0,
+        "glyphCards": 0,
+        "modcards": 0,
+        "calcLive": 0,
+        "chips": [],
+        "engChips": [],
+        "sw": 375,
+        "cw": 375
+      },
+      "consoleErrors": []
+    }
+  ],
+  "consoleErrors": []
+}

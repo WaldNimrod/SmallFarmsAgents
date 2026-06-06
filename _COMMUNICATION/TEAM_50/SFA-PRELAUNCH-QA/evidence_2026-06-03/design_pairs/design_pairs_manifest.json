@@ -1,0 +1,32 @@
+[
+  {
+    "label": "book-entry",
+    "board": "Board-A-Book-and-Calculator.html",
+    "path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/design_pairs/board_book-entry_desktop1440.png",
+    "live_pair": "../qa_probe/screenshots/crop-book-entry_desktop1440.png"
+  },
+  {
+    "label": "calc-page",
+    "board": "Board-A-Book-and-Calculator.html",
+    "path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/design_pairs/board_calc-page_desktop1440.png",
+    "live_pair": "../qa_probe/screenshots/calc_desktop1440.png"
+  },
+  {
+    "label": "hub-home",
+    "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+    "path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/design_pairs/board_hub-home_desktop1440.png",
+    "live_pair": "../qa_probe/screenshots/hub_desktop1440.png"
+  },
+  {
+    "label": "market-list",
+    "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+    "path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/design_pairs/board_market-list_desktop1440.png",
+    "live_pair": "../qa_probe/screenshots/market-list_desktop1440.png"
+  },
+  {
+    "label": "community",
+    "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+    "path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/design_pairs/board_community_desktop1440.png",
+    "live_pair": "../qa_probe/screenshots/community_desktop1440.png"
+  }
+]

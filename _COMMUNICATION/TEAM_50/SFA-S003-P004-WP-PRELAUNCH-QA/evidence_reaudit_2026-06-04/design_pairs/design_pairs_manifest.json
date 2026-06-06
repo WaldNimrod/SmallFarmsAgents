@@ -1,0 +1,215 @@
+{
+  "ts": "2026-06-04T17:12:40.137Z",
+  "pairs": [
+    {
+      "label": "book-entry",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_book-entry_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/crop-book-entry_desktop1440.png"
+    },
+    {
+      "label": "book-entry",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_book-entry_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/crop-book-entry_tablet768.png"
+    },
+    {
+      "label": "book-entry",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_book-entry_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/crop-book-entry_mobile375.png"
+    },
+    {
+      "label": "crop-lettuce",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_crop-lettuce_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/crop-simple_desktop1440.png"
+    },
+    {
+      "label": "crop-lettuce",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_crop-lettuce_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/crop-simple_tablet768.png"
+    },
+    {
+      "label": "crop-lettuce",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_crop-lettuce_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/crop-simple_mobile375.png"
+    },
+    {
+      "label": "calc-page",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_calc-page_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/calc_desktop1440.png"
+    },
+    {
+      "label": "calc-page",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_calc-page_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/calc_tablet768.png"
+    },
+    {
+      "label": "calc-page",
+      "board": "Board-A-Book-and-Calculator.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_calc-page_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/calc_mobile375.png"
+    },
+    {
+      "label": "hub-home",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_hub-home_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/hub_desktop1440.png"
+    },
+    {
+      "label": "hub-home",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_hub-home_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/hub_tablet768.png"
+    },
+    {
+      "label": "hub-home",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_hub-home_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/hub_mobile375.png"
+    },
+    {
+      "label": "market-list",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-list_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/market-list_desktop1440.png"
+    },
+    {
+      "label": "market-list",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-list_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/market-list_tablet768.png"
+    },
+    {
+      "label": "market-list",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-list_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/market-list_mobile375.png"
+    },
+    {
+      "label": "market-detail",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-detail_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/market-detail_desktop1440.png"
+    },
+    {
+      "label": "market-detail",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-detail_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/market-detail_tablet768.png"
+    },
+    {
+      "label": "market-detail",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_market-detail_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/market-detail_mobile375.png"
+    },
+    {
+      "label": "search-results",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_search-results_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/global-search-hit_desktop1440.png"
+    },
+    {
+      "label": "search-results",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_search-results_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/global-search-hit_tablet768.png"
+    },
+    {
+      "label": "search-results",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_search-results_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/global-search-hit_mobile375.png"
+    },
+    {
+      "label": "community",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_community_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/community_desktop1440.png"
+    },
+    {
+      "label": "community",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_community_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/community_tablet768.png"
+    },
+    {
+      "label": "community",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_community_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/community_mobile375.png"
+    },
+    {
+      "label": "about-tiers",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_about-tiers_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/about_desktop1440.png"
+    },
+    {
+      "label": "about-tiers",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_about-tiers_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/about_tablet768.png"
+    },
+    {
+      "label": "about-tiers",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_about-tiers_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/about_mobile375.png"
+    },
+    {
+      "label": "account",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "desktop1440",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_account_desktop1440.png",
+      "live_pair": "../qa_probe/screenshots/account_desktop1440.png"
+    },
+    {
+      "label": "account",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "tablet768",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_account_tablet768.png",
+      "live_pair": "../qa_probe/screenshots/account_tablet768.png"
+    },
+    {
+      "label": "account",
+      "board": "Board-B-Hub-Market-Search-Community-About-Account.html",
+      "viewport": "mobile375",
+      "board_path": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/design_pairs/board_account_mobile375.png",
+      "live_pair": "../qa_probe/screenshots/account_mobile375.png"
+    }
+  ]
+}

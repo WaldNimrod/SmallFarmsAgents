@@ -1,0 +1,38 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "v": "1780576560",
+  "out": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/team_50/SFA-S003-P004-WP-PRELAUNCH-QA/evidence_reaudit_2026-06-04/qa_probe",
+  "shots": true,
+  "viewports": [
+    {"name": "desktop1440", "w": 1440, "h": 900},
+    {"name": "tablet768", "w": 768, "h": 900},
+    {"name": "mobile375", "w": 375, "h": 812}
+  ],
+  "pages": [
+    {"name": "hub", "path": "/?v=1780576560"},
+    {"name": "crop-book-entry", "path": "/crop-book/?v=1780576560"},
+    {"name": "crop-simple", "path": "/crop-book/lettuce/?depth=simple&v=1780576560"},
+    {"name": "crop-full", "path": "/crop-book/tomatoes/?depth=full&v=1780576560"},
+    {"name": "calc", "path": "/calc/?v=1780576560"},
+    {"name": "market-list", "path": "/market/?v=1780576560"},
+    {"name": "market-detail", "path": "/market/prd017?v=1780576560"},
+    {"name": "global-search-hit", "path": "/search?q=%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%94&v=1780576560"},
+    {"name": "global-search-miss", "path": "/search?q=zzznomatch190&v=1780576560"},
+    {"name": "community", "path": "/community?v=1780576560"},
+    {"name": "about", "path": "/about?v=1780576560"},
+    {"name": "account", "path": "/account?v=1780576560"}
+  ],
+  "absent": [
+    "TBD",
+    "LOREM",
+    "undefined",
+    "[object Object]",
+    "direct_seed",
+    "half_hardy",
+    "family:variety",
+    "yield_per_bed_m",
+    "root_vegetables",
+    "leafy_greens",
+    "legumes_fresh"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "ts": "2026-06-03T20:33:17.355614+00:00",
+  "base": "https://sfa.nimrod.bio",
+  "health": {
+    "code": 200,
+    "body": {
+      "status": "ok",
+      "php_version": "8.5.5",
+      "db": "ok",
+      "ts": "2026-06-03T20:33:17+00:00"
+    }
+  },
+  "patch01_css": {
+    "wi5_cb_paths_grid": false,
+    "wi5_comment": false,
+    "wi5_note": "live hub.css has only .cb-paths { gap: 6px; }; crop-book-v1.css has 0 cb-paths rules",
+    "wi6_sh_mark_svg": false,
+    "wi6_comment": false,
+    "wi6_note": "live classb.css has 0 sh__mark selectors; 7fbcf89 branch contains WI-6",
+    "crop_book_v1_css_bytes": 46938,
+    "classb_css_bytes": 41697
+  },
+  "asset_versions_home": {
+    "crop-book-v1": "1780515224",
+    "classb": "1780515224"
+  },
+  "class_b_markers": {
+    "hub_home_inner": 2,
+    "community_contact_webp": 1,
+    "search_reqinfo": 1,
+    "search_glyph": 1,
+    "market_ptable_th": 4,
+    "community_aria_current": 1,
+    "community_footer_self_link": false
+  },
+  "crops": {
+    "count": 70,
+    "test_slugs": {
+      "tomatoes": true,
+      "lettuce": true,
+      "carrots": true,
+      "cauliflower": true,
+      "anise-hyssop": true
+    }
+  },
+  "products": {
+    "count": 65,
+    "market_detail_slug": "prd017",
+    "priced_count": 61
+  },
+  "route_http": {
+    "/crop-book/": 200,
+    "/crop-book/lettuce/?depth=simple": 200,
+    "/crop-book/tomatoes/?depth=full": 200,
+    "/crop-book/anise-hyssop/variety/variety-11/": 404,
+    "/calc/": 200,
+    "/calc/print": 200,
+    "/account": 200
+  },
+  "mandate_sha_7fbcf89": {
+    "expected": "7fbcf89",
+    "live_wi5": false,
+    "live_wi6": false,
+    "deploy_report_sha": "08f529d",
+    "live_matches_mandate_tip": false
+  }
+}

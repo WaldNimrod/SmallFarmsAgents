@@ -1,0 +1,560 @@
+{
+  "summary": {
+    "ts": "2026-06-03T20:39:43.787Z",
+    "viewport": {
+      "name": "desktop1440",
+      "w": 1440,
+      "h": 900
+    },
+    "pages": 20,
+    "overflow_pages": [],
+    "bbox_offenders": [
+      {
+        "page": "crop-book-entry",
+        "offenders": [
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 0,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 1,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 2,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 3,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 0,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 1,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 2,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 3,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          }
+        ]
+      }
+    ],
+    "visible_leaks": [],
+    "console_error_pages": [],
+    "sh_shell_hashes": [
+      {
+        "page": "hub",
+        "shHash": "11028:30"
+      },
+      {
+        "page": "crop-book-entry",
+        "shHash": "103410:30"
+      },
+      {
+        "page": "crop-simple",
+        "shHash": "78788:30"
+      },
+      {
+        "page": "crop-full",
+        "shHash": "59622:30"
+      },
+      {
+        "page": "crop-drill",
+        "shHash": "59622:30"
+      },
+      {
+        "page": "variety",
+        "shHash": "6841:30"
+      },
+      {
+        "page": "book-family",
+        "shHash": "9304:30"
+      },
+      {
+        "page": "book-table",
+        "shHash": "54590:30"
+      },
+      {
+        "page": "book-search",
+        "shHash": "3704:30"
+      },
+      {
+        "page": "global-search-hit",
+        "shHash": "4441:30"
+      },
+      {
+        "page": "global-search-miss",
+        "shHash": "2344:30"
+      },
+      {
+        "page": "questions",
+        "shHash": "4864:30"
+      },
+      {
+        "page": "cover-crops",
+        "shHash": "1909:30"
+      },
+      {
+        "page": "calc",
+        "shHash": "42458:30"
+      },
+      {
+        "page": "calc-print",
+        "shHash": 0
+      },
+      {
+        "page": "market-list",
+        "shHash": "101534:30"
+      },
+      {
+        "page": "market-detail",
+        "shHash": "5373:30"
+      },
+      {
+        "page": "community",
+        "shHash": "4052:30"
+      },
+      {
+        "page": "about",
+        "shHash": "5077:30"
+      },
+      {
+        "page": "account",
+        "shHash": "5999:30"
+      }
+    ]
+  },
+  "results": [
+    {
+      "page": "hub",
+      "path": "/",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 11028,
+        "shHash": "11028:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "crop-book-entry",
+      "path": "/crop-book/",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 0,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 1,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 2,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".cb-paths .mod-card",
+            "i": 3,
+            "w": 1404,
+            "h": 786,
+            "tag": "A"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 0,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 1,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 2,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          },
+          {
+            "sel": ".mod-card__art",
+            "i": 3,
+            "w": 1402,
+            "h": 701,
+            "tag": "DIV"
+          }
+        ],
+        "leak": [],
+        "shLen": 103410,
+        "shHash": "103410:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "crop-simple",
+      "path": "/crop-book/lettuce/?depth=simple",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 78788,
+        "shHash": "78788:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "crop-full",
+      "path": "/crop-book/tomatoes/?depth=full",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 59622,
+        "shHash": "59622:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "crop-drill",
+      "path": "/crop-book/tomatoes/?depth=drill",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 59622,
+        "shHash": "59622:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "variety",
+      "path": "/crop-book/anise-hyssop/variety/variety-1/",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 6841,
+        "shHash": "6841:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "book-family",
+      "path": "/crop-book/family",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 9304,
+        "shHash": "9304:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "book-table",
+      "path": "/crop-book/table",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 54590,
+        "shHash": "54590:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "book-search",
+      "path": "/crop-book/search?q=tomato",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 3704,
+        "shHash": "3704:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "global-search-hit",
+      "path": "/search?q=חסה",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 4441,
+        "shHash": "4441:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "global-search-miss",
+      "path": "/search?q=zzznomatch190",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 2344,
+        "shHash": "2344:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "questions",
+      "path": "/crop-book/questions",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 4864,
+        "shHash": "4864:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "cover-crops",
+      "path": "/crop-book/cover-crops",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 1909,
+        "shHash": "1909:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "calc",
+      "path": "/calc/",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 42458,
+        "shHash": "42458:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "calc-print",
+      "path": "/calc/print",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgba(0, 0, 0, 0)",
+        "ff": "Assistant, Heebo, system-ui, sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 0,
+        "shHash": 0
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "market-list",
+      "path": "/market/",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 101534,
+        "shHash": "101534:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "market-detail",
+      "path": "/market/prd017",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 5373,
+        "shHash": "5373:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "community",
+      "path": "/community",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 4052,
+        "shHash": "4052:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "about",
+      "path": "/about",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 5077,
+        "shHash": "5077:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    },
+    {
+      "page": "account",
+      "path": "/account",
+      "probe": {
+        "dir": "rtl",
+        "bg": "rgb(248, 251, 248)",
+        "ff": "Assistant, Heebo, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "sw": 1440,
+        "cw": 1440,
+        "offenders": [],
+        "leak": [],
+        "shLen": 5999,
+        "shHash": "5999:30"
+      },
+      "consoleErrors": [],
+      "networkFailed": []
+    }
+  ],
+  "consoleErrors": [],
+  "networkFailed": []
+}

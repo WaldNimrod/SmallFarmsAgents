@@ -1,0 +1,44 @@
+{
+  "ts": "2026-06-04T17:08:33.435007+00:00",
+  "base": "https://sfa.nimrod.bio",
+  "expected_sha": "acca9b2",
+  "expected_v": "1780576560",
+  "health": {
+    "code": 200,
+    "body": {
+      "status": "ok",
+      "php_version": "8.5.5",
+      "db": "ok",
+      "ts": "2026-06-04T17:08:34+00:00"
+    }
+  },
+  "fidelity_css": {
+    "cb_paths_grid": true,
+    "cards_grid_168": true,
+    "crop_detail_1120": false,
+    "wi5_comment": true,
+    "sh_mark_svg": true,
+    "crop_book_v1_bytes": 54283,
+    "classb_bytes": 46427
+  },
+  "asset_versions_home": {
+    "crop-book-deep": "1780576560",
+    "crop-book-v1": "1780576560",
+    "classb": "1780576560"
+  },
+  "served_v_matches": true,
+  "crop_book": {
+    "wc_img_refs": 70,
+    "glyph_only_cards": 0
+  },
+  "market": {
+    "english_chip_slugs_in_html": [],
+    "ptable_th": 4
+  },
+  "route_http": {
+    "/crop-book/?v=1780576560": 200,
+    "/crop-book/lettuce/?depth=simple&v=1780576560": 200,
+    "/calc/?v=1780576560": 200,
+    "/account?v=1780576560": 200
+  }
+}

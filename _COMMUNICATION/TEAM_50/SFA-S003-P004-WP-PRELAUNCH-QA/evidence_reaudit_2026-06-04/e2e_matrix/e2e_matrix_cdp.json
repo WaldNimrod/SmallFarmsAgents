@@ -1,0 +1,84 @@
+{
+  "ts": "2026-06-04T17:09:12.169Z",
+  "v": "1780576560",
+  "failures": [
+    "crop_grid_card_width"
+  ],
+  "rows": [
+    {
+      "id": "shell_logo_href",
+      "pass": true,
+      "note": "expected \"/\" got \"/\"",
+      "val": "/"
+    },
+    {
+      "id": "hub_field_log_disabled",
+      "pass": true,
+      "note": "expected {\"tag\":\"DIV\",\"aria\":\"true\"} got {\"tag\":\"DIV\",\"aria\":\"true\"}",
+      "val": {
+        "tag": "DIV",
+        "aria": "true"
+      }
+    },
+    {
+      "id": "crop_entry_card_heights",
+      "pass": true,
+      "note": "heights=[133,133,133,133]",
+      "val": [
+        133,
+        133,
+        133,
+        133
+      ]
+    },
+    {
+      "id": "crop_grid_card_width",
+      "pass": false,
+      "note": "widths=[]",
+      "val": []
+    },
+    {
+      "id": "crop_lettuce_single_h1",
+      "pass": true,
+      "note": "h1 count=1",
+      "val": 1
+    },
+    {
+      "id": "market_range_disabled",
+      "pass": true,
+      "note": "[{\"t\":\"90י\",\"dis\":true},{\"t\":\"שנה\",\"dis\":true}]",
+      "val": [
+        {
+          "t": "90י",
+          "dis": true
+        },
+        {
+          "t": "שנה",
+          "dis": true
+        }
+      ]
+    },
+    {
+      "id": "calc_export_csv",
+      "pass": true,
+      "note": "expected true got true",
+      "val": true
+    },
+    {
+      "id": "calc_modcards",
+      "pass": true,
+      "note": "{\"total\":14,\"live\":6,\"spacing\":false}",
+      "val": {
+        "total": 14,
+        "live": 6,
+        "spacing": false
+      }
+    },
+    {
+      "id": "search_nomatch_reqinfo",
+      "pass": true,
+      "note": "expected \"/community\" got \"/community\"",
+      "val": "/community"
+    }
+  ]
+}

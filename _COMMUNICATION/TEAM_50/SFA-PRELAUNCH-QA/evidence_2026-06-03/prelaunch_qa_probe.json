@@ -1,0 +1,45 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "out": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_50/SFA-PRELAUNCH-QA/evidence_2026-06-03/qa_probe",
+  "shots": true,
+  "viewports": [
+    {"name": "desktop1440", "w": 1440, "h": 900},
+    {"name": "desktop1280", "w": 1280, "h": 800},
+    {"name": "tablet768", "w": 768, "h": 900},
+    {"name": "mobile375", "w": 375, "h": 812}
+  ],
+  "pages": [
+    {"name": "hub", "path": "/"},
+    {"name": "crop-book-entry", "path": "/crop-book/"},
+    {"name": "crop-simple", "path": "/crop-book/lettuce/?depth=simple"},
+    {"name": "crop-full", "path": "/crop-book/tomatoes/?depth=full"},
+    {"name": "crop-drill", "path": "/crop-book/tomatoes/?depth=drill"},
+    {"name": "variety", "path": "/crop-book/anise-hyssop/variety/variety-1/"},
+    {"name": "book-family", "path": "/crop-book/family"},
+    {"name": "book-table", "path": "/crop-book/table"},
+    {"name": "book-search", "path": "/crop-book/search?q=tomato"},
+    {"name": "global-search-hit", "path": "/search?q=חסה"},
+    {"name": "global-search-miss", "path": "/search?q=zzznomatch190"},
+    {"name": "questions", "path": "/crop-book/questions"},
+    {"name": "cover-crops", "path": "/crop-book/cover-crops"},
+    {"name": "calc", "path": "/calc/"},
+    {"name": "calc-print", "path": "/calc/print"},
+    {"name": "market-list", "path": "/market/"},
+    {"name": "market-detail", "path": "/market/prd017"},
+    {"name": "community", "path": "/community"},
+    {"name": "about", "path": "/about"},
+    {"name": "account", "path": "/account"}
+  ],
+  "absent": [
+    "TBD",
+    "LOREM",
+    "undefined",
+    "[object Object]",
+    "Array(",
+    "NULL",
+    "direct_seed",
+    "half_hardy",
+    "family:variety",
+    "yield_per_bed_m"
+  ]
+}
