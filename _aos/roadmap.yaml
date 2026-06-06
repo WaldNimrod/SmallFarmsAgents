@@ -4580,6 +4580,7 @@ work_packages:
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-MOBILE"]
   spec_ref: "_COMMUNICATION/team_100/REPORT_WP-CB-MOBILE_FOLLOWUPS_calc-and-deep-provenance_2026-06-07.md"
+  design_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4596,10 +4597,25 @@ work_packages:
       frost(#11) (+ maybe harvest_window #5); C decision — define `water` model or drop the goal. Research-
       first (LOD) per handoff HANDOFF_SELF_100_CB-FOLLOWUPS-RESEARCH_2026-06-07_full.md, on an isolated
       branch (parallel UI_REDESIGN session live on main).
-  notes: "REGISTER 2026-06-07 — calculator completion (6/14 -> 14 live). Phased A(ports)/B(date engine+anchor)/
-    C(water decision). Open team_00 decisions: water model vs drop; account-scoped session persistence
-    (today per-device sessionStorage); surface harvest_window(#5) as a 15th goal. Builder=team_10, validator=
-    team_50. Research-first + isolated branch per the 2026-06-07 handoff. Not yet scheduled — awaits LOD + prioritization."
+  - gate: L-GATE_E
+    result: DESIGN_AUTHORED
+    date: "2026-06-07"
+    validator: team_100
+    notes: >
+      LOD_DESIGN authored (design_ref) — DECISION-COMPLETE. team_00 resolved all open decisions:
+      water(#0) SPLIT to WP-CB-WATER (needs new model ET0xKc + new data Kc/ET0 — not a port);
+      #13 REFRAMED to a quantity-first crop comparison (not profit/margin; price=secondary price-list
+      line); frost(#11) = region picker (IL region->frost table); harvest_window(#5) = surface as 15th
+      goal; session = keep per-device sessionStorage. Phase B (date engine) GATED on new prereq
+      WP-CB-CROPDATA-DATES (date-field enrichment). NEW finding: date engine needs SERVER-side plumbing
+      too (HubController::calc whitelist :147-156 omits date fields; categorical planting_method/frost_class
+      dropped twice). Phase A (transplants/seed_cost/compare -> 6-to-9 live) has no prereqs. Awaits team_00
+      build go (L-GATE_E held; not advanced to D pending go).
+  notes: "REGISTER 2026-06-07; DESIGN authored 2026-06-07 (decision-complete). Phase A = transplants(#2)+
+    seed_cost(#14)+compare(#13 quantity-first) -> 6-to-9 live (no prereqs). Phase B = date engine
+    (sow_date/harvest_window/succession/nursery/frost region) -> up to 15 goals, GATED on WP-CB-CROPDATA-DATES.
+    water split to WP-CB-WATER. Builder=team_10, validator=team_50. Isolated branch claude/cb-followups-2026-06-07.
+    Awaits team_00 build go."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
@@ -4616,6 +4632,7 @@ work_packages:
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-MOBILE"]
   spec_ref: "_COMMUNICATION/team_100/REPORT_WP-CB-MOBILE_FOLLOWUPS_calc-and-deep-provenance_2026-06-07.md"
+  design_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-DEEP-PROVENANCE/DISPOSITION_2026-06-07_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4630,10 +4647,82 @@ work_packages:
       (CropBookViewController.php:879,887,912) -> no pill; (2) a stale/false comment at L693-696 ("mirror has
       no enrichment/attribute tables"); (3) optional robustness — add source_class{} to the variety payload so
       the fallback also yields pills. Ranges (.rng) confirmed robust (>=2 varieties, distinct numerics).
-  notes: "REGISTER 2026-06-07 — Deep provenance is mostly DATA-COVERAGE + a doc cleanup, not a rebuild
-    (pills render live where enrichment exists). Tasks: (S) verify live mirror crop_field_enrichment coverage +
-    fix the stale controller comment; (data) enrich more crops + push; (S,optional) source_class in variety
-    payload fallback. Builder=team_10, validator=team_50. Awaits team_00 prioritization (may fold into a crop-data WP)."
+  - gate: L-GATE_E
+    result: DESIGN_AUTHORED
+    date: "2026-06-07"
+    validator: team_100
+    notes: >
+      DISPOSITION authored (design_ref). team_00 decision: SCOPE = comment fix (CropBookViewController.php:693-696,
+      contradicted by L666-683 which query the very tables the comment says don't exist) + fallback robustness
+      (add source_class{} to the variety payload; read in the 3 fallback branches :879,887,912). Data-COVERAGE
+      SPLIT OUT to a separate crop-enrichment data WP (sibling of WP-CB-CROPDATA-DATES). no-leak intent for
+      OP/MK/WB/UC retained. Awaits team_00 build go (L-GATE_E held).
+  notes: "REGISTER 2026-06-07; DISPOSITION authored 2026-06-07. Scope = comment fix + fallback robustness
+    (source_class{} in variety payload). Data-coverage split to a separate crop-enrichment WP. Builder=team_10,
+    validator=team_50. Isolated branch claude/cb-followups-2026-06-07. Awaits team_00 build go."
+  profile: L0
+
+# WP-CB-WATER + WP-CB-CROPDATA-DATES registered 2026-06-07 (team_00 directive) — spin-offs from the
+# WP-CB-CALC LOD_DESIGN. See _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md §9.
+- id: SFA-S003-P004-WP-CB-WATER
+  label: "ספר גידולים: מחשבון צריכת מים (#0) — מודל ET₀×Kc + נתוני Kc/ET₀ (מודל+נתונים, נפרד מ-CALC)"
+  status: OPEN
+  phase: register
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: TBD
+  assigned_validator: team_50
+  created_at: "2026-06-07"
+  milestone_ref: "S003"
+  depends_on: []
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-07"
+    validator: team_00
+    notes: >
+      Spin-off from WP-CB-CALC (team_00 decision #1, 2026-06-07). `water` (#0) is the ONLY calculator goal
+      missing BOTH a model AND data, so it cannot be a Python->JS port like the other 13. Needs (a) a defined
+      water model (e.g. weekly need = ET0(region,month) × Kc(crop,stage) × area − effective rainfall) and
+      (b) new data: a per-crop crop-coefficient (Kc) book field + region/month reference ET0 (the IL region
+      axis can reuse the WP-CB-CALC Phase-B frost region table; Kc-per-crop does not exist yet). Independent
+      timeline; the "בפיתוח" stub stays in /calc until this ships.
+  notes: "REGISTER 2026-06-07 — water calculator as a model+data WP (split from WP-CB-CALC). Effort LARGE
+    (agronomy data: Kc per crop + ET0 by region/month). Builder TBD, validator=team_50. Awaits team_00 prioritization."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-CROPDATA-DATES
+  label: "ספר גידולים: העשרת שדות-תאריך לגידולים (days_to_maturity/days_in_nursery/planting_method/frost_class) — תנאי מקדים ל-Phase B של CALC"
+  status: OPEN
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: TBD
+  assigned_validator: team_50
+  created_at: "2026-06-07"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-MOBILE"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-07"
+    validator: team_00
+    notes: >
+      Spin-off from WP-CB-CALC (team_00 decision #5, 2026-06-07). The date calculators (Phase B) are only
+      useful once the date book-fields are populated per crop in the PG SSoT: days_to_maturity, days_in_nursery
+      (a.k.a. days_in_nursery_cell), planting_method, frost_tolerance_class (+ harvest_window_max_days,
+      succession_interval_weeks). Assume sparse today -> this enrichment is a PREREQUISITE for WP-CB-CALC Phase B
+      SHIPPING (Phase B code may be developed in parallel). Includes the server-side delivery work flagged in the
+      LOD §3 (widen HubController::calc whitelist :147-156; add a crop_attribute query + non-numeric channel for
+      categorical planting_method/frost_class). Likely shares an owner with the WP-CB-DEEP-PROVENANCE coverage split.
+  notes: "REGISTER 2026-06-07 — crop date-field enrichment, PREREQUISITE for WP-CB-CALC Phase B. Data + server
+    plumbing (calc controller whitelist + categorical channel). Builder TBD, validator=team_50. Awaits team_00 prioritization."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS
