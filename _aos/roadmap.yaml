@@ -4611,11 +4611,12 @@ work_packages:
       too (HubController::calc whitelist :147-156 omits date fields; categorical planting_method/frost_class
       dropped twice). Phase A (transplants/seed_cost/compare -> 6-to-9 live) has no prereqs. Awaits team_00
       build go (L-GATE_E held; not advanced to D pending go).
-  notes: "REGISTER 2026-06-07; DESIGN authored 2026-06-07 (decision-complete). Phase A = transplants(#2)+
-    seed_cost(#14)+compare(#13 quantity-first) -> 6-to-9 live (no prereqs). Phase B = date engine
-    (sow_date/harvest_window/succession/nursery/frost region) -> up to 15 goals, GATED on WP-CB-CROPDATA-DATES.
-    water split to WP-CB-WATER. Builder=team_10, validator=team_50. Isolated branch claude/cb-followups-2026-06-07.
-    Awaits team_00 build go."
+  notes: "REGISTER 2026-06-07; DESIGN authored + refined 2026-06-07 (decision-complete). Phase A = transplants(#2)+
+    seed_cost(#14)+compare(#13 quantity-first) -> 6-to-9 live (no prereqs). Phase B-now = harvest_window(#5)+
+    succession(#6 DERIVED from harvest_window/7)+sow_date(#4 direct) -> 9-to-12 live on EXISTING data (NOT gated).
+    Phase B-later = nursery(#3)/frost(#11 region)/transplant sow_date -> 12-to-15, after WP-CB-CROPDATA-DATES
+    guided-entry tool fills planting_method+frost_class. water split to WP-CB-WATER. Builder=team_10, validator=
+    team_50. Isolated branch claude/cb-followups-2026-06-07. Awaits team_00 build go."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
@@ -4718,15 +4719,26 @@ work_packages:
     date: "2026-06-07"
     validator: team_00
     notes: >
-      Spin-off from WP-CB-CALC (team_00 decision #5, 2026-06-07). The date calculators (Phase B) are only
-      useful once the date book-fields are populated per crop in the PG SSoT: days_to_maturity, days_in_nursery
-      (a.k.a. days_in_nursery_cell), planting_method, frost_tolerance_class (+ harvest_window_max_days,
-      succession_interval_weeks). Assume sparse today -> this enrichment is a PREREQUISITE for WP-CB-CALC Phase B
-      SHIPPING (Phase B code may be developed in parallel). Includes the server-side delivery work flagged in the
-      LOD §3 (widen HubController::calc whitelist :147-156; add a crop_attribute query + non-numeric channel for
-      categorical planting_method/frost_class). Likely shares an owner with the WP-CB-DEEP-PROVENANCE coverage split.
-  notes: "REGISTER 2026-06-07 — crop date-field enrichment, PREREQUISITE for WP-CB-CALC Phase B. Data + server
-    plumbing (calc controller whitelist + categorical channel). Builder TBD, validator=team_50. Awaits team_00 prioritization."
+      Spin-off from WP-CB-CALC (team_00 decision #5, 2026-06-07). ORIGINAL framing: populate the date book-fields.
+  - gate: L-GATE_E
+    result: RESCOPED
+    date: "2026-06-07"
+    validator: team_00
+    notes: >
+      RESCOPED much smaller after the data investigation (PG SSoT, 70 crops). The gap collapsed:
+      days_to_maturity 66/70 + harvest_window_max_days 68/70 ≈ complete; succession_interval_weeks is NO LONGER a
+      data field (team_00 decision: DERIVE it as round(harvest_window_max_days/7) in the calc engine — עידן's
+      empirical tray-order cadence does NOT correlate with biology, corr 0.10, so it measured a different,
+      operational thing); days_in_nursery is NOT a real gap (8/9 of KNOWN transplants already covered, gated by
+      planting_method). Real work now: (a) a GUIDED CLASSIFICATION UI (per-crop Q&A) for team_00 to fill the two
+      categoricals — planting_method (39 to classify; ADD a `both` canonical value) + frost_tolerance_class (33,
+      web-research-friendly); (b) days_in_nursery for the transplant/both crops the classification reveals;
+      (c) the server-side delivery plumbing (calc-controller whitelist + crop_attribute query + non-numeric
+      channel). Gates WP-CB-CALC B-LATER ONLY (nursery/frost/transplant-accurate sow_date) — B-now ships without it.
+  notes: "REGISTER+RESCOPED 2026-06-07 — guided-entry tool for planting_method + frost_tolerance_class (+ `both`
+    value) + days_in_nursery for transplants + server plumbing. succession DROPPED (now a calc derivation);
+    days_to_maturity/harvest_window already ~complete. Gates WP-CB-CALC B-later only (not B-now). Builder TBD,
+    validator=team_50. Awaits team_00 prioritization."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS

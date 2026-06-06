@@ -14,8 +14,9 @@
 2. **`profit` (#13) → reframe to a quantity-first crop comparison.** No "profit"/"margin" wording. Primary figure = **quantity (yield/m)**; value/revenue (from *our* price-list) is a **secondary line** only. Relabel the goal (e.g. "השוואת גידולים" / "שווי הגידול").
 3. **`frost` (#11) → region picker.** Ship an Israel **region → last/first-frost** table; user selects a region (frost in Israel is "fairly easy and constant"). No free-text frost dates.
 4. **`harvest_window` (#5) → surface as a 15th goal** (anchor=sow → harvest start/end).
-5. **Date-data coverage → assume sparse; an enrichment WP is a PREREQUISITE for Phase B** (`WP-CB-CROPDATA-DATES`, proposed §9). Phase B's date calcs are only useful once `days_to_maturity`/`days_in_nursery`/`planting_method`/`frost_class` are populated per crop.
+5. **Date-data coverage (data investigation 2026-06-07) — the gap collapsed.** `days_to_maturity` 66/70 + `harvest_window_max_days` 68/70 ≈ complete. **`succession_interval_weeks` → DERIVED** `round(harvest_window_max_days/7)` (agronomic definition; עידן's empirical cadence dropped — corr 0.10 with biology). `days_in_nursery` is NOT a real gap (8/9 known transplants covered; gated by planting_method). The only true gaps are the two **categoricals** — `planting_method` (31/70) + `frost_tolerance_class` (37/70) — filled via a **guided-entry tool** (`WP-CB-CROPDATA-DATES`). Result: **B-now ships on existing data; only B-later (transplant/frost) waits on the tool.**
 6. **Session persistence → keep per-device `sessionStorage`** (deferred until accounts exist).
+7. **`WP-CB-CROPDATA-DATES` includes a guided classification UI** (per-crop Q&A) for team_00 to fill planting_method + frost_class fast; add a **`both`** canonical planting_method value.
 
 ---
 
@@ -110,27 +111,28 @@ The hidden engine (`calc_dash.php:276-291`) has 8 numeric `[data-book]` chips. D
 
 ### Phase B — date engine (the substantive piece)
 
-> **⚠ PREREQUISITE (decision #5):** Phase B is **gated on `WP-CB-CROPDATA-DATES`** (§9) populating `days_to_maturity`/`days_in_nursery`/`planting_method`/`frost_class` for enough crops. Date calcs that fall back to "no data" on most crops aren't worth shipping. Build B's *code* can proceed in parallel, but B does not **ship** until coverage is adequate.
+> **⚠ Re-split by DATA DEPENDENCY (data investigation, 2026-06-07).** The supposed gap collapsed: `days_to_maturity` (66/70) + `harvest_window_max_days` (68/70) are nearly complete, and **`succession_interval_weeks` is no longer a data field — it is DERIVED** `round(harvest_window_max_days/7)` (decision: agronomic definition). Empirical proof: עידן's stored cadence (old source, 19 crops) does NOT correlate with crop biology (corr 0.10, ±5wk) — an operational ordering rhythm, a different thing. **So most of Phase B ships on EXISTING data; only the transplant-accuracy + frost paths wait on the `WP-CB-CROPDATA-DATES` guided-entry tool** (planting_method 31/70, frost_class 37/70; days_in_nursery is NOT a real gap — 8/9 of *known* transplants already covered, gated by planting_method).
 
-A vertical slice. Sub-grouped by how well each calc fits the existing anchor scaffolding:
+Sub-grouped by **data dependency** (not anchor fit):
 
 **B0 — foundations (shared):**
-1. **Server:** widen the `HubController.php:147-156` whitelist to add `days_to_maturity`, `days_in_nursery`/`days_in_nursery_cell`, `harvest_window_max_days`, `succession_interval_weeks`; add a `crop_attribute` query for `planting_method` + `frost_tolerance_class`; emit a text sub-map in `window.SFA_CROP_BOOK` (or a sibling `window.SFA_CROP_BOOK_TXT`).
+1. **Server:** widen the `HubController.php:147-156` whitelist to add `days_to_maturity`, `days_in_nursery`/`days_in_nursery_cell`, `harvest_window_max_days` (NOT `succession_interval_weeks` — now derived from `harvest_window_max_days/7`, not delivered); add a `crop_attribute` query for `planting_method` + `frost_tolerance_class`; emit a text sub-map in `window.SFA_CROP_BOOK` (or a sibling `window.SFA_CROP_BOOK_TXT`).
 2. **JS date engine:** a small date module doing **date-only** arithmetic on `YYYY-MM-DD` (no `Date`-timezone math — avoids DST/off-by-one; mirror Python `date + timedelta` exactly). Mirror `sowing_date_from_harvest`, `harvest_window_from_sowing`, `succession_schedule`, `nursery_trays_and_sow_date`, `frost_planting_window`.
 3. **Assumptions:** expose `TRAY_CELLS` + `HARDINESS_OFFSET` (and `rotation_gap_seasons`) to `window.SFA_ASSUMPTIONS`.
 4. **`runEngine()` rework:** branch on goal "type" (scalar | date | date-range | date-list); for date goals read `state.anchor` + the date input + the (new) date book-fields directly from `window.SFA_CROP_BOOK[slug]`.
 5. **Rendering:** date-aware `showResult`/`renderBreakdown`/`pushSession` — format `dd/mm/yyyy`, render a **range** (frost: earliest→latest plant) and a **list** (succession: N sow dates), and a sane session-row string for each.
 
-**B1 — fits the current anchor model cleanly:**
-- `sow_date` (#4): anchor=`target` → `target_date` → back-calc sow date. (If transplant: also field-set date.)
-- `harvest_window` (#5): **surfaced as the 15th goal** (decision #4). anchor=`sow` → `sow_date` → harvest start/end. Add a `$CALC_GOALS` entry + dropdown slot.
-- `succession` (#6): anchor=`sow` → `first_sow` + a **new** input (number of successions **or** season-end date).
+**B-now — buildable on EXISTING data (no enrichment dependency):**
+- `harvest_window` (#5): **surfaced as the 15th goal** (decision #4). anchor=`sow` → `sow_date` → harvest start/end, from `days_to_maturity` (66) + `harvest_window_max_days` (68). **Best coverage — ship first.** Add a `$CALC_GOALS` entry + dropdown slot.
+- `succession` (#6): **derived** `round(harvest_window_max_days/7)` (decision: agronomic) → 68/70, zero new data. anchor=`sow` → `first_sow` + a new input (number of successions **or** season-end date). The interval is computed, not asked.
+- `sow_date` (#4), direct-seed path: anchor=`target` → `target_date` − `days_to_maturity` (66). **Default to direct-seed** when `planting_method` is unknown (transplant accuracy comes in B-later).
 
-**B2 — needs inputs beyond the current anchor chips:**
-- `nursery` (#3): needs `field_set_date` + `plants` (chained from `transplants`/#2). The current anchor offers target/sow/now — none is "field-set date". Needs an anchor-model extension or a dedicated input.
-- `frost` (#11): **region picker** (decision #3). Ship a small **Israel region → {last_spring_frost, first_autumn_frost}** table; the user selects a region (a new Step-4 control), then offset via `HARDINESS_OFFSET[frost_tolerance_class]`. The region table is a static data asset shipped with the app (assemble once; low volume). No free-text frost dates.
+**B-later — needs the `WP-CB-CROPDATA-DATES` guided-entry tool (planting_method / frost_class / days_in_nursery):**
+- `sow_date` (#4) transplant path: also subtract `days_in_nursery` when `planting_method`∈{transplant,both} (known transplants already 8/9 covered).
+- `nursery` (#3): `days_in_nursery` (gated by planting_method) + `field_set_date` + `plants` (chained from `transplants`/#2). Needs an anchor extension or a dedicated field-set-date input.
+- `frost` (#11): **region picker** (decision #3). Ship a small **Israel region → {last_spring_frost, first_autumn_frost}** table (static asset) + `frost_tolerance_class` via `HARDINESS_OFFSET`. No free-text frost dates.
 
-**Phase B outcome:** 9 → 14 live + harvest_window = **15 goals total** (B1 ≈ +3 incl. harvest_window, B2 ≈ +2). Sequencing: B0 → B1 → B2. Ships only after the `WP-CB-CROPDATA-DATES` prerequisite.
+**Phase B outcome:** 9 → **15 goals total**. B-now ≈ +3 (harvest_window/succession/sow_date-direct) on existing data — **not gated** on the enrichment WP. B-later ≈ +2 (nursery/frost) + transplant-accurate sow_date, after the guided tool. Sequencing: B0 → B-now → (guided tool) → B-later.
 
 ### Phase C — `water` (#0): SPLIT OUT (decision #1)
 **Resolved:** `water` is **not** built in this WP. It needs a *new model* (ET₀×Kc×area − effective rainfall) **and** *new data* (per-crop Kc book field + region/month ET₀ — the frost region table can supply the region axis, but Kc-per-crop does not exist). Tracked as the proposed `WP-CB-WATER` (§9). The "בפיתוח" stub stays until that WP ships — no fabricated number.
@@ -158,19 +160,19 @@ A vertical slice. Sub-grouped by how well each calc fits the existing anchor sca
 | Overlap with the parallel UI_REDESIGN session (touches `calc_dash.php`, `crop-book-v1.js`) | Coordinate via Nimrod before merge; rebase on `main` first; do not touch `UI_REDESIGN_2026-06/`. |
 
 ## 7. Decisions — RESOLVED (team_00, 2026-06-07)
-All decisions resolved — see §0. Summary: (a) water → split to `WP-CB-WATER`; (b) session → keep per-device; (c) harvest_window → surface as 15th goal; (d) date-data → enrichment WP is a Phase-B prerequisite; (e) frost → region picker; (f) #13 → quantity-first comparison (not profit). No open decisions remain.
+All decisions resolved — see §0. Summary: (a) water → split to `WP-CB-WATER`; (b) session → keep per-device; (c) harvest_window → surface as 15th goal; (d) date-data gap collapsed — succession DERIVED, days_in_nursery not a real gap, only planting_method + frost_class need a guided-entry tool (gates B-later only); (e) frost → region picker; (f) #13 → quantity-first comparison (not profit). No open decisions remain.
 
 ## 8. Recommended sequencing
-1. **Phase A** (no prerequisites, no engine rework, immediate value): **A1 transplants** + **A2 seed_cost** + **A3 compare** (quantity-first) → **6 → 9 live**.
-2. **`WP-CB-CROPDATA-DATES`** (§9) enriches the date fields — **prerequisite** for Phase B shipping.
-3. **B0 → B1** (date-engine foundations + sow_date/harvest_window/succession).
-4. **B2** (nursery + frost region picker).
+1. **Phase A** (no prereqs, no engine rework, immediate value): transplants + seed_cost + compare → **6 → 9 live**.
+2. **B0 → B-now** (date-engine foundations + harvest_window/succession/sow_date-direct) — **runs on existing data, NOT gated** on the enrichment WP → **9 → 12 live**.
+3. **`WP-CB-CROPDATA-DATES`** (§9) — guided-entry tool fills planting_method + frost_class (in parallel with steps 1–2).
+4. **B-later** (nursery + frost + transplant-accurate sow_date) → **12 → 15 live**, after the tool.
 5. **`WP-CB-WATER`** (§9) — separate model+data effort, independent timeline.
 
-Phase A can start immediately on team_00 go. Phase B code can be developed in parallel with the enrichment WP but ships only once date coverage is adequate. Build runs on `claude/cb-followups-2026-06-07` (rebased on `main`; coordinate with the UI_REDESIGN session via Nimrod before merge), team_100 commits, with team_50 external visual QA + team_190 constitutional validation (IR#1/#5 — team_100 never self-issues the binding verdict).
+Phase A and B-now can both start on team_00 go (no data prereq). Build runs on `claude/cb-followups-2026-06-07` (rebased on `main`; coordinate with the UI_REDESIGN session via Nimrod before merge), team_100 commits, with team_50 external visual QA + team_190 constitutional validation (IR#1/#5 — team_100 never self-issues the binding verdict).
 
-## 9. Proposed spin-off WPs (for team_00 registration)
-These fell out of the resolved decisions. **Not yet registered** — team_100 will register on team_00's word (roadmap mutation via API, DB online / IR#7).
+## 9. Spin-off WPs (REGISTERED 2026-06-07)
+These fell out of the resolved decisions and are now on the roadmap (REGISTER / L-GATE_E).
 
 - **`WP-CB-WATER`** (decision #1) — `water` (#0) calculator: define an ET₀×Kc water model + add a per-crop **Kc** book field + region/month **ET₀** data (region axis can reuse the Phase-B frost region table). Model + data; medium-large; independent of WP-CB-CALC.
-- **`WP-CB-CROPDATA-DATES`** (decision #5) — crop **date-field enrichment**: populate `days_to_maturity`, `days_in_nursery`, `planting_method`, `frost_tolerance_class` (+ `harvest_window_max_days`, `succession_interval_weeks`) across crops in the PG SSoT, then push. **Prerequisite** for Phase B. Likely shares an owner/effort with the crop-enrichment data work referenced by `WP-CB-DEEP-PROVENANCE`.
+- **`WP-CB-CROPDATA-DATES`** (decisions #5/#7) — **rescoped much smaller** by the data investigation. Real work: **(a)** a **guided classification UI** (per-crop Q&A) for team_00 to fill the two categoricals — `planting_method` (39 to classify; add a `both` canonical value) + `frost_tolerance_class` (33, web-research-friendly); **(b)** `days_in_nursery` for the transplant/both crops the classification reveals (most known transplants already covered); **(c)** the server-side delivery plumbing from §3 (calc-controller whitelist + `crop_attribute` query + non-numeric channel). **NOT** in scope: `succession_interval_weeks` (now a calc derivation) and `days_to_maturity`/`harvest_window_max_days` (already ≈complete). Gates **B-later only**, not B-now.
