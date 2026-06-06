@@ -4433,12 +4433,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MOBILE
   label: "ספר גידולים + מחירון + מחשבון: ריענון ממשק מובייל (375) + פישוט /about — חוסם פרסום (team_00)"
-  status: IN_PROGRESS
-  phase: validate
+  status: VALIDATE
+  phase: done
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
-  lod_status: BUILT_DEPLOYED_AWAITING_QA
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_50
   created_at: "2026-06-05"
@@ -4540,10 +4540,28 @@ work_packages:
       $public_notes guard + rich-payload regression tests (217/217). Re-deployed a18816c; verified live: crop
       page 200, height @375 9053px->1366px, all depths 200, Deep renders vtable/storage/companions, no IL_ leak.
       NEXT: team_50 @375 visual QA (now ready) -> team_100 LOD500.
-  notes: "DEPLOYED+LIVE 2026-06-06 (crop dedup + 500 fix landed a18816c; @375 9053px->1366px). Awaiting team_50 @375 QA. Mobile launch blocker.
-    Scope=FULL v4 (one WP). D1+D2 ratified. PHP suite 215/215; Python parity restored (pre-push gate caught a
-    13->8 topic regression, fixed in 9cd077b). validate 0 FAIL. 2 honest data gaps (Deep provenance; 6/14 calc
-    client-math) + 3 pre-existing out-of-scope Python failures logged. Deploy held for this single batch."
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-06-06"
+    validator: team_50
+    notes: >
+      team_50 (external/non-Claude, cross-engine per IR#1/#5) binding visual L-GATE_V verdict = GO on live
+      sfa.nimrod.bio (?v=1780691715) @375 RTL + 1280 desktop, via CDP qa_probe.mjs + DOM/interaction probes +
+      manual screenshot review. Harness 16/16 PASS (no horizontal overflow, no IL_* leak, titles present).
+      Crop-page fix CONFIRMED: 200 at Simple/Full/Deep; Simple @375 = 1366px (not ~9000px); 0 cb-section-nav/
+      cb-vars; Deep renders storage+companions+variety table; hero no overlap (CDP bbox). Checklist GO: hub
+      module-*.png tiles + coming rows + inline suggest form (WhatsApp only on custom-farm); crop list compact
+      cards + season filter + in-season badges; market table-default + סלים chip + collapsible disclaimer +
+      ~5130px scroll (was ~12500) + RTL prices; calc 6+8 goals, live math (1.8 גרם seeds) + בפיתוח for soon +
+      session/export; about content-first. Desktop: no regressions beyond ratified D1/D2. Report:
+      _COMMUNICATION/team_50/SFA-S003-P004-WP-CB-MOBILE/QA_REPORT_2026-06-06.md; evidence: qa_run_2026-06-06/
+      (16 shots + JSON); notice: MSG-team50-to-team100-2026-06-06.md. team_100 records LOD500 -> launch blocker CLEARED.
+  notes: "LOD500_LOCKED 2026-06-06 — team_50 binding L-GATE_V GO. Mobile launch blocker CLEARED. Live @ ?v=1780691715.
+    Scope=FULL v4 one WP (hub/cards/crop 3-depth/market/calc/about/CTA/density), D1+D2 ratified. Crop-page dedup +
+    500 fix landed (a18816c; @375 9053px->1366px). PHP 217/217, validate 0 FAIL, 16/16 CDP. 2 honest data gaps
+    (Deep provenance; 6/14 calc client-math) tracked as follow-ups. Deployed direct from Mac (dynamic-IP allowlist).
+    Remaining closure: team_191 archival of _COMMUNICATION/*/SFA-S003-P004-WP-CB-MOBILE/ -> _archive/ per IR#15
+    (mandate: _COMMUNICATION/team_191/MANDATE_ARCHIVE_SFA-S003-P004-WP-CB-MOBILE_2026-06-06.md); status->COMPLETE on archive."
   profile: L0
 
 - id: SFA-S003-P004-WP-SRV-IDEAS

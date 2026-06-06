@@ -1,0 +1,105 @@
+{
+  "ts": "2026-06-06T20:23:11.404Z",
+  "asset_v": "1780691715",
+  "results": [
+    {
+      "name": "crop-simple-mobile",
+      "path": "/crop-book/lettuce/",
+      "data": {
+        "scrollHeight": 1366,
+        "cropBodies": 0,
+        "overlap": true,
+        "tokens": [],
+        "depthBtns": [
+          "◔פשוט",
+          "▤מלא"
+        ],
+        "sections": 1
+      }
+    },
+    {
+      "name": "crop-full-mobile",
+      "path": "/crop-book/lettuce/?depth=full",
+      "data": {
+        "scrollHeight": 2573,
+        "fieldLike": 16,
+        "cards": 35,
+        "dupAllData": 1
+      }
+    },
+    {
+      "name": "crop-deep-mobile",
+      "path": "/crop-book/lettuce/?depth=deep",
+      "data": {
+        "scrollHeight": 6639,
+        "hasStorage": true,
+        "hasCompanions": false,
+        "hasVariety": true,
+        "hasRanges": true,
+        "pills": []
+      }
+    },
+    {
+      "name": "market-mobile",
+      "path": "/market/",
+      "data": {
+        "scrollHeight": 5130,
+        "hasSalim": true,
+        "chipCount": 7,
+        "tableRows": 65,
+        "tableActive": true,
+        "discCollapsed": true,
+        "chips": [
+          "",
+          "▤ספר גידולים",
+          "∑מחשבון",
+          "₪מחירון",
+          "⌕",
+          "◔חשבון",
+          "הכל",
+          "בצליים",
+          "סלים",
+          "כרוביים",
+          "דלועיים",
+          "ביצים",
+          "ירקות פרי",
+          "פירות",
+          "ירוקי עלים"
+        ]
+      }
+    },
+    {
+      "name": "calc-mobile",
+      "path": "/calc/",
+      "data": {
+        "goalBtnCount": 21,
+        "hasMoreBtn": true,
+        "moreText": "↺ ברירת מחדל 0.8m"
+      }
+    },
+    {
+      "name": "cropbook-list-mobile",
+      "path": "/crop-book/",
+      "data": {
+        "cards": 402,
+        "seasonFilter": true,
+        "inSeasonBadges": 1,
+        "thumbs": 0
+      }
+    },
+    {
+      "name": "hub-mobile",
+      "path": "/",
+      "data": {
+        "moduleImgs": [
+          "module-crop-book.png",
+          "module-market.png",
+          "module-calc.png"
+        ],
+        "comingBlocks": 5,
+        "waLinks": 1,
+        "inlineForm": true
+      }
+    }
+  ]
+}

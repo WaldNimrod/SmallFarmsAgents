@@ -1,0 +1,22 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "viewports": [
+    {"name": "desktop1280", "w": 1280, "h": 900},
+    {"name": "mobile375", "w": 375, "h": 812}
+  ],
+  "pages": [
+    {"name": "hub", "path": "/"},
+    {"name": "cropbook-list", "path": "/crop-book/"},
+    {"name": "crop-simple", "path": "/crop-book/lettuce/"},
+    {"name": "crop-full", "path": "/crop-book/lettuce/?depth=full"},
+    {"name": "crop-deep", "path": "/crop-book/lettuce/?depth=deep"},
+    {"name": "market", "path": "/market/"},
+    {"name": "calc", "path": "/calc/"},
+    {"name": "about", "path": "/about/"}
+  ],
+  "absent": [
+    "IL_general", "IL_north", "IL_center", "IL_south", "IL_coastal",
+    "MED_general", ">seed<", ">spring<", ">summer<", ">fall<", ">winter<"
+  ],
+  "shots": true
+}
