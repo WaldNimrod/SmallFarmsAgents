@@ -480,6 +480,22 @@ final class CropBookV1MacroTest extends TestCase
         $this->assertSame($expected, $got, 'Calc #6 succession schedule (2-week interval, 5 cycles)');
     }
 
+    public function testDateEngineFrostNurseryAnchors(): void
+    {
+        // JS DATEC.frostWindow / .nursery mirror calculators.py (verified vs the real module).
+        $mk = static fn (string $iso, int $days): string =>
+            (new \DateTimeImmutable($iso, new \DateTimeZone('UTC')))
+                ->modify(($days >= 0 ? '+' : '') . $days . ' days')->format('d/m');
+
+        // #11 frost: earliest = last_frost − offset(semi_hardy=14); latest = first_frost − dtm(91)
+        $this->assertSame('11/03', $mk('2026-03-25', -14), 'Calc #11 earliest plant (semi_hardy offset 14)');
+        $this->assertSame('26/08', $mk('2026-11-25', -91), 'Calc #11 latest plant (first_frost − dtm)');
+
+        // #3 nursery: trays = ceil(plants×oversow / tray_cells); tray-sow = field_set − days_in_nursery
+        $this->assertSame(3, (int) ceil(300 * 1.10 / 128), 'Calc #3 trays = ceil(330/128) = 3');
+        $this->assertSame('03/04', $mk('2026-05-01', -28), 'Calc #3 tray-sow = field_set − days_in_nursery');
+    }
+
     public function testCalc14SeedCostParity(): void
     {
         // Calc #14 seed_input_cost (Python calculators.py:567) — JS CALC.seed_cost mirrors:

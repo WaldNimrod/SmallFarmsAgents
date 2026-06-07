@@ -69,7 +69,7 @@ $CALC_GOALS = [
     'pop'         => ['id'=>10, 'label'=>'צפיפות שתילה',  'ic'=>'▦', 'kind'=>'pop',     'soon'=>false, 'basis'=>'area',     'rlabel'=>'צפיפות',       'runit'=>'צמ׳/מ״ר',   'shape'=>'scalar', 'anchor'=>''],
     // ── dropdown (9) ──
     'harvest'     => ['id'=>5,  'label'=>'חלון קטיף',     'ic'=>'🧺', 'kind'=>'harvest', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'חלון קטיף',    'runit'=>'',          'shape'=>'range',  'anchor'=>'sow'],
-    'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>'',          'shape'=>'range',  'anchor'=>'region'],
+    'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'frost',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>'',          'shape'=>'range',  'anchor'=>'region'],
     'fert'        => ['id'=>12, 'label'=>'כמות דישון',    'ic'=>'🪱', 'kind'=>'fert',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'קומפוסט',      'runit'=>'ק״ג קומפוסט','shape'=>'scalar', 'anchor'=>''],
     'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>'',          'shape'=>'nodata', 'anchor'=>''],
     'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
@@ -225,6 +225,10 @@ ob_start();
             <span class="ipt__box"><input type="number" data-k="grams_per_pack" step="0.5" min="0" placeholder="גרם"/><span class="u">גרם</span></span>
           </label>
         </span>
+        <label class="ipt" data-goal-input="frost" style="display:none;max-width:240px">
+          <label>❄ אזור (לחלון קרה)</label>
+          <span class="ipt__box"><select data-k="region" id="qb-region"><option value="">בחרו אזור…</option></select></span>
+        </label>
       </div>
 
       <div class="qb__echo" id="qb-echo">השאלה שלך: אחשב <b><?= $h($default_goal_def['label']) ?></b> עבור <b>—</b>, לפי <b>שטח</b>.</div>

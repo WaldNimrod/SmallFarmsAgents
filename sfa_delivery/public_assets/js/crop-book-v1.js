@@ -237,6 +237,24 @@
         }
       } else { return null; }
       return { intervalWeeks: weeks, dates: out };
+    },
+    /* hardiness offset (days vs last frost) by frost_tolerance_class — mirrors assumptions.HARDINESS_OFFSET */
+    HARDINESS_OFFSET: { very_hardy: 28, hardy: 28, semi_hardy: 14, tender: 0, very_tender: -14, warm: -14 },
+    TRAY_CELLS_DEFAULT: 128,
+    /* #11 frost_planting_window: earliest = last_frost − offset(class); latest = first_frost − dtm */
+    frostWindow: function (lastFrost, firstFrost, frostClass, dtm) {
+      var lf = this.parse(lastFrost), ff = this.parse(firstFrost);
+      if (lf == null || ff == null || dtm == null) return null;
+      var off = this.HARDINESS_OFFSET[frostClass]; if (off == null) off = 0;   // conservative default
+      return { earliest: this.addDays(lf, -off), latest: this.addDays(ff, -dtm) };
+    },
+    /* #3 nursery_trays_and_sow_date: trays = ceil(plants×oversow/tray_cells); traySow = fieldSet − daysInNursery */
+    nursery: function (plants, daysInNursery, fieldSetDate, trayCells, oversow) {
+      var fs = this.parse(fieldSetDate);
+      if (fs == null || daysInNursery == null || !(plants > 0)) return null;
+      var cells = trayCells || this.TRAY_CELLS_DEFAULT;
+      var ov = oversow || 1.10;
+      return { trays: Math.ceil(plants * ov / cells), traySow: this.addDays(fs, -daysInNursery) };
     }
   };
   if (typeof window !== 'undefined') window.SFA_DATEC = DATEC;
@@ -811,7 +829,29 @@
         return { ok: true, type: 'list', dates: fmtd, goal: g,
           anchorText: 'מ-' + D.fmt(D.parse(first)) + ' · כל ' + sc.intervalWeeks + ' שבועות · ' + fmtd.length + ' מחזורים' };
       }
-      return { ok: false, reason: 'soon' };   // nursery/frost wired in later slices
+      if (g.kind === 'frost') {
+        var regSel = scope.querySelector('[data-k="region"]');
+        var regKey = regSel ? regSel.value : '';
+        var regions = (window.SFA_FROST_REGIONS && window.SFA_FROST_REGIONS.regions) || [];
+        var reg = null;
+        for (var i = 0; i < regions.length; i++) { if (regions[i].key === regKey) { reg = regions[i]; break; } }
+        if (!reg)        return { ok: false, reason: 'input', need: 'אזור' };
+        if (dtm == null) return { ok: false, reason: 'nodata' };
+        if (reg.frost_free) {
+          return { ok: true, type: 'note', goal: g,
+            text: 'אזור «' + reg.label_he + '» — ללא קרה משמעותית. אפשר לשתול כמעט כל השנה.' };
+        }
+        var ddmm = function (s) {
+          var p = String(s || '').split('-'); if (p.length !== 2) return null;
+          return (new Date()).getFullYear() + '-' + p[1] + '-' + p[0];   // DD-MM -> YYYY-MM-DD
+        };
+        var fclass = (txt && txt.frost_tolerance_class) || '';
+        var fw = D.frostWindow(ddmm(reg.last_spring_frost), ddmm(reg.first_autumn_frost), fclass, dtm);
+        if (!fw) return { ok: false, reason: 'nodata' };
+        return { ok: true, type: 'range', start: D.fmt(fw.earliest), end: D.fmt(fw.latest), goal: g,
+          anchorText: 'אזור ' + reg.label_he + (fclass ? ' · רגישות ' + fclass : '') };
+      }
+      return { ok: false, reason: 'soon' };   // nursery wired in a later slice
     }
 
     function runEngine() {
@@ -980,6 +1020,9 @@
       } else if (out.type === 'range') {
         if (big) big.innerHTML = ltr(out.start + ' – ' + out.end) + anchorLine;
         sessionVal = out.start + '–' + out.end;
+      } else if (out.type === 'note') {
+        if (big) big.innerHTML = '<div style="font-size:16px;color:var(--gj-ink);font-weight:600">' + out.text + '</div>';
+        sessionVal = out.text;
       } else if (out.type === 'list') {
         var items = out.dates.map(function (d, i) {
           return '<div style="display:flex;gap:8px;align-items:center;font-size:16px;margin:3px 0">' +
@@ -1090,6 +1133,25 @@
       if (sEl && !sEl.value) sEl.value = iso(now);
       if (tEl && !tEl.value) tEl.value = iso(new Date(now.getTime() + 90 * 86400000));
     })();
+
+    /* ── load the frost-region table + populate the #11 region picker ── */
+    if (typeof fetch === 'function') {
+      fetch('/public_assets/data/frost_regions.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (!j) return;
+          window.SFA_FROST_REGIONS = j;
+          var sel = document.getElementById('qb-region');
+          if (!sel) return;
+          (j.regions || []).forEach(function (rg) {
+            var o = document.createElement('option');
+            o.value = rg.key; o.textContent = rg.label_he;
+            if (j.default === rg.key) o.selected = true;
+            sel.appendChild(o);
+          });
+        })
+        .catch(function () {});
+    }
 
     /* ── deep-link ?state=result + initial paint ── */
     showBasisInput(); showAnchorInput(); showGoalInput(); updateEcho(); renderSession();
