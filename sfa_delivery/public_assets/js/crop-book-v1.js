@@ -745,10 +745,60 @@
 
     /* configure + run the hidden engine for the current goal; returns
        { main, unit, ok } where ok=false means no live math (soon). */
+    /* date-anchor input value ('YYYY-MM-DD') for the goal's anchor */
+    function dateInputVal(anchorKind) {
+      var k = anchorKind === 'sow' ? 'sow_date' : 'target_date';
+      var el = scope.querySelector('[data-k="' + k + '"]');
+      return el ? (el.value || '') : '';
+    }
+    /* first finite numeric among the given book field names */
+    function bookNum(book) {
+      for (var i = 1; i < arguments.length; i++) {
+        var v = parseFloat(book[arguments[i]]);
+        if (isFinite(v)) return v;
+      }
+      return null;
+    }
+    /* WP-CB-CALC Phase B-now: date goals via SFA_DATEC + the time-anchor + date book-fields */
+    function runDateGoal(g, book, txt) {
+      var D = window.SFA_DATEC; if (!D) return { ok: false, reason: 'soon' };
+      var dtm     = bookNum(book, 'days_to_maturity');
+      var hwMax   = bookNum(book, 'harvest_window_max_days');
+      var nursery = bookNum(book, 'days_in_nursery', 'days_in_nursery_cell');
+      var pm      = (txt && txt.planting_method) || '';
+      if (g.kind === 'sow_date') {
+        var target = dateInputVal('target');
+        if (!target)     return { ok: false, reason: 'input', need: 'תאריך יעד לקטיף' };
+        if (dtm == null) return { ok: false, reason: 'nodata' };
+        var r = D.sowDate(target, dtm, pm, nursery);
+        if (!r) return { ok: false, reason: 'nodata' };
+        return { ok: true, type: 'date', date: D.fmt(r.sow), goal: g,
+          anchorText: 'יעד ' + D.fmt(D.parse(target)) + ' − ' + dtm + ' ימי הבשלה' +
+            (D.isTransplant(pm) && nursery != null ? ' − ' + nursery + ' ימי משתלה' : ' (זריעה ישירה)') };
+      }
+      if (g.kind === 'harvest') {
+        var sow = dateInputVal('sow');
+        if (!sow)                       return { ok: false, reason: 'input', need: 'תאריך זריעה' };
+        if (dtm == null || hwMax == null) return { ok: false, reason: 'nodata' };
+        var h = D.harvestWindow(sow, dtm, hwMax, pm, nursery);
+        if (!h) return { ok: false, reason: 'nodata' };
+        return { ok: true, type: 'range', start: D.fmt(h.start), end: D.fmt(h.end), goal: g,
+          anchorText: 'זריעה ' + D.fmt(D.parse(sow)) + ' + ' + dtm + ' ימים · חלון ' + hwMax + ' ימים' };
+      }
+      return { ok: false, reason: 'soon' };   // succession/nursery/frost wired in later slices
+    }
+
     function runEngine() {
       var g = goals[state.goal] || {};
-      if (!g.kind || g.soon) return { ok: false };
-      if (!engine) return { ok: false };
+      if (g.soon) return { ok: false, reason: 'soon' };
+
+      var slug0 = cropSel ? cropSel.value : '';
+      if (g.shape === 'date' || g.shape === 'range' || g.shape === 'list') {
+        var bookD = (window.SFA_CROP_BOOK     && slug0) ? (window.SFA_CROP_BOOK[slug0]     || {}) : {};
+        var txtD  = (window.SFA_CROP_BOOK_TXT && slug0) ? (window.SFA_CROP_BOOK_TXT[slug0] || {}) : {};
+        return runDateGoal(g, bookD, txtD);
+      }
+      if (!g.kind || !engine) return { ok: false, reason: 'soon' };
 
       // 1 · push book values for the selected crop into the engine chips.
       var slug = cropSel ? cropSel.value : '';
@@ -782,7 +832,7 @@
       var rEl = engine.querySelector('[data-result]');
       var main = rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : '';
       // strip the trailing unit word recompute() appended (we re-add g.runit)
-      return { ok: true, main: main, unit: g.runit || '', goal: g };
+      return { ok: true, type: 'scalar', main: main, unit: g.runit || '', goal: g };
     }
 
     function breakRow(k, v, src) {
@@ -803,7 +853,8 @@
       var bookLabels = {
         rows_per_bed: 'שורות לערוגה', spacing_in_row_cm: 'מרווח בשורה',
         seeds_per_g: 'זרעים לגרם', yield_per_bed_m: 'יבול למ׳',
-        price_documented: 'מחיר מתועד', nutrient_removal_n_kg_per_ha: 'צריכת חנקן'
+        price_documented: 'מחיר מתועד', nutrient_removal_n_kg_per_ha: 'צריכת חנקן',
+        days_to_maturity: 'ימים להבשלה', harvest_window_max_days: 'חלון קטיף (ימים)'
       };
       Object.keys(bookData).forEach(function (fn) {
         if (bookLabels[fn] != null) rows += breakRow(bookLabels[fn], bookData[fn], 'ספר');
@@ -850,8 +901,31 @@
       if (qEl) qEl.textContent = [g.label, cn, basisPhrase()].filter(Boolean).join(' · ');
 
       var out = runEngine();
+      var lbl = document.getElementById('qb-answer-lbl');
+      var big = document.getElementById('qb-answer-big');
+
+      if (!out.ok && out.reason === 'input') {
+        // missing a date the user must enter — prompt, don't fabricate or say "coming soon"
+        if (soonBox) soonBox.hidden = true;
+        if (answer) answer.hidden = false;
+        if (lbl) lbl.textContent = g.rlabel || 'תוצאה';
+        if (big) big.innerHTML = '<div style="font-size:16px;color:var(--gj-ink-soft)">↑ הזינו <b>' +
+          (out.need || 'תאריך') + '</b> בשלב «עוגן זמן» ולחצו «חשב».</div>';
+        if (breakBox) breakBox.hidden = true;
+        scope.setAttribute('data-calc-state', 'result');
+        renderSession();
+        try { window.scrollTo(0, 0); } catch (e) {}
+        return;
+      }
       if (!out.ok) {
-        if (soonBox) { soonBox.hidden = false; var nm = document.getElementById('qb-soon-name'); if (nm) nm.textContent = '«' + (g.label || '') + '»'; }
+        // soon (not built) OR nodata (no book data for this crop) — honest, no fabricated number
+        if (soonBox) {
+          soonBox.hidden = false;
+          var nm = document.getElementById('qb-soon-name');
+          if (nm) nm.textContent = out.reason === 'nodata'
+            ? ('«' + (g.label || '') + '» לגידול זה')
+            : ('«' + (g.label || '') + '»');
+        }
         if (answer) answer.hidden = true;
         if (breakBox) breakBox.hidden = true;
         scope.setAttribute('data-calc-state', 'result');
@@ -859,24 +933,35 @@
         try { window.scrollTo(0, 0); } catch (e) {}
         return;
       }
+
       if (soonBox) soonBox.hidden = true;
       if (answer) answer.hidden = false;
       if (breakBox) breakBox.hidden = false;
-
-      var lbl = document.getElementById('qb-answer-lbl');
-      var big = document.getElementById('qb-answer-big');
       if (lbl) lbl.textContent = g.rlabel || 'תוצאה';
-      // recompute() already wrote "<value> <small>unit</small>" into [data-result];
-      // re-render in the big answer style.
-      var rEl = engine.querySelector('[data-result]');
-      if (big) big.innerHTML = rEl ? rEl.innerHTML : (out.main || '—');
+
+      var ltr = function (s) { return '<span dir="ltr" style="unicode-bidi:isolate">' + s + '</span>'; };
+      var anchorLine = out.anchorText
+        ? '<div style="font-size:13px;color:var(--gj-ink-soft);font-weight:400;margin-top:6px">' + out.anchorText + '</div>' : '';
+      var sessionVal;
+      if (out.type === 'date') {
+        if (big) big.innerHTML = ltr(out.date) + anchorLine;
+        sessionVal = out.date;
+      } else if (out.type === 'range') {
+        if (big) big.innerHTML = ltr(out.start + ' – ' + out.end) + anchorLine;
+        sessionVal = out.start + '–' + out.end;
+      } else {
+        // scalar — recompute() wrote "<value> <small>unit</small>" into [data-result]
+        var rEl = engine.querySelector('[data-result]');
+        if (big) big.innerHTML = rEl ? rEl.innerHTML : (out.main || '—');
+        sessionVal = (rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : out.main) || '—';
+      }
 
       renderBreakdown(g);
 
       pushSession({
         label: g.rlabel || g.label,
         sub:   [cn, basisPhrase()].filter(Boolean).join(' · '),
-        value: (rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : out.main) || '—'
+        value: sessionVal
       });
 
       scope.setAttribute('data-calc-state', 'result');
@@ -952,6 +1037,16 @@
       var base = a.getAttribute('href');
       a.addEventListener('click', function () { a.setAttribute('href', exportHref(base)); });
     });
+
+    /* ── sensible default anchor dates so date goals compute out of the box ── */
+    (function setDateDefaults() {
+      function iso(d) { return d.toISOString().slice(0, 10); }
+      var now = new Date();
+      var sEl = scope.querySelector('[data-k="sow_date"]');
+      var tEl = scope.querySelector('[data-k="target_date"]');
+      if (sEl && !sEl.value) sEl.value = iso(now);
+      if (tEl && !tEl.value) tEl.value = iso(new Date(now.getTime() + 90 * 86400000));
+    })();
 
     /* ── deep-link ?state=result + initial paint ── */
     showBasisInput(); showAnchorInput(); updateEcho(); renderSession();

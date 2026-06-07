@@ -57,26 +57,29 @@ $crop_book_text   = is_array($crop_book_text   ?? null) ? $crop_book_text   : []
  *  primary[] renders as the 6 .qb-goal--grid buttons.
  *  more[]    renders as the .qb-more <select> (the other 8).
  */
+// WP-CB-CALC: 'shape' = result render type (per team_35 mockup mapping); 'anchor' = date-engine input.
+// 'soon'=>false ⇒ the client has live math for this goal (scalar via CALC[kind]; date via SFA_DATEC).
 $CALC_GOALS = [
-    // id, key, label_he, icon, kind (JS CALC), soon, basis_default, result_label, result_unit
-    'seed'        => ['id'=>1,  'label'=>'זרעים לקנות',   'ic'=>'🌱', 'kind'=>'seed',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'כמות לקנייה',  'runit'=>'גרם'],
-    'sow_date'    => ['id'=>4,  'label'=>'תאריך זריעה',   'ic'=>'📅', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'תאריך זריעה',  'runit'=>''],
-    'yield'       => ['id'=>8,  'label'=>'יבול צפוי',     'ic'=>'⚖', 'kind'=>'yield',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'יבול צפוי',    'runit'=>'ק״ג'],
-    'revenue'     => ['id'=>9,  'label'=>'הכנסה צפויה',   'ic'=>'₪', 'kind'=>'revenue', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'הכנסה צפויה',  'runit'=>'₪'],
-    'transplants' => ['id'=>2,  'label'=>'כמות שתילים',   'ic'=>'🪴', 'kind'=>'transplants','soon'=>false, 'basis'=>'area',     'rlabel'=>'כמות שתילים',  'runit'=>'שתילים'],
-    'pop'         => ['id'=>10, 'label'=>'צפיפות שתילה',  'ic'=>'▦', 'kind'=>'pop',     'soon'=>false, 'basis'=>'area',     'rlabel'=>'צפיפות',       'runit'=>'צמ׳/מ״ר'],
-    // ── the other 8 (dropdown) ──
-    'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>''],
-    'fert'        => ['id'=>12, 'label'=>'כמות דישון',    'ic'=>'🪱', 'kind'=>'fert',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'קומפוסט',      'runit'=>'ק״ג קומפוסט'],
-    'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>''],
-    'profit'      => ['id'=>13, 'label'=>'רווח גולמי',    'ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'רווח למטר',    'runit'=>'₪/מ׳'],
-    'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות'],
-    'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪'],
-    'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>''],
-    'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>''],
+    // id, key, label, icon, kind, soon, basis, rlabel, runit, shape, anchor
+    'seed'        => ['id'=>1,  'label'=>'זרעים לקנות',   'ic'=>'🌱', 'kind'=>'seed',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'כמות לקנייה',  'runit'=>'גרם',        'shape'=>'scalar', 'anchor'=>''],
+    'sow_date'    => ['id'=>4,  'label'=>'תאריך זריעה',   'ic'=>'📅', 'kind'=>'sow_date','soon'=>false, 'basis'=>'area',     'rlabel'=>'תאריך זריעה',  'runit'=>'',          'shape'=>'date',   'anchor'=>'target'],
+    'yield'       => ['id'=>8,  'label'=>'יבול צפוי',     'ic'=>'⚖', 'kind'=>'yield',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'יבול צפוי',    'runit'=>'ק״ג',       'shape'=>'scalar', 'anchor'=>''],
+    'revenue'     => ['id'=>9,  'label'=>'הכנסה צפויה',   'ic'=>'₪', 'kind'=>'revenue', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'הכנסה צפויה',  'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
+    'transplants' => ['id'=>2,  'label'=>'כמות שתילים',   'ic'=>'🪴', 'kind'=>'transplants','soon'=>false, 'basis'=>'area',  'rlabel'=>'כמות שתילים',  'runit'=>'שתילים',    'shape'=>'scalar', 'anchor'=>''],
+    'pop'         => ['id'=>10, 'label'=>'צפיפות שתילה',  'ic'=>'▦', 'kind'=>'pop',     'soon'=>false, 'basis'=>'area',     'rlabel'=>'צפיפות',       'runit'=>'צמ׳/מ״ר',   'shape'=>'scalar', 'anchor'=>''],
+    // ── dropdown (9) ──
+    'harvest'     => ['id'=>5,  'label'=>'חלון קטיף',     'ic'=>'🧺', 'kind'=>'harvest', 'soon'=>false, 'basis'=>'area',     'rlabel'=>'חלון קטיף',    'runit'=>'',          'shape'=>'range',  'anchor'=>'sow'],
+    'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>'',          'shape'=>'range',  'anchor'=>'region'],
+    'fert'        => ['id'=>12, 'label'=>'כמות דישון',    'ic'=>'🪱', 'kind'=>'fert',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'קומפוסט',      'runit'=>'ק״ג קומפוסט','shape'=>'scalar', 'anchor'=>''],
+    'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>'',          'shape'=>'nodata', 'anchor'=>''],
+    'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
+    'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות',   'shape'=>'scalar', 'anchor'=>''],
+    'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
+    'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
+    'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>'',          'shape'=>'scalardate','anchor'=>'fieldset'],
 ];
 $primary_keys = ['seed', 'sow_date', 'yield', 'revenue', 'transplants', 'pop'];
-$more_keys    = ['frost', 'fert', 'water', 'profit', 'beds', 'seed_cost', 'succession', 'nursery'];
+$more_keys    = ['harvest', 'frost', 'fert', 'water', 'profit', 'beds', 'seed_cost', 'succession', 'nursery'];
 
 $default_goal = 'seed';
 $default_goal_def = $CALC_GOALS[$default_goal];
@@ -98,6 +101,8 @@ ob_start();
             'basis' => $g['basis'],
             'rlabel'=> $g['rlabel'],
             'runit' => $g['runit'],
+            'shape' => $g['shape'] ?? 'scalar',
+            'anchor'=> $g['anchor'] ?? '',
         ];
      }, array_keys($CALC_GOALS), $CALC_GOALS), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)) ?>'>
   <h1 class="gj-h1" style="font-size:23px">מחשבון התכנון</h1>
@@ -115,7 +120,7 @@ ob_start();
     <div class="qb">
       <!-- Step 1 — what to calculate -->
       <div class="qb__step">
-        <div class="qb__steplbl"><span class="qb__stepno">1</span><h3>מה תרצו לחשב?</h3><span class="opt">14 מחשבונים</span></div>
+        <div class="qb__steplbl"><span class="qb__stepno">1</span><h3>מה תרצו לחשב?</h3><span class="opt">15 מטרות</span></div>
         <div class="qb-goal qb-goal--grid" id="qb-goal">
           <?php foreach ($primary_keys as $gk): $g = $CALC_GOALS[$gk]; ?>
           <button type="button" data-goal="<?= $h($gk) ?>"<?= $gk === $default_goal ? ' class="is-on"' : '' ?>>
@@ -125,7 +130,7 @@ ob_start();
         </div>
         <div class="qb-more">
           <select aria-label="עוד מחשבונים" id="qb-more">
-            <option value="">עוד מחשבונים… (8)</option>
+            <option value="">עוד מחשבונים… (9)</option>
             <?php foreach ($more_keys as $gk): $g = $CALC_GOALS[$gk]; ?>
             <option value="<?= $h($gk) ?>"><?= $h($g['label']) ?></option>
             <?php endforeach; ?>

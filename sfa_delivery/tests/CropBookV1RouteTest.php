@@ -442,26 +442,33 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringContainsString('id="qb-engine"', $html, 'Calc page must render the hidden #qb-engine compute panel');
     }
 
-    /** FIX 6: the goal catalog must map all 14 calculators (6 primary + 8 dropdown). */
-    public function testCalcGoalCatalogHasAllFourteen(): void
+    /** Goal catalog: 15 goals (6 primary + 9 dropdown), with the live set + shape/anchor metadata. */
+    public function testCalcGoalCatalogHasAllFifteen(): void
     {
         $html = (string)$this->get('/calc/')->getBody();
         $this->assertMatchesRegularExpression('#data-calc-goals=\'[^\']+\'#', $html,
             'Calc scope must carry the data-calc-goals catalog');
+        $this->assertStringContainsString('15 מטרות', $html, 'Header must read 15 goals (was 14)');
+        $this->assertStringContainsString('השוואת גידולים', $html, '#13 relabeled away from "רווח גולמי"');
+        $this->assertStringNotContainsString('רווח גולמי', $html, '#13 "profit" wording removed');
         if (preg_match('#data-calc-goals=\'([^\']+)\'#', $html, $m)) {
             $goals = json_decode(html_entity_decode($m[1], ENT_QUOTES), true);
             $this->assertIsArray($goals);
-            $this->assertCount(14, $goals, 'Goal catalog must cover all 14 calculators');
-            // Goals with live client-side CALC math are flagged not-soon with a non-empty kind.
-            // WP-CB-CALC Phase A: transplants(#2) ported -> 7 live (was 6: seed/yield/revenue/pop/fert/beds).
+            $this->assertCount(15, $goals, 'Goal catalog must cover all 15 goals (harvest #5 surfaced)');
+            // Live = not-soon + non-empty kind. Phase A scalars + B-now date goals (sow_date, harvest).
             $live = array_values(array_filter($goals, static fn ($g) => !($g['soon'] ?? true) && ($g['kind'] ?? '') !== ''));
             $liveKinds = array_map(static fn ($g) => $g['kind'], $live);
             sort($liveKinds);
             $this->assertSame(
-                ['beds', 'fert', 'pop', 'revenue', 'seed', 'transplants', 'yield'],
+                ['beds', 'fert', 'harvest', 'pop', 'revenue', 'seed', 'sow_date', 'transplants', 'yield'],
                 $liveKinds,
-                'Live CALC[kind] goals (WP-CB-CALC Phase A added transplants)'
+                'Live goals: Phase A scalars + B-now date goals (sow_date #4, harvest #5)'
             );
+            // every goal carries shape + anchor metadata
+            foreach ($goals as $g) {
+                $this->assertArrayHasKey('shape', $g, 'goal must carry result shape');
+                $this->assertArrayHasKey('anchor', $g, 'goal must carry date anchor');
+            }
         }
     }
 
