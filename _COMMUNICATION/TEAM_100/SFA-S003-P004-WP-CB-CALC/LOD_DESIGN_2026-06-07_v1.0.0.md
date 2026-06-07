@@ -1,4 +1,4 @@
-# LOD (DESIGN) — SFA-S003-P004-WP-CB-CALC — Calculator completion (6/14 → 14 live)
+# LOD (DESIGN) — SFA-S003-P004-WP-CB-CALC — Calculator completion (6/14 → 15 live)
 
 **WP:** `SFA-S003-P004-WP-CB-CALC` · **Tier at authoring:** REGISTER → proposed **DESIGN (L-GATE_D)**
 **Date:** 2026-06-07 · **Author:** team_100 (Chief Architect) · **Engine:** Claude Code (Opus)
