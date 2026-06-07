@@ -35,7 +35,7 @@ Each adds a `CALC.<kind>(g, book)` mirroring the Python function; flip the goal'
 
 - **`transplants` (#2)** — `round((bed_len*100/spacing)*rows)` (Py `transplants_needed`). Book fields `spacing`,`rows` already delivered. Result: scalar `שתילים`. Trivial.
 - **`seed_cost` (#14)** — `seed_input_cost`: `grams*price_per_g` OR `ceil(grams/grams_per_pack)*pack_price`. Needs **new builder inputs** (price/gram OR pack price+grams/pack) + **chain `grams`** from the `seed`(#1) result. Result: scalar `₪` (+ packs).
-- **`compare` (#13)** — **quantity-first** (team_00). Loop `window.SFA_CROP_BOOK`, rank by `avg_yield_per_bed_m` (primary). Secondary line: `₪/מ׳` = yield × `price_documented` (price-list, illustrative). **No "profit"/"margin".** Rename label (e.g. "השוואת גידולים"/"שווי הגידול"); `rlabel`/`runit`=`ק״ג/מ׳`. Result: **ranked list** (new type — §6). Uses only whitelisted fields (no widening). Crops missing yield are excluded (not zeroed).
+- **`compare` (#13)** — **quantity-first** (team_00). **Scope = SELECTED-CROP BASKET** (team_00 decision 2026-06-07; NOT "all crops"): step 2 becomes a multi-select basket (user picks 2–6 candidate crops); rank only the basket by `avg_yield_per_bed_m` (primary). Secondary line: `₪/מ׳` = yield × `price_documented` (price-list, illustrative). **No "profit"/"margin".** Rename label "השוואת גידולים"; `rlabel`=השוואה, primary unit `ק״ג/מ׳`. Result: **ranked_list** (§6). Uses only whitelisted fields. Basket crops missing yield are excluded (not zeroed). **UI: awaiting team_35 #13 basket mockup iteration** (the all-crops mockup is superseded).
 
 ## 3. Phase B-now — date engine on existing data
 ### 3.1 B0 foundations (shared by all date calcs)
@@ -87,7 +87,7 @@ Refactor `showResult`/`renderBreakdown`/`pushSession` (`crop-book-v1.js:719-760`
 ## 7. UI contract — SATISFIED by the delivered mockups
 - **Goal grid:** all 15 with **honest availability badges** — `.st.live` (זמין) / `.st.soon` (בקרוב, phases A/B-now/B-later) / `.st.dev` (— מודל נפרד = water). (`calc.html` goal registry `G[]`.)
 - **ASK 4 steps** + goal-specific `.extra` panels (`#ex-target`,`#ex-seedcost`,`#ex-succession`,`#ex-region`) shown per goal; **anchor step LIVE** — greys/relabels for non-date goals (`anchorhint`, `datefld` opacity); **frost region picker** appears only for #11.
-- **compare (#13)** flips the crop step to "all crops" mode (`#comparenote`, crop `<select>` dimmed).
+- **compare (#13)** flips the crop step to a **selected-crop basket** (multi-select, 2–6 crops) — team_00 decision; the "all crops" mockup is superseded, team_35 iterating.
 - **RESULT:** typed shape (§6) + session (per-device) + export (PDF/CSV) + assumptions link (`assumptions.html`).
 - **Honest no-data** is first-class (badge + `.r-nodata` card) — never a 0/guess.
 - **Reuse `mock.css` tokens verbatim** (mirrors LOCKED `tokens.css`); calculator must match the redesigned shell.
