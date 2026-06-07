@@ -480,6 +480,39 @@ final class CropBookV1MacroTest extends TestCase
         $this->assertSame($expected, $got, 'Calc #6 succession schedule (2-week interval, 5 cycles)');
     }
 
+    public function testCalc14SeedCostParity(): void
+    {
+        // Calc #14 seed_input_cost (Python calculators.py:567) — JS CALC.seed_cost mirrors:
+        //   mode A: grams × ₪/g ; mode B: ceil(grams/grams_per_pack) × pack_price
+        $grams = 10.0;
+        $this->assertEqualsWithDelta(1.5, $grams * 0.15, 1e-9, 'Calc #14 ₪/g mode: 10g × 0.15 = 1.50');
+        $packs = (int) ceil($grams / 4.0);
+        $this->assertSame(3, $packs, 'Calc #14 packs: ceil(10/4) = 3');
+        $this->assertEqualsWithDelta(60.0, $packs * 20.0, 1e-9, 'Calc #14 pack mode: 3 × 20 = 60 ₪');
+    }
+
+    public function testCalc13CompareRankingParity(): void
+    {
+        // Calc #13 — quantity-first basket ranking (window.SFA_COMPARE / rankBasket):
+        //   rank by yield/m desc; value/m = yield × price is a SECONDARY line; missing-yield excluded.
+        $basket = [
+            'tomato'   => ['y' => 9.0,  'p' => 8.4],
+            'cucumber' => ['y' => 8.0,  'p' => 6.75],
+            'pepper'   => ['y' => 6.0,  'p' => 11.5],
+            'nodata'   => ['y' => null, 'p' => 5.0],   // excluded — no yield (not zeroed)
+        ];
+        $rows = [];
+        foreach ($basket as $slug => $b) {
+            if ($b['y'] === null || $b['y'] <= 0) { continue; }
+            $rows[] = ['slug' => $slug, 'y' => $b['y'], 'v' => $b['y'] * $b['p']];
+        }
+        usort($rows, static fn ($a, $c): int => $c['y'] <=> $a['y']);
+        $this->assertSame(['tomato', 'cucumber', 'pepper'], array_column($rows, 'slug'),
+            'Calc #13 ranks by yield/m desc; missing-yield crop excluded');
+        $this->assertEqualsWithDelta(75.6, $rows[0]['v'], 1e-9,
+            'Calc #13 value/m secondary = yield × price (tomato 9 × 8.4)');
+    }
+
     public function testCalc12FertilizerParity(): void
     {
         // Calc #12 fertilizer_compost_rate (Python calculators.py:479)

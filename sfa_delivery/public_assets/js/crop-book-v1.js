@@ -64,6 +64,32 @@
       };
     },
 
+    /* #14 seed / input cost (audience=F) — mirrors calculators.py seed_input_cost
+       cost = grams × ₪/g   OR   ceil(grams / grams_per_pack) × pack_price */
+    seed_cost: function (g, book) {
+      var grams = parseFloat(g.grams) || 0;
+      var perG  = parseFloat(g.seed_price_per_g);
+      var packP = parseFloat(g.pack_price);
+      var gPack = parseFloat(g.grams_per_pack);
+      var cost, packs = null, formula;
+      if (isFinite(perG)) {
+        cost = grams * perG;
+        formula = fmt(grams, 1) + ' g × ' + perG + ' ₪/g';
+      } else if (isFinite(packP) && isFinite(gPack) && gPack > 0) {
+        packs = Math.ceil(grams / gPack);
+        cost = packs * packP;
+        formula = '⌈' + fmt(grams, 1) + ' ÷ ' + gPack + '⌉ = ' + packs + ' חב׳ × ' + packP + ' ₪';
+      } else {
+        return { ok: false };   // no pricing mode supplied
+      }
+      return {
+        main:    fmt(cost, 2),
+        unit:    '₪',
+        formula: formula,
+        extra:   packs != null ? ('≈ ' + packs + ' חבילות') : ''
+      };
+    },
+
     /* #7 beds needed (audience=F)
        beds = target_kg / (yield_per_m × std_bed_length_m) */
     beds: function (g, book) {
@@ -207,6 +233,24 @@
     }
   };
   if (typeof window !== 'undefined') window.SFA_DATEC = DATEC;
+
+  /* #13 crop comparison — QUANTITY-FIRST basket ranking (team_00 reframe of
+     calculators.py crop_profit_comparison: rank by yield/m, value/m secondary;
+     NO profit/margin). Pure: ranks a basket of slugs against the numeric book map.
+     Exposed as window.SFA_COMPARE for the parity fixture. */
+  function rankBasket(slugs, bookMap) {
+    var rows = [];
+    (slugs || []).forEach(function (slug) {
+      var b = (bookMap && bookMap[slug]) || {};
+      var y = parseFloat(b.yield_per_bed_m != null ? b.yield_per_bed_m : b.avg_yield_per_bed_m);
+      if (!isFinite(y) || y <= 0) return;            // exclude missing-yield (not zeroed)
+      var price = parseFloat(b.price_documented != null ? b.price_documented : b.documented_price);
+      rows.push({ slug: slug, yieldPerM: y, valuePerM: isFinite(price) ? y * price : null });
+    });
+    rows.sort(function (a, c) { return c.yieldPerM - a.yieldPerM; });   // quantity desc (primary)
+    return rows;
+  }
+  if (typeof window !== 'undefined') window.SFA_COMPARE = rankBasket;
 
   function readBook(panel) {
     var book = {};
