@@ -26,6 +26,13 @@ Use these **keys** so the picker `<option>`s match the engine. **Labels final; d
 
 (`frost_free` regions ⇒ the calculator shows an effectively unconstrained window — honest, not a fake date.)
 
+### 2a. Validation status of the dates (team_00 directive: agri-oriented source)
+**Region keys + ordering = VALIDATED** against agricultural sources; **exact dates = APPROXIMATE, pending authoritative extraction.**
+- Quantitative anchor: Israel ≈ **304 frost-free days, ~Feb 1 – Dec 1** (national/coastal) — confirms the `coastal`/`jordan_valley` frost-free rows.
+- Ordering confirmed: coastal + Jordan Valley ≈ frost-free → Negev → Judean hills → Upper Galilee (progressively later spring / earlier autumn frost).
+- **Authoritative source for exact dates (follow-up, tied to #11 B-later):** Ministry of Agriculture agro-meteorology (meteo.moag.gov.il) and IMS Climate Atlas per-station **min-temp 0 °C crossing** (representative stations: Tel-Aviv, Jerusalem, Tiberias, Be'er-Sheva, Tzfat). These are interactive (not machine-fetched here) — extract when #11 is scheduled.
+- Sources: IMS Climate Atlas (ims.gov.il/ClimateAtlas); MoAg agro-meteorology (meteo.moag.gov.il); national frost-free-period figure (Feb 1–Dec 1).
+
 ## 3. JSON asset spec (engine will ship this)
 Path: `sfa_delivery/public_assets/data/frost_regions.json` (loaded by the picker; keys above frozen):
 ```json
