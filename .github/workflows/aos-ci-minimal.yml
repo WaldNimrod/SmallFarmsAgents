@@ -20,4 +20,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: AOS governance validation (Linux parity)
-        run: bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
+        # Model B (ADR054): _aos/lean-kit/ is a GIT-IGNORED cache, absent on a fresh CI checkout.
+        # Prefer the committed SSoT path (lean-kit/, present on the hub). On a spoke (no source
+        # lean-kit/ at root), hydrate the cache first via bootstrap, then use the _aos/ path.
+        run: |
+          # Set up a realistic environment for the parity check on a fresh CI checkout:
+          #  - install git hooks (Check 40 expects the pre-commit hook; hooks are per-clone, never committed)
+          #  - hydrate the git-ignored governance cache only if the committed SSoT path is absent (spoke)
+          bash scripts/install_hooks.sh || true
+          V="lean-kit/modules/validation-quality/scripts/validate_aos.sh"
+          if [ ! -f "$V" ]; then
+            bash scripts/aos_governance_bootstrap.sh --repo . || true
+            V="_aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh"
+          fi
+          bash "$V" .
