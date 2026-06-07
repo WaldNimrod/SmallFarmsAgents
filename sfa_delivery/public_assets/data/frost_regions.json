@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "wp": "SFA-S003-P004-WP-CB-CALC",
+    "approved_by": "team_00 (interim, 2026-06-07)",
+    "refinement_wp": "SFA-S003-P004-WP-CB-FROST-DATA",
+    "date_format": "DD-MM (year-agnostic; engine applies to the planning year)",
+    "note": "frost_free regions render an honest open planting window (no fabricated date)."
+  },
+  "default": "coastal",
+  "regions": [
+    { "key": "coastal",        "label_he": "שפלת החוף",     "frost_free": true,  "last_spring_frost": "01-02", "first_autumn_frost": "31-12" },
+    { "key": "judean_hills",   "label_he": "הרי ירושלים",   "frost_free": false, "last_spring_frost": "25-03", "first_autumn_frost": "25-11" },
+    { "key": "jordan_valley",  "label_he": "עמק הירדן",     "frost_free": true,  "last_spring_frost": "01-02", "first_autumn_frost": "31-12" },
+    { "key": "northern_negev", "label_he": "הנגב הצפוני",   "frost_free": false, "last_spring_frost": "10-03", "first_autumn_frost": "05-12" },
+    { "key": "upper_galilee",  "label_he": "הגליל העליון",  "frost_free": false, "last_spring_frost": "05-04", "first_autumn_frost": "15-11" }
+  ]
+}
