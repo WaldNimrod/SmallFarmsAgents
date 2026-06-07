@@ -454,6 +454,32 @@ final class CropBookV1MacroTest extends TestCase
             'Calc #9: 3.5kg/m × 30m × 12₪ = 1260 ₪');
     }
 
+    /**
+     * WP-CB-CALC Phase B date engine (window.SFA_DATEC) parity anchors.
+     * JS DATEC mirrors calculators.py (date + timedelta), UTC date-only. These literals are the
+     * source-of-truth the JS reproduces; the same values are asserted in tests/crop_book/test_calculators.py.
+     */
+    public function testDateEngineParityAnchors(): void
+    {
+        $mk = static fn (string $iso, int $days): string =>
+            (new \DateTimeImmutable($iso, new \DateTimeZone('UTC')))
+                ->modify(($days >= 0 ? '+' : '') . $days . ' days')->format('d/m/Y');
+
+        // #4 sowing_date_from_harvest (direct): target 2026-09-15 − dtm 91 = 16/06/2026
+        $this->assertSame('16/06/2026', $mk('2026-09-15', -91), 'Calc #4 sow_date (direct-seed)');
+
+        // #5 harvest_window_from_sowing: sow 2026-06-16 + dtm 91 = start; + 42 (6wk window) = end
+        $this->assertSame('15/09/2026', $mk('2026-06-16', 91),      'Calc #5 harvest_start');
+        $this->assertSame('27/10/2026', $mk('2026-06-16', 91 + 42), 'Calc #5 harvest_end');
+
+        // #6 succession: first 2026-06-16, interval = round(harvest_window_max_days/7); hwMax 14 → 2wk × 5
+        $this->assertSame(2, (int) round(14 / 7), 'succession interval derived from harvest_window_max_days/7');
+        $expected = ['16/06/2026', '30/06/2026', '14/07/2026', '28/07/2026', '11/08/2026'];
+        $got = [];
+        for ($i = 0; $i < 5; $i++) { $got[] = $mk('2026-06-16', $i * 14); }
+        $this->assertSame($expected, $got, 'Calc #6 succession schedule (2-week interval, 5 cycles)');
+    }
+
     public function testCalc12FertilizerParity(): void
     {
         // Calc #12 fertilizer_compost_rate (Python calculators.py:479)

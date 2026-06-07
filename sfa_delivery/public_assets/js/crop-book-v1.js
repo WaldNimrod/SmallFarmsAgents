@@ -142,6 +142,72 @@
     }
   };
 
+  /* ══════════════════════════════════════════════════════════════
+     WP-CB-CALC Phase B — DATE ENGINE.
+     Date-only arithmetic mirroring calculators.py (date + timedelta).
+     NO timezone math: parse/compute in UTC, display dd/mm/yyyy — avoids
+     DST/off-by-one. MUST stay in parity with calculators.py (AC-11).
+     Exposed as window.SFA_DATEC for the parity fixture.
+     ══════════════════════════════════════════════════════════════ */
+  var DATEC = {
+    DAY: 86400000,
+    parse: function (s) {                 // 'YYYY-MM-DD' -> UTC ms (date-only) | null
+      if (s == null) return null;
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s).trim());
+      return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : null;
+    },
+    addDays: function (ms, n) { return ms + n * this.DAY; },
+    fmt: function (ms) {                   // UTC ms -> 'dd/mm/yyyy'
+      if (ms == null) return '';
+      var d = new Date(ms);
+      return ('0' + d.getUTCDate()).slice(-2) + '/' +
+             ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + d.getUTCFullYear();
+    },
+    isTransplant: function (pm) {          // mirrors calculators.py _is_transplant (+ 'both')
+      pm = String(pm == null ? '' : pm).toLowerCase();
+      return pm.indexOf('transplant') === 0 || pm.indexOf('greenhouse') === 0 || pm === 'both';
+    },
+    /* #4 sowing_date_from_harvest */
+    sowDate: function (targetHarvest, dtm, plantingMethod, daysInNursery) {
+      var t = this.parse(targetHarvest);
+      if (t == null || dtm == null) return null;
+      if (this.isTransplant(plantingMethod) && daysInNursery != null) {
+        var sow = this.addDays(t, -(dtm + daysInNursery));
+        return { sow: sow, fieldSet: this.addDays(sow, daysInNursery) };
+      }
+      return { sow: this.addDays(t, -dtm), fieldSet: null };  // direct-seed default
+    },
+    /* #5 harvest_window_from_sowing */
+    harvestWindow: function (sow, dtm, hwMax, plantingMethod, daysInNursery) {
+      var s = this.parse(sow);
+      if (s == null || dtm == null || hwMax == null) return null;
+      var nursery = (this.isTransplant(plantingMethod) && daysInNursery != null) ? daysInNursery : 0;
+      var start = this.addDays(s, nursery + dtm);
+      return { start: start, end: this.addDays(start, hwMax) };
+    },
+    /* #6 succession_schedule — interval DERIVED round(harvest_window_max_days/7) per team_00 decision */
+    succession: function (firstSow, hwMax, opts) {
+      var f = this.parse(firstSow);
+      if (f == null || hwMax == null) return null;
+      var weeks = Math.round(hwMax / 7); if (weeks < 1) weeks = 1;
+      var step = weeks * 7, out = [];
+      opts = opts || {};
+      if (opts.count != null) {
+        var n = Math.max(0, Math.min(60, Math.floor(opts.count)));
+        for (var i = 0; i < n; i++) out.push(this.addDays(f, i * step));
+      } else if (opts.seasonEnd != null) {
+        var end = this.parse(opts.seasonEnd); if (end == null) return null;
+        for (var k = 0; k <= 60; k++) {
+          var d = this.addDays(f, k * step);
+          if (d > end) break;
+          out.push(d);
+        }
+      } else { return null; }
+      return { intervalWeeks: weeks, dates: out };
+    }
+  };
+  if (typeof window !== 'undefined') window.SFA_DATEC = DATEC;
+
   function readBook(panel) {
     var book = {};
     panel.querySelectorAll('[data-book]').forEach(function (el) {
