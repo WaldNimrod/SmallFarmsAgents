@@ -851,7 +851,33 @@
         return { ok: true, type: 'range', start: D.fmt(fw.earliest), end: D.fmt(fw.latest), goal: g,
           anchorText: 'אזור ' + reg.label_he + (fclass ? ' · רגישות ' + fclass : '') };
       }
-      return { ok: false, reason: 'soon' };   // nursery wired in a later slice
+      if (g.kind === 'nursery') {
+        var fsEl = scope.querySelector('[data-goal-input="nursery"] [data-k="field_set_date"]');
+        var fsv = fsEl ? fsEl.value : '';
+        if (!fsv)          return { ok: false, reason: 'input', need: 'תאריך השתלה לשדה' };
+        if (nursery == null) return { ok: false, reason: 'nodata' };   // days_in_nursery
+        // plants: seedlings basis → entered directly; else compute from area/beds × book spacing/rows
+        var spacing = bookNum(book, 'spacing_in_row_cm', 'in_row_spacing_cm');
+        var rowsN   = bookNum(book, 'rows_per_bed');
+        var bInp = scope.querySelector('[data-basis-input="' + effectiveBasisInput() + '"] input');
+        var bv = bInp ? parseFloat(bInp.value) : NaN;
+        var plants;
+        if (effectiveBasisInput() === 'seedlings') {
+          plants = bv;
+        } else {
+          if (spacing == null || rowsN == null) return { ok: false, reason: 'nodata' };
+          var std = (window.SFA_ASSUMPTIONS && window.SFA_ASSUMPTIONS.std_bed_length_m) || 30;
+          var meters = effectiveBasisInput() === 'beds' ? bv * std : bv;
+          plants = Math.round((meters * 100 / spacing) * rowsN);
+        }
+        if (!(plants > 0)) return { ok: false, reason: 'input', need: 'מספר שתילים / שטח' };
+        var ov = (window.SFA_ASSUMPTIONS && window.SFA_ASSUMPTIONS.oversow) || 1.10;
+        var nr = D.nursery(plants, nursery, fsv, D.TRAY_CELLS_DEFAULT, ov);
+        if (!nr) return { ok: false, reason: 'nodata' };
+        return { ok: true, type: 'scalardate', trays: nr.trays, traySow: D.fmt(nr.traySow), goal: g,
+          anchorText: plants + ' שתילים · ' + nursery + ' ימי משתלה · השתלה ' + D.fmt(D.parse(fsv)) };
+      }
+      return { ok: false, reason: 'soon' };
     }
 
     function runEngine() {
@@ -859,7 +885,7 @@
       if (g.soon) return { ok: false, reason: 'soon' };
 
       var slug0 = cropSel ? cropSel.value : '';
-      if (g.shape === 'date' || g.shape === 'range' || g.shape === 'list') {
+      if (g.shape === 'date' || g.shape === 'range' || g.shape === 'list' || g.shape === 'scalardate') {
         var bookD = (window.SFA_CROP_BOOK     && slug0) ? (window.SFA_CROP_BOOK[slug0]     || {}) : {};
         var txtD  = (window.SFA_CROP_BOOK_TXT && slug0) ? (window.SFA_CROP_BOOK_TXT[slug0] || {}) : {};
         return runDateGoal(g, bookD, txtD);
@@ -1023,6 +1049,11 @@
       } else if (out.type === 'note') {
         if (big) big.innerHTML = '<div style="font-size:16px;color:var(--gj-ink);font-weight:600">' + out.text + '</div>';
         sessionVal = out.text;
+      } else if (out.type === 'scalardate') {
+        if (big) big.innerHTML = '<b>' + out.trays + '</b> <small>מגשי משתלה</small>' +
+          '<div style="font-size:13px;color:var(--gj-ink-soft);font-weight:400;margin-top:6px">זריעת מגש: ' +
+          ltr(out.traySow) + (out.anchorText ? ' · ' + out.anchorText : '') + '</div>';
+        sessionVal = out.trays + ' מגשים · ' + out.traySow;
       } else if (out.type === 'list') {
         var items = out.dates.map(function (d, i) {
           return '<div style="display:flex;gap:8px;align-items:center;font-size:16px;margin:3px 0">' +

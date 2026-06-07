@@ -76,7 +76,7 @@ $CALC_GOALS = [
     'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות',   'shape'=>'scalar', 'anchor'=>''],
     'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'seed_cost','soon'=>false, 'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
     'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'succession','soon'=>false, 'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
-    'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>'',          'shape'=>'scalardate','anchor'=>'fieldset'],
+    'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'nursery', 'soon'=>false, 'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>'',          'shape'=>'scalardate','anchor'=>'fieldset'],
 ];
 $primary_keys = ['seed', 'sow_date', 'yield', 'revenue', 'transplants', 'pop'];
 $more_keys    = ['harvest', 'frost', 'fert', 'water', 'profit', 'beds', 'seed_cost', 'succession', 'nursery'];
@@ -228,6 +228,10 @@ ob_start();
         <label class="ipt" data-goal-input="frost" style="display:none;max-width:240px">
           <label>❄ אזור (לחלון קרה)</label>
           <span class="ipt__box"><select data-k="region" id="qb-region"><option value="">בחרו אזור…</option></select></span>
+        </label>
+        <label class="ipt" data-goal-input="nursery" style="display:none;max-width:240px">
+          <label>תאריך השתלה לשדה</label>
+          <span class="ipt__box"><input type="date" data-k="field_set_date"/><span class="u">📅</span></span>
         </label>
       </div>
 
