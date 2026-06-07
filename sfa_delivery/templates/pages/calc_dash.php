@@ -75,7 +75,7 @@ $CALC_GOALS = [
     'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
     'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות',   'shape'=>'scalar', 'anchor'=>''],
     'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
-    'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
+    'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'succession','soon'=>false, 'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
     'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>'',          'shape'=>'scalardate','anchor'=>'fieldset'],
 ];
 $primary_keys = ['seed', 'sow_date', 'yield', 'revenue', 'transplants', 'pop'];
@@ -202,6 +202,14 @@ ob_start();
             <span class="ipt__box"><input type="date" data-k="sow_date"/><span class="u">📅</span></span>
           </label>
         </div>
+      </div>
+
+      <!-- goal-specific extra inputs — shown by JS per the chosen goal (data-goal-input) -->
+      <div class="qb-row" id="qb-goal-inputs">
+        <label class="ipt" data-goal-input="succession" style="display:none">
+          <label>מספר מחזורי זריעה</label>
+          <span class="ipt__box"><input type="number" data-k="succ_count" value="5" min="1" max="60"/><span class="u">מחזורים</span></span>
+        </label>
       </div>
 
       <div class="qb__echo" id="qb-echo">השאלה שלך: אחשב <b><?= $h($default_goal_def['label']) ?></b> עבור <b>—</b>, לפי <b>שטח</b>.</div>

@@ -720,6 +720,12 @@
         el.style.display = el.getAttribute('data-anchor-input') === state.anchor ? '' : 'none';
       });
     }
+    /* goal-specific extra inputs (succession count, seed-cost price, …) — shown per chosen goal */
+    function showGoalInput() {
+      scope.querySelectorAll('[data-goal-input]').forEach(function (el) {
+        el.style.display = el.getAttribute('data-goal-input') === state.goal ? '' : 'none';
+      });
+    }
 
     function cropName() {
       if (!cropSel) return '';
@@ -785,7 +791,20 @@
         return { ok: true, type: 'range', start: D.fmt(h.start), end: D.fmt(h.end), goal: g,
           anchorText: 'זריעה ' + D.fmt(D.parse(sow)) + ' + ' + dtm + ' ימים · חלון ' + hwMax + ' ימים' };
       }
-      return { ok: false, reason: 'soon' };   // succession/nursery/frost wired in later slices
+      if (g.kind === 'succession') {
+        var first = dateInputVal('sow');
+        if (!first)        return { ok: false, reason: 'input', need: 'תאריך זריעה ראשונה' };
+        if (hwMax == null) return { ok: false, reason: 'nodata' };
+        var cntEl = scope.querySelector('[data-k="succ_count"]');
+        var cnt = cntEl ? parseInt(cntEl.value, 10) : 5;
+        if (!isFinite(cnt) || cnt < 1) cnt = 5;
+        var sc = D.succession(first, hwMax, { count: cnt });
+        if (!sc || !sc.dates.length) return { ok: false, reason: 'nodata' };
+        var fmtd = sc.dates.map(function (ms) { return D.fmt(ms); });
+        return { ok: true, type: 'list', dates: fmtd, goal: g,
+          anchorText: 'מ-' + D.fmt(D.parse(first)) + ' · כל ' + sc.intervalWeeks + ' שבועות · ' + fmtd.length + ' מחזורים' };
+      }
+      return { ok: false, reason: 'soon' };   // nursery/frost wired in later slices
     }
 
     function runEngine() {
@@ -949,6 +968,13 @@
       } else if (out.type === 'range') {
         if (big) big.innerHTML = ltr(out.start + ' – ' + out.end) + anchorLine;
         sessionVal = out.start + '–' + out.end;
+      } else if (out.type === 'list') {
+        var items = out.dates.map(function (d, i) {
+          return '<div style="display:flex;gap:8px;align-items:center;font-size:16px;margin:3px 0">' +
+            '<b style="min-width:1.6em">' + (i + 1) + '.</b> ' + ltr(d) + '</div>';
+        }).join('');
+        if (big) big.innerHTML = items + anchorLine;
+        sessionVal = out.dates.length + ' זריעות מ-' + out.dates[0];
       } else {
         // scalar — recompute() wrote "<value> <small>unit</small>" into [data-result];
         // surface [data-extra] as a secondary line (e.g. #9 revenue's ₪ value — quantity-first, QA F-01).
@@ -988,7 +1014,7 @@
     wireGroup(goalGrid, 'data-goal', function (v) {
       state.goal = v;
       if (moreSel) moreSel.value = '';   // primary pick clears the dropdown
-      showBasisInput(); updateEcho();
+      showBasisInput(); showGoalInput(); updateEcho();
     });
     wireGroup(basisGrp, 'data-basis', function (v) { state.basis = v; showBasisInput(); updateEcho(); });
     wireGroup(anchorGrp, 'data-anchor', function (v) { state.anchor = v; showAnchorInput(); updateEcho(); });
@@ -998,7 +1024,7 @@
         if (!moreSel.value) return;
         state.goal = moreSel.value;
         if (goalGrid) goalGrid.querySelectorAll('button').forEach(function (x) { x.classList.remove('is-on'); });
-        showBasisInput(); updateEcho();
+        showBasisInput(); showGoalInput(); updateEcho();
       });
     }
     if (cropSel) cropSel.addEventListener('change', updateEcho);
@@ -1054,7 +1080,7 @@
     })();
 
     /* ── deep-link ?state=result + initial paint ── */
-    showBasisInput(); showAnchorInput(); updateEcho(); renderSession();
+    showBasisInput(); showAnchorInput(); showGoalInput(); updateEcho(); renderSession();
     try {
       var params = new URLSearchParams(location.search);
       if (params.get('state') === 'result') scope.setAttribute('data-calc-state', 'result');

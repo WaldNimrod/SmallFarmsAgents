@@ -460,9 +460,9 @@ final class CropBookV1RouteTest extends TestCase
             $liveKinds = array_map(static fn ($g) => $g['kind'], $live);
             sort($liveKinds);
             $this->assertSame(
-                ['beds', 'fert', 'harvest', 'pop', 'revenue', 'seed', 'sow_date', 'transplants', 'yield'],
+                ['beds', 'fert', 'harvest', 'pop', 'revenue', 'seed', 'sow_date', 'succession', 'transplants', 'yield'],
                 $liveKinds,
-                'Live goals: Phase A scalars + B-now date goals (sow_date #4, harvest #5)'
+                'Live goals: Phase A scalars + B-now date goals (sow_date #4, harvest #5, succession #6)'
             );
             // every goal carries shape + anchor metadata
             foreach ($goals as $g) {
