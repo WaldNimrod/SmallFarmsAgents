@@ -66,20 +66,32 @@ Needs `planting_method` + `frost_tolerance_class` (+ `days_in_nursery` for revea
 3. **Non-numeric channel** — emit categoricals in a text sub-map (e.g. `window.SFA_CROP_BOOK_TXT[slug]`) so they survive the JS `parseFloat`/`isFinite` filter (`crop-book-v1.js:635`).
 4. **Route test** asserting `planting_method`/`frost_class` + the date numerics reach the rendered payload for a RICH-seeded crop.
 
-## 6. Result-layer rework (typed results)
-Today `showResult`/`renderBreakdown`/`pushSession` (`crop-book-v1.js:719-760`) assume a scalar in `[data-result]`. Refactor to render by `type`:
-- `scalar`, `scalar_grid` — as today.
-- `date` — Hebrew dd/mm/yyyy + the anchor used.
-- `date_range` — two dates as a window.
-- `date_list` — a schedule of N dates; session row = a compact summary string (e.g. "רצף · N תאריכים").
-- `ranked_list` — ranked crops, quantity primary + ₪/מ׳ secondary.
-**Visual design of each = team_35 mockups (mandate §3).** This spec fixes the **data each type carries**; mockups fix how it looks.
+## 6. Result-layer rework (typed results) — MOCKUPS DELIVERED & INTEGRATED (team_35, 2026-06-07)
+team_35 returned the mockups (`_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/MOCKUP_RETURN_team35_2026-06-07_v1.0.0.md`); the visual spec is locked. Source: `_COMMUNICATION/team_100/UI_REDESIGN_2026-06/mockups/{calc,cropdata_entry}.html` + `mock.css` (LOCKED tokens).
 
-## 7. UI contract (what the mockups must satisfy — merged on return)
-- ASK: 4 steps (goal / crop / basis / time-anchor) + a **region picker** (frost) + goal-specific inputs (succession count|season-end; seed price|pack; nursery field-set date).
-- RESULT: typed answer (6 shapes §6) + breakdown rows + session (accumulate, per-device, cap 30) + export (whole session → `/calc/print`,`/calc/export.csv`) + assumptions editor (existing AssumptionField macro).
-- Honest **no-data state** per goal/crop (no fabricated numbers).
-- #13 is multi-crop — the crop step adapts (all/shortlist).
+Refactor `showResult`/`renderBreakdown`/`pushSession` (`crop-book-v1.js:719-760`) from scalar-only to **render-by-`type`**, using the mockup's DOM/classes verbatim:
+
+| `type` | Goals | Mockup container | Session-row string |
+|---|---|---|---|
+| `scalar` | 1,8,2,10,12,7 | `.r-scalar > .big/.lbl` (+ `.breakdown`) | `כמות שתילים · עגבנייה → ~97 שתילים` |
+| `scalar` + ₪ secondary | 9, 14 | `.r-scalar > .second` (₪ smaller, "לפי מדד השוק / להמחשה") | as scalar |
+| `date` | 4 | `.r-date > .d/.anchor` | `תאריך זריעה · עגבנייה → 16/06/2026` |
+| `date_range` | 5, 11 | `.r-range > .ends/.bar/.fill` | `חלון קרה · עגבנייה → 15/03–15/11` |
+| `date_list` | 6 | `.r-list > .item(.n/.dt/.meta)` | `רצף · עגבנייה → 5 זריעות מ-16/06` |
+| `ranked_list` | 13 | `.r-rank > table` (ק״ג/מ׳ primary, ₪/מ׳ `.v` secondary, `tr.top`) | `השוואה · 8 גידולים → עגבנייה #1` |
+| `scalar+date` | 3 | `.r-scalar > .big` (trays) + `.second` (tray-sow date) | trays + date |
+| `nodata` | any goal w/o data for the crop; 0 (water) | `.r-nodata > .ic/b` + "עזרו להשלים" | — (not pushed) |
+
+`pushSession` must generalize beyond the scalar assumption to emit the per-shape string above.
+
+## 7. UI contract — SATISFIED by the delivered mockups
+- **Goal grid:** all 15 with **honest availability badges** — `.st.live` (זמין) / `.st.soon` (בקרוב, phases A/B-now/B-later) / `.st.dev` (— מודל נפרד = water). (`calc.html` goal registry `G[]`.)
+- **ASK 4 steps** + goal-specific `.extra` panels (`#ex-target`,`#ex-seedcost`,`#ex-succession`,`#ex-region`) shown per goal; **anchor step LIVE** — greys/relabels for non-date goals (`anchorhint`, `datefld` opacity); **frost region picker** appears only for #11.
+- **compare (#13)** flips the crop step to "all crops" mode (`#comparenote`, crop `<select>` dimmed).
+- **RESULT:** typed shape (§6) + session (per-device) + export (PDF/CSV) + assumptions link (`assumptions.html`).
+- **Honest no-data** is first-class (badge + `.r-nodata` card) — never a 0/guess.
+- **Reuse `mock.css` tokens verbatim** (mirrors LOCKED `tokens.css`); calculator must match the redesigned shell.
+- **Relabels to apply (mockup flag #6):** `calc_dash.php` — #13 "רווח גולמי"→"השוואת גידולים"; header "14 מחשבונים"→"15 מטרות"; add the `harvest`(#5) goal entry.
 
 ## 8. Acceptance criteria
 1. Each shipped goal returns a real result; no "בפיתוח" for goals declared live in that phase; honest no-data state otherwise.
