@@ -67,26 +67,33 @@
     /* #14 seed / input cost (audience=F) — mirrors calculators.py seed_input_cost
        cost = grams × ₪/g   OR   ceil(grams / grams_per_pack) × pack_price */
     seed_cost: function (g, book) {
-      var grams = parseFloat(g.grams) || 0;
-      var perG  = parseFloat(g.seed_price_per_g);
-      var packP = parseFloat(g.pack_price);
-      var gPack = parseFloat(g.grams_per_pack);
+      var len     = parseFloat(g.bed_len) || 0;
+      var sph     = parseFloat(g.seeds_per_hole) || 1;
+      var spacing = parseFloat(book.spacing) || 1;
+      var rows    = parseFloat(book.rows) || 1;
+      var spg     = parseFloat(book.seeds_per_gram) || 0;
+      var perG    = parseFloat(g.seed_price_per_g);
+      var packP   = parseFloat(g.pack_price);
+      var gPack   = parseFloat(g.grams_per_pack);
+      if (!spg) return { main: '—', unit: '', formula: 'אין נתון זרעים-לגרם לגידול זה', extra: '' };
+      // grams needed (same chain as #1 seed): plants → seeds (germ + oversow) → grams
+      var grams = ((len * 100 / spacing) * rows * sph) / A.germination_rate * A.oversow / spg;
       var cost, packs = null, formula;
-      if (isFinite(perG)) {
+      if (isFinite(perG) && perG > 0) {
         cost = grams * perG;
-        formula = fmt(grams, 1) + ' g × ' + perG + ' ₪/g';
-      } else if (isFinite(packP) && isFinite(gPack) && gPack > 0) {
+        formula = fmt(grams, 1) + ' גרם × ' + perG + ' ₪/גרם';
+      } else if (isFinite(packP) && packP > 0 && isFinite(gPack) && gPack > 0) {
         packs = Math.ceil(grams / gPack);
         cost = packs * packP;
-        formula = '⌈' + fmt(grams, 1) + ' ÷ ' + gPack + '⌉ = ' + packs + ' חב׳ × ' + packP + ' ₪';
+        formula = '⌈' + fmt(grams, 1) + ' ÷ ' + gPack + '⌉ × ' + packP + ' ₪';
       } else {
-        return { ok: false };   // no pricing mode supplied
+        return { main: '—', unit: '', formula: 'הזינו מחיר זרעים (₪/גרם או מחיר חבילה)', extra: '' };
       }
       return {
         main:    fmt(cost, 2),
         unit:    '₪',
         formula: formula,
-        extra:   packs != null ? ('≈ ' + packs + ' חבילות') : ''
+        extra:   (packs != null ? ('≈ ' + packs + ' חבילות · ') : '') + fmt(grams, 1) + ' גרם'
       };
     },
 
@@ -844,6 +851,11 @@
       setK('area', meters);
       setK('area_m2', meters);
       if (effectiveBasisInput() === 'target' && isFinite(basisVal)) setK('target_kg', basisVal);
+
+      // 2b · copy goal-specific inputs (e.g. seed-cost price pair) into the engine [data-k].
+      scope.querySelectorAll('[data-goal-input="' + state.goal + '"] [data-k]').forEach(function (el) {
+        setK(el.getAttribute('data-k'), el.value);
+      });
 
       // 3 · set the kind + recompute via the EXISTING engine, then read result.
       engine.setAttribute('data-calc', g.kind);

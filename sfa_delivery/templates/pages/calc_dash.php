@@ -74,7 +74,7 @@ $CALC_GOALS = [
     'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>'',          'shape'=>'nodata', 'anchor'=>''],
     'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
     'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות',   'shape'=>'scalar', 'anchor'=>''],
-    'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
+    'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'seed_cost','soon'=>false, 'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
     'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'succession','soon'=>false, 'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
     'nursery'     => ['id'=>3,  'label'=>'ימי משתלה',     'ic'=>'🌿', 'kind'=>'',        'soon'=>true,  'basis'=>'seedlings','rlabel'=>'מגשי משתלה',   'runit'=>'',          'shape'=>'scalardate','anchor'=>'fieldset'],
 ];
@@ -210,6 +210,21 @@ ob_start();
           <label>מספר מחזורי זריעה</label>
           <span class="ipt__box"><input type="number" data-k="succ_count" value="5" min="1" max="60"/><span class="u">מחזורים</span></span>
         </label>
+        <span data-goal-input="seed_cost" style="display:none">
+          <label class="ipt" style="max-width:170px">
+            <label>מחיר זרעים</label>
+            <span class="ipt__box"><input type="number" data-k="seed_price_per_g" step="0.01" min="0" placeholder="0.15"/><span class="u">₪/גרם</span></span>
+          </label>
+          <span class="u" style="align-self:center">או</span>
+          <label class="ipt" style="max-width:160px">
+            <label>מחיר חבילה</label>
+            <span class="ipt__box"><input type="number" data-k="pack_price" step="0.5" min="0" placeholder="מחיר"/><span class="u">₪</span></span>
+          </label>
+          <label class="ipt" style="max-width:150px">
+            <label>גרם בחבילה</label>
+            <span class="ipt__box"><input type="number" data-k="grams_per_pack" step="0.5" min="0" placeholder="גרם"/><span class="u">גרם</span></span>
+          </label>
+        </span>
       </div>
 
       <div class="qb__echo" id="qb-echo">השאלה שלך: אחשב <b><?= $h($default_goal_def['label']) ?></b> עבור <b>—</b>, לפי <b>שטח</b>.</div>
@@ -303,6 +318,9 @@ ob_start();
     <input type="hidden" data-k="target_kg" value="100"/>
     <input type="hidden" data-k="area" value="300"/>
     <input type="hidden" data-k="area_m2" value="300"/>
+    <input type="hidden" data-k="seed_price_per_g" value=""/>
+    <input type="hidden" data-k="pack_price" value=""/>
+    <input type="hidden" data-k="grams_per_pack" value=""/>
     <span data-result></span><span data-formula></span><span data-extra></span>
   </div>
 </div>
