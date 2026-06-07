@@ -710,7 +710,8 @@
     var state = {
       goal:   'seed',
       basis:  'area',
-      anchor: 'target'
+      anchor: 'target',
+      basket: []           // #13 compare — selected crop slugs (2–6)
     };
 
     var goalGrid  = document.getElementById('qb-goal');
@@ -745,11 +746,32 @@
         el.style.display = el.getAttribute('data-anchor-input') === state.anchor ? '' : 'none';
       });
     }
-    /* goal-specific extra inputs (succession count, seed-cost price, …) — shown per chosen goal */
+    /* goal-specific extra inputs (succession count, seed-cost price, region, basket …) — shown per goal */
     function showGoalInput() {
       scope.querySelectorAll('[data-goal-input]').forEach(function (el) {
         el.style.display = el.getAttribute('data-goal-input') === state.goal ? '' : 'none';
       });
+      scope.querySelectorAll('[data-goal-hide]').forEach(function (el) {
+        el.style.display = el.getAttribute('data-goal-hide') === state.goal ? 'none' : '';
+      });
+    }
+    /* slug → Hebrew name (from the crop <select> options) */
+    function cropNameBySlug(slug) {
+      if (!cropSel) return slug;
+      for (var i = 0; i < cropSel.options.length; i++) {
+        if (cropSel.options[i].value === slug) return cropSel.options[i].text || slug;
+      }
+      return slug;
+    }
+    /* #13 basket — render selected-crop chips with ✕ remove */
+    function renderBasket() {
+      var box = document.getElementById('qb-basket-chips');
+      if (!box) return;
+      box.innerHTML = state.basket.map(function (slug) {
+        return '<span class="qb-chip" data-basket-rm="' + slug +
+          '" style="display:inline-flex;gap:6px;align-items:center;background:var(--gj-paper-2,#eee);border:1px solid var(--gj-line,#ccc);border-radius:14px;padding:3px 10px;font-size:13px;cursor:pointer">' +
+          cropNameBySlug(slug) + ' <b style="color:var(--gj-ink-soft,#888)">✕</b></span>';
+      }).join('');
     }
 
     function cropName() {
@@ -889,6 +911,13 @@
         var bookD = (window.SFA_CROP_BOOK     && slug0) ? (window.SFA_CROP_BOOK[slug0]     || {}) : {};
         var txtD  = (window.SFA_CROP_BOOK_TXT && slug0) ? (window.SFA_CROP_BOOK_TXT[slug0] || {}) : {};
         return runDateGoal(g, bookD, txtD);
+      }
+      if (g.shape === 'rank') {
+        if (!state.basket.length) return { ok: false, reason: 'input', need: 'בחרו גידולים לסל (2–6)' };
+        var ranked = window.SFA_COMPARE ? window.SFA_COMPARE(state.basket, window.SFA_CROP_BOOK || {}) : [];
+        if (!ranked.length) return { ok: false, reason: 'nodata' };
+        return { ok: true, type: 'rank', goal: g,
+          rows: ranked.map(function (r) { return { name: cropNameBySlug(r.slug), y: r.yieldPerM, v: r.valuePerM }; }) };
       }
       if (!g.kind || !engine) return { ok: false, reason: 'soon' };
 
@@ -1049,6 +1078,17 @@
       } else if (out.type === 'note') {
         if (big) big.innerHTML = '<div style="font-size:16px;color:var(--gj-ink);font-weight:600">' + out.text + '</div>';
         sessionVal = out.text;
+      } else if (out.type === 'rank') {
+        if (big) big.innerHTML = out.rows.map(function (r, i) {
+          return '<div style="display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dotted var(--gj-line,#ddd)' +
+            (i === 0 ? ';font-weight:800' : '') + '">' +
+            '<b style="min-width:1.5em;color:var(--gj-leaf-deep,#3a6)">' + (i + 1) + '</b>' +
+            '<span style="flex:1">' + r.name + '</span>' +
+            '<b dir="ltr">' + fmt(r.y, 1) + ' ק״ג/מ׳</b>' +
+            (r.v != null ? '<span style="font-size:12px;color:var(--gj-ink-soft,#888)" dir="ltr">₪' + fmt(r.v, 0) + '/מ׳</span>' : '') +
+            '</div>';
+        }).join('');
+        sessionVal = out.rows.length + ' גידולים · ' + (out.rows[0] ? out.rows[0].name + ' #1' : '');
       } else if (out.type === 'scalardate') {
         if (big) big.innerHTML = '<b>' + out.trays + '</b> <small>מגשי משתלה</small>' +
           '<div style="font-size:13px;color:var(--gj-ink-soft);font-weight:400;margin-top:6px">זריעת מגש: ' +
@@ -1114,6 +1154,29 @@
       });
     }
     if (cropSel) cropSel.addEventListener('change', updateEcho);
+
+    /* #13 basket — add via the dropdown, remove via chip ✕ (2–6 crops) */
+    var basketAdd = document.getElementById('qb-basket-add');
+    if (basketAdd) {
+      basketAdd.addEventListener('change', function () {
+        var slug = basketAdd.value;
+        basketAdd.value = '';
+        if (!slug || state.basket.indexOf(slug) >= 0) return;
+        if (state.basket.length >= 6) return;
+        state.basket.push(slug);
+        renderBasket(); updateEcho();
+      });
+    }
+    var basketChips = document.getElementById('qb-basket-chips');
+    if (basketChips) {
+      basketChips.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-basket-rm]');
+        if (!el) return;
+        var slug = el.getAttribute('data-basket-rm');
+        state.basket = state.basket.filter(function (s) { return s !== slug; });
+        renderBasket(); updateEcho();
+      });
+    }
     scope.querySelectorAll('[data-basis-input] input, [data-anchor-input] input').forEach(function (el) {
       el.addEventListener('input', updateEcho);
     });

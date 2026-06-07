@@ -72,7 +72,7 @@ $CALC_GOALS = [
     'frost'       => ['id'=>11, 'label'=>'חלון קרה',      'ic'=>'❄', 'kind'=>'frost',   'soon'=>false, 'basis'=>'area',     'rlabel'=>'חלון שתילה',   'runit'=>'',          'shape'=>'range',  'anchor'=>'region'],
     'fert'        => ['id'=>12, 'label'=>'כמות דישון',    'ic'=>'🪱', 'kind'=>'fert',    'soon'=>false, 'basis'=>'area',     'rlabel'=>'קומפוסט',      'runit'=>'ק״ג קומפוסט','shape'=>'scalar', 'anchor'=>''],
     'water'       => ['id'=>0,  'label'=>'צריכת מים',     'ic'=>'💧', 'kind'=>'',        'soon'=>true,  'basis'=>'area',     'rlabel'=>'צריכת מים',    'runit'=>'',          'shape'=>'nodata', 'anchor'=>''],
-    'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'',        'soon'=>true,  'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
+    'profit'      => ['id'=>13, 'label'=>'השוואת גידולים','ic'=>'📊', 'kind'=>'compare', 'soon'=>false, 'basis'=>'beds',     'rlabel'=>'השוואה',       'runit'=>'ק״ג/מ׳',    'shape'=>'rank',   'anchor'=>''],
     'beds'        => ['id'=>7,  'label'=>'ערוגות ליעד',   'ic'=>'▤', 'kind'=>'beds',    'soon'=>false, 'basis'=>'target',   'rlabel'=>'ערוגות נדרשות', 'runit'=>'ערוגות',   'shape'=>'scalar', 'anchor'=>''],
     'seed_cost'   => ['id'=>14, 'label'=>'עלות זרעים',    'ic'=>'🧾', 'kind'=>'seed_cost','soon'=>false, 'basis'=>'area',     'rlabel'=>'עלות זרעים',   'runit'=>'₪',         'shape'=>'scalar', 'anchor'=>''],
     'succession'  => ['id'=>6,  'label'=>'רצף גידולים',   'ic'=>'🔁', 'kind'=>'succession','soon'=>false, 'basis'=>'area',     'rlabel'=>'לוח רצף',      'runit'=>'',          'shape'=>'list',   'anchor'=>'sow'],
@@ -138,10 +138,10 @@ ob_start();
         </div>
       </div>
 
-      <!-- Step 2 — crop -->
+      <!-- Step 2 — crop (single) OR basket (for #13 compare) -->
       <div class="qb__step">
         <div class="qb__steplbl"><span class="qb__stepno">2</span><h3>עבור איזה גידול?</h3></div>
-        <label class="ipt" style="max-width:240px">
+        <label class="ipt" style="max-width:240px" data-goal-hide="compare">
           <label>גידול</label>
           <span class="ipt__box">
             <select data-k="crop_slug" aria-label="בחר גידול" id="qb-crop">
@@ -152,6 +152,21 @@ ob_start();
             </select>
           </span>
         </label>
+        <!-- basket: multi-select for #13 compare -->
+        <div id="qb-basket" data-goal-input="compare" style="display:none">
+          <p style="font-size:12.5px;color:var(--gj-code-deep);margin:0 0 8px">בחרו גידולים להשוואה (2–6):</p>
+          <div id="qb-basket-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <label class="ipt" style="max-width:240px">
+            <span class="ipt__box">
+              <select id="qb-basket-add">
+                <option value="">+ הוסף גידול…</option>
+                <?php foreach ($crop_list as $crop_opt): ?>
+                <option value="<?= $h((string)($crop_opt['slug'] ?? '')) ?>"><?= $h((string)($crop_opt['name_he'] ?? '')) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </span>
+          </label>
+        </div>
       </div>
 
       <!-- Step 3 — basis -->
