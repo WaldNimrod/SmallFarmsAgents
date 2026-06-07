@@ -117,8 +117,8 @@
       };
     },
 
-    /* #9 expected revenue (audience=F)
-       revenue = yield_per_m × area × price */
+    /* #9 expected revenue (audience=F) — QUANTITY-FIRST (team_00 / QA F-01):
+       yield (ק״ג) is the HEADLINE; ₪ value is a secondary, illustrative line (price-list). */
     revenue: function (g, book) {
       var area   = parseFloat(g.area) || 0;
       var yieldM = parseFloat(book.yield_per_m) || 0;
@@ -126,10 +126,10 @@
       var kg     = yieldM * area;
       var rev    = kg * price;
       return {
-        main:    fmt(rev),
-        unit:    '₪',
-        formula: fmt(kg, 0) + ' kg × ' + price + ' ₪/kg',
-        extra:   'יבול ' + fmt(kg, 0) + ' ק״ג'
+        main:    fmt(kg, 0),
+        unit:    'ק״ג',
+        formula: fmt(yieldM, 1) + ' ק״ג/מ׳ × ' + fmt(area, 0) + ' מ׳',
+        extra:   price > 0 ? ('שווי משוער ' + fmt(rev) + ' ₪ · מדד השוק · להמחשה') : ''
       };
     },
 
@@ -276,7 +276,7 @@
     var fEl = panel.querySelector('[data-formula]');
     if (fEl) fEl.textContent = out.formula || '';
     var eEl = panel.querySelector('[data-extra]');
-    if (eEl && out.extra != null) eEl.textContent = out.extra;
+    if (eEl) eEl.textContent = (out.extra != null ? out.extra : '');   // clear stale extra across goals
     /* #10 population grid */
     if (kind === 'pop' && out.perM2 != null) {
       var grid = panel.querySelector('[data-popgrid]');
@@ -950,9 +950,14 @@
         if (big) big.innerHTML = ltr(out.start + ' – ' + out.end) + anchorLine;
         sessionVal = out.start + '–' + out.end;
       } else {
-        // scalar — recompute() wrote "<value> <small>unit</small>" into [data-result]
+        // scalar — recompute() wrote "<value> <small>unit</small>" into [data-result];
+        // surface [data-extra] as a secondary line (e.g. #9 revenue's ₪ value — quantity-first, QA F-01).
         var rEl = engine.querySelector('[data-result]');
-        if (big) big.innerHTML = rEl ? rEl.innerHTML : (out.main || '—');
+        var exEl = engine.querySelector('[data-extra]');
+        var exTxt = exEl ? (exEl.textContent || '').trim() : '';
+        var secLine = exTxt
+          ? '<div style="font-size:13px;color:var(--gj-ink-soft);font-weight:400;margin-top:6px">' + exTxt + '</div>' : '';
+        if (big) big.innerHTML = (rEl ? rEl.innerHTML : (out.main || '—')) + secLine;
         sessionVal = (rEl ? (rEl.textContent || '').replace(/\s+/g, ' ').trim() : out.main) || '—';
       }
 
