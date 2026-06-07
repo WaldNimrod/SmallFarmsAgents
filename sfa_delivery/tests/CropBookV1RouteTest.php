@@ -465,6 +465,48 @@ final class CropBookV1RouteTest extends TestCase
         }
     }
 
+    /**
+     * WP-CB-CALC server plumbing: the date engine needs DATE numerics in SFA_CROP_BOOK and the
+     * CATEGORICAL fields in the separate SFA_CROP_BOOK_TXT channel (text can't ride the numeric map).
+     * Seeds a RICH crop (NOT an empty fixture — the WP-CB-MOBILE 500 lesson).
+     */
+    public function testCalcDeliversDateAndCategoricalBookFields(): void
+    {
+        // Mirror tables (crop_id-keyed, matching CropBookViewController's mirror queries).
+        $this->pdo->exec('CREATE TABLE IF NOT EXISTS crop_field_enrichment (id INTEGER PRIMARY KEY AUTOINCREMENT, crop_id INTEGER, field_name TEXT, value_best REAL, winning_source_class TEXT)');
+        $this->pdo->exec('CREATE TABLE IF NOT EXISTS crop_attribute (id INTEGER PRIMARY KEY AUTOINCREMENT, crop_id INTEGER, attribute_key TEXT, value_canonical TEXT)');
+        // RICH seed for lettuce (id=1): date numerics + a non-date numeric + both categoricals.
+        $this->pdo->exec("INSERT INTO crop_field_enrichment (crop_id,field_name,value_best) VALUES
+            (1,'days_to_maturity',55),
+            (1,'harvest_window_max_days',21),
+            (1,'days_in_nursery',28),
+            (1,'yield_per_bed_m',3.0),
+            (1,'rows_per_bed',4)");
+        $this->pdo->exec("INSERT INTO crop_attribute (crop_id,attribute_key,value_canonical) VALUES
+            (1,'planting_method','transplant'),
+            (1,'frost_tolerance_class','semi_hardy')");
+
+        $html = (string)$this->get('/calc/')->getBody();
+
+        // Date numerics ride the numeric SFA_CROP_BOOK map (keys present for lettuce).
+        $this->assertStringContainsString('window.SFA_CROP_BOOK', $html, 'numeric book map must be emitted');
+        $this->assertStringContainsString('days_to_maturity', $html, 'days_to_maturity must reach the client');
+        $this->assertStringContainsString('harvest_window_max_days', $html, 'harvest_window_max_days must reach the client');
+        // Categoricals ride the SEPARATE text channel (must survive the JS numeric flatten).
+        $this->assertStringContainsString('window.SFA_CROP_BOOK_TXT', $html, 'categorical channel must be emitted');
+        $this->assertStringContainsString('"planting_method":"transplant"', $html, 'planting_method must reach SFA_CROP_BOOK_TXT');
+        $this->assertStringContainsString('"frost_tolerance_class":"semi_hardy"', $html, 'frost_class must reach SFA_CROP_BOOK_TXT');
+    }
+
+    /** Graceful degradation: no crop_attribute table → no TXT channel, page still 200 (mirror reality). */
+    public function testCalcDegradesWhenCategoricalTableAbsent(): void
+    {
+        $res = $this->get('/calc/');
+        $this->assertSame(200, $res->getStatusCode(), '/calc/ must still 200 without crop_attribute');
+        $this->assertStringNotContainsString('window.SFA_CROP_BOOK_TXT', (string)$res->getBody(),
+            'TXT channel must be omitted (not errored) when no categoricals exist');
+    }
+
     // ── Decision A regression: season filter reads variety months, not crop payload ──
 
     /**

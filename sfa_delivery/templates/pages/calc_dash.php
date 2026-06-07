@@ -44,6 +44,9 @@ $assumptions = AssumptionsController::getAssumptions();
 // V03: crop list for the picker + book values for JS calc binding.
 $crop_list        = is_array($crop_list        ?? null) ? $crop_list        : [];
 $crop_book_values = is_array($crop_book_values ?? null) ? $crop_book_values : [];
+// WP-CB-CALC: categorical (text) book values — separate channel from the numeric SFA_CROP_BOOK
+// (the JS numeric flatten drops non-numerics). Carries planting_method + frost_tolerance_class.
+$crop_book_text   = is_array($crop_book_text   ?? null) ? $crop_book_text   : [];
 
 /**
  * Goal catalog — the 14 calculators mapped to the existing CALC[kind] registry.
@@ -294,6 +297,11 @@ ob_start();
 <?php if (!empty($crop_book_values)): ?>
 <script>
 window.SFA_CROP_BOOK = <?= json_encode($crop_book_values, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+</script>
+<?php endif; ?>
+<?php if (!empty($crop_book_text)): ?>
+<script>
+window.SFA_CROP_BOOK_TXT = <?= json_encode($crop_book_text, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 </script>
 <?php endif; ?>
 <?php

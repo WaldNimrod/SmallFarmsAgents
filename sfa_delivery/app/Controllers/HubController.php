@@ -130,10 +130,11 @@ final class HubController
             $cropList = []; // DB unavailable — select renders empty, calc still works manually
         }
 
-        // V03 fix: also pass per-crop book values (key fields used by SFA_CALC)
-        // so that crop selection can auto-populate book chips in the dashboard calculators.
-        // We embed only the 7 numeric fields that CALC.* actually read:
-        //   spacing, rows, seeds_per_gram, yield_per_m, price, n, p, k
+        // V03 fix: also pass per-crop NUMERIC book values (fields used by SFA_CALC) so that crop
+        // selection auto-populates the calculators. WP-CB-CALC: widened the whitelist to add the
+        // DATE numeric fields the date engine (Phase B) consumes — days_to_maturity, days_in_nursery
+        // (a.k.a. days_in_nursery_cell), harvest_window_max_days. (succession_interval_weeks is NOT
+        // delivered — it is derived client-side as round(harvest_window_max_days/7).)
         $cropBookValues = [];
         if (!empty($cropList)) {
             try {
@@ -152,7 +153,10 @@ final class HubController
                            'price_documented','documented_price',
                            'nutrient_removal_n_kg_per_ha','nutrient_removal_N',
                            'nutrient_removal_p_kg_per_ha',
-                           'nutrient_removal_k_kg_per_ha'
+                           'nutrient_removal_k_kg_per_ha',
+                           'days_to_maturity',
+                           'days_in_nursery','days_in_nursery_cell',
+                           'harvest_window_max_days'
                        )"
                 );
                 $enStmt->execute($slugs);
@@ -165,10 +169,40 @@ final class HubController
             }
         }
 
+        // WP-CB-CALC: CATEGORICAL book values (planting_method, frost_tolerance_class) live in
+        // crop_attribute and are TEXT — they cannot ride the numeric SFA_CROP_BOOK map (the JS
+        // flatten drops non-numerics). Deliver them via a separate text channel SFA_CROP_BOOK_TXT.
+        // The date engine reads planting_method (direct/transplant/both branch) + frost class.
+        $cropBookText = [];
+        if (!empty($cropList)) {
+            try {
+                $slugs   = array_column($cropList, 'slug');
+                $inMarks = implode(',', array_fill(0, count($slugs), '?'));
+                $atStmt  = $this->pdo->prepare(
+                    "SELECT c.slug, a.attribute_key, a.value_canonical
+                     FROM crops c
+                     JOIN crop_attribute a ON a.crop_id = c.id
+                     WHERE c.slug IN ($inMarks)
+                       AND a.attribute_key IN ('planting_method','frost_tolerance_class')"
+                );
+                $atStmt->execute($slugs);
+                foreach ($atStmt->fetchAll() as $row) {
+                    $val = (string)($row['value_canonical'] ?? '');
+                    if ($val !== '') {
+                        $cropBookText[(string)$row['slug']][(string)$row['attribute_key']] = $val;
+                    }
+                }
+            } catch (\Throwable) {
+                // crop_attribute may not exist on the mirror yet — degrade gracefully (date calcs
+                // default to direct-seed; frost shows the honest no-data state).
+            }
+        }
+
         $html = Template::render('pages/calc_dash', [
             'contact'         => Modules::all()['contact'] ?? [],
             'crop_list'       => $cropList,
             'crop_book_values'=> $cropBookValues,
+            'crop_book_text'  => $cropBookText,
         ]);
         return self::html($response, $html);
     }
