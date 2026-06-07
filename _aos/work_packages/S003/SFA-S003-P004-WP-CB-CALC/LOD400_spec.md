@@ -99,7 +99,7 @@ Refactor `showResult`/`renderBreakdown`/`pushSession` (`crop-book-v1.js:719-760`
 3. Date math is date-only and matches Python `timedelta` exactly (test direct-seed AND transplant branches).
 4. Server delivery: route test (RICH payload — NOT empty; WP-CB-MOBILE 500 lesson) asserts the new numeric + categorical fields reach the client.
 5. Session accumulates typed results; export includes a sensible representation for ranges/lists.
-6. **PHP suite green (217/217)** + a route test per touched server path. `validate_aos` 0 FAIL.
+6. **PHP suite green (all tests pass — 223+ and growing as goals land)** + a route test per touched server path. `validate_aos` 0 FAIL.
 7. Presentation matches the approved team_35 mockups (team_50 visual QA).
 
 ## 9. Risks & mitigations

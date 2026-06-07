@@ -30,7 +30,7 @@ refs:
 | `frost_tolerance_class` | crop_attribute (categorical) | 37/70 | 🎯 **classify** the remaining ~33 |
 | `days_in_nursery` | crop_field_enrichment (numeric) | 8/9 of known transplants | 🎯 fill only for transplant/both crops revealed by planting_method |
 
-**Schema note:** categoricals live in `crop_attribute (attribute_name, value_canonical, …)`, numerics in `crop_field_enrichment (field_name, value_best, …)`; **both key on `variety_id`** (join to crop via `crop_varieties`). Per-crop = the default variety (`name_en IS NULL`).
+**Schema note:** in the **PG SSoT** categoricals live in `crop_attribute (attribute_name, value_canonical, …)`, numerics in `crop_field_enrichment (field_name, value_best, …)`; **both key on `variety_id`** (join to crop via `crop_varieties`). Per-crop = the default variety (`name_en IS NULL`). **⚠ The MySQL delivery mirror exposes these as `attribute_key`/`crop_id`** (and `field_name`/`crop_id`) — the calc controller (`HubController::calc`) and `CropBookViewController` query `attribute_key` + `crop_id`, NOT the SSoT names. Keep both schemas straight when wiring SSoT writes vs mirror reads.
 
 ## 2. Scope
 **In:** (a) a **guided classification tool** for team_00 to fill `planting_method` + `frost_tolerance_class` (+ conditional `days_in_nursery`); (b) add a **`both` (גם וגם)** canonical value to `planting_method`; (c) the **server-side delivery plumbing** so the categoricals reach the calculator client. **Out:** `days_to_maturity`/`harvest_window_max_days` (already complete); `succession_interval_weeks` (calc derivation); the broader provenance coverage (separate WP).
