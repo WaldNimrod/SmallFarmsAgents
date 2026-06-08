@@ -4580,7 +4580,7 @@ work_packages:
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-MOBILE"]
   spec_ref: "_aos/work_packages/S003/SFA-S003-P004-WP-CB-CALC/LOD400_spec.md"
-  design_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CALC/LOD_DESIGN_2026-06-07_v1.0.0.md"
+  design_ref: "_archive/SFA-S003-P004-WP-CB-CALC/team_100/LOD_DESIGN_2026-06-07_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER

@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:8796",
+  "branch": "claude/cb-calc-ui-2026-06-07",
+  "head": "5794a67",
+  "ts": "2026-06-07T20:01:56.221Z",
+  "validator": "Cursor / Composer (non-Claude)",
+  "consoleErrors": [],
+  "verdict": "PASS",
+  "checks": {
+    "goalCount": 15,
+    "header15": true,
+    "noProfitLabel": true,
+    "hasCompareLabel": true,
+    "liveKinds": [
+      "beds", "compare", "fert", "frost", "harvest", "nursery", "pop",
+      "revenue", "seed", "seed_cost", "sow_date", "succession", "transplants", "yield"
+    ],
+    "sowDateTomato": "12/05/2026",
+    "sowDateOk": true,
+    "harvestRangeTomato": "15/09/2026 – 27/10/2026",
+    "harvestOk": true,
+    "potatoNodata": true,
+    "successionOk": true,
+    "successionDates": ["01/03/2026", "22/03/2026", "12/04/2026", "03/05/2026"],
+    "seedCostWithPrice": "0.03 ₪",
+    "seedCostNoPrice": "—",
+    "seedCostHonestNoFabrication": true,
+    "frostCoastalNote": "ללא קרה משמעותית",
+    "frostRangeJudean": "11/03/2026 – 01/10/2026",
+    "nurseryTrays": 5,
+    "nurseryTraySow": "18/03/2026",
+    "revenuePrimaryKg": "90 ק״ג",
+    "revenueSecondaryLine": "שווי משוער 1,080 ₪ · מדד השוק · להמחשה",
+    "compareRank": ["tomato 9.0 ק״ג/מ׳", "cucumber 6.0 ק״ג/מ׳", "pepper 4.5 ק״ג/מ׳"],
+    "transplants": "480 שתילים",
+    "waterSoon": true,
+    "exportRowsPopulated": true,
+    "assumptionsEditorOpens": true,
+    "regionDefaultCoastal": true,
+    "regionCount": 5
+  },
+  "notes": {
+    "F-04": "seed_cost without price shows — in #qb-answer-big; הזינו מחיר copy in hidden engine formula only"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "base": "https://sfa.nimrod.bio",
+  "ts": "2026-06-08T16:36:55.071Z",
+  "total": 2,
+  "failures": 0,
+  "verdict": "PASS",
+  "results": [
+    {
+      "viewport": "mobile",
+      "page": "_calc_",
+      "url": "/calc/",
+      "http_rendered": true,
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "מחשבון · SFA",
+      "screenshot": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-CALC/evidence_2026-06-08/screenshots/_calc__mobile.png",
+      "pass": true
+    },
+    {
+      "viewport": "desktop",
+      "page": "_calc_",
+      "url": "/calc/",
+      "http_rendered": true,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "forbiddenFound": [],
+      "title": "מחשבון · SFA",
+      "screenshot": "/Users/nimrod/Documents/SmallFarmsAgents/_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-CALC/evidence_2026-06-08/screenshots/_calc__desktop.png",
+      "pass": true
+    }
+  ]
+}
