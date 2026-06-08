@@ -4567,13 +4567,13 @@ work_packages:
 # WP-CB-CALC + WP-CB-DEEP-PROVENANCE registered 2026-06-07 (team_00 directive) — follow-ups carried
 # out of WP-CB-MOBILE. Scope: _COMMUNICATION/team_100/REPORT_WP-CB-MOBILE_FOLLOWUPS_calc-and-deep-provenance_2026-06-07.md
 - id: SFA-S003-P004-WP-CB-CALC
-  label: "ספר גידולים: השלמת מחשבון התכנון — 8/14 יעדים חסרי חישוב לקוח (פורט Python→JS + מנוע תאריכים)"
-  status: OPEN
-  phase: register
+  label: "ספר גידולים: השלמת מחשבון התכנון — 14/15 יעדים חיים (פורט Python→JS + מנוע תאריכים + השוואת-סל)"
+  status: COMPLETE
+  phase: validate
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
+  current_lean_gate: L-GATE_V
+  lod_status: LOD500_LOCKED
   assigned_builder: team_10
   assigned_validator: team_50
   created_at: "2026-06-07"
@@ -4611,12 +4611,37 @@ work_packages:
       too (HubController::calc whitelist :147-156 omits date fields; categorical planting_method/frost_class
       dropped twice). Phase A (transplants/seed_cost/compare -> 6-to-9 live) has no prereqs. Awaits team_00
       build go (L-GATE_E held; not advanced to D pending go).
-  notes: "REGISTER 2026-06-07; DESIGN authored + refined 2026-06-07 (decision-complete). Phase A = transplants(#2)+
-    seed_cost(#14)+compare(#13 quantity-first) -> 6-to-9 live (no prereqs). Phase B-now = harvest_window(#5)+
-    succession(#6 DERIVED from harvest_window/7)+sow_date(#4 direct) -> 9-to-12 live on EXISTING data (NOT gated).
-    Phase B-later = nursery(#3)/frost(#11 region)/transplant sow_date -> 12-to-15, after WP-CB-CROPDATA-DATES
-    guided-entry tool fills planting_method+frost_class. water split to WP-CB-WATER. Builder=team_10, validator=
-    team_50. Isolated branch claude/cb-followups-2026-06-07. Awaits team_00 build go."
+  - gate: L-GATE_D
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-07"
+    validator: team_190 (Cursor/Composer, non-Claude)
+    notes: >
+      Cross-engine design validation (IR#1/#5). 0 blockers. Findings F-01..F-03 cleared (test-count,
+      attribute_name->attribute_key, title 14->15). Authorized resume build.
+      Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P004-WP-CB-CALC/L-GATE_D_VERDICT_v1.0.0.md
+  - gate: L-GATE_QA
+    result: PASS
+    date: "2026-06-07/08"
+    validator: team_50 (Cursor/Composer, non-Claude)
+    notes: >
+      Build (PASS v2) then LIVE production re-verify (PASS v3) on sfa.nimrod.bio/calc/. 14/15 goals live;
+      F-01 quantity-first confirmed; qa_probe PASS (mobile+desktop, 0 console errors). F-05 (major, basket
+      attr key mismatch profit vs compare) HOTFIXED by team_100 (commit 0a993e9) + redeployed by team_99.
+      F-02/F-03/F-04 deferred to WP-CB-UI-REDESIGN. Verdict: L-GATE_QA_VERDICT_team50_2026-06-08_v3.0.0.md
+  - gate: L-GATE_V
+    result: PASS
+    date: "2026-06-08"
+    validator: team_190 (Cursor/Composer, non-Claude)
+    notes: >
+      Constitutional final validation (IR#5). 0 blockers / 0 major. Scope 14/15 live; water(#0) deferred.
+      PHPUnit 224/224; validate_aos 0 FAIL; production verified; spec_refs resolve; no governance edits;
+      no DB mutations; IR#1 satisfied (builder Claude != validator Cursor/Composer). -> LOD500_LOCKED.
+      Verdict: _COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-CALC/LOD500-VERDICT_team190_2026-06-08_v1.0.0.md
+  notes: "COMPLETE / LOD500_LOCKED (team_190 L-GATE_V PASS 2026-06-08). 14/15 goals LIVE on
+    https://sfa.nimrod.bio/calc/ (main 0a993e9; F-05 basket hotfix + redeploy applied post-QA). water(#0)
+    deferred -> WP-CB-WATER. Cross-engine validated (team_50 QA PASS v3 + team_190 L-GATE_V). Open follow-ups:
+    WP-CB-WATER, WP-CB-CROPDATA-DATES, WP-CB-FROST-DATA, WP-CB-UI-REDESIGN (F-02/F-03/F-04 CSS polish).
+    Remaining closure: team_191 archive of _COMMUNICATION/*/SFA-S003-P004-WP-CB-CALC/ per IR#15."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
