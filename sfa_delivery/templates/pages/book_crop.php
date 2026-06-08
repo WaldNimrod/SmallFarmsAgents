@@ -1,671 +1,442 @@
 <?php
 /**
- * book_crop.php — Route /crop-book/{slug}
+ * book_crop.php — Route /crop-book/{slug} — WP-CB-UI-REDESIGN (WI-4, centerpiece)
  *
- * WP-UI-patch04: Full-width central panel (AC-U4-08), species-first section order (AC-U4-03),
- * all rich payload sections surfaced (AC-U4-04), varieties LAST.
+ * Rebuilt from team_35 crop_card mockup. Retires the Simple/Full/Deep depth
+ * switch for the mockup's UNIVERSAL DRILL-DOWN: a sticky lifecycle spine
+ * (מתי → איך → טיפול → יבול) over <details class="topic"> cards that show KEY
+ * data closed and DEPTH open. Two-level knowledge affordance (ⓘ hover tip L1 →
+ * "ידע SFA" modal L2). Card data is wired to the real crop model; gaps render
+ * as honest empty-states (never fabricated). Public-only notes (AC-U4-05).
  *
- * Section order:
- *   (1) Hero + Identity
- *   (2) Planting calendar
- *   (3) Agronomy (crop-level rollup)
- *   (4) Harvest & yield
- *   (5) Storage
- *   (6) Companions
- *   (7) Notes (public only — empty-state when none)
- *   (8) Varieties (patch03 grid) — LAST
- *
- * SECURITY: knowledge notes / notes array filtered to public-only before
- *   reaching this template. Internal notes MUST NEVER render (AC-U4-05).
- *
- * Variables from controller:
- *   $crop     — full merged array (payload_json merged in)
- *   $varieties — variety rows with agronomy + agro_delta (patch03)
+ * Controller contract (CropBookViewController::detail): crop{}, varieties[],
+ * cb1_fields{field→{value_best,unit,field_state,winning_source_class}},
+ * variety_ranges{field→{min,max,count}}, wc_art, related[], market via
+ * crop.market_link, $depth (ignored by the universal layout; kept 200 for
+ * back-compat ?depth= links).
  */
 use SFA\Lib\Template;
+
 $h = [Template::class, 'h'];
 
-use SFA\Lib\FieldRegistry;
+$crop      = is_array($crop ?? null) ? $crop : [];
+$cb        = is_array($cb1_fields ?? null) ? $cb1_fields : [];
+$ranges    = is_array($variety_ranges ?? null) ? $variety_ranges : [];
+$related   = is_array($related ?? null) ? $related : [];
+$wc_art    = $wc_art ?? null;
 
-$crop = $crop ?? [];
+$name_he  = (string)($crop['name_he'] ?? ($crop['hebrew_name'] ?? 'גידול'));
+$name_lat = (string)($crop['name_lat'] ?? ($crop['scientific_name'] ?? ''));
+$slug     = (string)($crop['slug'] ?? '');
+$fam_he   = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
+$variety_count = (int)($variety_count ?? count((array)($crop['varieties'] ?? [])));
+$desc     = trim((string)($crop['description_he'] ?? ($crop['description'] ?? '')));
 
-$page_title = (string)($crop['name_he'] ?? 'גידול');
-$page_sub   = (string)($crop['name_lat'] ?? ($crop['en_name'] ?? ($crop['scientific_name'] ?? '')));
+$page_title = $name_he;
+$page_sub   = 'ספר גידולים';
 $active     = 'crop-book';
-$back_url   = '/crop-book/';
 
-// WP-CB-1 data (passed by controller; safe defaults for backward-compat)
-$depth            = (string)($depth            ?? 'simple');
-$cb1_fields       = is_array($cb1_fields       ?? null) ? $cb1_fields       : [];
-$attributes       = is_array($attributes       ?? null) ? $attributes       : [];
-$is_complete      = (bool)($is_complete        ?? false);
-$wc_art           = $wc_art                    ?? null;
-$family_name_he   = (string)($family_name_he   ?? '');
-$assumptions_reg  = is_array($assumptions      ?? null) ? $assumptions      : [];
-// WP-CB-MOBILE Stage 2 (Deep depth) — safe defaults for backward-compat with
-// partial renders (e.g. CropCardIconTest) that don't pass these controller vars.
-$variety_ranges   = is_array($variety_ranges   ?? null) ? $variety_ranges   : [];
-$source_classes   = is_array($source_classes   ?? null) ? $source_classes   : [];
-$variety_count    = (int)($variety_count       ?? (is_array($crop['varieties'] ?? null) ? count($crop['varieties']) : 0));
-
-// Helper: render prov_value inline without Template::partial dependency
-$pv = function(string $field_name) use ($cb1_fields, $h, $crop): string {
-    $field = $cb1_fields[$field_name] ?? ['value_best'=>null,'field_state'=>'MISSING','field_name'=>$field_name,'unit'=>''];
-    $state = strtoupper((string)($field['field_state'] ?? 'MISSING'));
-    $value = $field['value_best'] ?? null;
-    $unit  = (string)($field['unit'] ?? '');
-    $slug  = (string)($crop['slug'] ?? '');
-    $fn    = $h;
-    if ($state === 'PROPOSED') {
-        return '<span class="proposed-tag">מוצע</span>';
+// ── field helpers (honest: null when absent; never fabricate) ──
+$nf = static function ($v): string {
+    $s = number_format((float)$v, 1, '.', '');
+    return rtrim(rtrim($s, '0'), '.');
+};
+$fval = static function (string $k) use ($cb) {
+    $v = $cb[$k]['value_best'] ?? null;
+    return ($v === null || $v === '') ? null : $v;
+};
+$fstate = static fn (string $k) => strtoupper((string)($cb[$k]['field_state'] ?? 'MISSING'));
+// "min–max" across varieties when ≥2 differ, else the single best value.
+$frange = static function (string $k) use ($cb, $ranges, $nf) {
+    $r = $ranges[$k] ?? null;
+    if (is_array($r) && (int)($r['count'] ?? 0) >= 2 && (float)$r['min'] !== (float)$r['max']) {
+        return $nf($r['min']) . '–' . $nf($r['max']);
     }
-    if ($state === 'MISSING' || $value === null || $value === '') {
-        $ri = '<a class="reqinfo" href="#" data-field="' . $fn($field_name) . '" data-crop="' . $fn($slug) . '">◐ בקשו נתון</a>';
-        return '<span class="val--missing">—</span> ' . $ri;
-    }
-    // WI-1: apply number formatting for numeric fields; WI-2: map unit token to Hebrew.
-    // For numeric values, fmtNumber() formats them; for enum/text, enumLabel() translates.
-    if (is_numeric($value)) {
-        $display  = \SFA\Lib\FieldRegistry::fmtNumber($value, $unit);
-        $unit_he  = \SFA\Lib\FieldRegistry::unitLabel($unit);
-    } else {
-        // Translate enum values to Hebrew before display (V02 fix).
-        $display  = \SFA\Lib\FieldRegistry::enumLabel($field_name, (string)$value);
-        $unit_he  = \SFA\Lib\FieldRegistry::unitLabel($unit);
-    }
-    $unit_html = ($unit_he !== '') ? '<small> ' . $fn($unit_he) . '</small>' : '';
-    if ($state === 'UNVALIDATED') {
-        $conf = isset($field['confidence_score']) ? round((float)$field['confidence_score'] * 100) . '%' : '';
-        $tip  = 'מקור: ' . $fn((string)($field['winning_source_class'] ?? '')) . ($conf !== '' ? ' · ביטחון ' . $conf : '');
-        return '<span class="tip">' . $fn($display) . $unit_html . '<span class="ast" title="' . $fn($tip) . '">*</span><span class="tip__pop"><b>ערך לא מאומת</b>' . $fn($tip) . '</span></span>';
-    }
-    return '<span class="pv-validated">' . $fn($display) . $unit_html . '</span>';
+    $v = $cb[$k]['value_best'] ?? null;
+    return ($v === null || $v === '') ? null : $nf($v);
+};
+// provenance cue class for a field (drives the .pv-validated dot etc.)
+$pcue = static function (string $k) use ($fstate): string {
+    return match ($fstate($k)) {
+        'VALIDATED'   => 'pv-validated',
+        'UNVALIDATED', 'UNKNOWN' => 'pv-unvalidated',
+        default       => 'pv-missing',
+    };
+};
+// months list (sowing/transplant) — tolerates array | JSON-string | value_list.
+$months = static function (string $k) use ($cb): array {
+    $v = $cb[$k]['value_best'] ?? ($cb[$k]['value_list'] ?? null);
+    if (is_string($v) && $v !== '') { $d = json_decode($v, true); $v = is_array($d) ? $d : []; }
+    return is_array($v) ? array_values(array_filter(array_map('intval', $v), fn ($m) => $m >= 1 && $m <= 12)) : [];
 };
 
-// WP-CB-MOBILE Stage 2 — plain value (no reqinfo link / asterisk markup) for the
-// Simple .ess strip + .keylist. Returns the formatted Hebrew value, or '—' when
-// the field is missing/proposed. Numeric → fmtNumber; enum → enumLabel.
-$pvPlain = function(string $field_name) use ($cb1_fields): string {
-    $field = $cb1_fields[$field_name] ?? null;
-    if ($field === null) { return '—'; }
-    $state = strtoupper((string)($field['field_state'] ?? 'MISSING'));
-    $value = $field['value_best'] ?? null;
-    if ($state === 'PROPOSED' || $state === 'MISSING' || $value === null || $value === '' || $value === []) {
-        return '—';
-    }
-    $unit = (string)($field['unit'] ?? '');
-    if (is_numeric($value)) {
-        return \SFA\Lib\FieldRegistry::fmtNumber($value, $unit);
-    }
-    return \SFA\Lib\FieldRegistry::enumLabel($field_name, (string)$value);
-};
+$dtm_range = $frange('days_to_maturity') ?? (($crop['dtm_days'] ?? null) ? $nf($crop['dtm_days']) : null);
+$spacing   = $frange('spacing_in_row_cm');
+$rows_bed  = $fval('rows_per_bed');
+$yield_m   = $frange('yield_per_bed_m');
+$nursery   = $frange('days_in_nursery');
+$seeds_g   = $fval('seeds_per_g');
+$harvest_w = $frange('harvest_window_max_days');
+$germ_days = $frange('germination_days');
+$pmethod   = $fval('planting_method');
+$frost     = $fval('frost_tolerance_class');
+$sowM      = $months('sowing_months');
+$transM    = $months('transplant_months');
 
-// Month chip helper (for sowing_months int[] array)
-$monthChips = function($months) use ($h): string {
-    static $mn = ['','ינ׳','פב׳','מר׳','אפ׳','מא׳','יו׳','יל׳','אוג','ספ׳','אוק','נו׳','דצ׳'];
-    if (!is_array($months) || empty($months)) return '<span class="val--missing">—</span>';
-    $out = '<div class="month-chips">';
-    foreach ($months as $m) {
-        $mi = (int)$m;
-        if ($mi >= 1 && $mi <= 12) {
-            $out .= '<span class="mchip">' . $h($mn[$mi]) . '</span>';
-        }
-    }
-    return $out . '</div>';
-};
-
-$slug      = (string)($crop['slug']      ?? '');
-$icon_slug = (string)($crop['icon_slug'] ?? 'leaf');
-$icon_url  = (string)($crop['icon_url']  ?? '');
-$name_he   = (string)($crop['name_he']   ?? '');
-$name_lat  = (string)($crop['name_lat']  ?? ($crop['scientific_name'] ?? ''));
-$desc_he   = (string)($crop['description_he'] ?? '');
-$family    = is_array($crop['family'] ?? null) ? $crop['family'] : null;
-$varieties = is_array($crop['varieties'] ?? null) ? $crop['varieties'] : [];
-
-// Payload sections — each may be absent / empty.
-$identity   = is_array($crop['identity']   ?? null) ? $crop['identity']   : [];
-$calendar   = is_array($crop['calendar']   ?? null) ? $crop['calendar']   : [];
-$agronomy   = is_array($crop['agronomy']   ?? null) ? $crop['agronomy']   : [];
-$harvest    = is_array($crop['harvest']    ?? null) ? $crop['harvest']    : [];
-$storage    = is_array($crop['storage']    ?? null) ? $crop['storage']    : [];
-$companions = is_array($crop['companions'] ?? null) ? $crop['companions'] : [];
-
-// Notes — public-only (AC-U4-05: internal notes MUST NOT render).
-// Controller may supply either 'notes' (new payload key) or 'knowledge_notes' (legacy key).
-$raw_notes = $crop['notes'] ?? ($crop['knowledge_notes'] ?? []);
-$raw_notes = is_array($raw_notes) ? $raw_notes : [];
-// Strict public-only filter — remove any note with is_internal_farm_use_only truthy.
-// Maps legacy knowledge_notes shape ({title_he,text_he,kind,is_internal_farm_use_only})
-// and new payload shape ({note_type, body_text, trust_tier}) into a normalised array.
-$notes = [];
-foreach ($raw_notes as $n) {
-    if (!is_array($n)) continue;
-    if (!empty($n['is_internal_farm_use_only'])) continue; // hard-gate internal notes
-    // Normalise to new payload shape if it looks like a legacy knowledge_notes entry.
-    if (!isset($n['body_text']) && isset($n['text_he'])) {
-        $n['body_text']  = (string)$n['text_he'];
-        $n['note_type']  = (string)($n['kind'] ?? 'general');
-        $n['trust_tier'] = '';
-    }
-    $notes[] = $n;
+// plants per bed-metre = (100 / spacing) × rows  (computed, honest formula)
+$plants_m = null;
+$sp1 = $fval('spacing_in_row_cm');
+if ($sp1 !== null && (float)$sp1 > 0 && $rows_bed !== null && (float)$rows_bed > 0) {
+    $plants_m = $nf((100 / (float)$sp1) * (float)$rows_bed);
 }
-// Stable copy of the public-notes array. Some payload macros (e.g. crop_storage.php)
-// historically used a local $notes inside the shared include scope; capturing
-// $public_notes here makes the general-notes filters below immune to any such clobber.
-$public_notes = $notes;
 
-// WP-CB-MOBILE dedup: the legacy in-page anchor nav ($sections + nav.cb-section-nav)
-// and the standalone legacy `cb-section` / `cb-vars` body blocks were removed — the
-// Simple/Full/Deep depth panels (#depth-content) are now the single source of the
-// crop body. Calendar lives in Simple; the 17 enrichment fields in Full/Deep topics;
-// varieties in the Deep .vtable; agronomy/harvest/storage/companions + general notes
-// migrated into the Deep panel; the crop description into the .crophero lede.
+// harvest months derived from (transplant ∪ sowing) + dtm (honest derivation)
+$harvestM = [];
+$dtmNum = (float)($fval('days_to_maturity') ?? ($crop['dtm_days'] ?? 0));
+if ($dtmNum > 0) {
+    foreach (($transM ?: $sowM) as $m) {
+        $harvestM[] = (($m - 1 + (int)round($dtmNum / 30)) % 12) + 1;
+    }
+    $harvestM = array_values(array_unique($harvestM));
+}
+
+$MON = ['ינו','פבר','מרץ','אפר','מאי','יוני','יולי','אוג','ספט','אוק','נוב','דצמ'];
+$MON_FULL = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+$nowMonth = (int)date('n');
+$canSowNow = in_array($nowMonth, array_merge($sowM, $transM), true);
+$has_calendar = !empty($sowM) || !empty($transM) || !empty($harvestM);
+
+// market chip
+$mlink = is_array($crop['market_link'] ?? null) ? $crop['market_link'] : null;
+
+// public notes (rich payload) — body_text list (honest, public-only)
+$pub_notes = array_values(array_filter((array)($crop['notes'] ?? []), static fn ($n) => is_array($n) && !empty($n['body_text']) && empty($n['is_internal_farm_use_only'])));
+
+// storage + companions (real payload sections)
+$storage    = is_array($crop['storage'] ?? null) ? $crop['storage'] : [];
+$companions = array_values(array_filter((array)($crop['companions'] ?? []), 'is_array'));
+$comp_good  = array_filter($companions, static fn ($c) => ($c['compatibility'] ?? '') === 'beneficial');
+$comp_bad   = array_filter($companions, static fn ($c) => ($c['compatibility'] ?? '') === 'antagonistic');
+
+$frost_lbl = ['hardy'=>'עמיד לקרה','half_hardy'=>'חצי-עמיד','semi_hardy'=>'חצי-עמיד','tender'=>'רגיש לקרה','very_tender'=>'רגיש מאוד'];
+$pm_lbl    = ['transplant'=>'שתילה ממשתלה','direct_seed'=>'זריעה ישירה','direct'=>'זריעה ישירה'];
+
+// knowledge ⓘ helper — emits the two-level affordance (hover tip → modal)
+$qm = static function (string $title, string $short, string $rich = '') use ($h): string {
+    $d = $rich !== '' ? ' data-d="' . $h($rich) . '"' : '';
+    return '<a class="qm" role="button" tabindex="0" data-t="' . $h($title) . '" data-s="' . $h($short) . '"' . $d . '>ⓘ</a>';
+};
 
 ob_start();
 ?>
-<div class="cb-crop-detail" data-crop-slug="<?= $h($slug) ?>">
+<div class="cb-crop-detail wrap">
 
-  <!-- ══ WP-CB-1: Crop Hero + Depth Tabs ════════════════════════════ -->
-  <?php
-  $state_class = $is_complete ? 'statebadge--complete' : 'statebadge--partial';
-  $state_label = $is_complete ? '✓ נתונים מלאים' : '! נתונים חלקיים';
-  // Watercolor art or emoji fallback
-  $art_html_v1 = '';
-  if ($wc_art !== null) {
-      $art_html_v1 = '<img src="/public_assets/img/crops/' . $h($wc_art) . '" alt="' . $h($name_he) . '" loading="lazy">';
-  } else {
-      // emoji fallback by crop category
-      $emojis = ['tomato'=>'🍅','cucumber'=>'🥒','pepper'=>'🌶','zucchini'=>'🥬','lettuce'=>'🥬','carrot'=>'🥕','basil'=>'🌿'];
-      $emoji  = $emojis[$icon_slug] ?? '🌱';
-      $art_html_v1 = '<span class="veg" aria-hidden="true">' . $emoji . '</span>';
-  }
-  ?>
-  <?php
-  // WP-CB-MOBILE Stage 2 (FIX 2a' · depth control in the HEADER, not in-body).
-  // Compact 3-way icon segmented control: פשוט ◔ · מלא ▤ · העמקה ⌖. The active
-  // mode shows its Hebrew label (CSS: .sh__depths button.is-active span). Reuses
-  // the same data-depths/data-depth hooks crop-book-v1.js wireDepths() drives, so
-  // switching is client-side; ?depth= still server-renders the initial state.
-  $depth_modes = [
-      ['key'=>'simple', 'g'=>'◔', 'label'=>'פשוט'],
-      ['key'=>'full',   'g'=>'▤', 'label'=>'מלא'],
-      ['key'=>'deep',   'g'=>'⌖', 'label'=>'העמקה'],
-  ];
-  ?>
-  <div class="cb-crop-toolbar">
-    <div class="sh__depths" data-depths="depth-content" role="tablist" aria-label="עומק תצוגה">
-      <?php foreach ($depth_modes as $dm): ?>
-      <button type="button"
-        data-depth="<?= $h($dm['key']) ?>"
-        class="<?= $depth === $dm['key'] ? 'is-active' : '' ?>"
-        role="tab"
-        aria-selected="<?= $depth === $dm['key'] ? 'true' : 'false' ?>"
-        title="<?= $h($dm['label']) ?>"
-      ><span class="g" aria-hidden="true"><?= $dm['g'] ?></span><span><?= $h($dm['label']) ?></span></button>
-      <?php endforeach; ?>
-    </div>
+  <!-- breadcrumb (right) · calculator button (left end) -->
+  <div class="pagebar">
+    <div class="bc"><a href="/crop-book/">ספר גידולים</a><?php if ($fam_he !== ''): ?> › <a href="/crop-book/family"><?= $h($fam_he) ?></a><?php endif; ?> › <b><?= $h($name_he) ?></b></div>
+    <a class="btn btn--leaf calcbtn" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> מחשבון לגידול זה ←</a>
   </div>
 
-  <section class="crophero" id="identity">
-    <div class="crophero__art"><?= $art_html_v1 ?></div>
-    <div>
-      <?php
-      // Latin/family breadcrumb — forced LTR (Latin + variety count read L→R).
-      $bc_bits = [];
-      if ($name_lat !== '') { $bc_bits[] = $name_lat; }
-      if ($family && ($family['name_he'] ?? '') !== '') { $bc_bits[] = (string)$family['name_he']; }
-      if ($variety_count > 0) { $bc_bits[] = $variety_count . ' זנים'; }
-      ?>
-      <?php if (!empty($bc_bits)): ?>
-      <div class="crophero__bc" dir="ltr" style="unicode-bidi:isolate"><?= $h(implode(' · ', $bc_bits)) ?></div>
-      <?php endif; ?>
-      <h1><span class="gj-underline"><?= $h($name_he) ?></span></h1>
-      <?php if ($name_lat !== ''): ?>
-        <p class="crophero__sci"><em><?= $h($name_lat) ?></em></p>
-      <?php endif; ?>
-      <?php /* WP-CB-MOBILE dedup: crop description migrated here from the
-               removed .cb-crop-lede hero remnant, so it shows at all depths. */ ?>
-      <?php if ($desc_he !== ''): ?>
-        <p class="crophero__lede"><?= $h($desc_he) ?></p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__art">
+      <?php if ($wc_art): ?>
+        <img src="/public_assets/img/crops/<?= $h($wc_art) ?>" alt="<?= $h($name_he) ?>" loading="eager" decoding="async">
+      <?php else: ?>
+        <span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-<?= $h((string)($crop['icon_slug'] ?? 'leaf')) ?>"/></svg></span>
       <?php endif; ?>
     </div>
-    <div class="crophero__state">
-      <span class="statebadge <?= $state_class ?>">
-        <span class="d"></span><?= $state_label ?>
-      </span>
+    <div>
+      <h1 class="hero__name"><?= $h($name_he) ?></h1>
+      <div class="hero__latin"><?php if ($name_lat !== ''): ?><span dir="ltr"><?= $h($name_lat) ?></span><?php endif; ?><?php if ($fam_he !== ''): ?> · משפחת <?= $h($fam_he) ?><?php endif; ?><?php if ($variety_count > 0): ?> · <span class="num"><?= $variety_count ?></span> זנים<?php endif; ?></div>
+
+      <?php if ($desc !== ''): ?>
+        <p class="hero__sum"><?= $h($desc) ?></p>
+      <?php else: ?>
+        <p class="hero__sum muted">תיאור הגידול עדיין לא פורסם — יתווסף עם מודל התוכן. בינתיים, הנתונים החקלאיים למטה.</p>
+      <?php endif; ?>
+
+      <div class="hero__row">
+        <?php if ($canSowNow): ?>
+          <span class="pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"/></svg> אפשר לשתול עכשיו · <?= $h($MON_FULL[$nowMonth - 1]) ?></span>
+        <?php endif; ?>
+        <?php if ($frost !== null && isset($frost_lbl[(string)$frost])): ?>
+          <span class="tag"><svg class="gi" aria-hidden="true"><use href="#i-snow"/></svg> <?= $h($frost_lbl[(string)$frost]) ?></span>
+        <?php endif; ?>
+        <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
+          <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג ←</a>
+        <?php endif; ?>
+      </div>
+
+      <div class="glance">
+        <?php if ($dtm_range !== null): ?><div><b class="num"><?= $h($dtm_range) ?></b><span>ימים להבשלה</span></div><?php endif; ?>
+        <?php if ($spacing !== null): ?><div><b class="num"><?= $h($spacing) ?></b><span>מרווח בשורה (ס״מ)</span></div><?php endif; ?>
+        <?php if ($plants_m !== null): ?><div><b class="num">~<?= $h($plants_m) ?></b><span>צמחים למטר ערוגה</span></div><?php endif; ?>
+        <?php if ($yield_m !== null): ?><div><b class="num"><?= $h($yield_m) ?></b><span>ק״ג / מ׳ ערוגה</span></div><?php endif; ?>
+      </div>
     </div>
   </section>
 
-  <div id="depth-content">
+  <!-- lifecycle spine -->
+  <nav class="stagenav" aria-label="שלבי הגידול">
+    <ul>
+      <li><a href="#s1"><span class="n">1</span> מתי לשתול</a></li>
+      <li><a href="#s2"><span class="n">2</span> איך לשתול</a></li>
+      <li><a href="#s3"><span class="n">3</span> טיפול לאורך העונה</a></li>
+      <li><a href="#s4"><span class="n">4</span> יבול צפוי</a></li>
+    </ul>
+  </nav>
 
-    <!-- ── SIMPLE depth (gardener-focused, genuinely minimal) ──
-         essentials strip → calendar → one key value per topic. NO full stat
-         block / per-field dump (WP-CB-MOBILE §4 — Simple ⊂ Full ⊂ Deep). -->
-    <div data-depth-view="simple"<?= $depth !== 'simple' ? ' style="display:none"' : '' ?>>
-      <?php
-      // Essentials a home gardener needs: spacing · DTM · water · method.
-      // Built from the cparam icon vocabulary shared with the entry cards.
-      $space_v  = $pvPlain('spacing_in_row_cm');
-      $dtm_v    = $pvPlain('days_to_maturity');
-      $method_v = $pvPlain('planting_method');
-      $irr_v    = $pvPlain('irrigation_type');
-      ?>
-      <div class="ess">
-        <span class="cparam cparam--space"><span class="g" aria-hidden="true">⇲</span><span class="num" dir="ltr"><?= $h($space_v) ?></span><small>מרווח ס״מ</small></span>
-        <span class="cparam cparam--dtm"><span class="g" aria-hidden="true">⏳</span><span class="num" dir="ltr"><?= $h($dtm_v) ?></span><small>ימים לקטיף</small></span>
-        <?php if ($irr_v !== '—'): ?>
-        <span class="cparam cparam--water"><span class="g" aria-hidden="true">💧</span><?= $h($irr_v) ?><small>השקיה</small></span>
-        <?php endif; ?>
-        <?php if ($method_v !== '—'): ?>
-        <span class="cparam cparam--method"><span class="g" aria-hidden="true">🌱</span><?= $h($method_v) ?></span>
-        <?php endif; ?>
-      </div>
-
-      <!-- seasons → planting calendar (reuse the Stage-1 .pcal macro as-is) -->
-      <?php if (!empty($calendar)): ?>
-        <?php include __DIR__ . '/../macros/crop_calendar.php'; ?>
-      <?php endif; ?>
-
-      <!-- one key value per topic (no per-field dump) -->
-      <h3 class="gj-h3">העיקר, לפי נושא</h3>
-      <?php
-      // Each row picks the single headline datum for its topic; '—' when absent.
-      $key_rows = [
-          ['ic'=>'🌱', 'color'=>'var(--t-nursery)', 'k'=>'משתלה', 'field'=>'days_in_nursery',          'unit'=>'ימ׳ במשתלה'],
-          ['ic'=>'🌿', 'color'=>'var(--t-grow)',    'k'=>'גידול', 'field'=>'days_to_maturity',         'unit'=>'ימים להבשלה'],
-          ['ic'=>'🧺', 'color'=>'var(--t-harvest)', 'k'=>'קציר',  'field'=>'harvest_window_max_days',   'unit'=>'ימי חלון קציר'],
-          ['ic'=>'⚖', 'color'=>'var(--t-yield)',   'k'=>'יבול',  'field'=>'yield_per_bed_m',           'unit'=>'ק״ג/מ׳'],
-      ];
-      ?>
-      <div class="keylist">
-        <?php foreach ($key_rows as $kr):
-          $kv = $pvPlain($kr['field']);
+  <!-- STAGE 1 · מתי -->
+  <section class="stage" id="s1">
+    <div class="stage__head"><span class="stage__n">1</span><span class="stage__t">מתי לשתול<small>חלון הזריעה, השתילה והקציר לאורך השנה</small></span></div>
+    <?php if ($has_calendar): ?>
+      <div class="cal__grid">
+        <span class="rl"></span>
+        <?php foreach ($MON as $m): ?><span class="mh"><?= $h($m) ?></span><?php endforeach; ?>
+        <?php
+          $rows_cal = [];
+          if (!empty($sowM))     { $rows_cal[] = ['זריעה', 'sow',   $sowM]; }
+          if (!empty($transM))   { $rows_cal[] = ['שתילה', 'trans', $transM]; }
+          if (!empty($harvestM)) { $rows_cal[] = ['קציר',  'harv',  $harvestM]; }
+          foreach ($rows_cal as [$label, $cls, $set]):
         ?>
-        <div class="keyrow">
-          <span class="ic" aria-hidden="true" style="background:<?= $kr['color'] ?>"><?= $kr['ic'] ?></span>
-          <span class="k"><?= $h($kr['k']) ?></span>
-          <span class="v"><?php if ($kv === '—'): ?><span class="val--missing">—</span><?php else: ?><span class="num" dir="ltr"><?= $h($kv) ?></span> <small><?= $h($kr['unit']) ?></small><?php endif; ?></span>
-        </div>
+          <span class="rl"><?= $h($label) ?></span>
+          <?php for ($m = 1; $m <= 12; $m++): ?>
+            <span class="cal__cell<?= in_array($m, $set, true) ? ' ' . $cls : '' ?>"></span>
+          <?php endfor; ?>
         <?php endforeach; ?>
       </div>
-
-      <p class="muted simple-more">רוצים את כל הנתונים? עברו ל<b>מלא</b> · להשוואת זנים ומקורות — <b>העמקה</b>.</p>
-
-      <!-- Rotation hint -->
-      <?php if ($family_name_he !== ''):
-        $family_lat = (string)($family['slug'] ?? '');
-        include __DIR__ . '/../macros/rotation_hint.php';
-      endif; ?>
-    </div>
-
-    <?php
-    // Shared 17-field topic taxonomy for Full + Deep (Simple ⊂ Full ⊂ Deep).
-    // Fields (17): spacing_in_row_cm, rows_per_bed, nutrient_removal_n_kg_per_ha,
-    // planting_method, days_in_nursery, seeds_per_g, sowing_months,
-    // irrigation_type, root_depth_class, common_pests, foliar_feeding_program,
-    // days_to_maturity, harvest_window_max_days, succession_interval_weeks,
-    // frost_tolerance_class, yield_per_bed_m, price_documented.
-    // Topic taxonomy MUST stay in strict parity (membership + order) with the
-    // canon SSoT organic_market_agent/crop_book/canon/topics.py (13 topics,
-    // AC-02 / test_crop_topics.py::test_php_parity). The 5 field-less topics
-    // (varieties/equipment/bedprep/care/storage) are listed for canon parity but
-    // skipped at render time by crop_topics.php (`if (empty($topic['fields']))`),
-    // so no empty cards appear. `varieties` is surfaced via the Deep variety table.
-    $topics = [
-      ['key'=>'varieties',  'icon'=>'🌿', 'label'=>'זנים',            'class'=>'grow',    'fields'=>[]],
-      ['key'=>'spacing',    'icon'=>'📏', 'label'=>'מרווח ופריסה',   'class'=>'grow',    'fields'=>['spacing_in_row_cm','rows_per_bed']],
-      ['key'=>'equipment',  'icon'=>'⚙',  'label'=>'ציוד וכיוונון',   'class'=>'grow',    'fields'=>[]],
-      ['key'=>'soil',       'icon'=>'🪱', 'label'=>'קרקע ודישון',    'class'=>'inputs',  'fields'=>['nutrient_removal_n_kg_per_ha']],
-      ['key'=>'bedprep',    'icon'=>'🌾', 'label'=>'הכנת ערוגה',      'class'=>'grow',    'fields'=>[]],
-      ['key'=>'sowing',     'icon'=>'🌱', 'label'=>'משתלה / שתילה',  'class'=>'nursery', 'fields'=>['planting_method','days_in_nursery','seeds_per_g','sowing_months']],
-      ['key'=>'irrigation', 'icon'=>'💧', 'label'=>'השקיה ושורשים',  'class'=>'grow',    'fields'=>['irrigation_type','root_depth_class']],
-      ['key'=>'care',       'icon'=>'✋', 'label'=>'טיפוח ועישוב',    'class'=>'grow',    'fields'=>[]],
-      ['key'=>'pest',       'icon'=>'🐛', 'label'=>'מזיקים ומחלות',  'class'=>'pest',    'fields'=>['common_pests','foliar_feeding_program']],
-      ['key'=>'harvest',    'icon'=>'🥬', 'label'=>'קציר',           'class'=>'harvest', 'fields'=>['days_to_maturity','harvest_window_max_days']],
-      ['key'=>'storage',    'icon'=>'❄',  'label'=>'שטיפה ואחסון',    'class'=>'harvest', 'fields'=>[]],
-      ['key'=>'succession', 'icon'=>'🔁', 'label'=>'רצף ועמידות',    'class'=>'yield',   'fields'=>['succession_interval_weeks','frost_tolerance_class']],
-      ['key'=>'yield_inc',  'icon'=>'💰', 'label'=>'יבול והכנסה',    'class'=>'yield',   'fields'=>['yield_per_bed_m','price_documented']],
-    ];
-    ?>
-
-    <!-- ── FULL depth (topic overview + every field by topic) ── -->
-    <div data-depth-view="full"<?= $depth !== 'full' ? ' style="display:none"' : '' ?>>
-      <!-- topic overview: one headline value per topic group -->
-      <h3 class="gj-h3">סקירה לפי נושא</h3>
-      <div class="tsum">
-        <div class="tcard tcard--nursery">
-          <div class="tcard__head"><span class="tcard__ic" aria-hidden="true">🌱</span><span class="tcard__t">משתלה</span></div>
-          <div class="tcard__rows">
-            <div class="tcard__row"><span class="k">שיטה</span><span class="v"><?= $pv('planting_method') ?></span></div>
-            <div class="tcard__row"><span class="k">במשתלה</span><span class="v"><?= $pv('days_in_nursery') ?></span></div>
-          </div>
-        </div>
-        <div class="tcard tcard--grow">
-          <div class="tcard__head"><span class="tcard__ic" aria-hidden="true">🌿</span><span class="tcard__t">גידול</span></div>
-          <div class="tcard__rows">
-            <div class="tcard__row"><span class="k">מרווח בשורה</span><span class="v"><?= $pv('spacing_in_row_cm') ?></span></div>
-            <div class="tcard__row"><span class="k">להבשלה</span><span class="v"><?= $pv('days_to_maturity') ?></span></div>
-          </div>
-        </div>
-        <div class="tcard tcard--yield">
-          <div class="tcard__head"><span class="tcard__ic" aria-hidden="true">⚖</span><span class="tcard__t">יבול</span></div>
-          <div class="tcard__rows">
-            <div class="tcard__row"><span class="k">ק״ג/מ׳</span><span class="v"><?= $pv('yield_per_bed_m') ?></span></div>
-            <div class="tcard__row"><span class="k">מחיר</span><span class="v"><?= $pv('price_documented') ?></span></div>
-          </div>
-        </div>
+      <div class="cal__legend">
+        <?php if (!empty($sowM)): ?><span><i style="background:var(--gj-leaf-soft)"></i>זריעה במשתלה</span><?php endif; ?>
+        <?php if (!empty($transM)): ?><span><i style="background:var(--gj-leaf)"></i>שתילה לשדה</span><?php endif; ?>
+        <?php if (!empty($harvestM)): ?><span><i style="background:var(--gj-sun)"></i>קציר (מוערך מימי ההבשלה)</span><?php endif; ?>
       </div>
+    <?php else: ?>
+      <div class="note">עדיין אין נתוני לוח זריעה/שתילה לגידול זה — <a href="/community">עזרו להשלים</a>.</div>
+    <?php endif; ?>
+  </section>
 
-      <h3 class="gj-h3">כל הנתונים</h3>
-      <?php
-      $is_deep = false;
-      include __DIR__ . '/../macros/crop_topics.php';
-      ?>
+  <!-- STAGE 2 · איך -->
+  <section class="stage" id="s2">
+    <div class="stage__head"><span class="stage__n">2</span><span class="stage__t">איך לשתול<small>גידול השתילים במשתלה, ואז השתילה בשדה — לחצו להרחבה</small></span></div>
 
-      <?php
-      // WP-CB-MOBILE dedup: general public notes migrated here from the removed
-      // legacy `notes` section. crop_topics.php only surfaces pest_disease /
-      // irrigation note types (in the pest topic), so the remaining public note
-      // types (general/tip/warning/nutrition/…) would otherwise be lost. Render
-      // them via the same crop_notes.php macro, scoped to the non-pest types.
-      $general_notes = array_values(array_filter($public_notes, static function ($n) {
-          return !in_array((string)($n['note_type'] ?? ''), ['pest_disease', 'irrigation'], true);
-      }));
-      if (!empty($general_notes)):
-      ?>
-      <h3 class="gj-h3">הערות</h3>
-      <div class="cb-block">
-        <?php
-        // crop_notes.php reads $notes from include scope — swap in the filtered
-        // general set for the render, then restore the page-level $notes (the
-        // Deep panel's crop_topics.php still needs the full list for its pest topic).
-        $notes_all = $notes; $notes = $general_notes;
-        include __DIR__ . '/../macros/crop_notes.php';
-        $notes = $public_notes;
-        ?>
-      </div>
-      <?php endif; ?>
-    </div>
-
-    <!-- ── DEEP depth (Full topics + per-datum range + EX/PR/WR sources
-         + variety comparison table + source-sheet topic) ── -->
-    <div data-depth-view="deep"<?= $depth !== 'deep' ? ' style="display:none"' : '' ?>>
-      <p class="gj-lede deep-lede">כמו «מלא» — אך לכל נתון נפתחים <b>הטווח בין הזנים</b> ו<b>המקורות</b>.</p>
-
-      <?php
-      $is_deep = true;
-      include __DIR__ . '/../macros/crop_topics.php';
-      ?>
-
-      <div class="cb-block">
-        <h3 class="gj-h3">השוואת זנים</h3>
-        <?php if (empty($varieties)): ?>
-          <p class="muted">אין זנים מתועדים לגידול זה.</p>
-        <?php else: ?>
-        <div class="vtable-wrap">
-          <table class="vtable">
-            <thead>
-              <tr>
-                <th>זן</th>
-                <th>ימים להבשלה</th>
-                <th>מרווח (ס״מ)</th>
-                <th>יבול (ק״ג/מ׳)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($varieties as $v):
-                $isDefault = !empty($v['is_default']);
-                $agro = is_array($v['agronomy'] ?? null) ? $v['agronomy'] : [];
-              ?>
-              <tr class="<?= $isDefault ? 'v-default' : '' ?>">
-                <td><span class="v-name"><?= $h((string)($v['name_he'] ?? ($v['name'] ?? ''))) ?>
-                  <?php if ($isDefault): ?><span class="star" aria-hidden="true">★</span><?php endif; ?>
-                </span></td>
-                <?php
-                  $_dtm  = $agro['days_to_maturity'] ?? ($v['dtm_days'] ?? null);
-                  $_spc  = $agro['in_row_spacing_cm'] ?? ($agro['spacing_in_row_cm'] ?? null);
-                  $_yld  = $agro['avg_yield_per_bed_m'] ?? ($agro['yield_per_bed_m'] ?? null);
-                ?>
-                <td class="num" dir="ltr"><?= $h($_dtm !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_dtm, 'days') : '—') ?></td>
-                <td class="num" dir="ltr"><?= $h($_spc !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_spc) : '—') ?></td>
-                <td class="num" dir="ltr"><?= $h($_yld !== null ? \SFA\Lib\FieldRegistry::fmtNumber($_yld) : '—') ?></td>
-              </tr>
-              <?php endforeach; ?>
-            </tbody>
-            <?php if (count($varieties) > 1): ?>
-            <tfoot>
-              <tr><td colspan="4"><span class="avg-lbl">ממוצע כל הזנים</span></td></tr>
-            </tfoot>
-            <?php endif; ?>
-          </table>
-        </div>
+    <?php $nurseryKey = ($nursery !== null) ? '<b>שתילה ממשתלה</b> · ' . $h($nursery) . ' ימים' : ($pmethod !== null && isset($pm_lbl[(string)$pmethod]) ? '<b>' . $h($pm_lbl[(string)$pmethod]) . '</b>' : '<span class="muted">נתוני משתלה חסרים</span>'); ?>
+    <details class="topic"<?= ($nursery !== null) ? ' open' : '' ?>>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-sprout"/></svg></span><span class="topic__t">גידול שתילים</span><span class="topic__key"><?= $nurseryKey ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <dl class="dl">
+          <?php if ($pmethod !== null && isset($pm_lbl[(string)$pmethod])): ?><div><dt>שיטת ריבוי <?= $qm('שיטת ריבוי', 'האם זורעים ישירות בשדה או מגדלים שתיל במשתלה ומעבירים.') ?></dt><dd><?= $h($pm_lbl[(string)$pmethod]) ?></dd></div><?php endif; ?>
+          <?php if ($nursery !== null): ?><div><dt>ימים במשתלה <?= $qm('ימים במשתלה', 'מספר הימים מהזריעה עד שהשתיל מוכן לשדה.', 'rich-nursery') ?></dt><dd><span class="num"><?= $h($nursery) ?></span><span class="u">ימים</span></dd></div><?php endif; ?>
+          <?php if ($germ_days !== null): ?><div><dt>ימים לנביטה <?= $qm('ימים לנביטה', 'מהזריעה עד הופעת הנבט.') ?></dt><dd><span class="num"><?= $h($germ_days) ?></span><span class="u">ימים</span></dd></div><?php endif; ?>
+          <?php if ($seeds_g !== null): ?><div><dt>זרעים לגרם <?= $qm('זרעים לגרם', 'להמרת משקל זרעים לכמות שתילים.') ?></dt><dd><span class="num">~<?= $h($nf($seeds_g)) ?></span></dd></div><?php endif; ?>
+        </dl>
+        <?php if ($nursery === null && $pmethod === null && $germ_days === null && $seeds_g === null): ?>
+          <p class="muted">נתוני גידול שתילים יתווספו עם השלמת המידע. <a href="/community">תרמו נתון ←</a></p>
         <?php endif; ?>
       </div>
+    </details>
 
-      <!-- Source-sheet topic: provenance for the key field (kept; honest data) -->
-      <h3 class="gj-h3">מקורות — ימים להבשלה</h3>
-      <div class="cb-block">
-        <?php
-        $prov_sources = [];
-        if (!empty($enrichment['days_to_maturity'])) {
-            $r = $enrichment['days_to_maturity'];
-            $prov_sources[] = [
-                'source_class' => strtoupper((string)($r['winning_source_class'] ?? 'WR')),
-                'source_name'  => 'מקור ראשי',
-                'value'        => (string)($r['value_best'] ?? '—'),
-                'unit'         => 'ימים',
-                'confidence_score' => (float)($r['confidence_score'] ?? 0.0),
-                'is_winner'    => true,
-            ];
-        }
-        $field_name = 'days_to_maturity';
-        $label_he   = 'ימים להבשלה';
-        $sources    = $prov_sources;
-        include __DIR__ . '/../macros/prov_table.php';
-        ?>
-      </div>
-
-      <!-- Source trust hierarchy (EX > PR > WR) — explains how the governing value is chosen -->
-      <div class="emptybox srchier">
-        <span class="emptybox__ic" aria-hidden="true">⛓</span>
-        <div>
-          <b>היררכיית מקורות</b>
-          <p>EX (מומחה) · PR (מקצועי) · WR (רשת). הערך הקובע נבחר לפי דירוג אמון — EX קודם ל-PR, ו-PR קודם ל-WR.</p>
-        </div>
-      </div>
-
-      <?php
-      // WP-CB-MOBILE dedup: the payload-driven sections (agronomy rollup, harvest,
-      // storage, companions) previously lived in standalone legacy `cb-section`
-      // blocks below #depth-content. Their data ($crop['agronomy'|'harvest'|
-      // 'storage'|'companions']) is NOT part of the $cb1_fields enrichment set the
-      // depth topics render, so to avoid content loss they are migrated here into
-      // Deep (the most-complete view). Each macro self-guards on empty, and each
-      // block is gated on !empty() so no empty cards appear.
-      ?>
-      <?php if (!empty($agronomy)): ?>
-      <div class="cb-block">
-        <h3 class="gj-h3">אגרונומיה</h3>
-        <?php include __DIR__ . '/../macros/crop_agronomy.php'; ?>
-      </div>
-      <?php endif; ?>
-
-      <?php if (!empty($harvest)): ?>
-      <div class="cb-block">
-        <h3 class="gj-h3">קטיף ויבול</h3>
-        <?php include __DIR__ . '/../macros/crop_harvest.php'; ?>
-      </div>
-      <?php endif; ?>
-
-      <?php if (!empty($storage)): ?>
-      <div class="cb-block">
-        <h3 class="gj-h3">אחסון לאחר קטיף</h3>
-        <?php include __DIR__ . '/../macros/crop_storage.php'; ?>
-      </div>
-      <?php endif; ?>
-
-      <?php if (!empty($companions)): ?>
-      <div class="cb-block">
-        <h3 class="gj-h3">ליווי גידולים</h3>
-        <?php include __DIR__ . '/../macros/crop_companions.php'; ?>
-      </div>
-      <?php endif; ?>
-
-      <?php
-      // General public notes (non-pest types) — also surfaced in Deep so the
-      // deepest view is a superset of Full. Same swap technique as Full.
-      $general_notes_deep = array_values(array_filter($public_notes, static function ($n) {
-          return !in_array((string)($n['note_type'] ?? ''), ['pest_disease', 'irrigation'], true);
-      }));
-      if (!empty($general_notes_deep)):
-      ?>
-      <div class="cb-block">
-        <h3 class="gj-h3">הערות</h3>
-        <?php
-        $notes_all = $notes; $notes = $general_notes_deep;
-        include __DIR__ . '/../macros/crop_notes.php';
-        $notes = $public_notes;
-        ?>
-      </div>
-      <?php endif; ?>
-    </div>
-
-  </div><!-- #depth-content -->
-
-  <!-- Calculator modal overlay (yield, #8) -->
-  <?php
-  $yf  = $cb1_fields['yield_per_bed_m'] ?? ['value_best'=>null,'field_state'=>'MISSING','field_name'=>'yield_per_bed_m','unit'=>'ק״ג/מ׳'];
-  $yState = strtoupper((string)($yf['field_state'] ?? 'MISSING'));
-  $yVal = (string)($yf['value_best'] ?? '');
-  $yDisabled = ($yState === 'MISSING');
-  $stdLen = (int)(($assumptions_reg['std_bed_length_m']['default'] ?? 30));
-  $serverYield = $yDisabled ? '—' : (is_numeric($yVal) ? number_format((float)$yVal * $stdLen, 1) : '—');
-  ?>
-  <div class="calcmodal" id="modal-calc-yield">
-    <div class="calcmodal__overlay" data-calc-close></div>
-    <div class="calcmodal__card">
-      <div class="calcmodal__head">
-        <span class="gj-eyebrow">מחשבון 8</span>
-        <span class="calcmodal__title">יבול צפוי</span>
-        <button class="calcmodal__close" data-calc-close type="button" aria-label="סגור">✕</button>
-      </div>
-      <div class="calcmodal__body">
-        <div class="cv<?= $yDisabled ? ' is-disabled' : '' ?>" data-calc="yield">
-          <div class="cv__head">
-            <span class="cv__no">8</span>
-            <div class="cv__title">יבול צפוי<small>expected yield</small></div>
-            <span class="tier tier--leaf cv__aud">● שני הקהלים</span>
+    <?php $fieldKey = ($spacing !== null) ? '<b>מרווח ' . $h($spacing) . ' ס״מ</b>' . ($rows_bed !== null ? ' · ' . $h($nf($rows_bed)) . ' שורות' : '') . ($plants_m !== null ? ' · ~' . $h($plants_m) . ' צמ׳/מ׳' : '') : '<span class="muted">נתוני מרווח חסרים</span>'; ?>
+    <details class="topic"<?= ($spacing !== null) ? ' open' : '' ?>>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-seedling"/></svg></span><span class="topic__t">שתילה בשדה</span><span class="topic__key"><?= $fieldKey ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <?php if ($spacing !== null && $rows_bed !== null): ?>
+          <div class="spaceviz">
+            <div class="big"><?= $h($spacing) ?><small>מרווח בשורה (ס״מ) <?= $qm('מרווח בשורה', 'המרחק בין שתיל לשתיל לאורך השורה — המספר שקובע את הצפיפות בפועל.', 'rich-spacing') ?></small></div>
+            <span class="arrow">×</span>
+            <div class="big"><?= $h($nf($rows_bed)) ?><small>שורות בערוגה</small></div>
+            <?php if ($plants_m !== null): ?><span class="arrow">=</span><div class="big">~<?= $h($plants_m) ?><small>צמחים למטר ערוגה <?= $qm('צמחים למטר ערוגה', 'מחושב מהמרווח ומספר השורות.', 'rich-plantsm') ?></small></div><?php endif; ?>
           </div>
-          <div class="cv__body">
-            <?php if ($yDisabled): ?>
-            <div class="cv__disabled">
-              <span class="ic">🔒</span>
-              <div><h5>חסר נתון: יבול למ׳</h5>
-              <a class="reqinfo" href="#" data-field="yield_per_bed_m" data-crop="<?= $h($slug) ?>">◐ בקשו נתון</a></div>
-            </div>
-            <?php else: ?>
-            <div class="cv__uses">ערכי ספר</div>
-            <div class="bvrow">
-              <span class="bv<?= $yState === 'UNVALIDATED' ? ' bv--ast' : '' ?>"
-                    data-book="yield_per_m" data-val="<?= $h($yVal) ?>">
-                <span data-field="yield_per_bed_m">יבול/מ׳</span>
-                <b><?= $h($yVal) ?></b><small> ק״ג</small>
-                <a class="bv__link" href="/crop-book/<?= $h($slug) ?>/?depth=full">↗ ספר</a>
-                <?= $yState === 'UNVALIDATED' ? '<span class="ast" title="ערך לא מאומת">*</span>' : '' ?>
-              </span>
-            </div>
-            <div class="cv__uses">קלט שלך</div>
-            <div class="cv__inputs">
-              <label class="ipt">
-                <label>אורך ערוגה</label>
-                <span class="ipt__box">
-                  <input type="number" data-k="bed_len" value="<?= $h((string)$stdLen) ?>" min="1"/>
-                  <span class="u">מ׳</span>
-                </span>
-              </label>
-            </div>
-            <div class="cv__result">
-              <span class="lbl">יבול צפוי</span>
-              <span class="big" data-result><?= $h($serverYield) ?> <small>ק״ג</small></span>
-            </div>
-            <div class="cv__formula" data-formula><?= $h($stdLen . ' m × ' . $yVal . ' kg/m') ?></div>
-            <div data-extra></div>
-            <?php endif; ?>
-          </div>
-        </div>
+          <div class="formula"><b>איך חושב «צמחים למטר»:</b> (100 ÷ מרווח בשורה) × מס׳ שורות → (100÷<?= $h($nf($sp1)) ?>)×<?= $h($nf($rows_bed)) ?> ≈ <?= $h((string)$plants_m) ?></div>
+        <?php else: ?>
+          <p class="muted">נתוני מרווח ושורות יתווספו עם השלמת המידע. <a href="/community">תרמו נתון ←</a></p>
+        <?php endif; ?>
+        <?php $dtmR = $ranges['days_to_maturity'] ?? null; if (is_array($dtmR) && (int)($dtmR['count'] ?? 0) >= 2 && (float)$dtmR['min'] !== (float)$dtmR['max']): ?>
+          <div class="srcline">טווח בין הזנים (ימים להבשלה): <span class="rng"><?= $h($nf($dtmR['min']) . '–' . $nf($dtmR['max'])) ?></span></div>
+        <?php endif; ?>
       </div>
+    </details>
+  </section>
+
+  <!-- STAGE 3 · טיפול -->
+  <section class="stage" id="s3">
+    <div class="stage__head"><span class="stage__n">3</span><span class="stage__t">טיפול לאורך העונה<small>לחצו על כל נושא להרחבה</small></span></div>
+
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-drop"/></svg></span><span class="topic__t">השקיה</span><span class="topic__key muted">הנחיות מפורטות — בקרוב</span><span class="chev">▾</span></summary>
+      <div class="topic__body"><div class="drill">▾ עומק נוסף</div><p class="muted">המלצות השקיה מפורטות (קצב, שיטה, מועדים) יתווספו עם מודל התוכן. ככלל — השקיה סדירה, הימנעות מהרטבת עלווה לצמצום מחלות. <a href="/community">תרמו ידע מהשטח ←</a></p></div>
+    </details>
+
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-compost"/></svg></span><span class="topic__t">דישון וקומפוסט</span><span class="topic__key muted">דישון אורגני</span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <p class="muted">הנחיות דישון כמותיות יתווספו עם מודל התוכן.</p>
+        <div class="organic"><svg class="gi" aria-hidden="true"><use href="#i-leaf"/></svg> <b>גידול אורגני:</b> בסיס הדישון — קומפוסט בשל בהכנת הערוגה (≈ 4–6 ק״ג/מ״ר כלל אצבע), בתוספת קומפוסט מועשר/דישון עלי אורגני לאורך העונה. ערכים מדויקים לגידול זה יתווספו עם נתוני התשומות.</div>
+      </div>
+    </details>
+
+    <?php if (!empty($pub_notes)): ?>
+    <details class="topic" open>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="topic__t">מזיקים והערות מהשטח</span><span class="topic__key"><span class="num"><?= count($pub_notes) ?></span> הערות קהילה</span><span class="chev">▾</span></summary>
+      <div class="topic__body cb-notes">
+        <div class="drill">▾ עומק נוסף</div>
+        <?php foreach ($pub_notes as $n): ?>
+          <div class="treat"><b><?= $h(((string)($n['note_type'] ?? '') === 'pest_disease') ? 'מזיק/מחלה' : 'טיפ') ?>:</b><span><?= $h((string)$n['body_text']) ?><?php if (!empty($n['trust_tier'])): ?> <span class="sp"><?= $h((string)$n['trust_tier']) ?></span><?php endif; ?></span></div>
+        <?php endforeach; ?>
+      </div>
+    </details>
+    <?php else: ?>
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="topic__t">מזיקים ומחלות</span><span class="topic__key muted">בקרוב</span><span class="chev">▾</span></summary>
+      <div class="topic__body"><div class="drill">▾ עומק נוסף</div><p class="muted">מדריך מזיקים ומחלות לגידול זה יתווסף עם מודל התוכן. <a href="/community">תרמו ניסיון שדה ←</a></p></div>
+    </details>
+    <?php endif; ?>
+
+    <details class="topic"<?= !empty($companions) ? ' open' : '' ?>>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-companions"/></svg></span><span class="topic__t">חברה בערוגה</span><span class="topic__key"><?php if (!empty($comp_good)): ?>טוב: <?= $h(implode(', ', array_map(fn ($c) => (string)($c['name_he'] ?? ''), array_slice(array_values($comp_good), 0, 3)))) ?><?php else: ?><span class="muted">בקרוב</span><?php endif; ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body cb-companions compa">
+        <div class="drill">▾ עומק נוסף</div>
+        <?php if (!empty($companions)): ?>
+          <?php if (!empty($comp_good)): ?><p class="good" style="margin:0 0 8px"><b>שכנים טובים:</b> <?php $g = []; foreach ($comp_good as $c) { $g[] = '<a href="/crop-book/' . $h((string)($c['slug'] ?? '')) . '/">' . $h((string)($c['name_he'] ?? '')) . '</a>'; } echo implode(' · ', $g); ?></p><?php endif; ?>
+          <?php if (!empty($comp_bad)): ?><p class="bad" style="margin:0"><b>הימנעו לצד:</b> <?php $b = []; foreach ($comp_bad as $c) { $b[] = '<a href="/crop-book/' . $h((string)($c['slug'] ?? '')) . '/">' . $h((string)($c['name_he'] ?? '')) . '</a>' . (!empty($c['notes']) ? ' (' . $h((string)$c['notes']) . ')' : ''); } echo implode(' · ', $b); ?></p><?php endif; ?>
+        <?php else: ?>
+          <p class="muted">נתוני שכנוּת בערוגה יתווספו עם השלמת המידע.</p>
+        <?php endif; ?>
+      </div>
+    </details>
+  </section>
+
+  <!-- STAGE 4 · יבול -->
+  <section class="stage" id="s4">
+    <div class="stage__head"><span class="stage__n">4</span><span class="stage__t">יבול צפוי<small>כמה יוצא, מתי, ובכמה — לחצו להרחבה</small></span></div>
+
+    <details class="topic"<?= ($yield_m !== null) ? ' open' : '' ?>>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-box"/></svg></span><span class="topic__t">יבול</span><span class="topic__key"><?php if ($yield_m !== null): ?><b><?= $h($yield_m) ?> ק״ג/מ׳ ערוגה</b><?php else: ?><span class="muted">נתוני יבול חסרים</span><?php endif; ?><?php if ($harvest_w !== null): ?> · חלון קציר <?= $h($harvest_w) ?> ימ׳<?php endif; ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <?php if ($yield_m !== null || $harvest_w !== null): ?>
+          <dl class="dl">
+            <?php if ($yield_m !== null): ?><div><dt><span class="<?= $pcue('yield_per_bed_m') ?>"></span>יבול למטר ערוגה <?= $qm('יבול למטר ערוגה', 'משקל פרי ממוצע למטר אורך של ערוגה.', 'rich-yield') ?></dt><dd><span class="num"><?= $h($yield_m) ?></span><span class="u">ק״ג</span></dd></div><?php endif; ?>
+            <?php if ($harvest_w !== null): ?><div><dt>חלון קציר</dt><dd><span class="num"><?= $h($harvest_w) ?></span><span class="u">ימים</span></dd></div><?php endif; ?>
+          </dl>
+        <?php else: ?>
+          <p class="muted">נתוני יבול יתווספו עם השלמת המידע. <a href="/community">תרמו נתון ←</a></p>
+        <?php endif; ?>
+      </div>
+    </details>
+
+    <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג</b> · ממדד השוק</span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <div class="profit">
+          <div><div class="muted" style="font-size:13px">מחיר נוכחי במדד השוק הקהילתי</div><div class="profit__big"><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span> / ק״ג</div></div>
+          <div style="flex:1"></div>
+          <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
+        </div>
+        <div class="srcline">מתוך מדד השוק הקהילתי · <a href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>">למחירון המלא ←</a></div>
+      </div>
+    </details>
+    <?php endif; ?>
+
+    <?php if (!empty($storage)): ?>
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-snow"/></svg></span><span class="topic__t">אחסון</span><span class="topic__key"><?php
+        $sk = [];
+        if (isset($storage['temp']['min'], $storage['temp']['max'])) { $sk[] = '<b><span class="num">' . $h($nf($storage['temp']['min'])) . '–' . $h($nf($storage['temp']['max'])) . '°C</span></b>'; }
+        if (isset($storage['life_days']['min'], $storage['life_days']['max'])) { $sk[] = 'חיי מדף <span class="num">' . $h($nf($storage['life_days']['min'])) . '–' . $h($nf($storage['life_days']['max'])) . '</span> ימים'; }
+        echo $sk ? implode(' · ', $sk) : '<span class="muted">פרטי אחסון</span>';
+      ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body cb-storage">
+        <div class="drill">▾ עומק נוסף</div>
+        <dl class="dl">
+          <?php if (isset($storage['temp']['min'], $storage['temp']['max'])): ?><div><dt>טמפרטורה</dt><dd><span class="num"><?= $h($nf($storage['temp']['min']) . '–' . $nf($storage['temp']['max'])) ?></span><span class="u">°C</span></dd></div><?php endif; ?>
+          <?php if (isset($storage['life_days']['min'], $storage['life_days']['max'])): ?><div><dt>חיי מדף</dt><dd><span class="num"><?= $h($nf($storage['life_days']['min']) . '–' . $nf($storage['life_days']['max'])) ?></span><span class="u">ימים</span></dd></div><?php endif; ?>
+        </dl>
+        <?php if (!empty($storage['notes'])): ?><p style="margin:8px 0 0"><?= $h((string)$storage['notes']) ?></p><?php endif; ?>
+      </div>
+    </details>
+    <?php endif; ?>
+  </section>
+
+  <!-- contribute CTA -->
+  <section class="contrib">
+    <span class="contrib__ic" aria-hidden="true"><svg class="gi"><use href="#i-leaf"/></svg></span>
+    <div class="t"><b>מצאתם נתון חסר או שגוי ב<?= $h($name_he) ?>?</b><p>הספר נבנה מניסיון הקהילה. עזרו לנו להשלים — זה לוקח דקה.</p></div>
+    <span class="sp"></span>
+    <a class="btn btn--primary" href="/community">✎ תרמו מידע על <?= $h($name_he) ?> ←</a>
+  </section>
+
+  <?php if (!empty($related)): ?>
+  <section>
+    <div class="eyebrow" style="margin-bottom:10px">גידולים קרובים · אותה משפחה</div>
+    <div class="relrow">
+      <?php foreach ($related as $r): $rslug = (string)($r['slug'] ?? ''); ?>
+        <a class="relcard" href="/crop-book/<?= $h($rslug) ?>/">
+          <div class="ph"><span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-leaf"/></svg></span></div>
+          <div class="nm"><?= $h((string)($r['name_he'] ?? '')) ?></div>
+          <?php if (!empty($r['fam_he'])): ?><span class="tag" style="margin-top:6px"><?= $h((string)$r['fam_he']) ?></span><?php endif; ?>
+        </a>
+      <?php endforeach; ?>
     </div>
+  </section>
+  <?php endif; ?>
+
+</div><!-- /cb-crop-detail -->
+
+<!-- knowledge modal (ⓘ L1 tip → L2 "ידע SFA" modal) -->
+<div class="modal" id="kmodal" hidden>
+  <div class="modal__bg" data-close></div>
+  <div class="modal__card">
+    <button class="modal__x" data-close aria-label="סגירה">✕</button>
+    <div class="eyebrow">ידע SFA</div>
+    <h3 id="kmt">—</h3>
+    <div id="kmb"></div>
   </div>
-
-  <!-- ══ END WP-CB-1 ════════════════════════════════════════════════ -->
-
-  <?php
-  /* WP-CB-MOBILE dedup: the legacy .cb-crop-lede + .cb-crop-hero__meta hero
-     remnants, the .cb-section-nav in-page anchor nav, and the standalone
-     #identity-facts cb-section were removed. The crop description now renders in
-     the .crophero lede; family/DTM in the hero breadcrumb; identity facts via the
-     Full/Deep topic fields. Timeline + market crosslink (below) are NOT legacy
-     duplicates and are preserved. */
-  ?>
-
-  <!-- ── Timeline (optional, patch03 carry-over) ───────────────── -->
-  <?php
-  if (!empty($crop['timeline']) && is_array($crop['timeline'])):
-      $prep_pct    = (float)($crop['timeline']['prep_pct'] ?? 0);
-      $grow_pct    = (float)($crop['timeline']['grow_pct'] ?? 0);
-      $harv_pct    = (float)($crop['timeline']['harv_pct'] ?? 0);
-      $harv_days   = (int)  ($crop['timeline']['harv_days'] ?? 0);
-      $week_labels = isset($crop['timeline']['week_labels']) && is_array($crop['timeline']['week_labels'])
-                     ? $crop['timeline']['week_labels'] : [];
-      include __DIR__ . '/../macros/timeline_bar.php';
-  endif;
-  ?>
-
-  <!-- ── Cross-link to market ──────────────────────────────────── -->
-  <?php
-  if (!empty($crop['market_link']) && is_array($crop['market_link'])):
-      $ml = $crop['market_link'];
-      $href       = '/market/' . (string)($ml['slug'] ?? '');
-      $art_html   = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-' . htmlspecialchars($icon_slug, ENT_QUOTES, 'UTF-8') . '"></use></svg>';
-      $big_text   = number_format((float)($ml['price_current'] ?? 0), 2);
-      $small_unit = '₪/ק״ג';
-      $sub_text   = 'מחיר שוק נוכחי · ' . (int)($ml['source_count'] ?? 0) . ' מקורות';
-      $direction  = 'book-to-market';
-      include __DIR__ . '/../macros/crosslink.php';
-  endif;
-  ?>
-
-  <?php
-  /* WP-CB-MOBILE dedup: the legacy standalone cb-section blocks (calendar,
-     agronomy, harvest, storage, companions, notes) and the cb-vars variety grid
-     were removed — they duplicated the depth panels. Their content now lives in
-     #depth-content: calendar in Simple (.pcal); the enrichment fields in Full/Deep
-     topics; varieties in the Deep .vtable (with full per-variety detail still on
-     each variety page); agronomy/harvest/storage/companions + general public notes
-     migrated into the Deep panel; the description into the .crophero lede. */
-  ?>
-
-  <?php
-  $context          = 'book.' . $slug;
-  $context_label_he = 'ספר · ' . $name_he;
-  include __DIR__ . '/../macros/contrib_strip.php';
-  ?>
-
-  <!-- WP-CB-MOBILE Stage 2 — CTA foot (data-completion, primary/loud). -->
-  <div class="cta">
-    <div class="cta__card cta--data">
-      <h3>מגדלים <?= $h($name_he) ?>? עזרו לדייק</h3>
-      <p>ידע מהשטח משפר את הספר לכולם — תרמו נתון או ניסיון, וזה יידלק לכל המגדלים.</p>
-      <a class="cta__btn" href="/community">◐ תרמו נתון ›</a>
-    </div>
-  </div>
-
-</div><!-- /.cb-crop-detail -->
+</div>
+<script>
+(function(){
+  var KB = {
+    'rich-spacing':'<p>המרחק בין שתיל לשתיל לאורך השורה. זהו המספר המעשי שקובע כמה צמחים ייכנסו בערוגה — לא «צמחים למ״ר», שהוא נגזרת סטטיסטית.</p><div class="kf"><b>בחישוב:</b> צמחים למטר ערוגה = (100 ÷ מרווח בשורה) × מספר שורות.</div>',
+    'rich-plantsm':'<p>מספר הצמחים שייכנסו במטר אורך של ערוגה, לפי המרווח ומספר השורות.</p><div class="kf"><b>הנוסחה:</b> (100 ÷ מרווח בשורה) × מספר שורות בערוגה.</div>',
+    'rich-nursery':'<p>מספר הימים מהזריעה במשתלה ועד שהשתיל מוכן להעברה לשדה.</p><div class="kf"><b>למה זה חשוב:</b> קובע מתי להתחיל לזרוע במשתלה כדי לעמוד ביעד השתילה בשדה.</div>',
+    'rich-yield':'<p>משקל הפרי הממוצע הצפוי למטר ערוגה בתנאי גידול תקינים.</p><div class="kf"><b>בחישוב:</b> יבול לערוגה = יבול למטר × אורך הערוגה. בסיס לחישובי הכנסה.</div>'
+  };
+  var modal=document.getElementById('kmodal'), kmt=document.getElementById('kmt'), kmb=document.getElementById('kmb');
+  if(!modal) return;
+  function openModal(q){
+    kmt.textContent=q.getAttribute('data-t')||'הסבר';
+    var d=q.getAttribute('data-d');
+    kmb.innerHTML=(d&&KB[d])?KB[d]:('<p>'+(q.getAttribute('data-s')||'')+'</p><div class="kf">הסבר מורחב + נוסחת החישוב + מקור — יתווספו עם מודל התוכן.</div>');
+    modal.hidden=false;
+  }
+  modal.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')) modal.hidden=true; });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') modal.hidden=true; });
+  var tip=document.createElement('div'); tip.className='ktip'; tip.hidden=true; document.body.appendChild(tip);
+  var curQ=null, hideT=null;
+  function showTip(q){ clearTimeout(hideT); curQ=q;
+    tip.innerHTML='<b>'+(q.getAttribute('data-t')||'')+'</b>'+(q.getAttribute('data-s')||'')+'<span class="more">להרחבה במודול ידע ←</span>';
+    var r=q.getBoundingClientRect(); tip.hidden=false;
+    tip.style.top=(window.scrollY+r.bottom+8)+'px';
+    tip.style.left=Math.max(10,r.left+r.width/2-124)+'px';
+  }
+  function hideSoon(){ hideT=setTimeout(function(){tip.hidden=true;},250); }
+  tip.addEventListener('mouseenter',function(){clearTimeout(hideT);});
+  tip.addEventListener('mouseleave',hideSoon);
+  tip.addEventListener('click',function(e){ if(e.target.classList.contains('more')&&curQ){ openModal(curQ); tip.hidden=true; }});
+  document.querySelectorAll('.qm').forEach(function(q){
+    q.addEventListener('mouseenter',function(){showTip(q);});
+    q.addEventListener('mouseleave',hideSoon);
+    q.addEventListener('click',function(e){ e.preventDefault(); openModal(q); });
+    q.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openModal(q);} });
+  });
+})();
+</script>
 <?php
 $content = ob_get_clean();
-// Re-assert nav key: section macros are include'd into this scope inside the ob_*
-// buffer above and could shadow page-level vars (e.g. crop_calendar's month loop).
-// Guarantee _layout/nav receives the correct active section regardless.
-$active = 'crop-book';
-echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active', 'back_url'));
+echo Template::render('_layout', compact('content', 'page_title', 'page_sub', 'active'));

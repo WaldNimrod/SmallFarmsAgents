@@ -118,10 +118,11 @@ final class CropCardIconTest extends TestCase
             'icon_slug' => 'leaf',
         ]);
 
-        // WI-4: single crophero section present with h1 crop name
-        $this->assertStringContainsString('class="crophero"', $html, 'AC-U2-03: single .crophero section must be present in detail hero');
-        $this->assertStringContainsString('<h1>', $html, 'AC-U2-03: detail hero must have h1 crop name');
-        $this->assertStringContainsString('בזיליקום', $html, 'AC-U2-03: detail hero must render the Hebrew crop name');
+        // WP-CB-UI-REDESIGN (WI-4): the detail hero is the mockup .hero section
+        // with an <h1 class="hero__name"> crop name. Art = $wc_art img or sprite fallback.
+        $this->assertStringContainsString('class="hero"', $html, 'detail hero must be the .hero section');
+        $this->assertStringContainsString('hero__name', $html, 'detail hero must render the .hero__name H1');
+        $this->assertStringContainsString('בזיליקום', $html, 'detail hero must render the Hebrew crop name');
     }
 
     /**
@@ -140,11 +141,11 @@ final class CropCardIconTest extends TestCase
             'icon_slug' => 'leaf',
         ]);
 
-        // WI-4: single hero present; legacy icon box removed (no .cb-crop-hero__icon)
-        $this->assertStringContainsString('class="crophero"', $html, 'AC-U2-04: .crophero single hero must be present');
-        $this->assertStringNotContainsString('cb-crop-hero__icon', $html, 'AC-U2-04: legacy green icon box must NOT be present (WI-4 dedup)');
-        // Art fallback: emoji span OR watercolor img in crophero__art
-        $this->assertStringContainsString('crophero__art', $html, 'AC-U2-04: crophero__art art container must be present');
+        // WP-CB-UI-REDESIGN (WI-4): single .hero present; legacy icon box gone.
+        $this->assertStringContainsString('class="hero"', $html, '.hero single hero must be present');
+        $this->assertStringNotContainsString('cb-crop-hero__icon', $html, 'legacy green icon box must NOT be present');
+        // Art fallback: sprite glyph OR watercolor img in .hero__art
+        $this->assertStringContainsString('hero__art', $html, 'hero__art art container must be present');
     }
 
     // ── C1: plural-slug art regression (patch01 recovery) ───────────────────

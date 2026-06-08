@@ -748,6 +748,29 @@ final class CropBookViewController
         // Watercolor art for this crop
         $wc_art = self::WC_ART[$slug] ?? null;
 
+        // WP-CB-UI-REDESIGN (WI-4): related crops — same botanical family, for the
+        // "גידולים קרובים · אותה משפחה" rail. Degrades to empty (rail omitted).
+        $related = [];
+        $famForRel = (string)($crop['family_name_he'] ?? ($crop['family_tag_he'] ?? ''));
+        if ($famForRel !== '') {
+            try {
+                $relStmt = $this->pdo->prepare(
+                    'SELECT slug, hebrew_name, family_name_he FROM crops
+                     WHERE family_name_he = ? AND slug <> ? ORDER BY hebrew_name LIMIT 4'
+                );
+                $relStmt->execute([$famForRel, $slug]);
+                foreach ($relStmt->fetchAll() as $r) {
+                    $related[] = [
+                        'slug'    => (string)($r['slug'] ?? ''),
+                        'name_he' => (string)($r['hebrew_name'] ?? ''),
+                        'fam_he'  => (string)($r['family_name_he'] ?? ''),
+                    ];
+                }
+            } catch (\Throwable) {
+                $related = [];
+            }
+        }
+
         // Family for rotation hint
         $family_name_he = (string)($crop['family_tag_he'] ?? ($crop['family_name_he'] ?? ''));
 
@@ -780,6 +803,7 @@ final class CropBookViewController
             'variety_ranges'   => $variety_ranges,
             'source_classes'   => $source_classes,
             'variety_count'    => count($varieties),
+            'related'          => $related,
         ]));
     }
 

@@ -259,16 +259,16 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropSimpleDepth(): void
     {
-        // WP-CB-MOBILE Stage 2: Simple is now genuinely minimal — essentials
-        // strip + calendar + one-key-per-topic keylist; the full stat block
-        // (headvals) was intentionally removed (Simple ⊂ Full ⊂ Deep).
+        // WP-CB-UI-REDESIGN (WI-4): the Simple/Full/Deep depth switch is retired for
+        // the universal drill-down — a lifecycle spine (.stagenav) + .stage sections
+        // + .topic open/closed cards. ?depth= is a no-op back-compat param (still 200).
         $res  = $this->get('/crop-book/lettuce/?depth=simple');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('sh__depths', $html, 'Must include the header depth segmented control');
-        $this->assertStringContainsString('class="ess"', $html, 'Simple depth must include the essentials chip strip');
-        $this->assertStringContainsString('class="keylist"', $html, 'Simple depth must include the one-key-per-topic list');
-        $this->assertStringNotContainsString('class="headvals"', $html, 'Simple depth must NOT carry the full stat block (Stage 2 IA)');
+        $this->assertStringContainsString('stagenav', $html, 'Crop page must render the lifecycle spine (.stagenav)');
+        $this->assertStringContainsString('class="stage"', $html, 'Crop page must render .stage lifecycle sections');
+        $this->assertStringContainsString('class="topic"', $html, 'Crop page must render .topic universal drill-down cards');
+        $this->assertStringNotContainsString('sh__depths', $html, 'The Simple/Full/Deep depth control is retired (WI-4)');
     }
 
     public function testBookCropFullDepth(): void
@@ -303,25 +303,25 @@ final class CropBookV1RouteTest extends TestCase
 
     public function testBookCropDrillDepth(): void
     {
-        // WP-CB-MOBILE Stage 2: legacy ?depth=drill is a back-compat alias for the
-        // deepest view; controller normalises it to 'deep'. Still 200 + vtable.
+        // WP-CB-UI-REDESIGN (WI-4): legacy ?depth=drill is a no-op back-compat param;
+        // the universal drill-down renders every .topic regardless. Still 200.
         $res  = $this->get('/crop-book/lettuce/?depth=drill');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('vtable', $html, 'Drill (→deep) depth must include variety table');
+        $this->assertStringContainsString('class="topic"', $html, 'Crop page must render .topic drill-down cards');
     }
 
     public function testBookCropDeepDepth(): void
     {
-        // WP-CB-MOBILE Stage 2: Deep is the canonical third state. Same topic
-        // structure as Full (.topic) + the variety comparison table (.vtable)
-        // + the EX/PR/WR source trust-hierarchy explainer.
+        // WP-CB-UI-REDESIGN (WI-4): the Deep view is retired. Per-variety spread now
+        // renders inline as the .rng "טווח בין הזנים" srcline (honest, no fabricated
+        // source pills); the variety comparison table (.vtable) is gone.
         $res  = $this->get('/crop-book/lettuce/?depth=deep');
         $this->assertSame(200, $res->getStatusCode());
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('vtable', $html, 'Deep depth must include the variety comparison table');
-        $this->assertStringContainsString('data-depth-view="deep"', $html, 'Deep depth view container must render');
-        $this->assertStringContainsString('היררכיית מקורות', $html, 'Deep depth must include the source trust-hierarchy explainer');
+        $this->assertStringContainsString('class="stage"', $html, 'Crop page must render the lifecycle .stage sections');
+        $this->assertStringContainsString('class="topic"', $html, 'Crop page must render .topic universal drill-down cards');
+        $this->assertStringNotContainsString('data-depth-view', $html, 'The depth-view container is retired (WI-4)');
     }
 
     public function testBookCropDefaultDepth(): void
