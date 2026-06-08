@@ -33,12 +33,15 @@ $tier_color_map = [
     'paper'  => '',
 ];
 
-// Icon sprite map
+// Icon sprite map — DSX-1: line glyphs from icons.svg (crops) / ui-icons.svg,
+// never OS emoji (locked principle #6). Module icon name → sprite id.
 $icon_sprite_map = [
-    'tomato' => '🍅', 'lettuce' => '🥬', 'cucumber' => '🥒',
-    'carrot' => '🥕', 'pepper'  => '🫑', 'onion'    => '🧅',
-    'basil'  => '🌿', 'strawberry' => '🍓', 'eggplant' => '🍆',
-    'zucchini' => '🥦', 'seedling' => '🌱', 'leaf' => '🌿',
+    'tomato' => 'icon-tomato', 'lettuce' => 'icon-lettuce', 'cucumber' => 'icon-cucumber',
+    'carrot' => 'icon-carrot', 'pepper'  => 'icon-pepper',  'onion'    => 'icon-onion',
+    'eggplant' => 'icon-eggplant', 'zucchini' => 'icon-zucchini',
+    'seedling' => 'i-seedling', 'leaf' => 'icon-leaf', 'basil' => 'icon-leaf',
+    'journal' => 'i-journal', 'box' => 'i-box', 'receipt' => 'i-receipt',
+    'calc' => 'i-scale', 'market' => 'i-basket', 'book' => 'i-book',
 ];
 
 // Partition modules: live/beta = open grid; planned/coming = soon
@@ -104,7 +107,7 @@ ob_start();
       $m_route   = str_replace('/book/', '/crop-book/', preg_replace('#^/sfa/#', '/', (string)($m['route'] ?? '#')));
       $hero_url  = $module_hero_map[$m_id] ?? '';
       $tile_mod  = $tier_color_map[$m_color] ?? '';
-      $glyph     = $icon_sprite_map[$m_icon] ?? '📋';
+      $glyph     = $icon_sprite_map[$m_icon] ?? 'i-grid';
     ?>
     <a class="modtile modtile--row<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?>" href="<?= $h($m_route) ?>">
       <div class="modtile__art">
@@ -114,7 +117,7 @@ ob_start();
         <span class="modtile__tier">
           <?php $tier = $m_tier; $size = 'sm'; include __DIR__ . '/../macros/tier_badge.php'; ?>
         </span>
-        <span class="modtile__glyph" aria-hidden="true"><?= $glyph ?></span>
+        <span class="modtile__glyph" aria-hidden="true"><svg class="gi"><use href="#<?= $h($glyph) ?>"/></svg></span>
       </div>
       <div class="modtile__body">
         <div class="modtile__title"><?= $h($m_name) ?></div>
@@ -131,7 +134,7 @@ ob_start();
     <?php /* ── WP-CB-UI-patch01: Field Log in-development teaser tile ── */ ?>
     <div class="modtile modtile--row modtile--soil is-dev" aria-disabled="true">
       <div class="modtile__art">
-        <span class="modtile__glyph" aria-hidden="true">📒</span>
+        <span class="modtile__glyph" aria-hidden="true"><svg class="gi"><use href="#i-journal"/></svg></span>
       </div>
       <div class="modtile__body">
         <div class="modtile__title">יומן השדה</div>
@@ -173,19 +176,19 @@ ob_start();
   </div>
   <div class="hub-aud">
     <a class="audcard audcard--leaf" href="/crop-book/">
-      <div class="audcard__ic">🌱</div>
+      <div class="audcard__ic"><svg class="gi" aria-hidden="true"><use href="#i-sprout"/></svg></div>
       <div class="audcard__t">גנן<small>GARDENER</small></div>
       <p class="audcard__d">ספר גידולים עם מועדי זריעה, ריווח וצרכי דישון — לגינה הקטנה.</p>
       <span class="audcard__go">לספר הגידולים ←</span>
     </a>
     <a class="audcard audcard--soil" href="/market/">
-      <div class="audcard__ic">🌾</div>
+      <div class="audcard__ic"><svg class="gi" aria-hidden="true"><use href="#i-tractor"/></svg></div>
       <div class="audcard__t">חקלאי מקומי<small>FARMER</small></div>
       <p class="audcard__d">מחירון שוק בזמן-אמת ומחשבון שדה — לקבלת החלטות חכמה.</p>
       <span class="audcard__go">למחירון ←</span>
     </a>
     <a class="audcard audcard--code" href="/about">
-      <div class="audcard__ic">💡</div>
+      <div class="audcard__ic"><svg class="gi" aria-hidden="true"><use href="#i-bulb"/></svg></div>
       <div class="audcard__t">מתכנן / יועץ<small>PLANNER</small></div>
       <p class="audcard__d">כלים מתקדמים לניהול לקוחות, מעקב יבול ואינטגרציות שדה.</p>
       <span class="audcard__go">על הכלים ←</span>
@@ -208,7 +211,7 @@ ob_start();
       $m_id      = (string)($m['id']      ?? '');
       $hero_url  = $module_hero_map[$m_id] ?? '';
       $tile_mod  = $tier_color_map[$m_color] ?? '';
-      $glyph     = $icon_sprite_map[$m_icon] ?? '📋';
+      $glyph     = $icon_sprite_map[$m_icon] ?? 'i-grid';
     ?>
     <div class="modtile modtile--row<?= $tile_mod !== '' ? ' modtile--' . $h($tile_mod) : '' ?> is-soon" aria-disabled="true">
       <div class="modtile__art">
@@ -218,7 +221,7 @@ ob_start();
         <span class="modtile__tier">
           <?php $tier = $m_tier; $size = 'sm'; include __DIR__ . '/../macros/tier_badge.php'; ?>
         </span>
-        <span class="modtile__glyph" aria-hidden="true"><?= $glyph ?></span>
+        <span class="modtile__glyph" aria-hidden="true"><svg class="gi"><use href="#<?= $h($glyph) ?>"/></svg></span>
       </div>
       <div class="modtile__body">
         <div class="modtile__title"><?= $h($m_name) ?></div>

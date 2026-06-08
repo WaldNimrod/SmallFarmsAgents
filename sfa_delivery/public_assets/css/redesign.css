@@ -172,6 +172,14 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 
 /* ============================================================
    PER-SURFACE COMPONENT CSS — appended as each WI lands
-   (WI-2 home · WI-3 book_list · WI-4 crop_card · WI-5 market ·
-    WI-6 assumptions · WI-7 calc re-skin)
    ============================================================ */
+
+/* ── WI-2 · home (hub_home.php) — DSX-1 glyph sizing on the existing
+      Class-B hub vocabulary (.audcard / .modtile / field-log teaser) ── */
+.audcard__ic{ line-height:0; }
+.audcard__ic .gi{ width:32px; height:32px; color:var(--gj-leaf-deep); }
+.audcard--soil .audcard__ic .gi{ color:var(--gj-soil-deep); }
+.audcard--code .audcard__ic .gi{ color:var(--gj-sun-deep); }
+.modtile__glyph{ line-height:0; }
+.modtile__glyph .gi{ width:28px; height:28px; color:var(--gj-leaf-deep); }
+.is-dev .modtile__glyph .gi,.is-soon .modtile__glyph .gi{ color:var(--gj-ink-soft); }
