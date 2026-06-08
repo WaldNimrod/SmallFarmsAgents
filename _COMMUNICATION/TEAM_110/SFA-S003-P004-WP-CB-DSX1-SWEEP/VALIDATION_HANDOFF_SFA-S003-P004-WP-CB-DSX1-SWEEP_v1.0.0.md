@@ -66,12 +66,13 @@ isolated branch.
 1. **Asset redeploy:** `ui-icons.svg` changed and is `@readfile`-inlined server-side → must redeploy with templates.
 2. **Branch hygiene:** a concurrent session's commit `56bc693 feat(WP-CB-CONTENT)` was rescued to
    `rescue/wp-cb-content-56bc693` and rebased OFF this branch; `feat/wp-cb-dsx1-sweep` now carries only `5c66bf1`.
-3. **Canonical qa_probe port:** the authoritative browser-QA runs on **8095** (SFA preview canon).
-   The build-time qa_probe (12/12, real SFA — verified by SFA-branded screenshots) ran on a temporary
-   port and is being re-run on canonical 8095. That re-run is **blocked** by a TikTrack `vite preview`
-   squatting on 8095 (port-canon R10 violation; TikTrack's own port is 8080). A fix request was issued
-   to team_100 (TikTrack domain) to vacate 8095. We are **not** changing the canon and **not** killing
-   the sibling process unilaterally.
+3. **Canonical qa_probe (8095) — COMPLETE / PASS.** The authoritative browser-QA was re-run on the
+   canonical SFA preview port **8095** via `sfa_delivery/dev_server.sh`: **12/12 pass** (6 routes ×
+   mobile+desktop), 0 overflow, 0 forbidden emoji; page titles confirm real SFA (`עגבניית שרי · SFA`,
+   `חשבון · SFA`, …). Shots: `/tmp/sfa_qa_8095/screenshots/`. The earlier port collision (a TikTrack
+   `vite preview` squatting on SFA-reserved 8095, R10) was fixed by team_100 (TikTrack domain) —
+   TikTrack moved its preview to its canonical 8080 (`.claude/launch.json`, PID 37558 killed); canon
+   unchanged. team_110 did not change the canon or touch the sibling process.
 
 ## 6. On VALIDATE PASS
 
