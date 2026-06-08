@@ -439,17 +439,17 @@ final class ClassBRouteTest extends TestCase
         $this->assertSame(200, $res->getStatusCode(), '/crop-book/ must return 200');
     }
 
-    /** WI-1: /crop-book/ still renders .cards-grid */
+    /** WP-CB-UI-REDESIGN (WI-3): /crop-book/ is the filtered crop index —
+     *  .lead header + .grid card grid; the old .cb-hero/.cb-paths entry hub is
+     *  folded into the compact .book-subnav (questions/family/search preserved). */
     public function testCropBookEntryHasCardsGrid(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/crop-book/');
         $body = (string)$this->app->handle($req)->getBody();
-        // cards-grid class appears in static HTML even without $crops (via the template structure)
-        // We check at minimum that the cb-hero and cb-paths are present
-        $this->assertStringContainsString('cb-hero', $body,
-            '/crop-book/ must still render .cb-hero (WI-1 kept functionality)');
-        $this->assertStringContainsString('cb-paths', $body,
-            '/crop-book/ must still render .cb-paths (WI-1 kept functionality)');
+        $this->assertStringContainsString('class="grid"', $body,
+            '/crop-book/ must render the .cc card grid');
+        $this->assertStringContainsString('book-subnav', $body,
+            '/crop-book/ must preserve entry navigation in .book-subnav (questions/family/search)');
     }
 
     /** A1: crop-book-v1.css .cards-grid uses team_35 restored minmax(168px,1fr) */

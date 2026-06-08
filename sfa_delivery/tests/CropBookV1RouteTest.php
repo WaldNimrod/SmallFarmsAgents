@@ -145,7 +145,10 @@ final class CropBookV1RouteTest extends TestCase
         $res = $this->get('/crop-book/?view=cards');
         $this->assertSame(200, $res->getStatusCode(), 'Crop-book cards view must return 200');
         $html = (string)$res->getBody();
-        $this->assertStringContainsString('aud__opt', $html, 'Must include audience switch');
+        // WP-CB-UI-REDESIGN (WI-3): the audience switch is replaced by the always-visible
+        // .filters bar + .cc decision-card grid (mockup book_list). Assert the new contract.
+        $this->assertStringContainsString('class="filters"', $html, 'Cards view must include the always-visible filter bar');
+        $this->assertStringContainsString('class="grid"', $html, 'Cards view must include the .cc card grid');
     }
 
     public function testBookIndexTableView(): void

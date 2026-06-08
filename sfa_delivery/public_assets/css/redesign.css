@@ -183,3 +183,46 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .modtile__glyph{ line-height:0; }
 .modtile__glyph .gi{ width:28px; height:28px; color:var(--gj-leaf-deep); }
 .is-dev .modtile__glyph .gi,.is-soon .modtile__glyph .gi{ color:var(--gj-ink-soft); }
+
+/* ── WI-3 · book_list (crop index) — .lead / .filters / .grid / .cc ── */
+.book-index .lead{ display:flex; justify-content:space-between; align-items:flex-end; gap:var(--sp-4); flex-wrap:wrap; margin-bottom:var(--sp-4); }
+.book-index .lead h1{ font-size:34px; font-weight:900; }
+.book-index .lead p{ margin:4px 0 0; color:var(--gj-ink-soft); }
+
+.book-subnav{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:var(--sp-4); }
+.book-subnav a{ display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:600; color:var(--gj-leaf-deep); background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:6px 13px; }
+.book-subnav a:hover{ background:#eef5e7; }
+.book-subnav .gi{ width:15px; height:15px; }
+
+.filters{ position:sticky; top:62px; z-index:20; background:rgba(238,244,238,.95); backdrop-filter:blur(6px); border:1px solid var(--gj-line); border-radius:var(--r-l); padding:var(--sp-4); margin-bottom:var(--sp-5); display:flex; gap:var(--sp-3); flex-wrap:wrap; align-items:center; }
+.filters .fsearch{ flex:1; min-width:200px; display:flex; align-items:center; gap:8px; background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:9px 16px; }
+.filters .fsearch input{ border:0; background:transparent; outline:none; font-family:inherit; font-size:15px; width:100%; color:var(--gj-ink); }
+.filters .sel{ position:relative; }
+.filters .sel select{ appearance:none; font-family:inherit; font-size:14px; font-weight:600; color:var(--gj-ink); background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:9px 34px 9px 16px; cursor:pointer; }
+.filters .sel::after{ content:"▾"; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--gj-ink-soft); pointer-events:none; font-size:11px; }
+.filters .fspring{ flex:1; }
+.filters__apply{ font-family:inherit; font-weight:700; font-size:14px; color:#fff; background:var(--gj-leaf-deep); border:0; border-radius:var(--r-pill); padding:9px 18px; cursor:pointer; }
+.viewtog{ display:flex; background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); overflow:hidden; }
+.viewtog .vt{ display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-weight:600; font-size:14px; padding:9px 16px; cursor:pointer; color:var(--gj-ink-soft); }
+.viewtog .vt.on{ background:var(--gj-leaf-deep); color:#fff; }
+.viewtog .gi{ width:15px; height:15px; }
+.book-index .fcount{ font-size:14px; color:var(--gj-ink-soft); margin-bottom:var(--sp-4); }
+.book-index .fcount b{ color:var(--gj-ink); }
+
+.book-index .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:var(--sp-4); }
+.cc{ background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-l); overflow:hidden; box-shadow:var(--sh-s); transition:transform .12s ease,box-shadow .12s ease; display:flex; flex-direction:column; }
+.cc:hover{ transform:translateY(-3px); box-shadow:var(--sh-m); }
+.cc__art{ height:140px; background:radial-gradient(circle at 50% 38%,#fff,#eef4ee); display:grid; place-items:center; position:relative; overflow:hidden; }
+.cc__art img{ max-height:118px; max-width:82%; object-fit:contain; }
+.cc__icon .gi{ width:54px; height:54px; color:var(--gj-leaf-soft); }
+.cc__now{ position:absolute; top:10px; inset-inline-end:10px; }
+.cc__b{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+.cc__name{ font-family:var(--gj-font-head); font-size:21px; font-weight:700; line-height:1.1; }
+.cc__latin{ font-size:12px; color:var(--gj-ink-soft); font-style:italic; margin-top:-4px; }
+.cc .tag{ align-self:flex-start; }
+.cc__stats{ display:flex; gap:14px; margin-top:auto; padding-top:10px; border-top:1px solid var(--gj-line); }
+.cc__stats div{ display:flex; flex-direction:column; }
+.cc__stats b{ font-size:16px; font-weight:700; line-height:1.18; }
+.cc__stats span{ font-size:11px; color:var(--gj-ink-soft); margin-top:3px; }
+
+@media(max-width:680px){ .filters{ position:static; } .book-index .lead h1{ font-size:27px; } }

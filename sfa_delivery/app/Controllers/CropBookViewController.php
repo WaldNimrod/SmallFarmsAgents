@@ -67,7 +67,13 @@ final class CropBookViewController
         // NOTE: season filter is NOT in SQL — handled as PHP post-filter below (Decision A).
         if ($dtmMax !== null) { $where[] = '(dtm_max IS NULL OR dtm_max <= ?)'; $params[] = $dtmMax; }
         if ($where) { $sql .= ' WHERE ' . implode(' AND ', $where); }
-        $sql .= ' ORDER BY hebrew_name';
+        // WP-CB-UI-REDESIGN (WI-3): server-side sort. name|dtm in SQL; 'now'
+        // (in-season first) is a stable PHP post-sort after the badge is derived.
+        $sort = trim((string)($qp['sort'] ?? 'name'));
+        if (!in_array($sort, ['name', 'dtm', 'now'], true)) { $sort = 'name'; }
+        $sql .= $sort === 'dtm'
+            ? ' ORDER BY (dtm_max IS NULL), dtm_max ASC, hebrew_name'
+            : ' ORDER BY hebrew_name';
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
@@ -195,6 +201,33 @@ final class CropBookViewController
             ];
         }
 
+        // WP-CB-UI-REDESIGN (WI-3): 'now' sort — in-season crops first (stable).
+        if ($sort === 'now') {
+            usort($crops, static fn ($a, $b) => ((int)!empty($b['in_season'])) <=> ((int)!empty($a['in_season'])));
+        }
+
+        // WP-CB-UI-REDESIGN (WI-3): batched market price per crop slug — the ₪ chip
+        // that closes the book↔market loop. ONE IN(...) query; degrades to empty when
+        // the products table is absent (honest: chip omitted, never fabricated).
+        /** @var array<string,array{price:float,unit:string}> */
+        $priceBySlug = [];
+        $resultSlugs = array_values(array_filter(array_map(static fn ($c) => (string)($c['slug'] ?? ''), $crops)));
+        if (!empty($resultSlugs)) {
+            try {
+                $ph  = implode(',', array_fill(0, count($resultSlugs), '?'));
+                $pst = $this->pdo->prepare("SELECT slug, last_price, unit FROM products WHERE slug IN ($ph) AND last_price IS NOT NULL");
+                $pst->execute($resultSlugs);
+                foreach ($pst->fetchAll() as $pr) {
+                    $priceBySlug[(string)$pr['slug']] = [
+                        'price' => (float)$pr['last_price'],
+                        'unit'  => (string)($pr['unit'] ?? ''),
+                    ];
+                }
+            } catch (\Throwable) {
+                $priceBySlug = [];
+            }
+        }
+
         // WP-CB-1: pass view param (cards|table) and total count
         $view = trim((string)($qp['view'] ?? 'cards'));
         if (!in_array($view, ['cards', 'table'], true)) $view = 'cards';
@@ -205,7 +238,9 @@ final class CropBookViewController
 
         return $this->html($response, Template::render('pages/book_entry', [
             'crops'    => $crops,
+            'prices'   => $priceBySlug,
             'view'     => $view,
+            'sort'     => $sort,
             'total'    => count($crops),
             'families' => $families,
             'filters'  => [
