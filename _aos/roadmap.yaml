@@ -4646,19 +4646,21 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-REDESIGN
   label: "ספר גידולים: גרסה מעוצבת מחדש — מימוש 6 מסכים ציבוריים + re-skin מחשבון (חבילת team_35 hi-fi · DSX-1/DSX-2) עד פריסה מלאה ב-sfa.nimrod.bio"
-  status: REGISTER
-  phase: register
+  status: COMPLETE
+  phase: closed
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
-  assigned_builder: team_10
-  assigned_validator: team_50
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-08"
+  assigned_builder: team_100
+  assigned_validator: team_190
   created_at: "2026-06-08"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-CALC", "SFA-S003-P004-WP-CB-MOBILE"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-REDESIGN/WORKPLAN_full-version_2026-06-08_v1.0.0.md"
-  design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-REDESIGN/handoff_ui_redesign/README.md"
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-UI-REDESIGN/team_100/WORKPLAN_full-version_2026-06-08_v1.0.0.md"
+  design_ref: "_archive/SFA-S003-P004-WP-CB-UI-REDESIGN/team_35/handoff_ui_redesign/README.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-REDESIGN/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4673,10 +4675,37 @@ work_packages:
       findings deferred from WP-CB-CALC QA. Plan = WORKPLAN_full-version (WI-0 DS foundation -> WI-1 shell ->
       WI-2..6/8 build -> WI-7 calc re-skin -> WI-9 QA -> WI-10 deploy to uPress). Awaits team_00 build go.
       Handoff: _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-REDESIGN/HANDOFF_SFA-S003-P004-WP-CB-UI-REDESIGN_v1.0.0.md
-  notes: "REGISTER (team_00, 2026-06-08). Design in hand (team_35 LOD300 hi-fi). Implementation: 6 public
-    surfaces full-build + calc re-skin + DSX-1/DSX-2 fold -> production on sfa.nimrod.bio with cross-engine
-    L-GATE_V. Content dependency (story description_md + care.*_md) = honest empty-states until a content WP;
-    water(#0) = WP-CB-WATER. FTP allowlist OPEN (team_00 2026-06-08)."
+  - gate: L-GATE_BUILD
+    result: COMPLETE
+    date: "2026-06-08"
+    validator: team_100
+    notes: >
+      Build WI-0..WI-9 on branch feat/wp-cb-ui-redesign (baseline 8d03f2e). 7 public surfaces + calc
+      re-skin + internal cropdata_entry from team_35 LOD300. DSX-1/DSX-2 folded. 226 route/macro tests
+      green; qa_probe.mjs 16/16 (mobile 375 + desktop, zero overflow). WP-CB-CALC engine byte-untouched.
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-08"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS (validator = Cursor/Composer, non-Claude; IR#1/#5). All 10 criteria
+      VC-1..VC-10 pass on independent re-execution: PHPUnit 226/226, qa_probe 16/16, crop-book-v1.js diff
+      0 bytes, validate_aos 0 FAIL (31 PASS/21 SKIP), honest-data, two-tier write isolation, security.
+      Verdict: _COMMUNICATION/team_190/VERDICT_SFA-S003-P004-WP-CB-UI-REDESIGN_L-GATE_VALIDATE_v1.0.0.md
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-06-08"
+    validator: team_100
+    notes: >
+      Deployed to sfa.nimrod.bio via scripts/ftp_deploy_sfa_ui.sh (FTPS mirror to uPress) from the Mac
+      (team_00 authorized; IP allowlist open). Live smoke: all 7 surfaces + 2 new assets 200; redesign
+      confirmed serving (.hdr/.shell/redesign.css + stagenav/cb-crop-detail). Production qa_probe 14/14
+      PASS (no overflow). LOD500_LOCKED.
+  notes: "LOD500_LOCKED (team_100, 2026-06-08). Live on sfa.nimrod.bio. Cross-engine L-GATE_V PASS (team_190/
+    Cursor). 7 surfaces full-build + calc re-skin + DSX-1/DSX-2 fold shipped. Follow-ups (NOT blocking):
+    content WP (story description_md + care.*_md — honest empty-states until then); water(#0)=WP-CB-WATER;
+    cropdata_entry backend persistence WP (delivery tier read-only); DSX-1 emoji fold for untouched legacy
+    surfaces (search_results/community/crop_calendar macro — team_190 advisory)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
