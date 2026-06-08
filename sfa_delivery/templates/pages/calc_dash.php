@@ -11,9 +11,10 @@
  * recompute(), reads the rendered result, and surfaces it as .qb-answer +
  * .qb-break, accumulating each calculation into .qb-session (sessionStorage).
  *
- * Only 6 of the 14 calculators have client-side CALC math implemented
- * (seed/beds/yield/revenue/pop/fert). The other 8 are exposed in the builder
- * but flagged "בקרוב" (no fabricated result) — see CALC_GOALS data-soon below.
+ * WP-CB-CALC: 14 of 15 goals have live client-side math (scalar via CALC[kind];
+ * date via SFA_DATEC; compare via SFA_COMPARE). Only water (#0) is deferred
+ * ("בפיתוח" — WP-CB-WATER). Missing-data goals show an honest no-data state
+ * (no fabricated result) — see CALC_GOALS 'soon'/'shape' below.
  *
  * Assumptions are edited via the EXISTING AssumptionField editor
  * (macros/assumption_field.php) — opened from .qb-assum (primary entry point).
@@ -141,7 +142,7 @@ ob_start();
       <!-- Step 2 — crop (single) OR basket (for #13 compare) -->
       <div class="qb__step">
         <div class="qb__steplbl"><span class="qb__stepno">2</span><h3>עבור איזה גידול?</h3></div>
-        <label class="ipt" style="max-width:240px" data-goal-hide="compare">
+        <label class="ipt" style="max-width:240px" data-goal-hide="profit">
           <label>גידול</label>
           <span class="ipt__box">
             <select data-k="crop_slug" aria-label="בחר גידול" id="qb-crop">
@@ -153,7 +154,7 @@ ob_start();
           </span>
         </label>
         <!-- basket: multi-select for #13 compare -->
-        <div id="qb-basket" data-goal-input="compare" style="display:none">
+        <div id="qb-basket" data-goal-input="profit" style="display:none">
           <p style="font-size:12.5px;color:var(--gj-code-deep);margin:0 0 8px">בחרו גידולים להשוואה (2–6):</p>
           <div id="qb-basket-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"></div>
           <label class="ipt" style="max-width:240px">
