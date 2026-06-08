@@ -24,7 +24,7 @@ if (!isset($asset_ver)) {
     $_css_dir = __DIR__ . '/../public_assets/css';
     $_js_file = __DIR__ . '/../public_assets/js/sfa.js';
     $_mtimes  = [];
-    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras', 'classb', 'mobile-fixes'] as $_n) {
+    foreach (['tokens', 'gj', 'hub', 'community', 'crop-book-deep', 'crop-book-v1', 'desktop-extras', 'classb', 'mobile-fixes', 'redesign'] as $_n) {
         $_mt = @filemtime($_css_dir . '/' . $_n . '.css');
         if ($_mt) { $_mtimes[] = $_mt; }
     }
@@ -33,6 +33,9 @@ if (!isset($asset_ver)) {
     $_mt = @filemtime(__DIR__ . '/../public_assets/js/crop-book-v1.js');
     if ($_mt) { $_mtimes[] = $_mt; }
     $_mt = @filemtime(__DIR__ . '/../public_assets/js/classb.js');
+    if ($_mt) { $_mtimes[] = $_mt; }
+    // DSX-1 sprite bumps the buster too (icon edits must invalidate cache)
+    $_mt = @filemtime(__DIR__ . '/../public_assets/img/ui-icons.svg');
     if ($_mt) { $_mtimes[] = $_mt; }
     $asset_ver = $_mtimes ? max($_mtimes) : 'build';
 }
@@ -80,11 +83,15 @@ $_is_classb = (
 <?php if ($_is_classb): ?>
 <link rel="stylesheet" href="/public_assets/css/classb.css?v=<?= $h($asset_ver) ?>">
 <?php endif; ?>
-<?php /* Mobile fix layer (WP-CB-MOBILE) — MUST load LAST so its overrides win.
-       Loaded on every page: it carries layout-agnostic components (.pcal,
-       .cparam, .cta, .tier-*, .qb-*) used on crop/calc pages too, plus the
-       two ratified desktop-reaching sections (D1 market table, D2 type floor). */ ?>
+<?php /* Mobile fix layer (WP-CB-MOBILE) — carries layout-agnostic components
+       (.pcal, .cparam, .cta, .tier-*, .qb-*) used on crop/calc pages too,
+       plus the two ratified desktop-reaching sections (D1 market table,
+       D2 type floor). */ ?>
 <link rel="stylesheet" href="/public_assets/css/mobile-fixes.css?v=<?= $h($asset_ver) ?>">
+<?php /* WP-CB-UI-REDESIGN — the productionized DS layer (mock.css shell +
+       mock-v2 refinements + per-surface components). MUST load LAST so it
+       wins on equal specificity (team_35 gradual-adoption note). */ ?>
+<link rel="stylesheet" href="/public_assets/css/redesign.css?v=<?= $h($asset_ver) ?>">
 
 <script defer src="/public_assets/js/sfa.js?v=<?= $h($asset_ver) ?>"></script>
 <?php if (isset($active) && in_array($active, ['crop-book', 'calc'], true)): ?>
@@ -96,12 +103,14 @@ $_is_classb = (
 <?php endif; ?>
 </head>
 <body class="sfa-app">
-<?php /* Inline the SVG sprite once per page. Chrome (and others) do not resolve
-       <use href="external.svg#id"> reliably without CORS headers from the asset
-       host — the sprite ends up with empty bboxes despite a 200 fetch. Inlining
-       via readfile preserves a single sprite definition and lets every <use
-       href="#icon-X"> in macros/templates resolve synchronously. */
+<?php /* Inline BOTH SVG sprites once per page (crop icons + DSX-1 UI glyphs).
+       Chrome (and others) do not resolve <use href="external.svg#id"> reliably
+       without CORS headers from the asset host — the sprite ends up with empty
+       bboxes despite a 200 fetch. Inlining via readfile keeps a single sprite
+       definition and lets every <use href="#icon-X">/<use href="#i-X"> in
+       macros/templates resolve synchronously. */
 @readfile(__DIR__ . '/../public_assets/img/icons.svg');
+@readfile(__DIR__ . '/../public_assets/img/ui-icons.svg');
 ?>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sfa-logo" viewBox="0 0 48 48">
   <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="#3a4d22"/>
@@ -111,41 +120,45 @@ $_is_classb = (
   <path d="M24 21.5 C 29 21.5 33 18.5 34 13.5 C 28 13.5 24 16.5 24 21.5 Z" fill="#cfe0b0"/>
   <circle cx="24" cy="15.5" r="2.4" fill="#d39a32"/>
 </symbol></svg>
-<div class="sh">
-  <div class="sh__bar">
-    <a class="sh__mark" href="/" aria-label="SFA — דף הבית"><svg><use href="#sfa-logo"/></svg></a>
-    <div class="sh__name">SFA<small><?= $h($page_sub) ?></small></div>
-    <nav class="sh__nav">
-      <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר גידולים</a>
-      <a class="<?= trim('is-calc ' . ($active==='calc' ? 'is-active' : '')) ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
-      <a class="<?= trim('is-market ' . ($active==='market' ? 'is-active' : '')) ?>" href="/market/"><span class="g">₪</span>מחירון</a>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="/" aria-label="SFA — דף הבית">
+      <svg class="brand__logo" aria-hidden="true"><use href="#sfa-logo"/></svg>
+      <span>SFA<small><?= $h($page_sub) ?></small></span>
+    </a>
+    <nav class="nav" aria-label="ניווט ראשי">
+      <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/">ספר גידולים</a>
+      <a class="<?= $active==='calc' ? 'is-active' : '' ?>" href="/calc/">מחשבון</a>
+      <a class="<?= $active==='market' ? 'is-active' : '' ?>" href="/market/">מחירון</a>
     </nav>
-    <span class="sh__nav__sp"></span>
-    <?php /* Class B: inline search (≥760px); collapses to icon below that */ ?>
-    <form class="sh__search" action="/search" method="get" role="search" aria-label="חיפוש">
-      <span class="ic">⌕</span>
+    <span class="hdr__sp"></span>
+    <?php /* Inline search ≥680px; collapses to the icon affordance below that
+            (each surface carries its own in-page search — mock-v2 mobile header). */ ?>
+    <form class="search" action="/search" method="get" role="search" aria-label="חיפוש">
+      <span aria-hidden="true">⌕</span>
       <input type="search" name="q" placeholder="חיפוש גידולים ומחירים…" aria-label="שדה חיפוש">
     </form>
-    <a class="sh__icon" href="/search" title="חיפוש" aria-label="חיפוש">⌕</a>
-    <a class="sh__acct <?= $active==='account' ? 'is-active' : '' ?>" href="/account" aria-label="חשבון"><span class="av">◔</span>חשבון</a>
+    <a class="hdr__icon" href="/search" title="חיפוש" aria-label="חיפוש">⌕</a>
+    <a class="acct <?= $active==='account' ? 'is-active' : '' ?>" href="/account" aria-label="חשבון"><span class="av">◔</span>חשבון</a>
   </div>
-  <div class="sh__body"><?= $body_html ?></div>
-  <nav class="sh__nav--mobile" aria-label="ניווט ראשי">
-    <a class="<?= $active==='crop-book' ? 'is-active' : '' ?>" href="/crop-book/"><span class="g">▤</span>ספר</a>
-    <a class="<?= trim('is-calc ' . ($active==='calc' ? 'is-active' : '')) ?>" href="/calc/"><span class="g">∑</span>מחשבון</a>
-    <a class="<?= trim('is-market ' . ($active==='market' ? 'is-active' : '')) ?>" href="/market/"><span class="g">₪</span>מחירון</a>
-    <a class="<?= $active==='account' ? 'is-active' : '' ?>" href="/account"><span class="g">◔</span>חשבון</a>
-  </nav>
-  <footer class="sh__foot">
+</header>
+
+<main>
+  <div class="shell"><?= $body_html ?></div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot__in">
     <span class="dot"></span>
-    <a href="/">SFA</a> · קוד פתוח · קהילתי ·
-    <a href="/about">על הכלים</a> ·
+    <span><a href="/">SFA</a> · קוד פתוח · קהילתי · <a href="/about">על הכלים</a> ·
     <?php if ($active === 'community'): ?>
       <span aria-current="page">קהילה</span>
     <?php else: ?>
       <a href="/community">קהילה</a>
     <?php endif; ?>
-  </footer>
-</div>
+    </span>
+  </div>
+</footer>
 </body>
 </html>

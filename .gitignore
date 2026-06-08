@@ -61,3 +61,10 @@ data/external_sources/**/*.csv
 
 # Browser-QA (qa_probe.mjs) default output dir — transient screenshots/probes, never committed
 docs/qa/
+
+# dev-only local preview (WP-CB-UI-REDESIGN)
+sfa_delivery/.env
+sfa_delivery/.env.dev
+sfa_delivery/dev_router.php
+sfa_delivery/dev_seed.php
+sfa_delivery/dev_server.sh
