@@ -51,6 +51,12 @@ final class MarketViewController
         // from product_prices in a single query to avoid N+1.
         $aggregates = $this->fetchAggregatesAll();
 
+        // WP-CB-UI-REDESIGN (WI-5): per-product 28-point price series → sparkline +
+        // trend% (the mockup's drill-down graph). One query, merged into aggregates.
+        foreach ($this->fetchSeriesAll() as $pid => $s) {
+            $aggregates[$pid] = array_merge($aggregates[$pid] ?? [], $s);
+        }
+
         $products = [];
         foreach ($rows as $row) {
             $products[] = $this->mapProductRow($row, $aggregates[(int)$row['id']] ?? null);
@@ -248,6 +254,10 @@ final class MarketViewController
         $product['book_slug']         = $this->resolveCropSlug($row); // resolved crop slug ('' when none — no 404)
         $product['book_label_he']     = $hebrewName;
         $product['updated_he']        = $this->formatHebrewDate((string)($row['last_price_date'] ?? ''));
+        // WI-5: 28-day sparkline + week-over-week trend (empty/flat when no history).
+        $product['spark']             = $agg['spark']     ?? [];
+        $product['trend_pct']         = $agg['trend_pct'] ?? 0.0;
+        $product['trend_dir']         = (string)($agg['trend_dir'] ?? 'flat');
 
         return $product;
     }
@@ -304,6 +314,53 @@ final class MarketViewController
             }
         } catch (\Throwable $e) {
             // Aggregation is best-effort — template fallbacks handle missing keys.
+            return [];
+        }
+        return $out;
+    }
+
+    /**
+     * WP-CB-UI-REDESIGN (WI-5): per-product recent price series → normalized
+     * sparkline heights (35–95%) + week-over-week trend%. One query for all
+     * products; tolerates an absent product_prices table (returns empty).
+     *
+     * @return array<int,array{spark:int[],trend_pct:float,trend_dir:string}>
+     */
+    private function fetchSeriesAll(): array
+    {
+        $out = [];
+        try {
+            $stmt = $this->pdo->query(
+                'SELECT product_id, price FROM product_prices ORDER BY product_id, price_date'
+            );
+            if ($stmt === false) {
+                return [];
+            }
+            $byPid = [];
+            foreach ($stmt->fetchAll() as $r) {
+                $byPid[(int)($r['product_id'] ?? 0)][] = (float)($r['price'] ?? 0);
+            }
+            foreach ($byPid as $pid => $prices) {
+                $series = array_slice($prices, -28); // last 28 points
+                $n = count($series);
+                if ($n < 2) {
+                    $out[$pid] = ['spark' => array_map(static fn () => 60, $series), 'trend_pct' => 0.0, 'trend_dir' => 'flat'];
+                    continue;
+                }
+                $min = min($series);
+                $max = max($series);
+                $span = ($max - $min) > 1e-9 ? ($max - $min) : 1.0;
+                $spark = array_map(static fn ($p) => (int)round(35 + 60 * (($p - $min) / $span)), $series);
+                $first = $series[0];
+                $last  = $series[$n - 1];
+                $trend = $first > 0 ? round((($last - $first) / $first) * 100, 0) : 0.0;
+                $out[$pid] = [
+                    'spark'     => $spark,
+                    'trend_pct' => (float)$trend,
+                    'trend_dir' => $trend > 0.5 ? 'up' : ($trend < -0.5 ? 'down' : 'flat'),
+                ];
+            }
+        } catch (\Throwable) {
             return [];
         }
         return $out;

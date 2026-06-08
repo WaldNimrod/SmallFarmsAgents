@@ -299,39 +299,25 @@ final class ClassBRouteTest extends TestCase
 
     // ── F-5 FIX: market table <th> has no inline style= ─────────────────────
 
-    /** F-5 fix / WP-CB-MOBILE FIX 3: market list table is the .mkt-table 3-col,
-     *  styled via CSS classes (no inline style= on <th>). */
+    /** WP-CB-UI-REDESIGN (WI-5): the market list is a .pgrid of universal-drill-down
+     *  .pcard <details> cards (the .mkt-table table view is retired). No inline th style. */
     public function testMarketTableThHasNoInlineStyle(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
         $body = (string)$this->app->handle($req)->getBody();
-        // FIX 3: dense 3-col .mkt-table replaces the old .ptable on the market list.
-        $this->assertStringContainsString('mkt-table', $body, 'Market list table must use the .mkt-table 3-col (FIX 3)');
-        // Must NOT have inline style on <th>
-        $this->assertDoesNotMatchRegularExpression(
-            '#<th\s[^>]*style=#',
-            $body,
-            'Market table <th> must not use inline style= attribute (F-5 fix)'
-        );
+        $this->assertStringContainsString('class="pgrid"', $body, 'Market list must render the .pgrid drill-down card grid (WI-5)');
+        $this->assertStringContainsString('class="pcard', $body, 'Market list must render .pcard drill-down cards (WI-5)');
+        $this->assertDoesNotMatchRegularExpression('#<th\s[^>]*style=#', $body, 'No inline style= on any <th>');
     }
 
-    /** WP-CB-MOBILE D1: market list default view is TABLE (server-rendered). */
+    /** WP-CB-UI-REDESIGN (WI-5): market is a single card-drill-down grid (no cards⇄table
+     *  toggle). Each .pcard opens in place to range/median/sources/28-day graph. */
     public function testMarketListDefaultsToTableView(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/');
         $body = (string)$this->app->handle($req)->getBody();
-        // The audience switch must mark the table option active by default (D1).
-        $this->assertMatchesRegularExpression(
-            '#is-table[^"]*is-active#',
-            $body,
-            'Market default view must be TABLE — table option active server-side (D1)'
-        );
-        // The cards grid must be hidden by default (display:none) and table visible.
-        $this->assertMatchesRegularExpression(
-            '#pcard-grid"\s+data-aud-view="cards"\s+style="display:none#',
-            $body,
-            'Cards grid must be hidden by default when the table view is the default (D1)'
-        );
+        $this->assertStringContainsString('class="pgrid"', $body, 'Market list must render the .pgrid card grid');
+        $this->assertMatchesRegularExpression('#<details class="pcard#', $body, 'Each product is a <details class="pcard"> drill-down card');
     }
 
     /** WP-CB-MOBILE FIX 3: the market list disclaimer is a collapsible <details> (closed default). */
