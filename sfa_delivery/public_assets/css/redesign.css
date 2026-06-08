@@ -448,3 +448,12 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .changed{ color:var(--gj-sun-deep); font-weight:700; }
 .savebar{ position:sticky; bottom:0; display:flex; justify-content:space-between; align-items:center; gap:var(--sp-4); background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-l); box-shadow:var(--sh-l); padding:var(--sp-4) var(--sp-5); margin-top:var(--sp-5); }
 @media(max-width:680px){ .arow{ grid-template-columns:1fr; gap:10px; } .atoolbar{ position:static; } .assum-page .lead h1{ font-size:27px; } }
+
+/* ── WI-7 · calc RE-SKIN (calc_dash.php view) — DSX-1 glyph sizing only.
+      The LOCKED WP-CB-CALC engine (crop-book-v1.js, goals, result shapes,
+      parity, region picker, basket) is untouched — emoji→icon swaps + sizing. ── */
+.qb-goal .g{ line-height:0; display:inline-flex; }
+.qb-goal .g .gi{ width:18px; height:18px; }
+.qb-intro__ic .gi{ width:22px; height:22px; color:var(--gj-tomato); }
+.ipt .u .gi{ width:15px; height:15px; color:var(--gj-ink-soft); }
+.qb-session__head .gi{ width:16px; height:16px; }
