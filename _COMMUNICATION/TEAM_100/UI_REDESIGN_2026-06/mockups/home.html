@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · דף הבית · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--sp-6);align-items:center;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-7) var(--sp-6);box-shadow:var(--sh-m);margin-bottom:var(--sp-6);}
+.hero h1{font-size:clamp(32px,4.5vw,48px);line-height:1.1;font-weight:900;}
+.hero h1 em{font-style:normal;color:var(--gj-tomato);}
+.hero p{font-size:18px;color:var(--gj-ink-soft);max-width:48ch;margin:var(--sp-3) 0 var(--sp-4);line-height:1.6;}
+.hero .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--sp-5);}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;}
+.collage{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.collage div{aspect-ratio:1;border-radius:var(--r-m);background:radial-gradient(circle at 50% 40%,#fff,#eef4ee);display:grid;place-items:center;overflow:hidden;box-shadow:var(--sh-s);}
+.collage img{width:78%;height:78%;object-fit:contain;}
+
+.ghead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:var(--sp-6) 0 var(--sp-4);}
+.ghead h2{font-size:26px;font-weight:700;}
+
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);}
+.tool{display:flex;flex-direction:column;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);overflow:hidden;box-shadow:var(--sh-s);transition:transform .12s ease,box-shadow .12s ease;}
+.tool:hover{transform:translateY(-3px);box-shadow:var(--sh-m);}
+.tool__art{height:150px;background:linear-gradient(160deg,#eef4ee,#dde8dd);display:grid;place-items:center;overflow:hidden;position:relative;}
+.tool__art img{width:100%;height:100%;object-fit:cover;}
+.tool__tier{position:absolute;top:10px;inset-inline-end:10px;}
+.tool__b{padding:var(--sp-4) var(--sp-5) var(--sp-5);display:flex;flex-direction:column;flex:1;}
+.tool__t{font-family:var(--gj-font-head);font-size:21px;font-weight:700;}
+.tool__d{color:var(--gj-ink-soft);font-size:14px;margin:6px 0 0;flex:1;}
+.tool__f{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+.tool__stat{font-size:13px;color:var(--gj-ink-soft);font-weight:600;}
+.tool__go{font-weight:700;color:var(--gj-leaf-deep);}
+
+.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);}
+.audcard{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-5);box-shadow:var(--sh-s);}
+.audcard .ic{font-size:32px;}
+.audcard .t{font-family:var(--gj-font-head);font-size:20px;font-weight:700;margin-top:8px;}
+.audcard .t small{display:block;font-family:var(--gj-font-mono);font-size:11px;font-weight:500;color:var(--gj-ink-soft);letter-spacing:.05em;}
+.audcard p{color:var(--gj-ink-soft);font-size:14px;margin:8px 0 12px;}
+.audcard .go{font-weight:700;color:var(--gj-leaf-deep);}
+
+.manifest{display:grid;grid-template-columns:auto 1fr auto;gap:var(--sp-5);align-items:center;background:linear-gradient(135deg,#f3f8ec,#eef4ee);border:1px solid var(--gj-leaf-soft);border-radius:var(--r-l);padding:var(--sp-6);margin:var(--sp-6) 0;}
+.manifest .mk{width:64px;height:64px;border-radius:16px;background:var(--gj-leaf-deep);display:grid;place-items:center;font-size:32px;}
+.manifest h2{font-size:24px;}.manifest h2 em{font-style:normal;color:var(--gj-tomato);}
+.manifest p{color:#374239;margin:6px 0 0;max-width:60ch;}
+.manifest .stats{display:flex;gap:var(--sp-5);}
+.manifest .stats b{font-family:var(--gj-font-head);font-size:30px;font-weight:900;color:var(--gj-leaf-deep);display:block;line-height:1;}
+.manifest .stats span{font-size:12px;color:var(--gj-ink-soft);}
+
+.cta3{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);}
+.ctacard{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-5);box-shadow:var(--sh-s);}
+.ctacard h3{font-size:18px;}.ctacard p{color:var(--gj-ink-soft);font-size:14px;margin:6px 0 12px;}
+.ctafield{display:flex;gap:8px;}
+.ctafield input{flex:1;border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:9px 14px;font-family:inherit;font-size:14px;outline:none;}
+
+.soon{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);}
+.soontile{display:flex;gap:12px;align-items:center;background:var(--gj-paper);border:1px dashed var(--gj-line);border-radius:var(--r-m);padding:var(--sp-4);opacity:.85;}
+.soontile .e{font-size:26px;}
+.soontile b{display:block;}.soontile span{font-size:12px;color:var(--gj-ink-soft);}
+
+@media(max-width:760px){
+  .hero{grid-template-columns:1fr;}.tools,.aud,.soon{grid-template-columns:1fr;}
+  .cta3{grid-template-columns:1fr;}.manifest{grid-template-columns:1fr;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP</span> <b>דף הבית</b> · אותו שלד, container רוחב אחיד, איורים אמיתיים · hub: כניסה → 3 כלים → קהלי יעד → מניפסט → תרומה.</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="#"><span class="mk">🌱</span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a href="crop_card.html">ספר גידולים</a><a href="calc.html">מחשבון</a><a href="market.html">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <h1>כלים פתוחים לחקלאות <em>מקומית</em></h1>
+        <p>ספר גידולים קהילתי, מחירון שוק בזמן-אמת, ומחשבון שדה — בנויים על ניסיון שדה ומחקר AI, פתוחים לכולם.</p>
+        <div class="pills"><span class="pill pill--leaf">72 גידולים בספר</span><span class="pill pill--tomato">38 מוצרים במחירון</span></div>
+        <div class="cta"><a class="btn btn--leaf" href="crop_card.html">לספר הגידולים ←</a><a class="btn btn--ghost" href="market.html">למחירון</a></div>
+      </div>
+      <div class="collage">
+        <div><img src="./wc/wc-tomato.png" alt=""></div>
+        <div><img src="./wc/wc-lettuce.png" alt=""></div>
+        <div><img src="./wc/wc-pepper.png" alt=""></div>
+        <div><img src="./wc/wc-carrot.png" alt=""></div>
+        <div><img src="./wc/wc-eggplant.png" alt=""></div>
+        <div><img src="./wc/wc-cucumber.png" alt=""></div>
+      </div>
+    </section>
+
+    <!-- OPEN TOOLS -->
+    <div class="ghead"><h2>הכלים שלנו</h2><span class="eyebrow">זמינים עכשיו</span></div>
+    <div class="tools">
+      <a class="tool" href="crop_card.html">
+        <div class="tool__art"><img src="./wc/module-crop-book.png" alt="ספר גידולים"><span class="tool__tier"><span class="pill pill--leaf">פתוח</span></span></div>
+        <div class="tool__b">
+          <div class="tool__t">ספר הגידולים</div>
+          <p class="tool__d">מועדי זריעה ושתילה, ריווח, טיפול לאורך העונה ויבול צפוי — לכל גידול.</p>
+          <div class="tool__f"><span class="tool__stat">72 גידולים</span><span class="tool__go">כניסה ←</span></div>
+        </div>
+      </a>
+      <a class="tool" href="market.html">
+        <div class="tool__art"><img src="./wc/module-market.png" alt="מחירון"><span class="tool__tier"><span class="pill pill--tomato">פתוח</span></span></div>
+        <div class="tool__b">
+          <div class="tool__t">מחירון השוק</div>
+          <p class="tool__d">מדד מחירים קהילתי לירקות אורגניים — מגמות, טווחים וטריות בזמן-אמת.</p>
+          <div class="tool__f"><span class="tool__stat">38 מוצרים</span><span class="tool__go">כניסה ←</span></div>
+        </div>
+      </a>
+      <a class="tool" href="calc.html">
+        <div class="tool__art"><img src="./wc/module-calc.png" alt="מחשבון"><span class="tool__tier"><span class="pill pill--leaf">פתוח</span></span></div>
+        <div class="tool__b">
+          <div class="tool__t">מחשבון השדה</div>
+          <p class="tool__d">כמות זרעים ושתילים, יבול והכנסה — לפי המרווח, הערוגה והמשק שלכם.</p>
+          <div class="tool__f"><span class="tool__stat">6 מחשבונים</span><span class="tool__go">כניסה ←</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- AUDIENCE -->
+    <div class="ghead"><h2>למי זה מתאים?</h2></div>
+    <div class="aud">
+      <a class="audcard" href="crop_card.html">
+        <div class="ic">🌱</div><div class="t">גנן · מתעניין<small>GARDENER</small></div>
+        <p>ספר גידולים עם מועדי זריעה, ריווח וטיפול — לגינה הביתית, בשפה פשוטה.</p>
+        <span class="go">לספר הגידולים ←</span>
+      </a>
+      <a class="audcard" href="market.html">
+        <div class="ic">🚜</div><div class="t">חקלאי מקומי<small>FARMER</small></div>
+        <p>מחירון שוק ומחשבון שדה — נתונים, טווחים ומקורות לקבלת החלטות.</p>
+        <span class="go">למחירון ←</span>
+      </a>
+      <a class="audcard" href="#">
+        <div class="ic">💡</div><div class="t">מתכנן · יועץ<small>PLANNER</small></div>
+        <p>כלים מתקדמים לתכנון עונה, מעקב יבול ואינטגרציות שדה.</p>
+        <span class="go">על הכלים ←</span>
+      </a>
+    </div>
+
+    <!-- MANIFEST -->
+    <section class="manifest">
+      <div class="mk">🌱</div>
+      <div>
+        <h2>ידע פתוח לחקלאות <em>מקומית</em></h2>
+        <p>SFA נבנה על ניסיון שדה קהילתי ומחקר AI. כל נתון — מחיר, מינון, מועד — פתוח לעיון, להרחבה ולתרומה.</p>
+      </div>
+      <div class="stats"><div><b>72</b><span>גידולים בספר</span></div><div><b>38</b><span>מוצרים במחירון</span></div></div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta3">
+      <div class="ctacard">
+        <h3>עזרו להשלים את המידע</h3>
+        <p>הספר והמחירון גדלים מתרומות הקהילה. מצאתם נתון חסר או מחיר עדכני? ספרו לנו.</p>
+        <a class="btn btn--primary" href="#">◐ השלמת מידע ←</a>
+      </div>
+      <div class="ctacard">
+        <h3>הצעה או בקשה?</h3>
+        <p>אין צ׳אט — טופס קצר.</p>
+        <div class="ctafield"><input placeholder="מה תרצו שנפתח?"><button class="btn btn--leaf">שליחה</button></div>
+      </div>
+    </div>
+
+    <!-- COMING SOON -->
+    <div class="ghead"><h2>בפיתוח</h2><span class="eyebrow">בקרוב</span></div>
+    <div class="soon">
+      <div class="soontile"><span class="e">📒</span><div><b>יומן השדה</b><span>תיעוד זריעה, השקיה ויבול</span></div></div>
+      <div class="soontile"><span class="e">📦</span><div><b>ניהול מלאי</b><span>זרעים, שתילים ותשומות</span></div></div>
+      <div class="soontile"><span class="e">🧾</span><div><b>מכירות ולקוחות</b><span>הזמנות, CSA ונקודת מכירה</span></div></div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+</body>
+</html>

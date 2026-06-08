@@ -1,0 +1,106 @@
+/* ============================================================
+   SFA UI Redesign — v2 REFINEMENT LAYER  (team_35, Step-2 handoff)
+   Loads AFTER each page's inline <style> so it wins on equal
+   specificity. Implements the actioned REVIEW_RESPONSE items:
+   DSX-1 icon glyphs · DSX-2 type scale · RTL number isolation ·
+   dl de-crush · calc step-badge fix · mobile header · a11y.
+   Base design system (mock.css) stays LOCKED & untouched.
+   ============================================================ */
+
+/* ---- DSX-2 · named type scale (the readability floor, Q-C) ---- */
+:root{
+  --fs-body:17px;
+  --fs-data:18px;        /* the hero number in a stat            */
+  --fs-secondary:14px;   /* units, breakdowns, “שווי”, captions  */
+  --fs-micro:13px;       /* smallest label allowed anywhere      */
+}
+@media(min-width:760px){
+  :root{ --fs-body:18px; --fs-data:19px; }
+}
+body{ font-size:var(--fs-body); }
+
+/* lift every known secondary/micro offender to the floor (no surface under 13px) */
+.foot,.foot__in,.foot__in span,.note,.second,.muted{ font-size:var(--fs-secondary); }
+.tag,.eyebrow,.brand small,.cc__latin,.cc__stats span,.srcline,.gu,.breakdown,
+.dl dd .u,.relcard .ph + *,.kf,.ksrc .sp{ font-size:var(--fs-micro); }
+.dl dt{ font-size:15px; }
+.cc__stats b{ font-size:var(--fs-data); }
+.nav a{ font-size:15px; }
+
+/* ---- DSX-1 · line-glyph icons (replaces ALL emoji, principle #6) ---- */
+.gi{
+  display:inline-block; width:1.05em; height:1.05em; vertical-align:-0.16em;
+  fill:none; stroke:currentColor; stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto;
+}
+.gi use{ pointer-events:none; }
+/* a couple of contexts want a touch more presence */
+.topic__ic .gi,.agroup > summary .gic .gi{ width:20px; height:20px; color:var(--gj-leaf-deep); }
+.goal .g .gi{ width:16px; height:16px; }
+.pill .gi,.tag .gi,.mktchip .gi{ width:1em; height:1em; }
+/* icon-container contrast: light glyph on the dark brand/manifest tiles */
+.brand .mk,.manifest .mk{ color:#f6f1e3; }
+.audcard .ic{ color:var(--gj-leaf-deep); }
+.soontile .e{ color:var(--gj-ink-soft); }
+.why .ic{ color:var(--gj-sun-deep); }
+
+/* ---- RTL number integrity (cross-cutting #3) ---- */
+/* every numeric/value run is isolated LTR so ranges never bidi-break */
+.num{ unicode-bidi:isolate; direction:ltr; white-space:nowrap; font-family:var(--gj-font-mono); }
+.cc__stats b,.dl dd,.spaceviz .big,.r-scalar .big,.r-date .d,.pc__price,.glance b{
+  unicode-bidi:isolate; direction:ltr; white-space:nowrap;
+}
+.cc__stats b{ line-height:1.18; }            /* the book-card collision fix */
+.dl dd{ line-height:1.3; }
+
+/* ---- crop drill-down: de-crush the data list (cross-cutting #4) ---- */
+.stage .dl,.topic__body .dl{ grid-template-columns:1fr 1fr; gap:2px var(--sp-6); }
+@media(max-width:640px){ .stage .dl,.topic__body .dl{ grid-template-columns:1fr; } }
+
+/* ---- calc: reserve a badge column so it never overlaps the heading ---- */
+.step__h{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; column-gap:10px; }
+.step__h b{ line-height:1.25; }
+.step__h .opt{ margin-inline-start:0; font-size:var(--fs-micro); white-space:nowrap; }
+.goals{ margin-top:10px; }                    /* clearance for the -7px availability chips */
+.goal{ font-size:14px; }
+.goal .st{ font-size:10px; }
+
+/* ---- crop card: demote the calc CTA so it stops fighting the H1 ---- */
+.calcbtn{
+  background:var(--gj-paper); color:var(--gj-leaf-deep);
+  border:1px solid var(--gj-leaf-soft); box-shadow:none;
+}
+.calcbtn:hover{ background:#eef5e7; }
+
+/* ---- book card: optional ₪ market chip (P3 interlink) ---- */
+.cc__price{
+  display:inline-flex; align-items:center; gap:5px; align-self:flex-start;
+  font-size:var(--fs-micro); font-weight:600; color:var(--gj-tomato-deep);
+  background:#f7e2da; border-radius:var(--r-pill); padding:3px 10px;
+}
+.cc__price .num{ font-weight:700; }
+
+/* ---- assumptions: make “used-in” chips real links (P3 interlink) ---- */
+.usedin a,.chip-link{ text-decoration:none; }
+.usedin a:hover{ background:var(--gj-leaf-soft); color:#26341c; }
+
+/* ---- a11y: give the ⓘ knowledge affordance a 44px touch target ---- */
+.qm{ position:relative; }
+.qm::after{ content:""; position:absolute; inset:-13px; border-radius:50%; }
+
+/* ---- mobile header: it now has a behaviour (cross-cutting #5) ---- */
+@media(max-width:680px){
+  .hdr__in{ flex-wrap:wrap; height:auto; min-height:56px; padding-block:9px; gap:10px 12px; }
+  .brand{ font-size:18px; }
+  .brand small{ display:none; }
+  .hdr__sp{ display:none; }
+  .search,.acct{ display:none; }                 /* search lives in-page on each surface */
+  .nav{ order:5; width:100%; margin-inline-start:0; overflow-x:auto; gap:4px; padding-bottom:2px; }
+  .nav a{ white-space:nowrap; }
+}
+
+/* ---- strip the sandbox MOCKUP caption bar for the handoff build ---- */
+.mockbar{ display:none !important; }
+
+/* ---- market: name the “no trend” state honestly instead of “–?” ---- */
+.pc__trend--none::after{ content:"אין מגמה"; }

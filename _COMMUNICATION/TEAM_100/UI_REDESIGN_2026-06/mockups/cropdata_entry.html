@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · כלי הזנה מודרך (פנימי) · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+body{background:var(--gj-paper-3);}
+.tool{max-width:720px;margin:0 auto;padding:var(--sp-5) var(--shell-pad) var(--sp-7);}
+.thead{display:flex;align-items:center;gap:12px;margin-bottom:var(--sp-4);}
+.thead .badge{background:var(--gj-soil);color:#fff;border-radius:var(--r-pill);padding:3px 12px;font-size:12px;font-weight:700;}
+.thead h1{font-size:22px;font-weight:800;}
+.thead .muted{margin-inline-start:auto;font-size:13px;}
+
+/* progress */
+.prog{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);height:12px;overflow:hidden;margin-bottom:6px;}
+.prog i{display:block;height:100%;background:var(--gj-leaf);width:47%;}
+.proglbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--gj-ink-soft);margin-bottom:var(--sp-5);}
+
+/* crop card */
+.card{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);box-shadow:var(--sh-m);padding:var(--sp-6);}
+.crop{display:flex;align-items:center;gap:16px;margin-bottom:var(--sp-5);padding-bottom:var(--sp-4);border-bottom:1px solid var(--gj-line);}
+.crop__art{width:72px;height:72px;border-radius:var(--r-m);background:radial-gradient(circle at 50% 40%,#fff,#eef4ee);display:grid;place-items:center;overflow:hidden;}
+.crop__art img{width:64px;height:64px;object-fit:contain;}
+.crop__n{font-family:var(--gj-font-head);font-size:28px;font-weight:800;}
+.crop__l{color:var(--gj-ink-soft);font-style:italic;font-size:14px;}
+.crop__c{margin-inline-start:auto;font-size:12px;color:var(--gj-ink-soft);}
+
+.q{margin-bottom:var(--sp-5);}
+.q__h{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px;}
+.q__h .qm{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--gj-paper-3);color:var(--gj-ink-soft);font-size:9px;font-weight:700;}
+.picks{display:flex;gap:8px;flex-wrap:wrap;}
+.pick{position:relative;font-family:inherit;font-size:14px;font-weight:600;padding:12px 16px;border-radius:var(--r-m);border:1px solid var(--gj-line);background:var(--gj-paper-2);cursor:pointer;color:var(--gj-ink);}
+.pick.on{background:var(--gj-leaf-deep);color:#fff;border-color:var(--gj-leaf-deep);}
+.pick kbd{position:absolute;top:-7px;inset-inline-start:7px;background:var(--gj-ink);color:#fff;border-radius:4px;font-size:9px;padding:1px 5px;font-family:var(--gj-font-mono);}
+.cond{display:none;margin-top:var(--sp-4);padding:14px;background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-m);}
+.cond.show{display:block;}
+.cond .fld{display:flex;align-items:center;gap:8px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:8px 12px;max-width:180px;}
+.cond input{border:0;background:transparent;outline:none;font-family:inherit;font-weight:700;font-size:18px;width:60px;text-align:center;}
+
+.actions{display:flex;align-items:center;gap:10px;margin-top:var(--sp-5);padding-top:var(--sp-4);border-top:1px solid var(--gj-line);}
+.actions .hint{font-size:12px;color:var(--gj-ink-soft);}
+.actions .sp{flex:1;}
+.queue{margin-top:var(--sp-5);background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:14px 18px;}
+.queue h5{margin:0 0 8px;font-size:13px;}
+.queue .row{display:flex;gap:8px;flex-wrap:wrap;}
+.queue .chip{background:var(--gj-paper-2);border-radius:var(--r-pill);padding:3px 11px;font-size:12px;color:var(--gj-ink-soft);}
+.queue .chip.done{background:#e7f1d8;color:var(--gj-leaf-deep);}
+</style>
+</head>
+<body>
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP · פנימי</span> <b>כלי הזנה מודרך</b> · WP-CB-CROPDATA-DATES · סיווג מהיר של planting_method + frost_class (+ ימי משתלה מותנה) · ניווט מקלדת · גידול אחד בכל פעם.</div></div>
+
+<div class="tool">
+  <div class="thead"><span class="badge">פנימי · בעלים בלבד</span><h1>סיווג נתוני גידולים</h1><span class="muted">מקלדת: 1–5 לבחירה · Enter לשמירה</span></div>
+
+  <div class="prog"><i></i></div>
+  <div class="proglbl"><span><b style="color:var(--gj-ink)">33</b> / 70 גידולים סווגו</span><span>נותרו 37 · ~6 דק׳</span></div>
+
+  <div class="card">
+    <div class="crop">
+      <div class="crop__art"><img src="./wc/wc-potato.png" alt="בטטה"></div>
+      <div><div class="crop__n">בטטה</div><div class="crop__l">Ipomoea batatas · סולניים? לא — חבלבליים</div></div>
+      <div class="crop__c">גידול 34 מתוך 70</div>
+    </div>
+
+    <div class="q">
+      <div class="q__h">שיטת ריבוי <a class="qm" title="כיצד מתחילים את הגידול.">ⓘ</a></div>
+      <div class="picks">
+        <button class="pick"><kbd>1</kbd>זריעה ישירה</button>
+        <button class="pick"><kbd>2</kbd>שתיל</button>
+        <button class="pick"><kbd>3</kbd>גם וגם</button>
+        <button class="pick on"><kbd>4</kbd>פקעת / שלוחה</button>
+        <button class="pick"><kbd>5</kbd>ייחור</button>
+      </div>
+      <div class="cond" id="nursery"><div style="font-size:13px;font-weight:600;margin-bottom:8px">ימים במשתלה (לשתיל / גם-וגם)</div><div class="fld"><input value="—"><span class="muted">ימים</span></div></div>
+    </div>
+
+    <div class="q">
+      <div class="q__h">עמידות לקרה <a class="qm" title="רגישות הגידול לקרה — קובע את חלון השתילה הבטוח.">ⓘ</a></div>
+      <div class="picks">
+        <button class="pick"><kbd>1</kbd>קשיח מאוד</button>
+        <button class="pick"><kbd>2</kbd>קשיח</button>
+        <button class="pick"><kbd>3</kbd>בינוני</button>
+        <button class="pick on"><kbd>4</kbd>רגיש</button>
+        <button class="pick"><kbd>5</kbd>רגיש מאוד</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span class="hint">⏎ שמור והמשך · ⌫ דלג · → הקודם</span>
+      <span class="sp"></span>
+      <button class="btn btn--ghost">דלג</button>
+      <button class="btn btn--leaf">שמור והבא ←</button>
+    </div>
+  </div>
+
+  <div class="queue">
+    <h5>תור הסיווג</h5>
+    <div class="row">
+      <span class="chip done">✓ עגבנייה</span><span class="chip done">✓ מלפפון</span><span class="chip done">✓ חסה</span><span class="chip" style="background:var(--gj-leaf-deep);color:#fff">בטטה</span><span class="chip">דלעת</span><span class="chip">תירס</span><span class="chip">במיה</span><span class="chip">+ 33</span>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.q').forEach(function(q){
+  q.querySelectorAll('.pick').forEach(function(p){
+    p.addEventListener('click',function(){
+      q.querySelectorAll('.pick').forEach(function(x){x.classList.remove('on');});
+      p.classList.add('on');
+      if(q.querySelector('#nursery')||q.contains(document.getElementById('nursery'))){
+        var t=p.textContent; document.getElementById('nursery').classList.toggle('show', t.indexOf('שתיל')>=0||t.indexOf('גם')>=0);
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

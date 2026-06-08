@@ -4644,6 +4644,41 @@ work_packages:
     Remaining closure: team_191 archive of _COMMUNICATION/*/SFA-S003-P004-WP-CB-CALC/ per IR#15."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-UI-REDESIGN
+  label: "ספר גידולים: גרסה מעוצבת מחדש — מימוש 6 מסכים ציבוריים + re-skin מחשבון (חבילת team_35 hi-fi · DSX-1/DSX-2) עד פריסה מלאה ב-sfa.nimrod.bio"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-08"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-CALC", "SFA-S003-P004-WP-CB-MOBILE"]
+  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-REDESIGN/WORKPLAN_full-version_2026-06-08_v1.0.0.md"
+  design_ref: "_COMMUNICATION/team_35/SFA-S003-P004-WP-CB-UI-REDESIGN/handoff_ui_redesign/README.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-08"
+    validator: team_00
+    notes: >
+      Full redesigned public version. team_35 (Design Studio / claude-design) delivered the Step-2 hi-fi
+      handoff (handoff_ui_redesign/: 7 surfaces on locked mock.css + mock-v2.css refinement layer + sfa-icons.js;
+      DSX-1 icon set + DSX-2 type/readability floor; decisions Q-A..Q-D). Scope: FULL BUILD of 6 public surfaces
+      (home, book_list, crop_card, market, assumptions) + internal cropdata_entry; RE-SKIN ONLY of the calculator
+      (WP-CB-CALC engine is LOD500_LOCKED — must NOT be re-implemented). Folds the F-02/F-03/F-04 CSS-polish
+      findings deferred from WP-CB-CALC QA. Plan = WORKPLAN_full-version (WI-0 DS foundation -> WI-1 shell ->
+      WI-2..6/8 build -> WI-7 calc re-skin -> WI-9 QA -> WI-10 deploy to uPress). Awaits team_00 build go.
+      Handoff: _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-REDESIGN/HANDOFF_SFA-S003-P004-WP-CB-UI-REDESIGN_v1.0.0.md
+  notes: "REGISTER (team_00, 2026-06-08). Design in hand (team_35 LOD300 hi-fi). Implementation: 6 public
+    surfaces full-build + calc re-skin + DSX-1/DSX-2 fold -> production on sfa.nimrod.bio with cross-engine
+    L-GATE_V. Content dependency (story description_md + care.*_md) = honest empty-states until a content WP;
+    water(#0) = WP-CB-WATER. FTP allowlist OPEN (team_00 2026-06-08)."
+  profile: L0
+
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
   label: "ספר גידולים: כיסוי מקורות EX/PR/WR בתצוגת העמקה (כיסוי-נתונים + ניקוי הערה ישנה)"
   status: DEFERRED

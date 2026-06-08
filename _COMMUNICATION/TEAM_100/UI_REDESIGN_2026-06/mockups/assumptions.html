@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · הנחות היסוד שלי · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.lead{margin-bottom:var(--sp-5);}
+.lead h1{font-size:34px;font-weight:900;}
+.lead p{margin:6px 0 0;color:var(--gj-ink-soft);max-width:68ch;}
+
+/* explainer band — WHY these matter */
+.why{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,#f3f8ec,#eef4ee);border:1px solid var(--gj-leaf-soft);border-radius:var(--r-l);padding:var(--sp-5);margin-bottom:var(--sp-5);}
+.why .ic{font-size:26px;}
+.why b{color:var(--gj-leaf-deep);}
+
+/* toolbar: search + reset (scales to many) */
+.atoolbar{position:sticky;top:62px;z-index:20;display:flex;gap:var(--sp-3);align-items:center;flex-wrap:wrap;background:rgba(238,244,238,.95);backdrop-filter:blur(6px);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-5);}
+.atoolbar .fsearch{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:9px 16px;}
+.atoolbar .fsearch input{border:0;background:transparent;outline:none;font-family:inherit;font-size:15px;width:100%;}
+.atoolbar .cnt{font-size:13px;color:var(--gj-ink-soft);}
+
+/* a collapsible group */
+.agroup{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);box-shadow:var(--sh-s);margin-bottom:var(--sp-4);overflow:hidden;}
+.agroup > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:var(--sp-4) var(--sp-5);font-family:var(--gj-font-head);font-size:19px;font-weight:700;}
+.agroup > summary::-webkit-details-marker{display:none;}
+.agroup > summary .gic{width:34px;height:34px;border-radius:9px;background:var(--gj-paper-2);display:grid;place-items:center;font-size:17px;}
+.agroup > summary .gc{margin-inline-start:auto;font-family:var(--gj-font-body);font-size:13px;font-weight:600;color:var(--gj-ink-soft);background:var(--gj-paper-2);border-radius:var(--r-pill);padding:2px 11px;}
+.agroup > summary .chev{color:var(--gj-ink-soft);transition:transform .15s;}
+.agroup[open] > summary .chev{transform:rotate(180deg);}
+.agroup__body{padding:0 var(--sp-5) var(--sp-3);}
+
+/* one assumption row — label+explain+used-in | value | default */
+.arow{display:grid;grid-template-columns:1fr 175px 130px;gap:var(--sp-4);align-items:center;padding:var(--sp-4) 0;border-top:1px solid var(--gj-line);}
+.arow__main b{font-size:16px;}
+.arow__main p{margin:3px 0 6px;font-size:13px;color:var(--gj-ink-soft);}
+.usedin{display:flex;gap:5px;flex-wrap:wrap;}
+.usedin .u{font-size:11px;font-weight:600;color:var(--gj-code-deep);background:#dff0f0;border-radius:var(--r-pill);padding:1px 9px;}
+.val{display:flex;align-items:center;gap:8px;background:var(--gj-paper-2);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:8px 12px;}
+.val input{border:0;background:transparent;outline:none;font-family:inherit;font-size:20px;font-weight:700;width:100%;text-align:center;color:var(--gj-ink);}
+.val .un{font-size:13px;color:var(--gj-ink-soft);white-space:nowrap;}
+.def{font-size:12px;color:var(--gj-ink-soft);text-align:center;}
+.def a{display:inline-block;margin-top:4px;color:var(--gj-code-deep);text-decoration:underline;}
+.changed{color:var(--gj-sun-deep);font-weight:700;}
+
+/* sticky save bar */
+.savebar{position:sticky;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);box-shadow:var(--sh-l);padding:var(--sp-4) var(--sp-5);margin-top:var(--sp-5);}
+
+@media(max-width:680px){ .arow{grid-template-columns:1fr;gap:10px;} .atoolbar{position:static;} }
+</style>
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP</span> <b>הנחות היסוד שלי</b> · ניהול נתוני-הבסיס (רוחב ערוגה, אחוז נביטה…) בקבוצות מתקפלות + חיפוש + "בשימוש ב:" — בנוי לגדול למאות פרמטרים בלי להציף.</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="#"><span class="mk">🌱</span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a href="crop_card.html">ספר גידולים</a><a class="is-active" href="calc.html">מחשבון</a><a href="#">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <div class="lead">
+      <h1>הנחות היסוד שלי</h1>
+      <p>ברירות המחדל שמזינות את כל המחשבונים ואת המספרים המחושבים בספר.</p>
+    </div>
+
+    <div class="why">
+      <span class="ic">💡</span>
+      <div>שנו ערך <b>פעם אחת</b> — וכל החישובים בכל הגידולים מתעדכנים. למשל: שינוי <b>רוחב הערוגה</b> מ-80 ל-100 ס״מ משפיע על צפיפות השתילה, כמות הזרעים והיבול לערוגה בכל הספר. כל ערך מציג היכן הוא בשימוש ומה ברירת המחדל הקהילתית.</div>
+    </div>
+
+    <div class="atoolbar">
+      <div class="fsearch"><span>⌕</span><input placeholder="חפשו הנחה… (רוחב ערוגה, נביטה, מחיר…)"></div>
+      <span class="cnt">12 הנחות פעילות · 3 שונו מברירת המחדל</span>
+      <a class="btn btn--ghost" href="#" style="padding:8px 16px">↺ אפס הכל</a>
+    </div>
+
+    <!-- GROUP 1 -->
+    <details class="agroup" open>
+      <summary><span class="gic">▭</span> ערוגה ושטח <span class="gc">3 הנחות</span><span class="chev">▾</span></summary>
+      <div class="agroup__body">
+        <div class="arow">
+          <div class="arow__main"><b>רוחב ערוגה</b><p>הרוחב הסטנדרטי של ערוגה במשק שלכם. בסיס לכל חישובי הצפיפות.</p><div class="usedin"><span class="u">זרעים</span><span class="u">שתילים</span><span class="u">צפיפות</span><span class="u">יבול</span></div></div>
+          <div class="val"><input value="80"><span class="un">ס״מ</span></div>
+          <div class="def">ברירת מחדל: 80<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>אורך ערוגה סטנדרטי</b><p>אורך ברירת מחדל לחישובי יבול והכנסה "לערוגה".</p><div class="usedin"><span class="u">יבול</span><span class="u">הכנסה</span></div></div>
+          <div class="val"><input value="10"><span class="un">מ׳</span></div>
+          <div class="def">ברירת מחדל: 10<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>רוחב מעבר בין ערוגות</b><p>לחישוב ניצולת שטח כולל בחלקה.</p><div class="usedin"><span class="u">מס׳ ערוגות</span></div></div>
+          <div class="val"><input value="50"><span class="un">ס״מ</span></div>
+          <div class="def">ברירת מחדל: 50<a href="#">↺ אפס</a></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- GROUP 2 -->
+    <details class="agroup" open>
+      <summary><span class="gic">🌱</span> זרעים ונביטה <span class="gc">3 הנחות</span><span class="chev">▾</span></summary>
+      <div class="agroup__body">
+        <div class="arow">
+          <div class="arow__main"><b>אחוז נביטה</b><p>שיעור הזרעים שצפויים לנבוט. נמוך יותר = צריך יותר זרעים.</p><div class="usedin"><span class="u">זרעים</span><span class="u">עלות זרעים</span></div></div>
+          <div class="val"><input value="90"><span class="un">%</span></div>
+          <div class="def"><span class="changed">שונה</span> · מחדל: 85<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>מקדם ביטחון לזרעים</b><p>עודף מעבר לחישוב, לכיסוי אובדן בשתילה.</p><div class="usedin"><span class="u">זרעים</span><span class="u">שתילים</span></div></div>
+          <div class="val"><input value="1.1"><span class="un">×</span></div>
+          <div class="def">ברירת מחדל: 1.1<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>זרעים לבור/תא</b><p>כמה זרעים מניחים בכל בור או תא משתלה.</p><div class="usedin"><span class="u">זרעים</span></div></div>
+          <div class="val"><input value="2"><span class="un">זרעים</span></div>
+          <div class="def"><span class="changed">שונה</span> · מחדל: 1<a href="#">↺ אפס</a></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- GROUP 3 -->
+    <details class="agroup">
+      <summary><span class="gic">₪</span> מחיר ועלות <span class="gc">3 הנחות</span><span class="chev">▾</span></summary>
+      <div class="agroup__body">
+        <div class="arow">
+          <div class="arow__main"><b>מקור מחיר</b><p>מאיפה נלקח המחיר לחישובי הכנסה.</p><div class="usedin"><span class="u">הכנסה</span><span class="u">רווחיות</span></div></div>
+          <div class="val"><input value="מדד השוק" style="font-size:15px"></div>
+          <div class="def">מחדל: מדד השוק<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>עלות זרע ממוצעת</b><p>לחישוב עלות תשומות והרווחיות.</p><div class="usedin"><span class="u">עלות זרעים</span><span class="u">רווחיות</span></div></div>
+          <div class="val"><input value="0.15"><span class="un">₪/זרע</span></div>
+          <div class="def">ברירת מחדל: 0.15<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>מע״מ בחישובי הכנסה</b><p>הצגת מחירים כולל/לא כולל מע״מ.</p><div class="usedin"><span class="u">הכנסה</span></div></div>
+          <div class="val"><input value="לא כולל" style="font-size:15px"></div>
+          <div class="def">מחדל: לא כולל<a href="#">↺ אפס</a></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- GROUP 4 — advanced (collapsed) -->
+    <details class="agroup">
+      <summary><span class="gic">🚜</span> עבודה ותפוקה <span class="gc">מתקדם · 3 הנחות</span><span class="chev">▾</span></summary>
+      <div class="agroup__body">
+        <div class="arow">
+          <div class="arow__main"><b>קצב קציר</b><p>יחידות לשעת עבודה — לתמחור עלות עבודה.</p><div class="usedin"><span class="u">עלות עבודה</span></div></div>
+          <div class="val"><input value="40"><span class="un">יח׳/שעה</span></div>
+          <div class="def">ברירת מחדל: 40<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>קצב שטיפה ואריזה</b><p>יחידות לשעה בעיבוד אחרי קציר.</p><div class="usedin"><span class="u">עלות עבודה</span></div></div>
+          <div class="val"><input value="60"><span class="un">יח׳/שעה</span></div>
+          <div class="def">ברירת מחדל: 60<a href="#">↺ אפס</a></div>
+        </div>
+        <div class="arow">
+          <div class="arow__main"><b>עלות שעת עבודה</b><p>לתמחור רווחיות נטו.</p><div class="usedin"><span class="u">רווחיות</span></div></div>
+          <div class="val"><input value="45"><span class="un">₪/שעה</span></div>
+          <div class="def"><span class="changed">שונה</span> · מחדל: 40<a href="#">↺ אפס</a></div>
+        </div>
+      </div>
+    </details>
+
+    <div class="savebar">
+      <span class="muted" style="font-size:13px">נשמר במכשיר זה · התחברו לחשבון לסנכרון בין מכשירים</span>
+      <div style="display:flex;gap:10px"><a class="btn btn--ghost" href="calc.html">חזרה למחשבון</a><a class="btn btn--leaf" href="#">שמירה</a></div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+</body>
+</html>
