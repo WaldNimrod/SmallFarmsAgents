@@ -223,7 +223,9 @@ final class CropBookV1MacroTest extends TestCase
         $out = $this->captureCalcPanel($book_fields);
         $this->assertStringContainsString('is-disabled', $out);
         $this->assertStringContainsString('reqinfo', $out, 'Disabled calc must have request-info CTA');
-        $this->assertStringContainsString('🔒', $out);
+        // WP-CB-DSX1-SWEEP: the lock affordance is now the i-shield line-glyph, not an OS emoji.
+        $this->assertStringContainsString('#i-shield', $out, 'Disabled calc must show the i-shield line-glyph');
+        $this->assertStringNotContainsString('🔒', $out, 'No OS emoji — locked principle #6');
         // C6 / FIM §4 (F-190-CB1-V-01): disabled copy must show the resolved Hebrew label,
         // never the raw DB key and never the literal "Array" from passing label()'s tuple to $h().
         [$expectedLabel] = FieldRegistry::label('yield_per_bed_m');

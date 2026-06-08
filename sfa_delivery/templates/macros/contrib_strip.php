@@ -32,7 +32,7 @@ $wa_link = function (string $prefix) use ($wa_phone, $context_label_he): string 
     </div>
   </div>
   <div class="contrib-strip__input">
-    <a class="contrib-strip__cta" href="<?= htmlspecialchars($wa_link('תרומת נתונים'), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">💬 שלחו בוואטסאפ</a>
+    <a class="contrib-strip__cta" href="<?= htmlspecialchars($wa_link('תרומת נתונים'), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener"><svg class="gi" aria-hidden="true"><use href="#i-chat"/></svg> שלחו בוואטסאפ</a>
   </div>
   <div class="contrib-strip__quick" role="group">
     <a class="contrib-strip__chip" href="<?= htmlspecialchars($wa_link('מחיר שונה'), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">מחיר שונה</a>

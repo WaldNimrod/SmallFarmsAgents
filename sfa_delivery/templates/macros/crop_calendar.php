@@ -92,9 +92,9 @@ if (empty($grouped)): ?>
     ?>
   <div class="pcal cb-calendar">
     <div class="pcal__head">
-      <h4 class="pcal__title"><span class="g">📅</span>מתי לזרוע ולשתול</h4>
+      <h4 class="pcal__title"><span class="g"><svg class="gi" aria-hidden="true"><use href="#i-calendar"/></svg></span>מתי לזרוע ולשתול</h4>
       <?php if ($region_label !== ''): ?>
-        <span class="pcal__region cb-calendar__region"><span class="g">📍</span><?= $h($region_label) ?></span>
+        <span class="pcal__region cb-calendar__region"><span class="g"><svg class="gi" aria-hidden="true"><use href="#i-pin"/></svg></span><?= $h($region_label) ?></span>
       <?php endif; ?>
     </div>
     <div class="pcal__legend">

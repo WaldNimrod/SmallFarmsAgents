@@ -261,7 +261,7 @@ ob_start();
       </form>
     </div>
     <div class="cta__card cta--wa">
-      <span class="ic" aria-hidden="true">✆</span>
+      <span class="ic" aria-hidden="true"><svg class="gi"><use href="#i-chat"/></svg></span>
       <div><h3>פתרון מותאם לחווה?</h3><p>פנייה ישירה בוואטסאפ</p></div>
       <a class="cta__btn" href="<?= $h($cta_wa_link) ?>" target="_blank" rel="noopener">וואטסאפ</a>
     </div>

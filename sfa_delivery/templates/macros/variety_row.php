@@ -119,7 +119,7 @@ $cells = array_values($cells);
 ?>
 <a class="cb-var<?= $is_default ? ' cb-var--default' : '' ?>" href="/crop-book/<?= htmlspecialchars($crop_slug, ENT_QUOTES, 'UTF-8') ?>/variety/<?= htmlspecialchars($vslug, ENT_QUOTES, 'UTF-8') ?>/">
   <div class="cb-var__head">
-    <?php if ($is_default): ?><span class="cb-var__star" title="זן ברירת מחדל">★</span><?php endif; ?>
+    <?php if ($is_default): ?><span class="cb-var__star" title="זן ברירת מחדל"><svg class="gi" aria-hidden="true"><use href="#i-star"/></svg></span><?php endif; ?>
     <h4><?= htmlspecialchars($name_he, ENT_QUOTES, 'UTF-8') ?></h4>
     <?php if (!empty($breeding_type)): ?>
       <span class="pill pill--code"><?= htmlspecialchars($breeding_type, ENT_QUOTES, 'UTF-8') ?></span>

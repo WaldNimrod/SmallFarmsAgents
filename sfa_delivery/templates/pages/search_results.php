@@ -65,7 +65,7 @@ ob_start();
   <?php if ($query === ''): ?>
     <?php /* Empty state — no query yet */ ?>
     <div class="srch-suggest">
-      <span class="srch-suggest__lbl">💡 נסו:</span>
+      <span class="srch-suggest__lbl"><svg class="gi" aria-hidden="true"><use href="#i-bulb"/></svg> נסו:</span>
       <a class="schip" href="/search?q=עגבנייה">עגבנייה</a>
       <a class="schip" href="/search?q=מלפפון">מלפפון</a>
       <a class="schip" href="/search?q=פלפל">פלפל</a>
@@ -77,7 +77,7 @@ ob_start();
     <?php /* No-match state */ ?>
     <p class="srch-echo">חיפוש: <b class="q"><?= $h($query) ?></b> — לא נמצאו תוצאות</p>
     <div class="srch-nomatch">
-      <div class="srch-nomatch__ic">🔍</div>
+      <div class="srch-nomatch__ic" aria-hidden="true">⌕</div>
       <h3>לא נמצאה תוצאה עבור "<?= $h($query) ?>"</h3>
       <p>נסו מילת חיפוש אחרת, או בקשו הוספת גידול/מוצר חדש.</p>
       <a class="reqinfo" href="/community">◐ בקשו הוספה</a>
@@ -103,7 +103,7 @@ ob_start();
           $c_en     = (string)($crop['en_name'] ?? '');
           $c_family = (string)($crop['family_tag_he'] ?? '');
           $c_dtm    = $crop['dtm_days'] ?? null;
-          $c_glyph  = $c_name !== '' ? mb_substr($c_name, 0, 1, 'UTF-8') : '🌱';
+          $c_glyph  = $c_name !== '' ? mb_substr($c_name, 0, 1, 'UTF-8') : '<svg class="gi" aria-hidden="true"><use href="#i-seedling"/></svg>';
         ?>
         <a class="srow" href="/crop-book/<?= $h($c_slug) ?>">
           <div class="srow__art">
@@ -149,7 +149,7 @@ ob_start();
           } elseif (isset($prod['last_price']) && (float)$prod['last_price'] > 0) {
               $p_price = (float)$prod['last_price'];
           }
-          $p_glyph = $p_name !== '' ? mb_substr($p_name, 0, 1, 'UTF-8') : '🥬';
+          $p_glyph = $p_name !== '' ? mb_substr($p_name, 0, 1, 'UTF-8') : '<svg class="gi" aria-hidden="true"><use href="#i-basket"/></svg>';
           $unit_lbl = match(strtolower(trim($p_unit))) {
               'kg', 'ק"ג', 'ק״ג' => 'לק״ג',
               'unit', 'יח׳', 'יח\'' => 'ליחידה',

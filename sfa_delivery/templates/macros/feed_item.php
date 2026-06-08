@@ -24,18 +24,19 @@ $tag_he    = (string)($tag_he    ?? '');
 $upvotes   = isset($upvotes) ? (int)$upvotes : 0;
 
 $kind_map = [
-    'suggest'    => ['color' => 'sun',    'glyph' => '💡', 'label' => 'הצעה'],
+    'suggest'    => ['color' => 'sun',    'gi' => 'i-bulb', 'glyph' => '', 'label' => 'הצעה'],
     'correction' => ['color' => 'tomato', 'glyph' => '◐',  'label' => 'תיקון'],
     'data'       => ['color' => 'leaf',   'glyph' => '✎',  'label' => 'תרומה'],
 ];
 $entry = $kind_map[$kind] ?? $kind_map['data'];
 $color = $entry['color'];
-$glyph = $entry['glyph'];
+$gi    = $entry['gi']    ?? '';
+$glyph = $entry['glyph'] ?? '';
 $kind_label_he = $entry['label'];
 ?>
 <article class="feed-item">
   <div class="feed-item__kind feed-item__kind--<?= htmlspecialchars($color, ENT_QUOTES, 'UTF-8') ?>">
-    <span><?= htmlspecialchars($glyph, ENT_QUOTES, 'UTF-8') ?></span>
+    <span><?php if ($gi !== ''): ?><svg class="gi" aria-hidden="true"><use href="#<?= htmlspecialchars($gi, ENT_QUOTES, 'UTF-8') ?>"/></svg><?php else: ?><?= htmlspecialchars($glyph, ENT_QUOTES, 'UTF-8') ?><?php endif; ?></span>
     <small><?= htmlspecialchars($kind_label_he, ENT_QUOTES, 'UTF-8') ?></small>
   </div>
   <div class="feed-item__body">

@@ -57,10 +57,10 @@ ob_start();
     <h1>כלים פתוחים לחקלאות קטנה</h1>
     <p class="about-lead">SFA מרכז ידע חקלאי, מחירי שוק וכלי תכנון — חינמיים ופתוחים לכל גנן וחקלאי. נבנה בשיתוף הקהילה, על בסיס ניסיון מהשטח ומחקר.</p>
     <div class="about-points">
-      <div class="about-point"><span class="ic">📖</span><div><h4>ידע פתוח</h4><p>מאגר גידולים — זנים, מרווחים, מחזורי גידול ומקורות מתועדים.</p></div></div>
+      <div class="about-point"><span class="ic"><svg class="gi" aria-hidden="true"><use href="#i-book"/></svg></span><div><h4>ידע פתוח</h4><p>מאגר גידולים — זנים, מרווחים, מחזורי גידול ומקורות מתועדים.</p></div></div>
       <div class="about-point"><span class="ic">₪</span><div><h4>מחירי שוק שקופים</h4><p>ממוצעים מתגלגלים מתוצרת טרייה, מתעדכנים יומית.</p></div></div>
-      <div class="about-point"><span class="ic">🧮</span><div><h4>כלי תכנון</h4><p>מחשבונים מנומקים — מהזרע ועד היבול וההכנסה.</p></div></div>
-      <div class="about-point"><span class="ic">🤝</span><div><h4>נבנה בשיתוף</h4><p>הליבה תמיד פתוחה; הקהילה משלימה נתונים ומשפרת.</p></div></div>
+      <div class="about-point"><span class="ic"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg></span><div><h4>כלי תכנון</h4><p>מחשבונים מנומקים — מהזרע ועד היבול וההכנסה.</p></div></div>
+      <div class="about-point"><span class="ic"><svg class="gi" aria-hidden="true"><use href="#i-companions"/></svg></span><div><h4>נבנה בשיתוף</h4><p>הליבה תמיד פתוחה; הקהילה משלימה נתונים ומשפרת.</p></div></div>
     </div>
   </div>
 
@@ -135,7 +135,7 @@ ob_start();
       </form>
     </div>
     <div class="cta__card cta--wa">
-      <span class="ic" aria-hidden="true">✆</span>
+      <span class="ic" aria-hidden="true"><svg class="gi"><use href="#i-chat"/></svg></span>
       <div><h3>פתרון מותאם לחווה?</h3><p>פנייה ישירה בוואטסאפ</p></div>
       <a class="cta__btn" href="<?= $h($wa_custom) ?>" target="_blank" rel="noopener">וואטסאפ</a>
     </div>

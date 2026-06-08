@@ -81,7 +81,7 @@ ob_start();
     <h1 class="cb-var-detail__h">
       <?= $h($variety_name) ?>
       <?php if ($is_default): ?>
-        <span class="cb-var__star" title="זן ברירת מחדל">★ ברירת מחדל</span>
+        <span class="cb-var__star" title="זן ברירת מחדל"><svg class="gi" aria-hidden="true"><use href="#i-star"/></svg> ברירת מחדל</span>
       <?php endif; ?>
     </h1>
     <?php if (!empty($variety['breeding_type'])): ?>
@@ -113,7 +113,7 @@ ob_start();
               }
           } elseif ($key === 'taste_stars') {
               $n = max(0, min(5, (int)$value));
-              echo $n > 0 ? str_repeat('★', $n) : '—';
+              echo $n > 0 ? str_repeat('<svg class="gi cb-var__star-gi" aria-hidden="true"><use href="#i-star"/></svg>', $n) : '—';
           } elseif ($key === 'yield_kg_per_m2') {
               echo $h(number_format((float)$value, 1) . ' ק״ג/מ״ר');
           } else {

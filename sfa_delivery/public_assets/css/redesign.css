@@ -458,3 +458,59 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .ipt .u .gi{ width:15px; height:15px; color:var(--gj-ink-soft); }
 .qb-session__head .gi{ width:16px; height:16px; }
 /* (WI-8 .cde cropdata_entry styles removed — route retired, team_00 2026-06-08) */
+
+/* ============================================================
+   WP-CB-DSX1-SWEEP · emoji→line-glyph fold for the surfaces NOT
+   covered by WP-CB-UI-REDESIGN (team_110, 2026-06-09). 7 new sprite
+   IDs added to ui-icons.svg: i-mail i-pin i-logout i-bug i-chat
+   i-clock i-star. Per-context .gi sizing only — colour inherits each
+   container's currentColor unless the box paints a coloured bg.
+   ============================================================ */
+
+/* search_results.php — suggest label · crop/product art fallback.
+   (🔍 no-match kept as the ⌕ text glyph, already sized by .srch-nomatch__ic) */
+.srch-suggest__lbl .gi{ width:1em; height:1em; }
+.srow__art .veg{ line-height:0; }
+.srow__art .veg .gi{ width:26px; height:26px; color:var(--gj-leaf-soft); }
+
+/* community.php — request chips (inherit chip currentColor incl. .is-on #fff) */
+.reqchip .gi{ width:1em; height:1em; vertical-align:-0.14em; }
+
+/* account_landing.php — soon banner · empty state · setting rows.
+   .acct-empty__ic paints a soil bg with #fff text → glyph inherits #fff. */
+.acct-soon .gi{ width:1em; height:1em; color:var(--gj-ink-soft); vertical-align:-0.14em; }
+.acct-empty__ic .gi{ width:24px; height:24px; }
+.setrow__ic .gi{ width:18px; height:18px; } /* inherits ink-soft / tomato-deep (danger) */
+
+/* hub_tiers.php (/about) — value points (leaf box) · WhatsApp CTA.
+   .cta--wa .ic paints a soil-deep bg with #fff text → glyph inherits #fff. */
+.about-point .ic .gi{ width:18px; height:18px; }
+.cta--wa .ic .gi{ width:20px; height:20px; }
+
+/* hub_calc.php — crosslink upsell art */
+.gj-crosslink__art .gi{ width:30px; height:30px; color:var(--gj-leaf-deep); }
+
+/* crop_calendar.php — planting-dates title · region pin (inherits soil-deep) */
+.pcal__title .g{ display:inline-flex; line-height:0; }
+.pcal__title .g .gi{ width:17px; height:17px; color:var(--gj-leaf-deep); }
+.pcal__region .g{ display:inline-flex; line-height:0; }
+.pcal__region .g .gi{ width:13px; height:13px; }
+
+/* calc_panel.php — locked-calc shield */
+.cv__disabled .ic .gi{ width:22px; height:22px; color:var(--gj-ink-soft); }
+
+/* feed_item.php — kind badge glyph (inherits the --kind colour) */
+.feed-item__kind .gi{ width:16px; height:16px; }
+
+/* tier_badge.php — tier pill glyph (inherits pill currentColor) */
+.tier__glyph .gi{ width:12px; height:12px; vertical-align:-0.1em; }
+.tier--lg .tier__glyph .gi{ width:15px; height:15px; }
+
+/* contrib_strip.php — WhatsApp CTA */
+.contrib-strip__cta .gi{ width:1em; height:1em; vertical-align:-0.14em; }
+
+/* book_variety.php · variety_row.php — default-variety marker + taste rating.
+   .cb-var__star wraps the marker (inherits --gj-sun); the rating row emits
+   bare .cb-var__star-gi stars. */
+.cb-var__star .gi{ width:1em; height:1em; }
+.cb-var__star-gi{ width:15px; height:15px; color:var(--gj-sun); vertical-align:-0.16em; }

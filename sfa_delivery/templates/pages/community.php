@@ -69,18 +69,18 @@ ob_start();
       <?php
       /* All chips map to kind=request-info — MINOR F-03 */
       $chips = [
-          ['label' => '❓ שאלה', 'val' => 'question'],
-          ['label' => '💰 דיווח מחיר', 'val' => 'price-report'],
-          ['label' => '🌱 הצעת גידול', 'val' => 'crop-suggest'],
-          ['label' => '🐛 דיווח שגיאה', 'val' => 'bug-report'],
-          ['label' => '🤝 שיתוף-פעולה', 'val' => 'collab'],
+          ['gi' => 'i-info',       'label' => 'שאלה',       'val' => 'question'],
+          ['gi' => 'i-shekel',     'label' => 'דיווח מחיר',  'val' => 'price-report'],
+          ['gi' => 'i-seedling',   'label' => 'הצעת גידול',  'val' => 'crop-suggest'],
+          ['gi' => 'i-bug',        'label' => 'דיווח שגיאה', 'val' => 'bug-report'],
+          ['gi' => 'i-companions', 'label' => 'שיתוף-פעולה', 'val' => 'collab'],
       ];
       foreach ($chips as $i => $chip):
       ?>
       <button class="reqchip<?= $i === 0 ? ' is-on' : '' ?>"
               type="button"
               data-chip-val="<?= $h($chip['val']) ?>"
-              data-field-name="<?= $h($chip['val']) ?>"><?= $h($chip['label']) ?></button>
+              data-field-name="<?= $h($chip['val']) ?>"><svg class="gi" aria-hidden="true"><use href="#<?= $h($chip['gi']) ?>"/></svg> <?= $h($chip['label']) ?></button>
       <?php endforeach; ?>
     </div>
     <form class="reqcard__field" action="/api/v1/contribute" method="post"

@@ -46,7 +46,7 @@ ob_start();
     </button>
 
     <div class="acct-soon" aria-label="מידע על מצב הכלי">
-      ⏳ מערכת החשבונות בפיתוח — <strong>בקרוב</strong>
+      <svg class="gi" aria-hidden="true"><use href="#i-clock"/></svg> מערכת החשבונות בפיתוח — <strong>בקרוב</strong>
     </div>
 
     <p class="acct-alt">
@@ -56,7 +56,7 @@ ob_start();
 
   <?php /* Open-core empty state */ ?>
   <div class="acct-empty" style="margin-top:16px">
-    <div class="acct-empty__ic" aria-hidden="true">🌿</div>
+    <div class="acct-empty__ic" aria-hidden="true"><svg class="gi"><use href="#i-leaf"/></svg></div>
     <div>
       <b>הכלים הפתוחים — חינמיים לגמרי</b>
       <p>ספר גידולים, מחירון שוק ומחשבון שדה פתוחים לכולם ללא הרשמה.</p>
@@ -80,19 +80,19 @@ ob_start();
     <div class="setgroup">
       <div class="setgroup__lbl">פרופיל</div>
       <div class="setrow">
-        <div class="setrow__ic" aria-hidden="true">👤</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-companions"/></svg></div>
         <div class="setrow__t">שם<small>בקרוב</small></div>
         <span class="setrow__val">—</span>
         <span class="setrow__chev">›</span>
       </div>
       <div class="setrow">
-        <div class="setrow__ic" aria-hidden="true">📧</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-mail"/></svg></div>
         <div class="setrow__t">דוא"ל<small>בקרוב</small></div>
         <span class="setrow__val">—</span>
         <span class="setrow__chev">›</span>
       </div>
       <div class="setrow">
-        <div class="setrow__ic" aria-hidden="true">📍</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-pin"/></svg></div>
         <div class="setrow__t">אזור<small>בקרוב</small></div>
         <span class="setrow__val">—</span>
         <span class="setrow__chev">›</span>
@@ -114,7 +114,7 @@ ob_start();
         <span class="setrow__chev">›</span>
       </a>
       <div class="setrow">
-        <div class="setrow__ic" aria-hidden="true">🌾</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-tractor"/></svg></div>
         <div class="setrow__t">כלים מתקדמים<small>בקרוב · מנוי</small></div>
         <span class="setrow__val" style="font-size:10px;color:var(--gj-ink-soft)">בקרוב</span>
         <span class="setrow__chev">›</span>
@@ -129,12 +129,12 @@ ob_start();
         <span class="setrow__chev">›</span>
       </a>
       <a class="setrow" href="/community">
-        <div class="setrow__ic" aria-hidden="true">💬</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-companions"/></svg></div>
         <div class="setrow__t">קהילה</div>
         <span class="setrow__chev">›</span>
       </a>
       <div class="setrow setrow--danger">
-        <div class="setrow__ic" aria-hidden="true">🚪</div>
+        <div class="setrow__ic" aria-hidden="true"><svg class="gi"><use href="#i-logout"/></svg></div>
         <div class="setrow__t">התנתק<small>בקרוב</small></div>
         <span class="setrow__chev">›</span>
       </div>

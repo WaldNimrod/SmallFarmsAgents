@@ -75,7 +75,7 @@ $aud_cls    = $aud_class[$audience]  ?? 'tier--leaf';
   <?php if ($is_disabled): ?>
   <div class="cv__body">
     <div class="cv__disabled">
-      <span class="ic">🔒</span>
+      <span class="ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span>
       <div>
         <h5>חסר שדה נדרש</h5>
         <?php [$disabled_label_he] = FieldRegistry::label((string)($disabled_field['field_name'] ?? '')); ?>

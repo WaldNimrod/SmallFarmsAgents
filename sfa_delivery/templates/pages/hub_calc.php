@@ -89,7 +89,7 @@ ob_start();
 
   <?php
     $href       = $wa_href;
-    $art_html   = '<span style="font-size:2em" aria-hidden="true">💬</span>';
+    $art_html   = '<svg class="gi" aria-hidden="true"><use href="#i-chat"/></svg>';
     $big_text   = 'רוצים תכונות נוספות?';
     $small_unit = '';
     $sub_text   = 'תכנון רב-עונתי, חישוב עומק, ROI מלא';
