@@ -807,35 +807,10 @@ final class CropBookViewController
         ]));
     }
 
-    /**
-     * GET /cropdata-entry — WP-CB-UI-REDESIGN (WI-8): internal owner-only guided
-     * classification tool (planting_method + frost_class, keyboard 1–5). NOT linked
-     * in the public nav. Staging only: selections persist client-side and feed the
-     * backend pipeline through the existing contribution funnel — the read-only
-     * delivery tier never writes canonical data (two-tier write isolation).
-     */
-    public function dataEntry(Request $request, Response $response): Response
-    {
-        $crops = [];
-        try {
-            $stmt = $this->pdo->query(
-                'SELECT slug, hebrew_name, scientific_name, family_name_he FROM crops ORDER BY hebrew_name'
-            );
-            foreach (($stmt ? $stmt->fetchAll() : []) as $r) {
-                $slug = (string)($r['slug'] ?? '');
-                $crops[] = [
-                    'slug'    => $slug,
-                    'name_he' => (string)($r['hebrew_name'] ?? ''),
-                    'name_lat'=> (string)($r['scientific_name'] ?? ''),
-                    'fam_he'  => (string)($r['family_name_he'] ?? ''),
-                    'wc_art'  => self::WC_ART[$slug] ?? null,
-                ];
-            }
-        } catch (\Throwable) {
-            $crops = [];
-        }
-        return $this->html($response, Template::render('pages/cropdata_entry', ['crops' => $crops]));
-    }
+    // dataEntry() (WI-8 /cropdata-entry) RETIRED — team_00 2026-06-08. Crop classification
+    // (planting_method/frost/days_in_nursery) is authored in the backend crop_book pipeline
+    // (importer/attribute_resolver) and published via sfa_ingest_push; a delivery-tier write
+    // tool duplicated that and is removed.
 
     public function coverCrops(Request $request, Response $response): Response
     {

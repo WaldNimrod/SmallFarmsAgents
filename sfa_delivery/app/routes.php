@@ -49,9 +49,9 @@ return function (App $app): void {
     $app->get('/account[/]', [AccountController::class, 'index']);
     // WP-CB-UI-REDESIGN (WI-6): standalone assumptions editor ("הנחות היסוד שלי")
     $app->get('/assumptions[/]', [AssumptionsController::class, 'page']);
-    // WP-CB-UI-REDESIGN (WI-8): internal owner-only guided classification tool
-    // (not linked in public nav; client-side staging → backend pipeline).
-    $app->get('/cropdata-entry[/]', [CropBookViewController::class, 'dataEntry']);
+    // WI-8 cropdata_entry route RETIRED (team_00 2026-06-08): crop classification is
+    // authored in the backend crop_book pipeline (importer + attribute_resolver) and
+    // pushed via sfa_ingest_push — a delivery-tier write tool was redundant.
 
     // AC-U4-07: redirect planned/future modules so they don't 404.
     // /clients/ is linked from the home page module grid (tier=paid, status=planned).

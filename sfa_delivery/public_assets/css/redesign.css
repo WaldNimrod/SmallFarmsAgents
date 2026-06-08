@@ -457,39 +457,4 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .qb-intro__ic .gi{ width:22px; height:22px; color:var(--gj-tomato); }
 .ipt .u .gi{ width:15px; height:15px; color:var(--gj-ink-soft); }
 .qb-session__head .gi{ width:16px; height:16px; }
-
-/* ── WI-8 · cropdata_entry (internal owner-only classification tool) ── */
-.cde{ max-width:720px; margin:0 auto; }
-.cde .thead{ display:flex; align-items:center; gap:12px; margin-bottom:var(--sp-4); }
-.cde .thead .badge{ background:var(--gj-soil); color:#fff; border-radius:var(--r-pill); padding:3px 12px; font-size:12px; font-weight:700; }
-.cde .thead h1{ font-size:22px; font-weight:800; }
-.cde .thead .muted{ margin-inline-start:auto; font-size:13px; }
-.cde .prog{ background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); height:12px; overflow:hidden; margin-bottom:6px; }
-.cde .prog i{ display:block; height:100%; background:var(--gj-leaf); width:0; transition:width .2s; }
-.cde .proglbl{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--gj-ink-soft); margin-bottom:var(--sp-5); }
-.cde .card{ background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-l); box-shadow:var(--sh-m); padding:var(--sp-6); }
-.cde .crop{ display:flex; align-items:center; gap:16px; margin-bottom:var(--sp-5); padding-bottom:var(--sp-4); border-bottom:1px solid var(--gj-line); }
-.cde .crop__art{ width:72px; height:72px; border-radius:var(--r-m); background:radial-gradient(circle at 50% 40%,#fff,#eef4ee); display:grid; place-items:center; overflow:hidden; flex:0 0 auto; }
-.cde .crop__art img{ width:64px; height:64px; object-fit:contain; }
-.cde .crop__n{ font-family:var(--gj-font-head); font-size:28px; font-weight:800; }
-.cde .crop__l{ color:var(--gj-ink-soft); font-style:italic; font-size:14px; }
-.cde .crop__c{ margin-inline-start:auto; font-size:12px; color:var(--gj-ink-soft); }
-.cde .q{ margin-bottom:var(--sp-5); }
-.cde .q__h{ font-weight:700; font-size:15px; margin-bottom:10px; }
-.cde .picks{ display:flex; gap:8px; flex-wrap:wrap; }
-.cde .pick{ display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:14px; font-weight:600; background:var(--gj-paper-2); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:9px 15px; cursor:pointer; color:var(--gj-ink); }
-.cde .pick.on{ background:var(--gj-leaf-deep); color:#fff; border-color:var(--gj-leaf-deep); }
-.cde .pick kbd{ font-family:var(--gj-font-mono); font-size:11px; background:rgba(0,0,0,.12); border-radius:5px; padding:1px 6px; }
-.cde .pick.on kbd{ background:rgba(255,255,255,.22); }
-.cde .cond{ display:none; margin-top:12px; padding:12px 14px; background:var(--gj-paper-2); border-radius:var(--r-m); }
-.cde .cond.show{ display:block; }
-.cde .fld{ display:flex; align-items:center; gap:8px; }
-.cde .fld input{ width:90px; border:1px solid var(--gj-line); border-radius:var(--r-s); padding:7px 10px; font-family:var(--gj-font-mono); font-size:16px; text-align:center; }
-.cde .actions{ display:flex; align-items:center; gap:12px; margin-top:var(--sp-4); padding-top:var(--sp-4); border-top:1px solid var(--gj-line); flex-wrap:wrap; }
-.cde .actions .hint{ font-size:12px; color:var(--gj-ink-soft); }
-.cde .actions .sp{ flex:1; }
-.cde .queue{ margin-top:var(--sp-5); }
-.cde .queue h5{ margin:0 0 8px; font-size:13px; color:var(--gj-ink-soft); font-weight:600; }
-.cde .queue .row{ display:flex; gap:6px; flex-wrap:wrap; }
-.cde .queue .chip{ font-size:12px; font-weight:600; background:var(--gj-paper); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:3px 11px; color:var(--gj-ink-soft); }
-.cde .queue .chip.done{ background:#e7f1d8; color:var(--gj-leaf-deep); border-color:transparent; }
+/* (WI-8 .cde cropdata_entry styles removed — route retired, team_00 2026-06-08) */
