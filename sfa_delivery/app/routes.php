@@ -49,6 +49,9 @@ return function (App $app): void {
     $app->get('/account[/]', [AccountController::class, 'index']);
     // WP-CB-UI-REDESIGN (WI-6): standalone assumptions editor ("הנחות היסוד שלי")
     $app->get('/assumptions[/]', [AssumptionsController::class, 'page']);
+    // WP-CB-UI-REDESIGN (WI-8): internal owner-only guided classification tool
+    // (not linked in public nav; client-side staging → backend pipeline).
+    $app->get('/cropdata-entry[/]', [CropBookViewController::class, 'dataEntry']);
 
     // AC-U4-07: redirect planned/future modules so they don't 404.
     // /clients/ is linked from the home page module grid (tier=paid, status=planned).
