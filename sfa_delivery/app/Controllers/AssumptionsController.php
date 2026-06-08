@@ -96,6 +96,58 @@ final class AssumptionsController
      * GET /api/v1/assumptions
      * Returns the assumptions registry as JSON. CORS-open.
      */
+    /**
+     * GET /assumptions — WP-CB-UI-REDESIGN (WI-6): the standalone "הנחות היסוד שלי"
+     * editor. Renders the ASSUMPTIONS registry as grouped, searchable rows with
+     * community defaults + per-field "used-in" chips. Local overrides persist
+     * client-side (localStorage 'sfa.assumptions'); the page never mutates the
+     * locked calc engine. Display value/unit are derived from the canonical
+     * default + a small presentation map.
+     */
+    public function page(Request $request, Response $response): Response
+    {
+        // Presentation map: key → [group, label_he, unit_he, used_in[], display×factor].
+        // 'f' = factor applied to the canonical default for human display (e.g. fraction→%).
+        $pres = [
+            'germination_rate'       => ['g' => 'זרעים ונביטה', 'l' => 'אחוז נביטה',          'u' => '%',     'f' => 100, 'used' => ['זרעים', 'עלות זרעים']],
+            'oversow'                => ['g' => 'זרעים ונביטה', 'l' => 'מקדם ביטחון לזרעים',   'u' => '×',     'f' => 1,   'used' => ['זרעים', 'שתילים']],
+            'tray_cells'             => ['g' => 'זרעים ונביטה', 'l' => 'תאים במגש משתלה',      'u' => 'תאים', 'f' => 1,   'used' => ['שתילים']],
+            'bed_width'              => ['g' => 'ערוגה ושטח',   'l' => 'רוחב ערוגה',           'u' => 'ס״מ',  'f' => 100, 'used' => ['זרעים', 'שתילים', 'צפיפות', 'יבול']],
+            'std_bed_length_m'       => ['g' => 'ערוגה ושטח',   'l' => 'אורך ערוגה סטנדרטי',   'u' => 'מ׳',   'f' => 1,   'used' => ['יבול', 'הכנסה']],
+            'compost_N_pct'          => ['g' => 'דישון',        'l' => 'אחוז חנקן בקומפוסט',   'u' => '%',     'f' => 100, 'used' => ['דישון']],
+            'application_efficiency' => ['g' => 'דישון',        'l' => 'יעילות שחרור חנקן',    'u' => '%',     'f' => 100, 'used' => ['דישון']],
+            'rotation_gap_seasons'   => ['g' => 'סבב ואקלים',   'l' => 'מרווח סבב גידולים',    'u' => 'עונות','f' => 1,   'used' => ['סבב גידולים']],
+        ];
+        $groupIcon = [
+            'ערוגה ושטח'   => 'i-grid',
+            'זרעים ונביטה' => 'i-sprout',
+            'דישון'        => 'i-compost',
+            'סבב ואקלים'   => 'i-repeat',
+        ];
+
+        $groups = [];
+        foreach ($pres as $key => $p) {
+            $def = self::ASSUMPTIONS[$key]['default'] ?? null;
+            if (!is_numeric($def)) { continue; }
+            $disp = (float)$def * (float)$p['f'];
+            $dispStr = rtrim(rtrim(number_format($disp, 2, '.', ''), '0'), '.');
+            $groups[$p['g']]['icon'] = $groupIcon[$p['g']] ?? 'i-gear';
+            $groups[$p['g']]['rows'][] = [
+                'key'       => $key,
+                'label'     => $p['l'],
+                'explainer' => (string)(self::ASSUMPTIONS[$key]['explainer_he'] ?? ''),
+                'unit'      => $p['u'],
+                'used'      => $p['used'],
+                'value'     => $dispStr,
+                'post_url'  => self::ASSUMPTIONS[$key]['post_url'] ?? null,
+            ];
+        }
+
+        $html = \SFA\Lib\Template::render('pages/assumptions', ['groups' => $groups]);
+        $response->getBody()->write($html);
+        return $response->withStatus(200)->withHeader('Content-Type', 'text/html; charset=utf-8');
+    }
+
     public function list(Request $request, Response $response): Response
     {
         $payload = json_encode(self::ASSUMPTIONS, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

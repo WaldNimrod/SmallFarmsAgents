@@ -64,6 +64,7 @@ final class RouteSmokeTest extends TestCase
             ['/market/'],
             ['/market/onion-dry/'],
             ['/community/'],
+            ['/assumptions/'],
         ];
     }
 }

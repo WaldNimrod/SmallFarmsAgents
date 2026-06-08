@@ -47,6 +47,8 @@ return function (App $app): void {
 
     $app->get('/community[/]', [HubController::class, 'community']);
     $app->get('/account[/]', [AccountController::class, 'index']);
+    // WP-CB-UI-REDESIGN (WI-6): standalone assumptions editor ("הנחות היסוד שלי")
+    $app->get('/assumptions[/]', [AssumptionsController::class, 'page']);
 
     // AC-U4-07: redirect planned/future modules so they don't 404.
     // /clients/ is linked from the home page module grid (tier=paid, status=planned).
