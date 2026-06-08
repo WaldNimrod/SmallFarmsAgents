@@ -37,28 +37,35 @@ class TestCropTopics:
         assert TOPIC_BY_KEY["yield_inc"]["label_he"] == "יבול/הכנסה"
 
     def test_php_parity(self):
-        """AC-02: PHP topic array in book_crop.php must match CROP_TOPICS keys."""
+        """AC-02 (revised — WP-CB-UI-REDESIGN, team_190 L-GATE_V PASS 2026-06-08):
+        book_crop.php no longer carries a flat 13-key $topics array. The redesign
+        replaced the Simple/Full/Deep depth IA with the mockup's lifecycle spine
+        (מתי→איך→טיפול→יבול) over <details class="topic"> universal drill-down cards,
+        which regroup the same crop data into stages rather than mirroring CROP_TOPICS
+        1:1. The Python CROP_TOPICS taxonomy remains the data/canon SSoT (verified by
+        the other tests in this class); this test now asserts the new UI structure
+        exists instead of the retired flat-array ordered parity.
+        """
         if not BOOK_CROP_PHP.exists():
-            pytest.skip("book_crop.php not found — skipping PHP parity check")
+            pytest.skip("book_crop.php not found — skipping PHP structure check")
 
         php_text = BOOK_CROP_PHP.read_text(encoding="utf-8")
 
-        # Extract ONLY the 13-topic $topics array keys. Topic entries are uniquely
-        # identified by a following 'icon' key — this excludes other arrays in the
-        # template that also use 'key'=> (e.g. the quick-facts field array L185-188,
-        # which has no 'icon'). Order is preserved (re.findall is left-to-right).
-        php_keys = re.findall(r"\['key'\s*=>\s*'([^']+)'\s*,\s*'icon'", php_text)
-
-        if not php_keys:
-            pytest.fail("Could not extract topic keys from book_crop.php $topics array")
-
-        # Strict ordered parity — the schema SSoT (CROP_TOPICS) and the UI must agree
-        # on both membership AND order.
-        assert TOPIC_KEYS == php_keys, (
-            f"PHP topic keys do not match CROP_TOPICS (ordered).\n"
-            f"  Python: {TOPIC_KEYS}\n"
-            f"  PHP:    {php_keys}"
+        # The flat keyed $topics array is intentionally gone.
+        legacy_array = re.findall(r"\['key'\s*=>\s*'([^']+)'\s*,\s*'icon'", php_text)
+        assert not legacy_array, (
+            "book_crop.php still carries the legacy flat $topics array; the redesign "
+            "(WP-CB-UI-REDESIGN) replaced it with the lifecycle-spine drill-down."
         )
+
+        # The new IA must be present: lifecycle spine + stage sections + .topic cards.
+        for marker in ('stagenav', 'class="stage"', 'class="topic"'):
+            assert marker in php_text, (
+                f"book_crop.php must render the redesigned lifecycle IA — missing {marker!r}."
+            )
+
+        # CROP_TOPICS stays the canon SSoT (membership/order checked by the sibling tests).
+        assert len(TOPIC_KEYS) == 13
 
     def test_pest_topic_present(self):
         """WI-9 / AC-10: pest topic exists at index 8 (0-based)."""
