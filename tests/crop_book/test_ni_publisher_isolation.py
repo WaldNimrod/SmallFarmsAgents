@@ -40,3 +40,42 @@ class TestNiPublisherIsolation:
             assert forbidden not in content, (
                 f"§3.1 violation — views.py references '{forbidden}'"
             )
+
+
+# WP-CB-CONTENT license firewall: the public narrative-content pipeline (loader + the new
+# crop_content publisher fetchers) MUST NOT read the internal-only crop_knowledge_notes table.
+CONTENT_LOADER_PY = pathlib.Path(
+    "organic_market_agent/crop_book/importer/content_loader.py"
+)
+CONTENT_MODELS_PY = pathlib.Path("organic_market_agent/crop_book/content_models.py")
+
+
+class TestContentLicenseFirewall:
+    """WP-CB-CONTENT §2c — public crop_content path has zero crop_knowledge_notes read path.
+
+    The firewall bans IMPORTING / QUERYING the internal table — not merely naming it in a
+    docstring that documents the separation. So we assert: no import of the crop_knowledge_notes
+    module, no reference to the CropKnowledgeNote model, and no SQL against the table.
+    """
+
+    @staticmethod
+    def _assert_no_read_path(py_path: pathlib.Path) -> None:
+        import io
+        import tokenize
+
+        assert py_path.exists(), f"not found: {py_path}"
+        src = py_path.read_text(encoding="utf-8")
+        code = []
+        for tok in tokenize.generate_tokens(io.StringIO(src).readline):
+            if tok.type in (tokenize.STRING, tokenize.COMMENT):
+                continue  # ignore docstrings/comments — they may name the table to document the firewall
+            code.append(tok.string)
+        joined = " ".join(code)
+        assert "CropKnowledgeNote" not in joined, f"{py_path.name}: imports/uses the CropKnowledgeNote model"
+        assert "crop_knowledge_notes" not in joined, f"{py_path.name}: imports the crop_knowledge_notes module"
+
+    def test_content_loader_clean(self):
+        self._assert_no_read_path(CONTENT_LOADER_PY)
+
+    def test_content_models_clean(self):
+        self._assert_no_read_path(CONTENT_MODELS_PY)

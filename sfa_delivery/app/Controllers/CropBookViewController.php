@@ -725,6 +725,52 @@ final class CropBookViewController
             $attributes = [];
         }
 
+        // Read crop_content (canonical) + crop_content_source (per-source variants) — WP-CB-CONTENT.
+        // Tolerates table absence (degrades to empty → honest empty-states stay). Normal mode reads
+        // the canonical; Deep mode (?depth=deep) additionally surfaces the per-source variants.
+        $crop_content = [];
+        try {
+            $ccStmt = $this->pdo->prepare(
+                'SELECT content_type, text_md, winning_source_class, confidence_score, field_state
+                 FROM crop_content WHERE crop_id = ?'
+            );
+            $ccStmt->execute([$crop['id']]);
+            foreach ($ccStmt->fetchAll() as $row) {
+                $ct = (string)$row['content_type'];
+                $crop_content[$ct] = [
+                    'canonical'            => (string)($row['text_md'] ?? ''),
+                    'field_state'          => (string)($row['field_state'] ?? ''),
+                    'winning_source_class' => (string)($row['winning_source_class'] ?? ''),
+                    'sources'              => [],
+                ];
+            }
+            if (!empty($crop_content)) {
+                $csStmt = $this->pdo->prepare(
+                    'SELECT content_type, source_label, source_class, raw_text_md, source_url, display_order
+                     FROM crop_content_source WHERE crop_id = ?
+                     ORDER BY content_type, display_order, source_label'
+                );
+                $csStmt->execute([$crop['id']]);
+                foreach ($csStmt->fetchAll() as $row) {
+                    $ct = (string)$row['content_type'];
+                    if (!isset($crop_content[$ct])) { continue; }
+                    $crop_content[$ct]['sources'][] = [
+                        'source_label' => (string)($row['source_label'] ?? ''),
+                        'source_class' => (string)($row['source_class'] ?? ''),
+                        'raw_text_md'  => (string)($row['raw_text_md'] ?? ''),
+                        'source_url'   => (string)($row['source_url'] ?? ''),
+                    ];
+                }
+            }
+        } catch (\Throwable) {
+            $crop_content = []; // table not yet migrated
+        }
+
+        // Hero story prefers the authored canonical; falls back to the legacy description_he.
+        if (!empty($crop_content['story']['canonical'])) {
+            $crop['description_he'] = $crop_content['story']['canonical'];
+        }
+
         // F-UI-01: the MySQL mirror has no crop_field_enrichment / crop_attribute tables;
         // the ingest instead delivers per-field value + field_state inside the DEFAULT
         // variety payload (agronomy{} + field_state{}). Pass it as a fallback so prov
@@ -790,6 +836,8 @@ final class CropBookViewController
         return $this->html($response, Template::render('pages/book_crop', [
             'crop'             => $crop,
             'varieties'        => $varieties,
+            // WP-CB-CONTENT: multi-source narrative prose (Normal=canonical / Deep=per-source)
+            'crop_content'     => $crop_content,
             // WP-CB-1 additions
             'depth'            => $depth,
             'cb1_fields'       => $cb1_fields,

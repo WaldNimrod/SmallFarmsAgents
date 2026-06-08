@@ -50,6 +50,14 @@ final class IngestController
             'crop_id', 'attribute_key', 'value_canonical', 'value_list',
             'field_state', 'last_pushed_at',
         ],
+        'crop_content' => [
+            'crop_id', 'content_type', 'text_md', 'winning_source_class',
+            'confidence_score', 'field_state', 'last_pushed_at',
+        ],
+        'crop_content_source' => [
+            'crop_id', 'content_type', 'source_label', 'source_class',
+            'raw_text_md', 'source_url', 'display_order', 'last_pushed_at',
+        ],
     ];
 
     public function __construct(
@@ -191,6 +199,8 @@ final class IngestController
                 'product_prices'        => 'product_id, price_date, source',
                 'crop_field_enrichment' => 'crop_id, field_name',
                 'crop_attribute'        => 'crop_id, attribute_key',
+                'crop_content'          => 'crop_id, content_type',
+                'crop_content_source'   => 'crop_id, content_type, source_label',
                 default                 => 'id',
             };
             $sql = sprintf(

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "_doc": "Curated narrative prose for the crop book. Keyed by JMF English crop name (→ JMF_CROP_MAP → name_he → crops.id). Every body (canonical_md + each source raw_text_md) is OUR own Hebrew text — translation/synthesis, NEVER verbatim copyrighted source text. source_class is derived at load from source_registry; do not author it here. Omit a content_type to leave the honest empty-state. Loaded by importer/content_loader.py; populated/extended by the WP-CB-CONTENT authoring workflow.",
+  "_content_types": ["story", "care_watering", "care_fertilizing", "care_pests"],
+  "crops": {
+    "Lettuce": {
+      "story": {
+        "canonical_md": "החסה היא מהגידולים המתגמלים ביותר לחקלאי הקטן: מחזור גידול קצר, ביקוש יציב לאורך כל השנה ואפשרות לקציר רציף בשיטת חיתוך-וצמיחה-מחדש. היא אוהבת מזג אוויר קריר ומשגשגת בעונות המעבר; בקיץ הישראלי החם יש להעדיף זנים עמידי-חום ולספק הצללה כדי למנוע עלייה לגבעול (bolting) ומרירות. שתילה מרציפים בני 3–4 שבועות מקצרת את הזמן לשוק ומשפרת את אחידות הערוגה.",
+        "sources": [
+          {
+            "source_label": "JMF",
+            "raw_text_md": "בגישת הגן השוקי, החסה נשתלת בצפיפות גבוהה מרציפים ונקצרת כראש מלא או כעלי-בייבי בחיתוך חוזר. עיבוד מיטה נקייה מעשבייה לפני השתילה ולוח עישוב הדוק בשבועות הראשונים הם המפתח לאחידות וליבול גבוה למ\"ר.",
+            "source_url": null
+          },
+          {
+            "source_label": "NI:groworganic",
+            "raw_text_md": "בתנאי הארץ החסה מתאימה במיוחד לעונות הסתיו, החורף והאביב; בקיץ נדרשת הצללה וזנים עמידי-חום כדי למנוע עלייה לגבעול. שתילה רציפה כל 2–3 שבועות שומרת על אספקה קבועה.",
+            "source_url": null
+          }
+        ]
+      },
+      "care_watering": {
+        "canonical_md": "לחסה מערכת שורשים רדודה ולכן היא רגישה להתייבשות: יש לשמור על לחות אחידה בקרקע ולהשקות לעיתים קרובות ובמנות קטנות במקום השקיה כבדה ומרוחקת. השקיית טפטוף עדיפה על המטרה — היא שומרת על העלווה יבשה ומפחיתה מחלות עלים. בימים החמים הגדילו את התדירות; הימנעו מעודף מים עומדים שמעודד ריקבון צוואר.",
+        "sources": [
+          {
+            "source_label": "JMF",
+            "raw_text_md": "השקיה סדירה וקלה לאורך כל מחזור הגידול; אין לתת לערוגה להתייבש בין השקיות. בשלבי הקליטה לאחר השתילה חשובה לחות גבוהה ועקבית.",
+            "source_url": null
+          },
+          {
+            "source_label": "WR:claude_research",
+            "raw_text_md": "ההמלצה המקובלת היא כ-25–30 מ\"מ מים בשבוע, מפוצלים למספר השקיות קצרות; טפטוף מפחית מחלות עלווה לעומת המטרה ומייעל את ניצול המים.",
+            "source_url": null
+          }
+        ]
+      }
+    }
+  }
+}
