@@ -4739,12 +4739,12 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-CONTENT
   label: "ספר גידולים: תוכן נרטיבי רב-מקורי עם פרובננס — סיפור גידול (description) + מדריכי טיפול (care.watering/fertilizing/pests); מצב רגיל=ריכוז קאנוני, מצב מעמיק=מלא לפי מקור עם ציון מקור"
-  status: BUILD
-  phase: build
+  status: COMPLETE
+  phase: closed
   track: A
   effort: LARGE
-  current_lean_gate: L-GATE_VALIDATE
-  lod_status: LOD400
+  current_lean_gate: LOD500_LOCKED
+  lod_status: LOD500_LOCKED
   assigned_builder: team_100
   assigned_validator: team_190
   created_at: "2026-06-08"
@@ -4797,9 +4797,22 @@ work_packages:
       crop_content_source, 0 rejected). Smoke PASS: authored crops (peppers/carrots/lettuce/kale/…) render
       Normal canonical hero + care 'מדריך SFA' + Deep per-source EX/PR/WR pills; un-authored crops keep honest
       empty-states. qa_probe overflow=false / pass=true mobile(375)+desktop on 3 content-heavy Deep pages.
-  notes: "LIVE (team_100, 2026-06-09) on sfa.nimrod.bio. Multi-source content+provenance shipped. Cross-engine
-    L-GATE_VALIDATE next (team_190, non-Claude; mandate staged). Branch merged to main 161f698. Follow-ups:
-    integrate 4 JMF FT fixture guides (phytoprotection/biopesticide/flameweed/nurseryseeding) + Beans key fix."
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-09"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS (validator = Cursor/Composer, non-Claude; IR#1/#5). VC-1..VC-8 PASS on
+      independent re-execution at HEAD 50c5a1a: backend 767 pass/1 skip, delivery 233 pass (copied vendor),
+      license firewall intact, migration 061 reversible, honest empty-states locked, validate_aos 0 FAIL,
+      two-tier write isolation. VC-9 (production smoke) recorded PENDING at verdict time — since SATISFIED by
+      the team_100 post-verdict deploy (006 + push + smoke + qa_probe). No BLOCKER/MAJOR/MINOR. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P004-WP-CB-CONTENT/VERDICT_SFA-S003-P004-WP-CB-CONTENT_L-GATE_VALIDATE_v1.0.0.md
+  notes: "LOD500_LOCKED (team_100, 2026-06-09). Live on sfa.nimrod.bio. Cross-engine L-GATE_VALIDATE PASS
+    (team_190/Cursor). 25 crops / 77 units / 85 variants, multi-source content+provenance (Normal canonical /
+    Deep per-source EX/PR/WR). Archived: _archive/SFA-S003-P004-WP-CB-CONTENT/ARCHIVE_MANIFEST.md. Follow-ups
+    (NOT blocking): integrate 4 JMF FT fixture guides (phytoprotection/biopesticide/flameweed/nurseryseeding) +
+    Beans (Bush/Pole) key-mapping fix + 3 geresh-mismatch hydro crops."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DSX1-SWEEP
