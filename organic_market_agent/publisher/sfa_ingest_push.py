@@ -764,6 +764,77 @@ def _fetch_crop_attribute(conn) -> list[dict[str, Any]]:
     return out
 
 
+def _fetch_crop_content(conn) -> list[dict[str, Any]]:
+    """Crop-level narrative-content canonical mirror rows (WP-CB-CONTENT).
+
+    One row per (crop_id, content_type) — the consolidated canonical body (Normal mode).
+    field_state is stamped via the existing τ/class constants so the delivery tier gates
+    rendering consistently with the enrichment/attribute mirrors.
+    """
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("""
+        SELECT crop_id, content_type, text_md,
+               winning_source_class, confidence_score
+        FROM crop_content
+        ORDER BY crop_id, content_type
+    """)
+    rows = cur.fetchall()
+
+    now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        score_raw = r["confidence_score"]
+        score = float(score_raw) if score_raw is not None else 0.0
+        src_class = r["winning_source_class"] or ""
+        if src_class in _HIGH_TRUST_CLASSES or score >= _FIELD_STATE_TAU:
+            field_state = "VALIDATED"
+        else:
+            field_state = "UNVALIDATED"
+        out.append({
+            "crop_id": r["crop_id"],
+            "content_type": r["content_type"],
+            "text_md": r["text_md"],
+            "winning_source_class": src_class or None,
+            "confidence_score": score_raw,
+            "field_state": field_state,
+            "last_pushed_at": now,
+        })
+    return out
+
+
+def _fetch_crop_content_source(conn) -> list[dict[str, Any]]:
+    """Per-source narrative variants (Deep mode), denormalized with crop_id + content_type.
+
+    JOINed to crop_content so each variant carries (crop_id, content_type, source_label) —
+    the delivery mirror is keyed by those (crop-scoped), not the Postgres surrogate content_id.
+    """
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("""
+        SELECT cc.crop_id, cc.content_type,
+               ccs.source_label, ccs.source_class,
+               ccs.raw_text_md, ccs.source_url, ccs.display_order
+        FROM crop_content_source ccs
+        JOIN crop_content cc ON cc.id = ccs.content_id
+        ORDER BY cc.crop_id, cc.content_type, ccs.display_order, ccs.source_label
+    """)
+    rows = cur.fetchall()
+
+    now = _dt.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        out.append({
+            "crop_id": r["crop_id"],
+            "content_type": r["content_type"],
+            "source_label": r["source_label"],
+            "source_class": r["source_class"],
+            "raw_text_md": r["raw_text_md"],
+            "source_url": r["source_url"],
+            "display_order": r["display_order"],
+            "last_pushed_at": now,
+        })
+    return out
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -847,6 +918,8 @@ def _push_table(
         "cover_crops": _fetch_cover_crops,
         "crop_field_enrichment": _fetch_crop_field_enrichment,
         "crop_attribute": _fetch_crop_attribute,
+        "crop_content": _fetch_crop_content,
+        "crop_content_source": _fetch_crop_content_source,
     }
     if table not in fetchers:
         raise SystemExit(f"Unknown table: {table}")
@@ -883,7 +956,8 @@ def main() -> int:
         "--table",
         choices=(
             "crops", "crop_varieties", "products", "cover_crops",
-            "crop_field_enrichment", "crop_attribute", "all",
+            "crop_field_enrichment", "crop_attribute",
+            "crop_content", "crop_content_source", "all",
         ),
         default="all",
         help="Which table to push",
@@ -907,7 +981,8 @@ def main() -> int:
     try:
         tables = (
             ["crops", "crop_varieties", "products", "cover_crops",
-             "crop_field_enrichment", "crop_attribute"]
+             "crop_field_enrichment", "crop_attribute",
+             "crop_content", "crop_content_source"]
             if args.table == "all" else [args.table]
         )
         for tbl in tables:

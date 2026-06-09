@@ -127,6 +127,43 @@ $qm = static function (string $title, string $short, string $rich = '') use ($h)
     return '<a class="qm" role="button" tabindex="0" data-t="' . $h($title) . '" data-s="' . $h($short) . '"' . $d . '>ⓘ</a>';
 };
 
+// ── WP-CB-CONTENT: multi-source narrative prose (Normal=canonical / Deep=per-source) ──
+// Normal mode shows OUR consolidated canonical; Deep (?depth=deep) adds the full text per
+// source with attribution. Absent content_type → honest empty-state preserved (never fabricated).
+$is_deep = (string)($depth ?? '') === 'deep';
+$content = is_array($crop_content ?? null) ? $crop_content : [];
+$SRC_PILL = [
+    'EX' => ['ex', 'EX · מומחה'],   'NI' => ['ex', 'NI · מקור מנומק'],
+    'PR' => ['pr', 'PR · מקצועי'],  'WR' => ['wr', 'WR · רשת'],
+    'OP' => ['wr', 'OP · שטח'],     'MK' => ['wr', 'MK · שוק'],
+    'WB' => ['wr', 'WB · רשת'],     'UC' => ['wr', 'UC · קהילה'],
+];
+// Canonical body for a content_type (escaped, newlines → <br>); '' when absent.
+$cbody = static function (string $ct) use ($content, $h): string {
+    $md = trim((string)($content[$ct]['canonical'] ?? ''));
+    return $md === '' ? '' : nl2br($h($md));
+};
+// Deep per-source block for a content_type — only when ?depth=deep AND sources exist.
+$csrc = static function (string $ct) use ($content, $is_deep, $h, $SRC_PILL): string {
+    if (!$is_deep) { return ''; }
+    $srcs = $content[$ct]['sources'] ?? [];
+    if (!is_array($srcs) || $srcs === []) { return ''; }
+    $out = '<div class="kf"><b>ידע SFA · הטקסט המלא לפי מקור</b>';
+    foreach ($srcs as $s) {
+        $cls  = strtoupper((string)($s['source_class'] ?? ''));
+        $pill = $SRC_PILL[$cls] ?? ['wr', $cls];
+        $lbl  = (string)($s['source_label'] ?? '');
+        $url  = trim((string)($s['source_url'] ?? ''));
+        $body = nl2br($h((string)($s['raw_text_md'] ?? '')));
+        $out .= '<div class="treat"><span class="srcline">'
+              . '<span class="srcpill srcpill--' . $pill[0] . '">' . $h($pill[1]) . '</span>';
+        if ($lbl !== '') { $out .= '<span class="sp">' . $h($lbl) . '</span>'; }
+        if ($url !== '') { $out .= ' <a href="' . $h($url) . '" rel="nofollow noopener" target="_blank">מקור ←</a>'; }
+        $out .= '</span><span>' . $body . '</span></div>';
+    }
+    return $out . '</div>';
+};
+
 ob_start();
 ?>
 <div class="cb-crop-detail wrap">
@@ -152,6 +189,7 @@ ob_start();
 
       <?php if ($desc !== ''): ?>
         <p class="hero__sum"><?= $h($desc) ?></p>
+        <?php if (($sd = $csrc('story')) !== ''): ?><?= $sd ?><?php endif; ?>
       <?php else: ?>
         <p class="hero__sum muted">תיאור הגידול עדיין לא פורסם — יתווסף עם מודל התוכן. בינתיים, הנתונים החקלאיים למטה.</p>
       <?php endif; ?>
@@ -265,36 +303,56 @@ ob_start();
   <section class="stage" id="s3">
     <div class="stage__head"><span class="stage__n">3</span><span class="stage__t">טיפול לאורך העונה<small>לחצו על כל נושא להרחבה</small></span></div>
 
+    <?php $waterBody = $cbody('care_watering'); ?>
     <details class="topic">
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-drop"/></svg></span><span class="topic__t">השקיה</span><span class="topic__key muted">הנחיות מפורטות — בקרוב</span><span class="chev">▾</span></summary>
-      <div class="topic__body"><div class="drill">▾ עומק נוסף</div><p class="muted">המלצות השקיה מפורטות (קצב, שיטה, מועדים) יתווספו עם מודל התוכן. ככלל — השקיה סדירה, הימנעות מהרטבת עלווה לצמצום מחלות. <a href="/community">תרמו ידע מהשטח ←</a></p></div>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-drop"/></svg></span><span class="topic__t">השקיה</span><span class="topic__key<?= $waterBody === '' ? ' muted' : '' ?>"><?= $waterBody === '' ? 'הנחיות מפורטות — בקרוב' : 'מדריך SFA' ?></span><span class="chev">▾</span></summary>
+      <div class="topic__body"><div class="drill">▾ עומק נוסף</div>
+        <?php if ($waterBody !== ''): ?>
+          <p><?= $waterBody ?></p>
+          <?= $csrc('care_watering') ?>
+        <?php else: ?>
+          <p class="muted">המלצות השקיה מפורטות (קצב, שיטה, מועדים) יתווספו עם מודל התוכן. ככלל — השקיה סדירה, הימנעות מהרטבת עלווה לצמצום מחלות. <a href="/community">תרמו ידע מהשטח ←</a></p>
+        <?php endif; ?>
+      </div>
     </details>
 
+    <?php $fertBody = $cbody('care_fertilizing'); ?>
     <details class="topic">
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-compost"/></svg></span><span class="topic__t">דישון וקומפוסט</span><span class="topic__key muted">דישון אורגני</span><span class="chev">▾</span></summary>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-compost"/></svg></span><span class="topic__t">דישון וקומפוסט</span><span class="topic__key<?= $fertBody === '' ? ' muted' : '' ?>"><?= $fertBody === '' ? 'דישון אורגני' : 'מדריך SFA' ?></span><span class="chev">▾</span></summary>
       <div class="topic__body">
         <div class="drill">▾ עומק נוסף</div>
-        <p class="muted">הנחיות דישון כמותיות יתווספו עם מודל התוכן.</p>
+        <?php if ($fertBody !== ''): ?>
+          <p><?= $fertBody ?></p>
+          <?= $csrc('care_fertilizing') ?>
+        <?php else: ?>
+          <p class="muted">הנחיות דישון כמותיות יתווספו עם מודל התוכן.</p>
+        <?php endif; ?>
         <div class="organic"><svg class="gi" aria-hidden="true"><use href="#i-leaf"/></svg> <b>גידול אורגני:</b> בסיס הדישון — קומפוסט בשל בהכנת הערוגה (≈ 4–6 ק״ג/מ״ר כלל אצבע), בתוספת קומפוסט מועשר/דישון עלי אורגני לאורך העונה. ערכים מדויקים לגידול זה יתווספו עם נתוני התשומות.</div>
       </div>
     </details>
 
-    <?php if (!empty($pub_notes)): ?>
-    <details class="topic" open>
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="topic__t">מזיקים והערות מהשטח</span><span class="topic__key"><span class="num"><?= count($pub_notes) ?></span> הערות קהילה</span><span class="chev">▾</span></summary>
+    <?php $pestBody = $cbody('care_pests'); $hasPest = $pestBody !== '' || !empty($pub_notes); ?>
+    <details class="topic"<?= !empty($pub_notes) ? ' open' : '' ?>>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="topic__t">מזיקים ומחלות</span><span class="topic__key<?= $hasPest ? '' : ' muted' ?>"><?php
+        if ($pestBody !== '' && !empty($pub_notes)) { echo 'מדריך SFA · <span class="num">' . count($pub_notes) . '</span> הערות קהילה'; }
+        elseif ($pestBody !== '') { echo 'מדריך SFA'; }
+        elseif (!empty($pub_notes)) { echo '<span class="num">' . count($pub_notes) . '</span> הערות קהילה'; }
+        else { echo 'בקרוב'; }
+      ?></span><span class="chev">▾</span></summary>
       <div class="topic__body cb-notes">
         <div class="drill">▾ עומק נוסף</div>
+        <?php if ($pestBody !== ''): ?>
+          <p><?= $pestBody ?></p>
+          <?= $csrc('care_pests') ?>
+        <?php endif; ?>
         <?php foreach ($pub_notes as $n): ?>
           <div class="treat"><b><?= $h(((string)($n['note_type'] ?? '') === 'pest_disease') ? 'מזיק/מחלה' : 'טיפ') ?>:</b><span><?= $h((string)$n['body_text']) ?><?php if (!empty($n['trust_tier'])): ?> <span class="sp"><?= $h((string)$n['trust_tier']) ?></span><?php endif; ?></span></div>
         <?php endforeach; ?>
+        <?php if (!$hasPest): ?>
+          <p class="muted">מדריך מזיקים ומחלות לגידול זה יתווסף עם מודל התוכן. <a href="/community">תרמו ניסיון שדה ←</a></p>
+        <?php endif; ?>
       </div>
     </details>
-    <?php else: ?>
-    <details class="topic">
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="topic__t">מזיקים ומחלות</span><span class="topic__key muted">בקרוב</span><span class="chev">▾</span></summary>
-      <div class="topic__body"><div class="drill">▾ עומק נוסף</div><p class="muted">מדריך מזיקים ומחלות לגידול זה יתווסף עם מודל התוכן. <a href="/community">תרמו ניסיון שדה ←</a></p></div>
-    </details>
-    <?php endif; ?>
 
     <details class="topic"<?= !empty($companions) ? ' open' : '' ?>>
       <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-companions"/></svg></span><span class="topic__t">חברה בערוגה</span><span class="topic__key"><?php if (!empty($comp_good)): ?>טוב: <?= $h(implode(', ', array_map(fn ($c) => (string)($c['name_he'] ?? ''), array_slice(array_values($comp_good), 0, 3)))) ?><?php else: ?><span class="muted">בקרוב</span><?php endif; ?></span><span class="chev">▾</span></summary>

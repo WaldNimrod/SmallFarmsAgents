@@ -583,4 +583,91 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringNotContainsString('/crop-book/basil/', $htmlSpring,
             'season=spring: basil (no month data) must NOT be in results');
     }
+
+    // ── WP-CB-CONTENT: multi-source narrative prose (Normal=canonical / Deep=per-source) ──
+
+    /** Create the crop_content[+_source] mirror tables and author lettuce (id=1) richly. */
+    private function seedCropContent(): void
+    {
+        $this->pdo->exec("
+            CREATE TABLE IF NOT EXISTS crop_content (
+              crop_id INTEGER NOT NULL, content_type TEXT NOT NULL, text_md TEXT,
+              winning_source_class TEXT, confidence_score REAL, field_state TEXT,
+              last_pushed_at TEXT, PRIMARY KEY (crop_id, content_type));
+            CREATE TABLE IF NOT EXISTS crop_content_source (
+              crop_id INTEGER NOT NULL, content_type TEXT NOT NULL, source_label TEXT NOT NULL,
+              source_class TEXT NOT NULL, raw_text_md TEXT NOT NULL, source_url TEXT,
+              display_order INTEGER NOT NULL DEFAULT 0, last_pushed_at TEXT,
+              PRIMARY KEY (crop_id, content_type, source_label));
+        ");
+        // Canonical bodies (Normal) carry CANON_* markers; per-source bodies (Deep) carry DEEP_* markers.
+        $this->pdo->exec("INSERT INTO crop_content (crop_id,content_type,text_md,winning_source_class,confidence_score,field_state) VALUES
+            (1,'story','CANON_STORY החסה אוהבת מזג קריר','NI',1.0,'VALIDATED'),
+            (1,'care_watering','CANON_WATER השקיה סדירה','PR',0.7,'VALIDATED'),
+            (1,'care_pests','CANON_PESTS כנימות עלה','WR',0.55,'VALIDATED')");
+        $this->pdo->exec("INSERT INTO crop_content_source (crop_id,content_type,source_label,source_class,raw_text_md,source_url,display_order) VALUES
+            (1,'story','team_00','EX','DEEP_STORY_EX גרסת מומחה',NULL,0),
+            (1,'story','JMF','PR','DEEP_STORY_PR גרסת JMF',NULL,2),
+            (1,'story','WR:claude_research','WR','DEEP_STORY_WR סינתזת רשת','https://example.test/x',3),
+            (1,'care_watering','JMF','PR','DEEP_WATER_PR השקיה לפי JMF',NULL,2)");
+    }
+
+    public function testCropContentNormalRendersCanonicalNoLeak(): void
+    {
+        $this->seedCropContent();
+        $res  = $this->get('/crop-book/lettuce/');  // default = simple (Normal)
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // Canonical present (hero story + care topics).
+        $this->assertStringContainsString('CANON_STORY', $html, 'hero must show canonical story (Normal)');
+        $this->assertStringContainsString('CANON_WATER', $html, 'watering topic must show canonical (Normal)');
+        $this->assertStringContainsString('CANON_PESTS', $html, 'pests topic must show canonical (Normal)');
+        // Per-source Deep bodies + pills must NOT leak into Normal mode.
+        $this->assertStringNotContainsString('DEEP_STORY', $html, 'per-source story must not leak in Normal');
+        $this->assertStringNotContainsString('DEEP_WATER', $html, 'per-source watering must not leak in Normal');
+        $this->assertStringNotContainsString('srcpill', $html, 'source pills must not render in Normal');
+    }
+
+    public function testCropContentDeepRendersPerSourceWithPills(): void
+    {
+        $this->seedCropContent();
+        $res  = $this->get('/crop-book/lettuce/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // Canonical still present in Deep.
+        $this->assertStringContainsString('CANON_STORY', $html);
+        // Per-source full text now rendered.
+        $this->assertStringContainsString('DEEP_STORY_EX', $html, 'Deep must render the EX story variant');
+        $this->assertStringContainsString('DEEP_STORY_PR', $html, 'Deep must render the PR story variant');
+        $this->assertStringContainsString('DEEP_STORY_WR', $html, 'Deep must render the WR story variant');
+        $this->assertStringContainsString('DEEP_WATER_PR', $html, 'Deep must render the watering variant');
+        // Attribution pills (the existing srcpill--ex/pr/wr classes).
+        $this->assertStringContainsString('srcpill--ex', $html, 'EX pill must render in Deep');
+        $this->assertStringContainsString('srcpill--pr', $html, 'PR pill must render in Deep');
+        $this->assertStringContainsString('srcpill--wr', $html, 'WR pill must render in Deep');
+        // Attribution link for the WR source with a URL.
+        $this->assertStringContainsString('https://example.test/x', $html, 'source_url link must render in Deep');
+    }
+
+    public function testCropContentEmptyStatePreservedForUnauthored(): void
+    {
+        $this->seedCropContent();  // authors lettuce (id=1) only; radish (id=2) has no content
+        $res  = $this->get('/crop-book/radish/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode());
+        $html = (string)$res->getBody();
+        // Honest empty-states intact for an un-authored crop.
+        $this->assertStringContainsString('תיאור הגידול עדיין לא פורסם', $html, 'hero empty-state preserved');
+        $this->assertStringContainsString('בקרוב', $html, 'care empty-state preserved');
+        $this->assertStringNotContainsString('CANON_STORY', $html, 'no canonical leaks onto an un-authored crop');
+        $this->assertStringNotContainsString('srcpill', $html, 'no pills on an un-authored crop');
+    }
+
+    /** Tolerates the mirror tables being absent entirely (degrades to empty-states, page still 200). */
+    public function testCropContentTablesAbsentStill200(): void
+    {
+        $res  = $this->get('/crop-book/lettuce/?depth=deep');  // no seedCropContent() → tables don't exist
+        $this->assertSame(200, $res->getStatusCode(), 'page must 200 even without crop_content tables');
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('תיאור הגידול עדיין לא פורסם', $html);
+    }
 }

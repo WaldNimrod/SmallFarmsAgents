@@ -623,6 +623,21 @@ def _run_c2_ingestion(session: Session) -> None:
     session.flush()
 
 
+def _run_content_ingestion(session: Session) -> None:
+    """WP-CB-CONTENT: curated multi-source narrative prose → crop_content[+_source].
+
+    Loads data/crop_content/authoring.json via CropContentLoader. Every body is OUR own
+    Hebrew text; no read path into crop_knowledge_notes (license firewall).
+    """
+    from organic_market_agent.crop_book import content_models as _cm  # noqa: F401
+    from organic_market_agent.crop_book.importer.content_loader import load_content
+
+    logger.info("WP-CB-CONTENT: loading curated narrative prose")
+    summary = load_content(session)
+    logger.info("WP-CB-CONTENT content: %s", summary)
+    session.flush()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="ספר גידולים seed importer — populate crop-book tables from Tend CSV + JMF XLSX"
@@ -644,6 +659,10 @@ def main() -> None:
     mode.add_argument(
         "--c3-only", action="store_true",
         help="Run WP-C3 importers only (Curtis Stone + Idan succession + FRANCHI + L49 diff + Tend 2018)",
+    )
+    mode.add_argument(
+        "--content-only", action="store_true",
+        help="Run WP-CB-CONTENT loader only (curated narrative prose → crop_content[+_source])",
     )
     mode.add_argument(
         "--wd-only", action="store_true",
@@ -742,6 +761,10 @@ def main() -> None:
         help="Skip WP-C3 importers when --all is used",
     )
     parser.add_argument(
+        "--no-content", action="store_true",
+        help="Skip WP-CB-CONTENT narrative-prose loader when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -757,10 +780,10 @@ def main() -> None:
     target_crops: list[str] | None = None
     if getattr(args, 'crops', None):
         target_crops = args.crops
-    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.wd_only and not args.openai_only and not args.idan_only and not args.calendar_only and not args.gemini_only:
+    elif not args.all and not args.jmf_only and not args.ni_only and not args.c1_only and not args.c4_only and not args.c2_only and not args.c3_only and not args.content_only and not args.wd_only and not args.openai_only and not args.idan_only and not args.calendar_only and not args.gemini_only:
         parser.error(
-            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --wd-only, --openai-only, --idan-only, "
-            "--jmf-only, --ni-only, or --crops NAME [NAME ...]"
+            "Specify --all, --c1-only, --c2-only, --c3-only, --c4-only, --content-only, --wd-only, --openai-only, "
+            "--idan-only, --jmf-only, --ni-only, or --crops NAME [NAME ...]"
         )
 
     # ── C4-only fast path (WP-C4 LOD400 §6) ──
@@ -794,6 +817,15 @@ def main() -> None:
 
         with SessionFactory() as session:
             _run_c2_ingestion(session)
+            session.commit()
+        return
+
+    # ── Content-only fast path (WP-CB-CONTENT) ──
+    if args.content_only:
+        from organic_market_agent.db.session import SessionFactory
+
+        with SessionFactory() as session:
+            _run_content_ingestion(session)
             session.commit()
         return
 
@@ -1089,6 +1121,11 @@ def main() -> None:
         # NI ingestion runs LAST (hard-override wins precedence) — single call-site via helper
         if not args.no_ni:
             _run_ni_ingestion(session)
+            session.commit()
+
+        # WP-CB-CONTENT: narrative prose loader (after crops exist; independent table)
+        if args.all and not args.no_content:
+            _run_content_ingestion(session)
             session.commit()
 
 
