@@ -4793,18 +4793,20 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-DSX1-SWEEP
   label: "DSX-1 emoji fold למסכים שלא נכללו ברידיזיין — החלפת כל OS-emoji ב-.gi line-glyphs (ui-icons.svg כבר בפרודקשן) על 12 קבצים (לא כולל market_product = WP נפרד)"
-  status: REGISTER
-  phase: register
+  status: COMPLETE
+  phase: closed
   track: A
   effort: SMALL
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-09"
   assigned_builder: team_110
-  assigned_validator: team_50
+  assigned_validator: team_190
   created_at: "2026-06-08"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
   spec_ref: "_COMMUNICATION/team_110/SFA-S003-P004-WP-CB-DSX1-SWEEP/HANDOFF_SFA-S003-P004-WP-CB-DSX1-SWEEP_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-DSX1-SWEEP/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4817,7 +4819,42 @@ work_packages:
       feed_item, tier_badge, variety_row; + the hub_home WhatsApp ✆. EXCLUDES market_product (owned by
       WP-CB-MARKET-DETAIL). Replace with .gi glyphs from the shipped ui-icons.svg. Full handoff to team_110;
       MUST work on an isolated branch + report to team_100 on completion.
-  notes: "REGISTER (team_00, 2026-06-08). DSX-1 consistency sweep. Handoff: team_110 (isolated branch → report team_100)."
+  - gate: L-GATE_BUILD
+    result: COMPLETE
+    date: "2026-06-09"
+    validator: team_110 (Claude Code, ADR045 execution mandate)
+    notes: >
+      Build commit 5c66bf1 (base ce7d9c1) on isolated branch feat/wp-cb-dsx1-sweep. 16 files (sfa_delivery/):
+      ui-icons.svg +7 symbols (i-mail i-pin i-logout i-bug i-chat i-clock i-star); redesign.css per-context .gi;
+      7 pages + 6 macros + 1 test. market_product.php EXCLUDED (0-byte diff). Builder-side: PHPUnit 225/225,
+      qa_probe 12/12 (8095), emoji sweeps clean, validate_aos 31 PASS / 21 SKIP / 0 FAIL.
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-09"
+    validator: team_190 (Cursor/Composer, non-Claude)
+    notes: >
+      Constitutional cross-engine final validation (IR#1/#5; builder Claude Code != validator Cursor).
+      Independent reproduction at 5c66bf1: VC-1..VC-8 all PASS — PHPUnit 225/225 (697 assert); DSX-1 emoji
+      sweep only market_product.php; market_product 0-byte diff vs ce7d9c1; 25 #i-* refs / 0 unresolved
+      (7 new present); php -l clean; validate_aos 0 FAIL; qa_probe 12/12 (0 overflow). No BLOCKER/MAJOR/MINOR
+      (advisories F-190-DSX1-01/02 only). -> LOD500_LOCKED.
+      Verdict: _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-DSX1-SWEEP/WP-CB-DSX1-SWEEP_LGATE-V_VERDICT_v1.0.0.md
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-06-09"
+    validator: team_100
+    notes: >
+      Merged to main (deploy commit 9b83c94, ancestor of main) + FTPS->uPress coordinated pass
+      (ui-icons.svg + templates together — sprite is @readfile-inlined). Production verified: 6 routes HTTP 200;
+      7 new sprite symbols inlined; 0 folded emoji on live surfaces; production qa_probe 12/12 (0 overflow).
+  notes: "COMPLETE / LOD500_LOCKED (ADR042 closure by team_191, 2026-06-09; mandated by team_110/ADR045).
+    L-GATE_VALIDATE PASS by team_190 (Cursor, cross-engine, no findings). LIVE on https://sfa.nimrod.bio
+    (build 5c66bf1 -> deploy 9b83c94). Spoke-native WP (ADR034 R9): no hub DB row — hub API returns 404 for
+    the whole SFA-CB family — so lifecycle is file-authored in roadmap.yaml per R9/R8 (gate_history R2-exempt),
+    matching sibling closures WP-CB-CALC / WP-CB-UI-REDESIGN. Step 3 propagation SKIPPED (no core/governance/
+    edits). Carry-forward: (1) ui-icons.svg @readfile-inlined -> always deploy sprite WITH templates (done);
+    (2) concurrent commit 56bc693 (WP-CB-CONTENT) rescued to rescue/wp-cb-content-56bc693, since merged to main.
+    Archive: _archive/SFA-S003-P004-WP-CB-DSX1-SWEEP/."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DEEP-PROVENANCE
