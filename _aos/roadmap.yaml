@@ -4784,11 +4784,22 @@ work_packages:
       IngestController + CropBookViewController + book_crop.php (Normal canonical / Deep per-source + EX/PR/WR
       pills; honest empty-states preserved). Content: 25 crops / 77 units / 85 variants authored via an
       orchestrated author→adversarial-verify Workflow (50 agents; 25/25 license-verified). Tests: backend
-      767 + delivery 233. DEPLOY: backend loaded to local oma-postgres (22/25 crops resolved → 68/74 rows;
-      3 unseeded crops skipped); delivery code LIVE on sfa.nimrod.bio (graceful empty-states). PENDING: uPress
-      mirror 006 + content push (ADMIN_MIGRATE_TOKEN, server-side) → then cross-engine L-GATE_VALIDATE.
-  notes: "BUILD (team_100, 2026-06-09). Multi-source content+provenance LIVE-pending-006/push; cross-engine
-    L-GATE_VALIDATE next (team_190, non-Claude). Branch feat/wp-cb-content-build merged to main 161f698."
+      767 + delivery 233. Content: backend loaded to local oma-postgres (22/25 crops resolved → 68/74 rows;
+      3 unseeded crops skipped — Beans Bush/Pole key-mismatch).
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-06-09"
+    validator: team_100
+    notes: >
+      LIVE on sfa.nimrod.bio (cutover entirely from the Mac: local oma-postgres:5433 → FTPS → uPress, no
+      waldhomeserver). Delivery migration 006 applied via token-gated /admin/migrate (token set→used→cleared,
+      .env restored byte-identical, site 200 throughout). Content pushed via HMAC ingest (crop_content +
+      crop_content_source, 0 rejected). Smoke PASS: authored crops (peppers/carrots/lettuce/kale/…) render
+      Normal canonical hero + care 'מדריך SFA' + Deep per-source EX/PR/WR pills; un-authored crops keep honest
+      empty-states. qa_probe overflow=false / pass=true mobile(375)+desktop on 3 content-heavy Deep pages.
+  notes: "LIVE (team_100, 2026-06-09) on sfa.nimrod.bio. Multi-source content+provenance shipped. Cross-engine
+    L-GATE_VALIDATE next (team_190, non-Claude; mandate staged). Branch merged to main 161f698. Follow-ups:
+    integrate 4 JMF FT fixture guides (phytoprotection/biopesticide/flameweed/nurseryseeding) + Beans key fix."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DSX1-SWEEP
