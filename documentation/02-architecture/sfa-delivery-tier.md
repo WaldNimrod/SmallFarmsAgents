@@ -107,7 +107,9 @@ The product surfaces **two datasets** with **different lifecycles**, so they hav
 
 **Consequence (resolves the "durability caveat"):** the home server Postgres being at an older Alembic head **without** the crop-book schema is **by design, not a defect**. The crop book is a *dev→production publish*, not a server-cron responsibility. There is **no requirement** to install the crop-book schema or data on the home server; doing so would make it a redundant staging mirror, which §1A.1 forbids. (Supersedes the PROJECT_CONTEXT "durability caveat" framing: manual Mac re-push of crop data is the *intended* pipeline, not a workaround.)
 
-### 1A.3 Why data publishes from the Mac but code deploys from the server
+### 1A.3 Both crop-book code AND data deploy FROM the Mac (waldhomeserver is NOT in this path)
+
+⚠ **Anti-drift (team_00, repeated):** the **entire crop-book / SFA-UI production cutover runs from the Mac** — `alembic upgrade head` + `seed` against the **local Docker `oma-postgres:5433`**, FTPS `lftp mirror` deploy to uPress, and the HMAC content push. **waldhomeserver is NOT involved** in the crop-book deploy — it runs **only** the price-index (מחירון) pipeline (§1A.2). Do not gate this cutover on SSH-to-waldhomeserver; do not "hand it to team_00 as blocked." (Verified end-to-end 2026-06-09, WP-CB-CONTENT.) The only thing team_00 supplies live is the **uPress `ADMIN_MIGRATE_TOKEN`** to run the delivery-side `/admin/migrate` (server-side secret) and opening the Mac's external IP on the uPress FTPS allowlist.
 
 Two different transports with two different network constraints — do not conflate:
 
