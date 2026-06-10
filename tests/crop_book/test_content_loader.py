@@ -174,6 +174,39 @@ def test_unknown_content_type_skipped(session, tmp_path):
     assert types == {"story"}
 
 
+def test_name_he_override_targets_db_crop(session, tmp_path):
+    """A ``_name_he`` override resolves to a DB crop even when JMF_CROP_MAP maps elsewhere.
+
+    Real cases: JMF 'Basil' → 'בזיליקום' but the DB has 'בזיל'; 'Beans (Bush)' → 'שעועית שיחית'
+    but the DB has the generic 'שעועית'. The override lets the authoring file target the right row.
+    """
+    from organic_market_agent.crop_book.models import Crop, CropFamily
+    from organic_market_agent.crop_book.content_models import CropContent
+
+    fam = session.query(CropFamily).first()
+    session.add(Crop(name_he="בזיל", category="herbs", family_id=fam.id))
+    session.commit()
+    f = _write_authoring(tmp_path, {
+        "Basil": {"_name_he": "בזיל", "story": {"canonical_md": "סיפור הבזיל", "sources": []}},
+    })
+    summ = _load(session, f)
+    cc = session.query(CropContent).join(Crop).filter(Crop.name_he == "בזיל").one()
+    assert cc.content_type == "story"
+    assert summ.skipped == []  # resolved via override, not skipped
+
+
+def test_name_he_meta_key_not_a_content_type(session, tmp_path):
+    """The ``_name_he`` meta key must not be loaded as a content_type."""
+    from organic_market_agent.crop_book.content_models import CropContent
+
+    f = _write_authoring(tmp_path, {
+        "Lettuce": {"_name_he": "חסה", "story": {"canonical_md": "x", "sources": []}},
+    })
+    _load(session, f)
+    types = {cc.content_type for cc in session.query(CropContent).all()}
+    assert types == {"story"}
+
+
 def test_committed_authoring_file_loads(session):
     """The repo's data/crop_content/authoring.json loads against the lettuce fixture."""
     from organic_market_agent.crop_book.content_models import CropContent

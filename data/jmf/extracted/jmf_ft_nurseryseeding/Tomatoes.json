@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_nurseryseeding_v1",
+  "crop_jmf_en": "Tomatoes",
+  "provenance": {
+    "pdf": "FT_FINALE_NURSERYSEEDING.PDF",
+    "pages": "7-9",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T15:30:00Z"
+  },
+  "notes": {
+    "nursery_seeding_process": "Sow 1 tomato seed per cell in 72-cell or 50-cell trays. Use a well-draining seedling mix. Germinate at 22-26 degrees C with bottom heat for 5-7 days. Maintain at 18-22 degrees C after emergence. Transplant at 6-8 true leaves or 5-6 weeks from seeding. Harden off over 7-10 days before field planting."
+  }
+}

@@ -583,19 +583,29 @@ def _run_ni_ingestion(session: Session) -> None:
     from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
     from organic_market_agent.crop_book.importer.ni_importer import _upsert_knowledge_note
 
+    # Resilience (WP-CB-CONTENT follow-up): each importer + each path runs inside its own
+    # SAVEPOINT so a single broken importer (e.g. a malformed value_text) cannot poison the
+    # whole transaction and silently drop every other importer's rows. A failed path is logged
+    # and skipped; healthy importers (incl. the JMF FT specialty guides) still commit.
     for cls in NI_IMPORTER_CLASSES:
         importer = cls()  # constructor takes no args (subclass attrs are class-level)
 
         # PATH A: variety-source-value rows (cultivar_recommendation only)
-        for row in importer.load(session):
-            # Row is fully resolved by load(); use existing WP-A signature:
-            variety_id = row.pop("variety_id")
-            _upsert_source_value(session, variety_id, row)
+        try:
+            with session.begin_nested():
+                for row in importer.load(session):
+                    variety_id = row.pop("variety_id")
+                    _upsert_source_value(session, variety_id, row)
+        except Exception as exc:  # noqa: BLE001 — isolate per importer
+            logger.warning("NI %s load() failed — skipped: %s", cls.__name__, str(exc)[:200])
 
         # PATH B: crop_knowledge_notes rows (B2-specific)
-        for row in importer.load_knowledge_notes(session):
-            # Row is fully resolved by load_knowledge_notes(); crop_id is in the dict
-            _upsert_knowledge_note(session, **row)
+        try:
+            with session.begin_nested():
+                for row in importer.load_knowledge_notes(session):
+                    _upsert_knowledge_note(session, **row)
+        except Exception as exc:  # noqa: BLE001 — isolate per importer
+            logger.warning("NI %s load_knowledge_notes() failed — skipped: %s", cls.__name__, str(exc)[:200])
 
     session.flush()
 

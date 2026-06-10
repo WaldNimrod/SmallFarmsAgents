@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_flameweed_v1",
+  "crop_jmf_en": "Arugula",
+  "provenance": {
+    "pdf": "FT_FINALE_FLAMEWEEDING.PDF",
+    "pages": "1-3",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T15:00:00Z"
+  },
+  "notes": {
+    "flame_weed_timing": "Flame weed arugula beds 2-3 days before germination when weeds have reached the white thread stage. A single pass at medium intensity is sufficient. Do not flame after emergence."
+  }
+}

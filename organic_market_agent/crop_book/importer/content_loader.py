@@ -85,8 +85,14 @@ class CropContentLoader:
     def __init__(self, authoring_file: Path | None = None) -> None:
         self.authoring_file = authoring_file or _AUTHORING_FILE
 
-    def _iter_units(self) -> Iterator[tuple[str, str, str, list[dict[str, Any]]]]:
-        """Yield (crop_jmf_en, content_type, canonical_md, sources_list)."""
+    def _iter_units(self) -> Iterator[tuple[str, str | None, str, str, list[dict[str, Any]]]]:
+        """Yield (crop_jmf_en, name_he_override, content_type, canonical_md, sources_list).
+
+        A crop entry may carry meta keys prefixed with ``_`` (e.g. ``"_name_he"``) that are NOT
+        content types. ``_name_he`` lets the authoring file target a DB crop directly by its Hebrew
+        name when JMF_CROP_MAP doesn't map to the right one (e.g. JMF "Beans (Bush)" → "שעועית שיחית"
+        but the DB models beans as the single generic crop "שעועית").
+        """
         if not self.authoring_file.exists():
             logger.warning("%s: authoring file missing — %s", self.name, self.authoring_file)
             return
@@ -96,7 +102,10 @@ class CropContentLoader:
                 f"{self.authoring_file}: schema_version != {_SCHEMA_VERSION!r}"
             )
         for crop_jmf_en, units in data.get("crops", {}).items():
+            name_he_override = (units or {}).get("_name_he")
             for content_type, unit in units.items():
+                if content_type.startswith("_"):
+                    continue  # meta key (e.g. _name_he) — not a content type
                 if content_type not in CONTENT_TYPE_VALUES:
                     logger.warning(
                         "%s: %r/%r unknown content_type — skipped",
@@ -111,16 +120,19 @@ class CropContentLoader:
                     )
                     continue
                 sources = (unit or {}).get("sources", []) or []
-                yield crop_jmf_en, content_type, canonical_md, sources
+                yield crop_jmf_en, name_he_override, content_type, canonical_md, sources
 
-    def _resolve_crop_id(self, session: Session, crop_jmf_en: str) -> int | None:
+    def _resolve_crop_id(
+        self, session: Session, crop_jmf_en: str, name_he_override: str | None = None
+    ) -> int | None:
         from organic_market_agent.crop_book.constants import JMF_CROP_MAP
         from organic_market_agent.crop_book.models import Crop
 
-        name_he = JMF_CROP_MAP.get(crop_jmf_en)
+        name_he = name_he_override or JMF_CROP_MAP.get(crop_jmf_en)
         if name_he is None:
             logger.warning(
-                "%s: crop_jmf_en=%r not in JMF_CROP_MAP — skipped", self.name, crop_jmf_en
+                "%s: crop_jmf_en=%r not in JMF_CROP_MAP and no _name_he override — skipped",
+                self.name, crop_jmf_en,
             )
             return None
         crop = session.query(Crop).filter_by(name_he=name_he).one_or_none()
@@ -134,8 +146,8 @@ class CropContentLoader:
         resolved_crops: set[str] = set()
         now = datetime.now(timezone.utc)
 
-        for crop_jmf_en, content_type, canonical_md, sources in self._iter_units():
-            crop_id = self._resolve_crop_id(session, crop_jmf_en)
+        for crop_jmf_en, name_he_override, content_type, canonical_md, sources in self._iter_units():
+            crop_id = self._resolve_crop_id(session, crop_jmf_en, name_he_override)
             if crop_id is None:
                 summary.skipped.append(f"{crop_jmf_en}/{content_type}")
                 continue

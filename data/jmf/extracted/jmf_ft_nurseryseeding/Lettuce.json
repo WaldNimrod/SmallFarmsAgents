@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_nurseryseeding_v1",
+  "crop_jmf_en": "Lettuce",
+  "provenance": {
+    "pdf": "FT_FINALE_NURSERYSEEDING.PDF",
+    "pages": "3-5",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T15:30:00Z"
+  },
+  "notes": {
+    "nursery_seeding_process": "Sow 2-3 lettuce seeds per cell in 128-cell trays using a fine-grade seed starting mix. Germinate at 18-20 degrees C in darkness or low light. Thin to 1 seedling per cell at cotyledon stage. Transplant at 3-4 true leaves, approximately 21-28 days from seeding."
+  }
+}

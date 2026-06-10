@@ -72,7 +72,8 @@ class JmfFtNurseryseedingImporter(NIImporter):
         v = (
             session.query(CropVariety)
             .filter(CropVariety.crop_id == crop_id, CropVariety.name_en.is_(None))
-            .one_or_none()
+            .order_by(CropVariety.is_default.desc(), CropVariety.id)
+            .first()
         )
         if v is None:
             v = CropVariety(crop_id=crop_id, name_en=None, name_he=None)

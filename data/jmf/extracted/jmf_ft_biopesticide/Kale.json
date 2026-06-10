@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "source": "NI:jmf_ft_biopesticide_v1",
+  "crop_jmf_en": "Kale",
+  "provenance": {
+    "pdf": "FT_FINALE_TABLEAUAPPLICATIONBIOPESTICIPE.PDF",
+    "pages": "1-5",
+    "extraction_model": "claude-sonnet-4-6",
+    "extracted_at": "2026-05-25T15:10:00Z"
+  },
+  "notes": {
+    "biopesticide_spray": "Apply Bt (Bacillus thuringiensis) at first sign of cabbage worm damage. Spray late afternoon when caterpillars are feeding. Repeat every 5-7 days or after rain. Effective against all lepidopteran pests."
+  }
+}
