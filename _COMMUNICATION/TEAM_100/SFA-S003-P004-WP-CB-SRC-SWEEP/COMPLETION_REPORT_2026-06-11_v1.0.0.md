@@ -26,10 +26,14 @@ and the non-integrable tail (L43/L44/L26/L38/jmf_book_alt) is explicitly deprior
 
 ## 3. Integrity
 
-- **Backend** `pytest tests/crop_book`: **779 pass / 1 skip / 1 fail**. The 1 fail
+- **Backend** `pytest tests/crop_book`: **780 pass / 1 skip / 1 fail** (after R2 remediation). The 1 fail
   (`test_wp_upload_crop_book::test_dispatch_upload_crop_book_profile`) is **pre-existing** (mock.patch of
   `organic_market_agent.utils.config.Config` under py3.9 — tests the retired www WP-upload tier; severed
   2026-05-28). Proven identical on clean `main` (stash test). Not introduced by this WP; out of scope.
+  **R2 (2026-06-11):** first validation FAILED `test_ac05_derived_fields` — `seed --all` (run to land deltas)
+  reintroduced forbidden DERIVED fields; the canon strip (`canon.migrate phase4`) was not run. Fixed by
+  stripping 77 source-values + 695 enrichment rows; AC-05 now passes. Production never affected (derived
+  fields not in the publish whitelist).
 - **Delivery** `vendor/bin/phpunit`: **233 pass / 0 fail** (1 PHPUnit deprecation warning only).
 - **validate_aos.sh**: **31 PASS / 21 SKIP / 0 FAIL**.
 - **License firewall**: `crop_knowledge_notes` not in ingest allowlist; "Salanova"/L45 cultural-note text
@@ -56,6 +60,14 @@ and the non-integrable tail (L43/L44/L26/L38/jmf_book_alt) is explicitly deprior
    mints a duplicate. Must be fixed before any full catch-up deploy (and 6 other unvalidated new crops
    #89-94 reviewed). This is why the publisher now requires `--crop-ids` (slugs are ambiguous here).
 3. **Masterclass re-seed fragility** — fixed in this WP (was blocking `seed --all`).
+4. **`seed --all` produces a non-canonical, AC-05-violating DB.** Importers emit DERIVED fields
+   (`yield_per_m2_kg`, oxide P2O5/K2O, `plants_per_m2`); the canonical state requires `seed` THEN
+   `canon.migrate phase4` to strip them. Running `seed --all` alone (as this session did) leaves forbidden
+   rows that fail `test_ac05_derived_fields` — and caused the first L-GATE_VALIDATE FAIL. The deploy is
+   protected (those fields aren't in the publish whitelist), but the build pipeline gap should be closed —
+   e.g. `seed --all` auto-runs the canon strip at the end, or hard-fails if derived fields remain. Belongs
+   with the duplicate-crop seed fix (same root: `seed --all` alone is incomplete). Strongly reinforces the
+   go-forward rule: NEVER full re-seed against the deploy baseline; add incrementally + scoped push.
 
 ## 6. Cross-engine L-GATE_VALIDATE handoff (team_190, validator ≠ Claude Code — IR#1/#5)
 
