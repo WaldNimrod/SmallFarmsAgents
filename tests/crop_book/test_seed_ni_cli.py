@@ -39,13 +39,13 @@ class TestSeedNiCli:
         assert "--no-ni" in result.stdout
 
     def test_ac03_ni_importer_classes_count(self):
-        """AC-03: NI_IMPORTER_CLASSES has exactly 6 entries."""
+        """AC-03: NI_IMPORTER_CLASSES has exactly 7 entries (+jmf_ft_mesclun, WP-CB-SRC-SWEEP)."""
         from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
 
-        assert len(NI_IMPORTER_CLASSES) == 6
+        assert len(NI_IMPORTER_CLASSES) == 7
 
     def test_ac03_source_labels(self):
-        """AC-03: All 6 source labels are correct."""
+        """AC-03: All 7 source labels are correct."""
         from organic_market_agent.crop_book.importer.ni import NI_IMPORTER_CLASSES
 
         labels = {cls().source_label for cls in NI_IMPORTER_CLASSES}
@@ -56,6 +56,7 @@ class TestSeedNiCli:
             "NI:jmf_ft_biopesticide_v1",
             "NI:jmf_ft_phytoprotection_v1",
             "NI:jmf_ft_nurseryseeding_v1",
+            "NI:jmf_ft_mesclun_v1",
         }
 
     def test_ac03b_b2_subclasses_absent_from_registry(self):

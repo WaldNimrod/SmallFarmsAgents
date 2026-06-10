@@ -775,6 +775,10 @@ def main() -> None:
         help="Skip WP-CB-CONTENT narrative-prose loader when --all is used",
     )
     parser.add_argument(
+        "--no-l45", action="store_true",
+        help="Skip L45 IL-farm-2017 base-data cherry-pick (WP-CB-SRC-SWEEP) when --all is used",
+    )
+    parser.add_argument(
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
@@ -1087,6 +1091,15 @@ def main() -> None:
                 ingest as _idan_ingest,
             )
             _idan_ingest(session)
+            session.flush()
+
+        if args.all and not getattr(args, "no_l45", False):
+            # WP-CB-SRC-SWEEP: L45 IL-farm-2017 base-data cherry-pick (OP source values).
+            # Runs before enrichment so DTM/spacing/rows_per_bed are reconciled & published.
+            from organic_market_agent.crop_book.importer.ni.il_farm_2017_l45 import (
+                ingest as _l45_ingest,
+            )
+            _l45_ingest(session)
             session.flush()
 
         if args.all and not getattr(args, "no_calendar", False):

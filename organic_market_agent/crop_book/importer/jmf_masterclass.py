@@ -740,11 +740,18 @@ def parse_cultivars(xlsx_path: Path) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def _default_variety_id(session: Session, crop_id: int) -> int:
-    """Get or create the baseline (default, name_en=None) variety for a crop."""
+    """Get or create the baseline (default, name_en=None) variety for a crop.
+
+    Robust against multiple null-name varieties (re-seed drift accumulates extra
+    name_en=NULL stubs): prefer the is_default baseline, then lowest id — mirrors
+    jmf_book._resolve_default_variety_id. (WP-CB-SRC-SWEEP: was .one_or_none(),
+    which raised MultipleResultsFound on re-seed against a populated DB.)
+    """
     from organic_market_agent.crop_book.models import CropVariety
     v = (session.query(CropVariety)
          .filter(CropVariety.crop_id == crop_id, CropVariety.name_en.is_(None))
-         .one_or_none())
+         .order_by(CropVariety.is_default.desc(), CropVariety.id)
+         .first())
     if v is None:
         v = CropVariety(crop_id=crop_id, name_en=None, name_he=None)
         session.add(v)

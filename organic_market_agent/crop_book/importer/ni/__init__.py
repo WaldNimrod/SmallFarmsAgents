@@ -32,6 +32,7 @@ from organic_market_agent.crop_book.importer.ni.jmf_ft_flameweed import JmfFtFla
 from organic_market_agent.crop_book.importer.ni.jmf_ft_biopesticide import JmfFtBiopesticideImporter
 from organic_market_agent.crop_book.importer.ni.jmf_ft_phytoprotection import JmfFtPhytoprotectionImporter
 from organic_market_agent.crop_book.importer.ni.jmf_ft_nurseryseeding import JmfFtNurseryseedingImporter
+from organic_market_agent.crop_book.importer.ni.jmf_ft_mesclun import JmfFtMesclunImporter
 
 NI_IMPORTER_CLASSES = (
     JmfBookImporter,
@@ -40,6 +41,7 @@ NI_IMPORTER_CLASSES = (
     JmfFtBiopesticideImporter,
     JmfFtPhytoprotectionImporter,
     JmfFtNurseryseedingImporter,
+    JmfFtMesclunImporter,
 )
 
 __all__ = [cls.__name__ for cls in NI_IMPORTER_CLASSES] + ["NI_IMPORTER_CLASSES"]

@@ -4739,18 +4739,18 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-SRC-SWEEP
   label: "ספר גידולים: השלמת סריקה ושילוב כל מקורות המידע הקיימים (קבצים גולמיים שלא חולצו) + פריסה במערכת החיה + בדיקת תקינות"
-  status: REGISTER
-  phase: register
+  status: BUILD
+  phase: build
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
+  current_lean_gate: DEPLOY
+  lod_status: LOD400
   assigned_builder: team_100
   assigned_validator: team_190
   created_at: "2026-06-09"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-CONTENT"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-SRC-SWEEP/HANDOFF_SFA-S003-P004-WP-CB-SRC-SWEEP_v1.0.0.md"
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-SRC-SWEEP/SPEC_2026-06-11_v1.0.0.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4762,7 +4762,41 @@ work_packages:
       tail after WP-CB-CONTENT: 7 unextracted raw files (L14 JMF nursery PDF, L26 Hebrew, L43/L44/L45 Israeli,
       L38/L39 Italian/mesclun) + jmf_book_alt (no source). Each needs extractor → importer → DB → (public) deploy.
       Licensing: JMF/licensed → internal crop_knowledge_notes (never published). Method + done-criteria in handoff.
-  notes: "REGISTER (team_00 handoff, 2026-06-09). Complete source-data integration + live deploy + integrity. Handoff: team_100."
+  - gate: L-GATE_SPEC
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      Full DB-verified audit: the corpus was already comprehensively integrated (~50 sources). Of the 7-file
+      tail, content inspection found only L39 (JMF Masterclass mesclun) + L45 (real IL-farm-2017 base-data)
+      integrable; L43 (business economics), L44 (OCR'd LED spec sheet), L26 (bank receipt), L38 (empty Italian
+      OCR), jmf_book_alt (no source PDF) deprioritized via DECISION (team_00 2026-06-10). L14 already integrated
+      via jmf_ft_nurseryseeding_ext. SPEC_2026-06-11_v1.0.0.md + DECISION_DEPRIORITIZED_SOURCES_2026-06-11.
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      L39: variety 'חסה בייבי' (id 586) under crop #31 + cultivar source value + 4 internal species notes
+      (JMF → internal). L45 cherry-pick: OP:il_farm_2017_l45 'נתוני בסיס' → 62 source-values (days_to_maturity/
+      spacing_in_row_cm/rows_per_bed) + 22 internal notes / 22 crops; cannabis/price/budget/trees/calendar sheets
+      excluded. Fix: jmf_masterclass._default_variety_id one_or_none→first() (re-seed drift). Publisher: added
+      --crop-ids/--slugs scoping. Tests: backend 779 pass/1 skip (1 pre-existing wp_upload fail, retired tier),
+      delivery phpunit 233 pass, validate_aos 0 FAIL. License firewall verified intact.
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      Scoped HMAC push (team_00 approved 'only this WP's crops') from the Mac → 23 crop_ids (crop #31 +
+      L45-touched crops): crops/crop_varieties/crop_field_enrichment/crop_attribute all HTTP 200, 0 rejected.
+      Production smoke PASS (qa_probe mobile375+desktop overflow=false): salad-mix variety count 12→13
+      (חסה בייבי live). Production crop count remained 70 — 7 stale prior-WP crops (incl. duplicate #95) NOT
+      deployed. FINDING (not this WP): production is behind a full seed (70 vs 77 crops) — separate catch-up
+      deploy + duplicate-crop #95 fix needed. See COMPLETION_REPORT_2026-06-11_v1.0.0.md §5.
+  notes: "BUILD/DEPLOY done (team_100, 2026-06-11). L39 variety + L45 cherry-pick integrated & LIVE (scoped) on
+    sfa.nimrod.bio; 5 sources deprioritized via DECISION. Awaiting cross-engine L-GATE_VALIDATE (team_190,
+    validator ≠ Claude Code) → LOD500_LOCK. Handoff: team_100."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-CONTENT
