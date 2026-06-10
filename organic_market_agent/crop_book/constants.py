@@ -43,7 +43,7 @@ TEND_CROP_MAP: dict[str, str] = {
     "Lemon Balm": "לימון בלם",
     "Lemon Verbena": "לימון ורבנה",
     "Lettuce": "חסה",
-    "Lettuce: Salad Mix": "תערובת סלט",
+    "Lettuce: Salad Mix": "עלי בייבי",  # team_00 2026-06-10: resolve Salad Mix to canonical baby-leaf crop 'עלי בייבי' (do NOT mint 'תערובת סלט')
     "Lovage": "לובסטייה",
     "Melons": "מלון",
     "Mint": "נענע",
@@ -177,7 +177,7 @@ TEAM00_DTM_OVERRIDES: dict[str, int] = {
 
 OUTLIER_CROPS: set[str] = {
     "ארוגולה",
-    "תערובת סלט",
+    "עלי בייבי",  # team_00 2026-06-10: renamed from 'תערובת סלט' (Salad Mix → canonical baby-leaf crop)
     "גרגר נחלים",
     "קייל",
     "מנגולד",
@@ -237,7 +237,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Jerusalem Artichokes": "ארטישוק ירושלמי",
     "Parsnips":           "שורש פטרוזילה",   # patch02 (team_00 DECISION 2026-05-25 §Q4): "גזר לבן" was colloquial; replaced with botanically accurate "parsley root"
     "Potatoes":           "תפוח אדמה",
-    "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; prior value was a hallucination, NOT a real Hebrew word)
+    "Rutabaga":           "לפת",   # team_00 2026-06-10: resolve to canonical 'לפת' (Turnips); do NOT mint a separate 'רוטבגה' crop
     "Sweet Potatoes":     "בטטה",
     # ---- Solanaceae ----
     "Eggplant":           "חציל",
@@ -258,7 +258,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Peas":               "אפונה",
     "Snow Peas":          "אפונת שלג",
     # ---- Herbs ----
-    "Basil":              "בזיליקום",
+    "Basil":              "בזיל",   # team_00 2026-06-10: resolve to canonical 'בזיל' (matches TEND_CROP_MAP); do NOT mint a separate 'בזיליקום' crop
     "Celery":             "סלרי",
     "Cilantro":           "כוסברה",
     "Dill":               "שמיר",
@@ -418,8 +418,8 @@ IL_CROP_MAP: dict[str, str] = {
     "בצל ירוק": "בצל ירוק",
     "בצלים": "בצל",
     "בזיל": "בזיל",
-    "בזיליקום": "בזיליקום",
-    "בזיליקום (ריחן)": "בזיליקום",
+    "בזיליקום": "בזיל",            # team_00 2026-06-10: alias → canonical 'בזיל' (not a separate crop)
+    "בזיליקום (ריחן)": "בזיל",     # team_00 2026-06-10: alias → canonical 'בזיל'
     "ברוקולי": "ברוקולי",
     "גזר": "גזר",
     "גזר לבן": "גזר",

@@ -86,7 +86,7 @@ _CONVERSION_UNITS_SEED: list[tuple[str, str, str, Decimal, str | None, str]] = [
     ("עשבי_תיבול", "bunch", "gram", Decimal("80"), None, "team_00"),
 ]
 
-_BABY_CROPS = {"ארוגולה", "תערובת סלט", "גרגר נחלים"}
+_BABY_CROPS = {"ארוגולה", "עלי בייבי", "גרגר נחלים"}  # team_00 2026-06-10: 'תערובת סלט' renamed to canonical 'עלי בייבי'
 _LEAF_LARGE = {"מנגולד", "קייל", "תרד", "סלרי", "כוסברה", "פטרוזיליה", "שמיר"}
 _ROOT_SMALL = {"גזר", "לפת", "צנונית", "סלק"}
 _HEAD_CROPS = {"חסה", "כרוב", "קולורבי", "פאק צ'וי"}
@@ -191,6 +191,65 @@ def _upsert_source_value(session: Session, variety_id: int, sv: dict[str, Any]) 
     else:
         for k, v in sv.items():
             setattr(obj, k, v)
+
+
+# Canon rule LOD200 §6.4: these fields are DERIVED and must NEVER be stored in
+# either crop_variety_source_values or crop_field_enrichment. A fresh `seed --all`
+# can re-introduce them (e.g. ni/idan_planner.py emits 'yield_per_m2_kg'), so the
+# --all path strips them as a robust post-seed guard. (migrate.phase4 does the same
+# but is NOT invoked by seed --all — this closes that gap. A direct DELETE is used
+# instead of calling phase4(), whose oxide→elemental pre-conversion can throw on a
+# re-seeded DB.)
+_DERIVED_FIELDS_FORBIDDEN: list[str] = [
+    "yield_per_m2_kg",
+    "nutrient_removal_p2o5_kg_ha",
+    "nutrient_removal_k2o_kg_ha",
+    "plants_per_m2",
+    "avg_revenue_per_bed_m",
+]
+
+
+def strip_derived_fields(session: Session) -> dict[str, dict[str, int]]:
+    """DELETE the 5 canon-forbidden DERIVED fields from BOTH the source-values and
+    the enrichment tables (LOD200 §6.4). Idempotent. Logs what it deleted.
+
+    Returns {"source_values": {field: deleted}, "enrichment": {field: deleted}}.
+    """
+    from sqlalchemy import text
+
+    deleted_sv: dict[str, int] = {}
+    deleted_en: dict[str, int] = {}
+    for field_name in _DERIVED_FIELDS_FORBIDDEN:
+        sv_cnt = session.execute(
+            text("SELECT COUNT(*) FROM crop_variety_source_values WHERE field_name = :fn"),
+            {"fn": field_name},
+        ).scalar() or 0
+        if sv_cnt:
+            session.execute(
+                text("DELETE FROM crop_variety_source_values WHERE field_name = :fn"),
+                {"fn": field_name},
+            )
+            logger.info("strip_derived: deleted %d source_values rows for %r", sv_cnt, field_name)
+        deleted_sv[field_name] = sv_cnt
+
+        en_cnt = session.execute(
+            text("SELECT COUNT(*) FROM crop_field_enrichment WHERE field_name = :fn"),
+            {"fn": field_name},
+        ).scalar() or 0
+        if en_cnt:
+            session.execute(
+                text("DELETE FROM crop_field_enrichment WHERE field_name = :fn"),
+                {"fn": field_name},
+            )
+            logger.info("strip_derived: deleted %d enrichment rows for %r", en_cnt, field_name)
+        deleted_en[field_name] = en_cnt
+
+    total = sum(deleted_sv.values()) + sum(deleted_en.values())
+    logger.info(
+        "strip_derived: removed %d total forbidden DERIVED rows (source_values=%s, enrichment=%s)",
+        total, deleted_sv, deleted_en,
+    )
+    return {"source_values": deleted_sv, "enrichment": deleted_en}
 
 
 def seed(
@@ -782,6 +841,12 @@ def main() -> None:
         "--no-enrich", action="store_true",
         help="Skip enrichment_runner when --all is used (default: enrichment runs automatically with --all)",
     )
+    parser.add_argument(
+        "--no-strip-derived", action="store_true",
+        help="Skip the post-seed DERIVED-field strip when --all is used "
+             "(default: forbidden DERIVED fields per LOD200 §6.4 are deleted from "
+             "both source-values and enrichment tables after seeding)",
+    )
     parser.add_argument("-v", "--verbose", action="store_true", help="Debug logging")
     args = parser.parse_args()
 
@@ -1149,6 +1214,15 @@ def main() -> None:
         # WP-CB-CONTENT: narrative prose loader (after crops exist; independent table)
         if args.all and not args.no_content:
             _run_content_ingestion(session)
+            session.commit()
+
+        # Post-seed DERIVED-field strip (LOD200 §6.4) — robust guard against
+        # re-introduced forbidden DERIVED fields (e.g. ni/idan_planner.py emits
+        # 'yield_per_m2_kg'). Runs LAST so it catches every importer's output,
+        # including enrichment + NI. Always runs on --all unless --no-strip-derived.
+        if args.all and not args.no_strip_derived:
+            logger.info("Stripping forbidden DERIVED fields after --all seed (pass --no-strip-derived to skip)...")
+            strip_derived_fields(session)
             session.commit()
 
 

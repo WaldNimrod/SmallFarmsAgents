@@ -35,7 +35,8 @@ def test_jmf_crop_map_values_nonempty_hebrew(jmf_crop_map):
 
 
 def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
-    """patch06: exactly 6 synonym-pair duplicate-target groups."""
+    """patch06 + team_00 2026-06-10: 6 synonym-pair duplicate-target groups PLUS
+    'לפת' (Turnips), which Rutabaga now resolves to (no separate 'רוטבגה' crop)."""
     counts = Counter(jmf_crop_map.values())
     duplicates = {
         v: sorted([k for k, mv in jmf_crop_map.items() if mv == v])
@@ -48,6 +49,7 @@ def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
         "תפוח אדמה":   ["Potato", "Potatoes"],
         "אבטיח":       ["Watermelon", "Watermelons"],
         "כוסברה":      ["Cilantro", "Coriander"],
+        "לפת":         ["Rutabaga", "Turnips"],
     }, f"unexpected Hebrew-value duplicates: {duplicates}"
 
 
@@ -75,9 +77,13 @@ def test_jmf_crop_map_fixture_crops_mapped():
 # ─── patch01 additions ───────────────────────────────────────────────────────
 
 def test_ac02_rutabaga_value_corrected(jmf_crop_map):
-    """AC-02a (patch01): Rutabaga value is 'רוטבגה' (phonetic transliteration)."""
-    assert jmf_crop_map["Rutabaga"] == "רוטבגה", (
-        f"Expected 'רוטבגה', got {jmf_crop_map['Rutabaga']!r}"
+    """team_00 2026-06-10: Rutabaga resolves to canonical 'לפת' (Turnips) — no
+    separate 'רוטבגה' crop is minted (supersedes the patch01 transliteration)."""
+    assert jmf_crop_map["Rutabaga"] == "לפת", (
+        f"Expected 'לפת', got {jmf_crop_map['Rutabaga']!r}"
+    )
+    assert "רוטבגה" not in jmf_crop_map.values(), (
+        "Non-canonical 'רוטבגה' must not be a JMF_CROP_MAP target"
     )
 
 
@@ -89,10 +95,12 @@ def test_ac02_old_rutabaga_value_absent():
 
 
 def test_ac03_duplicate_group_count(jmf_crop_map):
-    """patch06: exactly 6 Hebrew values appear more than once (all synonyms)."""
+    """patch06 + team_00 2026-06-10: exactly 7 Hebrew values appear more than once
+    (6 synonyms + 'לפת' now shared by Turnips and Rutabaga, which resolves to the
+    canonical Turnips crop)."""
     counts = Counter(jmf_crop_map.values())
     dup_count = sum(1 for c in counts.values() if c > 1)
-    assert dup_count == 6, f"Expected 6 duplicate-target groups, got {dup_count}"
+    assert dup_count == 7, f"Expected 7 duplicate-target groups, got {dup_count}"
 
 
 # ─── patch02 regression tests (DECISION 2026-05-25 §Q4) ───
@@ -156,8 +164,13 @@ def test_snow_peas_value_post_patch03():
 
 
 def test_basil_value_post_patch03():
+    """team_00 2026-06-10: Basil resolves to canonical 'בזיל' (matches
+    TEND_CROP_MAP) — no separate 'בזיליקום' crop is minted."""
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Basil"] == "בזיליקום"
+    assert JMF_CROP_MAP["Basil"] == "בזיל"
+    assert "בזיליקום" not in JMF_CROP_MAP.values(), (
+        "Non-canonical 'בזיליקום' must not be a JMF_CROP_MAP target"
+    )
 
 
 # ─── patch04 regression tests (DECISION_WP-B1-patch04-patch06 §2.5) ───
@@ -195,9 +208,10 @@ def test_no_typo_keys_in_map_post_patch06():
 
 
 def test_six_synonym_groups_exact():
-    """patch06: the 6 remaining duplicate-target groups are all pure synonym pairs."""
+    """patch06 + team_00 2026-06-10: the duplicate-target groups are 6 pure synonym
+    pairs PLUS 'לפת' (Turnips), which Rutabaga now resolves to (no separate crop)."""
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     from collections import Counter
     counts = Counter(JMF_CROP_MAP.values())
     duplicates = {v for v, c in counts.items() if c > 1}
-    assert duplicates == {"פאק צ'וי", "מנגולד", "בצל ירוק", "תפוח אדמה", "אבטיח", "כוסברה"}
+    assert duplicates == {"פאק צ'וי", "מנגולד", "בצל ירוק", "תפוח אדמה", "אבטיח", "כוסברה", "לפת"}
