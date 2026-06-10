@@ -841,6 +841,14 @@ def _fetch_crop_content_source(conn) -> list[dict[str, Any]]:
 def _slugify(value: str | None, *, fallback: str) -> str:
     if not value:
         return fallback
+    # Pre-clean display annotations leaked into name_en so the slug is the real crop name:
+    #   "Beans (default: Pole/Climbing)" → "beans" · "Pac Choi (Bok Choy)" → "pac-choi"
+    #   "Onions: Scallions" → "scallions" · "Lettuce: Salad Mix" → "salad-mix"
+    import re as _re
+    cleaned = _re.sub(r"\([^)]*\)", " ", value)          # drop parenthetical annotations
+    if ":" in cleaned:
+        cleaned = cleaned.rsplit(":", 1)[-1]             # take the part after a category colon prefix
+    value = cleaned.strip() or value
     s = value.strip().lower()
     out_chars: list[str] = []
     for ch in s:

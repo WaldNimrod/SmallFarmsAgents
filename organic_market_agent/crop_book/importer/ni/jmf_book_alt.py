@@ -90,6 +90,16 @@ class JmfBookAltImporter(NIImporter):
             cultivar = data["notes"].get("cultivar_recommendation")
             if not cultivar:
                 continue
+            # value_text is a Text column — flatten list-of-note-dicts to joined body_text.
+            if isinstance(cultivar, list):
+                cultivar_text = " ".join(
+                    str((c.get("body_text") if isinstance(c, dict) else c) or "").strip()
+                    for c in cultivar
+                ).strip()
+            else:
+                cultivar_text = str(cultivar).strip()
+            if not cultivar_text:
+                continue
             variety_id = self._resolve_default_variety_id(session, crop_jmf_en)
             if variety_id is None:
                 continue
@@ -99,7 +109,7 @@ class JmfBookAltImporter(NIImporter):
                     "variety_id": variety_id,
                     "field_name": "cultivar_recommendation",
                     "source": self.source_label,
-                    "value_text": cultivar[:2000],
+                    "value_text": cultivar_text[:2000],
                     "value_numeric": None,
                     "unit": None,
                     "note": (
@@ -130,13 +140,26 @@ class JmfBookAltImporter(NIImporter):
             for note_type, body in data["notes"].items():
                 if not body:
                     continue
+                # body may be a list of note-dicts, a single dict, or a string — flatten to text.
+                if isinstance(body, list):
+                    body_text = " ".join(
+                        str((b.get("body_text") if isinstance(b, dict) else b) or "").strip()
+                        for b in body
+                    ).strip()
+                elif isinstance(body, dict):
+                    body_text = str(body.get("body_text") or "").strip()
+                else:
+                    body_text = str(body).strip()
+                if not body_text:
+                    continue
+                body_text = body_text[:2000]
                 rows.append(
                     {
                         "crop_id": crop_id,
                         "source": self.source_label,
                         "trust_tier": "NI",
                         "note_type": note_type,
-                        "body_text": body,
+                        "body_text": body_text,
                         "provenance_pdf": provenance.get("pdf"),
                         "provenance_pages": provenance.get("pages"),
                         "is_internal_farm_use_only": True,
