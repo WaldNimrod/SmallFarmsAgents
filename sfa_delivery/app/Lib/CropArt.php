@@ -63,6 +63,12 @@ final class CropArt
         'summer-squash'                => 'wc-zucchini.png',
         'onions-scallions'             => 'wc-scallion.png',
         'beans-default-pole-climbing-' => 'wc-pole-bean.png',
+        // production DB slugs that were falling back to the line-glyph icon
+        'scallions'                    => 'wc-scallion.png',
+        'salad-mix'                    => 'wc-lettuce-salad-mix.png',
+        'pac-choi'                     => 'wc-pac-choi-bok-choy.png',
+        'bush-pole'                    => 'wc-bush-bean.png',
+        'corn'                         => 'wc-sweet-corn.png',
         // ── 43 watercolor identity slugs (WP-CB-UI-FIDELITY batch) ──────────
         'anise-hyssop'                => 'wc-anise-hyssop.png',
         'artichokes'                  => 'wc-artichokes.png',
