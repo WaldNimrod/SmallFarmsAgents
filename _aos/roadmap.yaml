@@ -4737,6 +4737,37 @@ work_packages:
   notes: "REGISTER (team_00, 2026-06-08). Per-product market page redesign — sibling of WP-CB-UI-REDESIGN market_list."
   profile: L0
 
+- id: SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY
+  label: "התאמת ה-UI החי למוקאפים של צוות 35 (WP-CB-UI-REDESIGN Step-2) — סבב דיוק/תיקון: רשימת ספר הגידולים + מחירון השוק לעיצוב הכרטיסים המרווח (וטרקולור/₪/sparkline), + ליטוש חוצה-מסכים, פריסה ובדיקת תקינות"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_100
+  assigned_validator: team_190
+  created_at: "2026-06-11"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY/HANDOFF_SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-11"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-11): "why doesn't the UI look like the team_35 mockups?" Investigation (this session):
+      the design system (DSX-1 icons, DSX-2 type-scale, .num isolation in redesign.css) + watercolor assets
+      are LIVE, and the deep crop page + home tool-cards adopted Step-2 — but the INDEX surfaces (crop-book
+      list + market grid) were never migrated from the dense v1 layout (crop-book-v1.css/classb.css) to the
+      mockup's spacious watercolor/₪/sparkline card design; plus cross-surface drift (home hero strip,
+      related-crops icons). Mockup package + gap-evidence screenshots copied into the WP dir. Delivery-tier
+      UI only (no schema/data); deploy via FTPS lftp from the Mac. Handoff: team_100.
+  notes: "REGISTER (team_00 directive, 2026-06-11). Align live UI to team_35 Step-2 mockups — P1: crop-book
+    list + market grid card redesign; P2/P3: cross-surface fidelity. Handoff: team_100."
+  profile: L0
+
 - id: SFA-S003-P004-WP-CB-SRC-SWEEP
   label: "ספר גידולים: השלמת סריקה ושילוב כל מקורות המידע הקיימים (קבצים גולמיים שלא חולצו) + פריסה במערכת החיה + בדיקת תקינות"
   status: COMPLETE

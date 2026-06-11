@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · כרטיס גידול (עגבנייה) · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.wrap{display:grid;grid-template-columns:1fr;gap:var(--sp-5);}
+
+/* (3) top bar: breadcrumb right · calculator button LEFT end */
+.pagebar{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);flex-wrap:wrap;}
+.pagebar .bc{font-size:13px;color:var(--gj-ink-soft);}
+.calcbtn{padding:10px 20px;}
+
+/* two-level info affordance: hover tip (L1) → knowledge modal (L2) */
+.qm{position:relative;display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--gj-paper-3);color:var(--gj-ink-soft);font-size:10px;font-weight:700;margin-inline-start:5px;cursor:pointer;text-decoration:none;vertical-align:1px;}
+.qm:hover{background:var(--gj-code);color:#fff;}
+.ktip[hidden]{display:none;}
+.ktip{position:absolute;z-index:90;width:248px;background:#1f2a22;color:#e8efe8;border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.55;box-shadow:var(--sh-l);}
+.ktip b{display:block;color:#fff;margin-bottom:3px;font-size:13px;}
+.ktip .more{display:inline-block;margin-top:8px;color:#9bd0cf;text-decoration:underline;font-weight:700;cursor:pointer;}
+
+/* knowledge modal (module above the page) */
+.modal[hidden]{display:none;}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;}
+.modal__bg{position:absolute;inset:0;background:rgba(20,30,22,.55);}
+.modal__card{position:relative;background:var(--gj-paper);border-radius:var(--r-l);box-shadow:var(--sh-l);max-width:540px;width:100%;padding:var(--sp-6);max-height:86vh;overflow:auto;border:1px solid var(--gj-line);}
+.modal__x{position:absolute;top:14px;inset-inline-start:14px;border:0;background:var(--gj-paper-2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;}
+.modal h3{font-size:24px;margin:2px 0 12px;}
+.kf{background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-m);padding:12px 14px;margin:12px 0;font-size:14px;line-height:1.6;}
+.kf b{color:var(--gj-code-deep);}
+.ksrc{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;align-items:center;}
+.ksrc .sp{background:var(--gj-paper-3);border-radius:var(--r-pill);padding:2px 10px;font-size:12px;font-weight:600;}
+.kfix{margin-top:14px;font-size:13px}.kfix a{color:var(--gj-code-deep);text-decoration:underline;font-weight:700;}
+
+/* hero */
+.hero{display:grid;grid-template-columns:200px 1fr;gap:var(--sp-5);align-items:start;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-5);box-shadow:var(--sh-m);}
+.hero__art{width:200px;height:200px;border-radius:var(--r-m);background:radial-gradient(circle at 50% 40%,#fff,#eef4ee);display:grid;place-items:center;overflow:hidden;}
+.hero__art img{width:100%;height:100%;object-fit:contain;}
+.hero__name{font-size:40px;line-height:1.1;font-weight:900;}
+.hero__latin{color:var(--gj-ink-soft);font-style:italic;margin-top:2px;}
+.hero__sum{margin:var(--sp-3) 0 0;max-width:64ch;font-size:17px;line-height:1.7;}
+.hero__more{margin-top:10px;font-size:14px;}
+.hero__more a{color:var(--gj-code-deep);text-decoration:underline;font-weight:600;margin-inline-end:14px;}
+.hero__row{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--sp-4);align-items:center;}
+.glance{display:flex;flex-wrap:wrap;gap:var(--sp-5);margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--gj-line);}
+.glance div{display:flex;flex-direction:column;}
+.glance b{font-family:var(--gj-font-head);font-size:24px;font-weight:700;line-height:1;}
+.glance span{font-size:13px;color:var(--gj-ink-soft);margin-top:3px;}
+.mktchip{display:inline-flex;align-items:center;gap:7px;background:#f7e2da;color:var(--gj-tomato-deep);border-radius:var(--r-pill);padding:5px 13px;font-weight:700;font-size:13px;}
+.mktchip .up{color:var(--gj-leaf-deep);font-size:12px;}
+
+.stagenav{position:sticky;top:62px;z-index:20;background:rgba(238,244,238,.94);backdrop-filter:blur(6px);border-block:1px solid var(--gj-line);margin-inline:calc(-1*var(--shell-pad));padding-inline:var(--shell-pad);}
+.stagenav ul{display:flex;gap:4px;list-style:none;margin:0;padding:8px 0;overflow-x:auto;}
+.stagenav a{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:var(--r-pill);font-weight:600;font-size:14px;color:var(--gj-ink-soft);white-space:nowrap;}
+.stagenav a:hover{background:var(--gj-paper);}
+.stagenav .n{width:22px;height:22px;border-radius:50%;background:var(--gj-leaf-deep);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;}
+
+.stage{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-6);box-shadow:var(--sh-s);scroll-margin-top:120px;}
+.stage__head{display:flex;align-items:center;gap:14px;margin-bottom:var(--sp-4);}
+.stage__n{width:38px;height:38px;border-radius:50%;background:var(--gj-leaf-deep);color:#fff;display:grid;place-items:center;font-family:var(--gj-font-head);font-weight:700;font-size:20px;flex:0 0 auto;}
+.stage__t{font-size:26px;font-weight:700;line-height:1.1;}
+.stage__t small{display:block;font-family:var(--gj-font-body);font-size:13px;font-weight:500;color:var(--gj-ink-soft);}
+
+/* === UNIVERSAL pattern: closed shows KEY data, open gives DEPTH === */
+.topic{border:1px solid var(--gj-line);border-radius:var(--r-m);background:var(--gj-paper);overflow:hidden;margin-bottom:var(--sp-3);}
+.topic:last-child{margin-bottom:0;}
+.topic > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:14px var(--sp-5);}
+.topic > summary::-webkit-details-marker{display:none;}
+.topic__ic{width:34px;height:34px;border-radius:9px;background:var(--gj-paper-2);display:grid;place-items:center;font-size:17px;flex:0 0 auto;}
+.topic__t{font-family:var(--gj-font-head);font-size:18px;font-weight:700;flex:0 0 auto;}
+.topic__key{font-size:14px;color:var(--gj-ink-soft);margin-inline-start:6px;}
+.topic__key b{color:var(--gj-ink);font-weight:700;}
+.topic__when{margin-inline-start:auto;font-size:12px;font-weight:700;color:var(--gj-leaf-deep);background:#e7f1d8;border-radius:var(--r-pill);padding:1px 10px;}
+.topic .chev{color:var(--gj-ink-soft);transition:transform .15s;font-size:13px;margin-inline-start:10px;flex:0 0 auto;}
+.topic[open] .chev{transform:rotate(180deg);}
+.topic[open] > summary{border-bottom:1px solid var(--gj-line);}
+.topic__body{padding:var(--sp-4) var(--sp-5) var(--sp-5);color:#33403a;}
+.topic__body .drill{font-size:11px;font-weight:700;color:var(--gj-code);letter-spacing:.03em;margin-bottom:10px;}
+
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px var(--sp-6);margin:0;}
+.dl > div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dotted var(--gj-line);}
+.dl dt{color:var(--gj-ink-soft);font-size:14px;margin:0;}
+.dl dd{margin:0;font-weight:700;text-align:end;}
+.dl dd .u{font-weight:500;color:var(--gj-ink-soft);font-size:13px;margin-inline-start:3px;}
+.formula{background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-s);padding:10px 12px;font-size:13px;color:#33524f;margin-top:6px;}
+.srcline{font-size:12px;color:var(--gj-ink-soft);margin-top:8px;}
+.srcline .sp{display:inline-block;background:var(--gj-paper-3);border-radius:var(--r-pill);padding:1px 9px;margin-inline-start:4px;font-size:11px;}
+
+/* spacing visual (fixes "doesn't sit nicely") */
+.spaceviz{display:flex;gap:18px;flex-wrap:wrap;align-items:center;background:var(--gj-paper-2);border-radius:var(--r-m);padding:14px 16px;margin-bottom:14px;}
+.spaceviz .big{font-family:var(--gj-font-head);font-size:30px;font-weight:900;color:var(--gj-leaf-deep);}
+.spaceviz .big small{display:block;font-family:var(--gj-font-body);font-size:12px;font-weight:600;color:var(--gj-ink-soft);}
+.spaceviz .arrow{color:var(--gj-ink-soft);font-size:20px;}
+
+.treat{display:flex;gap:10px;padding:8px 0;border-top:1px dotted var(--gj-line);}
+.treat:first-child{border-top:0;}
+.treat b{color:var(--gj-tomato-deep);white-space:nowrap;}
+.organic{background:#eef5ec;border:1px solid var(--gj-leaf-soft);border-radius:var(--r-s);padding:9px 12px;margin-top:10px;font-size:13.5px;color:var(--gj-leaf-deep);}
+.compa a{color:var(--gj-leaf-deep);text-decoration:underline;font-weight:600;}
+.compa .bad a{color:var(--gj-tomato-deep);}
+.profit{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-5);background:linear-gradient(135deg,#f3f8ec,#eef4ee);border:1px solid var(--gj-leaf-soft);border-radius:var(--r-m);padding:var(--sp-4) var(--sp-5);margin-top:12px;}
+.profit__big{font-family:var(--gj-font-head);font-size:26px;font-weight:900;color:var(--gj-leaf-deep);}
+
+.cal__grid{display:grid;grid-template-columns:84px repeat(12,1fr);gap:3px;font-size:12px;}
+.cal__grid .mh{text-align:center;color:var(--gj-ink-soft);font-weight:600;padding-bottom:4px;}
+.cal__grid .rl{display:flex;align-items:center;font-weight:600;font-size:13px;color:var(--gj-ink-soft);}
+.cal__cell{height:26px;border-radius:6px;background:var(--gj-paper-2);}
+.cal__cell.sow{background:var(--gj-leaf-soft);}
+.cal__cell.trans{background:var(--gj-leaf);}
+.cal__cell.harv{background:var(--gj-sun);}
+.cal__legend{display:flex;gap:18px;margin-top:12px;font-size:13px;color:var(--gj-ink-soft);flex-wrap:wrap;}
+.cal__legend i{width:14px;height:14px;border-radius:4px;display:inline-block;vertical-align:-2px;margin-inline-start:5px;}
+.summary{margin-top:var(--sp-4);padding:12px 16px;background:var(--gj-paper-2);border-radius:var(--r-m);font-size:15px;}
+.summary b{color:var(--gj-leaf-deep);}
+
+.contrib{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-4);background:#fff8ec;border:1px solid var(--gj-sun);border-radius:var(--r-l);padding:var(--sp-5);}
+.contrib .t b{font-size:17px;}
+.contrib .t p{margin:3px 0 0;color:var(--gj-sun-deep);font-size:14px;}
+.contrib .sp{flex:1;}
+.relrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:var(--sp-3);}
+.relcard{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:14px;text-align:center;}
+.relcard .ph{height:84px;display:grid;place-items:center;}
+.relcard .ph img{max-height:84px;max-width:100%;object-fit:contain;}
+.relcard .nm{font-weight:700;margin-top:4px;}
+
+@media(max-width:680px){
+  .hero{grid-template-columns:1fr;text-align:center;}
+  .hero__art{width:150px;height:150px;margin:0 auto;}
+  .glance{justify-content:center;}
+  .stage{padding:var(--sp-5);}
+  .topic > summary{flex-wrap:wrap;}
+  .topic__key{flex-basis:100%;margin:4px 0 0;}
+}
+</style>
+  <link rel="stylesheet" href="./mock-v2.css">
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP v5</span> <b>כרטיס גידול</b> · דריל-דאון אוניברסלי (סגור=נתונים מרכזיים · פתוח=עומק) במקום מתג חקלאי · ⓘ דו-שלבי (ריחוף→מודול ידע) · כפתור מחשבון בראש משמאל.</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="#"><span class="mk"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a class="is-active" href="#">ספר גידולים</a><a href="calc.html">מחשבון</a><a href="#">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell wrap">
+
+    <!-- (3) breadcrumb right · calculator button LEFT end of header row -->
+    <div class="pagebar">
+      <div class="bc">ספר גידולים › סולניים › <b>עגבנייה</b></div>
+      <a class="btn btn--leaf calcbtn" href="calc.html">∑ מחשבון לגידול זה ←</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__art"><img src="./wc/wc-tomato.png" alt="איור עגבנייה"></div>
+      <div>
+        <div class="hero__name">עגבנייה</div>
+        <div class="hero__latin">Solanum lycopersicum · משפחת הסולניים · 6 זנים</div>
+        <p class="hero__sum">גידול הקיץ המוביל בגינה ובערוגת השוק. נזרע במשתלה ומועבר לשדה, אוהב שמש מלאה והשקיה סדירה, ורגיש לקרה. שיח בריא מניב עשרות פירות לאורך 6–10 שבועות קציר — נדיב אך תובעני, ומתגמל את מי שמבין את הקצב שלו.</p>
+        <div class="hero__more"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> <a href="#">מדריך גידול עגבניות מורחב</a> <a href="#"><svg class="gi" aria-hidden="true"><use href="#i-cap"></use></svg> סדנת ירקות קיץ</a> <span class="muted" style="font-size:12px">· תוכן משלים ב-nimrod.bio</span></div>
+        <div class="hero__row">
+          <span class="pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> אפשר לזרוע עכשיו · יוני</span>
+          <span class="tag">קושי: בינוני</span>
+          <a class="mktchip" href="/market/tomato">₪ בשוק היום: ₪9.40/ק״ג <span class="up">▲4%</span> ←</a>
+        </div>
+        <div class="glance">
+          <div><b>65–80</b><span>ימים להבשלה</span></div>
+          <div><b>40–50</b><span>מרווח בשורה (ס״מ)</span></div>
+          <div><b>~4–5</b><span>צמחים למטר ערוגה</span></div>
+          <div><b>6–9</b><span>ק״ג / מ״ר יבול</span></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="stagenav">
+      <ul>
+        <li><a href="#s1"><span class="n">1</span> מתי לשתול</a></li>
+        <li><a href="#s2"><span class="n">2</span> איך לשתול</a></li>
+        <li><a href="#s3"><span class="n">3</span> טיפול לאורך העונה</a></li>
+        <li><a href="#s4"><span class="n">4</span> יבול צפוי</a></li>
+      </ul>
+    </nav>
+
+    <!-- STAGE 1 -->
+    <section class="stage" id="s1">
+      <div class="stage__head"><span class="stage__n">1</span><span class="stage__t">מתי לשתול<small>חלון הזריעה, השתילה והקציר לאורך השנה</small></span></div>
+      <div class="cal__grid">
+        <span class="rl"></span>
+        <span class="mh">ינו</span><span class="mh">פבר</span><span class="mh">מרץ</span><span class="mh">אפר</span><span class="mh">מאי</span><span class="mh">יוני</span><span class="mh">יולי</span><span class="mh">אוג</span><span class="mh">ספט</span><span class="mh">אוק</span><span class="mh">נוב</span><span class="mh">דצמ</span>
+        <span class="rl">זריעה</span>
+        <span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell sow"></span><span class="cal__cell sow"></span><span class="cal__cell sow"></span><span class="cal__cell sow"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span>
+        <span class="rl">שתילה</span>
+        <span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell trans"></span><span class="cal__cell trans"></span><span class="cal__cell trans"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span>
+        <span class="rl">קציר</span>
+        <span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell"></span><span class="cal__cell harv"></span><span class="cal__cell harv"></span><span class="cal__cell harv"></span><span class="cal__cell harv"></span><span class="cal__cell"></span><span class="cal__cell"></span>
+      </div>
+      <div class="cal__legend">
+        <span><i style="background:var(--gj-leaf-soft)"></i>זריעה במשתלה</span>
+        <span><i style="background:var(--gj-leaf)"></i>שתילה לשדה</span>
+        <span><i style="background:var(--gj-sun)"></i>קציר</span>
+      </div>
+      <div class="summary">זריעה: <b>מרץ–יוני</b> · שתילה לשדה: <b>אפריל–יוני</b> · קציר צפוי: <b>יולי–אוקטובר</b>. לקציר רציף — חזרו וזרעו כל <b>3–4 שבועות</b>.</div>
+    </section>
+
+    <!-- STAGE 2 — universal cards: closed = key, open = depth -->
+    <section class="stage" id="s2">
+      <div class="stage__head"><span class="stage__n">2</span><span class="stage__t">איך לשתול<small>גידול השתילים במשתלה, ואז השתילה בשדה — לחצו להרחבה</small></span></div>
+
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></span><span class="topic__t">גידול שתילים</span><span class="topic__key"><b>שתילה ממשתלה</b> · 28–35 ימים · נביטה 5–10 ימים</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <dl class="dl">
+            <div><dt>שיטת ריבוי <a class="qm" data-t="שיטת ריבוי" data-s="האם זורעים ישירות בשדה או מגדלים שתיל במשתלה ומעבירים.">ⓘ</a></dt><dd>שתילה ממשתלה</dd></div>
+            <div><dt>ימים במשתלה <a class="qm" data-t="ימים במשתלה" data-s="מספר הימים מהזריעה עד שהשתיל מוכן לשדה." data-d="rich-nursery">ⓘ</a></dt><dd>28–35<span class="u">ימים</span></dd></div>
+            <div><dt>עומק זריעה <a class="qm" data-t="עומק זריעה" data-s="לעומק כמה מכניסים את הזרע במצע המשתלה.">ⓘ</a></dt><dd>0.5–1<span class="u">ס״מ</span></dd></div>
+            <div><dt>ימים לנביטה <a class="qm" data-t="ימים לנביטה" data-s="מהזריעה עד הופעת הנבט.">ⓘ</a></dt><dd>5–10<span class="u">ימים</span></dd></div>
+            <div><dt>זרעים לגרם <a class="qm" data-t="זרעים לגרם" data-s="להמרת משקל זרעים לכמות.">ⓘ</a></dt><dd>~300</dd></div>
+            <div><dt>חום נביטה אופטימלי <a class="qm" data-t="חום נביטה" data-s="טווח הטמפרטורה המיטבי לנביטה.">ⓘ</a></dt><dd>24–26<span class="u">°C</span></dd></div>
+          </dl>
+        </div>
+      </details>
+
+      <details class="topic" open>
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-seedling"></use></svg></span><span class="topic__t">שתילה בשדה</span><span class="topic__key"><b>מרווח 40–50 ס״מ</b> · 2 שורות · ~4–5 צמ׳/מ׳</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <div class="spaceviz">
+            <div class="big">40–50<small>מרווח בשורה (ס״מ) <a class="qm" data-t="מרווח בשורה" data-s="המרחק בין שתיל לשתיל לאורך השורה — המספר שקובע את הצפיפות בפועל." data-d="rich-spacing">ⓘ</a></small></div>
+            <span class="arrow">×</span>
+            <div class="big">2<small>שורות בערוגה (80 ס״מ)</small></div>
+            <span class="arrow">=</span>
+            <div class="big">~4–5<small>צמחים למטר ערוגה <a class="qm" data-t="צמחים למטר ערוגה" data-s="מחושב מהמרווח ומספר השורות." data-d="rich-plantsm">ⓘ</a></small></div>
+          </div>
+          <dl class="dl">
+            <div><dt>צמחים ל-100 מ׳ ערוגה</dt><dd>~400–500</dd></div>
+            <div><dt>צמחים למ״ר (סטטיסטי) <a class="qm" data-t="צמחים למ״ר" data-s="ערך השוואתי כללי. בפועל עובדים לפי מרווח ומספר שורות.">ⓘ</a></dt><dd>2.5–3</dd></div>
+            <div><dt>עומק שורשים <a class="qm" data-t="עומק שורשים" data-s="עומק בית השורשים — משפיע על השקיה ועיבוד.">ⓘ</a></dt><dd>בינוני–עמוק</dd></div>
+            <div><dt>חומציות קרקע (pH) <a class="qm" data-t="חומציות קרקע" data-s="טווח ה-pH המועדף בקרקע.">ⓘ</a></dt><dd>6.0–6.8</dd></div>
+          </dl>
+          <div class="formula"><b>איך חושב «צמחים למטר»:</b> (100 ÷ מרווח בשורה) × מס׳ שורות → (100÷45)×2 ≈ 4.4</div>
+          <div class="srcline">טווח בין הזנים: מרווח 40–60 ס״מ <span class="sp">EX · ניסיון שדה</span> <span class="sp">PR · חישוב</span></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- STAGE 3 — care: closed = key, open = depth -->
+    <section class="stage" id="s3">
+      <div class="stage__head"><span class="stage__n">3</span><span class="stage__t">טיפול לאורך העונה<small>לחצו על כל נושא להרחבה</small></span></div>
+
+      <details class="topic" open>
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-drop"></use></svg></span><span class="topic__t">השקיה</span><span class="topic__key"><b>טפטוף</b> · 4–6 מ״מ/יום בשיא · ללא הרטבת עלווה</span><span class="topic__when">כל העונה</span><span class="chev">▾</span></summary>
+        <div class="topic__body"><div class="drill">▾ עומק נוסף</div>השקיה סדירה ועמוקה — יותר בשיא הקיץ, פחות בתחילת העונה. 2 קווי טפטוף לערוגה. הימנעו מהרטבת העלווה כדי לצמצם מחלות פטרייתיות. שורש בינוני–עמוק — אפשר להרחיב מרווחי השקיה ככל שהצמח מתבסס.</div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-compost"></use></svg></span><span class="topic__t">דישון</span><span class="topic__key"><b>N·P·K מדורג</b> · ≈ 4–6 ק״ג קומפוסט/מ״ר</span><span class="topic__when">משבוע 2</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          זרחן בשתילה לפיתוח שורשים; חנקן ואשלגן מדורגים מהפריחה. בהבשלה — הגבירו אשלגן לטעם וצבע.
+          <div class="organic"><svg class="gi" aria-hidden="true"><use href="#i-leaf"></use></svg> <b>גידול אורגני:</b> צריכת הדשן (N ~150 · P ~40 · K ~250 ק״ג/דונם) שווה בערך ל-<b>4–6 ק״ג קומפוסט בשל למ״ר</b> בהכנת הערוגה, בתוספת קומפוסט מועשר/זבל עוף מהפריחה. דישון עלי אורגני (תמצית אצות/קומפוסט-תה) אחת לשבועיים בעומס.</div>
+        </div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-leaf"></use></svg></span><span class="topic__t">תמיכה ועיצוב</span><span class="topic__key"><b>קשירה לסמך</b> · חיטוט שבועי</span><span class="topic__when">משבוע 3–4</span><span class="chev">▾</span></summary>
+        <div class="topic__body"><div class="drill">▾ עומק נוסף</div>קשירה לסמך או לחוט. בזנים בלתי-מוגדרים — חיטוט (הסרת סורים) אחת לשבוע לאוורור וצמיחה אנכית. הסירו עלים תחתונים נוגעים בקרקע.</div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="topic__t">מזיקים ומחלות</span><span class="topic__key"><b>נחושת מונעת</b> · נים · חרס קאוליני</span><span class="topic__when">ניטור שבועי</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <div class="treat"><b>כימשון מאוחר/מוקדם:</b><span>תרסיס נחושת (מאושר אורגני) <b>מונע</b> — לפני תסמינים, בתקופות לחות. כל 7–10 ימים.</span></div>
+          <div class="treat"><b>תריפס וכנימת עש:</b><span>חרס קאוליני להרחקה; שמן נים — בשעת דמדומים בלבד.</span></div>
+          <div class="treat"><b>ריקבון פיטופתורה:</b><span>אוורור, מניעת הרטבת עלווה, הרחקת רקמה נגועה מיד.</span></div>
+          <div class="srcline"><span class="sp">PR · JMF Phytoprotection FT</span></div>
+        </div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-companions"></use></svg></span><span class="topic__t">חברה בערוגה</span><span class="topic__key">טוב: בזיליקום, בצל, גזר · רע: תפו״א</span><span class="chev">▾</span></summary>
+        <div class="topic__body compa">
+          <div class="drill">▾ עומק נוסף</div>
+          <p style="margin:0 0 8px" class="good"><b>שכנים טובים:</b> <a href="#">בזיליקום</a> · <a href="#">ציפורן (טגטס)</a> · <a href="#">בצל</a> · <a href="#">כרישה</a> · <a href="#">גזר</a></p>
+          <p style="margin:0" class="bad"><b>הימנעו לצד:</b> <a href="#">תפוח-אדמה</a> (מחלות משותפות) · <a href="#">שומר</a> · <a href="#">כרוב</a></p>
+        </div>
+      </details>
+    </section>
+
+    <!-- STAGE 4 — yield: closed = key, open = depth -->
+    <section class="stage" id="s4">
+      <div class="stage__head"><span class="stage__n">4</span><span class="stage__t">יבול צפוי<small>כמה יוצא, מתי, ובכמה — לחצו להרחבה</small></span></div>
+
+      <details class="topic" open>
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-box"></use></svg></span><span class="topic__t">יבול</span><span class="topic__key"><b>6–9 ק״ג/מ״ר</b> · ~60 ק״ג/ערוגה · קציר 6–10 שב׳</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <dl class="dl">
+            <div><dt>יבול למ״ר <a class="qm" data-t="יבול למ״ר" data-s="משקל פרי ממוצע למטר מרובע." data-d="rich-yield">ⓘ</a></dt><dd>6–9<span class="u">ק״ג</span></dd></div>
+            <div><dt>יבול לערוגה (10 מ׳)</dt><dd>~60<span class="u">ק״ג</span></dd></div>
+            <div><dt>חלון קציר</dt><dd>6–10<span class="u">שבועות</span></dd></div>
+          </dl>
+          <div class="srcline">טווח בין הזנים: 4–11 ק״ג/מ״ר <span class="sp">EX</span> <span class="sp">WR · ספרות</span></div>
+        </div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b>₪8–12/ק״ג</b> · ~₪540–720/ערוגה</span><span class="chev">▾</span></summary>
+        <div class="topic__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <div class="profit">
+            <div><div class="muted" style="font-size:13px">ערוגה אחת (10 מ׳) צפויה להניב</div><div class="profit__big">~60 ק״ג · ₪540–720</div></div>
+            <div style="flex:1"></div>
+            <a class="btn btn--leaf" href="calc.html">∑ חשב לכמות היעד שלי ←</a>
+          </div>
+          <div class="srcline">מחיר מתוך מדד השוק הקהילתי · עודכן השבוע · <a href="/market/tomato" style="color:var(--gj-code-deep);text-decoration:underline">למחירון המלא ←</a></div>
+        </div>
+      </details>
+      <details class="topic">
+        <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-snow"></use></svg></span><span class="topic__t">אחסון</span><span class="topic__key"><b>12–15°C</b> · חיי מדף 7–14 ימים</span><span class="chev">▾</span></summary>
+        <div class="topic__body"><div class="drill">▾ עומק נוסף</div>
+          <dl class="dl">
+            <div><dt>טמפרטורה</dt><dd>12–15<span class="u">°C</span></dd></div>
+            <div><dt>לחות יחסית</dt><dd>85–90<span class="u">%</span></dd></div>
+            <div><dt>חיי מדף</dt><dd>7–14<span class="u">ימים</span></dd></div>
+            <div><dt>רגישות לאתילן</dt><dd>בינונית</dd></div>
+          </dl>
+        </div>
+      </details>
+    </section>
+
+    <!-- (6) CONTRIBUTE CTA — NOTE: links to a per-crop tailored contribution form (to be built) -->
+    <section class="contrib">
+      <span style="font-size:26px"><svg class="gi" aria-hidden="true"><use href="#i-leaf"></use></svg></span>
+      <div class="t"><b>מצאתם נתון חסר או שגוי בעגבנייה?</b><p>הספר נבנה מניסיון הקהילה. עזרו לנו להשלים — זה לוקח דקה.</p></div>
+      <span class="sp"></span>
+      <!-- TODO: href → tailored per-crop contribution form (crop=tomato prefilled) -->
+      <a class="btn btn--primary" href="#contribute-form">✎ תרמו מידע על עגבנייה ←</a>
+    </section>
+
+    <section>
+      <div class="eyebrow" style="margin-bottom:10px">גידולים קרובים · אותה משפחה</div>
+      <div class="relrow">
+        <a class="relcard" href="#"><div class="ph"><img src="./wc/wc-pepper.png" alt="פלפל"></div><div class="nm">פלפל</div><span class="tag" style="margin-top:6px">סולניים</span></a>
+        <a class="relcard" href="#"><div class="ph"><img src="./wc/wc-eggplant.png" alt="חציל"></div><div class="nm">חציל</div><span class="tag" style="margin-top:6px">סולניים</span></a>
+        <a class="relcard" href="#"><div class="ph"><img src="./wc/wc-potato.png" alt="תפוח אדמה"></div><div class="nm">תפוח אדמה</div><span class="tag" style="margin-top:6px">סולניים</span></a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+
+<!-- (2) knowledge modal — opens ABOVE the page from the ⓘ "להרחבה" link -->
+<div class="modal" id="kmodal" hidden>
+  <div class="modal__bg" data-close></div>
+  <div class="modal__card">
+    <button class="modal__x" data-close>✕</button>
+    <div class="eyebrow">ידע SFA</div>
+    <h3 id="kmt">—</h3>
+    <div id="kmb"></div>
+  </div>
+</div>
+
+<script>
+/* rich explanation library (level-2 modal content) */
+var KB = {
+  'rich-spacing':'<p>המרחק בין שתיל לשתיל לאורך השורה. זהו המספר המעשי שקובע כמה צמחים ייכנסו בערוגה — ולא «צמחים למ״ר», שהוא נגזרת סטטיסטית.</p>'+
+    '<div class="kf"><b>איך הוא משמש בחישוב:</b> צמחים למטר ערוגה = (100 ÷ מרווח בשורה) × מספר שורות. מרווח צפוף יותר = יותר צמחים, אך פחות אוורור.</div>'+
+    '<div class="ksrc"><span class="sp">EX · ניסיון שדה</span><span class="sp">JMF</span> · טווח בין הזנים: 40–60 ס״מ</div>'+
+    '<div class="kfix">מכירים ערך מדויק יותר לזן שלכם? <a href="#contribute-form">תרמו תיקון ←</a></div>',
+  'rich-plantsm':'<p>מספר הצמחים שייכנסו במטר אורך של ערוגה, לפי המרווח ומספר השורות.</p>'+
+    '<div class="kf"><b>הנוסחה:</b> (100 ÷ מרווח בשורה בס״מ) × מספר שורות בערוגה.<br>דוגמה: (100 ÷ 45) × 2 ≈ <b>4.4 צמחים למטר</b> → ל-100 מ׳ ערוגה ≈ 440.</div>'+
+    '<div class="ksrc"><span class="sp">PR · חישוב</span> · תלוי ברוחב הערוגה שהגדרתם (כאן 80 ס״מ → 2 שורות)</div>',
+  'rich-nursery':'<p>מספר הימים מהזריעה במשתלה ועד שהשתיל מוכן להעברה לשדה.</p>'+
+    '<div class="kf"><b>למה זה חשוב:</b> קובע מתי להתחיל לזרוע במשתלה כדי לעמוד ביעד השתילה בשדה. נספר אחורה מתאריך השתילה הרצוי.</div>'+
+    '<div class="ksrc"><span class="sp">EX · ניסיון שדה</span> · טווח בין הזנים: 25–40 ימים</div>',
+  'rich-yield':'<p>משקל הפרי הממוצע הצפוי למטר מרובע של גידול, בתנאי גידול תקינים.</p>'+
+    '<div class="kf"><b>איך משמש:</b> יבול לערוגה = יבול למ״ר × שטח הערוגה (אורך × רוחב). בסיס לחישובי הכנסה ורווחיות.</div>'+
+    '<div class="ksrc"><span class="sp">EX</span><span class="sp">WR · ספרות</span> · טווח בין הזנים: 4–11 ק״ג/מ״ר</div>'
+};
+var modal=document.getElementById('kmodal'), kmt=document.getElementById('kmt'), kmb=document.getElementById('kmb');
+function openModal(q){
+  kmt.textContent=q.dataset.t||'הסבר';
+  var d=q.dataset.d;
+  kmb.innerHTML=(d&&KB[d])?KB[d]:('<p>'+(q.dataset.s||'')+'</p><div class="kf">הסבר מורחב + נוסחת החישוב + מקור — יתווספו עם מודל התוכן.</div>');
+  modal.hidden=false;
+}
+modal.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')) modal.hidden=true; });
+
+/* level-1 hover tip with a "להרחבה" link → level-2 modal */
+var tip=document.createElement('div'); tip.className='ktip'; tip.hidden=true; document.body.appendChild(tip);
+var curQ=null, hideT=null;
+function showTip(q){
+  clearTimeout(hideT); curQ=q;
+  tip.innerHTML='<b>'+(q.dataset.t||'')+'</b>'+(q.dataset.s||'')+'<span class="more">להרחבה במודול ידע ←</span>';
+  var r=q.getBoundingClientRect();
+  tip.hidden=false;
+  tip.style.top=(window.scrollY+r.bottom+8)+'px';
+  var left=r.left+r.width/2-124; tip.style.left=Math.max(10,left)+'px';
+}
+function hideSoon(){ hideT=setTimeout(function(){tip.hidden=true;},250); }
+tip.addEventListener('mouseenter',function(){clearTimeout(hideT);});
+tip.addEventListener('mouseleave',hideSoon);
+tip.addEventListener('click',function(e){ if(e.target.classList.contains('more')&&curQ){ openModal(curQ); tip.hidden=true; }});
+document.querySelectorAll('.qm').forEach(function(q){
+  q.addEventListener('mouseenter',function(){showTip(q);});
+  q.addEventListener('mouseleave',hideSoon);
+  q.addEventListener('click',function(e){ e.preventDefault(); openModal(q); });
+});
+</script>
+<script src="sfa-icons.js"></script>
+</body>
+</html>

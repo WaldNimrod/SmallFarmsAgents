@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFA UI — לוח עיצוב Step 2 (דסקטופ + מובייל)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--paper:#f8fbf8;--paper2:#eef4ee;--ink:#1f2a22;--soft:#5d6b5e;--line:#dce6dc;--leaf:#4d6a2c;--leafsoft:#9bb172;--sun:#d39a32;--tomato:#c24f2c;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper2);color:var(--ink);font-family:"Assistant",system-ui,sans-serif;}
+.mast{background:var(--leaf);color:#eef4e6;padding:34px clamp(18px,4vw,40px) 28px;border-bottom:4px solid var(--sun);}
+.mast .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.1em;color:var(--leafsoft);text-transform:uppercase;}
+.mast h1{font-family:"Frank Ruhl Libre",serif;font-size:clamp(26px,4vw,40px);font-weight:900;color:#fff;margin:12px 0 8px;}
+.mast p{margin:0;max-width:70ch;color:#d8e6cf;font-size:17px;}
+.mast .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;font-family:"JetBrains Mono",monospace;font-size:12px;}
+.mast .tags span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:4px 12px;}
+main{max-width:1040px;margin:0 auto;padding:32px clamp(14px,3vw,28px) 80px;}
+.screen{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 4px 14px rgba(30,55,38,.06);padding:22px clamp(16px,2.5vw,26px);margin-bottom:30px;}
+.screen__head{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;border-bottom:2px solid var(--line);padding-bottom:16px;margin-bottom:20px;}
+.screen__n{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:600;color:#fff;background:var(--leaf);width:42px;height:42px;border-radius:10px;display:grid;place-items:center;}
+.screen__head h2{font-family:"Frank Ruhl Libre",serif;font-size:23px;margin:0;}
+.screen__head .open{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;color:var(--leaf);margin-inline-start:8px;text-decoration:none;white-space:nowrap;}
+.screen__head .open:hover{text-decoration:underline;}
+.screen__sub{margin:4px 0 0;color:var(--soft);font-size:14px;}
+.screen__fx{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;max-width:280px;}
+.screen__fx li{font-size:12.5px;color:var(--leaf);font-weight:600;padding-inline-start:14px;position:relative;}
+.screen__fx li::before{content:"✓";position:absolute;inset-inline-start:0;color:var(--leafsoft);font-weight:700;}
+.frames{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+figure{margin:0;}
+figcaption{text-align:center;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--soft);margin-top:8px;}
+/* desktop frame */
+.dt{flex:0 0 auto;}
+.chrome{width:600px;height:30px;background:#e7eee7;border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:6px;padding:0 12px;}
+.chrome .dot{width:9px;height:9px;border-radius:50%;background:#cdd9cd;}
+.chrome .url{margin-inline-start:12px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--soft);background:#f3f8f3;border-radius:6px;padding:2px 12px;}
+.dt__vp{width:600px;height:392px;overflow:hidden;border:1px solid var(--line);background:#fff;}
+.dt__vp iframe{width:1280px;height:836px;border:0;transform:scale(.46875);transform-origin:top right;}
+/* phone frame */
+.ph__bezel{position:relative;width:317px;background:#26331f;border-radius:36px;padding:13px;box-shadow:0 10px 30px rgba(28,55,38,.22);}
+.ph__notch{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:120px;height:20px;background:#26331f;border-radius:0 0 14px 14px;z-index:2;}
+.ph__vp{width:291px;height:606px;overflow:hidden;border-radius:24px;background:#fff;}
+.ph__vp iframe{width:375px;height:781px;border:0;transform:scale(.776);transform-origin:top right;}
+@media(max-width:560px){
+  .screen__head{grid-template-columns:auto 1fr;}
+  .screen__fx{grid-column:1/-1;max-width:none;flex-direction:row;flex-wrap:wrap;gap:4px 16px;}
+  .dt .chrome,.dt__vp{width:88vw;}
+  .dt__vp{height:calc(88vw*0.6531);}
+  .dt__vp iframe{transform:scale(calc(88vw/1280));}
+}
+</style></head><body>
+<div class="mast">
+  <div class="eyebrow">SFA-S003-P004-WP-CB-UI-REDESIGN · STEP 2 · HANDOFF</div>
+  <h1>לוח עיצוב — דסקטופ + מובייל</h1>
+  <p>שבעת המסכים אחרי ה-refinement, כל אחד בתצוגת דסקטופ (1280px) ולצידה מסגרת טלפון (375px) — חיים ואינטראקטיביים. בנוי על mock.css הנעול + שכבת mock-v2.css (תיקוני הדוח). אין אימוג׳י; אייקונים קוויים; רצפת קריאוּת; מספרים מבודדי-RTL.</p>
+  <div class="tags"><span>7 מסכים</span><span>desktop + mobile</span><span>RTL</span><span>ללא אימוג׳י</span><span>type scale</span><span>tokens נעולים</span></div>
+</div>
+<main>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">01</span>
+      <div>
+        <h2>דף הבית <a class="open" href="home.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">hub · 3 כלים · קהל · מניפסט · תרומה</p>
+      </div>
+      <ul class="screen__fx"><li>module watercolors במקום אימוג׳י</li><li>header רספונסיבי</li><li>מניפסט עד ~60ch</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/home</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="home.html" title="דף הבית — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="home.html" title="דף הבית — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">02</span>
+      <div>
+        <h2>ספר הגידולים <a class="open" href="book_list.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">אינדקס גידולים · כרטיסי החלטה</p>
+      </div>
+      <ul class="screen__fx"><li>תיקון חפיפת טווח DTM</li><li>ציפ מחיר ₪ בשוק</li><li>אייקונים במקום 🌱⏳</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/book_list</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="book_list.html" title="ספר הגידולים — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="book_list.html" title="ספר הגידולים — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">03</span>
+      <div>
+        <h2>כרטיס גידול <a class="open" href="crop_card.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">המרכזי · ציר מחזור-חיים · drill-down · ידע SFA</p>
+      </div>
+      <ul class="screen__fx"><li>dl 2-טורים (ללא מעיכה)</li><li>CTA מחשבון הומלך ל-ghost</li><li>אייקוני טיפול קוויים</li><li>יעד-מגע 44px ל-ⓘ</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/crop_card</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="crop_card.html" title="כרטיס גידול — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="crop_card.html" title="כרטיס גידול — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">04</span>
+      <div>
+        <h2>מחשבון התכנון <a class="open" href="calc.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">15 מטרות · 5 צורות תוצאה · מצב אין-נתונים כנה</p>
+      </div>
+      <ul class="screen__fx"><li>badge שלב לא חופף לכותרת</li><li>גלריית מנוע מקופלת</li><li>אייקוני מטרה קוויים</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/calc</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="calc.html" title="מחשבון התכנון — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="calc.html" title="מחשבון התכנון — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">05</span>
+      <div>
+        <h2>מחירון השוק <a class="open" href="market.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">drill-down · מגמת 28 יום · רעננות</p>
+      </div>
+      <ul class="screen__fx"><li>אייקוני קישור ספר/מחשבון</li><li>בידוד מספרים LTR</li><li>«אין מגמה» במקום –?</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/market</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="market.html" title="מחירון השוק — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="market.html" title="מחירון השוק — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">06</span>
+      <div>
+        <h2>הנחות היסוד שלי <a class="open" href="assumptions.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">ניהול פרמטרים סקיילבילי</p>
+      </div>
+      <ul class="screen__fx"><li>אייקוני קבוצה קוויים</li><li>ציפי used-in קליקביליים</li><li>רצפת קריאוּת</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/assumptions</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="assumptions.html" title="הנחות היסוד שלי — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="assumptions.html" title="הנחות היסוד שלי — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="screen">
+    <div class="screen__head">
+      <span class="screen__n">07</span>
+      <div>
+        <h2>הזנת נתוני גידול (פנימי) <a class="open" href="cropdata_entry.html" target="_blank">פתח מסך מלא ↗</a></h2>
+        <p class="screen__sub">סיווג מהיר מונחה-מקלדת · ליטוש קל</p>
+      </div>
+      <ul class="screen__fx"><li>header פנימי ללא חפיפה</li><li>רמז מקלדת מוגדל</li></ul>
+    </div>
+    <div class="frames">
+      <figure class="dt">
+        <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">sfa.local/cropdata_entry</span></div>
+        <div class="dt__vp"><iframe loading="lazy" src="cropdata_entry.html" title="הזנת נתוני גידול (פנימי) — desktop"></iframe></div>
+        <figcaption>דסקטופ · 1280px</figcaption>
+      </figure>
+      <figure class="ph">
+        <div class="ph__bezel"><div class="ph__notch"></div><div class="ph__vp"><iframe loading="lazy" src="cropdata_entry.html" title="הזנת נתוני גידול (פנימי) — mobile"></iframe></div></div>
+        <figcaption>מובייל · 375px</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+</body></html>

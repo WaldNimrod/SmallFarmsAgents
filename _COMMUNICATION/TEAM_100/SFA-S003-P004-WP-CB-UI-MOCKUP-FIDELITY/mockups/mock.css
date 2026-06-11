@@ -1,0 +1,80 @@
+/* ============================================================
+   SFA UI Redesign — MOCKUP stylesheet (team_100, 2026-06)
+   Built on the LOCKED Design System v3 tokens (tokens.css).
+   Standalone: tokens inlined so the file opens anywhere (file://).
+   This is a DESIGN MOCKUP — not production CSS.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  /* white-green paper (crop-book v2 palette) */
+  --gj-paper:#f8fbf8; --gj-paper-2:#eef4ee; --gj-paper-3:#dde8dd;
+  --gj-ink:#1f2a22; --gj-ink-soft:#5d6b5e; --gj-line:#dce6dc;
+  --gj-leaf:#6f8a45; --gj-leaf-deep:#4d6a2c; --gj-leaf-soft:#9bb172;
+  --gj-tomato:#c24f2c; --gj-tomato-deep:#8e3018;
+  --gj-sun:#d39a32; --gj-sun-deep:#a4711a;
+  --gj-soil:#8b5d2f; --gj-code:#2d8a8c; --gj-code-deep:#1f5e60;
+  --spark:#d23a2e;
+  --gj-font-body:"Assistant","Heebo",system-ui,sans-serif;
+  --gj-font-head:"Frank Ruhl Libre","David Libre",serif;
+  --gj-font-mono:"JetBrains Mono",monospace;
+  --r-s:8px; --r-m:12px; --r-l:16px; --r-pill:99px;
+  --sh-s:0 1px 3px rgba(30,50,35,.06); --sh-m:0 4px 14px rgba(30,55,38,.08); --sh-l:0 10px 30px rgba(28,55,38,.12);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  /* THE container width — applied uniformly to header + body (the shell fix) */
+  --shell-max:1100px;
+  --shell-pad:clamp(16px,3vw,28px);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--gj-font-body); background:var(--gj-paper-2); color:var(--gj-ink);
+  font-size:17px; line-height:1.6; direction:rtl; -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3{font-family:var(--gj-font-head);margin:0;}
+
+/* ── THE SHELL — one container, used by header AND body (consistency fix) ── */
+.shell{max-width:var(--shell-max);margin:0 auto;padding-inline:var(--shell-pad);}
+
+.hdr{position:sticky;top:0;z-index:30;background:rgba(248,251,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--gj-line);}
+.hdr__in{display:flex;align-items:center;gap:var(--sp-4);height:62px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--gj-font-head);font-weight:700;font-size:20px;}
+.brand .mk{width:34px;height:34px;border-radius:10px;background:var(--gj-leaf-deep);display:grid;place-items:center;color:#f6f1e3;font-size:18px;flex:0 0 auto;}
+.brand small{display:block;font-family:var(--gj-font-body);font-weight:500;font-size:11px;color:var(--gj-ink-soft);line-height:1;}
+.nav{display:flex;gap:2px;margin-inline-start:var(--sp-4);}
+.nav a{padding:8px 14px;border-radius:var(--r-pill);font-weight:600;font-size:15px;color:var(--gj-ink-soft);}
+.nav a.is-active{background:var(--gj-leaf-deep);color:#fff;}
+.nav a:hover:not(.is-active){background:var(--gj-paper-3);color:var(--gj-ink);}
+.hdr__sp{flex:1;}
+.search{display:flex;align-items:center;gap:6px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:6px 14px;min-width:200px;}
+.search input{border:0;background:transparent;font-family:inherit;font-size:14px;width:100%;outline:none;color:var(--gj-ink);}
+.acct{display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:var(--gj-ink-soft);}
+
+main{padding-block:var(--sp-6) var(--sp-7);min-height:60vh;}
+.foot{border-top:1px solid var(--gj-line);background:var(--gj-paper);color:var(--gj-ink-soft);font-size:13px;}
+.foot__in{display:flex;gap:10px;align-items:center;height:54px;}
+.foot .dot{width:8px;height:8px;border-radius:50%;background:var(--gj-leaf);}
+
+/* ── shared atoms ── */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:var(--r-pill);font-size:13px;font-weight:600;line-height:1.6;}
+.pill--now{background:#e7f1d8;color:var(--gj-leaf-deep);}
+.pill--next{background:#fbeedd;color:var(--gj-sun-deep);}
+.pill--leaf{background:#e7f1d8;color:var(--gj-leaf-deep);}
+.pill--tomato{background:#f7e2da;color:var(--gj-tomato-deep);}
+.tag{display:inline-block;padding:2px 9px;border-radius:var(--r-pill);background:var(--gj-paper-3);color:var(--gj-ink-soft);font-size:12px;font-weight:600;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-weight:700;font-size:15px;padding:11px 20px;border-radius:var(--r-pill);border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .12s ease,background .12s ease;}
+.btn:hover{transform:translateY(-1px);}
+.btn--primary{background:var(--gj-tomato);color:#fff;}
+.btn--leaf{background:var(--gj-leaf-deep);color:#fff;}
+.btn--ghost{background:var(--gj-paper);color:var(--gj-ink);border-color:var(--gj-line);}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--gj-leaf);text-transform:uppercase;}
+.muted{color:var(--gj-ink-soft);}
+.note{background:#fff8ec;border:1px dashed var(--gj-sun);border-radius:var(--r-m);padding:10px 14px;font-size:13px;color:var(--gj-sun-deep);}
+
+/* a small caption above each mockup explaining what it is */
+.mockbar{background:var(--gj-ink);color:#dfe8df;font-size:13px;}
+.mockbar .shell{display:flex;gap:12px;align-items:center;padding-block:8px;flex-wrap:wrap;}
+.mockbar b{color:#fff;}
+.mockbar .x{background:var(--spark);color:#fff;border-radius:var(--r-pill);padding:1px 9px;font-weight:700;font-size:11px;}
