@@ -145,34 +145,6 @@
 .fresh--stale { background: color-mix(in oklch, var(--gj-tomato) 14%, var(--gj-paper)); color: var(--gj-tomato-deep); }
 .fresh--stale::before { background: var(--gj-tomato); }
 
-/* price-card grid */
-.pcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(216px, 1fr)); gap: 12px; }
-.pcard {
-  display: flex; flex-direction: column; gap: 0; text-decoration: none; color: inherit;
-  background: var(--gj-paper); border: 1px solid var(--gj-line); border-radius: var(--gj-r-l);
-  overflow: hidden; box-shadow: var(--gj-shadow-s); transition: transform .15s, box-shadow .15s;
-}
-.pcard:hover { transform: translateY(-2px); box-shadow: var(--gj-shadow-m); }
-.pcard__top { display: flex; align-items: center; gap: 10px; padding: 12px 13px 0; }
-.pcard__sw { width: 42px; height: 42px; border-radius: 10px; object-fit: contain; mix-blend-mode: multiply; background: #fff; border: 1px solid var(--gj-line); flex: none; }
-.pcard__sw--glyph { display: grid; place-items: center; font-size: 22px; }
-.pcard__name { font-family: var(--gj-font-head); font-weight: 700; font-size: 16px; line-height: 1.1; }
-.pcard__unit { font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); margin-top: 2px; }
-.pcard__price { display: flex; align-items: baseline; gap: 5px; padding: 8px 13px 2px; }
-.pcard__price .big { font-family: var(--gj-font-head); font-weight: 900; font-size: 30px; line-height: 1; color: var(--gj-tomato-deep); }
-.pcard__price .cur { font-size: 14px; font-weight: 700; color: var(--gj-tomato-deep); }
-.pcard__price .per { font-size: 11px; color: var(--gj-ink-soft); margin-inline-start: auto; }
-.pcard__range { padding: 0 13px 10px; font-family: var(--gj-font-mono); font-size: 11px; color: var(--gj-ink-soft); }
-.pcard__spark { padding: 0 13px 6px; }
-.pcard__foot { display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-top: 1px solid var(--gj-line); background: var(--gj-paper-2); }
-.pcard__src { font-family: var(--gj-font-mono); font-size: 10px; color: var(--gj-ink-soft); }
-.pcard__src b { color: var(--gj-ink); }
-.pcard__foot .fresh { margin-inline-start: auto; }
-/* stale / empty price card */
-.pcard.is-stale .pcard__price .big { color: var(--gj-ink-soft); }
-.pcard.is-empty { background: var(--gj-paper-2); }
-.pcard.is-empty .pcard__price .big { color: var(--gj-paper-3); }
-.pcard.is-empty .pcard__name { color: var(--gj-ink-soft); }
 
 /* mini sparkline (pure CSS bars) */
 .spark { display: flex; align-items: flex-end; gap: 2px; height: 26px; }

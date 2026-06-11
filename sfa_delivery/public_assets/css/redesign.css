@@ -401,6 +401,9 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .fresh.f{ background:#e7f1d8; color:var(--gj-leaf-deep); }
 .fresh.a{ background:#fbeedd; color:var(--gj-sun-deep); }
 .fresh.s{ background:#f7e2da; color:var(--gj-tomato-deep); }
+/* classb's .fresh::before status-dot belongs to the market DETAIL pills
+   (.fresh--*); suppress its bleed onto the redesign list pills (.fresh.f/.a/.s). */
+.pc__foot .fresh::before{ content:none; }
 .spark{ display:flex; align-items:flex-end; gap:2px; height:26px; margin-inline-start:auto; }
 .spark i{ width:4px; background:var(--gj-leaf-soft); border-radius:2px; }
 .pc__body{ padding:0 var(--sp-4) var(--sp-4); border-top:1px solid var(--gj-line); margin-top:4px; }

@@ -28,57 +28,6 @@
 .aud-head { display: flex; align-items: center; justify-content: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
 .aud-head__sub { margin-inline-start: auto; }
 
-/* ════════════════════════════════════════════════════════════
-   2 · CROP CARDS  (Cards audience view)
-   ════════════════════════════════════════════════════════════ */
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
-.ccard {
-  display: flex; flex-direction: column;
-  background: var(--gj-paper); border: 1px solid var(--gj-line);
-  border-radius: var(--gj-r-l); overflow: hidden; text-decoration: none; color: inherit;
-  box-shadow: var(--gj-shadow-s); transition: transform .15s, box-shadow .15s;
-}
-.ccard:hover { transform: translateY(-2px); box-shadow: var(--gj-shadow-m); }
-.ccard__art {
-  aspect-ratio: 1.7 / 1; display: grid; place-items: center; position: relative;
-  background: radial-gradient(120% 120% at 50% 20%, #fff 0%, var(--gj-paper-2) 100%);
-  border-bottom: 1px solid var(--gj-line);
-}
-.ccard__art img { width: 64%; height: 64%; object-fit: contain; mix-blend-mode: multiply; }
-.ccard__art .veg { font-size: 28px; }
-.ccard__state {
-  position: absolute; top: 8px; inset-inline-start: 8px;
-  width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
-  font-size: 10px; font-weight: 800; color: #fff;
-}
-.ccard__state--complete { background: var(--gj-leaf); }
-.ccard__state--partial  { background: var(--gj-sun); color: #4a2d04; }
-.ccard__body { padding: 6px 8px 8px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
-.ccard__name { font-family: var(--gj-font-head); font-weight: 700; font-size: 13px; line-height: 1.1; }
-.ccard__en { font-size: 10px; color: var(--gj-ink-soft); font-style: italic; }
-.ccard__season {
-  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
-  font-size: 11px; font-weight: 700; color: var(--gj-soil-deep);
-  background: color-mix(in oklch, var(--gj-sun) 16%, var(--gj-paper));
-  padding: 3px 9px; border-radius: var(--gj-r-pill); align-self: flex-start;
-}
-.ccard__meta { display: flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
-.ccard__dtm { margin-inline-start: auto; font-family: var(--gj-font-head); font-weight: 900; font-size: 17px; color: var(--gj-leaf-deep); }
-.ccard__dtm small { font-family: var(--gj-font-mono); font-size: 8px; font-weight: 400; color: var(--gj-ink-soft); display: block; text-align: center; }
-.ccard__calcs { display: flex; gap: 3px; }
-.ccard__calcs i { width: 6px; height: 6px; border-radius: 50%; background: var(--gj-leaf-soft); }
-.ccard__calcs i.off { background: var(--gj-paper-3); }
-/* card mini graphics */
-.cardviz { display: flex; flex-direction: column; gap: 7px; margin-top: 6px; }
-.seasonbar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5px; height: 14px; border-radius: 4px; overflow: hidden; }
-.seasonbar i { background: var(--gj-paper-3); }
-.seasonbar i.on { background: var(--gj-leaf-soft); }
-.seasonbar i.peak { background: var(--gj-leaf-deep); }
-.cardviz__lbl { display: flex; justify-content: space-between; font-family: var(--gj-font-mono); font-size: 8px; color: var(--gj-ink-soft); }
-.minibar { display: flex; align-items: center; gap: 6px; }
-.minibar__track { flex: 1; height: 6px; border-radius: 3px; background: var(--gj-paper-3); overflow: hidden; }
-.minibar__fill { height: 100%; background: var(--gj-sun); border-radius: 3px; }
-.minibar__v { font-family: var(--gj-font-head); font-weight: 700; font-size: 11px; color: var(--gj-soil-deep); white-space: nowrap; }
 
 /* ════════════════════════════════════════════════════════════
    3 · PRO TABLE  (Table audience view)
@@ -548,7 +497,6 @@
   .crophero h1 { font-size: clamp(22px, 7vw, 34px); overflow-wrap: break-word; word-break: break-word; min-width: 0; }
 }
 @media (max-width: 600px) {
-  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .headvals { grid-template-columns: 1fr 1fr; }
 }
 
