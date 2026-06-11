@@ -11,7 +11,7 @@
    LOADS LAST in the asset chain (after page CSS so it wins on equal
    specificity — team_35 two-file gradual-adoption note). Base DS
    tokens.css stays LOCKED & untouched; this file only ADDS the short
-   --r-*/--sp-*/--sh-* aliases + --fs-* type scale + --shell-* the
+   r/sp/sh aliases + fs type scale + shell-width vars the
    mockups reference. Colour/font tokens already live in tokens.css.
    ============================================================ */
 
@@ -382,6 +382,7 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .pc__top{ display:flex; align-items:center; gap:12px; }
 .pc__art{ width:52px; height:52px; border-radius:10px; background:radial-gradient(circle at 50% 40%,#fff,#eef4ee); display:grid; place-items:center; overflow:hidden; flex:0 0 auto; }
 .pc__art .gi{ width:30px; height:30px; color:var(--gj-leaf-soft); }
+.pc__art img{ width:46px; height:46px; object-fit:contain; }
 .pc__name{ font-family:var(--gj-font-head); font-size:19px; font-weight:700; line-height:1.1; }
 .pc__unit{ font-size:12px; color:var(--gj-ink-soft); }
 .pc__chev{ margin-inline-start:auto; color:var(--gj-ink-soft); font-size:13px; transition:transform .15s; }

@@ -96,6 +96,7 @@ ob_start();
         $obs       = (int)($row['observation_count'] ?? 0);
         $fresh     = isset($row['freshness_days']) ? (int)$row['freshness_days'] : null;
         $icon_slug = (string)($row['icon_slug'] ?? 'leaf');
+        $wc_art    = (string)($row['wc_art'] ?? '');
         $book_slug = (string)($row['book_slug'] ?? '');
         $updated   = (string)($row['updated_he'] ?? '');
         $spark     = is_array($row['spark'] ?? null) ? $row['spark'] : [];
@@ -113,7 +114,7 @@ ob_start();
       <details class="pcard<?= $is_stale ? ' stale' : '' ?>">
         <summary>
           <div class="pc__top">
-            <div class="pc__art" aria-hidden="true"><svg class="gi"><use href="#icon-<?= $h($icon_slug) ?>"/></svg></div>
+            <div class="pc__art" aria-hidden="true"><?php if ($wc_art !== ''): ?><img src="/public_assets/img/crops/<?= $h($wc_art) ?>" alt="" loading="lazy" decoding="async"><?php else: ?><svg class="gi"><use href="#icon-<?= $h($icon_slug) ?>"/></svg><?php endif; ?></div>
             <div><div class="pc__name"><?= $h($name_he) ?></div><?php if ($unit_lbl !== ''): ?><div class="pc__unit"><?= $h($unit_lbl) ?></div><?php endif; ?></div>
             <span class="pc__chev">▾</span>
           </div>

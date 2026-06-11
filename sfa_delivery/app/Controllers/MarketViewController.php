@@ -6,6 +6,7 @@ namespace SFA\Controllers;
 use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use SFA\Lib\CropArt;
 use SFA\Lib\FieldRegistry;
 use SFA\Lib\Template;
 
@@ -251,6 +252,9 @@ final class MarketViewController
         $product['source_count']      = $sourceCount;
         $product['observation_count'] = $obsCount;
         $product['icon_slug']         = $iconSlug;
+        // WP-CB-UI-MOCKUP-FIDELITY: watercolor thumbnail (same art as the crop
+        // book) — '' when unmapped so the .pc__art line-glyph icon is the fallback.
+        $product['wc_art']            = CropArt::file($slug) ?? '';
         $product['book_slug']         = $this->resolveCropSlug($row); // resolved crop slug ('' when none — no 404)
         $product['book_label_he']     = $hebrewName;
         $product['updated_he']        = $this->formatHebrewDate((string)($row['last_price_date'] ?? ''));
