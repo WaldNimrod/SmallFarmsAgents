@@ -151,6 +151,35 @@ final class CropBookV1RouteTest extends TestCase
         $this->assertStringContainsString('class="grid"', $html, 'Cards view must include the .cc card grid');
     }
 
+    /**
+     * WP-CB-BOOK-MARKET-PRICECHIP: the ₪ market chip must resolve when a product links to a
+     * crop by HEBREW NAME even though the slugs differ — production product slugs are an OMA
+     * namespace that doesn't match crop slugs, so the old slug-only join rendered zero chips.
+     * Guards the book↔market price loop.
+     */
+    public function testBookIndexPriceChipResolvesByHebrewName(): void
+    {
+        // Product slug ('oma-lettuce-7') deliberately != crop slug ('lettuce'); only the
+        // Hebrew name (חסה) links them. last_price set → an honest chip must render.
+        $this->pdo->exec("INSERT OR IGNORE INTO products (id,slug,hebrew_name,category,unit,last_price,last_price_date,freshness_days,payload_json,last_pushed_at)
+            VALUES (701,'oma-lettuce-7','חסה','vegetables','kg',5.5,'2026-06-11',1,'{}','2026-06-11')");
+
+        $html = (string)$this->get('/crop-book/?view=cards')->getBody();
+        $this->assertStringContainsString('cc__price', $html,
+            'A crop linked to a product only by Hebrew name must render the ₪ market chip');
+        $this->assertStringContainsString('₪5.5', $html,
+            'The resolved market price must appear in the chip');
+    }
+
+    /** Honesty guard: no matching product → no ₪ chip (never fabricated). */
+    public function testBookIndexNoPriceChipWithoutProduct(): void
+    {
+        // setUp seeds NO products, so no crop can resolve a market price.
+        $html = (string)$this->get('/crop-book/?view=cards')->getBody();
+        $this->assertStringNotContainsString('cc__price', $html,
+            'Without a matching product price, the ₪ chip must be omitted (never fabricated)');
+    }
+
     public function testBookIndexTableView(): void
     {
         $res = $this->get('/crop-book/?view=table');

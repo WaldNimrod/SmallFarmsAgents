@@ -207,22 +207,39 @@ final class CropBookViewController
             usort($crops, static fn ($a, $b) => ((int)!empty($b['in_season'])) <=> ((int)!empty($a['in_season'])));
         }
 
-        // WP-CB-UI-REDESIGN (WI-3): batched market price per crop slug — the ₪ chip
-        // that closes the book↔market loop. ONE IN(...) query; degrades to empty when
-        // the products table is absent (honest: chip omitted, never fabricated).
+        // WP-CB-BOOK-MARKET-PRICECHIP: batched market price per crop — the ₪ chip that
+        // closes the book↔market loop. A crop links to a product by slug OR by Hebrew name
+        // (crops.hebrew_name = products.hebrew_name) — the same linkage the market detail uses
+        // (MarketViewController::resolveCropSlug). Production product slugs are an OMA namespace
+        // that rarely matches crop slugs, so the old slug-only join rendered ZERO chips; the
+        // Hebrew-name fallback is what actually lights the loop. ONE IN(...) query keyed by slug
+        // and name; result is keyed by CROP slug (what the template reads). Honest: a chip renders
+        // only when a real product price resolves — never fabricated.
         /** @var array<string,array{price:float,unit:string}> */
         $priceBySlug = [];
         $resultSlugs = array_values(array_filter(array_map(static fn ($c) => (string)($c['slug'] ?? ''), $crops)));
-        if (!empty($resultSlugs)) {
+        $resultNames = array_values(array_filter(array_map(static fn ($c) => (string)($c['name_he'] ?? ''), $crops)));
+        if (!empty($resultSlugs) || !empty($resultNames)) {
             try {
-                $ph  = implode(',', array_fill(0, count($resultSlugs), '?'));
-                $pst = $this->pdo->prepare("SELECT slug, last_price, unit FROM products WHERE slug IN ($ph) AND last_price IS NOT NULL");
-                $pst->execute($resultSlugs);
+                $keys = array_values(array_unique(array_merge($resultSlugs, $resultNames)));
+                $ph   = implode(',', array_fill(0, count($keys), '?'));
+                $pst  = $this->pdo->prepare(
+                    "SELECT slug, hebrew_name, last_price, unit FROM products
+                     WHERE last_price IS NOT NULL AND (slug IN ($ph) OR hebrew_name IN ($ph))"
+                );
+                $pst->execute(array_merge($keys, $keys));
+                $bySlug = [];
+                $byName = [];
                 foreach ($pst->fetchAll() as $pr) {
-                    $priceBySlug[(string)$pr['slug']] = [
-                        'price' => (float)$pr['last_price'],
-                        'unit'  => (string)($pr['unit'] ?? ''),
-                    ];
+                    $entry = ['price' => (float)$pr['last_price'], 'unit' => (string)($pr['unit'] ?? '')];
+                    if (($s = (string)($pr['slug'] ?? '')) !== '')        { $bySlug[$s] = $entry; }
+                    if (($n = (string)($pr['hebrew_name'] ?? '')) !== '') { $byName[$n] = $entry; }
+                }
+                foreach ($crops as $c) {
+                    $cslug = (string)($c['slug'] ?? '');
+                    if ($cslug === '') { continue; }
+                    $p = $bySlug[$cslug] ?? ($byName[(string)($c['name_he'] ?? '')] ?? null); // slug wins, else Hebrew name
+                    if ($p !== null) { $priceBySlug[$cslug] = $p; }
                 }
             } catch (\Throwable) {
                 $priceBySlug = [];
