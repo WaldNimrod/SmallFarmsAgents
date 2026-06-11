@@ -28,15 +28,15 @@ You are **team_190**, the external constitutional validator for the SmallFarmsAg
 | Item | Value |
 |------|-------|
 | Repo | `/Users/nimrod/Documents/SmallFarmsAgents` |
-| Branch (specs + mandates) | `docs/cb-handoff-specs` @ **`24eac71`** (pushed to origin) |
-| Source pins reviewed against | `origin/main` @ **`609a8d5`** |
+| Branch (specs + mandates) | `origin/docs/cb-handoff-specs` (current tip; specs + mandates frozen since `b341e80`, later commits only add validation-bundle docs) |
+| Source pins reviewed against | `origin/main` @ **`609a8d5`** (frozen) |
 | ⚠ STALE — do NOT use | local `main` @ `90ed1e0` (15 `sfa_delivery/` files behind) |
 | Item-1 price-chip baseline | `feat/wp-cb-book-market-pricechip` @ **`ab71d9f`** (already built; not yet on main) |
 | DB | online (hub) — IRRELEVANT here: this is a SPEC review, not a build. Do NOT run the DB or live checks. |
 
-Confirm you are at the right ref: `git -C /Users/nimrod/Documents/SmallFarmsAgents rev-parse HEAD` → `24eac71`.
-If not, `git fetch origin` then review in YOUR OWN worktree
-(`git worktree add /tmp/sfa-lgate-s-190 docs/cb-handoff-specs`) — do NOT switch the team_100 session's main checkout.
+Get the artifacts: `git -C /Users/nimrod/Documents/SmallFarmsAgents fetch origin`, then review the specs + mandates
+on `origin/docs/cb-handoff-specs` and the source pins on `origin/main` (`609a8d5`). Work in YOUR OWN worktree
+(`git worktree add /tmp/sfa-lgate-s-190 origin/docs/cb-handoff-specs`) — do NOT switch the team_100 session's main checkout.
 
 ## Mandatory reads (in order)
 1. `CLAUDE.md` — spoke rules (delivery-tier canon; never validate layout with curl alone).
@@ -99,4 +99,4 @@ id/severity/evidence/disposition, `authorize_build`, one-paragraph summary).
 
 ---
 *Self-contained L-GATE_S activation package. Two WPs, two verdicts, one non-Claude session. Spec review only —
-no build, no live-DB. Source pins on `origin/main` @ `609a8d5`; specs + mandates on `docs/cb-handoff-specs` @ `24eac71`.*
+no build, no live-DB. Source pins on `origin/main` @ `609a8d5`; specs + mandates on `origin/docs/cb-handoff-specs`.*
