@@ -4,7 +4,7 @@
 **From:** team_100 (Claude Code, builder)
 **To:** team_190 (constitutional validator) — **MUST run on a non-Claude engine** (Cursor / Codex / Desktop) per Iron Rule #1/#5
 **Gate:** L-GATE_VALIDATE
-**Branch / HEAD:** `main` @ post-merge tip — **build commits `a5ada1a..154c89d`** (6 UI commits; fast-forwarded onto main from `be6c8d7`)
+**Branch / HEAD:** `feat/wp-cb-ui-mockup-fidelity` @ `29b6847` (pushed to `origin`). A **clean fast-forward over `origin/main`** (origin/main is the build base `be6c8d7`; 0 divergence). **Build commits `a5ada1a..154c89d`** (6 UI commits); validate at the branch tip. On PASS the closure fast-forwards `main`.
 **Deploy:** LIVE on `https://sfa.nimrod.bio` (FTPS, 2026-06-11). Tier: delivery (Slim4/PHP + CSS), `sfa_delivery/` only.
 
 ## Why this mandate
