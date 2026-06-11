@@ -252,10 +252,13 @@ final class MarketViewController
         $product['source_count']      = $sourceCount;
         $product['observation_count'] = $obsCount;
         $product['icon_slug']         = $iconSlug;
+        $bookSlug                     = $this->resolveCropSlug($row); // resolved crop slug ('' when none — no 404)
         // WP-CB-UI-MOCKUP-FIDELITY: watercolor thumbnail (same art as the crop
-        // book) — '' when unmapped so the .pc__art line-glyph icon is the fallback.
-        $product['wc_art']            = CropArt::file($slug) ?? '';
-        $product['book_slug']         = $this->resolveCropSlug($row); // resolved crop slug ('' when none — no 404)
+        // book). Resolve via the CROP slug — a product's own slug is an OMA
+        // namespace that isn't in the art map; the resolved book slug (e.g.
+        // 'carrots') is. Fall back to the product slug, then the .pc__art icon.
+        $product['wc_art']            = (CropArt::file($bookSlug) ?? CropArt::file($slug)) ?? '';
+        $product['book_slug']         = $bookSlug;
         $product['book_label_he']     = $hebrewName;
         $product['updated_he']        = $this->formatHebrewDate((string)($row['last_price_date'] ?? ''));
         // WI-5: 28-day sparkline + week-over-week trend (empty/flat when no history).
