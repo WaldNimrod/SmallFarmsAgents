@@ -2977,7 +2977,8 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-0
   label: "ספר גידולים: Crop Data Model Canon (field taxonomy, attributes layer, units/enums, migration)"
-  status: ACTIVE
+  status: DONE
+  closed_at: "2026-05-31"
   phase: design
   track: A
   effort: LARGE
@@ -3085,7 +3086,11 @@ work_packages:
     how crop knowledge is
     named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
     by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model
-    change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400."
+    change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400.
+    [2026-06-12 status hygiene — team_100, per team_00 handoff: stale 'ACTIVE' → DONE. This is a LOCKED
+    design canon (LOD200_LOCKED @ d16a611, R3 PASS team_190 non-Claude), implemented + cross-engine
+    validated downstream by WP-CB-MIG (LOD500_LOCKED, 0247a95) and WP-CB-MIG2 (LOD500_LOCKED). No build /
+    no L-GATE_V of its own; terminal state = DONE / LOD200_LOCKED.]"
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-MIG
@@ -4175,7 +4180,13 @@ work_packages:
 
 - id: SFA-S003-P004-WP-PRELAUNCH-QA
   label: "ספר גידולים: Pre-launch full-system visual + E2E QA (all surfaces vs team_35 mockups) — launch-readiness audit"
-  status: ROUTED
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
+  superseded_by: ["SFA-S003-P004-WP-CB-UI-FIDELITY", "SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY", "SFA-S003-P004-WP-CB-MOBILE"]
+  closure_note: "team_100 hygiene (team_00 handoff): the 2026-06-03 NO-GO punch-list (giant /crop-book/ entry
+    cards, app-shell logo, 375/768 mobile horizontal overflow on /crop-book/{slug}+/crop-book/table+/market/{slug})
+    was resolved by the FIDELITY/MOCKUP-FIDELITY/MOBILE WPs (all LOD500_LOCKED) + their external L-GATE_V passes.
+    This launch-readiness QA pass is therefore superseded — not formally re-run."
   phase: qa
   track: A
   effort: NORMAL
@@ -5337,7 +5348,8 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-2
   label: "ספר גידולים: Planner v0 (bed-map / season plan)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5357,12 +5369,16 @@ work_packages:
       plant_population (#10), succession_schedule (#6) — plus sow/harvest dates (#4/#5).
       Owns scheduling/layout; reads agronomic truth from Crop Book. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Activates after WP-CB-1 LOD500_LOCKED + team_00 priority."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — bed-map/season
+    planning is a farmOS capability, delivered via farmOS (headless) not a custom module. Original LOD100
+    intent retained below for history. // PLACEHOLDER — not for execution. Activates after WP-CB-1
+    LOD500_LOCKED + team_00 priority."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-3
   label: "ספר גידולים: Tasks (crop task scheduling)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5382,12 +5398,16 @@ work_packages:
       #4/#5, plus seed/tray procurement from #1/#3. Owns task timeline; reads anchors
       from Crop Book + Planner. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Consumes crop_task_templates + CB-1 date calcs."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — crop task
+    scheduling is a farmOS capability, delivered via farmOS (headless) not a custom module. Original LOD100
+    intent retained below for history. // PLACEHOLDER — not for execution. Consumes crop_task_templates +
+    CB-1 date calcs."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-4
   label: "ספר גידולים: Sales / POS"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5407,12 +5427,16 @@ work_packages:
       WP-CB-1, plus documented_price + OMA market index (MK class). Owns transactions;
       reads economics from Crop Book. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Consumes CB-1 economics calcs + OMA market."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — sales/POS is a
+    farmOS capability (D3 CRM/sales integration), delivered via farmOS (headless) not a custom module.
+    Original LOD100 intent retained below for history. // PLACEHOLDER — not for execution. Consumes CB-1
+    economics calcs + OMA market."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-5
   label: "ספר גידולים: Tend integration (operational write-back loop)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5432,7 +5456,10 @@ work_packages:
       book-vs-reality. Consumes crop_field_enrichment + provenance from WP-CB-1; writes
       OP-class source_values that re-reconcile. Owns the ops feedback loop. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. OP-class operational feedback into enrichment."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — operational
+    write-back/Tend integration is a farmOS capability, delivered via farmOS (headless) not a custom module.
+    Original LOD100 intent retained below for history. // PLACEHOLDER — not for execution. OP-class
+    operational feedback into enrichment."
   profile: L0
 
 # ============================================================================
@@ -5443,9 +5470,10 @@ work_packages:
 # North star: "מערכת ההפעלה של החווה הקטנה — הדף שכל מגדל פותח בבוקר."
 # Canonical brief: _COMMUNICATION/TEAM_100/BRIEF_SFA_VISION_RELOCK_AND_PLATFORM_DIRECTION_2026-06-04_v1.0.0.md
 # NOTE: this program SUPERSEDES the "build-our-own" intent of the S003-P004
-# downstream placeholders (WP-CB-3 tasks, WP-CB-4 Sales/POS, WP-CB-5 Tend
-# integration) — those capabilities are now to be delivered via farmOS adoption,
-# not custom modules. Reconciliation of those placeholders deferred to S004-P001.
+# downstream placeholders (WP-CB-2 Planner, WP-CB-3 Tasks, WP-CB-4 Sales/POS,
+# WP-CB-5 Tend integration) — those capabilities are now to be delivered via
+# farmOS adoption, not custom modules. RECONCILED 2026-06-12 (team_100, team_00
+# handoff): all four placeholders set status SUPERSEDED with per-WP annotations.
 # DB online (hub probe) but spoke is L0 file-based (no in-tree AOS v3 engine,
 # project_id null) → roadmap.yaml is canonical WP registry per PROJECT_CONTEXT.
 # Open DECISIONS carried: D1 monetization specifics, D2 multi-tenancy scale,
