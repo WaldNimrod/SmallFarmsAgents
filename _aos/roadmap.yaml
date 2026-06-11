@@ -4739,18 +4739,20 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-SRC-SWEEP
   label: "ספר גידולים: השלמת סריקה ושילוב כל מקורות המידע הקיימים (קבצים גולמיים שלא חולצו) + פריסה במערכת החיה + בדיקת תקינות"
-  status: BUILD
-  phase: build
+  status: COMPLETE
+  phase: closed
   track: A
   effort: MEDIUM
-  current_lean_gate: DEPLOY
-  lod_status: LOD400
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-11"
   assigned_builder: team_100
   assigned_validator: team_190
   created_at: "2026-06-09"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-CONTENT"]
   spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-SRC-SWEEP/SPEC_2026-06-11_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-SRC-SWEEP/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4794,9 +4796,25 @@ work_packages:
       (חסה בייבי live). Production crop count remained 70 — 7 stale prior-WP crops (incl. duplicate #95) NOT
       deployed. FINDING (not this WP): production is behind a full seed (70 vs 77 crops) — separate catch-up
       deploy + duplicate-crop #95 fix needed. See COMPLETION_REPORT_2026-06-11_v1.0.0.md §5.
-  notes: "BUILD/DEPLOY done (team_100, 2026-06-11). L39 variety + L45 cherry-pick integrated & LIVE (scoped) on
-    sfa.nimrod.bio; 5 sources deprioritized via DECISION. Awaiting cross-engine L-GATE_VALIDATE (team_190,
-    validator ≠ Claude Code) → LOD500_LOCK. Handoff: team_100."
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-11"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS (validator = Cursor, non-Claude; IR#1/#5) on the UNIFIED scope
+      (SRC-SWEEP + crop-taxonomy/data-integrity remediation that team_00 directed mid-flight). First round
+      FAILed AC-05 (seed --all reintroduced derived fields); remediated R2 (live-DB strip + seed --all
+      auto-strip). Independent re-run of VC-1..VC-12 at build HEAD dfea7e6: backend 798 pass/1 skip (AC-05
+      8/8), delivery 233/233, validate_aos 0 FAIL, 73 crops/0 dups, postharvest corrected (31 crops), prod
+      70 crops + qa_probe 6/6 overflow=false. 2 non-blocking advisories. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-SRC-SWEEP/WP-CB-SRC-SWEEP_LGATE-V_VERDICT_v1.0.0.md.
+      Mandate: VALIDATION_MANDATE_2026-06-11_v2.0.0.md.
+  notes: "LOD500_LOCKED (team_100, 2026-06-11). Cross-engine L-GATE_VALIDATE PASS (team_190/Cursor) on unified
+    scope: L39 mesclun variety + L45 cherry-pick + crop-taxonomy dedup (Basil/Rutabaga/Salad-Mix/Heirloom →
+    canonical; 4 keep-crops) + seed auto-strip-derived + uc_davis postharvest fix (31 crops). LIVE on
+    sfa.nimrod.bio (scoped). 5 sources deprioritized via DECISION. Archived:
+    _archive/SFA-S003-P004-WP-CB-SRC-SWEEP/ARCHIVE_MANIFEST.md. Deferred (non-blocking): 3 thin keep-crops
+    held from prod; idan_planner yield emit (auto-stripped)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-CONTENT
