@@ -50,6 +50,7 @@ def test_jmf_crop_map_duplicate_target_allowlist(jmf_crop_map):
         "אבטיח":       ["Watermelon", "Watermelons"],
         "כוסברה":      ["Cilantro", "Coriander"],
         "לפת":         ["Rutabaga", "Turnips"],
+        "עגבנייה":     ["Greenhouse Heirloom Tomato", "Tomatoes"],
     }, f"unexpected Hebrew-value duplicates: {duplicates}"
 
 
@@ -95,12 +96,12 @@ def test_ac02_old_rutabaga_value_absent():
 
 
 def test_ac03_duplicate_group_count(jmf_crop_map):
-    """patch06 + team_00 2026-06-10: exactly 7 Hebrew values appear more than once
-    (6 synonyms + 'לפת' now shared by Turnips and Rutabaga, which resolves to the
-    canonical Turnips crop)."""
+    """patch06 + team_00 2026-06-10: exactly 8 Hebrew values appear more than once
+    (6 synonyms + 'לפת' shared by Turnips/Rutabaga + 'עגבנייה' shared by Tomatoes/
+    Greenhouse Heirloom Tomato — both resolve to the canonical crop)."""
     counts = Counter(jmf_crop_map.values())
     dup_count = sum(1 for c in counts.values() if c > 1)
-    assert dup_count == 7, f"Expected 7 duplicate-target groups, got {dup_count}"
+    assert dup_count == 8, f"Expected 8 duplicate-target groups, got {dup_count}"
 
 
 # ─── patch02 regression tests (DECISION 2026-05-25 §Q4) ───
@@ -139,8 +140,11 @@ def test_cherry_tomato_value_post_patch03():
 
 
 def test_heirloom_tomato_value_post_patch03():
+    """team_00 2026-06-10 SUPERSEDES patch03 split: Heirloom Tomato is a variety-type,
+    so it resolves to the canonical 'עגבנייה' (not a separate 'עגבניות מורשת' crop)."""
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
-    assert JMF_CROP_MAP["Greenhouse Heirloom Tomato"] == "עגבניות מורשת"
+    assert JMF_CROP_MAP["Greenhouse Heirloom Tomato"] == "עגבנייה"
+    assert "עגבניות מורשת" not in JMF_CROP_MAP.values()
 
 
 def test_chinese_cabbage_value_post_patch03():
@@ -208,10 +212,10 @@ def test_no_typo_keys_in_map_post_patch06():
 
 
 def test_six_synonym_groups_exact():
-    """patch06 + team_00 2026-06-10: the duplicate-target groups are 6 pure synonym
-    pairs PLUS 'לפת' (Turnips), which Rutabaga now resolves to (no separate crop)."""
+    """patch06 + team_00 2026-06-10: 6 pure synonym pairs PLUS 'לפת' (Rutabaga→Turnips)
+    PLUS 'עגבנייה' (Greenhouse Heirloom Tomato→Tomatoes) — both resolve to canonical."""
     from organic_market_agent.crop_book.constants import JMF_CROP_MAP
     from collections import Counter
     counts = Counter(JMF_CROP_MAP.values())
     duplicates = {v for v, c in counts.items() if c > 1}
-    assert duplicates == {"פאק צ'וי", "מנגולד", "בצל ירוק", "תפוח אדמה", "אבטיח", "כוסברה", "לפת"}
+    assert duplicates == {"פאק צ'וי", "מנגולד", "בצל ירוק", "תפוח אדמה", "אבטיח", "כוסברה", "לפת", "עגבנייה"}

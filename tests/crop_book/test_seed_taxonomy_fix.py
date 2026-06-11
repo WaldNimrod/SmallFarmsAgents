@@ -70,10 +70,11 @@ def test_map_targets_are_canonical_names():
 
     assert JMF_CROP_MAP["Basil"] == "בזיל"
     assert JMF_CROP_MAP["Rutabaga"] == "לפת"
+    assert JMF_CROP_MAP["Greenhouse Heirloom Tomato"] == "עגבנייה"
     assert TEND_CROP_MAP["Lettuce: Salad Mix"] == "עלי בייבי"
 
     # The non-canonical names must NOT be targets of any name-mapping table.
-    for dup in ("בזיליקום", "רוטבגה", "תערובת סלט"):
+    for dup in ("בזיליקום", "רוטבגה", "תערובת סלט", "עגבניות מורשת"):
         assert dup not in JMF_CROP_MAP.values(), f"{dup!r} still a JMF_CROP_MAP target"
         assert dup not in TEND_CROP_MAP.values(), f"{dup!r} still a TEND_CROP_MAP target"
 
@@ -89,7 +90,7 @@ def test_il_basil_aliases_resolve_to_canonical():
 
 @pytest.mark.parametrize(
     "jmf_en, canonical_he",
-    [("Basil", "בזיל"), ("Rutabaga", "לפת")],
+    [("Basil", "בזיל"), ("Rutabaga", "לפת"), ("Greenhouse Heirloom Tomato", "עגבנייה")],
 )
 def test_jmf_dup_names_resolve_no_new_crop(Session, jmf_en, canonical_he):
     """When JMF processes 'Basil'/'Rutabaga', it finds the existing canonical crop
@@ -117,7 +118,8 @@ def test_jmf_dup_names_resolve_no_new_crop(Session, jmf_en, canonical_he):
         after = session.query(Crop).count()
         assert after == before, "A new crop was minted for a dup name"
         # The dup name must NOT exist as a crop.
-        dup = {"Basil": "בזיליקום", "Rutabaga": "רוטבגה"}[jmf_en]
+        dup = {"Basil": "בזיליקום", "Rutabaga": "רוטבגה",
+               "Greenhouse Heirloom Tomato": "עגבניות מורשת"}[jmf_en]
         assert session.query(Crop).filter_by(name_he=dup).one_or_none() is None
 
 
@@ -150,7 +152,8 @@ _KEEP_CASES = [
     ("סלרי שורש", "Celeriac", "סלרי", "Apiaceae"),
     ("כרוב סיני", "Chinese Cabbage", "כרוב", "Brassicaceae"),
     ("פלפל חריף", "Hot Pepper", "פלפל", "Solanaceae"),
-    ("עגבניות מורשת", "Heirloom Tomato", "עגבנייה", "Solanaceae"),
+    # עגבניות מורשת (Heirloom) is NOT a keep-crop — team_00 2026-06-10 ruled it a
+    # variety-type that resolves to עגבנייה (covered by the dup-resolution tests).
     ("כרוב ניצנים", "Brussels Sprouts", "כרוב", "Brassicaceae"),
 ]
 

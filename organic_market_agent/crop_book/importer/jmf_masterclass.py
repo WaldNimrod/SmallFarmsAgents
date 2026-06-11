@@ -212,7 +212,8 @@ _KEEP_CROP_IDENTITY: dict[str, dict[str, str]] = {
     "סלרי שורש":      {"name_en": "Celeriac",         "sibling_name_he": "סלרי",   "sibling_family": "Apiaceae"},
     "כרוב סיני":      {"name_en": "Chinese Cabbage",  "sibling_name_he": "כרוב",   "sibling_family": "Brassicaceae"},
     "פלפל חריף":      {"name_en": "Hot Pepper",       "sibling_name_he": "פלפל",   "sibling_family": "Solanaceae"},
-    "עגבניות מורשת":  {"name_en": "Heirloom Tomato",  "sibling_name_he": "עגבנייה", "sibling_family": "Solanaceae"},
+    # team_00 2026-06-10: עגבניות מורשת (Heirloom Tomato) is a variety-type, NOT a
+    # separate crop — resolves to canonical 'עגבנייה' via JMF_CROP_MAP (no keep entry).
     "כרוב ניצנים":    {"name_en": "Brussels Sprouts", "sibling_name_he": "כרוב",   "sibling_family": "Brassicaceae"},
 }
 

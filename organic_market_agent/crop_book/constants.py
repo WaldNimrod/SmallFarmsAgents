@@ -298,7 +298,7 @@ JMF_CROP_MAP: dict[str, str] = {
     # ── Tomato variants (all Solanum lycopersicum at species level) ──
     # patch06: Roma Tomato (cultivar) removed — variety data in crop_varieties
     "Greenhouse Cherry Tomato":     "עגבניית שרי",  # protected-culture cherry — patch03: split from עגבנייה umbrella
-    "Greenhouse Heirloom Tomato":   "עגבניות מורשת", # protected-culture heirloom — patch03: split from עגבנייה umbrella
+    "Greenhouse Heirloom Tomato":   "עגבנייה", # team_00 2026-06-10: heirloom is a variety-type of tomato → resolve to canonical 'עגבנייה' (do NOT split into 'עגבניות מורשת')
 
     # ── Cucumber variants ──
     # patch06: Greenhouse English Cucumber + Greenhouse Libanese Cucumber removed (cultivars)
