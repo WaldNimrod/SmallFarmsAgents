@@ -515,3 +515,10 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
    bare .cb-var__star-gi stars. */
 .cb-var__star .gi{ width:1em; height:1em; }
 .cb-var__star-gi{ width:15px; height:15px; color:var(--gj-sun); vertical-align:-0.16em; }
+
+/* ── home hero · watercolor crop collage (WP-CB-UI-MOCKUP-FIDELITY, team_35 Step-2) ── */
+.hub-intro__collage{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; flex:0 0 clamp(220px,32%,320px); }
+.hub-intro__collage span{ aspect-ratio:1; border-radius:var(--r-m); background:radial-gradient(circle at 50% 40%,#fff,#eef4ee); display:grid; place-items:center; overflow:hidden; box-shadow:var(--sh-s); }
+.hub-intro__collage img{ width:78%; height:78%; object-fit:contain; }
+.hub-intro__stats{ margin-top:14px; }
+@media(max-width:680px){ .hub-intro__collage{ flex-basis:100%; } }

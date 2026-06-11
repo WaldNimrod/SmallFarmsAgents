@@ -49,8 +49,14 @@ $fstate = static fn (string $k) => strtoupper((string)($cb[$k]['field_state'] ??
 // "min–max" across varieties when ≥2 differ, else the single best value.
 $frange = static function (string $k) use ($cb, $ranges, $nf) {
     $r = $ranges[$k] ?? null;
-    if (is_array($r) && (int)($r['count'] ?? 0) >= 2 && (float)$r['min'] !== (float)$r['max']) {
-        return $nf($r['min']) . '–' . $nf($r['max']);
+    $rmin = is_array($r) ? ($r['min'] ?? null) : null;
+    $rmax = is_array($r) ? ($r['max'] ?? null) : null;
+    // Render "min–max" only when BOTH ends are present (else a missing side
+    // produced a stray "–80"); otherwise fall through to the single best value.
+    if (is_array($r) && (int)($r['count'] ?? 0) >= 2
+        && $rmin !== null && $rmin !== '' && $rmax !== null && $rmax !== ''
+        && (float)$rmin !== (float)$rmax) {
+        return $nf($rmin) . '–' . $nf($rmax);
     }
     $v = $cb[$k]['value_best'] ?? null;
     return ($v === null || $v === '') ? null : $nf($v);
@@ -436,7 +442,7 @@ ob_start();
     <div class="relrow">
       <?php foreach ($related as $r): $rslug = (string)($r['slug'] ?? ''); ?>
         <a class="relcard" href="/crop-book/<?= $h($rslug) ?>/">
-          <div class="ph"><span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-leaf"/></svg></span></div>
+          <div class="ph"><?php $rwc = \SFA\Lib\CropArt::file($rslug); if ($rwc !== null): ?><img src="/public_assets/img/crops/<?= $h($rwc) ?>" alt="" loading="lazy" decoding="async"><?php else: ?><span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-leaf"/></svg></span><?php endif; ?></div>
           <div class="nm"><?= $h((string)($r['name_he'] ?? '')) ?></div>
           <?php if (!empty($r['fam_he'])): ?><span class="tag" style="margin-top:6px"><?= $h((string)$r['fam_he']) ?></span><?php endif; ?>
         </a>
