@@ -156,7 +156,7 @@ ob_start();
           <tr>
             <td><div class="t-name"><a href="/crop-book/<?= $h($cslug) ?>/"><?= $h((string)($c['name_he'] ?? '')) ?></a>
               <?php if (!empty($c['en_name'])): ?><em dir="ltr"><?= $h((string)$c['en_name']) ?></em><?php endif; ?></div></td>
-            <td class="t-fam"><?= $h((string)($c['family_tag_he'] ?: $c['category'])) ?></td>
+            <td class="t-fam"><?= $h((string)($c['family_tag_he'] ?: ($c['category_he'] ?? $c['category']))) ?></td>
             <td><?= !empty($c['dtm_days']) ? '<span class="num">' . (int)$c['dtm_days'] . '</span>' : '—' ?></td>
             <td><?= !empty($c['in_season']) ? 'כן' : '—' ?></td>
             <td><?php if ($pr): ?><span class="num">₪<?= $h(number_format($pr['price'], 1)) ?></span><?php elseif ($est): ?><span class="num est">₪<?= $h(number_format($est['price_min'], 1)) ?><?= $est['price_max'] > $est['price_min'] ? '–' . $h(number_format($est['price_max'], 1)) : '' ?></span> <small class="est">מוערך</small><?php else: ?>—<?php endif; ?></td>
@@ -173,7 +173,7 @@ ob_start();
         $act   = (string)($c['in_season_activity'] ?? '');
         $pr    = $prices[$cslug] ?? null;
         $est   = $estimates[$cslug] ?? null; // AC-1.2 estimated range (only when no live price)
-        $fam   = (string)($c['family_tag_he'] ?: $c['category']);
+        $fam   = (string)($c['family_tag_he'] ?: ($c['category_he'] ?? $c['category']));
       ?>
       <a class="cc" href="/crop-book/<?= $h($cslug) ?>/">
         <div class="cc__art">

@@ -383,6 +383,18 @@ final class FieldRegistry
             'g'               => 'גר׳',
             'kg/m'            => 'ק״ג/מ׳',
             'ק״ג/מ׳'          => 'ק״ג/מ׳',
+            // WP-FINAL-QA: live market product units (products.unit) — must render Hebrew
+            // on the ₪ "בשוק" chip (book index card + crop page). Tokens from the live
+            // products table: kg / bunch / unit / basket_{small,medium,large}.
+            'bunch'           => 'צרור',
+            'unit'            => 'יחידה',
+            'each'            => 'יחידה',
+            'head'            => 'ראש',
+            'bundle'          => 'אגודה',
+            'basket'          => 'סל',
+            'basket_small'    => 'סל קטן',
+            'basket_medium'   => 'סל בינוני',
+            'basket_large'    => 'סל גדול',
         ];
         if ($unit === '') {
             return '';

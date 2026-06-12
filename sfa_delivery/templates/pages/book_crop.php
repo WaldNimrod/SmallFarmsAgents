@@ -114,6 +114,8 @@ $has_calendar = !empty($sowM) || !empty($transM) || !empty($harvestM);
 
 // market chip
 $mlink = is_array($crop['market_link'] ?? null) ? $crop['market_link'] : null;
+// WP-FINAL-QA: live ₪ chip unit in Hebrew (kg→ק״ג, bunch→צרור, unit→יחידה); fall back to ק״ג.
+$mlUnit = ($mlink && (string)($mlink['unit_he'] ?? '') !== '') ? (string)$mlink['unit_he'] : 'ק״ג';
 
 // WP-CB-MARKET-RANGES: estimated market range (multi-engine research aggregate).
 // The flat price_* fields ARE the PRIMARY basis — organic for most crops (SFA teaches
@@ -224,7 +226,7 @@ ob_start();
           <span class="tag"><svg class="gi" aria-hidden="true"><use href="#i-snow"/></svg> <?= $h($frost_lbl[(string)$frost]) ?></span>
         <?php endif; ?>
         <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
-          <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג ←</a>
+          <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/<?= $h($mlUnit) ?> ←</a>
         <?php elseif ($mestHas): ?>
           <span class="mktchip mktchip--est"<?= $mestNote !== '' ? ' title="' . $h($mestNote) . '"' : '' ?>><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> מחיר מוערך: <span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?>/<?= $h($mu) ?><?php endif; ?><?php if ((float)($mest['price_median'] ?? 0) > 0): ?> · חציון <span class="num">₪<?= $h($nf($mest['price_median'])) ?></span><?php endif; ?></span>
         <?php endif; ?>
@@ -413,11 +415,11 @@ ob_start();
 
     <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
     <details class="topic">
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג</b> · ממדד השוק</span><span class="chev">▾</span></summary>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/<?= $h($mlUnit) ?></b> · ממדד השוק</span><span class="chev">▾</span></summary>
       <div class="topic__body">
         <div class="drill">▾ עומק נוסף</div>
         <div class="profit">
-          <div><div class="muted" style="font-size:13px">מחיר נוכחי במדד השוק הקהילתי</div><div class="profit__big"><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span> / ק״ג</div></div>
+          <div><div class="muted" style="font-size:13px">מחיר נוכחי במדד השוק הקהילתי</div><div class="profit__big"><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span> / <?= $h($mlUnit) ?></div></div>
           <div style="flex:1"></div>
           <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
         </div>

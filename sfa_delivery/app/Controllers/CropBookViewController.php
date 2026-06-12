@@ -198,6 +198,9 @@ final class CropBookViewController
                 'icon_url'         => (string)($payload['icon_url'] ?? ''),
                 'family_tag_he'    => (string)($payload['family_tag_he'] ?? ''),
                 'category'         => (string)($row['category'] ?? ''),
+                // WP-FINAL-QA: Hebrew category label for the card tag fallback (when
+                // family_tag_he is empty) — never leak the raw English enum (vegetables…).
+                'category_he'      => FieldRegistry::enumLabel('category', (string)($row['category'] ?? '')),
                 'dtm_days'         => $dtm,
                 'in_season'        => $inSeasonAct !== '',
                 'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
@@ -246,7 +249,8 @@ final class CropBookViewController
                 $bySlug = [];
                 $byName = [];
                 foreach ($pst->fetchAll() as $pr) {
-                    $entry = ['price' => (float)$pr['last_price'], 'unit' => (string)($pr['unit'] ?? '')];
+                    // WP-FINAL-QA: Hebrew unit on the live ₪ chip (kg→ק״ג, bunch→צרור, unit→יחידה).
+                    $entry = ['price' => (float)$pr['last_price'], 'unit' => FieldRegistry::unitLabel((string)($pr['unit'] ?? ''))];
                     if (($s = (string)($pr['slug'] ?? '')) !== '')        { $bySlug[$s] = $entry; }
                     if (($n = (string)($pr['hebrew_name'] ?? '')) !== '') { $byName[$n] = $entry; }
                 }
@@ -608,14 +612,25 @@ final class CropBookViewController
             static fn ($n) => is_array($n) && empty($n['is_internal_farm_use_only'])
         ));
 
-        // Best-effort market_link: only attach when a matching product exists.
-        $marketStmt = $this->pdo->prepare('SELECT slug, hebrew_name, last_price FROM products WHERE slug = ? LIMIT 1');
-        $marketStmt->execute([$slug]);
+        // Best-effort market_link: attach when a matching product exists. WP-FINAL-QA
+        // BLOCKER fix: resolve a product by slug OR Hebrew name — the SAME linkage the
+        // index (entry()) and MarketViewController use. Production product slugs are an
+        // OMA namespace that rarely matches crop slugs, so the old slug-only query left
+        // ~26 crops showing "מחיר מוערך" on their page while the index showed a live
+        // "בשוק" price — an inconsistency. Slug match wins, else the Hebrew-name match.
+        $cropHe = (string)($crop['name_he'] ?? ($crop['hebrew_name'] ?? ''));
+        $marketStmt = $this->pdo->prepare(
+            'SELECT slug, hebrew_name, last_price, unit FROM products
+             WHERE last_price IS NOT NULL AND (slug = ? OR hebrew_name = ?)
+             ORDER BY (slug = ?) DESC LIMIT 1'
+        );
+        $marketStmt->execute([$slug, $cropHe, $slug]);
         $marketRow = $marketStmt->fetch();
         if ($marketRow) {
             $crop['market_link'] = [
                 'slug'          => (string)($marketRow['slug'] ?? $slug),
                 'price_current' => (float)($marketRow['last_price'] ?? 0.0),
+                'unit_he'       => FieldRegistry::unitLabel((string)($marketRow['unit'] ?? '')),
                 'source_count'  => 0, // aggregate not joined here; template tolerates 0.
             ];
         }
