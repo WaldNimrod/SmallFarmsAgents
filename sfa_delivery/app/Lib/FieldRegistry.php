@@ -261,6 +261,7 @@ final class FieldRegistry
             'vegetables'        => 'ירקות',
             'herbs'             => 'עשבי תיבול',
             'fruits'            => 'פירות',
+            'fruit_trees'       => 'עצי פרי',
             'legumes'           => 'קטניות',
             'grains'            => 'דגנים',
             'flowers'           => 'פרחים',
