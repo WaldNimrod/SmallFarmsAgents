@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "jerusalem-artichokes",
+    "hebrew_name": "ארטישוק ירושלמי",
+    "market_estimate": {
+      "price_min": 15.9,
+      "price_max": 15.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שופרסל גרין",
+      "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090706",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "turmeric",
+    "hebrew_name": "כורכום",
+    "market_estimate": {
+      "price_min": 13.0,
+      "price_max": 20.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "משק כישורית; שופרסל גרין",
+      "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090867",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "leeks",
+    "hebrew_name": "כרישה",
+    "market_estimate": {
+      "price_min": 15.92,
+      "price_max": 20.9,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שופרסל גרין; זמורה אורגני; טבע קסטל",
+      "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "beets",
+    "hebrew_name": "סלק",
+    "market_estimate": {
+      "price_min": 9.95,
+      "price_max": 13.9,
+      "unit": "מארז 500 גרם",
+      "organic": true,
+      "source": "שופרסל / CHP",
+      "source_url": "https://chp.co.il/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "celery",
+    "hebrew_name": "סלרי",
+    "market_estimate": {
+      "price_min": 12.9,
+      "price_max": 13.9,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שופרסל גרין; פרייסז",
+      "source_url": "https://www.pricez.co.il/Product/74383/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "radishes",
+    "hebrew_name": "צנונית",
+    "market_estimate": {
+      "price_min": 11.9,
+      "price_max": 13.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שופרסל גרין; רמב\"ם אורגניק",
+      "source_url": "https://rambam-medicine.org.il/organic/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "kohlrabi",
+    "hebrew_name": "קולורבי",
+    "market_estimate": {
+      "price_min": 14.9,
+      "price_max": 14.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "משק זינגר",
+      "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "kale",
+    "hebrew_name": "קייל",
+    "market_estimate": {
+      "price_min": 13.9,
+      "price_max": 14.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "פרייסז (יבולי בר); כרמלה",
+      "source_url": "https://www.pricez.co.il/Product/270523/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "garlic",
+    "hebrew_name": "שום",
+    "market_estimate": {
+      "price_min": 68.0,
+      "price_max": 68.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "משק כישורית",
+      "source_url": "https://www.meshek-kishorit.org/items/3799927",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "dill",
+    "hebrew_name": "שמיר",
+    "market_estimate": {
+      "price_min": 7.45,
+      "price_max": 11.9,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "משק זינגר; כרמלה; שופרסל",
+      "source_url": "https://www.carmella.co.il/product/%D7%A9%D7%9E%D7%99%D7%A8-%D7%90%D7%A8%D7%95%D7%96/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "spinach",
+    "hebrew_name": "תרד",
+    "market_estimate": {
+      "price_min": 9.95,
+      "price_max": 13.9,
+      "unit": "מארז / יחידה",
+      "organic": true,
+      "source": "פרייסז (יבולי בר); טבע קסטל",
+      "source_url": "https://www.pricez.co.il/Product/270853/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "new-zealand-spinach",
+    "hebrew_name": "תרד ניו-זילנד",
+    "market_estimate": {
+      "price_min": 14.9,
+      "price_max": 14.9,
+      "unit": "מארז 200 גרם",
+      "organic": true,
+      "source": "רמב\"ם אורגניק",
+      "source_url": "https://rambam-medicine.org.il/organic/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "turnips",
+    "hebrew_name": "לפת",
+    "market_estimate": {
+      "price_min": 10.9,
+      "price_max": 13.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "משק זינגר; זמורה אורגני",
+      "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "strawberry",
+    "hebrew_name": "תות שדה",
+    "market_estimate": {
+      "price_min": 21.9,
+      "price_max": 29.9,
+      "unit": "מארז 250 גרם",
+      "organic": true,
+      "source": "זמורה אורגני; משק זינגר; וולט",
+      "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "bush-pole",
+    "hebrew_name": "שעועית",
+    "market_estimate": {
+      "price_min": 10.0,
+      "price_max": 15.9,
+      "unit": "מארז קפוא 500 גרם",
+      "organic": true,
+      "source": "ליב (פרייסז); לקט השדה",
+      "source_url": "https://www.pricez.co.il/Supplier/1361/%D7%9C%D7%99%D7%91",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  }
+]

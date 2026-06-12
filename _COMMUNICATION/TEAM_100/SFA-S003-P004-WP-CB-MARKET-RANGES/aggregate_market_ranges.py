@@ -18,7 +18,7 @@ Each merged estimate: robust outlier trim (drop a source whose midpoint > 3x the
 restaurant-menu price), unit-normalized, with engines/basis/confidence. team_80 = advisory research;
 team_100 reviews, then ingests via WP-CB-DATA-API (incremental, validated — NO seed --all).
 """
-import json, os, glob, sys
+import json, os, glob, sys, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INPUTS = os.path.join(HERE, "research_inputs")
@@ -54,18 +54,26 @@ def norm_unit(u):
 CONF_RANK = {"high": 3, "medium": 2, "medium-high": 2, "low": 1, "": 0}
 
 def summarize(sources):
-    """Merge a list of per-source dicts into one estimate, with robust high-outlier trim."""
+    """Merge per-source dicts into one estimate. The headline range uses the DOMINANT unit only
+    (₪/kg can't be averaged with ₪/package), then trims a high outlier (>3x the cheapest) within it."""
     if not sources:
         return None
-    mids = sorted((s["price_min"] + s["price_max"]) / 2 for s in sources)
-    floor = mids[0]
-    pool = [s for s in sources if (s["price_min"] + s["price_max"]) / 2 <= 3 * floor] or sources
+    from collections import Counter
+    unit_counts = Counter(s["unit"] for s in sources if s["unit"])
+    if unit_counts:
+        # dominant = most sources; tie-break prefers ק״ג, then יחידה (the canonical retail units)
+        dom_unit = max(unit_counts, key=lambda u: (unit_counts[u], 2 if u == 'ק״ג' else (1 if u == 'יחידה' else 0)))
+        pool0 = [s for s in sources if s["unit"] == dom_unit]
+    else:
+        dom_unit, pool0 = "", sources
+    mids = sorted((s["price_min"] + s["price_max"]) / 2 for s in pool0)
+    floor = mids[0] if mids else 0
+    pool = [s for s in pool0 if floor == 0 or (s["price_min"] + s["price_max"]) / 2 <= 3 * floor] or pool0
     excluded = [s for s in sources if s not in pool]
     rmin = min(s["price_min"] for s in pool)
     rmax = max(s["price_max"] for s in pool)
-    pu = [s["unit"] for s in pool if s["unit"]]
-    unit = max(set(pu), key=pu.count) if pu else ""
-    units_all = sorted({s["unit"] for s in pool if s["unit"]})
+    unit = dom_unit
+    units_all = sorted(unit_counts.keys() - {dom_unit})  # alternative units seen (other packaging)
     engines = sorted({s["engine"] for s in pool})
     bases = sorted({s["basis"] for s in pool})
     if len(engines) >= 2:
@@ -78,8 +86,8 @@ def summarize(sources):
         "price_min": round(rmin, 2), "price_max": round(rmax, 2), "unit": unit,
         "basis": "/".join(bases), "confidence": conf, "engines": engines, "n_sources": len(pool),
     }
-    if len(units_all) > 1:
-        out["unit_options"] = units_all
+    if units_all:
+        out["unit_options"] = units_all  # other packaging seen (e.g. ₪/package vs the dominant ₪/kg)
     if excluded:
         out["outlier_excluded"] = [f"{s['engine']}@₪{s['price_max']}" for s in excluded]
     return out
@@ -96,7 +104,8 @@ def main():
         print("No engine reports in research_inputs/."); return
 
     by_slug, he_name, unknown = {}, {}, set()
-    for engine, rows in reports.items():
+    for engine_file, rows in reports.items():
+        engine = re.split(r'[-_]', engine_file)[0]  # base engine (gemini-round2_* → gemini) — no double-count
         for row in rows:
             slug = (row.get("slug") or "").strip()
             me = row.get("market_estimate") or {}

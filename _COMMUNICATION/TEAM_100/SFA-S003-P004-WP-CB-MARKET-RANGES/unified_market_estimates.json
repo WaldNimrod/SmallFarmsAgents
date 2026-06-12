@@ -10,8 +10,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -22,14 +22,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.0,
         "price_max": 4.5,
         "unit": "ק״ג",
@@ -41,7 +41,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 5.0,
         "price_max": 7.0,
         "unit": "ק״ג",
@@ -53,7 +53,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 13.9,
         "price_max": 13.9,
         "unit": "ק״ג",
@@ -78,7 +78,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -87,7 +87,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 19.9,
         "price_max": 19.9,
         "unit": "חבילה 1 ק״ג",
@@ -112,7 +112,7 @@
       "basis": "retail",
       "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -121,7 +121,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 23.0,
         "price_max": 29.0,
         "unit": "מארז 125 גרם",
@@ -145,7 +145,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -155,7 +155,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 17.0,
         "price_max": 17.0,
         "unit": "צרור",
@@ -179,7 +179,7 @@
       "basis": "retail",
       "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -189,7 +189,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 13.3,
         "price_max": 14.0,
         "unit": "חבילה 500 גרם",
@@ -213,7 +213,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -223,7 +223,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.0,
         "price_max": 7.0,
         "unit": "מארז",
@@ -242,17 +242,20 @@
     "primary": "conventional",
     "organic": null,
     "conventional": {
-      "price_min": 3.0,
-      "price_max": 3.0,
-      "unit": "יחידה",
+      "price_min": 6.9,
+      "price_max": 39.9,
+      "unit": "ק״ג",
       "basis": "wholesale",
-      "confidence": "low",
+      "confidence": "medium",
       "engines": [
-        "gemini_2026-06-12"
+        "openai"
       ],
       "n_sources": 1,
+      "unit_options": [
+        "יחידה"
+      ],
       "outlier_excluded": [
-        "openai_2026-06-12@₪39.9"
+        "gemini@₪3.0"
       ]
     },
     "_flags": [
@@ -260,7 +263,7 @@
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.0,
         "price_max": 3.0,
         "unit": "יחידה",
@@ -272,7 +275,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.9,
         "price_max": 39.9,
         "unit": "ק״ג",
@@ -290,23 +293,42 @@
     "hebrew_name": "ארטישוק ירושלמי",
     "primary": "organic",
     "organic": {
-      "price_min": 22.5,
-      "price_max": 22.5,
-      "unit": "יחידה 400 גרם",
+      "price_min": 15.9,
+      "price_max": 15.9,
+      "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "יחידה 400 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪22.5"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה 400 גרם"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 15.9,
+        "price_max": 15.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שופרסל גרין",
+        "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090706",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 22.5,
         "price_max": 22.5,
         "unit": "יחידה 400 גרם",
@@ -325,27 +347,29 @@
     "primary": "organic",
     "organic": {
       "price_min": 6.0,
-      "price_max": 11.0,
-      "unit": "צרור",
+      "price_max": 6.0,
+      "unit": "יחידה",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "יחידה",
         "צרור"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪11.0"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:יחידה/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.0,
         "price_max": 6.0,
         "unit": "יחידה",
@@ -357,7 +381,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 7.9,
         "price_max": 11.0,
         "unit": "צרור",
@@ -381,8 +405,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -393,14 +417,14 @@
       "basis": "wholesale",
       "confidence": "medium",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.0,
         "price_max": 9.5,
         "unit": "ק״ג",
@@ -412,7 +436,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 14.5,
         "price_max": 19.6,
         "unit": "ק״ג",
@@ -424,7 +448,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 12.0,
         "price_max": 18.9,
         "unit": "ק״ג",
@@ -449,7 +473,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -458,7 +482,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 19.5,
         "price_max": 19.5,
         "unit": "חבילה 1 ק״ג",
@@ -482,8 +506,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -494,14 +518,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 1.93,
         "price_max": 3.0,
         "unit": "ק״ג",
@@ -513,7 +537,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.5,
         "price_max": 13.5,
         "unit": "ק״ג",
@@ -525,7 +549,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 10.0,
         "price_max": 13.9,
         "unit": "ק״ג",
@@ -543,19 +567,20 @@
     "hebrew_name": "בצל ירוק",
     "primary": "organic",
     "organic": {
-      "price_min": 7.0,
+      "price_min": 8.5,
       "price_max": 8.5,
       "unit": "צרור",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "מארז",
-        "צרור"
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪7.0"
       ]
     },
     "conventional": {
@@ -565,16 +590,17 @@
       "basis": "wholesale",
       "confidence": "medium",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-unit-ambiguity:מארז/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 4.0,
         "price_max": 13.0,
         "unit": "יחידה",
@@ -586,7 +612,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "צרור",
@@ -598,7 +624,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 7.0,
         "price_max": 7.0,
         "unit": "מארז",
@@ -622,8 +648,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -634,14 +660,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 6.5,
         "price_max": 11.0,
         "unit": "ק״ג",
@@ -653,7 +679,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 26.5,
         "price_max": 26.5,
         "unit": "ק״ג",
@@ -665,7 +691,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 26.0,
         "price_max": 26.0,
         "unit": "ק״ג",
@@ -690,7 +716,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -699,7 +725,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 19.5,
         "price_max": 19.5,
         "unit": "יחידה 300 גרם",
@@ -723,9 +749,9 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini",
+        "openai",
+        "perplexity"
       ],
       "n_sources": 3
     },
@@ -733,7 +759,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 7.9,
         "price_max": 13.0,
         "unit": "ק״ג",
@@ -745,7 +771,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 12.5,
         "price_max": 12.5,
         "unit": "ק״ג",
@@ -757,7 +783,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 9.0,
         "price_max": 23.0,
         "unit": "ק״ג",
@@ -781,7 +807,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -791,7 +817,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 11.0,
         "price_max": 11.0,
         "unit": "מארז",
@@ -815,8 +841,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -827,14 +853,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.63,
         "price_max": 5.5,
         "unit": "ק״ג",
@@ -846,7 +872,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 15.5,
         "price_max": 23.5,
         "unit": "ק״ג",
@@ -858,7 +884,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 14.0,
         "price_max": 16.5,
         "unit": "ק״ג",
@@ -882,7 +908,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -892,7 +918,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 10.0,
         "price_max": 10.0,
         "unit": "מארז",
@@ -917,7 +943,7 @@
       "basis": "retail",
       "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -926,7 +952,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.99,
         "price_max": 12.9,
         "unit": "100 גרם",
@@ -950,7 +976,7 @@
       "basis": "wholesale",
       "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -960,7 +986,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 10.9,
         "price_max": 15.9,
         "unit": "חבילה 500 גרם",
@@ -984,7 +1010,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -994,7 +1020,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 11.2,
         "price_max": 11.2,
         "unit": "ק״ג",
@@ -1018,7 +1044,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1028,7 +1054,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 10.0,
         "price_max": 10.0,
         "unit": "חבילה 300 גרם",
@@ -1052,8 +1078,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -1064,14 +1090,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 4.0,
         "price_max": 4.5,
         "unit": "יחידה",
@@ -1083,7 +1109,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.0,
         "price_max": 7.0,
         "unit": "יחידה",
@@ -1095,7 +1121,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 7.5,
         "price_max": 7.9,
         "unit": "יחידה",
@@ -1119,8 +1145,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
       "n_sources": 2
     },
@@ -1128,7 +1154,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 10.0,
         "price_max": 12.0,
         "unit": "ק״ג",
@@ -1140,7 +1166,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.8,
         "price_max": 11.5,
         "unit": "ק״ג",
@@ -1159,27 +1185,29 @@
     "primary": "organic",
     "organic": {
       "price_min": 7.0,
-      "price_max": 9.9,
-      "unit": "צרור",
+      "price_max": 7.0,
+      "unit": "יחידה",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "יחידה",
         "צרור"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪9.9"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:יחידה/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.0,
         "price_max": 7.0,
         "unit": "יחידה",
@@ -1191,7 +1219,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 9.5,
         "price_max": 9.9,
         "unit": "צרור",
@@ -1216,7 +1244,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1225,7 +1253,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.9,
         "price_max": 6.9,
         "unit": "מארז",
@@ -1244,27 +1272,29 @@
     "primary": "organic",
     "organic": {
       "price_min": 6.0,
-      "price_max": 11.9,
+      "price_max": 6.0,
       "unit": "יחידה",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "יחידה",
         "מארז"
+      ],
+      "outlier_excluded": [
+        "gemini@₪11.9"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:יחידה/מארז"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 11.9,
         "price_max": 11.9,
         "unit": "מארז",
@@ -1276,7 +1306,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.0,
         "price_max": 6.0,
         "unit": "יחידה",
@@ -1294,23 +1324,42 @@
     "hebrew_name": "כורכום",
     "primary": "organic",
     "organic": {
-      "price_min": 19.5,
-      "price_max": 19.5,
-      "unit": "חבילה 150 גרם",
+      "price_min": 13.0,
+      "price_max": 20.9,
+      "unit": "מארז",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "חבילה 150 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪19.5"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:חבילה 150 גרם"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 13.0,
+        "price_max": 20.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "משק כישורית; שופרסל גרין",
+        "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090867",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 19.5,
         "price_max": 19.5,
         "unit": "חבילה 150 גרם",
@@ -1329,18 +1378,19 @@
     "primary": "organic",
     "organic": {
       "price_min": 5.5,
-      "price_max": 12.9,
-      "unit": "יחידה",
+      "price_max": 11.5,
+      "unit": "ק״ג",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "medium-high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "יחידה",
-        "ק״ג"
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪12.9"
       ]
     },
     "conventional": {
@@ -1350,16 +1400,17 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-unit-ambiguity:יחידה/ק״ג"
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 1.5,
         "price_max": 4.0,
         "unit": "ק״ג",
@@ -1371,7 +1422,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 5.5,
         "price_max": 11.5,
         "unit": "ק״ג",
@@ -1383,7 +1434,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 12.9,
         "price_max": 12.9,
         "unit": "יחידה",
@@ -1407,8 +1458,8 @@
       "basis": "retail/wholesale",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -1419,14 +1470,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 4.93,
         "price_max": 7.5,
         "unit": "יחידה / ק״ג",
@@ -1438,7 +1489,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 14.9,
         "price_max": 15.9,
         "unit": "ק״ג",
@@ -1450,7 +1501,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 19.0,
         "price_max": 21.0,
         "unit": "ק״ג",
@@ -1468,23 +1519,42 @@
     "hebrew_name": "כרישה",
     "primary": "organic",
     "organic": {
-      "price_min": 12.0,
-      "price_max": 12.0,
-      "unit": "מארז 2 יחידות",
+      "price_min": 15.92,
+      "price_max": 20.9,
+      "unit": "יחידה",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "medium-high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "מארז 2 יחידות"
+      ],
+      "outlier_excluded": [
+        "openai@₪12.0"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז 2 יחידות"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 15.92,
+        "price_max": 20.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שופרסל גרין; זמורה אורגני; טבע קסטל",
+        "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 12.0,
         "price_max": 12.0,
         "unit": "מארז 2 יחידות",
@@ -1509,7 +1579,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1518,7 +1588,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.9,
         "price_max": 7.9,
         "unit": "מארז",
@@ -1542,7 +1612,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1552,7 +1622,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.5,
         "price_max": 9.5,
         "unit": "צרור",
@@ -1576,7 +1646,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1586,7 +1656,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.0,
         "price_max": 9.0,
         "unit": "יחידה",
@@ -1604,15 +1674,16 @@
     "hebrew_name": "לפת",
     "primary": "organic",
     "organic": {
-      "price_min": 13.5,
-      "price_max": 13.5,
+      "price_min": 10.9,
+      "price_max": 13.9,
       "unit": "ק״ג",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 2
     },
     "conventional": {
       "price_min": 5.0,
@@ -1621,16 +1692,26 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
-    "_flags": [
-      "organic-single-source"
-    ],
+    "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 10.9,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר; זמורה אורגני",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
         "price_min": 5.0,
         "price_max": 6.5,
         "unit": "ק״ג",
@@ -1642,7 +1723,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 13.5,
         "price_max": 13.5,
         "unit": "ק״ג",
@@ -1666,8 +1747,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -1678,14 +1759,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.5,
         "price_max": 7.0,
         "unit": "ק״ג",
@@ -1697,7 +1778,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.0,
         "price_max": 9.0,
         "unit": "ק״ג",
@@ -1709,7 +1790,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 14.9,
         "price_max": 14.9,
         "unit": "ק״ג",
@@ -1733,9 +1814,9 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini",
+        "openai",
+        "perplexity"
       ],
       "n_sources": 3
     },
@@ -1743,7 +1824,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 13.0,
         "price_max": 14.0,
         "unit": "ק״ג",
@@ -1755,7 +1836,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 13.5,
         "price_max": 18.5,
         "unit": "ק״ג",
@@ -1767,7 +1848,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 15.9,
         "price_max": 17.9,
         "unit": "ק״ג",
@@ -1785,28 +1866,30 @@
     "hebrew_name": "מנגולד",
     "primary": "organic",
     "organic": {
-      "price_min": 8.5,
+      "price_min": 12.9,
       "price_max": 12.9,
-      "unit": "צרור",
+      "unit": "מארז",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "מארז",
         "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪8.5"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:מארז/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 12.9,
         "price_max": 12.9,
         "unit": "מארז",
@@ -1818,7 +1901,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "צרור",
@@ -1842,7 +1925,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1852,7 +1935,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.0,
         "price_max": 9.0,
         "unit": "יחידה",
@@ -1870,28 +1953,30 @@
     "hebrew_name": "נענע",
     "primary": "organic",
     "organic": {
-      "price_min": 5.0,
+      "price_min": 8.5,
       "price_max": 8.5,
       "unit": "צרור",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "מארז",
-        "צרור"
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪5.0"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:מארז/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "צרור",
@@ -1903,7 +1988,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 5.0,
         "price_max": 5.0,
         "unit": "מארז",
@@ -1927,7 +2012,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -1937,7 +2022,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.7,
         "price_max": 9.7,
         "unit": "חבילה 500 גרם",
@@ -1961,9 +2046,15 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "מארז 500 גרם"
+      ],
+      "outlier_excluded": [
+        "gemini@₪13.9"
+      ]
     },
     "conventional": {
       "price_min": 2.6,
@@ -1972,16 +2063,29 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז 500 גרם"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 9.95,
+        "price_max": 13.9,
+        "unit": "מארז 500 גרם",
+        "organic": true,
+        "source": "שופרסל / CHP",
+        "source_url": "https://chp.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
         "price_min": 2.6,
         "price_max": 4.0,
         "unit": "ק״ג",
@@ -1993,7 +2097,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 12.5,
         "price_max": 12.5,
         "unit": "ק״ג",
@@ -2012,22 +2116,33 @@
     "primary": "organic",
     "organic": {
       "price_min": 8.0,
-      "price_max": 8.0,
+      "price_max": 13.9,
       "unit": "יחידה",
-      "basis": "retail",
-      "confidence": "low",
+      "basis": "retail/wholesale",
+      "confidence": "high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 2
     },
     "conventional": null,
-    "_flags": [
-      "organic-single-source"
-    ],
+    "_flags": [],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 12.9,
+        "price_max": 13.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שופרסל גרין; פרייסז",
+        "source_url": "https://www.pricez.co.il/Product/74383/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
         "price_min": 8.0,
         "price_max": 8.0,
         "unit": "יחידה",
@@ -2051,9 +2166,9 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini",
+        "openai",
+        "perplexity"
       ],
       "n_sources": 3
     },
@@ -2061,7 +2176,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 10.0,
         "price_max": 13.0,
         "unit": "ק״ג",
@@ -2073,7 +2188,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 14.5,
         "price_max": 23.5,
         "unit": "ק״ג",
@@ -2085,7 +2200,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 17.9,
         "price_max": 19.9,
         "unit": "ק״ג",
@@ -2109,9 +2224,9 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini",
+        "openai",
+        "perplexity"
       ],
       "n_sources": 3
     },
@@ -2119,7 +2234,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 21.9,
         "price_max": 29.9,
         "unit": "ק״ג",
@@ -2131,7 +2246,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 26.5,
         "price_max": 27.8,
         "unit": "ק״ג",
@@ -2143,7 +2258,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 24.0,
         "price_max": 26.0,
         "unit": "ק״ג",
@@ -2167,7 +2282,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -2177,7 +2292,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "יחידה",
@@ -2195,19 +2310,20 @@
     "hebrew_name": "עלי בייבי",
     "primary": "organic",
     "organic": {
-      "price_min": 12.9,
+      "price_min": 15.5,
       "price_max": 15.5,
       "unit": "יחידה",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "low",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "perplexity"
       ],
-      "n_sources": 2,
+      "n_sources": 1,
       "unit_options": [
-        "יחידה",
         "מארז"
+      ],
+      "outlier_excluded": [
+        "openai@₪12.9"
       ]
     },
     "conventional": {
@@ -2217,16 +2333,17 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-unit-ambiguity:יחידה/מארז"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 8.9,
         "price_max": 8.9,
         "unit": "מארז",
@@ -2238,7 +2355,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 12.9,
         "price_max": 12.9,
         "unit": "מארז",
@@ -2250,7 +2367,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 15.5,
         "price_max": 15.5,
         "unit": "יחידה",
@@ -2274,8 +2391,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
       "n_sources": 2
     },
@@ -2283,7 +2400,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 16.9,
         "price_max": 16.9,
         "unit": "יחידה",
@@ -2295,7 +2412,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 7.0,
         "price_max": 7.0,
         "unit": "יחידה",
@@ -2319,7 +2436,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -2329,7 +2446,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 4.9,
         "price_max": 4.9,
         "unit": "100 גרם",
@@ -2351,26 +2468,28 @@
       "price_max": 11.9,
       "unit": "מארז / צרור",
       "basis": "retail",
-      "confidence": "high",
+      "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 3,
+      "n_sources": 1,
       "unit_options": [
         "מארז",
-        "מארז / צרור",
         "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪5.0",
+        "perplexity@₪5.5"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:מארז/מארז / צרור/צרור"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז/צרור"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 4.9,
         "price_max": 11.9,
         "unit": "מארז / צרור",
@@ -2382,7 +2501,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 5.0,
         "price_max": 5.0,
         "unit": "מארז",
@@ -2394,7 +2513,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 5.5,
         "price_max": 5.5,
         "unit": "צרור",
@@ -2418,8 +2537,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -2430,14 +2549,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 5.0,
         "price_max": 11.5,
         "unit": "ק״ג",
@@ -2449,7 +2568,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.5,
         "price_max": 24.5,
         "unit": "ק״ג",
@@ -2461,7 +2580,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 12.9,
         "price_max": 20.9,
         "unit": "ק״ג",
@@ -2486,7 +2605,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -2495,7 +2614,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 36.0,
         "price_max": 36.0,
         "unit": "מארז 115 גרם",
@@ -2520,7 +2639,7 @@
       "basis": "retail",
       "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -2529,7 +2648,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 29.9,
         "price_max": 49.9,
         "unit": "מארז 500 גרם",
@@ -2547,15 +2666,21 @@
     "hebrew_name": "צנונית",
     "primary": "organic",
     "organic": {
-      "price_min": 9.5,
-      "price_max": 9.5,
-      "unit": "צרור",
+      "price_min": 11.9,
+      "price_max": 13.9,
+      "unit": "מארז",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪9.5"
+      ]
     },
     "conventional": {
       "price_min": 6.5,
@@ -2564,16 +2689,29 @@
       "basis": "wholesale",
       "confidence": "low",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 11.9,
+        "price_max": 13.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שופרסל גרין; רמב\"ם אורגניק",
+        "source_url": "https://rambam-medicine.org.il/organic/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
         "price_min": 6.5,
         "price_max": 6.5,
         "unit": "ק״ג",
@@ -2585,7 +2723,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.5,
         "price_max": 9.5,
         "unit": "צרור",
@@ -2604,14 +2742,15 @@
     "primary": "organic",
     "organic": {
       "price_min": 8.5,
-      "price_max": 8.5,
+      "price_max": 14.9,
       "unit": "ק״ג",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 2
     },
     "conventional": {
       "price_min": 5.0,
@@ -2620,16 +2759,26 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
-    "_flags": [
-      "organic-single-source"
-    ],
+    "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
         "price_min": 5.0,
         "price_max": 6.5,
         "unit": "ק״ג",
@@ -2641,7 +2790,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "ק״ג",
@@ -2660,25 +2809,41 @@
     "primary": "organic",
     "organic": {
       "price_min": 8.0,
-      "price_max": 8.0,
+      "price_max": 14.9,
       "unit": "מארז",
-      "basis": "retail",
-      "confidence": "low",
+      "basis": "retail/wholesale",
+      "confidence": "high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
-      "n_sources": 1,
+      "n_sources": 2,
+      "unit_options": [
+        "ק״ג"
+      ],
       "outlier_excluded": [
-        "perplexity_2026-06-12@₪64.86"
+        "perplexity@₪64.86"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-unit-ambiguity:ק״ג"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 13.9,
+        "price_max": 14.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "פרייסז (יבולי בר); כרמלה",
+        "source_url": "https://www.pricez.co.il/Product/270523/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
         "price_min": 8.0,
         "price_max": 8.0,
         "unit": "מארז",
@@ -2690,7 +2855,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 64.86,
         "price_max": 64.86,
         "unit": "ק״ג",
@@ -2714,8 +2879,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -2726,14 +2891,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.0,
         "price_max": 7.5,
         "unit": "ק״ג",
@@ -2745,7 +2910,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 15.5,
         "price_max": 18.5,
         "unit": "ק״ג",
@@ -2757,7 +2922,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 14.0,
         "price_max": 16.0,
         "unit": "ק״ג",
@@ -2775,15 +2940,21 @@
     "hebrew_name": "שום",
     "primary": "organic",
     "organic": {
-      "price_min": 17.5,
-      "price_max": 17.5,
-      "unit": "חבילה 200 גרם",
+      "price_min": 68.0,
+      "price_max": 68.0,
+      "unit": "ק״ג",
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "חבילה 200 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪17.5"
+      ]
     },
     "conventional": {
       "price_min": 5.33,
@@ -2792,16 +2963,29 @@
       "basis": "wholesale",
       "confidence": "medium",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:חבילה 200 גרם"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 68.0,
+        "price_max": 68.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק כישורית",
+        "source_url": "https://www.meshek-kishorit.org/items/3799927",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
         "price_min": 5.33,
         "price_max": 18.0,
         "unit": "ק״ג",
@@ -2813,7 +2997,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 17.5,
         "price_max": 17.5,
         "unit": "חבילה 200 גרם",
@@ -2837,8 +3021,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -2849,14 +3033,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 4.5,
         "price_max": 8.0,
         "unit": "ק״ג",
@@ -2868,7 +3052,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 8.5,
         "price_max": 8.5,
         "unit": "ק״ג",
@@ -2880,7 +3064,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 6.0,
         "price_max": 11.5,
         "unit": "ק״ג",
@@ -2904,7 +3088,7 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
       "n_sources": 1
     },
@@ -2914,7 +3098,7 @@
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 13.9,
         "price_max": 13.9,
         "unit": "חבילה 500 גרם",
@@ -2933,14 +3117,15 @@
     "primary": "organic",
     "organic": {
       "price_min": 6.0,
-      "price_max": 6.0,
+      "price_max": 11.9,
       "unit": "יחידה",
       "basis": "retail",
-      "confidence": "low",
+      "confidence": "high",
       "engines": [
-        "openai_2026-06-12"
+        "gemini",
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 2
     },
     "conventional": {
       "price_min": 3.0,
@@ -2949,16 +3134,26 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "perplexity_2026-06-12"
+        "perplexity"
       ],
       "n_sources": 1
     },
-    "_flags": [
-      "organic-single-source"
-    ],
+    "_flags": [],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 7.45,
+        "price_max": 11.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "משק זינגר; כרמלה; שופרסל",
+        "source_url": "https://www.carmella.co.il/product/%D7%A9%D7%9E%D7%99%D7%A8-%D7%90%D7%A8%D7%95%D7%96/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 6.0,
         "price_max": 6.0,
         "unit": "יחידה",
@@ -2970,7 +3165,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 3.0,
         "price_max": 3.0,
         "unit": "צרור",
@@ -2988,15 +3183,21 @@
     "hebrew_name": "שעועית",
     "primary": "organic",
     "organic": {
-      "price_min": 22.5,
-      "price_max": 22.5,
-      "unit": "חבילה 300 גרם",
-      "basis": "retail",
-      "confidence": "low",
+      "price_min": 10.0,
+      "price_max": 15.9,
+      "unit": "מארז קפוא 500 גרם",
+      "basis": "wholesale",
+      "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "חבילה 300 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪22.5"
+      ]
     },
     "conventional": {
       "price_min": 15.0,
@@ -3005,16 +3206,29 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:חבילה 300 גרם"
     ],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
+        "price_min": 10.0,
+        "price_max": 15.9,
+        "unit": "מארז קפוא 500 גרם",
+        "organic": true,
+        "source": "ליב (פרייסז); לקט השדה",
+        "source_url": "https://www.pricez.co.il/Supplier/1361/%D7%9C%D7%99%D7%91",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "gemini",
         "price_min": 15.0,
         "price_max": 16.0,
         "unit": "ק״ג",
@@ -3026,7 +3240,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 22.5,
         "price_max": 22.5,
         "unit": "חבילה 300 גרם",
@@ -3050,17 +3264,36 @@
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "openai"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "מארז 250 גרם"
+      ],
+      "outlier_excluded": [
+        "gemini@₪29.9"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז 250 גרם"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 21.9,
+        "price_max": 29.9,
+        "unit": "מארז 250 גרם",
+        "organic": true,
+        "source": "זמורה אורגני; משק זינגר; וולט",
+        "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 19.0,
         "price_max": 19.0,
         "unit": "ק״ג",
@@ -3084,8 +3317,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -3096,14 +3329,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 5.5,
         "price_max": 7.5,
         "unit": "מארז",
@@ -3115,7 +3348,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 17.5,
         "price_max": 17.5,
         "unit": "ק״ג",
@@ -3127,7 +3360,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 13.0,
         "price_max": 13.0,
         "unit": "ק״ג",
@@ -3151,8 +3384,8 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "openai",
+        "perplexity"
       ],
       "n_sources": 2
     },
@@ -3163,14 +3396,14 @@
       "basis": "wholesale",
       "confidence": "medium-high",
       "engines": [
-        "gemini_2026-06-12"
+        "gemini"
       ],
       "n_sources": 1
     },
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 3.0,
         "price_max": 4.88,
         "unit": "ק״ג",
@@ -3182,7 +3415,7 @@
         "basis": "wholesale"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 9.5,
         "price_max": 9.5,
         "unit": "ק״ג",
@@ -3194,7 +3427,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 15.9,
         "price_max": 15.9,
         "unit": "ק״ג",
@@ -3218,9 +3451,9 @@
       "basis": "retail",
       "confidence": "high",
       "engines": [
-        "gemini_2026-06-12",
-        "openai_2026-06-12",
-        "perplexity_2026-06-12"
+        "gemini",
+        "openai",
+        "perplexity"
       ],
       "n_sources": 3
     },
@@ -3228,7 +3461,7 @@
     "_flags": [],
     "_sources": [
       {
-        "engine": "gemini_2026-06-12",
+        "engine": "gemini",
         "price_min": 9.9,
         "price_max": 9.9,
         "unit": "ק״ג",
@@ -3240,7 +3473,7 @@
         "basis": "retail"
       },
       {
-        "engine": "openai_2026-06-12",
+        "engine": "openai",
         "price_min": 6.5,
         "price_max": 15.5,
         "unit": "ק״ג",
@@ -3252,7 +3485,7 @@
         "basis": "retail"
       },
       {
-        "engine": "perplexity_2026-06-12",
+        "engine": "perplexity",
         "price_min": 9.0,
         "price_max": 19.0,
         "unit": "ק״ג",
@@ -3270,23 +3503,42 @@
     "hebrew_name": "תרד",
     "primary": "organic",
     "organic": {
-      "price_min": 13.9,
+      "price_min": 9.95,
       "price_max": 13.9,
-      "unit": "יחידה 190 גרם",
-      "basis": "retail",
-      "confidence": "low",
+      "unit": "מארז / יחידה",
+      "basis": "wholesale",
+      "confidence": "medium",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "יחידה 190 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪13.9"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה 190 גרם"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 9.95,
+        "price_max": 13.9,
+        "unit": "מארז / יחידה",
+        "organic": true,
+        "source": "פרייסז (יבולי בר); טבע קסטל",
+        "source_url": "https://www.pricez.co.il/Product/270853/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
         "price_min": 13.9,
         "price_max": 13.9,
         "unit": "יחידה 190 גרם",
@@ -3304,23 +3556,42 @@
     "hebrew_name": "תרד ניו-זילנד",
     "primary": "organic",
     "organic": {
-      "price_min": 8.0,
-      "price_max": 8.0,
-      "unit": "מארז",
+      "price_min": 14.9,
+      "price_max": 14.9,
+      "unit": "מארז 200 גרם",
       "basis": "retail",
       "confidence": "low",
       "engines": [
-        "openai_2026-06-12"
+        "gemini"
       ],
-      "n_sources": 1
+      "n_sources": 1,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "openai@₪8.0"
+      ]
     },
     "conventional": null,
     "_flags": [
-      "organic-single-source"
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
     ],
     "_sources": [
       {
-        "engine": "openai_2026-06-12",
+        "engine": "gemini",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "מארז 200 גרם",
+        "organic": true,
+        "source": "רמב\"ם אורגניק",
+        "source_url": "https://rambam-medicine.org.il/organic/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
         "price_min": 8.0,
         "price_max": 8.0,
         "unit": "מארז",
