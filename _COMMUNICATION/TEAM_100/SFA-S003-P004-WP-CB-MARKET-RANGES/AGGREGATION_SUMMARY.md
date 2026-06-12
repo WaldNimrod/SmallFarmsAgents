@@ -1,13 +1,13 @@
 # Aggregation Summary — WP-CB-MARKET-RANGES (organic-primary, dual-basis)
 
-**Engines:** gemini-round2_2026-06-12, gemini_2026-06-12, openai_2026-06-12, perplexity_2026-06-12  ·  **Coverage:** 69/70  ·  **Organic tiers:** STRONG 25 · OK 9 · WEAK 25 · NONE 10
+**Engines:** gemini-round2_2026-06-12, gemini_2026-06-12, openai_2026-06-12, perplexity-round2_2026-06-12, perplexity_2026-06-12  ·  **Coverage:** 69/70  ·  **Organic tiers:** STRONG 27 · OK 10 · WEAK 24 · NONE 8
 
 ## Per crop — ORGANIC (primary) vs conventional (secondary)
 
 | slug | 🌱 organic ₪ | unit | conf | conventional ₪ | unit | flags |
 |------|-------------|------|------|----------------|------|-------|
 | watermelon | 5.0–13.9 | ק״ג | high | 3.0–4.5 | ק״ג |  |
-| edamame | — |  |  | 19.9 | חבילה 1 ק״ג | no-organic-source |
+| edamame | 11.9–14.9 | מארז (מוצר קפוא) | medium | 19.9 | חבילה 1 ק״ג | organic-single-source |
 | blackberry | — |  |  | 23.0–29.0 | מארז 125 גרם | no-organic-source |
 | anise-hyssop | 17.0 | צרור | low | — |  | organic-single-source |
 | peas | 13.3–14.0 | חבילה 500 גרם | medium | — |  | organic-single-source |
@@ -32,12 +32,12 @@
 | lettuce | 6.0–7.9 | יחידה | high | 4.0–4.5 | יחידה |  |
 | eggplant | 8.8–12.0 | ק״ג | high | — |  |  |
 | thyme | 7.0 | יחידה | low | — |  | organic-single-source; organic-unit-ambiguity:צרור |
-| tarragon | — |  |  | 6.9 | מארז | no-organic-source |
+| tarragon | 9.0 | מארז | low | 6.9 | מארז | organic-single-source |
 | cilantro | 6.0 | יחידה | low | — |  | organic-single-source; organic-unit-ambiguity:מארז |
 | turmeric | 13.0–20.9 | מארז | medium | — |  | organic-single-source; organic-unit-ambiguity:חבילה 150 גרם |
 | cabbage | 5.5–11.5 | ק״ג | medium-high | 1.5–4.0 | ק״ג | organic-single-source; organic-unit-ambiguity:יחידה |
 | cauliflower | 14.9–21.0 | ק״ג | high | 4.93–7.5 | יחידה / ק״ג |  |
-| leeks | 15.92–20.9 | יחידה | medium-high | — |  | organic-single-source; organic-unit-ambiguity:מארז 2 יחידות |
+| leeks | 15.92–20.9 | יחידה | medium-high | — |  | organic-single-source; organic-unit-ambiguity:מארז/מארז 2 יחידות |
 | lovage | — |  |  | 7.9 | מארז | no-organic-source |
 | lemon-balm | 9.5 | צרור | low | — |  | organic-single-source |
 | lemon-verbena | 9.0 | יחידה | low | — |  | organic-single-source |
@@ -48,8 +48,8 @@
 | sage | 9.0 | יחידה | low | — |  | organic-single-source |
 | mint | 8.5 | צרור | low | — |  | organic-single-source; organic-unit-ambiguity:מארז |
 | soybean | 9.7 | חבילה 500 גרם | low | — |  | organic-single-source |
-| beets | 12.5 | ק״ג | low | 2.6–4.0 | ק״ג | organic-single-source; organic-unit-ambiguity:מארז 500 גרם |
-| celery | 8.0–13.9 | יחידה | high | — |  |  |
+| beets | 10.0–16.0 | ק״ג | high | 2.6–4.0 | ק״ג | organic-unit-ambiguity:מארז 500 גרם |
+| celery | 8.0–13.9 | יחידה | high | — |  | organic-unit-ambiguity:צרור |
 | tomatoes | 10.0–23.5 | ק״ג | high | — |  |  |
 | cherry-tomato | 21.9–29.9 | ק״ג | high | — |  |  |
 | chives | 8.5 | יחידה | low | — |  | organic-single-source |
@@ -60,25 +60,25 @@
 | peppers | 9.5–24.5 | ק״ג | high | 5.0–11.5 | ק״ג |  |
 | chinese-lantern | — |  |  | 36.0 | מארז 115 גרם | no-organic-source |
 | chicory | — |  |  | 29.9–49.9 | מארז 500 גרם | no-organic-source |
-| radishes | 11.9–13.9 | מארז | medium | 6.5 | ק״ג | organic-single-source; organic-unit-ambiguity:צרור |
+| radishes | 11.9–13.9 | מארז | medium | 6.5 | ק״ג | organic-single-source; organic-unit-ambiguity:מארז 100 גרם/צרור |
 | kohlrabi | 8.5–14.9 | ק״ג | high | 5.0–6.5 | ק״ג |  |
-| kale | 8.0–14.9 | מארז | high | — |  | organic-unit-ambiguity:ק״ג |
+| kale | 8.0–14.9 | מארז | high | — |  | organic-unit-ambiguity:צרור/ק״ג |
 | summer-squash | 14.0–18.5 | ק״ג | high | 3.0–7.5 | ק״ג |  |
 | garlic | 68.0 | ק״ג | low | 5.33–18.0 | ק״ג | organic-single-source; organic-unit-ambiguity:חבילה 200 גרם |
 | fennel | 6.0–11.5 | ק״ג | high | 4.5–8.0 | ק״ג |  |
 | sesame | 13.9 | חבילה 500 גרם | low | — |  | organic-single-source |
 | dill | 6.0–11.9 | יחידה | high | 3.0 | צרור |  |
 | bush-pole | 10.0–15.9 | מארז קפוא 500 גרם | medium | 15.0–16.0 | ק״ג | organic-single-source; organic-unit-ambiguity:חבילה 300 גרם |
-| strawberry | 19.0 | ק״ג | low | — |  | organic-single-source; organic-unit-ambiguity:מארז 250 גרם |
+| strawberry | 19.0–69.9 | ק״ג | high | — |  | organic-unit-ambiguity:מארז 250 גרם; organic-wide-spread(x3.7) |
 | corn | 13.0–17.5 | ק״ג | high | 5.5–7.5 | מארז |  |
 | oranges | 9.5–15.9 | ק״ג | high | 3.0–4.88 | ק״ג |  |
 | potato | 6.5–19.0 | ק״ג | high | — |  |  |
-| spinach | 9.95–13.9 | מארז / יחידה | medium | — |  | organic-single-source; organic-unit-ambiguity:יחידה 190 גרם |
-| new-zealand-spinach | 14.9 | מארז 200 גרם | low | — |  | organic-single-source; organic-unit-ambiguity:מארז |
+| spinach | 9.95–13.9 | מארז / יחידה | medium | — |  | organic-single-source; organic-unit-ambiguity:יחידה 190 גרם/מארז 190–200 גרם |
+| new-zealand-spinach | 14.9 | מארז 200 גרם | low | — |  | organic-single-source; organic-unit-ambiguity:מארז/צרור |
 
-## Organic completion-round TARGET (36 crops — WEAK organic or none)
+## Organic completion-round TARGET (33 crops — WEAK organic or none)
 
-anise-hyssop, arugula, jerusalem-artichokes, basil, scallions, cress, bay, wheat, sunflower, thyme, cilantro, lemon-balm, lemon-verbena, chard, sage, mint, soybean, beets, chives, salad-mix, fava-bean, garlic, sesame, strawberry, new-zealand-spinach, edamame, blackberry, artichokes, okra, ginger, hibiscus, tarragon, lovage, chinese-lantern, chicory, jicama
+anise-hyssop, arugula, jerusalem-artichokes, basil, scallions, cress, bay, wheat, sunflower, thyme, tarragon, cilantro, lemon-balm, lemon-verbena, chard, sage, mint, soybean, chives, salad-mix, fava-bean, garlic, sesame, new-zealand-spinach, blackberry, artichokes, okra, ginger, hibiscus, lovage, chinese-lantern, chicory, jicama
 
 ## Missing entirely (1/70)
 
