@@ -66,6 +66,7 @@ def grams_of(unit):
 # team_00 per-crop overrides (2026-06-12):
 FORCE_KG = {"bush-pole"}                        # שעועית — combine fresh+frozen forms on one ₪/kg basis
 UNIT_PREFER = {"strawberry": "מארז 250 גרם"}    # תות — display per 250g punnet
+NOTE = {"hibiscus": "מחיר לפרח היבש (לתה), לא לתוצרת טרייה"}  # generic note shown beside the chip
 
 CONF_RANK = {"high": 3, "medium": 2, "medium-high": 2, "low": 1, "": 0}
 
@@ -172,12 +173,15 @@ def main():
             flags.append("organic-unit-ambiguity:" + "/".join(org["unit_options"]))
         if org and org["price_min"] > 0 and org["price_max"] / org["price_min"] >= 3:
             flags.append(f"organic-wide-spread(x{round(org['price_max']/org['price_min'],1)})")
-        unified.append({
+        row = {
             "slug": slug, "hebrew_name": he_name.get(slug, ""),
             "primary": "organic" if org else "conventional",
             "organic": org, "conventional": conv,
             "_flags": flags, "_sources": srcs,
-        })
+        }
+        if slug in NOTE:
+            row["note"] = NOTE[slug]
+        unified.append(row)
 
     json.dump(unified, open(os.path.join(HERE, "unified_market_estimates.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)

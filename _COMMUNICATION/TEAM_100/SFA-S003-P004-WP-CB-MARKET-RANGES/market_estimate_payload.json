@@ -1,0 +1,1407 @@
+{
+  "watermelon": {
+    "price_min": 5.0,
+    "price_max": 13.9,
+    "price_median": 9.95,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 5.0,
+      "price_max": 13.9,
+      "price_median": 9.95,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.5,
+      "price_median": 3.75,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "edamame": {
+    "price_min": 11.9,
+    "price_max": 14.9,
+    "price_median": 13.4,
+    "unit": "חבילה 400 גרם (קפוא)",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 11.9,
+      "price_max": 14.9,
+      "price_median": 13.4,
+      "unit": "חבילה 400 גרם (קפוא)",
+      "confidence": "medium-high",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 19.9,
+      "price_max": 19.9,
+      "price_median": 19.9,
+      "unit": "חבילה 1 ק״ג",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "blackberry": {
+    "price_min": 29.9,
+    "price_max": 29.9,
+    "price_median": 29.9,
+    "unit": "חבילה 300 גרם (קפוא)",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 29.9,
+      "price_max": 29.9,
+      "price_median": 29.9,
+      "unit": "חבילה 300 גרם (קפוא)",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 23.0,
+      "price_max": 29.0,
+      "price_median": 26.0,
+      "unit": "מארז 125 גרם",
+      "confidence": "medium",
+      "n_sources": 1
+    }
+  },
+  "anise-hyssop": {
+    "price_min": 7.0,
+    "price_max": 13.0,
+    "price_median": 9.25,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 13.0,
+      "price_median": 9.25,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "peas": {
+    "price_min": 13.3,
+    "price_max": 14.0,
+    "price_median": 13.65,
+    "unit": "חבילה 500 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 13.3,
+      "price_max": 14.0,
+      "price_median": 13.65,
+      "unit": "חבילה 500 גרם",
+      "confidence": "medium",
+      "n_sources": 1
+    }
+  },
+  "arugula": {
+    "price_min": 7.0,
+    "price_max": 13.0,
+    "price_median": 8.5,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 13.0,
+      "price_median": 8.5,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "artichokes": {
+    "price_min": 21.0,
+    "price_max": 21.0,
+    "price_median": 21.0,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 21.0,
+      "price_max": 21.0,
+      "price_median": 21.0,
+      "unit": "ק״ג",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 6.9,
+      "price_max": 39.9,
+      "price_median": 23.4,
+      "unit": "ק״ג",
+      "confidence": "medium",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "jerusalem-artichokes": {
+    "price_min": 22.5,
+    "price_max": 22.5,
+    "price_median": 22.5,
+    "unit": "חבילה 400 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 22.5,
+      "price_max": 22.5,
+      "price_median": 22.5,
+      "unit": "חבילה 400 גרם",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "basil": {
+    "price_min": 6.0,
+    "price_max": 6.0,
+    "price_median": 6.0,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "price_median": 6.0,
+      "unit": "יחידה",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "sweet-potato": {
+    "price_min": 12.0,
+    "price_max": 19.6,
+    "price_median": 16.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 12.0,
+      "price_max": 19.6,
+      "price_median": 16.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 9.5,
+      "price_median": 6.25,
+      "unit": "ק״ג",
+      "confidence": "medium",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "okra": {
+    "price_min": 22.0,
+    "price_max": 22.0,
+    "price_median": 22.0,
+    "unit": "מארז 150–250 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 22.0,
+      "price_max": 22.0,
+      "price_median": 22.0,
+      "unit": "מארז 150–250 גרם",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "price_median": 19.5,
+      "unit": "חבילה 1 ק״ג",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "onions": {
+    "price_min": 7.5,
+    "price_max": 13.9,
+    "price_median": 11.22,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.5,
+      "price_max": 13.9,
+      "price_median": 11.22,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 1.93,
+      "price_max": 3.0,
+      "price_median": 2.46,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "scallions": {
+    "price_min": 8.5,
+    "price_max": 8.5,
+    "price_median": 8.5,
+    "unit": "צרור",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "price_median": 8.5,
+      "unit": "צרור",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 13.0,
+      "price_median": 8.5,
+      "unit": "יחידה",
+      "confidence": "medium",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "broccoli": {
+    "price_min": 26.0,
+    "price_max": 26.5,
+    "price_median": 26.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 26.0,
+      "price_max": 26.5,
+      "price_median": 26.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 11.0,
+      "price_median": 8.75,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "ginger": {
+    "price_min": 60.0,
+    "price_max": 79.0,
+    "price_median": 69.5,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 60.0,
+      "price_max": 79.0,
+      "price_median": 69.5,
+      "unit": "ק״ג",
+      "confidence": "medium",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "price_median": 19.5,
+      "unit": "יחידה 300 גרם",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "jicama": {
+    "price_min": 15.0,
+    "price_max": 15.0,
+    "price_median": 15.0,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 15.0,
+      "price_max": 15.0,
+      "price_median": 15.0,
+      "unit": "ק״ג",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "carrots": {
+    "price_min": 7.9,
+    "price_max": 23.0,
+    "price_median": 12.5,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.9,
+      "price_max": 23.0,
+      "price_median": 12.5,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "cress": {
+    "price_min": 11.0,
+    "price_max": 11.0,
+    "price_median": 11.0,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 11.0,
+      "price_max": 11.0,
+      "price_median": 11.0,
+      "unit": "מארז",
+      "confidence": "low",
+      "n_sources": 2
+    }
+  },
+  "winter-squash": {
+    "price_min": 14.0,
+    "price_max": 23.5,
+    "price_median": 17.38,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 23.5,
+      "price_median": 17.38,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.63,
+      "price_max": 5.5,
+      "price_median": 4.56,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "bay": {
+    "price_min": 10.0,
+    "price_max": 16.0,
+    "price_median": 11.5,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 16.0,
+      "price_median": 11.5,
+      "unit": "מארז",
+      "confidence": "medium",
+      "n_sources": 2
+    }
+  },
+  "hibiscus": {
+    "price_min": 7.99,
+    "price_max": 12.9,
+    "price_median": 10.45,
+    "unit": "100 גרם",
+    "primary": "conventional",
+    "as_of": "2026-06",
+    "conventional": {
+      "price_min": 7.99,
+      "price_max": 12.9,
+      "price_median": 10.45,
+      "unit": "100 גרם",
+      "confidence": "medium",
+      "n_sources": 1
+    },
+    "note": "מחיר לפרח היבש (לתה), לא לתוצרת טרייה"
+  },
+  "chickpea": {
+    "price_min": 10.9,
+    "price_max": 15.9,
+    "price_median": 13.4,
+    "unit": "חבילה 500 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.9,
+      "price_max": 15.9,
+      "price_median": 13.4,
+      "unit": "חבילה 500 גרם",
+      "confidence": "medium",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "wheat": {
+    "price_min": 11.2,
+    "price_max": 16.8,
+    "price_median": 12.84,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 11.2,
+      "price_max": 16.8,
+      "price_median": 12.84,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "sunflower": {
+    "price_min": 10.0,
+    "price_max": 10.0,
+    "price_median": 10.0,
+    "unit": "חבילה 300 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 10.0,
+      "price_median": 10.0,
+      "unit": "חבילה 300 גרם",
+      "confidence": "low",
+      "n_sources": 2
+    }
+  },
+  "lettuce": {
+    "price_min": 6.0,
+    "price_max": 7.9,
+    "price_median": 7.1,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 7.9,
+      "price_median": 7.1,
+      "unit": "יחידה",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 4.5,
+      "price_median": 4.25,
+      "unit": "יחידה",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "eggplant": {
+    "price_min": 8.8,
+    "price_max": 12.0,
+    "price_median": 10.57,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.8,
+      "price_max": 12.0,
+      "price_median": 10.57,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "thyme": {
+    "price_min": 7.0,
+    "price_max": 7.0,
+    "price_median": 7.0,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "price_median": 7.0,
+      "unit": "יחידה",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "tarragon": {
+    "price_min": 9.0,
+    "price_max": 9.5,
+    "price_median": 9.0,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 9.5,
+      "price_median": 9.0,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 3
+    },
+    "conventional": {
+      "price_min": 6.9,
+      "price_max": 6.9,
+      "price_median": 6.9,
+      "unit": "מארז",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "cilantro": {
+    "price_min": 6.0,
+    "price_max": 6.0,
+    "price_median": 6.0,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "price_median": 6.0,
+      "unit": "יחידה",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "turmeric": {
+    "price_min": 65.0,
+    "price_max": 130.0,
+    "price_median": 97.5,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 65.0,
+      "price_max": 130.0,
+      "price_median": 97.5,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1
+    }
+  },
+  "cabbage": {
+    "price_min": 5.5,
+    "price_max": 11.5,
+    "price_median": 8.5,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 5.5,
+      "price_max": 11.5,
+      "price_median": 8.5,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 1.5,
+      "price_max": 4.0,
+      "price_median": 2.75,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "cauliflower": {
+    "price_min": 14.9,
+    "price_max": 21.0,
+    "price_median": 17.7,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 14.9,
+      "price_max": 21.0,
+      "price_median": 17.7,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2,
+      "basis": "wholesale"
+    },
+    "conventional": {
+      "price_min": 4.93,
+      "price_max": 7.5,
+      "price_median": 6.21,
+      "unit": "יחידה / ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "leeks": {
+    "price_min": 12.0,
+    "price_max": 19.5,
+    "price_median": 16.1,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 12.0,
+      "price_max": 19.5,
+      "price_median": 16.1,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "lovage": {
+    "price_min": 14.0,
+    "price_max": 14.0,
+    "price_median": 14.0,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 14.0,
+      "price_median": 14.0,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 7.9,
+      "price_max": 7.9,
+      "price_median": 7.9,
+      "unit": "מארז",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "lemon-balm": {
+    "price_min": 9.5,
+    "price_max": 9.5,
+    "price_median": 9.5,
+    "unit": "צרור",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 9.5,
+      "price_median": 9.5,
+      "unit": "צרור",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "lemon-verbena": {
+    "price_min": 7.0,
+    "price_max": 9.0,
+    "price_median": 8.25,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 9.0,
+      "price_median": 8.25,
+      "unit": "יחידה",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "turnips": {
+    "price_min": 10.9,
+    "price_max": 13.9,
+    "price_median": 12.4,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.9,
+      "price_max": 13.9,
+      "price_median": 12.4,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "price_median": 5.75,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "melons": {
+    "price_min": 9.0,
+    "price_max": 14.9,
+    "price_median": 11.95,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 14.9,
+      "price_median": 11.95,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.5,
+      "price_max": 7.0,
+      "price_median": 5.25,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "cucumbers": {
+    "price_min": 13.0,
+    "price_max": 18.5,
+    "price_median": 16.0,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 13.0,
+      "price_max": 18.5,
+      "price_median": 16.0,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "chard": {
+    "price_min": 12.9,
+    "price_max": 12.9,
+    "price_median": 12.9,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 12.9,
+      "price_max": 12.9,
+      "price_median": 12.9,
+      "unit": "מארז",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "sage": {
+    "price_min": 9.0,
+    "price_max": 9.0,
+    "price_median": 9.0,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 9.0,
+      "price_median": 9.0,
+      "unit": "יחידה",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "mint": {
+    "price_min": 8.5,
+    "price_max": 8.5,
+    "price_median": 8.5,
+    "unit": "צרור",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "price_median": 8.5,
+      "unit": "צרור",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "soybean": {
+    "price_min": 9.7,
+    "price_max": 9.7,
+    "price_median": 9.7,
+    "unit": "חבילה 500 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.7,
+      "price_max": 9.7,
+      "price_median": 9.7,
+      "unit": "חבילה 500 גרם",
+      "confidence": "low",
+      "n_sources": 2
+    }
+  },
+  "beets": {
+    "price_min": 9.0,
+    "price_max": 16.0,
+    "price_median": 11.88,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 16.0,
+      "price_median": 11.88,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 2.6,
+      "price_max": 4.0,
+      "price_median": 3.3,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "celery": {
+    "price_min": 6.0,
+    "price_max": 13.9,
+    "price_median": 8.5,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 13.9,
+      "price_median": 8.5,
+      "unit": "יחידה",
+      "confidence": "high",
+      "n_sources": 4,
+      "basis": "wholesale"
+    }
+  },
+  "tomatoes": {
+    "price_min": 10.0,
+    "price_max": 23.5,
+    "price_median": 18.9,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 23.5,
+      "price_median": 18.9,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "cherry-tomato": {
+    "price_min": 21.9,
+    "price_max": 29.9,
+    "price_median": 25.9,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 21.9,
+      "price_max": 29.9,
+      "price_median": 25.9,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "chives": {
+    "price_min": 7.0,
+    "price_max": 8.5,
+    "price_median": 8.12,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 8.5,
+      "price_median": 8.12,
+      "unit": "יחידה",
+      "confidence": "medium",
+      "n_sources": 2
+    }
+  },
+  "salad-mix": {
+    "price_min": 15.5,
+    "price_max": 15.5,
+    "price_median": 15.5,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 15.5,
+      "price_max": 15.5,
+      "price_median": 15.5,
+      "unit": "יחידה",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 8.9,
+      "price_max": 8.9,
+      "price_median": 8.9,
+      "unit": "מארז",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "pac-choi": {
+    "price_min": 7.0,
+    "price_max": 16.9,
+    "price_median": 11.95,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 16.9,
+      "price_median": 11.95,
+      "unit": "יחידה",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  },
+  "fava-bean": {
+    "price_min": 4.9,
+    "price_max": 4.9,
+    "price_median": 4.9,
+    "unit": "100 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 4.9,
+      "price_max": 4.9,
+      "price_median": 4.9,
+      "unit": "100 גרם",
+      "confidence": "low",
+      "n_sources": 2
+    }
+  },
+  "parsley": {
+    "price_min": 4.9,
+    "price_max": 11.9,
+    "price_median": 8.4,
+    "unit": "מארז / צרור",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 4.9,
+      "price_max": 11.9,
+      "price_median": 8.4,
+      "unit": "מארז / צרור",
+      "confidence": "medium-high",
+      "n_sources": 1
+    }
+  },
+  "peppers": {
+    "price_min": 9.5,
+    "price_max": 24.5,
+    "price_median": 16.95,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 24.5,
+      "price_median": 16.95,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 11.5,
+      "price_median": 8.25,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "chinese-lantern": {
+    "price_min": 22.5,
+    "price_max": 25.0,
+    "price_median": 23.75,
+    "unit": "מארז 250 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 22.5,
+      "price_max": 25.0,
+      "price_median": 23.75,
+      "unit": "מארז 250 גרם",
+      "confidence": "low",
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 36.0,
+      "price_max": 36.0,
+      "price_median": 36.0,
+      "unit": "מארז 115 גרם",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "chicory": {
+    "price_min": 10.0,
+    "price_max": 17.0,
+    "price_median": 13.5,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 17.0,
+      "price_median": 13.5,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 29.9,
+      "price_max": 49.9,
+      "price_median": 39.9,
+      "unit": "מארז 500 גרם",
+      "confidence": "medium",
+      "n_sources": 1
+    }
+  },
+  "radishes": {
+    "price_min": 9.5,
+    "price_max": 16.0,
+    "price_median": 11.12,
+    "unit": "צרור",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 16.0,
+      "price_median": 11.12,
+      "unit": "צרור",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 6.5,
+      "price_median": 6.5,
+      "unit": "ק״ג",
+      "confidence": "low",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "kohlrabi": {
+    "price_min": 8.5,
+    "price_max": 14.9,
+    "price_median": 11.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 14.9,
+      "price_median": 11.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "price_median": 5.75,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "kale": {
+    "price_min": 7.0,
+    "price_max": 14.9,
+    "price_median": 8.5,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 14.9,
+      "price_median": 8.5,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 4,
+      "basis": "wholesale"
+    }
+  },
+  "summer-squash": {
+    "price_min": 14.0,
+    "price_max": 18.5,
+    "price_median": 16.0,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 18.5,
+      "price_median": 16.0,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 7.5,
+      "price_median": 5.25,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "garlic": {
+    "price_min": 49.0,
+    "price_max": 87.5,
+    "price_median": 68.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 49.0,
+      "price_max": 87.5,
+      "price_median": 68.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    },
+    "conventional": {
+      "price_min": 5.33,
+      "price_max": 18.0,
+      "price_median": 11.66,
+      "unit": "ק״ג",
+      "confidence": "medium",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "fennel": {
+    "price_min": 6.0,
+    "price_max": 11.5,
+    "price_median": 8.62,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 11.5,
+      "price_median": 8.62,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 4.5,
+      "price_max": 8.0,
+      "price_median": 6.25,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "sesame": {
+    "price_min": 13.9,
+    "price_max": 13.9,
+    "price_median": 13.9,
+    "unit": "חבילה 500 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 13.9,
+      "price_max": 13.9,
+      "price_median": 13.9,
+      "unit": "חבילה 500 גרם",
+      "confidence": "low",
+      "n_sources": 2
+    }
+  },
+  "dill": {
+    "price_min": 6.0,
+    "price_max": 12.0,
+    "price_median": 9.0,
+    "unit": "יחידה",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 12.0,
+      "price_median": 9.0,
+      "unit": "יחידה",
+      "confidence": "high",
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "price_median": 3.0,
+      "unit": "צרור",
+      "confidence": "low",
+      "n_sources": 1
+    }
+  },
+  "bush-pole": {
+    "price_min": 20.0,
+    "price_max": 75.0,
+    "price_median": 61.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 20.0,
+      "price_max": 75.0,
+      "price_median": 61.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 4,
+      "basis": "wholesale"
+    },
+    "conventional": {
+      "price_min": 15.0,
+      "price_max": 16.0,
+      "price_median": 15.5,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "strawberry": {
+    "price_min": 19.0,
+    "price_max": 29.9,
+    "price_median": 24.17,
+    "unit": "מארז 250 גרם",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 19.0,
+      "price_max": 29.9,
+      "price_median": 24.17,
+      "unit": "מארז 250 גרם",
+      "confidence": "high",
+      "n_sources": 2,
+      "basis": "wholesale"
+    }
+  },
+  "corn": {
+    "price_min": 13.0,
+    "price_max": 17.5,
+    "price_median": 15.25,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 13.0,
+      "price_max": 17.5,
+      "price_median": 15.25,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 5.5,
+      "price_max": 7.5,
+      "price_median": 6.5,
+      "unit": "מארז",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "oranges": {
+    "price_min": 9.5,
+    "price_max": 15.9,
+    "price_median": 12.7,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 15.9,
+      "price_median": 12.7,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.88,
+      "price_median": 3.94,
+      "unit": "ק״ג",
+      "confidence": "medium-high",
+      "n_sources": 1,
+      "basis": "wholesale"
+    }
+  },
+  "potato": {
+    "price_min": 6.5,
+    "price_max": 19.0,
+    "price_median": 11.0,
+    "unit": "ק״ג",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 6.5,
+      "price_max": 19.0,
+      "price_median": 11.0,
+      "unit": "ק״ג",
+      "confidence": "high",
+      "n_sources": 3
+    }
+  },
+  "spinach": {
+    "price_min": 8.5,
+    "price_max": 15.0,
+    "price_median": 11.75,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 15.0,
+      "price_median": 11.75,
+      "unit": "מארז",
+      "confidence": "medium-high",
+      "n_sources": 1
+    }
+  },
+  "new-zealand-spinach": {
+    "price_min": 8.0,
+    "price_max": 10.0,
+    "price_median": 8.62,
+    "unit": "מארז",
+    "primary": "organic",
+    "as_of": "2026-06",
+    "organic": {
+      "price_min": 8.0,
+      "price_max": 10.0,
+      "price_median": 8.62,
+      "unit": "מארז",
+      "confidence": "high",
+      "n_sources": 2
+    }
+  }
+}
