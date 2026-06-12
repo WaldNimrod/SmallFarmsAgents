@@ -1,0 +1,968 @@
+[
+  {
+    "slug": "peas",
+    "hebrew_name": "אפונה",
+    "market_estimate": {
+      "price_min": 13.3,
+      "price_max": 14.0,
+      "unit": "חבילה 500 גרם",
+      "organic": true,
+      "source": "טבע קסטל",
+      "source_url": "https://www.tevacastel.co.il/?catalogProduct=327416",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "arugula",
+    "hebrew_name": "ארוגולה",
+    "market_estimate": {
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "artichokes",
+    "hebrew_name": "ארטישוק",
+    "market_estimate": {
+      "price_min": 6.9,
+      "price_max": 39.9,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "פרייסז",
+      "source_url": "https://www.pricez.co.il/Product/71398/%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7-%D7%98%D7%A8%D7%99-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "jerusalem-artichokes",
+    "hebrew_name": "ארטישוק ירושלמי",
+    "market_estimate": {
+      "price_min": 22.5,
+      "price_max": 22.5,
+      "unit": "יחידה 400 גרם",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "edamame",
+    "hebrew_name": "אדממה",
+    "market_estimate": {
+      "price_min": 19.9,
+      "price_max": 19.9,
+      "unit": "חבילה 1 ק״ג",
+      "organic": false,
+      "source": "שופרסל",
+      "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%9E%D7%96%D7%95%D7%9F-%D7%9E%D7%A7%D7%95%D7%A8%D7%A8-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D-%D7%95%D7%A0%D7%A7%D7%A0%D7%99%D7%A7%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D/%D7%A4%D7%95%D7%9C%D7%99-%D7%A1%D7%95%D7%99%D7%94-%D7%90%D7%93%D7%9E%D7%9E%D7%94/p/P_7290011530471",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "sweet-potato",
+    "hebrew_name": "בטטה",
+    "market_estimate": {
+      "price_min": 14.5,
+      "price_max": 19.6,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "okra",
+    "hebrew_name": "במיה",
+    "market_estimate": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "unit": "חבילה 1 ק״ג",
+      "organic": false,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "onions",
+    "hebrew_name": "בצל",
+    "market_estimate": {
+      "price_min": 7.5,
+      "price_max": 13.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "scallions",
+    "hebrew_name": "בצל ירוק",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "צרור",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "broccoli",
+    "hebrew_name": "ברוקולי",
+    "market_estimate": {
+      "price_min": 26.5,
+      "price_max": 26.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "ginger",
+    "hebrew_name": "ג'ינג'ר",
+    "market_estimate": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "unit": "יחידה 300 גרם",
+      "organic": false,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "carrots",
+    "hebrew_name": "גזר",
+    "market_estimate": {
+      "price_min": 12.5,
+      "price_max": 12.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "cress",
+    "hebrew_name": "גרגר נחלים",
+    "market_estimate": {
+      "price_min": 11.0,
+      "price_max": 11.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "Farmerim",
+      "source_url": "https://farmerim.com/product/21893",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "winter-squash",
+    "hebrew_name": "דלעת",
+    "market_estimate": {
+      "price_min": 15.5,
+      "price_max": 23.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "chickpea",
+    "hebrew_name": "חומוס",
+    "market_estimate": {
+      "price_min": 10.9,
+      "price_max": 15.9,
+      "unit": "חבילה 500 גרם",
+      "organic": true,
+      "source": "פרייסז",
+      "source_url": "https://www.pricez.co.il/Product/62134/%D7%92%D7%A8%D7%92%D7%99%D7%A8%D7%99-%D7%97%D7%95%D7%9E%D7%95%D7%A1-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%94%D7%A8%D7%93%D7%95%D7%A3-500-%D7%92%D7%A8%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "wheat",
+    "hebrew_name": "חיטה",
+    "market_estimate": {
+      "price_min": 11.2,
+      "price_max": 11.2,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ניצת הדובדבן",
+      "source_url": "https://www.nizat.com/%D7%97%D7%99%D7%98%D7%94-%D7%9E%D7%9C%D7%90%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%2C-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F--i7310",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "sunflower",
+    "hebrew_name": "חמניה",
+    "market_estimate": {
+      "price_min": 10.0,
+      "price_max": 10.0,
+      "unit": "חבילה 300 גרם",
+      "organic": true,
+      "source": "ניצת הדובדבן",
+      "source_url": "https://www.nizat.com/productinfo.aspx?prodid=6388",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "lettuce",
+    "hebrew_name": "חסה",
+    "market_estimate": {
+      "price_min": 6.0,
+      "price_max": 7.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "eggplant",
+    "hebrew_name": "חציל",
+    "market_estimate": {
+      "price_min": 8.8,
+      "price_max": 11.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cabbage",
+    "hebrew_name": "כרוב",
+    "market_estimate": {
+      "price_min": 5.5,
+      "price_max": 11.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cauliflower",
+    "hebrew_name": "כרובית",
+    "market_estimate": {
+      "price_min": 14.9,
+      "price_max": 15.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "פרייסז",
+      "source_url": "https://www.pricez.co.il/Product/71448/%D7%9B%D7%A8%D7%95%D7%91%D7%99%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "leeks",
+    "hebrew_name": "כרישה",
+    "market_estimate": {
+      "price_min": 12.0,
+      "price_max": 12.0,
+      "unit": "מארז 2 יחידות",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "lovage",
+    "hebrew_name": "לובסטייה",
+    "market_estimate": {
+      "price_min": 7.9,
+      "price_max": 7.9,
+      "unit": "מארז",
+      "organic": false,
+      "source": "כרמלה",
+      "source_url": "https://www.carmella.co.il/product/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%95-%D7%90%D7%A9/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "turnips",
+    "hebrew_name": "לפת",
+    "market_estimate": {
+      "price_min": 13.5,
+      "price_max": 13.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "melons",
+    "hebrew_name": "מלון",
+    "market_estimate": {
+      "price_min": 9.0,
+      "price_max": 9.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "cucumbers",
+    "hebrew_name": "מלפפון",
+    "market_estimate": {
+      "price_min": 13.5,
+      "price_max": 18.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "chard",
+    "hebrew_name": "מנגולד",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "צרור",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "soybean",
+    "hebrew_name": "סויה",
+    "market_estimate": {
+      "price_min": 9.7,
+      "price_max": 9.7,
+      "unit": "חבילה 500 גרם",
+      "organic": true,
+      "source": "ניצת הדובדבן",
+      "source_url": "https://www.nizat.com/%D7%A4%D7%95%D7%9C%D7%99-%D7%A1%D7%95%D7%99%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99--%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-i13019",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "beets",
+    "hebrew_name": "סלק",
+    "market_estimate": {
+      "price_min": 12.5,
+      "price_max": 12.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "celery",
+    "hebrew_name": "סלרי",
+    "market_estimate": {
+      "price_min": 8.0,
+      "price_max": 8.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "tomatoes",
+    "hebrew_name": "עגבנייה",
+    "market_estimate": {
+      "price_min": 14.5,
+      "price_max": 23.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "salad-mix",
+    "hebrew_name": "עלי בייבי",
+    "market_estimate": {
+      "price_min": 12.9,
+      "price_max": 12.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "PricePilot",
+      "source_url": "https://pricepilot.co.il/item/%D7%9E%D7%99%D7%A7%D7%A1%20%D7%A2%D7%9C%D7%99%20%D7%91%D7%99%D7%99%D7%91%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/019bf8bd-9a16-705e-8d2e-17068c4cc7fd?lang=he",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "pac-choi",
+    "hebrew_name": "פאק צ'וי",
+    "market_estimate": {
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/%D7%91%D7%90%D7%A7%D7%A6-%D7%95%D7%99",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "fava-bean",
+    "hebrew_name": "פול",
+    "market_estimate": {
+      "price_min": 4.9,
+      "price_max": 4.9,
+      "unit": "100 גרם",
+      "organic": true,
+      "source": "נפלאות הקולה",
+      "source_url": "https://niflaot-hakole.co.il/product/%D7%A4%D7%95%D7%9C-%D7%99%D7%A8%D7%95%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "peppers",
+    "hebrew_name": "פלפל",
+    "market_estimate": {
+      "price_min": 9.5,
+      "price_max": 24.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "chinese-lantern",
+    "hebrew_name": "פנס סיני",
+    "market_estimate": {
+      "price_min": 36.0,
+      "price_max": 36.0,
+      "unit": "מארז 115 גרם",
+      "organic": false,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "chicory",
+    "hebrew_name": "ציקוריה",
+    "market_estimate": {
+      "price_min": 29.9,
+      "price_max": 49.9,
+      "unit": "מארז 500 גרם",
+      "organic": false,
+      "source": "כרמלה",
+      "source_url": "https://www.carmella.co.il/product/%D7%92%D7%A8%D7%92%D7%A8-%D7%A0%D7%97%D7%9C%D7%99%D7%9D/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "radishes",
+    "hebrew_name": "צנונית",
+    "market_estimate": {
+      "price_min": 9.5,
+      "price_max": 9.5,
+      "unit": "צרור",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "kohlrabi",
+    "hebrew_name": "קולורבי",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "kale",
+    "hebrew_name": "קייל",
+    "market_estimate": {
+      "price_min": 8.0,
+      "price_max": 8.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "summer-squash",
+    "hebrew_name": "קישוא",
+    "market_estimate": {
+      "price_min": 15.5,
+      "price_max": 18.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "garlic",
+    "hebrew_name": "שום",
+    "market_estimate": {
+      "price_min": 17.5,
+      "price_max": 17.5,
+      "unit": "חבילה 200 גרם",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "fennel",
+    "hebrew_name": "שומר",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "bush-pole",
+    "hebrew_name": "שעועית",
+    "market_estimate": {
+      "price_min": 22.5,
+      "price_max": 22.5,
+      "unit": "חבילה 300 גרם",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "corn",
+    "hebrew_name": "תירס",
+    "market_estimate": {
+      "price_min": 17.5,
+      "price_max": 17.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "potato",
+    "hebrew_name": "תפוח אדמה",
+    "market_estimate": {
+      "price_min": 6.5,
+      "price_max": 15.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "spinach",
+    "hebrew_name": "תרד",
+    "market_estimate": {
+      "price_min": 13.9,
+      "price_max": 13.9,
+      "unit": "יחידה 190 גרם",
+      "organic": true,
+      "source": "כרמלה",
+      "source_url": "https://www.carmella.co.il/product/%D7%A2%D7%9C%D7%99-%D7%AA%D7%A8%D7%93-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "new-zealand-spinach",
+    "hebrew_name": "תרד ניו-זילנד",
+    "market_estimate": {
+      "price_min": 8.0,
+      "price_max": 8.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "anise-hyssop",
+    "hebrew_name": "אזוב מצוי",
+    "market_estimate": {
+      "price_min": 17.0,
+      "price_max": 17.0,
+      "unit": "צרור",
+      "organic": true,
+      "source": "Farmerim",
+      "source_url": "https://farmerim.com/product/25143",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "basil",
+    "hebrew_name": "בזיל",
+    "market_estimate": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "hibiscus",
+    "hebrew_name": "היביסקוס",
+    "market_estimate": {
+      "price_min": 7.99,
+      "price_max": 12.9,
+      "unit": "100 גרם",
+      "organic": false,
+      "source": "ענק הטבע + לוינסקי מרקט",
+      "source_url": "https://anak-nuts.co.il/product/%D7%94%D7%99%D7%91%D7%99%D7%A1%D7%A7%D7%95%D7%A1",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "thyme",
+    "hebrew_name": "טימין",
+    "market_estimate": {
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "tarragon",
+    "hebrew_name": "טרגון",
+    "market_estimate": {
+      "price_min": 6.9,
+      "price_max": 6.9,
+      "unit": "מארז",
+      "organic": false,
+      "source": "כרמלה",
+      "source_url": "https://www.carmella.co.il/product/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%95-%D7%90%D7%A9/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "cilantro",
+    "hebrew_name": "כוסברה",
+    "market_estimate": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "turmeric",
+    "hebrew_name": "כורכום",
+    "market_estimate": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "unit": "חבילה 150 גרם",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "lemon-balm",
+    "hebrew_name": "לימון בלם",
+    "market_estimate": {
+      "price_min": 9.5,
+      "price_max": 9.5,
+      "unit": "צרור",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "lemon-verbena",
+    "hebrew_name": "לימון ורבנה",
+    "market_estimate": {
+      "price_min": 9.0,
+      "price_max": 9.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "sage",
+    "hebrew_name": "מרווה",
+    "market_estimate": {
+      "price_min": 9.0,
+      "price_max": 9.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "mint",
+    "hebrew_name": "נענע",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "צרור",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "chives",
+    "hebrew_name": "עירית",
+    "market_estimate": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "parsley",
+    "hebrew_name": "פטרוזיליה",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 5.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "sesame",
+    "hebrew_name": "שומשום",
+    "market_estimate": {
+      "price_min": 13.9,
+      "price_max": 13.9,
+      "unit": "חבילה 500 גרם",
+      "organic": true,
+      "source": "ניצת הדובדבן",
+      "source_url": "https://www.nizat.com/%D7%A9%D7%95%D7%9E%D7%A9%D7%95%D7%9D-%D7%9E%D7%9C%D7%90-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%2C-500-%D7%92%D7%A8%D7%9D%2C-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F--i7302",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "dill",
+    "hebrew_name": "שמיר",
+    "market_estimate": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "watermelon",
+    "hebrew_name": "אבטיח",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 7.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "blackberry",
+    "hebrew_name": "אוסנה",
+    "market_estimate": {
+      "price_min": 23.0,
+      "price_max": 29.0,
+      "unit": "מארז 125 גרם",
+      "organic": false,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "cherry-tomato",
+    "hebrew_name": "עגבניית שרי",
+    "market_estimate": {
+      "price_min": 26.5,
+      "price_max": 27.8,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ערן אורגני",
+      "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "strawberry",
+    "hebrew_name": "תות שדה",
+    "market_estimate": {
+      "price_min": 19.0,
+      "price_max": 19.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "עץ השדה",
+      "source_url": "https://www.etzhasade.com/%D7%AA%D7%95%D7%AA-%D7%A9%D7%93%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%9B-250-%D7%92%D7%A8",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "bay",
+    "hebrew_name": "דפנה",
+    "market_estimate": {
+      "price_min": 10.0,
+      "price_max": 10.0,
+      "unit": "מארז",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/%D7%A2%D7%9C%D7%99-%D7%93%D7%A4%D7%A0%D7%94-%D7%98%D7%A8%D7%99%D7%99%D7%9D11",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "oranges",
+    "hebrew_name": "תפוז",
+    "market_estimate": {
+      "price_min": 9.5,
+      "price_max": 9.5,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שדה ירוק",
+      "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  }
+]

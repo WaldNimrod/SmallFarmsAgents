@@ -105,12 +105,21 @@ def main():
         organic_retail = [s for s in retail if s["organic"]]
         # Recommended pool: prefer organic-retail > retail > all (the chip is consumer/retail facing).
         pool = organic_retail or retail or srcs
-        rmin = min(s["price_min"] for s in pool)
-        rmax = max(s["price_max"] for s in pool)
-        # unit: consensus of the pool, else the most common
-        pool_units = [s["unit"] for s in pool if s["unit"]]
+        # Robust outlier trim for the recommended RANGE: drop a source whose midpoint is > 3x the pool's
+        # median midpoint (e.g. a restaurant-menu price). Dropped sources stay in _sources (transparency).
+        mids = sorted((s["price_min"] + s["price_max"]) / 2 for s in pool)
+        floor = mids[0] if mids else 0  # cheapest source midpoint
+        pool_r = [s for s in pool if floor == 0 or (s["price_min"] + s["price_max"]) / 2 <= 3 * floor] or pool
+        excluded = [s for s in pool if s not in pool_r]
+        rmin = min(s["price_min"] for s in pool_r)
+        rmax = max(s["price_max"] for s in pool_r)
+        # unit: consensus of the trimmed pool, else the most common
+        pool_units = [s["unit"] for s in pool_r if s["unit"]]
         unit = max(set(pool_units), key=pool_units.count) if pool_units else (units[0] if units else "")
+        pool = pool_r  # the recommended estimate (range/unit/confidence) uses the trimmed pool
         flags = []
+        if excluded:
+            flags.append("outlier-excluded:" + "/".join(f"{s['engine']}@₪{s['price_max']}" for s in excluded))
         if len(units) > 1: flags.append(f"unit-conflict:{'/'.join(units)}")
         if "wholesale" in bases and "retail" not in bases: flags.append("wholesale-only-basis(below-retail)")
         if "wholesale" in bases and "retail" in bases: flags.append("mixed-basis(wholesale+retail)")
