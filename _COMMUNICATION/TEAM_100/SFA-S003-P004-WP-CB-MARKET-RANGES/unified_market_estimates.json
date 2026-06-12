@@ -3,19 +3,19 @@
     "slug": "watermelon",
     "hebrew_name": "אבטיח",
     "market_estimate": {
-      "price_min": 3.0,
-      "price_max": 4.5,
+      "price_min": 13.9,
+      "price_max": 13.9,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -29,6 +29,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 13.9,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%9E%D7%91%D7%A6%D7%A2%D7%99-%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -67,23 +79,52 @@
     ]
   },
   {
-    "slug": "sweet-potato",
-    "hebrew_name": "בטטה",
+    "slug": "basil",
+    "hebrew_name": "בזיל",
     "market_estimate": {
-      "price_min": 3.0,
-      "price_max": 9.5,
-      "unit": "ק״ג",
-      "organic": false,
+      "price_min": 7.9,
+      "price_max": 11.0,
+      "unit": "צרור",
+      "organic": true,
       "as_of": "2026-06",
       "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "perplexity_2026-06-12"
+    ],
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 7.9,
+        "price_max": 11.0,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ניצת הדובדבן; פארמרים",
+        "source_url": "https://www.nizat.com/%D7%91%D7%96%D7%99%D7%9C%D7%99%D7%A7%D7%95%D7%9D-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "sweet-potato",
+    "hebrew_name": "בטטה",
+    "market_estimate": {
+      "price_min": 12.0,
+      "price_max": 18.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "as_of": "2026-06",
+      "confidence": "medium"
+    },
+    "_engines": [
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)",
-      "wide-spread(x3.2)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -97,6 +138,18 @@
         "as_of": "2026-06",
         "confidence": "medium",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 12.0,
+        "price_max": 18.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -104,19 +157,19 @@
     "slug": "onions",
     "hebrew_name": "בצל",
     "market_estimate": {
-      "price_min": 1.93,
-      "price_max": 3.0,
+      "price_min": 10.0,
+      "price_max": 13.9,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -130,6 +183,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 10.0,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -137,20 +202,20 @@
     "slug": "scallions",
     "hebrew_name": "בצל ירוק",
     "market_estimate": {
-      "price_min": 4.0,
-      "price_max": 13.0,
-      "unit": "יחידה",
-      "organic": false,
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "unit": "מארז",
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)",
-      "wide-spread(x3.2)"
+      "unit-conflict:יחידה/מארז",
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -164,6 +229,18 @@
         "as_of": "2026-06",
         "confidence": "medium",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 7.0,
+        "price_max": 7.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "סלסילה",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -171,19 +248,19 @@
     "slug": "broccoli",
     "hebrew_name": "ברוקולי",
     "market_estimate": {
-      "price_min": 6.5,
-      "price_max": 11.0,
+      "price_min": 26.0,
+      "price_max": 26.0,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -197,6 +274,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 26.0,
+        "price_max": 26.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/product/21337",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -205,16 +294,19 @@
     "hebrew_name": "גזר",
     "market_estimate": {
       "price_min": 7.9,
-      "price_max": 13.0,
+      "price_max": 23.0,
       "unit": "ק״ג",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
-    "_flags": [],
+    "_flags": [
+      "wide-spread(x2.9)"
+    ],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -227,6 +319,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 9.0,
+        "price_max": 23.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; פארמרים; שופרסל; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
       }
     ]
   },
@@ -234,19 +338,19 @@
     "slug": "winter-squash",
     "hebrew_name": "דלעת",
     "market_estimate": {
-      "price_min": 3.63,
-      "price_max": 5.5,
+      "price_min": 14.0,
+      "price_max": 16.5,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -260,6 +364,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 14.0,
+        "price_max": 16.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -267,19 +383,19 @@
     "slug": "lettuce",
     "hebrew_name": "חסה",
     "market_estimate": {
-      "price_min": 4.0,
-      "price_max": 4.5,
+      "price_min": 7.5,
+      "price_max": 7.9,
       "unit": "יחידה",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -293,6 +409,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 7.5,
+        "price_max": 7.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ניצת הדובדבן; ערן אורגני",
+        "source_url": "https://www.nizat.com/%D7%97%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA---i19",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -320,6 +448,36 @@
         "organic": true,
         "source": "טבע בעיר / שופרסל אונליין",
         "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "thyme",
+    "hebrew_name": "טימין",
+    "market_estimate": {
+      "price_min": 9.5,
+      "price_max": 9.9,
+      "unit": "צרור",
+      "organic": true,
+      "as_of": "2026-06",
+      "confidence": "medium-high"
+    },
+    "_engines": [
+      "perplexity_2026-06-12"
+    ],
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 9.5,
+        "price_max": 9.9,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני; זמורה אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%98%D7%99%D7%9E%D7%99%D7%9F-%D7%A7%D7%95%D7%A8%D7%A0%D7%99%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99",
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
@@ -362,20 +520,20 @@
     "slug": "cabbage",
     "hebrew_name": "כרוב",
     "market_estimate": {
-      "price_min": 1.5,
-      "price_max": 4.0,
-      "unit": "ק״ג",
-      "organic": false,
+      "price_min": 12.9,
+      "price_max": 12.9,
+      "unit": "יחידה",
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)",
-      "wide-spread(x2.7)"
+      "unit-conflict:יחידה/ק״ג",
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -389,6 +547,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 12.9,
+        "price_max": 12.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "אורגני שופ",
+        "source_url": "https://organishop.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -396,19 +566,20 @@
     "slug": "cauliflower",
     "hebrew_name": "כרובית",
     "market_estimate": {
-      "price_min": 4.93,
-      "price_max": 7.5,
-      "unit": "יחידה / ק״ג",
-      "organic": false,
+      "price_min": 19.0,
+      "price_max": 21.0,
+      "unit": "ק״ג",
+      "organic": true,
       "as_of": "2026-06",
       "confidence": "medium-high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "unit-conflict:יחידה / ק״ג/ק״ג",
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -422,6 +593,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 19.0,
+        "price_max": 21.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/product/7732",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
       }
     ]
   },
@@ -462,19 +645,19 @@
     "slug": "melons",
     "hebrew_name": "מלון",
     "market_estimate": {
-      "price_min": 3.5,
-      "price_max": 7.0,
+      "price_min": 14.9,
+      "price_max": 14.9,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -488,6 +671,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/A28",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -496,14 +691,15 @@
     "hebrew_name": "מלפפון",
     "market_estimate": {
       "price_min": 13.0,
-      "price_max": 14.0,
+      "price_max": 17.9,
       "unit": "ק״ג",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [],
     "_sources": [
@@ -515,6 +711,18 @@
         "organic": true,
         "source": "ניצת הדובדבן / עדן טבע",
         "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 15.9,
+        "price_max": 17.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/c/A28",
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
@@ -547,6 +755,38 @@
         "organic": true,
         "source": "נוי השדה",
         "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "mint",
+    "hebrew_name": "נענע",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 5.0,
+      "unit": "מארז",
+      "organic": true,
+      "as_of": "2026-06",
+      "confidence": "low"
+    },
+    "_engines": [
+      "perplexity_2026-06-12"
+    ],
+    "_flags": [
+      "single-source-low-confidence"
+    ],
+    "_sources": [
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 5.0,
+        "price_max": 5.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A0%D7%A2%D7%A0%D7%A211",
         "as_of": "2026-06",
         "confidence": "low",
         "basis": "retail"
@@ -591,14 +831,15 @@
     "hebrew_name": "עגבנייה",
     "market_estimate": {
       "price_min": 10.0,
-      "price_max": 13.0,
+      "price_max": 19.9,
       "unit": "ק״ג",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [],
     "_sources": [
@@ -610,6 +851,18 @@
         "organic": true,
         "source": "ניצת הדובדבן / שופרסל גרין",
         "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 17.9,
+        "price_max": 19.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שדה ירוק; שופרסל green",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-herzliya",
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
@@ -625,10 +878,11 @@
       "unit": "ק״ג",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [],
     "_sources": [
@@ -643,6 +897,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 24.0,
+        "price_max": 26.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -650,19 +916,19 @@
     "slug": "salad-mix",
     "hebrew_name": "עלי בייבי",
     "market_estimate": {
-      "price_min": 8.9,
-      "price_max": 8.9,
-      "unit": "מארז",
-      "organic": false,
+      "price_min": 15.5,
+      "price_max": 15.5,
+      "unit": "יחידה",
+      "organic": true,
       "as_of": "2026-06",
       "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "unit-conflict:יחידה/מארז"
     ],
     "_sources": [
       {
@@ -673,6 +939,18 @@
         "organic": false,
         "source": "משק טל דיירקט",
         "source_url": "https://farmdirect.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 15.5,
+        "price_max": 15.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A2%D7%9C%D7%99%D7%9D-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%9D-%D7%A9%D7%98%D7%95%D7%A4%D7%99%D7%9D",
         "as_of": "2026-06",
         "confidence": "low",
         "basis": "retail"
@@ -717,15 +995,18 @@
     "market_estimate": {
       "price_min": 4.9,
       "price_max": 11.9,
-      "unit": "מארז / צרור",
+      "unit": "צרור",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
-    "_flags": [],
+    "_flags": [
+      "unit-conflict:מארז / צרור/צרור"
+    ],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -738,6 +1019,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 5.5,
+        "price_max": 5.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A4%D7%98%D7%A8%D7%95%D7%96%D7%99%D7%9C%D7%99%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -745,19 +1038,19 @@
     "slug": "peppers",
     "hebrew_name": "פלפל",
     "market_estimate": {
-      "price_min": 5.0,
-      "price_max": 11.5,
+      "price_min": 12.9,
+      "price_max": 20.9,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
       "confidence": "medium-high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -771,6 +1064,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 12.9,
+        "price_max": 20.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שופרסל green",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-hapil",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
       }
     ]
   },
@@ -842,23 +1147,54 @@
     ]
   },
   {
+    "slug": "kale",
+    "hebrew_name": "קייל",
+    "market_estimate": {
+      "price_min": 64.86,
+      "price_max": 64.86,
+      "unit": "ק״ג",
+      "organic": true,
+      "as_of": "2026-06",
+      "confidence": "low"
+    },
+    "_engines": [
+      "perplexity_2026-06-12"
+    ],
+    "_flags": [
+      "single-source-low-confidence"
+    ],
+    "_sources": [
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 64.86,
+        "price_max": 64.86,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-carlebach/items/menucategory-5",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
     "slug": "summer-squash",
     "hebrew_name": "קישוא",
     "market_estimate": {
-      "price_min": 3.0,
-      "price_max": 7.5,
+      "price_min": 14.0,
+      "price_max": 16.0,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)",
-      "wide-spread(x2.5)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -872,6 +1208,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 14.0,
+        "price_max": 16.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק; האגוזיה",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A7%D7%99%D7%A9%D7%95%D7%90-%D7%9B%D7%94%D7%9411",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
       }
     ]
   },
@@ -913,19 +1261,19 @@
     "slug": "fennel",
     "hebrew_name": "שומר",
     "market_estimate": {
-      "price_min": 4.5,
-      "price_max": 8.0,
+      "price_min": 6.0,
+      "price_max": 11.5,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "medium"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -939,6 +1287,51 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 6.0,
+        "price_max": 11.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A9%D7%95%D7%9E%D7%A8-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%9E%D7%97%D7%99%D7%A8-%D7%99%D7%A2%D7%95%D7%93%D7%A7%D7%9F-%D7%91%D7%99%D7%97%D7%A1-%D7%9C%D7%9E%D7%A9%D7%A7%D7%9C",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "dill",
+    "hebrew_name": "שמיר",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "unit": "צרור",
+      "organic": false,
+      "as_of": "2026-06",
+      "confidence": "low"
+    },
+    "_engines": [
+      "perplexity_2026-06-12"
+    ],
+    "_flags": [
+      "conventional-only(no-organic-source)",
+      "single-source-low-confidence"
+    ],
+    "_sources": [
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 3.0,
+        "price_max": 3.0,
+        "unit": "צרור",
+        "organic": false,
+        "source": "FarmDirect",
+        "source_url": "https://farmdirect.co.il/product/%D7%A9%D7%9E%D7%99%D7%A8-%D7%9E%D7%90%D7%A8%D7%96/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -979,19 +1372,20 @@
     "slug": "corn",
     "hebrew_name": "תירס",
     "market_estimate": {
-      "price_min": 5.5,
-      "price_max": 7.5,
-      "unit": "מארז",
-      "organic": false,
+      "price_min": 13.0,
+      "price_max": 13.0,
+      "unit": "ק״ג",
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "unit-conflict:מארז/ק״ג",
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -1005,6 +1399,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 13.0,
+        "price_max": 13.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -1012,19 +1418,19 @@
     "slug": "oranges",
     "hebrew_name": "תפוז",
     "market_estimate": {
-      "price_min": 3.0,
-      "price_max": 4.88,
+      "price_min": 15.9,
+      "price_max": 15.9,
       "unit": "ק״ג",
-      "organic": false,
+      "organic": true,
       "as_of": "2026-06",
-      "confidence": "medium-high"
+      "confidence": "low"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
     "_flags": [
-      "wholesale-only-basis(below-retail)",
-      "conventional-only(no-organic-source)"
+      "mixed-basis(wholesale+retail)"
     ],
     "_sources": [
       {
@@ -1038,6 +1444,18 @@
         "as_of": "2026-06",
         "confidence": "high",
         "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 15.9,
+        "price_max": 15.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/A28",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
       }
     ]
   },
@@ -1045,19 +1463,18 @@
     "slug": "potato",
     "hebrew_name": "תפוח אדמה",
     "market_estimate": {
-      "price_min": 9.9,
-      "price_max": 9.9,
+      "price_min": 9.0,
+      "price_max": 19.0,
       "unit": "ק״ג",
       "organic": true,
       "as_of": "2026-06",
-      "confidence": "low"
+      "confidence": "high"
     },
     "_engines": [
-      "gemini_2026-06-12"
+      "gemini_2026-06-12",
+      "perplexity_2026-06-12"
     ],
-    "_flags": [
-      "single-source-low-confidence"
-    ],
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -1069,6 +1486,18 @@
         "source_url": "https://www.shufersal.co.il/online/he/c/F010202/promotion",
         "as_of": "2026-06",
         "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity_2026-06-12",
+        "price_min": 9.0,
+        "price_max": 19.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; שופרסל green; טבע קסטל",
+        "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/c/A28",
+        "as_of": "2026-06",
+        "confidence": "high",
         "basis": "retail"
       }
     ]

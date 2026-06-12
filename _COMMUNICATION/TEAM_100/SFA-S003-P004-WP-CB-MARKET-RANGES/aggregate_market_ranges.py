@@ -36,6 +36,22 @@ def is_wholesale(src, url):
     blob = f"{src or ''} {url or ''}".lower()
     return any(h.lower() in blob for h in WHOLESALE_HINTS)
 
+def norm_unit(u):
+    """Canonicalize selling units so ק\"ג == ק״ג (ASCII quote vs Hebrew gershayim) etc."""
+    if not u:
+        return ""
+    u = u.strip().replace('"', '״').replace("'", "׳")
+    base = u.replace(' ', '')
+    if base in ('ק״ג', 'קילו', 'קילוגרם', 'קג', 'kg'):
+        return 'ק״ג'
+    if base in ('יח׳', 'יחידה', 'יח', 'unit'):
+        return 'יחידה'
+    if base in ('אגודה', 'צרור', 'bunch'):
+        return 'צרור'
+    if base in ('מארז', 'חבילה', 'pack'):
+        return 'מארז'
+    return u
+
 def load_reports():
     reports = {}
     for path in sorted(glob.glob(os.path.join(INPUTS, "*.json"))):
@@ -70,7 +86,7 @@ def main():
                 "engine": engine,
                 "price_min": float(me.get("price_min", 0) or 0),
                 "price_max": float(me.get("price_max", me.get("price_min", 0)) or 0),
-                "unit": (me.get("unit") or "").strip(),
+                "unit": norm_unit(me.get("unit") or ""),
                 "organic": bool(me.get("organic", False)),
                 "source": src, "source_url": url,
                 "as_of": me.get("as_of", ""),
