@@ -147,6 +147,8 @@ final class CropBookViewController
         $nowMonth = (int)date('n');
 
         $crops = [];
+        /** @var array<string,array{price_min:float,price_max:float,unit:string}> */
+        $estimateBySlug = [];
         foreach ($rows as $row) {
             $slug    = (string)($row['slug'] ?? '');
             $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
@@ -200,6 +202,19 @@ final class CropBookViewController
                 'in_season'        => $inSeasonAct !== '',
                 'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
             ];
+
+            // WP-CB-UI-TAILS AC-1.2: capture an ESTIMATED market range from the crop payload
+            // (crops.payload_json.market_estimate — populated later by WP-CB-MARKET-RANGES / team_80).
+            // Render-side infrastructure only: stays empty until that data lands → the chip simply
+            // does not render (honest). Live product price (below) always wins over this estimate.
+            $me = $payload['market_estimate'] ?? null;
+            if (is_array($me) && (float)($me['price_min'] ?? 0) > 0) {
+                $estimateBySlug[$slug] = [
+                    'price_min' => (float)$me['price_min'],
+                    'price_max' => (float)($me['price_max'] ?? $me['price_min']),
+                    'unit'      => (string)($me['unit'] ?? ''),
+                ];
+            }
         }
 
         // WP-CB-UI-REDESIGN (WI-3): 'now' sort — in-season crops first (stable).
@@ -257,6 +272,7 @@ final class CropBookViewController
         return $this->html($response, Template::render('pages/book_entry', [
             'crops'    => $crops,
             'prices'   => $priceBySlug,
+            'estimates'=> $estimateBySlug,
             'view'     => $view,
             'sort'     => $sort,
             'total'    => count($crops),
@@ -754,10 +770,15 @@ final class CropBookViewController
         //     suppresses the range line then). Built from the same $varieties the
         //     vtable already renders — no new query.
         $variety_ranges = self::buildVarietyRanges($varieties);
-        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by
-        //     trust. Derived from the winning_source_class the enrichment/payload
-        //     already exposes via $cb1_fields — never invented. Empty when the
-        //     mirror carries no provenance (template then omits the source row).
+        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by trust.
+        //     Derived from the winning_source_class $cb1_fields exposes — never invented.
+        //     Enrichment rows carry their real class; a value resolved from the internal
+        //     curated variety payload (F-UI-01 fallback) is classified 'NI' (internal → PR),
+        //     consistent with the crop_attribute path (AC-2.1, WP-CB-UI-TAILS) — so this list
+        //     is accurate rather than spuriously empty. Empty ONLY for genuinely-MISSING fields
+        //     (AC-2.2 honest-omission). NB: source_classes is consumed by the crop_topics macro
+        //     (templates/macros/crop_topics.php), which book_crop.php does not currently include;
+        //     the page's visible field provenance is the pv-* cue (field_state). See build report.
         $source_classes = self::buildSourceClasses($cb1_fields);
 
         return $this->html($response, Template::render('pages/book_crop', [
@@ -915,7 +936,13 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // WP-CB-UI-TAILS AC-2.1: a value resolved from the internal curated variety
+                        // payload IS sourced (our internal dataset) — classify it 'NI' (internal → PR
+                        // class) for source-class ACCURACY, consistent with the crop_attribute path
+                        // below (L982). This corrects the prior '' and feeds buildSourceClasses() →
+                        // source_classes (exposed to the deep template). Honest, not fabricated: only a
+                        // present value is classified; genuinely-MISSING fields keep '' (AC-2.2).
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $canonical,
                     ];
@@ -948,7 +975,9 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // AC-2.1: internal-curated payload value → 'NI' (internal → PR class), as the
+                        // crop_attribute branch already does. Honest source-class data, not fabricated.
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $atKey,
                     ];

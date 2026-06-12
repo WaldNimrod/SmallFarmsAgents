@@ -180,6 +180,44 @@ final class CropBookV1RouteTest extends TestCase
             'Without a matching product price, the ₪ chip must be omitted (never fabricated)');
     }
 
+    /**
+     * WP-CB-UI-TAILS AC-1.2: a crop with NO live product price but a payload `market_estimate`
+     * range renders the MUTED "מחיר מוערך" estimate chip — distinct from the live "בשוק" chip.
+     * (The market_estimate data lands later via WP-CB-MARKET-RANGES / team_80; this proves the
+     * render infrastructure.) Renders in both cards and table views (§9.2).
+     */
+    public function testBookIndexEstimateChipFromPayloadWhenNoLivePrice(): void
+    {
+        // No products seeded → no live price; the crop carries only a payload estimate range.
+        $payload = json_encode(['market_estimate' => ['price_min' => 8, 'price_max' => 12, 'unit' => 'ק״ג']], JSON_UNESCAPED_UNICODE);
+        $st = $this->pdo->prepare("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES (4,'estcrop','כרוב מוערך','Brassica oleracea','מצליבים','vegetables','winter',50,70,?,'2026-05-31')");
+        $st->execute([$payload]);
+
+        $cards = (string)$this->get('/crop-book/?view=cards')->getBody();
+        $this->assertStringContainsString('cc__price--est', $cards, 'A payload market_estimate with no live price must render the muted estimate chip');
+        $this->assertStringContainsString('מחיר מוערך', $cards, 'The estimate chip carries the distinct "מחיר מוערך" label (not "בשוק")');
+        $this->assertStringContainsString('₪8', $cards, 'The estimate range min renders');
+        $this->assertStringContainsString('12', $cards, 'The estimate range max renders');
+
+        $table = (string)$this->get('/crop-book/?view=table')->getBody();
+        $this->assertStringContainsString('מוערך', $table, 'The estimate also renders in the table view (§9.2)');
+    }
+
+    /** AC-1.4 priority: a live product price wins over a payload estimate — never both. */
+    public function testBookIndexLivePriceWinsOverEstimate(): void
+    {
+        $payload = json_encode(['market_estimate' => ['price_min' => 8, 'price_max' => 12, 'unit' => 'ק״ג']], JSON_UNESCAPED_UNICODE);
+        $st = $this->pdo->prepare("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES (5,'estcrop2','כרובית מוערכת','Brassica','מצליבים','vegetables','winter',50,70,?,'2026-05-31')");
+        $st->execute([$payload]);
+        // Same crop ALSO has a live product (linked by Hebrew name) → live must win.
+        $this->pdo->exec("INSERT OR IGNORE INTO products (id,slug,hebrew_name,category,unit,last_price,last_price_date,freshness_days,payload_json,last_pushed_at) VALUES (705,'oma-est2','כרובית מוערכת','vegetables','kg',9.0,'2026-06-11',1,'{}','2026-06-11')");
+
+        $html = (string)$this->get('/crop-book/?view=cards')->getBody();
+        $this->assertStringContainsString('בשוק', $html, 'The live chip renders when a live price exists');
+        $this->assertStringContainsString('₪9', $html, 'The live price wins');
+        $this->assertStringNotContainsString('מחיר מוערך', $html, 'Live price wins over the estimate (no estimate chip when a live price exists)');
+    }
+
     public function testBookIndexTableView(): void
     {
         $res = $this->get('/crop-book/?view=table');
@@ -328,6 +366,32 @@ final class CropBookV1RouteTest extends TestCase
         // 4.2 yield must surface as a validated value (not "—" missing) in the headline values.
         $this->assertStringContainsString('4.2', $html, 'yield value from variety payload must render');
         $this->assertStringContainsString('pv-validated', $html, 'VALIDATED state from payload must drive the cue');
+    }
+
+    /**
+     * WP-CB-UI-TAILS AC-2.1/AC-2.4: at DEEP depth, a field whose value comes from the internal
+     * curated variety payload (F-UI-01 fallback, no enrichment mirror) renders its visible
+     * provenance cue (pv-validated) — honest, driven by field_state, never fabricated. Also
+     * confirms buildSourceClasses no longer returns spuriously empty for payload-sourced fields
+     * (the winning_source_class NI correction); see build report on the crop_topics wiring.
+     */
+    public function testDeepProvenanceCueFromVarietyPayload(): void
+    {
+        $this->pdo->exec("INSERT OR IGNORE INTO crops (id,slug,hebrew_name,scientific_name,family_name_he,category,season,dtm_min,dtm_max,payload_json,last_pushed_at) VALUES
+            (10,'prov-crop','גזר מקור','Daucus carota','סוככיים','vegetables','winter',60,80,'{}','2026-06-01')");
+        $payload = json_encode([
+            'is_default'  => true,
+            'agronomy'    => ['yield_per_bed_m' => 4.2, 'days_to_maturity' => 70, 'spacing_in_row_cm' => 5],
+            'field_state' => ['yield_per_bed_m' => 'VALIDATED', 'days_to_maturity' => 'VALIDATED', 'spacing_in_row_cm' => 'VALIDATED'],
+        ], JSON_UNESCAPED_UNICODE);
+        $this->pdo->exec("INSERT OR IGNORE INTO crop_varieties (id,crop_id,name,payload_json) VALUES (1001,10,'def'," . $this->pdo->quote($payload) . ")");
+
+        $res = $this->get('/crop-book/prov-crop/?depth=deep');
+        $this->assertSame(200, $res->getStatusCode(), 'Deep depth must render 200 for a payload-sourced crop');
+        $html = (string)$res->getBody();
+        $this->assertStringContainsString('pv-validated', $html,
+            'Deep view must show the visible provenance cue for a value sourced from the variety payload (AC-2.1)');
+        $this->assertStringContainsString('4.2', $html, 'The payload-sourced value renders at deep depth');
     }
 
     public function testBookCropDrillDepth(): void
