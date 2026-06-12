@@ -115,6 +115,22 @@ $has_calendar = !empty($sowM) || !empty($transM) || !empty($harvestM);
 // market chip
 $mlink = is_array($crop['market_link'] ?? null) ? $crop['market_link'] : null;
 
+// WP-CB-MARKET-RANGES: estimated market range (multi-engine research aggregate).
+// The flat price_* fields ARE the PRIMARY basis — organic for most crops (SFA teaches
+// organic growing), conventional for dried-form crops like hibiscus, where $mestNote
+// clarifies the basis. Shown only when no live product price exists — a live price wins.
+$mest        = is_array($crop['market_estimate'] ?? null) ? $crop['market_estimate'] : null;
+$mestHas     = $mest !== null && (float)($mest['price_min'] ?? 0) > 0;
+$mestNote    = $mest ? trim((string)($mest['note'] ?? '')) : '';
+$mestPrimary = $mest ? (string)($mest['primary'] ?? 'organic') : 'organic';
+$mestConv    = ($mest && is_array($mest['conventional'] ?? null)) ? $mest['conventional'] : null;
+// Range formatter: "₪min" or "₪min–max" (trailing-zero-trimmed via $nf).
+$mestRange = static function (array $x) use ($nf): string {
+    $lo = (float)($x['price_min'] ?? 0);
+    $hi = (float)($x['price_max'] ?? $lo);
+    return '₪' . $nf($lo) . ($hi > $lo ? '–' . $nf($hi) : '');
+};
+
 // public notes (rich payload) — body_text list (honest, public-only)
 $pub_notes = array_values(array_filter((array)($crop['notes'] ?? []), static fn ($n) => is_array($n) && !empty($n['body_text']) && empty($n['is_internal_farm_use_only'])));
 
@@ -209,6 +225,8 @@ ob_start();
         <?php endif; ?>
         <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
           <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג ←</a>
+        <?php elseif ($mestHas): ?>
+          <span class="mktchip mktchip--est"<?= $mestNote !== '' ? ' title="' . $h($mestNote) . '"' : '' ?>><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> מחיר מוערך: <span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?>/<?= $h($mu) ?><?php endif; ?><?php if ((float)($mest['price_median'] ?? 0) > 0): ?> · חציון <span class="num">₪<?= $h($nf($mest['price_median'])) ?></span><?php endif; ?></span>
         <?php endif; ?>
       </div>
 
@@ -404,6 +422,29 @@ ob_start();
           <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
         </div>
         <div class="srcline">מתוך מדד השוק הקהילתי · <a href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>">למחירון המלא ←</a></div>
+      </div>
+    </details>
+    <?php elseif ($mestHas): ?>
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?>/<?= $h($mu) ?><?php endif; ?></b> · מחיר מוערך</span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <div class="profit">
+          <div>
+            <div class="muted" style="font-size:13px">מחיר מוערך<?= $mestPrimary === 'organic' ? ' · תוצרת אורגנית' : '' ?></div>
+            <div class="profit__big"><span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?> / <?= $h($mu) ?><?php endif; ?></div>
+            <?php if ((float)($mest['price_median'] ?? 0) > 0): ?><div class="muted" style="font-size:13px">חציון <span class="num">₪<?= $h($nf($mest['price_median'])) ?></span></div><?php endif; ?>
+          </div>
+          <div style="flex:1"></div>
+          <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
+        </div>
+        <?php if ($mestPrimary === 'organic' && $mestConv && (float)($mestConv['price_min'] ?? 0) > 0): ?>
+          <div class="srcline">תוצרת רגילה (לא אורגנית): <span class="num"><?= $h($mestRange($mestConv)) ?></span><?php if (($cu = (string)($mestConv['unit'] ?? '')) !== ''): ?>/<?= $h($cu) ?><?php endif; ?></div>
+        <?php endif; ?>
+        <?php if ($mestNote !== ''): ?>
+          <div class="srcline muted"><?= $h($mestNote) ?></div>
+        <?php endif; ?>
+        <div class="srcline">אומדן ממחקר שוק רב-מקורי<?php if (($ao = (string)($mest['as_of'] ?? '')) !== ''): ?> · עדכון <?= $h($ao) ?><?php endif; ?> · אינו מחיר מכירה</div>
       </div>
     </details>
     <?php endif; ?>

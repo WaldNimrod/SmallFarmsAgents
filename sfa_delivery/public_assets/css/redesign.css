@@ -253,6 +253,8 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .glance b{ font-family:var(--gj-font-head); font-size:24px; font-weight:700; line-height:1; }
 .glance span{ font-size:13px; color:var(--gj-ink-soft); margin-top:3px; }
 .mktchip{ display:inline-flex; align-items:center; gap:7px; background:#f7e2da; color:var(--gj-tomato-deep); border-radius:var(--r-pill); padding:5px 13px; font-weight:700; font-size:13px; }
+/* WP-CB-MARKET-RANGES: estimated price chip — muted/dashed "estimate" language (matches .cc__price--est). */
+.mktchip--est{ background:transparent; color:var(--gj-ink-soft); border:1px dashed var(--gj-line); }
 
 .stagenav{ position:sticky; top:62px; z-index:20; background:rgba(238,244,238,.94); backdrop-filter:blur(6px); border-block:1px solid var(--gj-line); margin-inline:calc(-1*var(--shell-pad)); padding-inline:var(--shell-pad); }
 .stagenav ul{ display:flex; gap:4px; list-style:none; margin:0; padding:8px 0; overflow-x:auto; }
