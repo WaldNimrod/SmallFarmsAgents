@@ -2,23 +2,31 @@
   {
     "slug": "watermelon",
     "hebrew_name": "אבטיח",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 5.0,
       "price_max": 13.9,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)",
-      "wide-spread(x2.8)"
-    ],
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -61,20 +69,21 @@
   {
     "slug": "edamame",
     "hebrew_name": "אדממה",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 19.9,
       "price_max": 19.9,
       "unit": "חבילה 1 ק״ג",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -94,19 +103,21 @@
   {
     "slug": "blackberry",
     "hebrew_name": "אוסנה",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 23.0,
       "price_max": 29.0,
       "unit": "מארז 125 גרם",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "medium"
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -126,19 +137,21 @@
   {
     "slug": "anise-hyssop",
     "hebrew_name": "אזוב מצוי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 17.0,
       "price_max": 17.0,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -158,18 +171,22 @@
   {
     "slug": "peas",
     "hebrew_name": "אפונה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.3,
       "price_max": 14.0,
       "unit": "חבילה 500 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "medium"
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
     ],
-    "_flags": [],
     "_sources": [
       {
         "engine": "openai_2026-06-12",
@@ -188,19 +205,21 @@
   {
     "slug": "arugula",
     "hebrew_name": "ארוגולה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.0,
       "price_max": 7.0,
       "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -220,23 +239,24 @@
   {
     "slug": "artichokes",
     "hebrew_name": "ארטישוק",
-    "market_estimate": {
-      "price_min": 6.9,
-      "price_max": 39.9,
-      "unit": "ק״ג",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "medium"
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "unit": "יחידה",
+      "basis": "wholesale",
+      "confidence": "low",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1,
+      "outlier_excluded": [
+        "openai_2026-06-12@₪39.9"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "unit-conflict:יחידה/ק״ג",
-      "mixed-basis(wholesale+retail)",
-      "conventional-only(no-organic-source)",
-      "wide-spread(x5.8)"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -261,26 +281,28 @@
         "source_url": "https://www.pricez.co.il/Product/71398/%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7-%D7%98%D7%A8%D7%99-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
         "as_of": "2026-06",
         "confidence": "medium",
-        "basis": "retail"
+        "basis": "wholesale"
       }
     ]
   },
   {
     "slug": "jerusalem-artichokes",
     "hebrew_name": "ארטישוק ירושלמי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 22.5,
       "price_max": 22.5,
       "unit": "יחידה 400 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -300,20 +322,26 @@
   {
     "slug": "basil",
     "hebrew_name": "בזיל",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.0,
       "price_max": 11.0,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:יחידה/צרור"
+      "organic-unit-ambiguity:יחידה/צרור"
     ],
     "_sources": [
       {
@@ -345,22 +373,31 @@
   {
     "slug": "sweet-potato",
     "hebrew_name": "בטטה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 12.0,
       "price_max": 19.6,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 9.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -403,20 +440,21 @@
   {
     "slug": "okra",
     "hebrew_name": "במיה",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 19.5,
       "price_max": 19.5,
       "unit": "חבילה 1 ק״ג",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -436,22 +474,31 @@
   {
     "slug": "onions",
     "hebrew_name": "בצל",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.5,
       "price_max": 13.9,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 1.93,
+      "price_max": 3.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -494,22 +541,36 @@
   {
     "slug": "scallions",
     "hebrew_name": "בצל ירוק",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.0,
       "price_max": 8.5,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 13.0,
+      "unit": "יחידה",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:יחידה/מארז/צרור",
-      "mixed-basis(wholesale+retail)"
+      "organic-unit-ambiguity:מארז/צרור"
     ],
     "_sources": [
       {
@@ -553,22 +614,31 @@
   {
     "slug": "broccoli",
     "hebrew_name": "ברוקולי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 26.0,
       "price_max": 26.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 11.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -611,20 +681,21 @@
   {
     "slug": "ginger",
     "hebrew_name": "ג'ינג'ר",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 19.5,
       "price_max": 19.5,
       "unit": "יחידה 300 גרם",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -644,22 +715,22 @@
   {
     "slug": "carrots",
     "hebrew_name": "גזר",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.9,
       "price_max": 23.0,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "wide-spread(x2.9)"
-    ],
+    "conventional": null,
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -702,19 +773,21 @@
   {
     "slug": "cress",
     "hebrew_name": "גרגר נחלים",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 11.0,
       "price_max": 11.0,
       "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -734,22 +807,31 @@
   {
     "slug": "winter-squash",
     "hebrew_name": "דלעת",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 14.0,
       "price_max": 23.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 3.63,
+      "price_max": 5.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -792,19 +874,21 @@
   {
     "slug": "bay",
     "hebrew_name": "דפנה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 10.0,
       "price_max": 10.0,
       "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -824,19 +908,21 @@
   {
     "slug": "hibiscus",
     "hebrew_name": "היביסקוס",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 7.99,
       "price_max": 12.9,
       "unit": "100 גרם",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "medium"
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -856,18 +942,22 @@
   {
     "slug": "chickpea",
     "hebrew_name": "חומוס",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 10.9,
       "price_max": 15.9,
       "unit": "חבילה 500 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "medium"
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
     ],
-    "_flags": [],
     "_sources": [
       {
         "engine": "openai_2026-06-12",
@@ -879,26 +969,28 @@
         "source_url": "https://www.pricez.co.il/Product/62134/%D7%92%D7%A8%D7%92%D7%99%D7%A8%D7%99-%D7%97%D7%95%D7%9E%D7%95%D7%A1-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%94%D7%A8%D7%93%D7%95%D7%A3-500-%D7%92%D7%A8%D7%9D",
         "as_of": "2026-06",
         "confidence": "medium",
-        "basis": "retail"
+        "basis": "wholesale"
       }
     ]
   },
   {
     "slug": "wheat",
     "hebrew_name": "חיטה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 11.2,
       "price_max": 11.2,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -918,19 +1010,21 @@
   {
     "slug": "sunflower",
     "hebrew_name": "חמניה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 10.0,
       "price_max": 10.0,
       "unit": "חבילה 300 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -950,22 +1044,31 @@
   {
     "slug": "lettuce",
     "hebrew_name": "חסה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.0,
       "price_max": 7.9,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 4.5,
+      "unit": "יחידה",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -1008,18 +1111,20 @@
   {
     "slug": "eggplant",
     "hebrew_name": "חציל",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.8,
       "price_max": 12.0,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [],
     "_sources": [
       {
@@ -1051,20 +1156,26 @@
   {
     "slug": "thyme",
     "hebrew_name": "טימין",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.0,
       "price_max": 9.9,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:יחידה/צרור"
+      "organic-unit-ambiguity:יחידה/צרור"
     ],
     "_sources": [
       {
@@ -1096,20 +1207,21 @@
   {
     "slug": "tarragon",
     "hebrew_name": "טרגון",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 6.9,
       "price_max": 6.9,
       "unit": "מארז",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -1129,20 +1241,26 @@
   {
     "slug": "cilantro",
     "hebrew_name": "כוסברה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.0,
       "price_max": 11.9,
-      "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "מארז"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:יחידה/מארז"
+      "organic-unit-ambiguity:יחידה/מארז"
     ],
     "_sources": [
       {
@@ -1174,19 +1292,21 @@
   {
     "slug": "turmeric",
     "hebrew_name": "כורכום",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 19.5,
       "price_max": 19.5,
       "unit": "חבילה 150 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1206,22 +1326,36 @@
   {
     "slug": "cabbage",
     "hebrew_name": "כרוב",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 5.5,
       "price_max": 12.9,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "ק״ג"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 1.5,
+      "price_max": 4.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:יחידה/ק״ג",
-      "mixed-basis(wholesale+retail)"
+      "organic-unit-ambiguity:יחידה/ק״ג"
     ],
     "_sources": [
       {
@@ -1265,23 +1399,31 @@
   {
     "slug": "cauliflower",
     "hebrew_name": "כרובית",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 14.9,
       "price_max": 21.0,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "unit-conflict:יחידה / ק״ג/ק״ג",
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 4.93,
+      "price_max": 7.5,
+      "unit": "יחידה / ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -1305,7 +1447,7 @@
         "source_url": "https://www.pricez.co.il/Product/71448/%D7%9B%D7%A8%D7%95%D7%91%D7%99%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
         "as_of": "2026-06",
         "confidence": "medium",
-        "basis": "retail"
+        "basis": "wholesale"
       },
       {
         "engine": "perplexity_2026-06-12",
@@ -1324,19 +1466,21 @@
   {
     "slug": "leeks",
     "hebrew_name": "כרישה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 12.0,
       "price_max": 12.0,
       "unit": "מארז 2 יחידות",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1356,20 +1500,21 @@
   {
     "slug": "lovage",
     "hebrew_name": "לובסטייה",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 7.9,
       "price_max": 7.9,
       "unit": "מארז",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -1389,19 +1534,21 @@
   {
     "slug": "lemon-balm",
     "hebrew_name": "לימון בלם",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.5,
       "price_max": 9.5,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1421,19 +1568,21 @@
   {
     "slug": "lemon-verbena",
     "hebrew_name": "לימון ורבנה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.0,
       "price_max": 9.0,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1453,20 +1602,31 @@
   {
     "slug": "turnips",
     "hebrew_name": "לפת",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.5,
       "price_max": 13.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1498,22 +1658,31 @@
   {
     "slug": "melons",
     "hebrew_name": "מלון",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.0,
       "price_max": 14.9,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 3.5,
+      "price_max": 7.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -1556,19 +1725,21 @@
   {
     "slug": "cucumbers",
     "hebrew_name": "מלפפון",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.0,
       "price_max": 18.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [],
     "_sources": [
       {
@@ -1612,20 +1783,26 @@
   {
     "slug": "chard",
     "hebrew_name": "מנגולד",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.5,
       "price_max": 12.9,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:מארז/צרור"
+      "organic-unit-ambiguity:מארז/צרור"
     ],
     "_sources": [
       {
@@ -1657,19 +1834,21 @@
   {
     "slug": "sage",
     "hebrew_name": "מרווה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.0,
       "price_max": 9.0,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1689,20 +1868,26 @@
   {
     "slug": "mint",
     "hebrew_name": "נענע",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 5.0,
       "price_max": 8.5,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:מארז/צרור"
+      "organic-unit-ambiguity:מארז/צרור"
     ],
     "_sources": [
       {
@@ -1734,19 +1919,21 @@
   {
     "slug": "soybean",
     "hebrew_name": "סויה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.7,
       "price_max": 9.7,
       "unit": "חבילה 500 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1766,20 +1953,31 @@
   {
     "slug": "beets",
     "hebrew_name": "סלק",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 12.5,
       "price_max": 12.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 2.6,
+      "price_max": 4.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1811,19 +2009,21 @@
   {
     "slug": "celery",
     "hebrew_name": "סלרי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.0,
       "price_max": 8.0,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1843,19 +2043,21 @@
   {
     "slug": "tomatoes",
     "hebrew_name": "עגבנייה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 10.0,
       "price_max": 23.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [],
     "_sources": [
       {
@@ -1899,19 +2101,21 @@
   {
     "slug": "cherry-tomato",
     "hebrew_name": "עגבניית שרי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 21.9,
       "price_max": 29.9,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [],
     "_sources": [
       {
@@ -1955,19 +2159,21 @@
   {
     "slug": "chives",
     "hebrew_name": "עירית",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.5,
       "price_max": 8.5,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -1987,21 +2193,36 @@
   {
     "slug": "salad-mix",
     "hebrew_name": "עלי בייבי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 12.9,
       "price_max": 15.5,
-      "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "מארז"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 8.9,
+      "price_max": 8.9,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:יחידה/מארז"
+      "organic-unit-ambiguity:יחידה/מארז"
     ],
     "_sources": [
       {
@@ -2045,18 +2266,20 @@
   {
     "slug": "pac-choi",
     "hebrew_name": "פאק צ'וי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 7.0,
       "price_max": 16.9,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [],
     "_sources": [
       {
@@ -2088,19 +2311,21 @@
   {
     "slug": "fava-bean",
     "hebrew_name": "פול",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 4.9,
       "price_max": 4.9,
       "unit": "100 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2120,21 +2345,28 @@
   {
     "slug": "parsley",
     "hebrew_name": "פטרוזיליה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 4.9,
       "price_max": 11.9,
-      "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "unit": "מארז / צרור",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3,
+      "unit_options": [
+        "מארז",
+        "מארז / צרור",
+        "צרור"
+      ]
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "unit-conflict:מארז/מארז / צרור/צרור"
+      "organic-unit-ambiguity:מארז/מארז / צרור/צרור"
     ],
     "_sources": [
       {
@@ -2178,23 +2410,31 @@
   {
     "slug": "peppers",
     "hebrew_name": "פלפל",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.5,
       "price_max": 24.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)",
-      "wide-spread(x2.6)"
-    ],
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 11.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2237,20 +2477,21 @@
   {
     "slug": "chinese-lantern",
     "hebrew_name": "פנס סיני",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 36.0,
       "price_max": 36.0,
       "unit": "מארז 115 גרם",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)",
-      "single-source-low-confidence"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -2270,19 +2511,21 @@
   {
     "slug": "chicory",
     "hebrew_name": "ציקוריה",
-    "market_estimate": {
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
       "price_min": 29.9,
       "price_max": 49.9,
       "unit": "מארז 500 גרם",
-      "organic": false,
-      "as_of": "2026-06",
-      "confidence": "medium"
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
     "_flags": [
-      "conventional-only(no-organic-source)"
+      "no-organic-source"
     ],
     "_sources": [
       {
@@ -2302,21 +2545,31 @@
   {
     "slug": "radishes",
     "hebrew_name": "צנונית",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.5,
       "price_max": 9.5,
       "unit": "צרור",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "low",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:צרור/ק״ג",
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2348,20 +2601,31 @@
   {
     "slug": "kohlrabi",
     "hebrew_name": "קולורבי",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.5,
       "price_max": 8.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2393,21 +2657,24 @@
   {
     "slug": "kale",
     "hebrew_name": "קייל",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.0,
       "price_max": 8.0,
       "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1,
+      "outlier_excluded": [
+        "perplexity_2026-06-12@₪64.86"
+      ]
     },
-    "_engines": [
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "outlier-excluded:perplexity_2026-06-12@₪64.86",
-      "unit-conflict:מארז/ק״ג"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2439,22 +2706,31 @@
   {
     "slug": "summer-squash",
     "hebrew_name": "קישוא",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 14.0,
       "price_max": 18.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 7.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2497,21 +2773,31 @@
   {
     "slug": "garlic",
     "hebrew_name": "שום",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 17.5,
       "price_max": 17.5,
       "unit": "חבילה 200 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 5.33,
+      "price_max": 18.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:חבילה 200 גרם/ק״ג",
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2543,22 +2829,31 @@
   {
     "slug": "fennel",
     "hebrew_name": "שומר",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.0,
       "price_max": 11.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 4.5,
+      "price_max": 8.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2601,19 +2896,21 @@
   {
     "slug": "sesame",
     "hebrew_name": "שומשום",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.9,
       "price_max": 13.9,
       "unit": "חבילה 500 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2633,20 +2930,31 @@
   {
     "slug": "dill",
     "hebrew_name": "שמיר",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.0,
       "price_max": 6.0,
       "unit": "יחידה",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:יחידה/צרור"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2678,21 +2986,31 @@
   {
     "slug": "bush-pole",
     "hebrew_name": "שעועית",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 22.5,
       "price_max": 22.5,
       "unit": "חבילה 300 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12"
-    ],
+    "conventional": {
+      "price_min": 15.0,
+      "price_max": 16.0,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
     "_flags": [
-      "unit-conflict:חבילה 300 גרם/ק״ג",
-      "mixed-basis(wholesale+retail)"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2724,19 +3042,21 @@
   {
     "slug": "strawberry",
     "hebrew_name": "תות שדה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 19.0,
       "price_max": 19.0,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2756,23 +3076,31 @@
   {
     "slug": "corn",
     "hebrew_name": "תירס",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.0,
       "price_max": 17.5,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "unit-conflict:מארז/ק״ג",
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 5.5,
+      "price_max": 7.5,
+      "unit": "מארז",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2815,22 +3143,31 @@
   {
     "slug": "oranges",
     "hebrew_name": "תפוז",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 9.5,
       "price_max": 15.9,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 2
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "mixed-basis(wholesale+retail)"
-    ],
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.88,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini_2026-06-12"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2873,22 +3210,22 @@
   {
     "slug": "potato",
     "hebrew_name": "תפוח אדמה",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 6.5,
       "price_max": 19.0,
       "unit": "ק״ג",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "high"
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini_2026-06-12",
+        "openai_2026-06-12",
+        "perplexity_2026-06-12"
+      ],
+      "n_sources": 3
     },
-    "_engines": [
-      "gemini_2026-06-12",
-      "openai_2026-06-12",
-      "perplexity_2026-06-12"
-    ],
-    "_flags": [
-      "wide-spread(x2.9)"
-    ],
+    "conventional": null,
+    "_flags": [],
     "_sources": [
       {
         "engine": "gemini_2026-06-12",
@@ -2931,19 +3268,21 @@
   {
     "slug": "spinach",
     "hebrew_name": "תרד",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 13.9,
       "price_max": 13.9,
       "unit": "יחידה 190 גרם",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {
@@ -2963,19 +3302,21 @@
   {
     "slug": "new-zealand-spinach",
     "hebrew_name": "תרד ניו-זילנד",
-    "market_estimate": {
+    "primary": "organic",
+    "organic": {
       "price_min": 8.0,
       "price_max": 8.0,
       "unit": "מארז",
-      "organic": true,
-      "as_of": "2026-06",
-      "confidence": "low"
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai_2026-06-12"
+      ],
+      "n_sources": 1
     },
-    "_engines": [
-      "openai_2026-06-12"
-    ],
+    "conventional": null,
     "_flags": [
-      "single-source-low-confidence"
+      "organic-single-source"
     ],
     "_sources": [
       {

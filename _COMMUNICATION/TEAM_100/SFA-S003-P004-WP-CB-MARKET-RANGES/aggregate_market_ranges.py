@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 """
-aggregate_market_ranges.py — WP-CB-MARKET-RANGES multi-engine aggregator.
+aggregate_market_ranges.py — WP-CB-MARKET-RANGES multi-engine aggregator (dual-basis).
 
 Reads every *.json engine report in ./research_inputs/ (each = a JSON array of
 {slug, hebrew_name, market_estimate:{price_min,price_max,unit,organic,source,source_url,as_of,confidence}}),
-merges them per crop with full provenance, flags data-quality issues, and writes:
-  - unified_market_estimates.json   (per crop: recommended estimate + _sources[] + _flags[])
-  - AGGREGATION_SUMMARY.md          (coverage + merged table + flags for human review)
+and produces, PER CROP, TWO merged estimates kept side by side (team_00: SFA teaches organic →
+organic is PRIMARY in the UI; conventional is kept as a secondary detail for future organic-vs-conventional
+comparison):
+  - "organic"      — merged from organic sources (the headline price chip)
+  - "conventional" — merged from conventional sources (small detail; often wholesale-basis from moag)
 
-Re-run after dropping each new engine report into research_inputs/. team_80 = advisory research; team_100
-reviews the unified file, then ingests the accepted market_estimate via WP-CB-DATA-API (NO seed --all).
+Outputs:
+  - unified_market_estimates.json   (per crop: organic{} + conventional{} + primary + _flags[] + _sources[])
+  - AGGREGATION_SUMMARY.md          (organic | conventional table + organic-coverage tiers for review)
+
+Each merged estimate: robust outlier trim (drop a source whose midpoint > 3x the cheapest — e.g. a
+restaurant-menu price), unit-normalized, with engines/basis/confidence. team_80 = advisory research;
+team_100 reviews, then ingests via WP-CB-DATA-API (incremental, validated — NO seed --all).
 """
 import json, os, glob, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INPUTS = os.path.join(HERE, "research_inputs")
 
-# Canonical 70 crop slugs (from sfa.nimrod.bio/api/v1/crops, 2026-06-12) — for coverage.
 CANON = [
  "watermelon","edamame","blackberry","anise-hyssop","peas","arugula","artichokes","jerusalem-artichokes",
  "basil","sweet-potato","okra","onions","scallions","broccoli","ginger","jicama","carrots","cress",
@@ -28,50 +34,68 @@ CANON = [
  "spinach","new-zealand-spinach",
 ]
 CANON_SET = set(CANON)
-
-# A source is WHOLESALE-basis (farm-gate / סיטונאי, far below consumer retail) if it matches these.
-WHOLESALE_HINTS = ["moag", "מועצת הצמחים", "משרד החקלאות", "סיטונא", "moonsite"]
+WHOLESALE_HINTS = ["moag", "מועצת הצמחים", "משרד החקלאות", "סיטונא", "moonsite", "pricez", "פרייסז"]
 
 def is_wholesale(src, url):
     blob = f"{src or ''} {url or ''}".lower()
     return any(h.lower() in blob for h in WHOLESALE_HINTS)
 
 def norm_unit(u):
-    """Canonicalize selling units so ק\"ג == ק״ג (ASCII quote vs Hebrew gershayim) etc."""
     if not u:
         return ""
     u = u.strip().replace('"', '״').replace("'", "׳")
     base = u.replace(' ', '')
-    if base in ('ק״ג', 'קילו', 'קילוגרם', 'קג', 'kg'):
-        return 'ק״ג'
-    if base in ('יח׳', 'יחידה', 'יח', 'unit'):
-        return 'יחידה'
-    if base in ('אגודה', 'צרור', 'bunch'):
-        return 'צרור'
-    if base in ('מארז', 'חבילה', 'pack'):
-        return 'מארז'
+    if base in ('ק״ג', 'קילו', 'קילוגרם', 'קג', 'kg'): return 'ק״ג'
+    if base in ('יח׳', 'יחידה', 'יח', 'unit'):          return 'יחידה'
+    if base in ('אגודה', 'צרור', 'bunch'):              return 'צרור'
+    if base in ('מארז', 'חבילה', 'pack'):               return 'מארז'
     return u
 
-def load_reports():
+CONF_RANK = {"high": 3, "medium": 2, "medium-high": 2, "low": 1, "": 0}
+
+def summarize(sources):
+    """Merge a list of per-source dicts into one estimate, with robust high-outlier trim."""
+    if not sources:
+        return None
+    mids = sorted((s["price_min"] + s["price_max"]) / 2 for s in sources)
+    floor = mids[0]
+    pool = [s for s in sources if (s["price_min"] + s["price_max"]) / 2 <= 3 * floor] or sources
+    excluded = [s for s in sources if s not in pool]
+    rmin = min(s["price_min"] for s in pool)
+    rmax = max(s["price_max"] for s in pool)
+    pu = [s["unit"] for s in pool if s["unit"]]
+    unit = max(set(pu), key=pu.count) if pu else ""
+    units_all = sorted({s["unit"] for s in pool if s["unit"]})
+    engines = sorted({s["engine"] for s in pool})
+    bases = sorted({s["basis"] for s in pool})
+    if len(engines) >= 2:
+        conf = "high"
+    elif any(s["confidence"] == "high" for s in pool):
+        conf = "medium-high"
+    else:
+        conf = max((s["confidence"] for s in pool), key=lambda c: CONF_RANK.get(c, 0)) or "low"
+    out = {
+        "price_min": round(rmin, 2), "price_max": round(rmax, 2), "unit": unit,
+        "basis": "/".join(bases), "confidence": conf, "engines": engines, "n_sources": len(pool),
+    }
+    if len(units_all) > 1:
+        out["unit_options"] = units_all
+    if excluded:
+        out["outlier_excluded"] = [f"{s['engine']}@₪{s['price_max']}" for s in excluded]
+    return out
+
+def main():
     reports = {}
     for path in sorted(glob.glob(os.path.join(INPUTS, "*.json"))):
         engine = os.path.splitext(os.path.basename(path))[0]
         try:
             reports[engine] = json.load(open(path, encoding="utf-8"))
         except Exception as e:
-            print(f"WARN: could not parse {path}: {e}", file=sys.stderr)
-    return reports
-
-def main():
-    reports = load_reports()
+            print(f"WARN: bad {path}: {e}", file=sys.stderr)
     if not reports:
-        print("No engine reports in research_inputs/. Drop <engine>.json files there and re-run.")
-        return
+        print("No engine reports in research_inputs/."); return
 
-    # slug -> list of source dicts (with engine + basis)
-    by_slug = {}
-    he_name = {}
-    unknown_slugs = set()
+    by_slug, he_name, unknown = {}, {}, set()
     for engine, rows in reports.items():
         for row in rows:
             slug = (row.get("slug") or "").strip()
@@ -79,9 +103,9 @@ def main():
             if not slug or not me:
                 continue
             if slug not in CANON_SET:
-                unknown_slugs.add(slug)
+                unknown.add(slug)
             he_name.setdefault(slug, row.get("hebrew_name", ""))
-            src = me.get("source", ""); url = me.get("source_url", "")
+            src, url = me.get("source", ""), me.get("source_url", "")
             by_slug.setdefault(slug, []).append({
                 "engine": engine,
                 "price_min": float(me.get("price_min", 0) or 0),
@@ -89,94 +113,69 @@ def main():
                 "unit": norm_unit(me.get("unit") or ""),
                 "organic": bool(me.get("organic", False)),
                 "source": src, "source_url": url,
-                "as_of": me.get("as_of", ""),
-                "confidence": me.get("confidence", ""),
+                "as_of": me.get("as_of", ""), "confidence": me.get("confidence", ""),
                 "basis": "wholesale" if is_wholesale(src, url) else "retail",
             })
 
     unified = []
     for slug in sorted(by_slug, key=lambda s: CANON.index(s) if s in CANON_SET else 999):
         srcs = by_slug[slug]
-        engines = sorted({s["engine"] for s in srcs})
-        units = sorted({s["unit"] for s in srcs if s["unit"]})
-        bases = sorted({s["basis"] for s in srcs})
-        organics = {s["organic"] for s in srcs}
-        retail = [s for s in srcs if s["basis"] == "retail"]
-        organic_retail = [s for s in retail if s["organic"]]
-        # Recommended pool: prefer organic-retail > retail > all (the chip is consumer/retail facing).
-        pool = organic_retail or retail or srcs
-        # Robust outlier trim for the recommended RANGE: drop a source whose midpoint is > 3x the pool's
-        # median midpoint (e.g. a restaurant-menu price). Dropped sources stay in _sources (transparency).
-        mids = sorted((s["price_min"] + s["price_max"]) / 2 for s in pool)
-        floor = mids[0] if mids else 0  # cheapest source midpoint
-        pool_r = [s for s in pool if floor == 0 or (s["price_min"] + s["price_max"]) / 2 <= 3 * floor] or pool
-        excluded = [s for s in pool if s not in pool_r]
-        rmin = min(s["price_min"] for s in pool_r)
-        rmax = max(s["price_max"] for s in pool_r)
-        # unit: consensus of the trimmed pool, else the most common
-        pool_units = [s["unit"] for s in pool_r if s["unit"]]
-        unit = max(set(pool_units), key=pool_units.count) if pool_units else (units[0] if units else "")
-        pool = pool_r  # the recommended estimate (range/unit/confidence) uses the trimmed pool
+        org = summarize([s for s in srcs if s["organic"]])
+        conv = summarize([s for s in srcs if not s["organic"]])
         flags = []
-        if excluded:
-            flags.append("outlier-excluded:" + "/".join(f"{s['engine']}@₪{s['price_max']}" for s in excluded))
-        if len(units) > 1: flags.append(f"unit-conflict:{'/'.join(units)}")
-        if "wholesale" in bases and "retail" not in bases: flags.append("wholesale-only-basis(below-retail)")
-        if "wholesale" in bases and "retail" in bases: flags.append("mixed-basis(wholesale+retail)")
-        if organics == {False}: flags.append("conventional-only(no-organic-source)")
-        if len(srcs) == 1 and srcs[0]["confidence"] == "low": flags.append("single-source-low-confidence")
-        if rmin > 0 and rmax / rmin >= 2.5: flags.append(f"wide-spread(x{round(rmax/rmin,1)})")
-        # derived confidence
-        if len({s["engine"] for s in pool}) >= 2: conf = "high"
-        elif any(s["confidence"] == "high" for s in pool): conf = "medium-high"
-        else: conf = max((s["confidence"] for s in pool), key=lambda c: {"high":3,"medium":2,"low":1,"":0}.get(c,0))
+        if not org:
+            flags.append("no-organic-source")
+        elif len(org["engines"]) == 1:
+            flags.append("organic-single-source")
+        if org and "unit_options" in org:
+            flags.append("organic-unit-ambiguity:" + "/".join(org["unit_options"]))
+        if org and org["price_min"] > 0 and org["price_max"] / org["price_min"] >= 3:
+            flags.append(f"organic-wide-spread(x{round(org['price_max']/org['price_min'],1)})")
         unified.append({
-            "slug": slug,
-            "hebrew_name": he_name.get(slug, ""),
-            "market_estimate": {
-                "price_min": round(rmin, 2), "price_max": round(rmax, 2), "unit": unit,
-                "organic": bool(organic_retail),
-                "as_of": max((s["as_of"] for s in srcs), default=""),
-                "confidence": conf,
-            },
-            "_engines": engines,
-            "_flags": flags,
-            "_sources": srcs,
+            "slug": slug, "hebrew_name": he_name.get(slug, ""),
+            "primary": "organic" if org else "conventional",
+            "organic": org, "conventional": conv,
+            "_flags": flags, "_sources": srcs,
         })
 
-    out_json = os.path.join(HERE, "unified_market_estimates.json")
-    json.dump(unified, open(out_json, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    json.dump(unified, open(os.path.join(HERE, "unified_market_estimates.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=2)
 
-    covered = [u["slug"] for u in unified]
-    missing = [s for s in CANON if s not in set(covered)]
-    flagged = [u for u in unified if u["_flags"]]
+    covered = {u["slug"] for u in unified}
+    missing = [s for s in CANON if s not in covered]
+    # organic coverage tiers
+    def org_tier(u):
+        o = u["organic"]
+        if not o: return "NONE"
+        if len(o["engines"]) >= 2: return "STRONG"
+        if o["confidence"] in ("high", "medium", "medium-high"): return "OK"
+        return "WEAK"
+    tiers = {"STRONG": [], "OK": [], "WEAK": [], "NONE": []}
+    for u in unified: tiers[org_tier(u)].append(u["slug"])
+    need = tiers["WEAK"] + tiers["NONE"] + [m for m in missing if m not in covered]
 
-    # Summary markdown
-    lines = []
-    lines.append(f"# Aggregation Summary — WP-CB-MARKET-RANGES (multi-engine)\n")
-    lines.append(f"**Engines merged:** {', '.join(sorted(reports))}  ·  **Coverage:** {len(covered)}/70  ·  **Flagged for review:** {len(flagged)}\n")
-    if unknown_slugs:
-        lines.append(f"**⚠ Unknown slugs (not in canonical 70):** {', '.join(sorted(unknown_slugs))}\n")
-    lines.append("## Merged estimates\n")
-    lines.append("| slug | ₪ range | unit | organic | basis | conf | engines | flags |")
-    lines.append("|------|---------|------|---------|-------|------|---------|-------|")
+    L = []
+    L.append("# Aggregation Summary — WP-CB-MARKET-RANGES (organic-primary, dual-basis)\n")
+    L.append(f"**Engines:** {', '.join(sorted(reports))}  ·  **Coverage:** {len(covered)}/70  ·  "
+             f"**Organic tiers:** STRONG {len(tiers['STRONG'])} · OK {len(tiers['OK'])} · WEAK {len(tiers['WEAK'])} · NONE {len(tiers['NONE'])}\n")
+    if unknown: L.append(f"**⚠ Unknown slugs:** {', '.join(sorted(unknown))}\n")
+    L.append("## Per crop — ORGANIC (primary) vs conventional (secondary)\n")
+    L.append("| slug | 🌱 organic ₪ | unit | conf | conventional ₪ | unit | flags |")
+    L.append("|------|-------------|------|------|----------------|------|-------|")
+    def rng(e): return "—" if not e else (f"{e['price_min']}" if e['price_min']==e['price_max'] else f"{e['price_min']}–{e['price_max']}")
     for u in unified:
-        me = u["market_estimate"]
-        bases = '/'.join(sorted({s["basis"] for s in u["_sources"]}))
-        rng = f"{me['price_min']}–{me['price_max']}" if me['price_max'] != me['price_min'] else f"{me['price_min']}"
-        lines.append(f"| {u['slug']} | {rng} | {me['unit']} | {'✓' if me['organic'] else '—'} | {bases} | {me['confidence']} | {len(u['_engines'])} | {'; '.join(u['_flags'])} |")
-    lines.append(f"\n## Missing ({len(missing)}/70 — no engine sourced these yet)\n")
-    lines.append(", ".join(f"{s}" for s in missing) + "\n")
-    open(os.path.join(HERE, "AGGREGATION_SUMMARY.md"), "w", encoding="utf-8").write("\n".join(lines))
+        o, c = u["organic"], u["conventional"]
+        L.append(f"| {u['slug']} | {rng(o)} | {o['unit'] if o else ''} | {o['confidence'] if o else ''} "
+                 f"| {rng(c)} | {c['unit'] if c else ''} | {'; '.join(u['_flags'])} |")
+    L.append(f"\n## Organic completion-round TARGET ({len(need)} crops — WEAK organic or none)\n")
+    L.append(", ".join(need) + "\n")
+    L.append(f"## Missing entirely ({len(missing)}/70)\n")
+    L.append(", ".join(missing) + "\n")
+    open(os.path.join(HERE, "AGGREGATION_SUMMARY.md"), "w", encoding="utf-8").write("\n".join(L))
 
-    # console
-    print(f"engines: {', '.join(sorted(reports))}")
-    print(f"coverage: {len(covered)}/70  ·  missing: {len(missing)}  ·  flagged: {len(flagged)}")
-    print(f"basis breakdown: retail-only={sum(1 for u in unified if {s['basis'] for s in u['_sources']}=={'retail'})}, "
-          f"wholesale-involved={sum(1 for u in unified if any(s['basis']=='wholesale' for s in u['_sources']))}")
-    print(f"organic-retail crops: {sum(1 for u in unified if u['market_estimate']['organic'])}")
-    print(f"→ {out_json}")
-    print(f"→ {os.path.join(HERE,'AGGREGATION_SUMMARY.md')}")
+    print(f"engines: {', '.join(sorted(reports))}  ·  coverage: {len(covered)}/70")
+    print(f"organic tiers: STRONG={len(tiers['STRONG'])} OK={len(tiers['OK'])} WEAK={len(tiers['WEAK'])} NONE={len(tiers['NONE'])}")
+    print(f"organic completion-round target: {len(need)} crops")
 
 if __name__ == "__main__":
     main()
