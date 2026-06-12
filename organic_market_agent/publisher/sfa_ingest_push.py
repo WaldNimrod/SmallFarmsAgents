@@ -74,6 +74,22 @@ def _load_config() -> PushConfig:
 # Transformers — Postgres canonical → MySQL ingest payload
 # ---------------------------------------------------------------------------
 
+_MARKET_EST_CACHE: dict[str, Any] | None = None
+
+
+def _load_market_estimates() -> dict[str, Any]:
+    """WP-CB-MARKET-RANGES: load the reviewed/approved per-crop market_estimate objects (slug→estimate)
+    from SFA_MARKET_ESTIMATE_FILE, to inject into crops.payload_json at push time. Opt-in: empty if unset."""
+    global _MARKET_EST_CACHE
+    if _MARKET_EST_CACHE is None:
+        path = os.environ.get("SFA_MARKET_ESTIMATE_FILE", "")
+        try:
+            _MARKET_EST_CACHE = json.load(open(path, encoding="utf-8")) if path else {}
+        except Exception as e:  # noqa: BLE001
+            print(f"[market_estimate] could not load {path}: {e}", file=sys.stderr)
+            _MARKET_EST_CACHE = {}
+    return _MARKET_EST_CACHE
+
 
 def _fetch_crops(conn) -> list[dict[str, Any]]:
     """One row per crop. payload_json carries everything not at top-level."""
@@ -306,6 +322,17 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
             "last_pushed_at": now,
             "payload_json": payload_extras,
         })
+    # WP-CB-MARKET-RANGES: inject the reviewed market_estimate (organic-primary range+median +
+    # conventional secondary) by slug. No-op unless SFA_MARKET_ESTIMATE_FILE is set (team_00 approved).
+    _est = _load_market_estimates()
+    if _est:
+        n = 0
+        for rec in out:
+            me = _est.get(rec["slug"])
+            if me:
+                rec["payload_json"]["market_estimate"] = me
+                n += 1
+        print(f"[market_estimate] injected into {n}/{len(out)} crops", file=sys.stderr)
     return out
 
 
