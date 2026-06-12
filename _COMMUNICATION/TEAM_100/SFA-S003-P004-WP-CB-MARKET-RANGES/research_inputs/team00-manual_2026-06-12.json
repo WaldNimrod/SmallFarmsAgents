@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "jicama",
+    "hebrew_name": "ג'יקמה",
+    "market_estimate": {
+      "price_min": 15.0,
+      "price_max": 15.0,
+      "unit": "ק\"ג",
+      "organic": true,
+      "source": "team_00 (base price)",
+      "source_url": "",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  }
+]

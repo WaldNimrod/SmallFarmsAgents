@@ -1,6 +1,6 @@
 # Aggregation Summary — WP-CB-MARKET-RANGES (organic-primary, dual-basis)
 
-**Engines:** claude_2026-06-12, gemini-round2_2026-06-12, gemini_2026-06-12, openai-round2_2026-06-12, openai_2026-06-12, perplexity-round2_2026-06-12, perplexity_2026-06-12  ·  **Coverage:** 69/70  ·  **Organic tiers:** STRONG 40 · OK 11 · WEAK 17 · NONE 1
+**Engines:** claude_2026-06-12, gemini-round2_2026-06-12, gemini_2026-06-12, openai-round2_2026-06-12, openai_2026-06-12, perplexity-round2_2026-06-12, perplexity_2026-06-12, team00-manual_2026-06-12  ·  **Coverage:** 70/70  ·  **Organic tiers:** STRONG 40 · OK 11 · WEAK 18 · NONE 1
 
 ## Per crop — ORGANIC (primary) vs conventional (secondary)
 
@@ -21,6 +21,7 @@
 | scallions | 8.5 | צרור | low | 4.0–13.0 | יחידה | organic-single-source; organic-unit-ambiguity:מארז |
 | broccoli | 26.0–26.5 | ק״ג | high | 6.5–11.0 | ק״ג |  |
 | ginger | 60.0–79.0 | ק״ג | medium | 19.5 | יחידה 300 גרם | organic-single-source |
+| jicama | 15.0 | ק״ג | low | — |  | organic-single-source |
 | carrots | 7.9–23.0 | ק״ג | high | — |  |  |
 | cress | 11.0 | מארז | low | — |  | organic-single-source; organic-unit-ambiguity:יחידה |
 | winter-squash | 14.0–23.5 | ק״ג | high | 3.63–5.5 | ק״ג |  |
@@ -78,8 +79,8 @@
 
 ## Organic completion-round TARGET (19 crops — WEAK organic or none)
 
-blackberry, artichokes, basil, okra, scallions, cress, sunflower, thyme, cilantro, chard, sage, mint, soybean, salad-mix, fava-bean, chinese-lantern, sesame, hibiscus, jicama
+blackberry, artichokes, basil, okra, scallions, jicama, cress, sunflower, thyme, cilantro, chard, sage, mint, soybean, salad-mix, fava-bean, chinese-lantern, sesame, hibiscus
 
-## Missing entirely (1/70)
+## Missing entirely (0/70)
 
-jicama
+

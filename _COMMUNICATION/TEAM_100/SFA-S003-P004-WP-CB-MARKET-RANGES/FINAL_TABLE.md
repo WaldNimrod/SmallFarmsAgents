@@ -1,6 +1,6 @@
 # FINAL market-estimate table — sorted by data quality (organic-primary)
 
-**Quality:** A=28 · B=7 · C=16 · D=17 · E=1 · F=1  (total 70)
+**Quality:** A=28 · B=7 · C=16 · D=18 · E=1 · F=0  (total 70)
 
 range/median/unit = what the user sees (organic). n = engines. CV% = std÷median (lower = more agreement).
 
@@ -80,6 +80,7 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | basil | בזיל | **6.0** | יחידה | 1 | — | — | — |  |
 | okra | במיה | **22.0** | מארז 150–250 גרם | 1 | — | — | 19.5 חבילה 1 ק״ג |  |
 | scallions | בצל ירוק | **8.5** | צרור | 1 | — | — | 4.0–13.0 יחידה ⚠whl |  |
+| jicama | ג'יקמה | **15.0** | ק״ג | 1 | — | — | — |  |
 | cress | גרגר נחלים | **11.0** | מארז | 1 | — | — | — |  |
 | sunflower | חמניה | **10.0** | חבילה 300 גרם | 1 | — | — | — |  |
 | thyme | טימין | **7.0** | יחידה | 1 | — | — | — |  |
@@ -98,9 +99,3 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | crop | he | organic: ₪ min–**med**–max | unit | n | ±std | CV% | conventional ₪ | note |
 |------|----|---------------------------|------|---|------|-----|----------------|------|
 | hibiscus | היביסקוס | — | — | 0 | — | — | 7.99–12.9 100 גרם |  |
-
-### F ⬜ missing
-
-| crop | he | organic: ₪ min–**med**–max | unit | n | ±std | CV% | conventional ₪ | note |
-|------|----|---------------------------|------|---|------|-----|----------------|------|
-| jicama | ג'יקמה | — | — | 0 | — | — | — |  |

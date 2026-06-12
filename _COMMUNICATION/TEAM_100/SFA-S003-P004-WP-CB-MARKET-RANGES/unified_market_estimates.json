@@ -1000,6 +1000,41 @@
     ]
   },
   {
+    "slug": "jicama",
+    "hebrew_name": "ג'יקמה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 15.0,
+      "price_max": 15.0,
+      "price_median": 15.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "team00"
+      ],
+      "n_sources": 1
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "team00",
+        "price_min": 15.0,
+        "price_max": 15.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "team_00 (base price)",
+        "source_url": "",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
     "slug": "carrots",
     "hebrew_name": "גזר",
     "primary": "organic",
