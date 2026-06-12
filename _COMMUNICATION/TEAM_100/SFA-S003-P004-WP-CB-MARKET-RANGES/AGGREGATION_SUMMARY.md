@@ -1,6 +1,6 @@
 # Aggregation Summary — WP-CB-MARKET-RANGES (organic-primary, dual-basis)
 
-**Engines:** claude_2026-06-12, gemini-round2_2026-06-12, gemini_2026-06-12, openai-round2_2026-06-12, openai_2026-06-12, perplexity-round2_2026-06-12, perplexity_2026-06-12, team00-manual_2026-06-12  ·  **Coverage:** 70/70  ·  **Organic tiers:** STRONG 40 · OK 11 · WEAK 18 · NONE 1
+**Engines:** claude_2026-06-12, gemini-round2_2026-06-12, gemini_2026-06-12, openai-round2_2026-06-12, openai_2026-06-12, perplexity-round2_2026-06-12, perplexity_2026-06-12, team00-manual_2026-06-12  ·  **Coverage:** 70/70  ·  **Organic tiers:** STRONG 41 · OK 10 · WEAK 18 · NONE 1
 
 ## Per crop — ORGANIC (primary) vs conventional (secondary)
 
@@ -69,8 +69,8 @@
 | fennel | 6.0–11.5 | ק״ג | high | 4.5–8.0 | ק״ג |  |
 | sesame | 13.9 | חבילה 500 גרם | low | — |  | organic-single-source; organic-unit-ambiguity:ק״ג |
 | dill | 6.0–12.0 | יחידה | high | 3.0 | צרור |  |
-| bush-pole | 30.0–75.0 | ק״ג | medium | 15.0–16.0 | ק״ג | organic-single-source; organic-unit-ambiguity:חבילה 300 גרם/מארז 300–500 גרם/מארז קפוא 500 גרם |
-| strawberry | 19.0–69.9 | ק״ג | high | — |  | organic-unit-ambiguity:מארז 125 גרם/מארז 250 גרם; organic-wide-spread(x3.7) |
+| bush-pole | 20.0–75.0 | ק״ג | high | 15.0–16.0 | ק״ג | organic-wide-spread(x3.8) |
+| strawberry | 19.0–29.9 | מארז 250 גרם | high | — |  | organic-unit-ambiguity:מארז 125 גרם/ק״ג |
 | corn | 13.0–17.5 | ק״ג | high | 5.5–7.5 | מארז |  |
 | oranges | 9.5–15.9 | ק״ג | high | 3.0–4.88 | ק״ג |  |
 | potato | 6.5–19.0 | ק״ג | high | — |  |  |

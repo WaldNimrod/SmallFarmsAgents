@@ -2,7 +2,7 @@
 
 4 engines · 7 reports · weight units normalized to **₪/kg** for comparability (bunch/unit kept as-is).
 
-**69/70 covered** · STRONG 47 · OK 8 · WEAK 13 · no-organic 1 · missing 1 · ship-ready 55
+**70/70 covered** · STRONG 47 · OK 8 · WEAK 14 · no-organic 1 · missing 0 · ship-ready 55
 
 | # | crop | he | basis | n | mean | ±std | CV% | range | outliers | conv | status |
 |---|------|----|-------|---|------|------|-----|-------|----------|------|--------|
@@ -21,7 +21,7 @@
 | 13 | scallions | בצל ירוק | צרור +1×מארז | 1 | 8.5 | — | — | 8.5 | — | 4.0–13.0 יחידה ⚠whl | 🟡WEAK |
 | 14 | broccoli | ברוקולי | ₪/kg | 2 | 26.2 | 0.2 | 1.0 | 26.0–26.5 | — | 6.5–11.0 ק״ג ⚠whl | 🟢STRONG |
 | 15 | ginger | ג'ינג'ר | ₪/kg | 1 | 69.5 | — | — | 69.5 | — | 65.0 ₪/kg | 🟡OK |
-| 16 | jicama | ג'יקמה | — | 0 | — | — | — | — | — | — | **MISSING** |
+| 16 | jicama | ג'יקמה | ₪/kg | 1 | 15.0 | — | — | 15.0 | — | — | 🟡WEAK |
 | 17 | carrots | גזר | ₪/kg | 3 | 13.0 | 2.3 | 17.6 | 10.4–16.0 | — | — | 🟢STRONG |
 | 18 | cress | גרגר נחלים | יחידה +1×מארז | 1 | 11.2 | — | — | 11.2 | — | — | 🟡WEAK |
 | 19 | winter-squash | דלעת | ₪/kg | 2 | 17.4 | 2.1 | 12.2 | 15.2–19.5 | — | 3.63–5.5 ק״ג ⚠whl | 🟢STRONG |
@@ -85,5 +85,4 @@
 
 ## Gaps (decide: omit, or show conventional)
 
-- **jicama** (ג'יקמה): MISSING · conventional: none
 - **hibiscus** (היביסקוס): NONE-org · conventional: 79.9–129.0 ₪/kg

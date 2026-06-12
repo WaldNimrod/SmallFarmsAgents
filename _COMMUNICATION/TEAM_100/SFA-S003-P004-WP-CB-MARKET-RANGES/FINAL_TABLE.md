@@ -1,6 +1,6 @@
 # FINAL market-estimate table — sorted by data quality (organic-primary)
 
-**Quality:** A=28 · B=7 · C=16 · D=18 · E=1 · F=0  (total 70)
+**Quality:** A=29 · B=8 · C=14 · D=18 · E=1 · F=0  (total 70)
 
 range/median/unit = what the user sees (organic). n = engines. CV% = std÷median (lower = more agreement).
 
@@ -28,6 +28,7 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | sweet-potato | בטטה | 12.0–**16.25**–19.6 | ק״ג | 2 | 0.8 | 4.9 | 3.0–9.5 ק״ג ⚠whl |  |
 | summer-squash | קישוא | 14.0–**16.0**–18.5 | ק״ג | 2 | 1.0 | 6.2 | 3.0–7.5 ק״ג ⚠whl |  |
 | onions | בצל | 7.5–**11.22**–13.9 | ק״ג | 2 | 0.7 | 6.5 | 1.93–3.0 ק״ג ⚠whl |  |
+| strawberry | תות שדה | 19.0–**24.17**–29.9 | מארז 250 גרם | 2 | 1.7 | 7.1 | — | show per 250g punnet (₪19–30); ₪/kg loose inflates |
 | new-zealand-spinach | תרד ניו-זילנד | 8.0–**8.62**–10.0 | מארז | 2 | 0.6 | 7.3 | — |  |
 | anise-hyssop | אזוב מצוי | 7.0–**9.25**–13.0 | מארז | 2 | 0.8 | 8.1 | — |  |
 | lettuce | חסה | 6.0–**7.1**–7.9 | יחידה | 2 | 0.6 | 8.5 | 4.0–4.5 יחידה ⚠whl |  |
@@ -43,6 +44,7 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | crop | he | organic: ₪ min–**med**–max | unit | n | ±std | CV% | conventional ₪ | note |
 |------|----|---------------------------|------|---|------|-----|----------------|------|
 | kohlrabi | קולורבי | 8.5–**11.25**–14.9 | ק״ג | 3 | 2.3 | 20.4 | 5.0–6.5 ק״ג ⚠whl |  |
+| bush-pole | שעועית | 20.0–**61.25**–75.0 | ק״ג | 3 | 17.3 | 28.2 | 15.0–16.0 ק״ג ⚠whl | fresh ₪/kg vs frozen 500g pack — different products |
 | celery | סלרי | 6.0–**8.5**–13.9 | יחידה | 3 | 2.6 | 30.3 | — |  |
 | kale | קייל | 7.0–**8.5**–14.9 | מארז | 3 | 3.0 | 35.0 | — |  |
 | melons | מלון | 9.0–**11.95**–14.9 | ק״ג | 2 | 3.0 | 24.7 | 3.5–7.0 ק״ג ⚠whl |  |
@@ -55,7 +57,6 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | crop | he | organic: ₪ min–**med**–max | unit | n | ±std | CV% | conventional ₪ | note |
 |------|----|---------------------------|------|---|------|-----|----------------|------|
 | pac-choi | פאק צ'וי | 7.0–**11.95**–16.9 | יחידה | 2 | 4.9 | 41.4 | — |  |
-| strawberry | תות שדה | 19.0–**33.23**–69.9 | ק״ג | 2 | 14.2 | 42.8 | — | show per 250g punnet (₪19–30); ₪/kg loose inflates |
 | jerusalem-artichokes | ארטישוק ירושלמי | **22.5** | חבילה 400 גרם | 2 | 0.0 | — | — |  |
 | lovage | לובסטייה | **14.0** | מארז | 2 | 0.0 | — | 7.9 מארז |  |
 | lemon-balm | לימון בלם | **9.5** | צרור | 2 | 0.0 | — | — |  |
@@ -68,7 +69,6 @@ range/median/unit = what the user sees (organic). n = engines. CV% = std÷median
 | cabbage | כרוב | 5.5–**8.5**–11.5 | ק״ג | 1 | — | — | 1.5–4.0 ק״ג ⚠whl |  |
 | chives | עירית | 7.0–**8.12**–8.5 | יחידה | 1 | — | — | — |  |
 | parsley | פטרוזיליה | 4.9–**8.4**–11.9 | מארז / צרור | 1 | — | — | — |  |
-| bush-pole | שעועית | 30.0–**52.5**–75.0 | ק״ג | 1 | — | — | 15.0–16.0 ק״ג ⚠whl | fresh ₪/kg vs frozen 500g pack — different products |
 | spinach | תרד | 8.5–**11.75**–15.0 | מארז | 1 | — | — | — |  |
 
 ### D 🟡 single thin source

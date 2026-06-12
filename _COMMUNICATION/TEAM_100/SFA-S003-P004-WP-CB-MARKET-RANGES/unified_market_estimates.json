@@ -4335,26 +4335,18 @@
     "hebrew_name": "שעועית",
     "primary": "organic",
     "organic": {
-      "price_min": 30.0,
+      "price_min": 20.0,
       "price_max": 75.0,
-      "price_median": 52.5,
+      "price_median": 61.25,
       "unit": "ק״ג",
-      "basis": "retail",
-      "confidence": "medium",
+      "basis": "retail/wholesale",
+      "confidence": "high",
       "engines": [
+        "claude",
+        "gemini",
         "openai"
       ],
-      "n_sources": 1,
-      "unit_options": [
-        "חבילה 300 גרם",
-        "מארז 300–500 גרם",
-        "מארז קפוא 500 גרם"
-      ],
-      "outlier_excluded": [
-        "claude@₪30.0",
-        "gemini@₪15.9",
-        "openai@₪22.5"
-      ]
+      "n_sources": 4
     },
     "conventional": {
       "price_min": 15.0,
@@ -4369,15 +4361,14 @@
       "n_sources": 1
     },
     "_flags": [
-      "organic-single-source",
-      "organic-unit-ambiguity:חבילה 300 גרם/מארז 300–500 גרם/מארז קפוא 500 גרם"
+      "organic-wide-spread(x3.8)"
     ],
     "_sources": [
       {
         "engine": "claude",
-        "price_min": 19.0,
-        "price_max": 30.0,
-        "unit": "מארז 300–500 גרם",
+        "price_min": 47.5,
+        "price_max": 75.0,
+        "unit": "ק״ג",
         "organic": true,
         "source": "סלסילה; פארמרים; ערן אורגני; שדה ירוק",
         "source_url": "https://www.salsila.co.il/",
@@ -4387,9 +4378,9 @@
       },
       {
         "engine": "gemini",
-        "price_min": 10.0,
-        "price_max": 15.9,
-        "unit": "מארז קפוא 500 גרם",
+        "price_min": 20.0,
+        "price_max": 31.8,
+        "unit": "ק״ג",
         "organic": true,
         "source": "ליב (פרייסז); לקט השדה",
         "source_url": "https://www.pricez.co.il/Supplier/1361/%D7%9C%D7%99%D7%91",
@@ -4423,9 +4414,9 @@
       },
       {
         "engine": "openai",
-        "price_min": 22.5,
-        "price_max": 22.5,
-        "unit": "חבילה 300 גרם",
+        "price_min": 75.0,
+        "price_max": 75.0,
+        "unit": "ק״ג",
         "organic": true,
         "source": "ערן אורגני",
         "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
@@ -4441,30 +4432,29 @@
     "primary": "organic",
     "organic": {
       "price_min": 19.0,
-      "price_max": 69.9,
-      "price_median": 33.23,
-      "unit": "ק״ג",
-      "basis": "retail",
+      "price_max": 29.9,
+      "price_median": 24.17,
+      "unit": "מארז 250 גרם",
+      "basis": "retail/wholesale",
       "confidence": "high",
       "engines": [
-        "openai",
-        "perplexity"
+        "gemini",
+        "openai"
       ],
       "n_sources": 2,
       "unit_options": [
         "מארז 125 גרם",
-        "מארז 250 גרם"
+        "ק״ג"
       ],
       "outlier_excluded": [
         "claude@₪29.0",
-        "gemini@₪29.9",
-        "openai@₪25.9"
+        "openai@₪19.0",
+        "perplexity@₪69.9"
       ]
     },
     "conventional": null,
     "_flags": [
-      "organic-unit-ambiguity:מארז 125 גרם/מארז 250 גרם",
-      "organic-wide-spread(x3.7)"
+      "organic-unit-ambiguity:מארז 125 גרם/ק״ג"
     ],
     "_sources": [
       {

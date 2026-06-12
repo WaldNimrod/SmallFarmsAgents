@@ -51,18 +51,38 @@ def norm_unit(u):
     if base in ('מארז', 'חבילה', 'pack'):               return 'מארז'
     return u
 
+def grams_of(unit):
+    """grams represented by a unit string, or None for bunch/unit (no weight)."""
+    u = unit or ""
+    if re.search(r'ק["״]?ג|קילו|\bkg\b', u):
+        m = re.search(r'(\d+(?:\.\d+)?)\s*ק', u)
+        return (float(m.group(1)) if m else 1) * 1000
+    m = re.search(r'(\d+)(?:\s*[–-]\s*(\d+))?\s*(?:גרם|גר|g)\b', u)
+    if m:
+        a = float(m.group(1)); b = float(m.group(2)) if m.group(2) else a
+        return (a + b) / 2
+    return None
+
+# team_00 per-crop overrides (2026-06-12):
+FORCE_KG = {"bush-pole"}                        # שעועית — combine fresh+frozen forms on one ₪/kg basis
+UNIT_PREFER = {"strawberry": "מארז 250 גרם"}    # תות — display per 250g punnet
+
 CONF_RANK = {"high": 3, "medium": 2, "medium-high": 2, "low": 1, "": 0}
 
-def summarize(sources):
+def summarize(sources, prefer=None):
     """Merge per-source dicts into one estimate. The headline range uses the DOMINANT unit only
-    (₪/kg can't be averaged with ₪/package), then trims a high outlier (>3x the cheapest) within it."""
+    (₪/kg can't be averaged with ₪/package), then trims a high outlier (>3x the cheapest) within it.
+    `prefer` forces a specific dominant unit when present (team_00 override)."""
     if not sources:
         return None
     from collections import Counter
     unit_counts = Counter(s["unit"] for s in sources if s["unit"])
     if unit_counts:
-        # dominant = most sources; tie-break prefers ק״ג, then יחידה (the canonical retail units)
-        dom_unit = max(unit_counts, key=lambda u: (unit_counts[u], 2 if u == 'ק״ג' else (1 if u == 'יחידה' else 0)))
+        if prefer and prefer in unit_counts:
+            dom_unit = prefer
+        else:
+            # dominant = most sources; tie-break prefers ק״ג, then יחידה (the canonical retail units)
+            dom_unit = max(unit_counts, key=lambda u: (unit_counts[u], 2 if u == 'ק״ג' else (1 if u == 'יחידה' else 0)))
         pool0 = [s for s in sources if s["unit"] == dom_unit]
     else:
         dom_unit, pool0 = "", sources
@@ -134,8 +154,15 @@ def main():
     unified = []
     for slug in sorted(by_slug, key=lambda s: CANON.index(s) if s in CANON_SET else 999):
         srcs = by_slug[slug]
-        org = summarize([s for s in srcs if s["organic"]])
-        conv = summarize([s for s in srcs if not s["organic"]])
+        if slug in FORCE_KG:  # team_00: convert every weight-bearing source to ₪/kg so forms combine
+            for s in srcs:
+                g = grams_of(s["unit"])
+                if g and g != 1000:
+                    s["price_min"] = round(s["price_min"] * 1000 / g, 2)
+                    s["price_max"] = round(s["price_max"] * 1000 / g, 2)
+                    s["unit"] = "ק״ג"
+        org = summarize([s for s in srcs if s["organic"]], UNIT_PREFER.get(slug))
+        conv = summarize([s for s in srcs if not s["organic"]], UNIT_PREFER.get(slug))
         flags = []
         if not org:
             flags.append("no-organic-source")
