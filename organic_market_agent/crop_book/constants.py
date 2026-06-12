@@ -74,6 +74,19 @@ TEND_CROP_MAP: dict[str, str] = {
     "Beans: Fava": "פול",           # id=78 — fava bean
 }
 
+# Canonical English crop name (DB ``crops.name_en``) for Tend raw names whose
+# verbatim value would slugify to something other than the canonical, production
+# (SSoT) slug. The importer normally sets ``name_en`` = the raw Tend "Crop" value,
+# and ``sfa_ingest_push`` derives the delivery-tier slug from it
+# (``_slugify(name_en)``). Where the raw Tend name and the canonical slug diverge,
+# this map pins ``name_en`` so the derived slug always matches production — keeping
+# the singular, indexed crop URL (e.g. ``/crop-book/soybean``) stable across any
+# re-seed/re-import. Keys MUST be exact Tend "Crop" values (see TEND_CROP_MAP).
+#   "Soybeans" (Tend, plural) → "Soybean" → slug "soybean" (prod SSoT, singular).
+TEND_CROP_EN_CANON: dict[str, str] = {
+    "Soybeans": "Soybean",
+}
+
 TEND_FAMILY_MAP: dict[str, str] = {
     "Aizoaceae": "Aizoaceae",
     "Amaranthaceae": "Amaranthaceae",

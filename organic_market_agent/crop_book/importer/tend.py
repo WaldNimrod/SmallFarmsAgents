@@ -19,6 +19,7 @@ from organic_market_agent.crop_book.constants import (
     HARVEST_STAGE_MAP,
     HARVEST_UNIT_MAP,
     PLANTING_METHOD_MAP,
+    TEND_CROP_EN_CANON,
     TEND_CROP_MAP,
     TEND_FAMILY_MAP,
 )
@@ -110,7 +111,9 @@ def parse_crop_plan(path: Path, year: str | None = None) -> list[dict[str, Any]]
 
             row: dict[str, Any] = {
                 "name_he": name_he,
-                "name_en": crop_en,
+                # Canonical DB name_en: pinned where the raw Tend name would slugify
+                # away from the production (SSoT) slug (e.g. "Soybeans"→"Soybean").
+                "name_en": TEND_CROP_EN_CANON.get(crop_en, crop_en),
                 "scientific_name": scientific_name,
                 "family_scientific_name": scientific_name,
                 "category": category,
