@@ -31,9 +31,10 @@ $page_title = 'ספר גידולים';
 $page_sub   = 'מאגר ידע פתוח';
 $active     = 'crop-book';
 
-$crops    = is_array($crops    ?? null) ? $crops    : [];
-$prices   = is_array($prices   ?? null) ? $prices   : [];
-$families = is_array($families ?? null) ? $families : [];
+$crops     = is_array($crops     ?? null) ? $crops     : [];
+$prices    = is_array($prices    ?? null) ? $prices    : [];
+$estimates = is_array($estimates ?? null) ? $estimates : [];
+$families  = is_array($families  ?? null) ? $families  : [];
 $view     = (string)($view ?? 'cards');
 $sort     = (string)($sort ?? 'name');
 $total    = (int)($total ?? count($crops));
@@ -150,6 +151,7 @@ ob_start();
           <?php foreach ($crops as $c):
             $cslug = (string)($c['slug'] ?? '');
             $pr    = $prices[$cslug] ?? null;
+            $est   = $estimates[$cslug] ?? null; // AC-1.2 estimated range (only when no live price)
           ?>
           <tr>
             <td><div class="t-name"><a href="/crop-book/<?= $h($cslug) ?>/"><?= $h((string)($c['name_he'] ?? '')) ?></a>
@@ -157,7 +159,7 @@ ob_start();
             <td class="t-fam"><?= $h((string)($c['family_tag_he'] ?: $c['category'])) ?></td>
             <td><?= !empty($c['dtm_days']) ? '<span class="num">' . (int)$c['dtm_days'] . '</span>' : '—' ?></td>
             <td><?= !empty($c['in_season']) ? 'כן' : '—' ?></td>
-            <td><?= $pr ? '<span class="num">₪' . $h(number_format($pr['price'], 1)) . '</span>' : '—' ?></td>
+            <td><?php if ($pr): ?><span class="num">₪<?= $h(number_format($pr['price'], 1)) ?></span><?php elseif ($est): ?><span class="num est">₪<?= $h(number_format($est['price_min'], 1)) ?><?= $est['price_max'] > $est['price_min'] ? '–' . $h(number_format($est['price_max'], 1)) : '' ?></span> <small class="est">מוערך</small><?php else: ?>—<?php endif; ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -170,6 +172,7 @@ ob_start();
         $wc    = CropArt::file($cslug);
         $act   = (string)($c['in_season_activity'] ?? '');
         $pr    = $prices[$cslug] ?? null;
+        $est   = $estimates[$cslug] ?? null; // AC-1.2 estimated range (only when no live price)
         $fam   = (string)($c['family_tag_he'] ?: $c['category']);
       ?>
       <a class="cc" href="/crop-book/<?= $h($cslug) ?>/">
@@ -191,6 +194,8 @@ ob_start();
           <?php if ($fam !== ''): ?><span class="tag"><?= $h($fam) ?></span><?php endif; ?>
           <?php if ($pr !== null): ?>
             <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg>בשוק <span class="num">₪<?= $h(number_format($pr['price'], 1)) ?></span><?php if ($pr['unit'] !== ''): ?>/<?= $h($pr['unit']) ?><?php endif; ?></span>
+          <?php elseif ($est !== null): ?>
+            <span class="cc__price cc__price--est"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg>מחיר מוערך <span class="num">₪<?= $h(number_format($est['price_min'], 1)) ?><?php if ($est['price_max'] > $est['price_min']): ?>–<?= $h(number_format($est['price_max'], 1)) ?><?php endif; ?></span><?php if ($est['unit'] !== ''): ?>/<?= $h($est['unit']) ?><?php endif; ?></span>
           <?php endif; ?>
           <div class="cc__stats">
             <?php if (!empty($c['dtm_days'])): ?>

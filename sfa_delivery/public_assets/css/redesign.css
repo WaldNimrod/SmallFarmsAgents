@@ -146,6 +146,9 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 /* ── book card: optional ₪ market chip (P3 interlink, book↔market loop) ── */
 .cc__price{ display:inline-flex; align-items:center; gap:5px; align-self:flex-start; font-size:var(--fs-micro); font-weight:600; color:var(--gj-tomato-deep); background:#f7e2da; border-radius:var(--r-pill); padding:3px 10px; }
 .cc__price .num{ font-weight:700; }
+/* WP-CB-UI-TAILS AC-1.2: estimated-range chip — muted + dashed so it reads as an estimate, not a live price. */
+.cc__price--est{ color:var(--gj-ink-soft); background:transparent; border:1px dashed var(--gj-line); }
+.est{ color:var(--gj-ink-soft); } /* table-view estimate number + 'מוערך' marker */
 
 /* ── assumptions: make "used-in" chips real links (P3 interlink) ── */
 .usedin a,.chip-link{ text-decoration:none; }

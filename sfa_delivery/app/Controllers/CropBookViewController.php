@@ -147,6 +147,8 @@ final class CropBookViewController
         $nowMonth = (int)date('n');
 
         $crops = [];
+        /** @var array<string,array{price_min:float,price_max:float,unit:string}> */
+        $estimateBySlug = [];
         foreach ($rows as $row) {
             $slug    = (string)($row['slug'] ?? '');
             $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
@@ -200,6 +202,19 @@ final class CropBookViewController
                 'in_season'        => $inSeasonAct !== '',
                 'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
             ];
+
+            // WP-CB-UI-TAILS AC-1.2: capture an ESTIMATED market range from the crop payload
+            // (crops.payload_json.market_estimate — populated later by WP-CB-MARKET-RANGES / team_80).
+            // Render-side infrastructure only: stays empty until that data lands → the chip simply
+            // does not render (honest). Live product price (below) always wins over this estimate.
+            $me = $payload['market_estimate'] ?? null;
+            if (is_array($me) && (float)($me['price_min'] ?? 0) > 0) {
+                $estimateBySlug[$slug] = [
+                    'price_min' => (float)$me['price_min'],
+                    'price_max' => (float)($me['price_max'] ?? $me['price_min']),
+                    'unit'      => (string)($me['unit'] ?? ''),
+                ];
+            }
         }
 
         // WP-CB-UI-REDESIGN (WI-3): 'now' sort — in-season crops first (stable).
@@ -207,22 +222,39 @@ final class CropBookViewController
             usort($crops, static fn ($a, $b) => ((int)!empty($b['in_season'])) <=> ((int)!empty($a['in_season'])));
         }
 
-        // WP-CB-UI-REDESIGN (WI-3): batched market price per crop slug — the ₪ chip
-        // that closes the book↔market loop. ONE IN(...) query; degrades to empty when
-        // the products table is absent (honest: chip omitted, never fabricated).
+        // WP-CB-BOOK-MARKET-PRICECHIP: batched market price per crop — the ₪ chip that
+        // closes the book↔market loop. A crop links to a product by slug OR by Hebrew name
+        // (crops.hebrew_name = products.hebrew_name) — the same linkage the market detail uses
+        // (MarketViewController::resolveCropSlug). Production product slugs are an OMA namespace
+        // that rarely matches crop slugs, so the old slug-only join rendered ZERO chips; the
+        // Hebrew-name fallback is what actually lights the loop. ONE IN(...) query keyed by slug
+        // and name; result is keyed by CROP slug (what the template reads). Honest: a chip renders
+        // only when a real product price resolves — never fabricated.
         /** @var array<string,array{price:float,unit:string}> */
         $priceBySlug = [];
         $resultSlugs = array_values(array_filter(array_map(static fn ($c) => (string)($c['slug'] ?? ''), $crops)));
-        if (!empty($resultSlugs)) {
+        $resultNames = array_values(array_filter(array_map(static fn ($c) => (string)($c['name_he'] ?? ''), $crops)));
+        if (!empty($resultSlugs) || !empty($resultNames)) {
             try {
-                $ph  = implode(',', array_fill(0, count($resultSlugs), '?'));
-                $pst = $this->pdo->prepare("SELECT slug, last_price, unit FROM products WHERE slug IN ($ph) AND last_price IS NOT NULL");
-                $pst->execute($resultSlugs);
+                $keys = array_values(array_unique(array_merge($resultSlugs, $resultNames)));
+                $ph   = implode(',', array_fill(0, count($keys), '?'));
+                $pst  = $this->pdo->prepare(
+                    "SELECT slug, hebrew_name, last_price, unit FROM products
+                     WHERE last_price IS NOT NULL AND (slug IN ($ph) OR hebrew_name IN ($ph))"
+                );
+                $pst->execute(array_merge($keys, $keys));
+                $bySlug = [];
+                $byName = [];
                 foreach ($pst->fetchAll() as $pr) {
-                    $priceBySlug[(string)$pr['slug']] = [
-                        'price' => (float)$pr['last_price'],
-                        'unit'  => (string)($pr['unit'] ?? ''),
-                    ];
+                    $entry = ['price' => (float)$pr['last_price'], 'unit' => (string)($pr['unit'] ?? '')];
+                    if (($s = (string)($pr['slug'] ?? '')) !== '')        { $bySlug[$s] = $entry; }
+                    if (($n = (string)($pr['hebrew_name'] ?? '')) !== '') { $byName[$n] = $entry; }
+                }
+                foreach ($crops as $c) {
+                    $cslug = (string)($c['slug'] ?? '');
+                    if ($cslug === '') { continue; }
+                    $p = $bySlug[$cslug] ?? ($byName[(string)($c['name_he'] ?? '')] ?? null); // slug wins, else Hebrew name
+                    if ($p !== null) { $priceBySlug[$cslug] = $p; }
                 }
             } catch (\Throwable) {
                 $priceBySlug = [];
@@ -240,6 +272,7 @@ final class CropBookViewController
         return $this->html($response, Template::render('pages/book_entry', [
             'crops'    => $crops,
             'prices'   => $priceBySlug,
+            'estimates'=> $estimateBySlug,
             'view'     => $view,
             'sort'     => $sort,
             'total'    => count($crops),
@@ -737,10 +770,15 @@ final class CropBookViewController
         //     suppresses the range line then). Built from the same $varieties the
         //     vtable already renders — no new query.
         $variety_ranges = self::buildVarietyRanges($varieties);
-        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by
-        //     trust. Derived from the winning_source_class the enrichment/payload
-        //     already exposes via $cb1_fields — never invented. Empty when the
-        //     mirror carries no provenance (template then omits the source row).
+        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by trust.
+        //     Derived from the winning_source_class $cb1_fields exposes — never invented.
+        //     Enrichment rows carry their real class; a value resolved from the internal
+        //     curated variety payload (F-UI-01 fallback) is classified 'NI' (internal → PR),
+        //     consistent with the crop_attribute path (AC-2.1, WP-CB-UI-TAILS) — so this list
+        //     is accurate rather than spuriously empty. Empty ONLY for genuinely-MISSING fields
+        //     (AC-2.2 honest-omission). NB: source_classes is consumed by the crop_topics macro
+        //     (templates/macros/crop_topics.php), which book_crop.php does not currently include;
+        //     the page's visible field provenance is the pv-* cue (field_state). See build report.
         $source_classes = self::buildSourceClasses($cb1_fields);
 
         return $this->html($response, Template::render('pages/book_crop', [
@@ -898,7 +936,13 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // WP-CB-UI-TAILS AC-2.1: a value resolved from the internal curated variety
+                        // payload IS sourced (our internal dataset) — classify it 'NI' (internal → PR
+                        // class) for source-class ACCURACY, consistent with the crop_attribute path
+                        // below (L982). This corrects the prior '' and feeds buildSourceClasses() →
+                        // source_classes (exposed to the deep template). Honest, not fabricated: only a
+                        // present value is classified; genuinely-MISSING fields keep '' (AC-2.2).
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $canonical,
                     ];
@@ -931,7 +975,9 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // AC-2.1: internal-curated payload value → 'NI' (internal → PR class), as the
+                        // crop_attribute branch already does. Honest source-class data, not fabricated.
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $atKey,
                     ];
