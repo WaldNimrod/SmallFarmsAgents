@@ -18,7 +18,7 @@ Each merged estimate: robust outlier trim (drop a source whose midpoint > 3x the
 restaurant-menu price), unit-normalized, with engines/basis/confidence. team_80 = advisory research;
 team_100 reviews, then ingests via WP-CB-DATA-API (incremental, validated — NO seed --all).
 """
-import json, os, glob, sys, re
+import json, os, glob, sys, re, statistics
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INPUTS = os.path.join(HERE, "research_inputs")
@@ -72,6 +72,11 @@ def summarize(sources):
     excluded = [s for s in sources if s not in pool]
     rmin = min(s["price_min"] for s in pool)
     rmax = max(s["price_max"] for s in pool)
+    # median over per-engine midpoints (in the dominant unit) — shown to the user alongside the range
+    per_eng = {}
+    for s in pool:
+        per_eng.setdefault(s["engine"], []).append((s["price_min"] + s["price_max"]) / 2)
+    median = round(statistics.median([statistics.mean(v) for v in per_eng.values()]), 2)
     unit = dom_unit
     units_all = sorted(unit_counts.keys() - {dom_unit})  # alternative units seen (other packaging)
     engines = sorted({s["engine"] for s in pool})
@@ -83,7 +88,7 @@ def summarize(sources):
     else:
         conf = max((s["confidence"] for s in pool), key=lambda c: CONF_RANK.get(c, 0)) or "low"
     out = {
-        "price_min": round(rmin, 2), "price_max": round(rmax, 2), "unit": unit,
+        "price_min": round(rmin, 2), "price_max": round(rmax, 2), "price_median": median, "unit": unit,
         "basis": "/".join(bases), "confidence": conf, "engines": engines, "n_sources": len(pool),
     }
     if units_all:

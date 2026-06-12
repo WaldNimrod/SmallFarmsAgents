@@ -6,6 +6,7 @@
     "organic": {
       "price_min": 5.0,
       "price_max": 13.9,
+      "price_median": 9.95,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -18,6 +19,7 @@
     "conventional": {
       "price_min": 3.0,
       "price_max": 4.5,
+      "price_median": 3.75,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -73,6 +75,7 @@
     "organic": {
       "price_min": 11.9,
       "price_max": 14.9,
+      "price_median": 13.4,
       "unit": "חבילה 400 גרם (קפוא)",
       "basis": "retail",
       "confidence": "medium-high",
@@ -90,6 +93,7 @@
     "conventional": {
       "price_min": 19.9,
       "price_max": 19.9,
+      "price_median": 19.9,
       "unit": "חבילה 1 ק״ג",
       "basis": "retail",
       "confidence": "low",
@@ -148,6 +152,7 @@
     "organic": {
       "price_min": 29.9,
       "price_max": 29.9,
+      "price_median": 29.9,
       "unit": "חבילה 300 גרם (קפוא)",
       "basis": "retail",
       "confidence": "low",
@@ -159,6 +164,7 @@
     "conventional": {
       "price_min": 23.0,
       "price_max": 29.0,
+      "price_median": 26.0,
       "unit": "מארז 125 גרם",
       "basis": "retail",
       "confidence": "medium",
@@ -204,6 +210,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 13.0,
+      "price_median": 9.25,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -269,6 +276,7 @@
     "organic": {
       "price_min": 13.3,
       "price_max": 14.0,
+      "price_median": 13.65,
       "unit": "חבילה 500 גרם",
       "basis": "retail",
       "confidence": "medium",
@@ -303,6 +311,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 13.0,
+      "price_median": 8.5,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -368,6 +377,7 @@
     "organic": {
       "price_min": 21.0,
       "price_max": 21.0,
+      "price_median": 21.0,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "low",
@@ -385,6 +395,7 @@
     "conventional": {
       "price_min": 6.9,
       "price_max": 39.9,
+      "price_median": 23.4,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium",
@@ -461,6 +472,7 @@
     "organic": {
       "price_min": 22.5,
       "price_max": 22.5,
+      "price_median": 22.5,
       "unit": "חבילה 400 גרם",
       "basis": "retail",
       "confidence": "high",
@@ -540,6 +552,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 6.0,
+      "price_median": 6.0,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "low",
@@ -593,6 +606,7 @@
     "organic": {
       "price_min": 12.0,
       "price_max": 19.6,
+      "price_median": 16.25,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -605,6 +619,7 @@
     "conventional": {
       "price_min": 3.0,
       "price_max": 9.5,
+      "price_median": 6.25,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium",
@@ -660,6 +675,7 @@
     "organic": {
       "price_min": 22.0,
       "price_max": 22.0,
+      "price_median": 22.0,
       "unit": "מארז 150–250 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -671,6 +687,7 @@
     "conventional": {
       "price_min": 19.5,
       "price_max": 19.5,
+      "price_median": 19.5,
       "unit": "חבילה 1 ק״ג",
       "basis": "retail",
       "confidence": "low",
@@ -716,6 +733,7 @@
     "organic": {
       "price_min": 7.5,
       "price_max": 13.9,
+      "price_median": 11.22,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -728,6 +746,7 @@
     "conventional": {
       "price_min": 1.93,
       "price_max": 3.0,
+      "price_median": 2.46,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -783,6 +802,7 @@
     "organic": {
       "price_min": 8.5,
       "price_max": 8.5,
+      "price_median": 8.5,
       "unit": "צרור",
       "basis": "retail",
       "confidence": "low",
@@ -800,6 +820,7 @@
     "conventional": {
       "price_min": 4.0,
       "price_max": 13.0,
+      "price_median": 8.5,
       "unit": "יחידה",
       "basis": "wholesale",
       "confidence": "medium",
@@ -858,6 +879,7 @@
     "organic": {
       "price_min": 26.0,
       "price_max": 26.5,
+      "price_median": 26.25,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -870,6 +892,7 @@
     "conventional": {
       "price_min": 6.5,
       "price_max": 11.0,
+      "price_median": 8.75,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -925,6 +948,7 @@
     "organic": {
       "price_min": 60.0,
       "price_max": 79.0,
+      "price_median": 69.5,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "medium",
@@ -936,6 +960,7 @@
     "conventional": {
       "price_min": 19.5,
       "price_max": 19.5,
+      "price_median": 19.5,
       "unit": "יחידה 300 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -981,6 +1006,7 @@
     "organic": {
       "price_min": 7.9,
       "price_max": 23.0,
+      "price_median": 12.5,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -1039,6 +1065,7 @@
     "organic": {
       "price_min": 11.0,
       "price_max": 11.0,
+      "price_median": 11.0,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
@@ -1104,6 +1131,7 @@
     "organic": {
       "price_min": 14.0,
       "price_max": 23.5,
+      "price_median": 17.38,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -1116,6 +1144,7 @@
     "conventional": {
       "price_min": 3.63,
       "price_max": 5.5,
+      "price_median": 4.56,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -1171,6 +1200,7 @@
     "organic": {
       "price_min": 10.0,
       "price_max": 16.0,
+      "price_median": 11.5,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "medium",
@@ -1237,6 +1267,7 @@
     "conventional": {
       "price_min": 7.99,
       "price_max": 12.9,
+      "price_median": 10.45,
       "unit": "100 גרם",
       "basis": "retail",
       "confidence": "medium",
@@ -1270,6 +1301,7 @@
     "organic": {
       "price_min": 10.9,
       "price_max": 15.9,
+      "price_median": 13.4,
       "unit": "חבילה 500 גרם",
       "basis": "wholesale",
       "confidence": "medium",
@@ -1304,6 +1336,7 @@
     "organic": {
       "price_min": 11.2,
       "price_max": 16.8,
+      "price_median": 12.84,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -1361,6 +1394,7 @@
     "organic": {
       "price_min": 10.0,
       "price_max": 10.0,
+      "price_median": 10.0,
       "unit": "חבילה 300 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -1426,6 +1460,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 7.9,
+      "price_median": 7.1,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "high",
@@ -1438,6 +1473,7 @@
     "conventional": {
       "price_min": 4.0,
       "price_max": 4.5,
+      "price_median": 4.25,
       "unit": "יחידה",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -1493,6 +1529,7 @@
     "organic": {
       "price_min": 8.8,
       "price_max": 12.0,
+      "price_median": 10.57,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -1538,6 +1575,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 7.0,
+      "price_median": 7.0,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "low",
@@ -1591,6 +1629,7 @@
     "organic": {
       "price_min": 9.0,
       "price_max": 9.5,
+      "price_median": 9.0,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -1604,6 +1643,7 @@
     "conventional": {
       "price_min": 6.9,
       "price_max": 6.9,
+      "price_median": 6.9,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
@@ -1671,6 +1711,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 6.0,
+      "price_median": 6.0,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "low",
@@ -1724,6 +1765,7 @@
     "organic": {
       "price_min": 65.0,
       "price_max": 130.0,
+      "price_median": 97.5,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "medium-high",
@@ -1805,6 +1847,7 @@
     "organic": {
       "price_min": 5.5,
       "price_max": 11.5,
+      "price_median": 8.5,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "medium-high",
@@ -1822,6 +1865,7 @@
     "conventional": {
       "price_min": 1.5,
       "price_max": 4.0,
+      "price_median": 2.75,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -1880,6 +1924,7 @@
     "organic": {
       "price_min": 14.9,
       "price_max": 21.0,
+      "price_median": 17.7,
       "unit": "ק״ג",
       "basis": "retail/wholesale",
       "confidence": "high",
@@ -1892,6 +1937,7 @@
     "conventional": {
       "price_min": 4.93,
       "price_max": 7.5,
+      "price_median": 6.21,
       "unit": "יחידה / ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -1947,6 +1993,7 @@
     "organic": {
       "price_min": 12.0,
       "price_max": 19.5,
+      "price_median": 16.1,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -2040,6 +2087,7 @@
     "organic": {
       "price_min": 14.0,
       "price_max": 14.0,
+      "price_median": 14.0,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -2052,6 +2100,7 @@
     "conventional": {
       "price_min": 7.9,
       "price_max": 7.9,
+      "price_median": 7.9,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
@@ -2107,6 +2156,7 @@
     "organic": {
       "price_min": 9.5,
       "price_max": 9.5,
+      "price_median": 9.5,
       "unit": "צרור",
       "basis": "retail",
       "confidence": "high",
@@ -2172,6 +2222,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 9.0,
+      "price_median": 8.25,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "high",
@@ -2229,6 +2280,7 @@
     "organic": {
       "price_min": 10.9,
       "price_max": 13.9,
+      "price_median": 12.4,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -2242,6 +2294,7 @@
     "conventional": {
       "price_min": 5.0,
       "price_max": 6.5,
+      "price_median": 5.75,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -2321,6 +2374,7 @@
     "organic": {
       "price_min": 9.0,
       "price_max": 14.9,
+      "price_median": 11.95,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -2333,6 +2387,7 @@
     "conventional": {
       "price_min": 3.5,
       "price_max": 7.0,
+      "price_median": 5.25,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -2388,6 +2443,7 @@
     "organic": {
       "price_min": 13.0,
       "price_max": 18.5,
+      "price_median": 16.0,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -2446,6 +2502,7 @@
     "organic": {
       "price_min": 12.9,
       "price_max": 12.9,
+      "price_median": 12.9,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
@@ -2499,6 +2556,7 @@
     "organic": {
       "price_min": 9.0,
       "price_max": 9.0,
+      "price_median": 9.0,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "low",
@@ -2566,6 +2624,7 @@
     "organic": {
       "price_min": 8.5,
       "price_max": 8.5,
+      "price_median": 8.5,
       "unit": "צרור",
       "basis": "retail",
       "confidence": "low",
@@ -2619,6 +2678,7 @@
     "organic": {
       "price_min": 9.7,
       "price_max": 9.7,
+      "price_median": 9.7,
       "unit": "חבילה 500 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -2684,6 +2744,7 @@
     "organic": {
       "price_min": 9.0,
       "price_max": 16.0,
+      "price_median": 11.88,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -2703,6 +2764,7 @@
     "conventional": {
       "price_min": 2.6,
       "price_max": 4.0,
+      "price_median": 3.3,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -2796,6 +2858,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 13.9,
+      "price_median": 8.5,
       "unit": "יחידה",
       "basis": "retail/wholesale",
       "confidence": "high",
@@ -2886,6 +2949,7 @@
     "organic": {
       "price_min": 10.0,
       "price_max": 23.5,
+      "price_median": 18.9,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -2944,6 +3008,7 @@
     "organic": {
       "price_min": 21.9,
       "price_max": 29.9,
+      "price_median": 25.9,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3002,6 +3067,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 8.5,
+      "price_median": 8.12,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "medium",
@@ -3067,6 +3133,7 @@
     "organic": {
       "price_min": 15.5,
       "price_max": 15.5,
+      "price_median": 15.5,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "low",
@@ -3084,6 +3151,7 @@
     "conventional": {
       "price_min": 8.9,
       "price_max": 8.9,
+      "price_median": 8.9,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "low",
@@ -3142,6 +3210,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 16.9,
+      "price_median": 11.95,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "high",
@@ -3187,6 +3256,7 @@
     "organic": {
       "price_min": 4.9,
       "price_max": 4.9,
+      "price_median": 4.9,
       "unit": "100 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -3252,6 +3322,7 @@
     "organic": {
       "price_min": 4.9,
       "price_max": 11.9,
+      "price_median": 8.4,
       "unit": "מארז / צרור",
       "basis": "retail",
       "confidence": "medium-high",
@@ -3319,6 +3390,7 @@
     "organic": {
       "price_min": 9.5,
       "price_max": 24.5,
+      "price_median": 16.95,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3331,6 +3403,7 @@
     "conventional": {
       "price_min": 5.0,
       "price_max": 11.5,
+      "price_median": 8.25,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -3386,6 +3459,7 @@
     "organic": {
       "price_min": 22.5,
       "price_max": 25.0,
+      "price_median": 23.75,
       "unit": "מארז 250 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -3397,6 +3471,7 @@
     "conventional": {
       "price_min": 36.0,
       "price_max": 36.0,
+      "price_median": 36.0,
       "unit": "מארז 115 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -3442,6 +3517,7 @@
     "organic": {
       "price_min": 10.0,
       "price_max": 17.0,
+      "price_median": 13.5,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
@@ -3454,6 +3530,7 @@
     "conventional": {
       "price_min": 29.9,
       "price_max": 49.9,
+      "price_median": 39.9,
       "unit": "מארז 500 גרם",
       "basis": "retail",
       "confidence": "medium",
@@ -3509,6 +3586,7 @@
     "organic": {
       "price_min": 9.5,
       "price_max": 16.0,
+      "price_median": 11.12,
       "unit": "צרור",
       "basis": "retail",
       "confidence": "high",
@@ -3531,6 +3609,7 @@
     "conventional": {
       "price_min": 6.5,
       "price_max": 6.5,
+      "price_median": 6.5,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "low",
@@ -3624,6 +3703,7 @@
     "organic": {
       "price_min": 8.5,
       "price_max": 14.9,
+      "price_median": 11.25,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3637,6 +3717,7 @@
     "conventional": {
       "price_min": 5.0,
       "price_max": 6.5,
+      "price_median": 5.75,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -3716,6 +3797,7 @@
     "organic": {
       "price_min": 7.0,
       "price_max": 14.9,
+      "price_median": 8.5,
       "unit": "מארז",
       "basis": "retail/wholesale",
       "confidence": "high",
@@ -3820,6 +3902,7 @@
     "organic": {
       "price_min": 14.0,
       "price_max": 18.5,
+      "price_median": 16.0,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3832,6 +3915,7 @@
     "conventional": {
       "price_min": 3.0,
       "price_max": 7.5,
+      "price_median": 5.25,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -3887,6 +3971,7 @@
     "organic": {
       "price_min": 49.0,
       "price_max": 87.5,
+      "price_median": 68.25,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3906,6 +3991,7 @@
     "conventional": {
       "price_min": 5.33,
       "price_max": 18.0,
+      "price_median": 11.66,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium",
@@ -3987,6 +4073,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 11.5,
+      "price_median": 8.62,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -3999,6 +4086,7 @@
     "conventional": {
       "price_min": 4.5,
       "price_max": 8.0,
+      "price_median": 6.25,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -4054,6 +4142,7 @@
     "organic": {
       "price_min": 13.9,
       "price_max": 13.9,
+      "price_median": 13.9,
       "unit": "חבילה 500 גרם",
       "basis": "retail",
       "confidence": "low",
@@ -4119,6 +4208,7 @@
     "organic": {
       "price_min": 6.0,
       "price_max": 12.0,
+      "price_median": 9.0,
       "unit": "יחידה",
       "basis": "retail",
       "confidence": "high",
@@ -4132,6 +4222,7 @@
     "conventional": {
       "price_min": 3.0,
       "price_max": 3.0,
+      "price_median": 3.0,
       "unit": "צרור",
       "basis": "retail",
       "confidence": "low",
@@ -4211,6 +4302,7 @@
     "organic": {
       "price_min": 30.0,
       "price_max": 75.0,
+      "price_median": 52.5,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "medium",
@@ -4232,6 +4324,7 @@
     "conventional": {
       "price_min": 15.0,
       "price_max": 16.0,
+      "price_median": 15.5,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -4314,6 +4407,7 @@
     "organic": {
       "price_min": 19.0,
       "price_max": 69.9,
+      "price_median": 33.23,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -4407,6 +4501,7 @@
     "organic": {
       "price_min": 13.0,
       "price_max": 17.5,
+      "price_median": 15.25,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -4419,6 +4514,7 @@
     "conventional": {
       "price_min": 5.5,
       "price_max": 7.5,
+      "price_median": 6.5,
       "unit": "מארז",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -4474,6 +4570,7 @@
     "organic": {
       "price_min": 9.5,
       "price_max": 15.9,
+      "price_median": 12.7,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -4486,6 +4583,7 @@
     "conventional": {
       "price_min": 3.0,
       "price_max": 4.88,
+      "price_median": 3.94,
       "unit": "ק״ג",
       "basis": "wholesale",
       "confidence": "medium-high",
@@ -4541,6 +4639,7 @@
     "organic": {
       "price_min": 6.5,
       "price_max": 19.0,
+      "price_median": 11.0,
       "unit": "ק״ג",
       "basis": "retail",
       "confidence": "high",
@@ -4599,6 +4698,7 @@
     "organic": {
       "price_min": 8.5,
       "price_max": 15.0,
+      "price_median": 11.75,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "medium-high",
@@ -4694,6 +4794,7 @@
     "organic": {
       "price_min": 8.0,
       "price_max": 10.0,
+      "price_median": 8.62,
       "unit": "מארז",
       "basis": "retail",
       "confidence": "high",
