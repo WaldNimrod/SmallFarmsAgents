@@ -1,0 +1,464 @@
+[
+  {
+    "slug": "tomatoes",
+    "hebrew_name": "עגבנייה",
+    "market_estimate": {
+      "price_min": 10.0,
+      "price_max": 13.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ניצת הדובדבן / שופרסל גרין",
+      "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cherry-tomato",
+    "hebrew_name": "עגבניית שרי",
+    "market_estimate": {
+      "price_min": 21.9,
+      "price_max": 29.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שופרסל גרין / משק טל",
+      "source_url": "https://www.shufersal.co.il/online/he/c/F01/promotion",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cucumbers",
+    "hebrew_name": "מלפפון",
+    "market_estimate": {
+      "price_min": 13.0,
+      "price_max": 14.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "ניצת הדובדבן / עדן טבע",
+      "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "eggplant",
+    "hebrew_name": "חציל",
+    "market_estimate": {
+      "price_min": 10.0,
+      "price_max": 12.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "טבע בעיר / שופרסל אונליין",
+      "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "carrots",
+    "hebrew_name": "גזר",
+    "market_estimate": {
+      "price_min": 7.9,
+      "price_max": 13.0,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שופרסל אונליין / ירוק",
+      "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "parsley",
+    "hebrew_name": "פטרוזיליה",
+    "market_estimate": {
+      "price_min": 4.9,
+      "price_max": 11.9,
+      "unit": "מארז / צרור",
+      "organic": true,
+      "source": "נוי השדה / שופרסל גרין",
+      "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cilantro",
+    "hebrew_name": "כוסברה",
+    "market_estimate": {
+      "price_min": 11.9,
+      "price_max": 11.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "נוי השדה",
+      "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "chard",
+    "hebrew_name": "מנגולד",
+    "market_estimate": {
+      "price_min": 12.9,
+      "price_max": 12.9,
+      "unit": "מארז",
+      "organic": true,
+      "source": "נוי השדה",
+      "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "pac-choi",
+    "hebrew_name": "פאק צ'וי",
+    "market_estimate": {
+      "price_min": 16.9,
+      "price_max": 16.9,
+      "unit": "יחידה",
+      "organic": true,
+      "source": "נוי השדה",
+      "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "potato",
+    "hebrew_name": "תפוח אדמה",
+    "market_estimate": {
+      "price_min": 9.9,
+      "price_max": 9.9,
+      "unit": "ק״ג",
+      "organic": true,
+      "source": "שופרסל גרין",
+      "source_url": "https://www.shufersal.co.il/online/he/c/F010202/promotion",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "watermelon",
+    "hebrew_name": "אבטיח",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 4.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "sweet-potato",
+    "hebrew_name": "בטטה",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 9.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "onions",
+    "hebrew_name": "בצל",
+    "market_estimate": {
+      "price_min": 1.93,
+      "price_max": 3.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "scallions",
+    "hebrew_name": "בצל ירוק",
+    "market_estimate": {
+      "price_min": 4.0,
+      "price_max": 13.0,
+      "unit": "יחידה",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "broccoli",
+    "hebrew_name": "ברוקולי",
+    "market_estimate": {
+      "price_min": 6.5,
+      "price_max": 11.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "winter-squash",
+    "hebrew_name": "דלעת",
+    "market_estimate": {
+      "price_min": 3.63,
+      "price_max": 5.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cabbage",
+    "hebrew_name": "כרוב",
+    "market_estimate": {
+      "price_min": 1.5,
+      "price_max": 4.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "cauliflower",
+    "hebrew_name": "כרובית",
+    "market_estimate": {
+      "price_min": 4.93,
+      "price_max": 7.5,
+      "unit": "יחידה / ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "turnips",
+    "hebrew_name": "לפת",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "melons",
+    "hebrew_name": "מלון",
+    "market_estimate": {
+      "price_min": 3.5,
+      "price_max": 7.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "beets",
+    "hebrew_name": "סלק",
+    "market_estimate": {
+      "price_min": 2.6,
+      "price_max": 4.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "peppers",
+    "hebrew_name": "פלפל",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 11.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "radishes",
+    "hebrew_name": "צנונית",
+    "market_estimate": {
+      "price_min": 6.5,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "מועצת הצמחים",
+      "source_url": "https://plants.moonsite.co.il/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "kohlrabi",
+    "hebrew_name": "קולורבי",
+    "market_estimate": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "summer-squash",
+    "hebrew_name": "קישוא",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 7.5,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "garlic",
+    "hebrew_name": "שום",
+    "market_estimate": {
+      "price_min": 5.33,
+      "price_max": 18.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "medium"
+    }
+  },
+  {
+    "slug": "fennel",
+    "hebrew_name": "שומר",
+    "market_estimate": {
+      "price_min": 4.5,
+      "price_max": 8.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "bush-pole",
+    "hebrew_name": "שעועית",
+    "market_estimate": {
+      "price_min": 15.0,
+      "price_max": 16.0,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "מועצת הצמחים",
+      "source_url": "https://plants.moonsite.co.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "corn",
+    "hebrew_name": "תירס",
+    "market_estimate": {
+      "price_min": 5.5,
+      "price_max": 7.5,
+      "unit": "מארז",
+      "organic": false,
+      "source": "משרד החקלאות / מועצת הצמחים",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "lettuce",
+    "hebrew_name": "חסה",
+    "market_estimate": {
+      "price_min": 4.0,
+      "price_max": 4.5,
+      "unit": "יחידה",
+      "organic": false,
+      "source": "משרד החקלאות",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  },
+  {
+    "slug": "salad-mix",
+    "hebrew_name": "עלי בייבי",
+    "market_estimate": {
+      "price_min": 8.9,
+      "price_max": 8.9,
+      "unit": "מארז",
+      "organic": false,
+      "source": "משק טל דיירקט",
+      "source_url": "https://farmdirect.co.il/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "artichokes",
+    "hebrew_name": "ארטישוק",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "unit": "יחידה",
+      "organic": false,
+      "source": "משרד החקלאות",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "low"
+    }
+  },
+  {
+    "slug": "oranges",
+    "hebrew_name": "תפוז",
+    "market_estimate": {
+      "price_min": 3.0,
+      "price_max": 4.88,
+      "unit": "ק״ג",
+      "organic": false,
+      "source": "משרד החקלאות",
+      "source_url": "https://prices.moag.gov.il/",
+      "as_of": "2026-06",
+      "confidence": "high"
+    }
+  }
+]
