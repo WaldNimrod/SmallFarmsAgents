@@ -76,55 +76,51 @@ def _merge_postharvest_with_fallback(parsed: list[dict]) -> list[dict]:
 
 
 def _fallback_postharvest() -> list[dict]:
+    # name_he is bound INTRINSICALLY to each row's storage data (the canonical crop
+    # name for that scientific name) — NOT via a fragile parallel positional list.
+    # Fixes the prior bug where a separate he_labels[] was misordered vs samples[]
+    # (and a padding loop appended samples[0]/tomato), mis-attributing storage data
+    # to ~30 crops (team_00 data-integrity review, 2026-06-10).
+    # Tuple: (scientific_name, name_he, tmin, tmax, rhmin, rhmax, eth_prod, eth_sens, days_min, days_max)
     samples = [
-        ("Solanum lycopersicum", 10, 15, 90, 95, "M", "M", 7, 14),
-        ("Capsicum annuum", 7, 10, 90, 95, "L", "M", 14, 21),
-        ("Cucumis sativus", 10, 12, 95, 100, "L", "L", 10, 14),
-        ("Lactuca sativa", 0, 2, 95, 100, "L", "L", 14, 21),
-        ("Brassica oleracea", 0, 2, 95, 100, "L", "L", 21, 28),
-        ("Daucus carota", 0, 2, 95, 100, "L", "L", 28, 180),
-        ("Allium cepa", 0, 2, 65, 75, "L", "L", 30, 180),
-        ("Spinacia oleracea", 0, 2, 95, 100, "L", "L", 10, 14),
-        ("Phaseolus vulgaris", 7, 10, 95, 100, "L", "L", 7, 10),
-        ("Cucurbita pepo", 10, 12, 50, 75, "L", "L", 14, 21),
-        ("Fragaria x ananassa", 0, 2, 90, 95, "L", "H", 5, 7),
-        ("Solanum melongena", 10, 12, 90, 95, "L", "M", 10, 14),
-        ("Apium graveolens", 0, 2, 95, 100, "L", "L", 14, 56),
-        ("Beta vulgaris", 0, 2, 95, 100, "L", "L", 14, 21),
-        ("Brassica oleracea var. italica", 0, 2, 95, 100, "L", "L", 10, 14),
-        ("Raphanus sativus", 0, 2, 95, 100, "L", "L", 7, 14),
-        ("Allium sativum", 0, 2, 65, 75, "L", "L", 90, 180),
-        ("Zea mays", 0, 2, 95, 100, "L", "L", 4, 8),
-        ("Solanum tuberosum", 4, 10, 90, 95, "L", "L", 90, 180),
-        ("Citrullus lanatus", 10, 15, 85, 90, "L", "L", 14, 21),
-        ("Petroselinum crispum", 0, 2, 95, 100, "L", "L", 14, 21),
-        ("Ocimum basilicum", 12, 15, 90, 95, "L", "L", 5, 10),
-        ("Brassica oleracea var. acephala", 0, 2, 95, 100, "L", "L", 10, 14),
-        ("Coriandrum sativum", 0, 2, 95, 100, "L", "L", 7, 14),
-        ("Anethum graveolens", 0, 2, 95, 100, "L", "L", 7, 14),
-        ("Cynara scolymus", 0, 2, 95, 100, "L", "L", 7, 14),
-        ("Asparagus officinalis", 2, 4, 95, 100, "L", "L", 14, 21),
-        ("Abelmoschus esculentus", 10, 12, 90, 95, "L", "L", 7, 10),
-        ("Brassica rapa", 0, 2, 95, 100, "L", "L", 14, 21),
-        ("Allium ampeloprasum", 0, 2, 95, 100, "L", "L", 21, 60),
-        ("Ipomoea batatas", 13, 16, 85, 90, "L", "L", 30, 90),
-        ("Pisum sativum", 0, 2, 95, 100, "L", "L", 7, 10),
+        ("Solanum lycopersicum",            "עגבנייה",     10, 15, 90, 95, "M", "M", 7, 14),
+        ("Capsicum annuum",                 "פלפל",         7, 10, 90, 95, "L", "M", 14, 21),
+        ("Cucumis sativus",                 "מלפפון",      10, 12, 95, 100, "L", "L", 10, 14),
+        ("Lactuca sativa",                  "חסה",          0,  2, 95, 100, "L", "L", 14, 21),
+        ("Brassica oleracea",               "כרוב",         0,  2, 95, 100, "L", "L", 21, 28),
+        ("Daucus carota",                   "גזר",          0,  2, 95, 100, "L", "L", 28, 180),
+        ("Allium cepa",                     "בצל",          0,  2, 65, 75, "L", "L", 30, 180),
+        ("Spinacia oleracea",               "תרד",          0,  2, 95, 100, "L", "L", 10, 14),
+        ("Phaseolus vulgaris",              "שעועית",       7, 10, 95, 100, "L", "L", 7, 10),
+        ("Cucurbita pepo",                  "קישוא",       10, 12, 50, 75, "L", "L", 14, 21),
+        ("Fragaria x ananassa",             "תות שדה",      0,  2, 90, 95, "L", "H", 5, 7),
+        ("Solanum melongena",               "חציל",        10, 12, 90, 95, "L", "M", 10, 14),
+        ("Apium graveolens",                "סלרי",         0,  2, 95, 100, "L", "L", 14, 56),
+        ("Beta vulgaris",                   "סלק",          0,  2, 95, 100, "L", "L", 14, 21),
+        ("Brassica oleracea var. italica",  "ברוקולי",      0,  2, 95, 100, "L", "L", 10, 14),
+        ("Raphanus sativus",                "צנונית",       0,  2, 95, 100, "L", "L", 7, 14),
+        ("Allium sativum",                  "שום",          0,  2, 65, 75, "L", "L", 90, 180),
+        ("Zea mays",                        "תירס",         0,  2, 95, 100, "L", "L", 4, 8),
+        ("Solanum tuberosum",               "תפוח אדמה",    4, 10, 90, 95, "L", "L", 90, 180),
+        ("Citrullus lanatus",               "אבטיח",       10, 15, 85, 90, "L", "L", 14, 21),
+        ("Petroselinum crispum",            "פטרוזיליה",    0,  2, 95, 100, "L", "L", 14, 21),
+        ("Ocimum basilicum",                "בזיל",        12, 15, 90, 95, "L", "L", 5, 10),
+        ("Brassica oleracea var. acephala", "קייל",         0,  2, 95, 100, "L", "L", 10, 14),
+        ("Coriandrum sativum",              "כוסברה",       0,  2, 95, 100, "L", "L", 7, 14),
+        ("Anethum graveolens",              "שמיר",         0,  2, 95, 100, "L", "L", 7, 14),
+        ("Cynara scolymus",                 "ארטישוק",      0,  2, 95, 100, "L", "L", 7, 14),
+        ("Asparagus officinalis",           "אספרגוס",      2,  4, 95, 100, "L", "L", 14, 21),
+        ("Abelmoschus esculentus",          "במיה",        10, 12, 90, 95, "L", "L", 7, 10),
+        ("Brassica rapa",                   "לפת",          0,  2, 95, 100, "L", "L", 14, 21),
+        ("Allium ampeloprasum",             "כרישה",        0,  2, 95, 100, "L", "L", 21, 60),
+        ("Ipomoea batatas",                 "בטטה",        13, 16, 85, 90, "L", "L", 30, 90),
+        ("Pisum sativum",                   "אפונה",        0,  2, 95, 100, "L", "L", 7, 10),
     ]
-    he_labels = [
-        "עגבנייה", "פלפל", "מלפפון", "חסה", "כרוב", "גזר", "בצל", "תרד",
-        "שעועית", "קישוא", "תות שדה", "חציל", "סלרי", "סלק", "צנונית",
-        "שום", "ברוקולי", "קייל", "כוסברה", "בזיל", "שמיר", "ארוגולה",
-        "קולורבי", "לפת", "שומר", "כרישה", "פטרוזיליה", "נענע", "מרווה",
-        "טימין", "אפונה", "מנגולד", "בצל ירוק", "פאק צ'וי", "בזיליקום",
-        "עירית", "לימון בלם", "גרגר נחלים", "דלעת", "מלון", "ארטישוק",
-        "שעועית מטפסת", "כורכום", "אזוב מצוי", "תרד ניו-זילנד",
-    ]
-    while len(samples) < len(he_labels):
-        samples.append(samples[len(samples) % len(samples)])
     out = []
-    for i, (sci, tmin, tmax, rhmin, rhmax, ep, es, dmin, dmax) in enumerate(samples):
-        entry = {
+    for sci, name_he, tmin, tmax, rhmin, rhmax, ep, es, dmin, dmax in samples:
+        out.append({
             "scientific_name": sci,
+            "name_he": name_he,
             "storage_temp_c_min": tmin,
             "storage_temp_c_max": tmax,
             "rh_pct_min": rhmin,
@@ -133,10 +129,7 @@ def _fallback_postharvest() -> list[dict]:
             "ethylene_sensitivity": es,
             "storage_life_days_min": dmin,
             "storage_life_days_max": dmax,
-        }
-        if i < len(he_labels):
-            entry["name_he"] = he_labels[i]
-        out.append(entry)
+        })
     return out
 
 

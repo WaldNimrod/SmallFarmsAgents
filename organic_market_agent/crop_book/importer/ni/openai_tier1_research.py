@@ -58,7 +58,7 @@ OPENAI_CROP_MAP: dict[str, str] = {
     "beet":             "סלק",
     "radish":           "צנון",
     "parsley":          "פטרוזיליה",
-    "basil":            "בזיליקום",
+    "basil":            "בזיל",   # team_00 2026-06-10: canonical basil crop (was 'בזיליקום')
     "edamame":          "אדממה",
 }
 

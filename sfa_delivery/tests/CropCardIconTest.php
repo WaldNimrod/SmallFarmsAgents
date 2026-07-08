@@ -161,9 +161,8 @@ final class CropCardIconTest extends TestCase
      */
     public function testPluralSlugResolvesToWcArt(string $slug, string $expectedFile): void
     {
-        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
-        $map = $rc->getConstant('WC_ART');
-        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $map = \SFA\Lib\CropArt::MAP;
+        $this->assertIsArray($map, 'CropArt::MAP must be an array');
         $this->assertArrayHasKey($slug, $map, "C1: plural slug '{$slug}' must be present in WC_ART");
         $this->assertSame($expectedFile, $map[$slug], "C1: '{$slug}' must map to '{$expectedFile}'");
     }
@@ -200,9 +199,8 @@ final class CropCardIconTest extends TestCase
      */
     public function testGeneratedCropArtWired(string $slug, string $expectedFile): void
     {
-        $rc  = new \ReflectionClass(\SFA\Controllers\CropBookViewController::class);
-        $map = $rc->getConstant('WC_ART');
-        $this->assertIsArray($map, 'WC_ART constant must be an array');
+        $map = \SFA\Lib\CropArt::MAP;
+        $this->assertIsArray($map, 'CropArt::MAP must be an array');
         $this->assertArrayHasKey($slug, $map, "C2: slug '{$slug}' must be present in WC_ART");
         $this->assertSame($expectedFile, $map[$slug], "C2: '{$slug}' must map to '{$expectedFile}'");
     }

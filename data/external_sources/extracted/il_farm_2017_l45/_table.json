@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0",
+  "source": "OP:il_farm_2017_l45",
+  "provenance": {
+    "xlsx": "L45_2017_data_summary.xlsx",
+    "sheet": "נתוני בסיס",
+    "farm_year": 2017,
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-06-10T00:00:00+00:00",
+    "note": "Cherry-pick of base-data sheet only (WP-CB-SRC-SWEEP). Calendar/price/budget/trees/cannabis sheets intentionally excluded."
+  },
+  "crops": [
+    {
+      "crop_he": "אפונה",
+      "rows_per_bed": 1.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "אוקטובר-ינואר",
+      "notes": "הדלייה"
+    },
+    {
+      "crop_he": "ארטישוק",
+      "rows_per_bed": 1.0,
+      "in_row_spacing_cm": 100.0,
+      "days_to_maturity": 160.0,
+      "dtm_raw": "160",
+      "season_he": "ספט-אוק",
+      "notes": null
+    },
+    {
+      "crop_he": "בצל יבש",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": 180.0,
+      "dtm_raw": "180",
+      "season_he": "ספט-אוק",
+      "notes": "שימוש בזרעים. 4 שורות בארוגה של מטר. לאחר הקטיף לייבש בשטח נשמר 4-5 חודשים במחסן. מחזור אחד בעונה. כמות דרושה - קילו בצל בשבוע לסל. כלומר יש לייצר 30 קילו בצל בשבוע חלוקה למשך חודשיים? כמה זמן חיי המדף של הבצל? כמות כללית 240 קילו. רוצים בצלים בינוניים במשקל 200 גרם. 5 בצלים בקילו. סה\"כ 1200 בצלים. השקיה בהצפות פעם בשבוע, להכנס לדשן כל חודש וחצי. אחרי הצניחה עוד השקיה אחת."
+    },
+    {
+      "crop_he": "בצל ירוק",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "כל השנה",
+      "notes": "ניתן לשתול כל השנה. רשת צל  ממאי עד אוגוסט כן. מחזור שתילה של בצל ירוק פעם בחודש. 2 צרורות לסל בשבוע, סה\"כ 75 צרורות בשבוע. משך קטיף חודש, כלומר 300 צרורות במחזור. נשתול חצי ערוגה בחודש."
+    },
+    {
+      "crop_he": "ברוקולי",
+      "rows_per_bed": 2.0,
+      "in_row_spacing_cm": 40.0,
+      "days_to_maturity": 105.0,
+      "dtm_raw": "90-120",
+      "season_he": null,
+      "notes": "שתי שורות בערוגה. ראש לסל פעם בשבוע. סה\"כ 37 יחידות בשבוע. 80 יחידות במחזור פעם בחודש."
+    },
+    {
+      "crop_he": "גזר",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 5.0,
+      "days_to_maturity": 150.0,
+      "dtm_raw": "150",
+      "season_he": "ספט-פבר",
+      "notes": "הנבטה עם טפטפות או מתזים. בארוגה של מטר 2 שורות בצמדים.מרווחים של שתי אצבעות בשורה. 10 גזרים לסל 300 גזרים בשבוע, 1200 בחודש."
+    },
+    {
+      "crop_he": "חסה",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "ספט-פבר",
+      "notes": "2 חסות לארגז, 60 חסות בשבוע,240 בחודש."
+    },
+    {
+      "crop_he": "כרוב",
+      "rows_per_bed": 2.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": 90.0,
+      "dtm_raw": "90",
+      "season_he": "ספט-פבר",
+      "notes": "יחידה לסל פעם בשבועיים. סה\"כ 30 יחידות בשבוע. שתילת חצי ארוגה אחת פעם בחודש.  שני שורות או שלוש. אפשר גם צמדים"
+    },
+    {
+      "crop_he": "כרובית",
+      "rows_per_bed": 2.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": null,
+      "dtm_raw": null,
+      "season_he": null,
+      "notes": "יחידה לסל פעם בשבועיים. סה\"כ 37 יחידות בשבוע. 80 יחידות בחודש. שתילת ארוגה אחת פעם בחודש.  שורה אחת בארוגה או שורה אחת של צמדים. מומלץ מחזור פעם בחודש בסירוגיות עם ברוקולי, משך קטיף שבועיים. עצירת שתילות בתחילת דצמבר ממשיך בינואר פברואר."
+    },
+    {
+      "crop_he": "כרישה",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": 165.0,
+      "dtm_raw": "150-180",
+      "season_he": null,
+      "notes": "3 יחידות לסל, פעם בשבועיים. סה\"כ 110 יחידות בשבועיים ו330 למחזור."
+    },
+    {
+      "crop_he": "מנגולד",
+      "rows_per_bed": 3.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "סתיו \\ אביב",
+      "notes": "קטיף עד שנה"
+    },
+    {
+      "crop_he": "סלק",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "כל השנה",
+      "notes": "עגול - 20 ס\"מ \\ צילינדר - 5 ס\"מ בשורה || שני צמדים. 3 סלקים לסל, 90 בשבוע. 270 בחודש."
+    },
+    {
+      "crop_he": "סלרי",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": 110.0,
+      "dtm_raw": "100-120",
+      "season_he": "ספט-פבר",
+      "notes": null
+    },
+    {
+      "crop_he": "פאק צ'וי",
+      "rows_per_bed": 3.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": null,
+      "dtm_raw": null,
+      "season_he": "חורף",
+      "notes": null
+    },
+    {
+      "crop_he": "צנונית",
+      "rows_per_bed": 6.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": null,
+      "dtm_raw": null,
+      "season_he": null,
+      "notes": "להנביט עם המטרה. צרור של 7 צנוניות פעם בשבוע, כלומר 210 צנוניות בשבוע ו 420 לזריעה כל שבועיים. כמה שורות בארוגה? 3 בצמדים. לשלב בסופי ארוגה."
+    },
+    {
+      "crop_he": "קולורבי",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": 60.0,
+      "dtm_raw": "60",
+      "season_he": "ספט-פבר",
+      "notes": "4 יחידות פעם בשבועיים, כלומר 120 יחידות כל שבועיים. שתילת חצי ארוגה פעם בחודש. שתילה בצמדים שני צינורות. לשלב עם לפת או שומר."
+    },
+    {
+      "crop_he": "קייל",
+      "rows_per_bed": 2.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "60-90",
+      "season_he": "סתיו \\ אביב",
+      "notes": "קטיף עד שנה"
+    },
+    {
+      "crop_he": "שום",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 10.0,
+      "days_to_maturity": 180.0,
+      "dtm_raw": "180",
+      "season_he": "ספט-אוק",
+      "notes": "(10 קילו שום מאייל) להנביט לפני להשרות כמה שעות ולשים כמה ימים בקרטון עם בד ורשת צל מכסה ולהשקות כמה פעמים."
+    },
+    {
+      "crop_he": "שומר",
+      "rows_per_bed": 4.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": 90.0,
+      "dtm_raw": "90",
+      "season_he": null,
+      "notes": "המרווח בשורה- כל 20 בעונה הגשומה, כל 30 בהשקיה בצמדים"
+    },
+    {
+      "crop_he": "תות שדה",
+      "rows_per_bed": 3.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": null,
+      "dtm_raw": null,
+      "season_he": "ספט-אוק",
+      "notes": null
+    },
+    {
+      "crop_he": "תפו\"א",
+      "rows_per_bed": 1.0,
+      "in_row_spacing_cm": 20.0,
+      "days_to_maturity": 105.0,
+      "dtm_raw": "90-120",
+      "season_he": "אוקטובר-ינואר",
+      "notes": "לקנות פקעות לסתיו ולאביב (12 קילו). ייבול צפוי 3.5 קילו למטר בסתיו ו4.8 למ\"ר באביב (יכול להגיע אפילו עד ל 6 קילו למ\"ר). אחרי הזריעה השקיה אחת ולחכות. לתלם פעמיים."
+    },
+    {
+      "crop_he": "תרד טורקי",
+      "rows_per_bed": 3.0,
+      "in_row_spacing_cm": 30.0,
+      "days_to_maturity": 75.0,
+      "dtm_raw": "75",
+      "season_he": "אוק-פבר",
+      "notes": null
+    }
+  ]
+}

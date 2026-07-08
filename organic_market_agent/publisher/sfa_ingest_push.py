@@ -74,6 +74,22 @@ def _load_config() -> PushConfig:
 # Transformers — Postgres canonical → MySQL ingest payload
 # ---------------------------------------------------------------------------
 
+_MARKET_EST_CACHE: dict[str, Any] | None = None
+
+
+def _load_market_estimates() -> dict[str, Any]:
+    """WP-CB-MARKET-RANGES: load the reviewed/approved per-crop market_estimate objects (slug→estimate)
+    from SFA_MARKET_ESTIMATE_FILE, to inject into crops.payload_json at push time. Opt-in: empty if unset."""
+    global _MARKET_EST_CACHE
+    if _MARKET_EST_CACHE is None:
+        path = os.environ.get("SFA_MARKET_ESTIMATE_FILE", "")
+        try:
+            _MARKET_EST_CACHE = json.load(open(path, encoding="utf-8")) if path else {}
+        except Exception as e:  # noqa: BLE001
+            print(f"[market_estimate] could not load {path}: {e}", file=sys.stderr)
+            _MARKET_EST_CACHE = {}
+    return _MARKET_EST_CACHE
+
 
 def _fetch_crops(conn) -> list[dict[str, Any]]:
     """One row per crop. payload_json carries everything not at top-level."""
@@ -306,6 +322,17 @@ def _fetch_crops(conn) -> list[dict[str, Any]]:
             "last_pushed_at": now,
             "payload_json": payload_extras,
         })
+    # WP-CB-MARKET-RANGES: inject the reviewed market_estimate (organic-primary range+median +
+    # conventional secondary) by slug. No-op unless SFA_MARKET_ESTIMATE_FILE is set (team_00 approved).
+    _est = _load_market_estimates()
+    if _est:
+        n = 0
+        for rec in out:
+            me = _est.get(rec["slug"])
+            if me:
+                rec["payload_json"]["market_estimate"] = me
+                n += 1
+        print(f"[market_estimate] injected into {n}/{len(out)} crops", file=sys.stderr)
     return out
 
 
@@ -915,9 +942,15 @@ def _push_batch(
         return {"http_status": r.status_code, "body": r.text[:300]}
 
 
+def _row_crop_id(row: dict[str, Any]) -> Any:
+    """Crop identity for a fetched row: crop-keyed tables carry 'crop_id';
+    the crops table itself carries 'id'."""
+    return row["crop_id"] if "crop_id" in row else row.get("id")
+
+
 def _push_table(
     cfg: PushConfig, conn, table: str, *,
-    limit: int | None, dry_run: bool,
+    limit: int | None, dry_run: bool, allowed_crop_ids: set[int] | None = None,
 ) -> dict[str, Any]:
     fetchers = {
         "crops": _fetch_crops,
@@ -939,6 +972,9 @@ def _push_table(
         conn.rollback()
         logger.warning("source schema missing for %s; skipping. (%s)", table, str(e)[:120])
         return {"table": table, "skipped": "source_schema_missing"}
+    if allowed_crop_ids is not None:
+        # Scoped push (e.g. WP-CB-SRC-SWEEP): only rows for the allow-listed crops.
+        rows = [r for r in rows if _row_crop_id(r) in allowed_crop_ids]
     if limit is not None:
         rows = rows[:limit]
     if not rows:
@@ -972,6 +1008,14 @@ def main() -> int:
     )
     parser.add_argument("--limit", type=int, default=None,
                         help="Limit rows per table (for testing)")
+    parser.add_argument("--slugs", default=None,
+                        help="Comma-separated crop slugs — scope the push to only these crops "
+                             "(crop-keyed tables only). Ambiguous slugs (duplicate name_en) "
+                             "raise an error; use --crop-ids to disambiguate.")
+    parser.add_argument("--crop-ids", default=None, dest="crop_ids",
+                        help="Comma-separated crop_ids — unambiguous scope for the push "
+                             "(crop-keyed tables only). Used for scoped deploys (e.g. WP-CB-SRC-SWEEP). "
+                             "Takes precedence over --slugs.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Build payloads but don't POST")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -985,16 +1029,48 @@ def main() -> int:
     cfg = _load_config()
     logger.info("Target: %s", cfg.ingest_url)
 
+    # Crop-keyed tables that a scoped (--crop-ids/--slugs) push may target.
+    # products/cover_crops are NOT crop-keyed and are excluded from scoped pushes.
+    CROP_KEYED = {"crops", "crop_varieties", "crop_field_enrichment",
+                  "crop_attribute", "crop_content", "crop_content_source"}
+
     conn = psycopg2.connect(cfg.db_url)
     try:
-        tables = (
-            ["crops", "crop_varieties", "products", "cover_crops",
-             "crop_field_enrichment", "crop_attribute",
-             "crop_content", "crop_content_source"]
-            if args.table == "all" else [args.table]
-        )
+        allowed_crop_ids: set[int] | None = None
+        if args.crop_ids:
+            allowed_crop_ids = {int(x) for x in args.crop_ids.split(",") if x.strip()}
+        elif args.slugs:
+            want = {s.strip() for s in args.slugs.split(",") if s.strip()}
+            # slug -> [ids]; name_en duplicates (e.g. a duplicate crop) make a slug ambiguous.
+            slug_to_ids: dict[str, list[int]] = {}
+            for r in _fetch_crops(conn):
+                slug_to_ids.setdefault(r["slug"], []).append(r["id"])
+            unknown = want - set(slug_to_ids)
+            if unknown:
+                raise SystemExit(f"--slugs: unknown crop slug(s): {sorted(unknown)}")
+            ambiguous = {s: slug_to_ids[s] for s in want if len(slug_to_ids[s]) > 1}
+            if ambiguous:
+                raise SystemExit(
+                    f"--slugs: ambiguous slug(s) map to multiple crop_ids: {ambiguous}. "
+                    f"Use --crop-ids to disambiguate.")
+            allowed_crop_ids = {slug_to_ids[s][0] for s in want}
+
+        if allowed_crop_ids is not None:
+            logger.info("Scoped push: %d crop(s) -> crop_ids %s",
+                        len(allowed_crop_ids), sorted(allowed_crop_ids))
+
+        if args.table == "all":
+            tables = (sorted(CROP_KEYED) if allowed_crop_ids is not None
+                      else ["crops", "crop_varieties", "products", "cover_crops",
+                            "crop_field_enrichment", "crop_attribute",
+                            "crop_content", "crop_content_source"])
+        else:
+            if allowed_crop_ids is not None and args.table not in CROP_KEYED:
+                raise SystemExit(f"--crop-ids/--slugs scoping only applies to crop-keyed tables: {sorted(CROP_KEYED)}")
+            tables = [args.table]
         for tbl in tables:
-            res = _push_table(cfg, conn, tbl, limit=args.limit, dry_run=args.dry_run)
+            res = _push_table(cfg, conn, tbl, limit=args.limit, dry_run=args.dry_run,
+                              allowed_crop_ids=allowed_crop_ids)
             print(json.dumps(res, ensure_ascii=False, default=str, indent=2))
     finally:
         conn.close()

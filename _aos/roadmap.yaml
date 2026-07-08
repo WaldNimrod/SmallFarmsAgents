@@ -2977,7 +2977,8 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-0
   label: "ספר גידולים: Crop Data Model Canon (field taxonomy, attributes layer, units/enums, migration)"
-  status: ACTIVE
+  status: DONE
+  closed_at: "2026-05-31"
   phase: design
   track: A
   effort: LARGE
@@ -3085,7 +3086,11 @@ work_packages:
     how crop knowledge is
     named/typed/stored/reconciled/read. Supersedes the WP-CB-1 field-mapping patch (FINDINGS artifact)
     by fixing the root. Calculator math (92 tests) unaffected; only the field MAPPING + storage model
-    change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400."
+    change. NEXT: team_00 review of LOD200 → Migration WP (8 phases) + correct WP-CB-1 LOD400.
+    [2026-06-12 status hygiene — team_100, per team_00 handoff: stale 'ACTIVE' → DONE. This is a LOCKED
+    design canon (LOD200_LOCKED @ d16a611, R3 PASS team_190 non-Claude), implemented + cross-engine
+    validated downstream by WP-CB-MIG (LOD500_LOCKED, 0247a95) and WP-CB-MIG2 (LOD500_LOCKED). No build /
+    no L-GATE_V of its own; terminal state = DONE / LOD200_LOCKED.]"
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-MIG
@@ -4175,7 +4180,13 @@ work_packages:
 
 - id: SFA-S003-P004-WP-PRELAUNCH-QA
   label: "ספר גידולים: Pre-launch full-system visual + E2E QA (all surfaces vs team_35 mockups) — launch-readiness audit"
-  status: ROUTED
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
+  superseded_by: ["SFA-S003-P004-WP-CB-UI-FIDELITY", "SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY", "SFA-S003-P004-WP-CB-MOBILE"]
+  closure_note: "team_100 hygiene (team_00 handoff): the 2026-06-03 NO-GO punch-list (giant /crop-book/ entry
+    cards, app-shell logo, 375/768 mobile horizontal overflow on /crop-book/{slug}+/crop-book/table+/market/{slug})
+    was resolved by the FIDELITY/MOCKUP-FIDELITY/MOBILE WPs (all LOD500_LOCKED) + their external L-GATE_V passes.
+    This launch-readiness QA pass is therefore superseded — not formally re-run."
   phase: qa
   track: A
   effort: NORMAL
@@ -4347,18 +4358,20 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-WI7
   label: "ספר גידולים: WI-7 design completions (team_35 Q2-Q5) + 2 INFO cleanups — FIDELITY follow-up polish"
-  status: VALIDATE
-  phase: validate
+  status: COMPLETE
+  phase: done
   track: A
   effort: SMALL
   current_lean_gate: L-GATE_V
-  lod_status: BUILT_DEPLOYED_VERIFIED
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-11"
   assigned_builder: team_10
-  assigned_validator: team_50
+  assigned_validator: team_190
   created_at: "2026-06-04"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-FIDELITY"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/DESIGN_MANDATE_team35_2026-06-04_v1.0.0.md"
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-UI-WI7/team_100/DESIGN_MANDATE_team35_2026-06-04_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-WI7/ARCHIVE_MANIFEST.md"
   branch: "claude/ui-polish-hub-cropbook-2026-06-03"
   gate_history:
   - gate: L-GATE_E
@@ -4396,10 +4409,25 @@ work_packages:
       the missed MAJOR confirmed gone); ק״ג/דונם live; search wc-img; no hub English eyebrows; legacy 301.
       cf-cache DYNAMIC. OPEN (non-blocking): /about tier badges (OPEN/BETA/…) left pending decision; calc Board-A
       pixel-polish deferred. team_50 spot-check (market-list לסל) to formally confirm → then LOD500.
-  notes: "OPENED 2026-06-04 (FIDELITY follow-up). team_35 design decisions are TEXT/SPEC only (no visual QA
-    capability); team_50 owns the visual screenshot-vs-Board verification per team_00 ruling. Mandates:
-    _COMMUNICATION/team_100/SFA-S003-P004-WP-CB-UI-WI7/. NOTE 2026-06-04: Q4 elevated by team_00 to a 4-level
-    graded seasonal-suitability model + new visual interface → split out to WP-CB-SEASON-VIZ (future)."
+  - gate: L-GATE_V
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-11"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS_WITH_FINDINGS (validator = Cursor Agent / GPT-5.5, non-Claude; IR#1/#5)
+      at origin/main@d259580 — re-verified WI7's deliverables SURVIVED the 4 later overlays (DSX1-SWEEP, CONTENT,
+      SRC-SWEEP, UI-MOCKUP-FIDELITY incl. the WC_ART→CropArt refactor). Delivery phpunit 232/736 (WI7 filter 12
+      tests/24 assertions); validate_aos 31 PASS/21 SKIP/0 FAIL; live qa_probe overflow=false on / + /market/ +
+      /crop-book/search (mobile+desktop); live basket-units לסל, no hub English eyebrows, kg_per_ha÷10 ק״ג/דונם,
+      legacy 301 redirects, and the Hebrew tomato (עגבנייה) watercolor all PASS. Only INFO: the search route is
+      Hebrew-keyed — q=עגבנייה renders wc-tomato.png (q=tomato returns no rows, expected). Verdict:
+      _archive/SFA-S003-P004-WP-CB-UI-WI7/team_190/WP-CB-UI-WI7_LGATE-V_VERDICT_v1.0.0.md.
+  notes: "LOD500_LOCKED (team_100, 2026-06-11). Cross-engine L-GATE_VALIDATE PASS_WITH_FINDINGS (team_190 /
+    Cursor·GPT-5.5, non-Claude) at d259580 — WI7's render-layer fixes (basket units→לסל + hardened default; search
+    watercolor; hub English-eyebrow removal; kg_per_ha÷10→ק״ג/דונם; legacy table→301) confirmed live + surviving
+    the 4 later UI overlays. 1 INFO (search is Hebrew-keyed). Archived:
+    _archive/SFA-S003-P004-WP-CB-UI-WI7/ARCHIVE_MANIFEST.md. Deferred (own WPs): /about tier-badge English (→ LOD100
+    WP); calc Board-A pixel-polish (→ UI-tails WP); Q4 seasonal model (→ WP-CB-SEASON-VIZ)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-SEASON-VIZ
@@ -4429,6 +4457,122 @@ work_packages:
   notes: "REGISTERED 2026-06-04 (future feature, team_00). Data model + 45-crop graded matrix + visual direction
     DECIDED — see REGISTER artifact. Needs LOD + build + team_50 visual QA when scheduled. Render-layer (levels
     computed from existing month data; no DB change)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-ABOUT
+  label: "ספר גידולים: עמוד /about — תוויות שכבות (OPEN/BETA/…) החלטה דו-לשונית/עברית + מימוש — פיצול מ-WI7"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_E
+  lod_status: LOD100
+  assigned_builder: team_10
+  assigned_validator: team_50
+  created_at: "2026-06-12"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-WI7"]
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-ABOUT/REGISTER_2026-06-12_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-12"
+    validator: team_00
+    notes: >
+      Carved from WP-CB-UI-WI7 (LOD500_LOCKED): the /about tier-badge English (OPEN/BETA/COMING/PAID/CUSTOM,
+      hub_tiers.php) was deliberately left unchanged pending a label decision. Needs a team_35/team_00 ruling
+      (bilingual vs Hebrew-only vs EN-subtitle) + impl. Delivery-tier only; no schema. LOD100.
+  notes: "REGISTERED 2026-06-12 (future, team_00). /about tier-label disposition + impl. Needs a tier-label decision."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-DATA-API
+  label: "ספר גידולים: API נתונים אינקרמנטלי עם ולידציה ושמירה-בקוד — חלופה ל-seed --all (אסטרטגי, חוסם עבודות נתונים)"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: LARGE
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-12"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-SRC-SWEEP"]
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-DATA-API/REGISTER_2026-06-12_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-12"
+    validator: team_00
+    notes: >
+      team_00 ruling (2026-06-12): NO more `seed --all` — the dataset has outgrown full re-seeding (dup crops,
+      AC-05 re-emit, 70-vs-77 drift = guaranteed damage). Build an incremental, VALIDATED, code-preserved data
+      API on top of the existing sfa_ingest_push --crop-ids path: pre-write validation (types/enums/AC-05),
+      code-preserved canonical data (git-reconstructable), a first-class validated upsert, and fence/retire
+      `seed --all`. Backend/pipeline only. BLOCKS the data-currency + cropdata-dates work.
+  notes: "REGISTERED 2026-06-12 (strategic, team_00). Replaces full re-seed with a validated incremental data API.
+    Foundation — blocks WP-CB-DATA-CURRENCY + WP-CB-CROPDATA-DATES. See REGISTER artifact."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-DATA-CURRENCY
+  label: "ספר גידולים: השלמת מידע ופריסה אינקרמנטלית (catch-up 70→מלא, keep-crops, מודל שעועית, hydro, JMF FT) — דרך ה-DATA-API"
+  status: DEFERRED
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-12"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-DATA-API"]
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-DATA-CURRENCY/REGISTER_2026-06-12_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-12"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-12): production crop-data catch-up — but DEFERRED + incremental-only (NOT seed --all, must
+      flow through WP-CB-DATA-API). Scope: catch-up deploy 70→full (scoped, completeness-bar only; flag recurring
+      drift); 3 thin keep-crops (celeriac/chinese-cabbage/hot-pepper) enrich+push; beans 2-crop model (שעועית
+      מטפסת default / שעועית שיח explicit — taxonomy canon); 3 hydro geresh-filename crops mapping; 4 JMF FT
+      guides; seed-AC05 hard-fail (with DATA-API). RESOLVED (record only): dup crop #95 (SRC-SWEEP taxonomy fix);
+      idan yield_per_m2 emit (removed this session).
+  notes: "REGISTERED 2026-06-12 (DEFERRED, team_00). Incremental data completion via DATA-API; do NOT push thin
+    crops; recurring drift to measure. Split from the UI tails. See REGISTER artifact."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-MARKET-RANGES
+  label: "ספר גידולים: מחקר שוק (team_80) — טווחי מחיר מוערכים + יחידות מידה לכל גידול מהרשת → מזין chip 'מחיר מוערך'"
+  status: REGISTER
+  phase: register
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_E
+  lod_status: REGISTER
+  assigned_builder: team_80
+  assigned_validator: team_100
+  created_at: "2026-06-12"
+  milestone_ref: "S003"
+  depends_on: []
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MARKET-RANGES/MANDATE_team80_market-research_2026-06-12_v1.0.0.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-12"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-12, in-session): activate team_80 research to gather CURRENT Israeli market price
+      RANGES (min–max) + selling UNITS OF MEASURE per crop from the web, with sources + as-of date. This
+      populates the crops.payload_json.market_estimate {price_min, price_max, unit, source, as_of} field that
+      the WP-CB-UI-TAILS AC-1.2 render infrastructure consumes ('מחיר מוערך' muted chip). team_80 delivers
+      FINDINGS to team_100 (advisory, no gate authority — Iron Rule: research → architecture, not build);
+      ingestion into the DB flows via WP-CB-DATA-API (incremental, validated — NO seed --all). The TAILS render
+      side ships independently; the chip stays honestly empty until the data lands.
+  notes: "REGISTERED 2026-06-12 (team_00). team_80 market-research mission → market_estimate ranges + units;
+    feeds WP-CB-UI-TAILS AC-1.2 (render infra built now). Data ingested later via WP-CB-DATA-API. See mandate."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-MOBILE
@@ -4710,18 +4854,21 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MARKET-DETAIL
   label: "מחירון: עיצוב מחדש של עמוד המוצר הפרטני (/market/{slug}) — יישור ל-DS החדש (drill-down/spark/cross-links) בעקבות רידיזיין ה-market_list"
-  status: REGISTER
-  phase: register
+  status: COMPLETE
+  phase: closed
   track: A
-  effort: SMALL
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
+  effort: MEDIUM
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-12"
+  build_commit: "58a2023"
   assigned_builder: team_10
-  assigned_validator: team_50
+  assigned_validator: team_190
   created_at: "2026-06-08"
   milestone_ref: "S003"
-  depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-MARKET-DETAIL/BRIEF_register_2026-06-08_v1.0.0.md"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY"]
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-MARKET-DETAIL/team_100/SPEC_2026-06-12_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-MARKET-DETAIL/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4734,23 +4881,189 @@ work_packages:
       reusing the sparkline+trend+aggregates already produced by MarketViewController; keep pgraph/phist/rangesel
       contract or supersede with the card drill-down pattern. Owns the market_product emoji fold (EXCLUDED from
       the DSX1-SWEEP WP to avoid double-work). Awaits design + spec.
-  notes: "REGISTER (team_00, 2026-06-08). Per-product market page redesign — sibling of WP-CB-UI-REDESIGN market_list."
+  - gate: L-GATE_SPEC
+    result: AUTHORED
+    date: "2026-06-12"
+    validator: team_100
+    notes: >
+      LOD400 spec authored (team_100): SPEC_2026-06-12_v1.0.0.md. Confirmed market_product.php is still the old
+      Class-B v2 design with raw OS emoji (📦📊📭📖) + the 2 disabled range buttons. Scope: re-skin to the redesign
+      DS (reuse list .pcard/.pc__*/.fresh/.spark), emoji→DSX-1 glyphs, watercolor hero via CropArt, range-button
+      disposition. Pending external L-GATE_SPEC validation by the build session (team_190, non-Claude) → then build.
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-12"
+    commit: "77e3ec9"
+    validator: team_190
+    notes: >
+      team_190 (GPT-5.2 Cursor, non-Claude — IR#1/#5). rootcause 4/4 · precision 3/4 · constitutional 4/4;
+      authorize_build: true. Findings folded into SPEC §9: AC-5 LOCKED (keep 90י/שנה disabled בקרוב — team_00);
+      AC-7 scoped (preserve crop-book xlink + LOCKED disclaimer, no calc link).
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-12"
+    commit: "af8eae4"
+    validator: team_190
+    notes: >
+      team_190 (Cursor Composer, non-Claude — IR#1/#5). Build feat/wp-cb-market-detail @ 58a2023. phpunit 233/0;
+      validate_aos 0 FAIL; qa_probe /market/{slug} overflow=false 375+desktop. AC-1..7 confirmed (DS re-skin,
+      emoji-fold, watercolor hero via wc_art with no controller change, .fresh.f-a-s, AC-5 בקרוב, empty-state).
+      Deferred classb.css block retirement accepted for PASS (markup layer clean). DEPLOYED to sfa.nimrod.bio
+      (FTPS from the Mac, release 15b4a0a); production smoke PASS (prd017/prd018 re-skin live, zero emoji/Class-B).
+      Closure: _archive/SFA-S003-P004-WP-CB-MARKET-DETAIL/ (ARCHIVE_MANIFEST) + LOD500_LOCKED.
+  notes: "COMPLETE / LOD500_LOCKED 2026-06-12. /market/{slug} re-skinned to the redesign DS (emoji-fold, watercolor
+    hero, AC-5 בקרוב). Built feat/wp-cb-market-detail@58a2023, L-GATE_V PASS (team_190 non-Claude af8eae4), deployed
+    + smoked. Archived. Follow-up: optional classb.css dead-block retirement (background task)."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-UI-TAILS
+  label: "ספר גידולים: זנבות UI לשכבת המסירה — ₪ chip (חי+מוערך) + תוויות מקור בהעמקה + דיוק המחשבון למוקאפ"
+  status: COMPLETE
+  phase: closed
+  track: A
+  effort: SMALL
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-12"
+  build_commit: "c4304f4"
+  assigned_builder: team_10
+  assigned_validator: team_190
+  created_at: "2026-06-12"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY"]
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-UI-TAILS/team_100/SPEC_2026-06-12_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-TAILS/ARCHIVE_MANIFEST.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-12"
+    validator: team_00
+    notes: >
+      team_00 allocation (2026-06-12): bundle 3 delivery-tier UI tails — (1) book↔market ₪ price-chip
+      (built+tested this session on feat/wp-cb-book-market-pricechip; extend with an estimated-price-from-book
+      label "מחיר מוערך" when no live market price); (2) deep-provenance source pills (restore the EX/PR/WR pill
+      from the variety payload when the enrichment mirror lacks winning_source_class); (3) calculator
+      precision-to-mockup (calc.html alignment + reuse existing code, no re-implementation). Delivery-tier only.
+  - gate: L-GATE_SPEC
+    result: AUTHORED
+    date: "2026-06-12"
+    validator: team_100
+    notes: >
+      LOD400 spec authored (team_100): SPEC_2026-06-12_v1.0.0.md. Pending external L-GATE_SPEC validation by the
+      build session (team_190, non-Claude) → then build → deploy. Reference price-chip build:
+      feat/wp-cb-book-market-pricechip @ ab71d9f (entry() slug-OR-hebrew_name resolver, phpunit 234/234).
+  - gate: L-GATE_S
+    result: PASS_WITH_FINDINGS
+    date: "2026-06-12"
+    commit: "77e3ec9"
+    validator: team_190
+    notes: >
+      team_190 (GPT-5.2 Cursor, non-Claude — IR#1/#5). rootcause 3/3 · precision 3/4 · constitutional 4/4;
+      authorize_build: true. Findings folded into SPEC §9: AC-1.2 REDEFINED (no stored estimate price → render
+      INFRASTRUCTURE reading crops.payload_json.market_estimate; DATA via new team_80 WP-CB-MARKET-RANGES); AC-2
+      provenance key named (NI) + honest-omit; cards+table.
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-12"
+    commit: "af8eae4"
+    validator: team_190
+    notes: >
+      team_190 (Cursor Composer, non-Claude — IR#1/#5). Build feat/wp-cb-ui-tails @ c4304f4. phpunit 237/0;
+      validate_aos 0 FAIL; qa_probe /calc/ + /crop-book/ overflow=false 375+desktop. AC-1.2 estimate render-infra,
+      AC-2 winning_source_class→NI data-correctness (the source_classes→.srcpill path crop_topics.php is unused
+      dead code — no visible pill was dropping; pv-* cue is the real provenance — accepted for PASS), AC-3 calc
+      parity. DEPLOYED to sfa.nimrod.bio (FTPS from the Mac, release 15b4a0a); production smoke PASS (26 live ₪
+      chips on /crop-book/). Closure: _archive/SFA-S003-P004-WP-CB-UI-TAILS/ (ARCHIVE_MANIFEST) + LOD500_LOCKED.
+  notes: "COMPLETE / LOD500_LOCKED 2026-06-12. 3 delivery-tier UI tails: ₪ estimate-chip infrastructure (data via
+    WP-CB-MARKET-RANGES/team_80), deep-provenance NI correction, calc parity. Built feat/wp-cb-ui-tails@c4304f4,
+    L-GATE_V PASS (team_190 non-Claude af8eae4), deployed + smoked. Archived."
+  profile: L0
+
+- id: SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY
+  label: "התאמת ה-UI החי למוקאפים של צוות 35 (WP-CB-UI-REDESIGN Step-2) — סבב דיוק/תיקון: רשימת ספר הגידולים + מחירון השוק לעיצוב הכרטיסים המרווח (וטרקולור/₪/sparkline), + ליטוש חוצה-מסכים, פריסה ובדיקת תקינות"
+  status: COMPLETE
+  phase: closed
+  track: A
+  effort: MEDIUM
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-11"
+  assigned_builder: team_100
+  assigned_validator: team_190
+  created_at: "2026-06-11"
+  milestone_ref: "S003"
+  depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY/team_100/HANDOFF_SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY/ARCHIVE_MANIFEST.md"
+  gate_history:
+  - gate: L-GATE_E
+    result: REGISTER
+    date: "2026-06-11"
+    validator: team_00
+    notes: >
+      team_00 (2026-06-11): "why doesn't the UI look like the team_35 mockups?" Investigation (this session):
+      the design system (DSX-1 icons, DSX-2 type-scale, .num isolation in redesign.css) + watercolor assets
+      are LIVE, and the deep crop page + home tool-cards adopted Step-2 — but the INDEX surfaces (crop-book
+      list + market grid) were never migrated from the dense v1 layout (crop-book-v1.css/classb.css) to the
+      mockup's spacious watercolor/₪/sparkline card design; plus cross-surface drift (home hero strip,
+      related-crops icons). Mockup package + gap-evidence screenshots copied into the WP dir. Delivery-tier
+      UI only (no schema/data); deploy via FTPS lftp from the Mac. Handoff: team_100.
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      Build complete (Claude Code). Root cause (corrected the handoff premise): production already served
+      Step-2 markup — the real defect was a stray "*/" inside redesign.css's header comment that closed the
+      /* */ comment early, dropping the whole :root token block (--shell-max/--sp-*/--r-*/--sh-*/--fs-*)
+      site-wide → uncapped/gapless/wrong-radii everywhere. Fixed (a5ada1a), restoring the Step-2 token layer.
+      Plus market watercolors (new SFA\Lib\CropArt, resolved via crop slug), crop-book 70/70 arted (5 fallback
+      slugs), home hero collage, crop-page related watercolors + glance "–80" fix, and dead-CSS retirement
+      (price_card/freshness_pill macros + old .pcard*/.ccard*/.mkt-table blocks). Delivery phpunit 232/232;
+      validate_aos 0 FAIL; qa_probe overflow=false on all surfaces. Scope: sfa_delivery/ only.
+  - gate: DEPLOY
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      LIVE on sfa.nimrod.bio via FTPS (lftp from the Mac). Production smoke (qa_probe 8 surfaces ×
+      mobile+desktop) PASS, overflow=false. Prod smoke caught + fixed the market wc_art product-slug bug
+      (resolve via crop slug, commit d8bfdce). Feature branch pushed to origin (feat/wp-cb-ui-mockup-fidelity).
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-11"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS (validator = Cursor Agent / Gemini 3.1 Pro, non-Claude; IR#1/#5).
+      Independent re-run of VC-1..VC-11 at validated_head fb51cc2: delivery phpunit 232/232; validate_aos
+      0 FAIL (31 PASS/21 SKIP); scope isolation (sfa_delivery/ only); CSS token-layer fix confirmed
+      (no "*/" comment break, :root resolves, .pgrid gap); market/crop-book/home/crop-page parity; dead-code
+      retired; qa_probe 10/10 prod overflow=false. Verdict:
+      _archive/SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY/team_190/WP-CB-UI-MOCKUP-FIDELITY_LGATE-V_VERDICT_v1.0.0.md.
+  notes: "LOD500_LOCKED (team_100, 2026-06-11). Cross-engine L-GATE_VALIDATE PASS (team_190 / Cursor·Gemini,
+    non-Claude). Root cause was a dropped redesign.css :root token block (stray */ in a comment) — the fix
+    restored the whole Step-2 token layer; + market & crop-book watercolors (SFA\\Lib\\CropArt), home hero
+    collage, crop-page related watercolors + glance fix, and dead-CSS retirement. LIVE on sfa.nimrod.bio.
+    Archived: _archive/SFA-S003-P004-WP-CB-UI-MOCKUP-FIDELITY/ARCHIVE_MANIFEST.md. Follow-up (out of scope,
+    flagged): book↔market ₪ price-chip linkage on /crop-book/ (slug-vs-hebrew_name resolver)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-SRC-SWEEP
   label: "ספר גידולים: השלמת סריקה ושילוב כל מקורות המידע הקיימים (קבצים גולמיים שלא חולצו) + פריסה במערכת החיה + בדיקת תקינות"
-  status: REGISTER
-  phase: register
+  status: COMPLETE
+  phase: closed
   track: A
   effort: MEDIUM
-  current_lean_gate: L-GATE_E
-  lod_status: REGISTER
+  current_lean_gate: L-GATE_VALIDATE
+  lod_status: LOD500_LOCKED
+  locked_at: "2026-06-11"
   assigned_builder: team_100
   assigned_validator: team_190
   created_at: "2026-06-09"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-CONTENT"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-SRC-SWEEP/HANDOFF_SFA-S003-P004-WP-CB-SRC-SWEEP_v1.0.0.md"
+  spec_ref: "_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-SRC-SWEEP/SPEC_2026-06-11_v1.0.0.md"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-SRC-SWEEP/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -4762,7 +5075,57 @@ work_packages:
       tail after WP-CB-CONTENT: 7 unextracted raw files (L14 JMF nursery PDF, L26 Hebrew, L43/L44/L45 Israeli,
       L38/L39 Italian/mesclun) + jmf_book_alt (no source). Each needs extractor → importer → DB → (public) deploy.
       Licensing: JMF/licensed → internal crop_knowledge_notes (never published). Method + done-criteria in handoff.
-  notes: "REGISTER (team_00 handoff, 2026-06-09). Complete source-data integration + live deploy + integrity. Handoff: team_100."
+  - gate: L-GATE_SPEC
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      Full DB-verified audit: the corpus was already comprehensively integrated (~50 sources). Of the 7-file
+      tail, content inspection found only L39 (JMF Masterclass mesclun) + L45 (real IL-farm-2017 base-data)
+      integrable; L43 (business economics), L44 (OCR'd LED spec sheet), L26 (bank receipt), L38 (empty Italian
+      OCR), jmf_book_alt (no source PDF) deprioritized via DECISION (team_00 2026-06-10). L14 already integrated
+      via jmf_ft_nurseryseeding_ext. SPEC_2026-06-11_v1.0.0.md + DECISION_DEPRIORITIZED_SOURCES_2026-06-11.
+  - gate: L-GATE_BUILD
+    result: PASS
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      L39: variety 'חסה בייבי' (id 586) under crop #31 + cultivar source value + 4 internal species notes
+      (JMF → internal). L45 cherry-pick: OP:il_farm_2017_l45 'נתוני בסיס' → 62 source-values (days_to_maturity/
+      spacing_in_row_cm/rows_per_bed) + 22 internal notes / 22 crops; cannabis/price/budget/trees/calendar sheets
+      excluded. Fix: jmf_masterclass._default_variety_id one_or_none→first() (re-seed drift). Publisher: added
+      --crop-ids/--slugs scoping. Tests: backend 779 pass/1 skip (1 pre-existing wp_upload fail, retired tier),
+      delivery phpunit 233 pass, validate_aos 0 FAIL. License firewall verified intact.
+  - gate: DEPLOY
+    result: LIVE
+    date: "2026-06-11"
+    validator: team_100
+    notes: >
+      Scoped HMAC push (team_00 approved 'only this WP's crops') from the Mac → 23 crop_ids (crop #31 +
+      L45-touched crops): crops/crop_varieties/crop_field_enrichment/crop_attribute all HTTP 200, 0 rejected.
+      Production smoke PASS (qa_probe mobile375+desktop overflow=false): salad-mix variety count 12→13
+      (חסה בייבי live). Production crop count remained 70 — 7 stale prior-WP crops (incl. duplicate #95) NOT
+      deployed. FINDING (not this WP): production is behind a full seed (70 vs 77 crops) — separate catch-up
+      deploy + duplicate-crop #95 fix needed. See COMPLETION_REPORT_2026-06-11_v1.0.0.md §5.
+  - gate: L-GATE_VALIDATE
+    result: PASS
+    date: "2026-06-11"
+    validator: team_190
+    notes: >
+      Constitutional cross-engine PASS (validator = Cursor, non-Claude; IR#1/#5) on the UNIFIED scope
+      (SRC-SWEEP + crop-taxonomy/data-integrity remediation that team_00 directed mid-flight). First round
+      FAILed AC-05 (seed --all reintroduced derived fields); remediated R2 (live-DB strip + seed --all
+      auto-strip). Independent re-run of VC-1..VC-12 at build HEAD dfea7e6: backend 798 pass/1 skip (AC-05
+      8/8), delivery 233/233, validate_aos 0 FAIL, 73 crops/0 dups, postharvest corrected (31 crops), prod
+      70 crops + qa_probe 6/6 overflow=false. 2 non-blocking advisories. Verdict:
+      _COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-SRC-SWEEP/WP-CB-SRC-SWEEP_LGATE-V_VERDICT_v1.0.0.md.
+      Mandate: VALIDATION_MANDATE_2026-06-11_v2.0.0.md.
+  notes: "LOD500_LOCKED (team_100, 2026-06-11). Cross-engine L-GATE_VALIDATE PASS (team_190/Cursor) on unified
+    scope: L39 mesclun variety + L45 cherry-pick + crop-taxonomy dedup (Basil/Rutabaga/Salad-Mix/Heirloom →
+    canonical; 4 keep-crops) + seed auto-strip-derived + uc_davis postharvest fix (31 crops). LIVE on
+    sfa.nimrod.bio (scoped). 5 sources deprioritized via DECISION. Archived:
+    _archive/SFA-S003-P004-WP-CB-SRC-SWEEP/ARCHIVE_MANIFEST.md. Deferred (non-blocking): 3 thin keep-crops
+    held from prod; idan_planner yield emit (auto-stripped)."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-CONTENT
@@ -5068,7 +5431,8 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-2
   label: "ספר גידולים: Planner v0 (bed-map / season plan)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5088,12 +5452,16 @@ work_packages:
       plant_population (#10), succession_schedule (#6) — plus sow/harvest dates (#4/#5).
       Owns scheduling/layout; reads agronomic truth from Crop Book. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Activates after WP-CB-1 LOD500_LOCKED + team_00 priority."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — bed-map/season
+    planning is a farmOS capability, delivered via farmOS (headless) not a custom module. Original LOD100
+    intent retained below for history. // PLACEHOLDER — not for execution. Activates after WP-CB-1
+    LOD500_LOCKED + team_00 priority."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-3
   label: "ספר גידולים: Tasks (crop task scheduling)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5113,12 +5481,16 @@ work_packages:
       #4/#5, plus seed/tray procurement from #1/#3. Owns task timeline; reads anchors
       from Crop Book + Planner. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Consumes crop_task_templates + CB-1 date calcs."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — crop task
+    scheduling is a farmOS capability, delivered via farmOS (headless) not a custom module. Original LOD100
+    intent retained below for history. // PLACEHOLDER — not for execution. Consumes crop_task_templates +
+    CB-1 date calcs."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-4
   label: "ספר גידולים: Sales / POS"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5138,12 +5510,16 @@ work_packages:
       WP-CB-1, plus documented_price + OMA market index (MK class). Owns transactions;
       reads economics from Crop Book. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. Consumes CB-1 economics calcs + OMA market."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — sales/POS is a
+    farmOS capability (D3 CRM/sales integration), delivered via farmOS (headless) not a custom module.
+    Original LOD100 intent retained below for history. // PLACEHOLDER — not for execution. Consumes CB-1
+    economics calcs + OMA market."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-5
   label: "ספר גידולים: Tend integration (operational write-back loop)"
-  status: PLACEHOLDER
+  status: SUPERSEDED
+  closed_at: "2026-06-12"
   track: A
   effort: TBD
   current_lean_gate: L-GATE_E
@@ -5163,7 +5539,10 @@ work_packages:
       book-vs-reality. Consumes crop_field_enrichment + provenance from WP-CB-1; writes
       OP-class source_values that re-reconcile. Owns the ops feedback loop. LOD200+ deferred."
     validator: team_100
-  notes: "PLACEHOLDER — not for execution. OP-class operational feedback into enrichment."
+  notes: "SUPERSEDED 2026-06-12 (team_100, team_00 handoff) by S004-P001 farmOS adoption — operational
+    write-back/Tend integration is a farmOS capability, delivered via farmOS (headless) not a custom module.
+    Original LOD100 intent retained below for history. // PLACEHOLDER — not for execution. OP-class
+    operational feedback into enrichment."
   profile: L0
 
 # ============================================================================
@@ -5174,9 +5553,10 @@ work_packages:
 # North star: "מערכת ההפעלה של החווה הקטנה — הדף שכל מגדל פותח בבוקר."
 # Canonical brief: _COMMUNICATION/TEAM_100/BRIEF_SFA_VISION_RELOCK_AND_PLATFORM_DIRECTION_2026-06-04_v1.0.0.md
 # NOTE: this program SUPERSEDES the "build-our-own" intent of the S003-P004
-# downstream placeholders (WP-CB-3 tasks, WP-CB-4 Sales/POS, WP-CB-5 Tend
-# integration) — those capabilities are now to be delivered via farmOS adoption,
-# not custom modules. Reconciliation of those placeholders deferred to S004-P001.
+# downstream placeholders (WP-CB-2 Planner, WP-CB-3 Tasks, WP-CB-4 Sales/POS,
+# WP-CB-5 Tend integration) — those capabilities are now to be delivered via
+# farmOS adoption, not custom modules. RECONCILED 2026-06-12 (team_100, team_00
+# handoff): all four placeholders set status SUPERSEDED with per-WP annotations.
 # DB online (hub probe) but spoke is L0 file-based (no in-tree AOS v3 engine,
 # project_id null) → roadmap.yaml is canonical WP registry per PROJECT_CONTEXT.
 # Open DECISIONS carried: D1 monetization specifics, D2 multi-tenancy scale,

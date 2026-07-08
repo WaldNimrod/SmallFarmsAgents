@@ -196,6 +196,84 @@ def _safe_int(value: object) -> Optional[int]:
 _UNKNOWN_FAMILY_SCIENTIFIC = "Unknown"
 _UNKNOWN_FAMILY_NAME_HE = "לא ידוע"
 
+# ---------------------------------------------------------------------------
+# Keep-crops: legitimately separate crops (team_00 2026-06-10) that JMF must
+# CREATE with a correct name_en and the SAME family as their botanical sibling
+# — NOT the neutral 'Unknown' placeholder family.
+#
+# Keyed by crops.name_he (the resolved JMF_CROP_MAP value). Each entry carries:
+#   name_en          — canonical English name to stamp on the new crop
+#   sibling_name_he  — botanical sibling already in the baseline; its family is reused
+#   sibling_family   — that sibling's botanical family (scientific_name), used as a
+#                      fallback when the sibling crop does not yet exist in the DB
+#                      (JMF runs before Tend seed in --all, so ordering is unreliable).
+# ---------------------------------------------------------------------------
+_KEEP_CROP_IDENTITY: dict[str, dict[str, str]] = {
+    "סלרי שורש":      {"name_en": "Celeriac",         "sibling_name_he": "סלרי",   "sibling_family": "Apiaceae"},
+    "כרוב סיני":      {"name_en": "Chinese Cabbage",  "sibling_name_he": "כרוב",   "sibling_family": "Brassicaceae"},
+    "פלפל חריף":      {"name_en": "Hot Pepper",       "sibling_name_he": "פלפל",   "sibling_family": "Solanaceae"},
+    # team_00 2026-06-10: עגבניות מורשת (Heirloom Tomato) is a variety-type, NOT a
+    # separate crop — resolves to canonical 'עגבנייה' via JMF_CROP_MAP (no keep entry).
+    "כרוב ניצנים":    {"name_en": "Brussels Sprouts", "sibling_name_he": "כרוב",   "sibling_family": "Brassicaceae"},
+}
+
+
+def _resolve_keep_crop_family_id(session, identity: dict[str, str]) -> int:
+    """Resolve the family_id for a keep-crop from its botanical sibling.
+
+    Prefers the sibling crop's family if that crop already exists in the DB;
+    otherwise falls back to the sibling's known botanical family
+    (scientific_name), creating that CropFamily if needed. Never returns the
+    neutral 'Unknown' placeholder for a known keep-crop.
+    """
+    from organic_market_agent.crop_book.models import Crop, CropFamily
+
+    sibling = (
+        session.query(Crop)
+        .filter_by(name_he=identity["sibling_name_he"])
+        .one_or_none()
+    )
+    if sibling is not None and sibling.family_id is not None:
+        return sibling.family_id
+
+    fam = (
+        session.query(CropFamily)
+        .filter_by(scientific_name=identity["sibling_family"])
+        .one_or_none()
+    )
+    if fam is None:
+        fam = CropFamily(scientific_name=identity["sibling_family"], name_he=None)
+        session.add(fam)
+        session.flush()
+    return fam.id
+
+
+def _create_jmf_crop(session, name_he: str):
+    """Create a JMF-only crop with the best available identity.
+
+    For a known keep-crop (team_00 2026-06-10), stamp the correct name_en and
+    resolve the family from the botanical sibling. For any other unmapped JMF
+    crop, fall back to the neutral 'Unknown' placeholder family (the later Tend
+    baseline / family corrective re-points it to its true family).
+    """
+    from organic_market_agent.crop_book.models import Crop
+
+    identity = _KEEP_CROP_IDENTITY.get(name_he)
+    if identity is not None:
+        family_id = _resolve_keep_crop_family_id(session, identity)
+        crop_obj = Crop(
+            name_he=name_he,
+            name_en=identity["name_en"],
+            category="vegetables",
+            family_id=family_id,
+        )
+    else:
+        family = _get_or_create_placeholder_family(session)
+        crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
+    session.add(crop_obj)
+    session.flush()
+    return crop_obj
+
 
 def _get_or_create_placeholder_family(session):
     """Return a neutral 'Unknown' placeholder family for JMF-only crops that have
@@ -740,11 +818,18 @@ def parse_cultivars(xlsx_path: Path) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def _default_variety_id(session: Session, crop_id: int) -> int:
-    """Get or create the baseline (default, name_en=None) variety for a crop."""
+    """Get or create the baseline (default, name_en=None) variety for a crop.
+
+    Robust against multiple null-name varieties (re-seed drift accumulates extra
+    name_en=NULL stubs): prefer the is_default baseline, then lowest id — mirrors
+    jmf_book._resolve_default_variety_id. (WP-CB-SRC-SWEEP: was .one_or_none(),
+    which raised MultipleResultsFound on re-seed against a populated DB.)
+    """
     from organic_market_agent.crop_book.models import CropVariety
     v = (session.query(CropVariety)
          .filter(CropVariety.crop_id == crop_id, CropVariety.name_en.is_(None))
-         .one_or_none())
+         .order_by(CropVariety.is_default.desc(), CropVariety.id)
+         .first())
     if v is None:
         v = CropVariety(crop_id=crop_id, name_en=None, name_he=None)
         session.add(v)
@@ -974,13 +1059,12 @@ def import_jmf_masterclass(
         # Get or create crop
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
-            # For JMF-only crops not in the DB: create with minimal fields.
-            # `family_id` is NOT NULL — use the neutral 'Unknown' placeholder family
-            # (NOT the first row, which is Aizoaceae — root cause of F-DATA-001).
-            family = _get_or_create_placeholder_family(session)
-            crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
-            session.add(crop_obj)
-            session.flush()
+            # For JMF-only crops not in the DB: create with the best available
+            # identity. Known keep-crops (team_00 2026-06-10) get a correct
+            # name_en + the family of their botanical sibling; all others fall
+            # back to the neutral 'Unknown' placeholder family (NOT the first
+            # row, which is Aizoaceae — root cause of F-DATA-001).
+            crop_obj = _create_jmf_crop(session, name_he)
 
         crop_id = crop_obj.id
         variety_id = _default_variety_id(session, crop_id)
@@ -1074,11 +1158,9 @@ def import_jmf_masterclass(
 
         crop_obj = session.query(Crop).filter_by(name_he=name_he).one_or_none()
         if crop_obj is None:
-            # Neutral placeholder family — never the first row (Aizoaceae) — F-DATA-001.
-            family = _get_or_create_placeholder_family(session)
-            crop_obj = Crop(name_he=name_he, category="vegetables", family_id=family.id)
-            session.add(crop_obj)
-            session.flush()
+            # Known keep-crops get correct name_en + sibling family; others fall
+            # back to the neutral placeholder — never the first row (Aizoaceae) — F-DATA-001.
+            crop_obj = _create_jmf_crop(session, name_he)
         crop_id = crop_obj.id
 
         for cult in cult_list:

@@ -29,9 +29,10 @@ def test_alias_spot_check_five_samples(jmf_crop_map):
 
 
 def test_hebrew_value_collision_set_has_6_groups(jmf_crop_map):
-    """patch06: Hebrew-value collision set = 6 synonym groups."""
+    """patch06 + team_00 2026-06-10: Hebrew-value collision set = 8 groups
+    (6 synonym groups + 'לפת' (Rutabaga→Turnips) + 'עגבנייה' (Heirloom→Tomatoes))."""
     counts = Counter(jmf_crop_map.values())
     duplicate_targets = {v for v, c in counts.items() if c > 1}
-    assert len(duplicate_targets) == 6, (
-        f"Expected 6 synonym groups, found {len(duplicate_targets)}: {sorted(duplicate_targets)}"
+    assert len(duplicate_targets) == 8, (
+        f"Expected 8 synonym groups, found {len(duplicate_targets)}: {sorted(duplicate_targets)}"
     )

@@ -44,54 +44,6 @@
 .cparam--method{ --cp: var(--gj-leaf-deep); }
 .cparam--season{ --cp: var(--gj-soil-deep); }
 
-/* ════════════════════════════════════════════════════════════
-   FIX 1 · CROP-BOOK ENTRY CARDS  →  ONE PER ROW, richer, icon language
-   (client revision: 1-up rows; more info in the featured first card;
-    DTM is now just one chip in the .cparam vocabulary, not a headline.)
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
-  .cards-grid { grid-template-columns: 1fr; gap: 8px; }
-
-  /* Compact ROW card: small thumbnail (not a big block, not a faint wash),
-     text-led, tight margins so it doesn't eat valuable space (client). */
-  .ccard { flex-direction: row; align-items: stretch; gap: 0; }
-  .ccard__art {
-    width: 66px; flex: none; aspect-ratio: auto;
-    border-bottom: 0; border-inline-end: 1px solid var(--gj-line);
-    /* FIX 1: kill the background wash — plain paper, full-opacity art (team_10). */
-    background: var(--gj-paper);
-  }
-  .ccard__art img { width: 74%; height: 74%; mix-blend-mode: normal; object-fit: contain; }
-  .ccard__state { top: 5px; inset-inline-start: 5px; width: 15px; height: 15px; }
-  .ccard__body { padding: 9px 12px; gap: 4px; justify-content: center; }
-  .ccard__name { font-size: 17px; }
-  .ccard__en   { font-size: 11px; margin-top: -2px; }
-  .ccard__season { align-self: flex-start; }
-  /* the old .ccard__meta (pips + giant DTM) is replaced by .cparams in markup */
-  .ccard__meta { display: none; }
-
-  /* IN-SEASON NOW — clear, on the list, for sow/transplant this month */
-  .ccard__now {
-    display: inline-flex; align-items: center; gap: 5px; align-self: flex-start;
-    font-size: 11px; font-weight: 700; color: var(--gj-leaf-deep);
-    background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper));
-    border-radius: var(--gj-r-pill); padding: 2px 9px;
-  }
-  .ccard__now .g { font-size: 11px; }
-
-  /* FEATURED first card: slightly bigger thumb + a one-line description. */
-  .ccard--feat .ccard__art { width: 88px; }
-  .ccard--feat .ccard__body { padding: 11px 13px; }
-  .ccard--feat .ccard__name { font-size: 20px; }
-  .ccard__feattag {
-    display: inline-flex; align-items: center; gap: 5px; align-self: flex-start;
-    font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; letter-spacing: .06em;
-    text-transform: uppercase; color: var(--gj-leaf-deep);
-    background: color-mix(in oklch, var(--gj-leaf) 16%, var(--gj-paper));
-    border-radius: var(--gj-r-pill); padding: 2px 9px;
-  }
-  .ccard__desc { font-size: 12.5px; line-height: 1.45; color: var(--gj-ink-soft); margin: 1px 0; }
-}
 
 /* In-season filter chips + result count (cards list head) — prototype defined
    these inline; promoted to the shared layer so the PHP list can use them.
@@ -201,63 +153,6 @@
   .tcard__rows { gap: 3px; }
 }
 
-/* ════════════════════════════════════════════════════════════
-   FIX 3 · MARKET  →  DEFAULT VIEW = TABLE  (also desktop, per client)
-   The cards⇄table toggle keeps both; default flips to table. The
-   mobile table is a compact 3-col ptable (מוצר · מחיר · מצב).
-   ════════════════════════════════════════════════════════════ */
-.mkt-table-wrap { border: 1px solid var(--gj-line); border-radius: var(--gj-r-l); overflow: hidden; background: var(--gj-paper); }
-.mkt-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.mkt-table thead th { text-align: start; font-family: var(--gj-font-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--gj-ink-soft); background: var(--gj-paper-2); padding: 9px 12px; border-bottom: 1px solid var(--gj-line); }
-.mkt-table tbody td { padding: 10px 12px; border-bottom: 1px solid var(--gj-line); font-size: 13px; vertical-align: middle; }
-.mkt-table tbody tr:last-child td { border-bottom: 0; }
-.mkt-table .t-name { font-family: var(--gj-font-head); font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 9px; }
-.mkt-table .t-name .sw { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; mix-blend-mode: multiply; background: #fff; border: 1px solid var(--gj-line); flex: none; }
-.mkt-table .t-name .sw--glyph { display: grid; place-items: center; font-size: 16px; }
-.mkt-table .t-name small { display: block; font-family: var(--gj-font-mono); font-size: 9px; font-weight: 400; color: var(--gj-ink-soft); }
-.mkt-table .t-price { font-family: var(--gj-font-head); font-weight: 900; font-size: 18px; color: var(--gj-tomato-deep); white-space: nowrap; text-align: start; }
-.mkt-table .t-price small { font-size: 9px; font-weight: 600; color: var(--gj-ink-soft); font-family: var(--gj-font-body); margin-inline-start: 2px; }
-.mkt-table tr.is-empty .t-price { color: var(--gj-paper-3); }
-.mkt-table tr.is-stale .t-price { color: var(--gj-ink-soft); }
-.mkt-table .t-fresh { text-align: end; }
-/* density toggle: which view shows */
-[data-mkt-view="cards"] .mkt-table-wrap { display: none; }
-[data-mkt-view="table"] .pcard-grid    { display: none; }
-
-@media (max-width: 480px) {
-  .mkt-table thead th, .mkt-table tbody td { padding: 9px 10px; }
-  .mkt-table .t-name { font-size: 13px; gap: 8px; }
-  .mkt-table .t-price { font-size: 16px; }
-  /* freshness collapses to a dot on mobile to keep 3 columns at 375 */
-  .mkt-table .t-fresh .fresh { gap: 0; padding: 3px; }
-  .mkt-table .t-fresh .fresh span { display: none; }
-  .mkt-table .t-fresh .fresh::before { width: 9px; height: 9px; }
-}
-
-/* compact price CARDS (kept for the toggle's cards view) */
-@media (max-width: 480px) {
-  .pcard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .pcard__top { padding: 10px 11px 0; gap: 8px; }
-  .pcard__sw  { width: 34px; height: 34px; border-radius: 8px; }
-  .pcard__sw--glyph { font-size: 18px; }
-  .pcard__name { font-size: 14px; }
-  .pcard__unit { font-size: 9px; }
-  .pcard__price { padding: 6px 11px 2px; }
-  .pcard__price .big { font-size: 24px; }
-  .pcard__price .cur { font-size: 12px; }
-  .pcard__price .per { font-size: 10px; }
-  .pcard__range { padding: 0 11px 8px; font-size: 10px; }
-  .pcard__spark { display: none; }
-  .pcard__foot { padding: 7px 11px; gap: 6px; }
-  .pcard__src  { font-size: 9px; }
-  .pcard__foot .fresh { gap: 0; padding: 3px; }
-  .pcard__foot .fresh span { display: none; }
-  .pcard__foot .fresh::before { width: 8px; height: 8px; }
-}
-
-/* market density toggle control (reuses the book .aud switch look) */
-.mkt-aud { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.mkt-aud .aud { margin-inline-start: auto; }
 
 /* ════════════════════════════════════════════════════════════
    FIX 4 · ABOUT / TIERS — two groups + status chip (kept from v1)
@@ -334,19 +229,15 @@
    layout holds. This is a sanctioned change to the desktop type scale.
    ════════════════════════════════════════════════════════════ */
 .gj-eyebrow { font-size: 11px; }
-.ccard__en { font-size: 11px; }
 .cparam small { font-size: 10px; }
 .pcal__months .nums { font-size: 10px; }
 .fresh { font-size: 11px; }
-.pcard__unit, .pcard__src { font-size: 11px; }
-.pcard__range { font-size: 11px; }
 .modtile__title small, .modtile__stat small, .modtile__desc { font-size: 12px; }
 .modtile__go { font-size: 12.5px; }
 .statebadge__cov { font-size: 11px; }
 .crophero__bc { font-size: 11px; }
 .hv__val small { font-size: 12px; }
 .tcard__t small, .topic__t small, .topic__meta, .topic__chev { font-size: 12px; }
-.mkt-table .t-name small, .mkt-table .t-price small { font-size: 10px; }
 .calc-summary__row small, .modcard__feed { font-size: 11px; }
 .vtable th, .vtable tfoot td .avg-lbl { font-size: 11px; }
 .fg dt { font-size: 13px; }
@@ -354,7 +245,6 @@
 /* mobile keeps the same floor (overrides any tighter mobile rule above) */
 @media (max-width: 480px) {
   .crophero__bc { font-size: 11px; }
-  .ccard__en { font-size: 11px; }
   .pcal__months .nums { font-size: 9.5px; }   /* 12 cols at 375 — one notch down, still legible */
 }
 
@@ -557,13 +447,6 @@ details.mkt-disc > summary .chev { margin-inline-start: auto; font-size: 12px; c
 details.mkt-disc[open] > summary .chev { transform: rotate(180deg); }
 details.mkt-disc .mkt-disc__list { padding: 0 16px 14px; }
 
-/* ── MARKET · price/number/unit RTL fix ──
-   Stack the LTR number over the Hebrew unit so bidi never reorders them. */
-.mkt-table .t-price { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
-.mkt-table .t-price .n { direction: ltr; unicode-bidi: isolate; font-family: var(--gj-font-head); font-weight: 900; font-size: 18px; color: var(--gj-tomato-deep); }
-.mkt-table .t-price small { font-family: var(--gj-font-mono); font-size: 10px; font-weight: 600; color: var(--gj-ink-soft); margin: 1px 0 0; }
-.mkt-table tr.is-empty .t-price .n { color: var(--gj-paper-3); }
-.mkt-table tr.is-stale .t-price .n { color: var(--gj-ink-soft); }
 .mchips { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
 .mchips .fchip { white-space: nowrap; flex: none; }
 

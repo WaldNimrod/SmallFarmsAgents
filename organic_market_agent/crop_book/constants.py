@@ -43,7 +43,7 @@ TEND_CROP_MAP: dict[str, str] = {
     "Lemon Balm": "לימון בלם",
     "Lemon Verbena": "לימון ורבנה",
     "Lettuce": "חסה",
-    "Lettuce: Salad Mix": "תערובת סלט",
+    "Lettuce: Salad Mix": "עלי בייבי",  # team_00 2026-06-10: resolve Salad Mix to canonical baby-leaf crop 'עלי בייבי' (do NOT mint 'תערובת סלט')
     "Lovage": "לובסטייה",
     "Melons": "מלון",
     "Mint": "נענע",
@@ -72,6 +72,19 @@ TEND_CROP_MAP: dict[str, str] = {
     "Soybeans": "סויה",             # id=86 — 3 years of Tend data
     "Sunflower": "חמניה",           # id=84 — 2 years of Tend data
     "Beans: Fava": "פול",           # id=78 — fava bean
+}
+
+# Canonical English crop name (DB ``crops.name_en``) for Tend raw names whose
+# verbatim value would slugify to something other than the canonical, production
+# (SSoT) slug. The importer normally sets ``name_en`` = the raw Tend "Crop" value,
+# and ``sfa_ingest_push`` derives the delivery-tier slug from it
+# (``_slugify(name_en)``). Where the raw Tend name and the canonical slug diverge,
+# this map pins ``name_en`` so the derived slug always matches production — keeping
+# the singular, indexed crop URL (e.g. ``/crop-book/soybean``) stable across any
+# re-seed/re-import. Keys MUST be exact Tend "Crop" values (see TEND_CROP_MAP).
+#   "Soybeans" (Tend, plural) → "Soybean" → slug "soybean" (prod SSoT, singular).
+TEND_CROP_EN_CANON: dict[str, str] = {
+    "Soybeans": "Soybean",
 }
 
 TEND_FAMILY_MAP: dict[str, str] = {
@@ -177,7 +190,7 @@ TEAM00_DTM_OVERRIDES: dict[str, int] = {
 
 OUTLIER_CROPS: set[str] = {
     "ארוגולה",
-    "תערובת סלט",
+    "עלי בייבי",  # team_00 2026-06-10: renamed from 'תערובת סלט' (Salad Mix → canonical baby-leaf crop)
     "גרגר נחלים",
     "קייל",
     "מנגולד",
@@ -237,7 +250,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Jerusalem Artichokes": "ארטישוק ירושלמי",
     "Parsnips":           "שורש פטרוזילה",   # patch02 (team_00 DECISION 2026-05-25 §Q4): "גזר לבן" was colloquial; replaced with botanically accurate "parsley root"
     "Potatoes":           "תפוח אדמה",
-    "Rutabaga":           "רוטבגה",   # phonetic transliteration (team_00 directive 2026-05-25; prior value was a hallucination, NOT a real Hebrew word)
+    "Rutabaga":           "לפת",   # team_00 2026-06-10: resolve to canonical 'לפת' (Turnips); do NOT mint a separate 'רוטבגה' crop
     "Sweet Potatoes":     "בטטה",
     # ---- Solanaceae ----
     "Eggplant":           "חציל",
@@ -258,7 +271,7 @@ JMF_CROP_MAP: dict[str, str] = {
     "Peas":               "אפונה",
     "Snow Peas":          "אפונת שלג",
     # ---- Herbs ----
-    "Basil":              "בזיליקום",
+    "Basil":              "בזיל",   # team_00 2026-06-10: resolve to canonical 'בזיל' (matches TEND_CROP_MAP); do NOT mint a separate 'בזיליקום' crop
     "Celery":             "סלרי",
     "Cilantro":           "כוסברה",
     "Dill":               "שמיר",
@@ -298,7 +311,7 @@ JMF_CROP_MAP: dict[str, str] = {
     # ── Tomato variants (all Solanum lycopersicum at species level) ──
     # patch06: Roma Tomato (cultivar) removed — variety data in crop_varieties
     "Greenhouse Cherry Tomato":     "עגבניית שרי",  # protected-culture cherry — patch03: split from עגבנייה umbrella
-    "Greenhouse Heirloom Tomato":   "עגבניות מורשת", # protected-culture heirloom — patch03: split from עגבנייה umbrella
+    "Greenhouse Heirloom Tomato":   "עגבנייה", # team_00 2026-06-10: heirloom is a variety-type of tomato → resolve to canonical 'עגבנייה' (do NOT split into 'עגבניות מורשת')
 
     # ── Cucumber variants ──
     # patch06: Greenhouse English Cucumber + Greenhouse Libanese Cucumber removed (cultivars)
@@ -418,8 +431,8 @@ IL_CROP_MAP: dict[str, str] = {
     "בצל ירוק": "בצל ירוק",
     "בצלים": "בצל",
     "בזיל": "בזיל",
-    "בזיליקום": "בזיליקום",
-    "בזיליקום (ריחן)": "בזיליקום",
+    "בזיליקום": "בזיל",            # team_00 2026-06-10: alias → canonical 'בזיל' (not a separate crop)
+    "בזיליקום (ריחן)": "בזיל",     # team_00 2026-06-10: alias → canonical 'בזיל'
     "ברוקולי": "ברוקולי",
     "גזר": "גזר",
     "גזר לבן": "גזר",

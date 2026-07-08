@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · מחירון קהילתי · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.lead{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--sp-4);flex-wrap:wrap;margin-bottom:var(--sp-4);}
+.lead h1{font-size:34px;font-weight:900;}
+.lead p{margin:4px 0 0;color:var(--gj-ink-soft);max-width:58ch;}
+
+/* disclaimer (community index, not official) — collapsible */
+.disc{background:#fff8ec;border:1px solid var(--gj-sun);border-radius:var(--r-m);margin-bottom:var(--sp-4);overflow:hidden;}
+.disc summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13.5px;font-weight:600;color:var(--gj-sun-deep);}
+.disc summary::-webkit-details-marker{display:none;}
+.disc .chev{margin-inline-start:auto;font-size:12px;}
+.disc[open] .chev{transform:rotate(180deg);}
+.disc__b{padding:0 16px 14px;font-size:13.5px;color:var(--gj-sun-deep);line-height:1.6;}
+
+/* toolbar */
+.tb{position:sticky;top:62px;z-index:20;background:rgba(238,244,238,.95);backdrop-filter:blur(6px);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{font-family:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:var(--r-pill);border:1px solid var(--gj-line);background:var(--gj-paper);color:var(--gj-ink-soft);cursor:pointer;text-decoration:none;}
+.chip.on{background:var(--gj-leaf-deep);color:#fff;border-color:var(--gj-leaf-deep);}
+.tb .sp{flex:1;}
+.sel select{appearance:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--gj-ink);background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:8px 30px 8px 14px;cursor:pointer;}
+.sel{position:relative;}.sel::after{content:"▾";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gj-ink-soft);pointer-events:none;font-size:10px;}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--gj-ink-soft);margin-bottom:var(--sp-4);}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block;vertical-align:-1px;margin-inline-start:5px;}
+.cnt{font-size:14px;color:var(--gj-ink-soft);margin-bottom:var(--sp-3);}
+.cnt b{color:var(--gj-ink);}
+
+/* product cards — universal drill-down (closed=price+freshness, open=depth) */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:var(--sp-4);align-items:start;}
+.pcard{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);box-shadow:var(--sh-s);overflow:hidden;}
+.pcard.stale{opacity:.85;}
+.pcard > summary{cursor:pointer;list-style:none;padding:var(--sp-4);}
+.pcard > summary::-webkit-details-marker{display:none;}
+.pc__top{display:flex;align-items:center;gap:12px;}
+.pc__art{width:52px;height:52px;border-radius:10px;background:radial-gradient(circle at 50% 40%,#fff,#eef4ee);display:grid;place-items:center;overflow:hidden;flex:0 0 auto;}
+.pc__art img{width:46px;height:46px;object-fit:contain;}
+.pc__name{font-family:var(--gj-font-head);font-size:19px;font-weight:700;line-height:1.1;}
+.pc__unit{font-size:12px;color:var(--gj-ink-soft);}
+.pc__chev{margin-inline-start:auto;color:var(--gj-ink-soft);font-size:13px;}
+.pcard[open] .pc__chev{transform:rotate(180deg);}
+.pc__price{display:flex;align-items:flex-end;gap:6px;margin-top:12px;}
+.pc__price .big{font-family:var(--gj-font-head);font-size:34px;font-weight:900;line-height:1;color:var(--gj-ink);}
+.pc__price .cur{font-size:18px;font-weight:700;color:var(--gj-ink-soft);}
+.pc__price .per{font-size:13px;color:var(--gj-ink-soft);margin-inline-start:2px;padding-bottom:2px;}
+.pc__price .trend{margin-inline-start:auto;font-size:13px;font-weight:700;}
+.trend.up{color:var(--gj-tomato-deep);}.trend.down{color:var(--gj-leaf-deep);}
+.pc__foot{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.fresh{font-size:12px;font-weight:700;border-radius:var(--r-pill);padding:2px 11px;}
+.fresh.f{background:#e7f1d8;color:var(--gj-leaf-deep);}
+.fresh.a{background:#fbeedd;color:var(--gj-sun-deep);}
+.fresh.s{background:#f7e2da;color:var(--gj-tomato-deep);}
+/* mini sparkline */
+.spark{display:flex;align-items:flex-end;gap:2px;height:26px;margin-inline-start:auto;}
+.spark i{width:4px;background:var(--gj-leaf-soft);border-radius:2px;}
+/* expand body */
+.pc__body{padding:0 var(--sp-4) var(--sp-4);border-top:1px solid var(--gj-line);margin-top:4px;}
+.pc__body .drill{font-size:11px;font-weight:700;color:var(--gj-code);margin:12px 0 8px;}
+.prow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dotted var(--gj-line);font-size:14px;}
+.prow dt{color:var(--gj-ink-soft);}.prow dd{margin:0;font-weight:700;}
+.bigspark{display:flex;align-items:flex-end;gap:3px;height:54px;margin:14px 0 6px;}
+.bigspark i{flex:1;background:var(--gj-leaf-soft);border-radius:2px;}
+.bigspark i.hi{background:var(--gj-leaf-deep);}
+.pc__links{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.pc__links a{flex:1;justify-content:center;font-size:13px;padding:9px 12px;}
+
+@media(max-width:680px){ .tb{position:static;} .lead h1{font-size:27px;} }
+</style>
+  <link rel="stylesheet" href="./mock-v2.css">
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP</span> <b>מחירון קהילתי</b> · כרטיס מוצר בדריל-דאון (סגור=מחיר+טריות · פתוח=טווח/חציון/מקורות/גרף + קישור לספר ולמחשבון) · אותו שלד וסגנון.</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="home.html"><span class="mk"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a href="crop_card.html">ספר גידולים</a><a href="calc.html">מחשבון</a><a class="is-active" href="#">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <div class="lead">
+      <div><h1>מחירון השוק הקהילתי</h1><p>מדד מחירים לירקות אורגניים — מסריקות ציבוריות ותרומות הקהילה, מתעדכן באופן שוטף.</p></div>
+      <span class="pill pill--tomato">38 מוצרים במחירון</span>
+    </div>
+
+    <details class="disc">
+      <summary>ℹ זהו מדד קהילתי — לא מחירון רשמי <span class="chev">▾</span></summary>
+      <div class="disc__b">המחירים נאספים מסריקות ציבוריות וממחירים שתרמה הקהילה. הם משקפים מגמה ולא ציטוט רשמי — ייתכנו פערים בין מקורות, אזורים ומועדים. כל מחיר מציג כמה מקורות עומדים מאחוריו ומתי עודכן.</div>
+    </details>
+
+    <div class="tb">
+      <div class="chips">
+        <a class="chip on" href="#">הכל</a>
+        <a class="chip" href="#">ירקות פרי</a>
+        <a class="chip" href="#">עלים</a>
+        <a class="chip" href="#">שורשים ובצליים</a>
+        <a class="chip" href="#">תבלינים</a>
+      </div>
+      <span class="sp"></span>
+      <div class="sel"><select><option>מיון: שם א׳–ת׳</option><option>מיון: מחיר (נמוך→גבוה)</option><option>מיון: הכי טרי</option><option>מיון: שינוי שבועי</option></select></div>
+    </div>
+
+    <div class="legend">
+      <span><i style="background:var(--gj-leaf)"></i>טרי (0–3 ימים)</span>
+      <span><i style="background:var(--gj-sun)"></i>מתעדכן (4–7)</span>
+      <span><i style="background:var(--gj-tomato)"></i>ישן (7+)</span>
+      <span style="margin-inline-start:auto">לחצו על מוצר להרחבה: טווח, חציון, מקורות וגרף 28 יום</span>
+    </div>
+
+    <div class="cnt">מציג <b>38</b> מוצרים · <b>29</b> עודכנו השבוע</div>
+
+    <div class="pgrid">
+
+      <!-- TOMATO (open, to show depth) -->
+      <details class="pcard" open>
+        <summary>
+          <div class="pc__top">
+            <div class="pc__art"><img src="./wc/wc-tomato.png" alt="עגבנייה"></div>
+            <div><div class="pc__name">עגבנייה</div><div class="pc__unit">לק״ג</div></div>
+            <span class="pc__chev">▾</span>
+          </div>
+          <div class="pc__price"><span class="big">9.40</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend up">▲ 4%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · עודכן היום</span><span style="font-size:12px;color:var(--gj-ink-soft)">5 מקורות</span>
+            <span class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:60%"></i><i style="height:70%"></i><i style="height:65%"></i><i style="height:80%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body">
+          <div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0">
+            <div class="prow"><dt>טווח מחירים</dt><dd>₪7.00–₪12.00</dd></div>
+            <div class="prow"><dt>חציון</dt><dd>₪9.20</dd></div>
+            <div class="prow"><dt>מקורות · תצפיות</dt><dd>5 · 23</dd></div>
+            <div class="prow"><dt>עודכן</dt><dd>היום · 7 ביוני</dd></div>
+          </dl>
+          <div class="bigspark">
+            <i style="height:40%"></i><i style="height:48%"></i><i style="height:44%"></i><i style="height:52%"></i><i style="height:50%"></i><i style="height:58%"></i><i style="height:62%"></i><i style="height:55%"></i><i style="height:64%"></i><i style="height:70%"></i><i style="height:66%"></i><i style="height:74%"></i><i style="height:80%"></i><i class="hi" style="height:84%"></i>
+          </div>
+          <div style="font-size:12px;color:var(--gj-ink-soft);text-align:center">מגמת 28 יום</div>
+          <div class="pc__links">
+            <a class="btn btn--ghost" href="crop_card.html"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר הגידולים</a>
+            <a class="btn btn--ghost" href="calc.html">∑ חשב הכנסה</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-cucumber.png" alt="מלפפון"></div><div><div class="pc__name">מלפפון</div><div class="pc__unit">לק״ג</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">6.80</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend down">▼ 2%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · לפני יומיים</span><span style="font-size:12px;color:var(--gj-ink-soft)">4 מקורות</span>
+            <span class="spark"><i style="height:70%"></i><i style="height:60%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:50%"></i><i style="height:48%"></i><i style="height:45%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪5.00–₪9.00</dd></div><div class="prow"><dt>חציון</dt><dd>₪6.90</dd></div><div class="prow"><dt>מקורות</dt><dd>4</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-pepper.png" alt="פלפל"></div><div><div class="pc__name">פלפל</div><div class="pc__unit">לק״ג</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">11.50</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend up">▲ 6%</span></div>
+          <div class="pc__foot"><span class="fresh a">מתעדכן · לפני 5 ימים</span><span style="font-size:12px;color:var(--gj-ink-soft)">3 מקורות</span>
+            <span class="spark"><i style="height:50%"></i><i style="height:55%"></i><i style="height:60%"></i><i style="height:58%"></i><i style="height:70%"></i><i style="height:75%"></i><i style="height:82%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪9.00–₪14.00</dd></div><div class="prow"><dt>חציון</dt><dd>₪11.20</dd></div><div class="prow"><dt>מקורות</dt><dd>3</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-lettuce.png" alt="חסה"></div><div><div class="pc__name">חסה</div><div class="pc__unit">לאגודה</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">5.00</span><span class="cur">₪</span><span class="per">לאגודה</span><span class="trend" style="margin-inline-start:auto;color:var(--gj-ink-soft)">— 0%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · עודכן היום</span><span style="font-size:12px;color:var(--gj-ink-soft)">6 מקורות</span>
+            <span class="spark"><i style="height:55%"></i><i style="height:55%"></i><i style="height:52%"></i><i style="height:55%"></i><i style="height:54%"></i><i style="height:55%"></i><i style="height:55%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪4.00–₪6.50</dd></div><div class="prow"><dt>חציון</dt><dd>₪5.00</dd></div><div class="prow"><dt>מקורות</dt><dd>6</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-carrot.png" alt="גזר"></div><div><div class="pc__name">גזר</div><div class="pc__unit">לק״ג</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">5.20</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend down">▼ 1%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · לפני 3 ימים</span><span style="font-size:12px;color:var(--gj-ink-soft)">4 מקורות</span>
+            <span class="spark"><i style="height:60%"></i><i style="height:58%"></i><i style="height:55%"></i><i style="height:54%"></i><i style="height:53%"></i><i style="height:52%"></i><i style="height:50%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪4.00–₪7.00</dd></div><div class="prow"><dt>חציון</dt><dd>₪5.10</dd></div><div class="prow"><dt>מקורות</dt><dd>4</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+      <details class="pcard stale">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-onion.png" alt="בצל"></div><div><div class="pc__name">בצל</div><div class="pc__unit">לק״ג</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">4.80</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend" style="margin-inline-start:auto;color:var(--gj-ink-soft)">— ?</span></div>
+          <div class="pc__foot"><span class="fresh s">ישן · לפני 9 ימים</span><span style="font-size:12px;color:var(--gj-ink-soft)">2 מקורות</span>
+            <span class="spark"><i style="height:50%;background:var(--gj-paper-3)"></i><i style="height:52%;background:var(--gj-paper-3)"></i><i style="height:48%;background:var(--gj-paper-3)"></i><i style="height:50%;background:var(--gj-paper-3)"></i><i style="height:49%;background:var(--gj-paper-3)"></i><i style="height:50%;background:var(--gj-paper-3)"></i><i style="height:50%;background:var(--gj-paper-3)"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪4.00–₪6.00</dd></div><div class="prow"><dt>מקורות</dt><dd>2 · מעט דיווחים</dd></div></dl>
+          <div class="note" style="margin-top:10px">מחיר ישן — <a href="#" style="color:inherit;text-decoration:underline;font-weight:700">דווחו מחיר עדכני ←</a></div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-eggplant.png" alt="חציל"></div><div><div class="pc__name">חציל</div><div class="pc__unit">לק״ג</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">7.30</span><span class="cur">₪</span><span class="per">לק״ג</span><span class="trend up">▲ 3%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · לפני יום</span><span style="font-size:12px;color:var(--gj-ink-soft)">4 מקורות</span>
+            <span class="spark"><i style="height:55%"></i><i style="height:58%"></i><i style="height:54%"></i><i style="height:60%"></i><i style="height:63%"></i><i style="height:66%"></i><i style="height:70%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪6.00–₪9.50</dd></div><div class="prow"><dt>חציון</dt><dd>₪7.20</dd></div><div class="prow"><dt>מקורות</dt><dd>4</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+      <details class="pcard">
+        <summary>
+          <div class="pc__top"><div class="pc__art"><img src="./wc/wc-basil.png" alt="בזיליקום"></div><div><div class="pc__name">בזיליקום</div><div class="pc__unit">לאגודה</div></div><span class="pc__chev">▾</span></div>
+          <div class="pc__price"><span class="big">3.50</span><span class="cur">₪</span><span class="per">לאגודה</span><span class="trend down">▼ 1%</span></div>
+          <div class="pc__foot"><span class="fresh f">טרי · עודכן היום</span><span style="font-size:12px;color:var(--gj-ink-soft)">3 מקורות</span>
+            <span class="spark"><i style="height:60%"></i><i style="height:58%"></i><i style="height:57%"></i><i style="height:55%"></i><i style="height:54%"></i><i style="height:54%"></i><i style="height:53%"></i></span>
+          </div>
+        </summary>
+        <div class="pc__body"><div class="drill">▾ עומק נוסף</div>
+          <dl style="margin:0"><div class="prow"><dt>טווח מחירים</dt><dd>₪3.00–₪4.50</dd></div><div class="prow"><dt>חציון</dt><dd>₪3.50</dd></div><div class="prow"><dt>מקורות</dt><dd>3</dd></div></dl>
+          <div class="pc__links"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-book"></use></svg> בספר</a><a class="btn btn--ghost" href="calc.html">∑ חשב</a></div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- contribute -->
+    <section class="contrib" style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;background:#fff8ec;border:1px solid var(--gj-sun);border-radius:var(--r-l);padding:24px;margin-top:28px">
+      <span style="font-size:26px">₪</span>
+      <div><b style="font-size:17px">יודעים מחיר מהשוק?</b><p style="margin:3px 0 0;color:var(--gj-sun-deep);font-size:14px">דווחו מחיר — וזה יידלק לכל הקהילה. ככל שיותר מקורות, המדד מדויק יותר.</p></div>
+      <span style="flex:1"></span>
+      <a class="btn btn--primary" href="#">✎ דווחו מחיר ←</a>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+<script src="sfa-icons.js"></script>
+</body>
+</html>

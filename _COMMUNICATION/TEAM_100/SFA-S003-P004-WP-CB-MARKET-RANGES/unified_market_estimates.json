@@ -1,0 +1,4910 @@
+[
+  {
+    "slug": "watermelon",
+    "hebrew_name": "אבטיח",
+    "primary": "organic",
+    "organic": {
+      "price_min": 5.0,
+      "price_max": 13.9,
+      "price_median": 9.95,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.5,
+      "price_median": 3.75,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.0,
+        "price_max": 4.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 5.0,
+        "price_max": 7.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 13.9,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%9E%D7%91%D7%A6%D7%A2%D7%99-%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "edamame",
+    "hebrew_name": "אדממה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 11.9,
+      "price_max": 14.9,
+      "price_median": 13.4,
+      "unit": "חבילה 400 גרם (קפוא)",
+      "basis": "retail",
+      "confidence": "medium-high",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז (מוצר קפוא)"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪14.9"
+      ]
+    },
+    "conventional": {
+      "price_min": 19.9,
+      "price_max": 19.9,
+      "price_median": 19.9,
+      "unit": "חבילה 1 ק״ג",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז (מוצר קפוא)"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 11.9,
+        "price_max": 14.9,
+        "unit": "חבילה 400 גרם (קפוא)",
+        "organic": true,
+        "source": "זמורה אורגני; ניצת הדובדבן; בשבילך",
+        "source_url": "https://zmora-organi.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.9,
+        "price_max": 19.9,
+        "unit": "חבילה 1 ק״ג",
+        "organic": false,
+        "source": "שופרסל",
+        "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%9E%D7%96%D7%95%D7%9F-%D7%9E%D7%A7%D7%95%D7%A8%D7%A8-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D-%D7%95%D7%A0%D7%A7%D7%A0%D7%99%D7%A7%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%A7%D7%A4%D7%95%D7%90%D7%99%D7%9D/%D7%A4%D7%95%D7%9C%D7%99-%D7%A1%D7%95%D7%99%D7%94-%D7%90%D7%93%D7%9E%D7%9E%D7%94/p/P_7290011530471",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 11.9,
+        "price_max": 14.9,
+        "unit": "מארז (מוצר קפוא)",
+        "organic": true,
+        "source": "זמורה אורגני; על המשקל",
+        "source_url": "https://zmora-organi.co.il/product/%D7%90%D7%93%D7%9E%D7%9E%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%9E%D7%95%D7%A7%D7%A4%D7%90-%D7%9C%D7%99%D7%91",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "blackberry",
+    "hebrew_name": "אוסנה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 29.9,
+      "price_max": 29.9,
+      "price_median": 29.9,
+      "unit": "חבילה 300 גרם (קפוא)",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 23.0,
+      "price_max": 29.0,
+      "price_median": 26.0,
+      "unit": "מארז 125 גרם",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 29.9,
+        "price_max": 29.9,
+        "unit": "חבילה 300 גרם (קפוא)",
+        "organic": true,
+        "source": "יש לי בוטן",
+        "source_url": "https://www.yeshlibotten.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 23.0,
+        "price_max": 29.0,
+        "unit": "מארז 125 גרם",
+        "organic": false,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "anise-hyssop",
+    "hebrew_name": "אזוב מצוי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 13.0,
+      "price_median": 9.25,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪17.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 7.0,
+        "price_max": 13.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק; פארמרים",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 10.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק; Farmerim",
+        "source_url": "https://farmerim.com/product/24448",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 17.0,
+        "price_max": 17.0,
+        "unit": "צרור",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/25143",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "peas",
+    "hebrew_name": "אפונה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 13.3,
+      "price_max": 14.0,
+      "price_median": 13.65,
+      "unit": "חבילה 500 גרם",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 13.3,
+        "price_max": 14.0,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "טבע קסטל",
+        "source_url": "https://www.tevacastel.co.il/?catalogProduct=327416",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "arugula",
+    "hebrew_name": "ארוגולה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 13.0,
+      "price_median": 8.5,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "openai@₪7.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:יחידה"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 7.0,
+        "price_max": 13.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 7.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "סלסילה; שדה ירוק; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 7.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "artichokes",
+    "hebrew_name": "ארטישוק",
+    "primary": "organic",
+    "organic": {
+      "price_min": 21.0,
+      "price_max": 21.0,
+      "price_median": 21.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז 6 יחידות"
+      ],
+      "outlier_excluded": [
+        "claude@₪20.0"
+      ]
+    },
+    "conventional": {
+      "price_min": 6.9,
+      "price_max": 39.9,
+      "price_median": 23.4,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "gemini@₪3.0"
+      ]
+    },
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז 6 יחידות"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 20.0,
+        "price_max": 20.0,
+        "unit": "מארז 6 יחידות",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 3.0,
+        "price_max": 3.0,
+        "unit": "יחידה",
+        "organic": false,
+        "source": "משרד החקלאות",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 21.0,
+        "price_max": 21.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21514",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.9,
+        "price_max": 39.9,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "פרייסז",
+        "source_url": "https://www.pricez.co.il/Product/71398/%D7%90%D7%A8%D7%98%D7%99%D7%A9%D7%95%D7%A7-%D7%98%D7%A8%D7%99-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      }
+    ]
+  },
+  {
+    "slug": "jerusalem-artichokes",
+    "hebrew_name": "ארטישוק ירושלמי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 22.5,
+      "price_max": 22.5,
+      "price_median": 22.5,
+      "unit": "חבילה 400 גרם",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה 400 גרם",
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "gemini@₪15.9",
+        "openai@₪22.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:יחידה 400 גרם/מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 22.5,
+        "price_max": 22.5,
+        "unit": "חבילה 400 גרם",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 15.9,
+        "price_max": 15.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שופרסל גרין",
+        "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090706",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 22.5,
+        "price_max": 22.5,
+        "unit": "חבילה 400 גרם",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 22.5,
+        "price_max": 22.5,
+        "unit": "יחידה 400 גרם",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "basil",
+    "hebrew_name": "בזיל",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "price_median": 6.0,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪11.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 6.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 7.9,
+        "price_max": 11.0,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ניצת הדובדבן; פארמרים",
+        "source_url": "https://www.nizat.com/%D7%91%D7%96%D7%99%D7%9C%D7%99%D7%A7%D7%95%D7%9D-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "sweet-potato",
+    "hebrew_name": "בטטה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 12.0,
+      "price_max": 19.6,
+      "price_median": 16.25,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 9.5,
+      "price_median": 6.25,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.0,
+        "price_max": 9.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 14.5,
+        "price_max": 19.6,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 12.0,
+        "price_max": 18.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "okra",
+    "hebrew_name": "במיה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 22.0,
+      "price_max": 22.0,
+      "price_median": 22.0,
+      "unit": "מארז 150–250 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "price_median": 19.5,
+      "unit": "חבילה 1 ק״ג",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 22.0,
+        "price_max": 22.0,
+        "unit": "מארז 150–250 גרם",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/7280",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.5,
+        "price_max": 19.5,
+        "unit": "חבילה 1 ק״ג",
+        "organic": false,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "onions",
+    "hebrew_name": "בצל",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.5,
+      "price_max": 13.9,
+      "price_median": 11.22,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 1.93,
+      "price_max": 3.0,
+      "price_median": 2.46,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 1.93,
+        "price_max": 3.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.5,
+        "price_max": 13.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 10.0,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "scallions",
+    "hebrew_name": "בצל ירוק",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "price_median": 8.5,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪7.0"
+      ]
+    },
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 13.0,
+      "price_median": 8.5,
+      "unit": "יחידה",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 4.0,
+        "price_max": 13.0,
+        "unit": "יחידה",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 7.0,
+        "price_max": 7.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "סלסילה",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "broccoli",
+    "hebrew_name": "ברוקולי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 26.0,
+      "price_max": 26.5,
+      "price_median": 26.25,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 11.0,
+      "price_median": 8.75,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 6.5,
+        "price_max": 11.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 26.5,
+        "price_max": 26.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 26.0,
+        "price_max": 26.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/product/21337",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "ginger",
+    "hebrew_name": "ג'ינג'ר",
+    "primary": "organic",
+    "organic": {
+      "price_min": 60.0,
+      "price_max": 79.0,
+      "price_median": 69.5,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 19.5,
+      "price_max": 19.5,
+      "price_median": 19.5,
+      "unit": "יחידה 300 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 60.0,
+        "price_max": 79.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "על עלים; Farmerim",
+        "source_url": "https://farmerim.com/product/24143",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.5,
+        "price_max": 19.5,
+        "unit": "יחידה 300 גרם",
+        "organic": false,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "jicama",
+    "hebrew_name": "ג'יקמה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 15.0,
+      "price_max": 15.0,
+      "price_median": 15.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "team00"
+      ],
+      "n_sources": 1
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "team00",
+        "price_min": 15.0,
+        "price_max": 15.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "team_00 (base price)",
+        "source_url": "",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "carrots",
+    "hebrew_name": "גזר",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.9,
+      "price_max": 23.0,
+      "price_median": 12.5,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 7.9,
+        "price_max": 13.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל אונליין / ירוק",
+        "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 12.5,
+        "price_max": 12.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.0,
+        "price_max": 23.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; פארמרים; שופרסל; טבע קסטל",
+        "source_url": "https://www.salsila.co.il/cat/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%98%D7%A8%D7%99",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cress",
+    "hebrew_name": "גרגר נחלים",
+    "primary": "organic",
+    "organic": {
+      "price_min": 11.0,
+      "price_max": 11.0,
+      "price_median": 11.0,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "claude@₪11.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 11.0,
+        "price_max": 11.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 11.0,
+        "price_max": 11.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21893",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 11.0,
+        "price_max": 11.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21893",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "winter-squash",
+    "hebrew_name": "דלעת",
+    "primary": "organic",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 23.5,
+      "price_median": 17.38,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.63,
+      "price_max": 5.5,
+      "price_median": 4.56,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.63,
+        "price_max": 5.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 15.5,
+        "price_max": 23.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 14.0,
+        "price_max": 16.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "bay",
+    "hebrew_name": "דפנה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 16.0,
+      "price_median": 11.5,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "claude@₪18.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 18.0,
+        "price_max": 18.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני גורן",
+        "source_url": "https://www.eranorgani.co.il/goren",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 16.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק; Farmerim",
+        "source_url": "https://farmerim.com/product/24582",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 10.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A2%D7%9C%D7%99-%D7%93%D7%A4%D7%A0%D7%94-%D7%98%D7%A8%D7%99%D7%99%D7%9D11",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "hibiscus",
+    "hebrew_name": "היביסקוס",
+    "primary": "conventional",
+    "organic": null,
+    "conventional": {
+      "price_min": 7.99,
+      "price_max": 12.9,
+      "price_median": 10.45,
+      "unit": "100 גרם",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "no-organic-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 7.99,
+        "price_max": 12.9,
+        "unit": "100 גרם",
+        "organic": false,
+        "source": "ענק הטבע + לוינסקי מרקט",
+        "source_url": "https://anak-nuts.co.il/product/%D7%94%D7%99%D7%91%D7%99%D7%A1%D7%A7%D7%95%D7%A1",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ],
+    "note": "מחיר לפרח היבש (לתה), לא לתוצרת טרייה"
+  },
+  {
+    "slug": "chickpea",
+    "hebrew_name": "חומוס",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.9,
+      "price_max": 15.9,
+      "price_median": 13.4,
+      "unit": "חבילה 500 גרם",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 10.9,
+        "price_max": 15.9,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "פרייסז",
+        "source_url": "https://www.pricez.co.il/Product/62134/%D7%92%D7%A8%D7%92%D7%99%D7%A8%D7%99-%D7%97%D7%95%D7%9E%D7%95%D7%A1-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%94%D7%A8%D7%93%D7%95%D7%A3-500-%D7%92%D7%A8%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      }
+    ]
+  },
+  {
+    "slug": "wheat",
+    "hebrew_name": "חיטה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 11.2,
+      "price_max": 16.8,
+      "price_median": 12.84,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 11.5,
+        "price_max": 16.8,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/goren",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 11.2,
+        "price_max": 12.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ניצת הדובדבן; יוג׳י רימון",
+        "source_url": "https://www.nizat.com/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 11.2,
+        "price_max": 11.2,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/%D7%97%D7%99%D7%98%D7%94-%D7%9E%D7%9C%D7%90%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA%2C-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F--i7310",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "sunflower",
+    "hebrew_name": "חמניה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 10.0,
+      "price_median": 10.0,
+      "unit": "חבילה 300 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪54.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 54.0,
+        "price_max": 54.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/goren",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 10.0,
+        "unit": "חבילה 300 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/productinfo.aspx?prodid=6388",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 10.0,
+        "unit": "חבילה 300 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/productinfo.aspx?prodid=6388",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "lettuce",
+    "hebrew_name": "חסה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 7.9,
+      "price_median": 7.1,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 4.0,
+      "price_max": 4.5,
+      "price_median": 4.25,
+      "unit": "יחידה",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 4.0,
+        "price_max": 4.5,
+        "unit": "יחידה",
+        "organic": false,
+        "source": "משרד החקלאות",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 7.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 7.5,
+        "price_max": 7.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ניצת הדובדבן; ערן אורגני",
+        "source_url": "https://www.nizat.com/%D7%97%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA---i19",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "eggplant",
+    "hebrew_name": "חציל",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.8,
+      "price_max": 12.0,
+      "price_median": 10.57,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 2
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 10.0,
+        "price_max": 12.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע בעיר / שופרסל אונליין",
+        "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.8,
+        "price_max": 11.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "thyme",
+    "hebrew_name": "טימין",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 7.0,
+      "price_median": 7.0,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪9.9"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 7.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.5,
+        "price_max": 9.9,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני; זמורה אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%98%D7%99%D7%9E%D7%99%D7%9F-%D7%A7%D7%95%D7%A8%D7%A0%D7%99%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "tarragon",
+    "hebrew_name": "טרגון",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 9.5,
+      "price_median": 9.0,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": {
+      "price_min": 6.9,
+      "price_max": 6.9,
+      "price_median": 6.9,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 9.0,
+        "price_max": 9.5,
+        "unit": "מארז",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.0,
+        "price_max": 9.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21927",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.9,
+        "price_max": 6.9,
+        "unit": "מארז",
+        "organic": false,
+        "source": "כרמלה",
+        "source_url": "https://www.carmella.co.il/product/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%95-%D7%90%D7%A9/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.0,
+        "price_max": 9.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/product/21927",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cilantro",
+    "hebrew_name": "כוסברה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 6.0,
+      "price_median": 6.0,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "gemini@₪11.9"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 11.9,
+        "price_max": 11.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "נוי השדה",
+        "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 6.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "turmeric",
+    "hebrew_name": "כורכום",
+    "primary": "organic",
+    "organic": {
+      "price_min": 65.0,
+      "price_max": 130.0,
+      "price_median": 97.5,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "medium-high",
+      "engines": [
+        "claude"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "100 גרם",
+        "חבילה 150 גרם",
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "gemini@₪20.9",
+        "openai@₪13.0",
+        "openai@₪19.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:100 גרם/חבילה 150 גרם/מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 65.0,
+        "price_max": 130.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; פארמרים; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 13.0,
+        "price_max": 20.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "משק כישורית; שופרסל גרין",
+        "source_url": "https://www.shufersal.co.il/online/he/p/P_7290013090867",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 13.0,
+        "unit": "100 גרם",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.5,
+        "price_max": 19.5,
+        "unit": "חבילה 150 גרם",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cabbage",
+    "hebrew_name": "כרוב",
+    "primary": "organic",
+    "organic": {
+      "price_min": 5.5,
+      "price_max": 11.5,
+      "price_median": 8.5,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "medium-high",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "יחידה"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪12.9"
+      ]
+    },
+    "conventional": {
+      "price_min": 1.5,
+      "price_max": 4.0,
+      "price_median": 2.75,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 1.5,
+        "price_max": 4.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 5.5,
+        "price_max": 11.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 12.9,
+        "price_max": 12.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "אורגני שופ",
+        "source_url": "https://organishop.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cauliflower",
+    "hebrew_name": "כרובית",
+    "primary": "organic",
+    "organic": {
+      "price_min": 14.9,
+      "price_max": 21.0,
+      "price_median": 17.7,
+      "unit": "ק״ג",
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 4.93,
+      "price_max": 7.5,
+      "price_median": 6.21,
+      "unit": "יחידה / ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 4.93,
+        "price_max": 7.5,
+        "unit": "יחידה / ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 14.9,
+        "price_max": 15.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פרייסז",
+        "source_url": "https://www.pricez.co.il/Product/71448/%D7%9B%D7%A8%D7%95%D7%91%D7%99%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA-%D7%91%D7%9E%D7%A9%D7%A7%D7%9C",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 19.0,
+        "price_max": 21.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים",
+        "source_url": "https://farmerim.com/product/7732",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "leeks",
+    "hebrew_name": "כרישה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 12.0,
+      "price_max": 19.5,
+      "price_median": 16.1,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "יחידה",
+        "מארז 2 יחידות",
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪18.0",
+        "gemini@₪20.9",
+        "openai@₪12.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:יחידה/מארז 2 יחידות/ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 12.0,
+        "price_max": 18.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 15.92,
+        "price_max": 20.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שופרסל גרין; זמורה אורגני; טבע קסטל",
+        "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 12.0,
+        "price_max": 19.5,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני",
+        "source_url": "https://www.sadeyarok.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 12.0,
+        "price_max": 12.0,
+        "unit": "מארז 2 יחידות",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 14.0,
+        "price_max": 18.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק; ניצת הדובדבן",
+        "source_url": "https://www.sadeyarok.co.il/%D7%9B%D7%A8%D7%99%D7%A9%D7%9411",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "lovage",
+    "hebrew_name": "לובסטייה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 14.0,
+      "price_median": 14.0,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 7.9,
+      "price_max": 7.9,
+      "price_median": 7.9,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 14.0,
+        "price_max": 14.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "פארמרים (משק זינגר)",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 14.0,
+        "price_max": 14.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21421",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.9,
+        "price_max": 7.9,
+        "unit": "מארז",
+        "organic": false,
+        "source": "כרמלה",
+        "source_url": "https://www.carmella.co.il/product/%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%95-%D7%90%D7%A9/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "lemon-balm",
+    "hebrew_name": "לימון בלם",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 9.5,
+      "price_median": 9.5,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "צרור/מארז"
+      ],
+      "outlier_excluded": [
+        "openai@₪12.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:צרור/מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 9.5,
+        "price_max": 9.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.5,
+        "price_max": 12.0,
+        "unit": "צרור/מארז",
+        "organic": true,
+        "source": "ערן אורגני; Farmerim",
+        "source_url": "https://farmerim.com/product/22002",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.5,
+        "price_max": 9.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "lemon-verbena",
+    "hebrew_name": "לימון ורבנה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 9.0,
+      "price_median": 8.25,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 7.0,
+        "price_max": 9.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני; שדה ירוק; פארמרים",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 9.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני",
+        "source_url": "https://www.sadeyarok.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.0,
+        "price_max": 9.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "turnips",
+    "hebrew_name": "לפת",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.9,
+      "price_max": 13.9,
+      "price_median": 12.4,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "price_median": 5.75,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 11.0,
+        "price_max": 13.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים; ערן אורגני; שדה ירוק",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 10.9,
+        "price_max": 13.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר; זמורה אורגני",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 5.0,
+        "price_max": 6.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.5,
+        "price_max": 13.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.5,
+        "price_max": 13.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "melons",
+    "hebrew_name": "מלון",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 14.9,
+      "price_median": 11.95,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.5,
+      "price_max": 7.0,
+      "price_median": 5.25,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.5,
+        "price_max": 7.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.0,
+        "price_max": 9.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/A28",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cucumbers",
+    "hebrew_name": "מלפפון",
+    "primary": "organic",
+    "organic": {
+      "price_min": 13.0,
+      "price_max": 18.5,
+      "price_median": 16.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 13.0,
+        "price_max": 14.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ניצת הדובדבן / עדן טבע",
+        "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.5,
+        "price_max": 18.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 15.9,
+        "price_max": 17.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/c/A28",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "chard",
+    "hebrew_name": "מנגולד",
+    "primary": "organic",
+    "organic": {
+      "price_min": 12.9,
+      "price_max": 12.9,
+      "price_median": 12.9,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪8.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 12.9,
+        "price_max": 12.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "נוי השדה",
+        "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "sage",
+    "hebrew_name": "מרווה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 9.0,
+      "price_median": 9.0,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז",
+        "מארז/יחידה"
+      ],
+      "outlier_excluded": [
+        "claude@₪11.0",
+        "openai@₪11.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז/מארז/יחידה"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 7.0,
+        "price_max": 11.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 11.0,
+        "unit": "מארז/יחידה",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני; Farmerim",
+        "source_url": "https://farmerim.com/product/24522",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.0,
+        "price_max": 9.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "mint",
+    "hebrew_name": "נענע",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 8.5,
+      "price_median": 8.5,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪5.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 5.0,
+        "price_max": 5.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A0%D7%A2%D7%A0%D7%A211",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "soybean",
+    "hebrew_name": "סויה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.7,
+      "price_max": 9.7,
+      "price_median": 9.7,
+      "unit": "חבילה 500 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪19.6"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 19.6,
+        "price_max": 19.6,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/goren",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.7,
+        "price_max": 9.7,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.7,
+        "price_max": 9.7,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/%D7%A4%D7%95%D7%9C%D7%99-%D7%A1%D7%95%D7%99%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99--%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-i13019",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "beets",
+    "hebrew_name": "סלק",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.0,
+      "price_max": 16.0,
+      "price_median": 11.88,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 4,
+      "unit_options": [
+        "מארז 500 גרם"
+      ],
+      "outlier_excluded": [
+        "gemini@₪13.9"
+      ]
+    },
+    "conventional": {
+      "price_min": 2.6,
+      "price_max": 4.0,
+      "price_median": 3.3,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-unit-ambiguity:מארז 500 גרם"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 9.0,
+        "price_max": 14.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 9.95,
+        "price_max": 13.9,
+        "unit": "מארז 500 גרם",
+        "organic": true,
+        "source": "שופרסל / CHP",
+        "source_url": "https://chp.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 2.6,
+        "price_max": 4.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 12.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; שדה ירוק; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 12.5,
+        "price_max": 12.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 10.0,
+        "price_max": 16.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים",
+        "source_url": "https://www.salsila.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%95%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "celery",
+    "hebrew_name": "סלרי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 13.9,
+      "price_median": 8.5,
+      "unit": "יחידה",
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4,
+      "unit_options": [
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪9.9"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 6.0,
+        "price_max": 11.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 12.9,
+        "price_max": 13.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שופרסל גרין; פרייסז",
+        "source_url": "https://www.pricez.co.il/Product/74383/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 8.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "סלסילה; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.0,
+        "price_max": 8.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 8.0,
+        "price_max": 9.9,
+        "unit": "צרור",
+        "organic": true,
+        "source": "שדה ירוק; משק זינגר; פארמרים; זמורה אורגני",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A1%D7%9C%D7%A8%D7%99-%D7%A2%D7%9C%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "tomatoes",
+    "hebrew_name": "עגבנייה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 23.5,
+      "price_median": 18.9,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 10.0,
+        "price_max": 13.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ניצת הדובדבן / שופרסל גרין",
+        "source_url": "https://www.hon.co.il/%D7%9B%D7%9E%D7%94-%D7%A2%D7%95%D7%9C%D7%94-%D7%9E%D7%96%D7%95%D7%9F-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 14.5,
+        "price_max": 23.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 17.9,
+        "price_max": 19.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שדה ירוק; שופרסל green",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-herzliya",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "cherry-tomato",
+    "hebrew_name": "עגבניית שרי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 21.9,
+      "price_max": 29.9,
+      "price_median": 25.9,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 21.9,
+        "price_max": 29.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל גרין / משק טל",
+        "source_url": "https://www.shufersal.co.il/online/he/c/F01/promotion",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 26.5,
+        "price_max": 27.8,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 24.0,
+        "price_max": 26.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "chives",
+    "hebrew_name": "עירית",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 8.5,
+      "price_median": 8.12,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "claude@₪11.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 8.5,
+        "price_max": 11.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 8.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני",
+        "source_url": "https://www.sadeyarok.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%9E%D7%9C%D7%99%D7%A1%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "salad-mix",
+    "hebrew_name": "עלי בייבי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 15.5,
+      "price_max": 15.5,
+      "price_median": 15.5,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "perplexity"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז"
+      ],
+      "outlier_excluded": [
+        "openai@₪12.9"
+      ]
+    },
+    "conventional": {
+      "price_min": 8.9,
+      "price_max": 8.9,
+      "price_median": 8.9,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 8.9,
+        "price_max": 8.9,
+        "unit": "מארז",
+        "organic": false,
+        "source": "משק טל דיירקט",
+        "source_url": "https://farmdirect.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 12.9,
+        "price_max": 12.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "PricePilot",
+        "source_url": "https://pricepilot.co.il/item/%D7%9E%D7%99%D7%A7%D7%A1%20%D7%A2%D7%9C%D7%99%20%D7%91%D7%99%D7%99%D7%91%D7%99%20%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/019bf8bd-9a16-705e-8d2e-17068c4cc7fd?lang=he",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 15.5,
+        "price_max": 15.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A2%D7%9C%D7%99%D7%9D-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%9D-%D7%A9%D7%98%D7%95%D7%A4%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "pac-choi",
+    "hebrew_name": "פאק צ'וי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 16.9,
+      "price_median": 11.95,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 2
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 16.9,
+        "price_max": 16.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "נוי השדה",
+        "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 7.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/%D7%91%D7%90%D7%A7%D7%A6-%D7%95%D7%99",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "fava-bean",
+    "hebrew_name": "פול",
+    "primary": "organic",
+    "organic": {
+      "price_min": 4.9,
+      "price_max": 4.9,
+      "price_median": 4.9,
+      "unit": "100 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪30.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 22.0,
+        "price_max": 30.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 4.9,
+        "price_max": 4.9,
+        "unit": "100 גרם",
+        "organic": true,
+        "source": "נפלאות הקולה",
+        "source_url": "https://niflaot-hakole.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 4.9,
+        "price_max": 4.9,
+        "unit": "100 גרם",
+        "organic": true,
+        "source": "נפלאות הקולה",
+        "source_url": "https://niflaot-hakole.co.il/product/%D7%A4%D7%95%D7%9C-%D7%99%D7%A8%D7%95%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "parsley",
+    "hebrew_name": "פטרוזיליה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 4.9,
+      "price_max": 11.9,
+      "price_median": 8.4,
+      "unit": "מארז / צרור",
+      "basis": "retail",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "מארז",
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "openai@₪5.0",
+        "perplexity@₪5.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:מארז/צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 4.9,
+        "price_max": 11.9,
+        "unit": "מארז / צרור",
+        "organic": true,
+        "source": "נוי השדה / שופרסל גרין",
+        "source_url": "https://noyhasade.co.il/product-category/%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%99%D7%A8%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 5.0,
+        "price_max": 5.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 5.5,
+        "price_max": 5.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A4%D7%98%D7%A8%D7%95%D7%96%D7%99%D7%9C%D7%99%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "peppers",
+    "hebrew_name": "פלפל",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 24.5,
+      "price_median": 16.95,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 11.5,
+      "price_median": 8.25,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 5.0,
+        "price_max": 11.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.5,
+        "price_max": 24.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 12.9,
+        "price_max": 20.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל; שופרסל green",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-hapil",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "chinese-lantern",
+    "hebrew_name": "פנס סיני",
+    "primary": "organic",
+    "organic": {
+      "price_min": 22.5,
+      "price_max": 25.0,
+      "price_median": 23.75,
+      "unit": "מארז 250 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "conventional": {
+      "price_min": 36.0,
+      "price_max": 36.0,
+      "price_median": 36.0,
+      "unit": "מארז 115 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-single-source"
+    ],
+    "_sources": [
+      {
+        "engine": "openai",
+        "price_min": 22.5,
+        "price_max": 25.0,
+        "unit": "מארז 250 גרם",
+        "organic": true,
+        "source": "פריקפוא",
+        "source_url": "https://www.prikafu.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 36.0,
+        "price_max": 36.0,
+        "unit": "מארז 115 גרם",
+        "organic": false,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "chicory",
+    "hebrew_name": "ציקוריה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 10.0,
+      "price_max": 17.0,
+      "price_median": 13.5,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 29.9,
+      "price_max": 49.9,
+      "price_median": 39.9,
+      "unit": "מארז 500 גרם",
+      "basis": "retail",
+      "confidence": "medium",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 17.0,
+        "price_max": 17.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "פארמרים (משק זינגר)",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 10.0,
+        "price_max": 10.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "Farmerim",
+        "source_url": "https://farmerim.com/product/21228",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 29.9,
+        "price_max": 49.9,
+        "unit": "מארז 500 גרם",
+        "organic": false,
+        "source": "כרמלה",
+        "source_url": "https://www.carmella.co.il/product/%D7%92%D7%A8%D7%92%D7%A8-%D7%A0%D7%97%D7%9C%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "radishes",
+    "hebrew_name": "צנונית",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 16.0,
+      "price_median": 11.12,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז",
+        "מארז 100 גרם",
+        "צרור/מארז"
+      ],
+      "outlier_excluded": [
+        "gemini@₪13.9",
+        "openai@₪9.5",
+        "perplexity@₪10.9"
+      ]
+    },
+    "conventional": {
+      "price_min": 6.5,
+      "price_max": 6.5,
+      "price_median": 6.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "low",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-unit-ambiguity:מארז/מארז 100 גרם/צרור/מארז"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 9.5,
+        "price_max": 16.0,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 11.9,
+        "price_max": 13.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שופרסל גרין; רמב\"ם אורגניק",
+        "source_url": "https://rambam-medicine.org.il/organic/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 6.5,
+        "price_max": 6.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "מועצת הצמחים",
+        "source_url": "https://plants.moonsite.co.il/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 9.5,
+        "unit": "צרור/מארז",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.5,
+        "price_max": 9.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 10.9,
+        "price_max": 10.9,
+        "unit": "מארז 100 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/%D7%A0%D7%91%D7%98%D7%99-%D7%A6%D7%A0%D7%95%D7%A0%D7%99%D7%AA---%D7%94%D7%A0%D7%91%D7%98%D7%99%D7%9D-%D7%A9%D7%9C-%D7%90%D7%95%D7%93%D7%99",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "kohlrabi",
+    "hebrew_name": "קולורבי",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 14.9,
+      "price_median": 11.25,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 5.0,
+      "price_max": 6.5,
+      "price_median": 5.75,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 8.5,
+        "price_max": 14.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק זינגר",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 5.0,
+        "price_max": 6.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 12.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני; שדה ירוק",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "kale",
+    "hebrew_name": "קייל",
+    "primary": "organic",
+    "organic": {
+      "price_min": 7.0,
+      "price_max": 14.9,
+      "price_median": 8.5,
+      "unit": "מארז",
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4,
+      "unit_options": [
+        "צרור",
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "perplexity@₪9.9",
+        "perplexity@₪64.86"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:צרור/ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 7.0,
+        "price_max": 10.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 13.9,
+        "price_max": 14.9,
+        "unit": "מארז",
+        "organic": true,
+        "source": "פרייסז (יבולי בר); כרמלה",
+        "source_url": "https://www.pricez.co.il/Product/270523/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 7.0,
+        "price_max": 8.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "סלסילה; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.0,
+        "price_max": 8.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.0,
+        "price_max": 9.9,
+        "unit": "צרור",
+        "organic": true,
+        "source": "משק זינגר; ג'ינה אורגנית; פארמרים",
+        "source_url": "https://www.zinger-organic.com/cat/%D7%9E%D7%91%D7%A6%D7%A2%D7%99-%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 64.86,
+        "price_max": 64.86,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "טבע קסטל",
+        "source_url": "https://wolt.com/he/isr/tel-aviv/venue/teva-castel-carlebach/items/menucategory-5",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "summer-squash",
+    "hebrew_name": "קישוא",
+    "primary": "organic",
+    "organic": {
+      "price_min": 14.0,
+      "price_max": 18.5,
+      "price_median": 16.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 7.5,
+      "price_median": 5.25,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.0,
+        "price_max": 7.5,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 15.5,
+        "price_max": 18.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 14.0,
+        "price_max": 16.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק; האגוזיה",
+        "source_url": "https://www.sadeyarok.co.il/%D7%A7%D7%99%D7%A9%D7%95%D7%90-%D7%9B%D7%94%D7%9411",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "garlic",
+    "hebrew_name": "שום",
+    "primary": "organic",
+    "organic": {
+      "price_min": 49.0,
+      "price_max": 87.5,
+      "price_median": 68.25,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 3,
+      "unit_options": [
+        "חבילה 200 גרם"
+      ],
+      "outlier_excluded": [
+        "openai@₪17.5"
+      ]
+    },
+    "conventional": {
+      "price_min": 5.33,
+      "price_max": 18.0,
+      "price_median": 11.66,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-unit-ambiguity:חבילה 200 גרם"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 49.0,
+        "price_max": 87.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "פארמרים; סלסילה; ערן אורגני",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 68.0,
+        "price_max": 68.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "משק כישורית",
+        "source_url": "https://www.meshek-kishorit.org/items/3799927",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 5.33,
+        "price_max": 18.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 69.0,
+        "price_max": 87.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "Farmerim; ערן אורגני",
+        "source_url": "https://farmerim.com/product/24576",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 17.5,
+        "price_max": 17.5,
+        "unit": "חבילה 200 גרם",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "fennel",
+    "hebrew_name": "שומר",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 11.5,
+      "price_median": 8.62,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 4.5,
+      "price_max": 8.0,
+      "price_median": 6.25,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 4.5,
+        "price_max": 8.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.5,
+        "price_max": 8.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 6.0,
+        "price_max": 11.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%A9%D7%95%D7%9E%D7%A8-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%9E%D7%97%D7%99%D7%A8-%D7%99%D7%A2%D7%95%D7%93%D7%A7%D7%9F-%D7%91%D7%99%D7%97%D7%A1-%D7%9C%D7%9E%D7%A9%D7%A7%D7%9C",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "sesame",
+    "hebrew_name": "שומשום",
+    "primary": "organic",
+    "organic": {
+      "price_min": 13.9,
+      "price_max": 13.9,
+      "price_median": 13.9,
+      "unit": "חבילה 500 גרם",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪62.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 48.0,
+        "price_max": 62.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/goren",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.9,
+        "price_max": 13.9,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.9,
+        "price_max": 13.9,
+        "unit": "חבילה 500 גרם",
+        "organic": true,
+        "source": "ניצת הדובדבן",
+        "source_url": "https://www.nizat.com/%D7%A9%D7%95%D7%9E%D7%A9%D7%95%D7%9D-%D7%9E%D7%9C%D7%90-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%2C-500-%D7%92%D7%A8%D7%9D%2C-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F-%D7%A0%D7%99%D7%A6%D7%AA-%D7%94%D7%93%D7%95%D7%91%D7%93%D7%91%D7%9F--i7302",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "dill",
+    "hebrew_name": "שמיר",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.0,
+      "price_max": 12.0,
+      "price_median": 9.0,
+      "unit": "יחידה",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 3.0,
+      "price_median": 3.0,
+      "unit": "צרור",
+      "basis": "retail",
+      "confidence": "low",
+      "engines": [
+        "perplexity"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 6.0,
+        "price_max": 12.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "סלסילה; ערן אורגני; פארמרים; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 7.45,
+        "price_max": 11.9,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "משק זינגר; כרמלה; שופרסל",
+        "source_url": "https://www.carmella.co.il/product/%D7%A9%D7%9E%D7%99%D7%A8-%D7%90%D7%A8%D7%95%D7%96/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 6.5,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני",
+        "source_url": "https://www.sadeyarok.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.0,
+        "price_max": 6.0,
+        "unit": "יחידה",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 3.0,
+        "price_max": 3.0,
+        "unit": "צרור",
+        "organic": false,
+        "source": "FarmDirect",
+        "source_url": "https://farmdirect.co.il/product/%D7%A9%D7%9E%D7%99%D7%A8-%D7%9E%D7%90%D7%A8%D7%96/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "bush-pole",
+    "hebrew_name": "שעועית",
+    "primary": "organic",
+    "organic": {
+      "price_min": 20.0,
+      "price_max": 75.0,
+      "price_median": 61.25,
+      "unit": "ק״ג",
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 4
+    },
+    "conventional": {
+      "price_min": 15.0,
+      "price_max": 16.0,
+      "price_median": 15.5,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [
+      "organic-wide-spread(x3.8)"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 47.5,
+        "price_max": 75.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; פארמרים; ערן אורגני; שדה ירוק",
+        "source_url": "https://www.salsila.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 20.0,
+        "price_max": 31.8,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ליב (פרייסז); לקט השדה",
+        "source_url": "https://www.pricez.co.il/Supplier/1361/%D7%9C%D7%99%D7%91",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 15.0,
+        "price_max": 16.0,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "מועצת הצמחים",
+        "source_url": "https://plants.moonsite.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 30.0,
+        "price_max": 75.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "על המשקל; Farmerim",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 75.0,
+        "price_max": 75.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "strawberry",
+    "hebrew_name": "תות שדה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 19.0,
+      "price_max": 29.9,
+      "price_median": 24.17,
+      "unit": "מארז 250 גרם",
+      "basis": "retail/wholesale",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז 125 גרם",
+        "ק״ג"
+      ],
+      "outlier_excluded": [
+        "claude@₪29.0",
+        "openai@₪19.0",
+        "perplexity@₪69.9"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:מארז 125 גרם/ק״ג"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 29.0,
+        "price_max": 29.0,
+        "unit": "מארז 125 גרם",
+        "organic": true,
+        "source": "פארמרים; סלסילה",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 21.9,
+        "price_max": 29.9,
+        "unit": "מארז 250 גרם",
+        "organic": true,
+        "source": "זמורה אורגני; משק זינגר; וולט",
+        "source_url": "https://zmora-organi.co.il/product-category/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%98%D7%A8%D7%99%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.0,
+        "price_max": 25.9,
+        "unit": "מארז 250 גרם",
+        "organic": true,
+        "source": "עץ השדה; פרייסז; שופרסל GREEN",
+        "source_url": "https://www.etzhasade.com/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 19.0,
+        "price_max": 19.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "עץ השדה",
+        "source_url": "https://www.etzhasade.com/%D7%AA%D7%95%D7%AA-%D7%A9%D7%93%D7%94-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99-%D7%9B-250-%D7%92%D7%A8",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 25.0,
+        "price_max": 69.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "Berryfairy; רמב\"ם אורגניק; משק זינגר",
+        "source_url": "https://berryfairy.co.il/shop/%D7%AA%D7%95%D7%AA-%D7%A9%D7%93%D7%94-bio-%D7%98%D7%A8%D7%99-2-%D7%9E%D7%90%D7%A8%D7%96%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "corn",
+    "hebrew_name": "תירס",
+    "primary": "organic",
+    "organic": {
+      "price_min": 13.0,
+      "price_max": 17.5,
+      "price_median": 15.25,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 5.5,
+      "price_max": 7.5,
+      "price_median": 6.5,
+      "unit": "מארז",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 5.5,
+        "price_max": 7.5,
+        "unit": "מארז",
+        "organic": false,
+        "source": "משרד החקלאות / מועצת הצמחים",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 17.5,
+        "price_max": 17.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 13.0,
+        "price_max": 13.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "oranges",
+    "hebrew_name": "תפוז",
+    "primary": "organic",
+    "organic": {
+      "price_min": 9.5,
+      "price_max": 15.9,
+      "price_median": 12.7,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 2
+    },
+    "conventional": {
+      "price_min": 3.0,
+      "price_max": 4.88,
+      "price_median": 3.94,
+      "unit": "ק״ג",
+      "basis": "wholesale",
+      "confidence": "medium-high",
+      "engines": [
+        "gemini"
+      ],
+      "n_sources": 1
+    },
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 3.0,
+        "price_max": 4.88,
+        "unit": "ק״ג",
+        "organic": false,
+        "source": "משרד החקלאות",
+        "source_url": "https://prices.moag.gov.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.5,
+        "price_max": 9.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%A4%D7%99%D7%A8%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 15.9,
+        "price_max": 15.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל green",
+        "source_url": "https://www.shufersal.co.il/online/he/A28",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "potato",
+    "hebrew_name": "תפוח אדמה",
+    "primary": "organic",
+    "organic": {
+      "price_min": 6.5,
+      "price_max": 19.0,
+      "price_median": 11.0,
+      "unit": "ק״ג",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "gemini",
+        "openai",
+        "perplexity"
+      ],
+      "n_sources": 3
+    },
+    "conventional": null,
+    "_flags": [],
+    "_sources": [
+      {
+        "engine": "gemini",
+        "price_min": 9.9,
+        "price_max": 9.9,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "שופרסל גרין",
+        "source_url": "https://www.shufersal.co.il/online/he/c/F010202/promotion",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 6.5,
+        "price_max": 15.5,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%99%D7%A8%D7%A7%D7%95%D7%AA",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.0,
+        "price_max": 19.0,
+        "unit": "ק״ג",
+        "organic": true,
+        "source": "סלסילה; שופרסל green; טבע קסטל",
+        "source_url": "https://www.shufersal.co.il/online/he/%D7%A7%D7%98%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%AA/%D7%A1%D7%95%D7%A4%D7%A8%D7%9E%D7%A8%D7%A7%D7%98/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA/%D7%A4%D7%99%D7%A8%D7%95%D7%AA-%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/c/A28",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "spinach",
+    "hebrew_name": "תרד",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.5,
+      "price_max": 15.0,
+      "price_median": 11.75,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "medium-high",
+      "engines": [
+        "claude"
+      ],
+      "n_sources": 1,
+      "unit_options": [
+        "יחידה 190 גרם",
+        "מארז / יחידה",
+        "מארז 190 גרם",
+        "מארז 190–200 גרם"
+      ],
+      "outlier_excluded": [
+        "gemini@₪13.9",
+        "openai@₪13.9",
+        "openai@₪13.9",
+        "perplexity@₪23.0"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-single-source",
+      "organic-unit-ambiguity:יחידה 190 גרם/מארז / יחידה/מארז 190 גרם/מארז 190–200 גרם"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 8.5,
+        "price_max": 15.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים",
+        "source_url": "https://www.eranorgani.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 9.95,
+        "price_max": 13.9,
+        "unit": "מארז / יחידה",
+        "organic": true,
+        "source": "פרייסז (יבולי בר); טבע קסטל",
+        "source_url": "https://www.pricez.co.il/Product/270853/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 9.95,
+        "price_max": 13.9,
+        "unit": "מארז 190 גרם",
+        "organic": true,
+        "source": "פרייסז; טבע קסטל; כרמלה",
+        "source_url": "https://www.tevacastel.co.il/",
+        "as_of": "2026-06",
+        "confidence": "high",
+        "basis": "wholesale"
+      },
+      {
+        "engine": "openai",
+        "price_min": 13.9,
+        "price_max": 13.9,
+        "unit": "יחידה 190 גרם",
+        "organic": true,
+        "source": "כרמלה",
+        "source_url": "https://www.carmella.co.il/product/%D7%A2%D7%9C%D7%99-%D7%AA%D7%A8%D7%93-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99%D7%99%D7%9D/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 13.5,
+        "price_max": 23.0,
+        "unit": "מארז 190–200 גרם",
+        "organic": true,
+        "source": "פארמרים; ערן אורגני",
+        "source_url": "https://farmerim.com/product/24349",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      }
+    ]
+  },
+  {
+    "slug": "new-zealand-spinach",
+    "hebrew_name": "תרד ניו-זילנד",
+    "primary": "organic",
+    "organic": {
+      "price_min": 8.0,
+      "price_max": 10.0,
+      "price_median": 8.62,
+      "unit": "מארז",
+      "basis": "retail",
+      "confidence": "high",
+      "engines": [
+        "claude",
+        "openai"
+      ],
+      "n_sources": 2,
+      "unit_options": [
+        "מארז 200 גרם",
+        "מארז/יחידה",
+        "צרור"
+      ],
+      "outlier_excluded": [
+        "gemini@₪14.9",
+        "openai@₪8.5",
+        "perplexity@₪9.5"
+      ]
+    },
+    "conventional": null,
+    "_flags": [
+      "organic-unit-ambiguity:מארז 200 גרם/מארז/יחידה/צרור"
+    ],
+    "_sources": [
+      {
+        "engine": "claude",
+        "price_min": 8.5,
+        "price_max": 10.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "ערן אורגני; פארמרים",
+        "source_url": "https://farmerim.com/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "gemini",
+        "price_min": 14.9,
+        "price_max": 14.9,
+        "unit": "מארז 200 גרם",
+        "organic": true,
+        "source": "רמב\"ם אורגניק",
+        "source_url": "https://rambam-medicine.org.il/organic/",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.0,
+        "price_max": 8.5,
+        "unit": "מארז/יחידה",
+        "organic": true,
+        "source": "שדה ירוק; ערן אורגני",
+        "source_url": "https://www.sadeyarok.co.il/",
+        "as_of": "2026-06",
+        "confidence": "medium",
+        "basis": "retail"
+      },
+      {
+        "engine": "openai",
+        "price_min": 8.0,
+        "price_max": 8.0,
+        "unit": "מארז",
+        "organic": true,
+        "source": "שדה ירוק",
+        "source_url": "https://www.sadeyarok.co.il/cat/%D7%99%D7%A8%D7%95%D7%A7%D7%99%D7%9D",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      },
+      {
+        "engine": "perplexity",
+        "price_min": 9.5,
+        "price_max": 9.5,
+        "unit": "צרור",
+        "organic": true,
+        "source": "ערן אורגני",
+        "source_url": "https://www.eranorgani.co.il/%D7%AA%D7%A8%D7%93-%D7%92%D7%95%D7%9C%D7%99%D7%91%D7%A8-%D7%99%D7%A8%D7%95%D7%A7-%D7%90%D7%95%D7%A8%D7%92%D7%A0%D7%99",
+        "as_of": "2026-06",
+        "confidence": "low",
+        "basis": "retail"
+      }
+    ]
+  }
+]

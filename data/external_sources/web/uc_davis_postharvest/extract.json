@@ -1,70 +1,8 @@
 {
   "rows": [
     {
-      "scientific_name": "snoitidnoc\ndna\nsnoitavresbO AC\nlaicifeneb",
-      "storage_temp_c_min": 2.0,
-      "storage_temp_c_max": 2.0,
-      "rh_pct_min": 2,
-      "rh_pct_max": 2
-    },
-    {
-      "scientific_name": "etamixorppA\nefil-egarots",
-      "storage_temp_c_min": 8.0,
-      "storage_temp_c_max": 8.0,
-      "rh_pct_min": 2,
-      "rh_pct_max": 2
-    },
-    {
-      "scientific_name": "**enelyhtE\nytivitisnes",
-      "storage_temp_c_min": null,
-      "storage_temp_c_max": null,
-      "rh_pct_min": null,
-      "rh_pct_max": null
-    },
-    {
-      "scientific_name": "noitcudorp\n*enelyhtE",
-      "storage_temp_c_min": null,
-      "storage_temp_c_max": null,
-      "rh_pct_min": null,
-      "rh_pct_max": null
-    },
-    {
-      "scientific_name": "gnizeerf\nerutarepmet F°\ntsehgiH\nC°",
-      "storage_temp_c_min": 4.03,
-      "storage_temp_c_max": 4.03,
-      "rh_pct_min": 1,
-      "rh_pct_max": 1
-    },
-    {
-      "scientific_name": "evitaleR ytidimuh\n%",
-      "storage_temp_c_min": 1.0,
-      "storage_temp_c_max": 1.0,
-      "rh_pct_min": 1,
-      "rh_pct_max": 1
-    },
-    {
-      "scientific_name": "erutarepmet F°\negarotS\nC°",
-      "storage_temp_c_min": 23.0,
-      "storage_temp_c_max": 23.0,
-      "rh_pct_min": 23,
-      "rh_pct_max": 23
-    },
-    {
-      "scientific_name": "eman\ncifitneicS",
-      "storage_temp_c_min": null,
-      "storage_temp_c_max": null,
-      "rh_pct_min": null,
-      "rh_pct_max": null
-    },
-    {
-      "scientific_name": "eman\nnommoC",
-      "storage_temp_c_min": null,
-      "storage_temp_c_max": null,
-      "rh_pct_min": null,
-      "rh_pct_max": null
-    },
-    {
       "scientific_name": "Solanum lycopersicum",
+      "name_he": "עגבנייה",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 15,
       "rh_pct_min": 90,
@@ -72,11 +10,11 @@
       "ethylene_production": "M",
       "ethylene_sensitivity": "M",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 14,
-      "name_he": "עגבנייה"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Capsicum annuum",
+      "name_he": "פלפל",
       "storage_temp_c_min": 7,
       "storage_temp_c_max": 10,
       "rh_pct_min": 90,
@@ -84,11 +22,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "M",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "פלפל"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Cucumis sativus",
+      "name_he": "מלפפון",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 12,
       "rh_pct_min": 95,
@@ -96,11 +34,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 10,
-      "storage_life_days_max": 14,
-      "name_he": "מלפפון"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Lactuca sativa",
+      "name_he": "חסה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -108,11 +46,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "חסה"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Brassica oleracea",
+      "name_he": "כרוב",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -120,11 +58,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 21,
-      "storage_life_days_max": 28,
-      "name_he": "כרוב"
+      "storage_life_days_max": 28
     },
     {
       "scientific_name": "Daucus carota",
+      "name_he": "גזר",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -132,11 +70,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 28,
-      "storage_life_days_max": 180,
-      "name_he": "גזר"
+      "storage_life_days_max": 180
     },
     {
       "scientific_name": "Allium cepa",
+      "name_he": "בצל",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 65,
@@ -144,11 +82,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 30,
-      "storage_life_days_max": 180,
-      "name_he": "בצל"
+      "storage_life_days_max": 180
     },
     {
       "scientific_name": "Spinacia oleracea",
+      "name_he": "תרד",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -156,11 +94,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 10,
-      "storage_life_days_max": 14,
-      "name_he": "תרד"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Phaseolus vulgaris",
+      "name_he": "שעועית",
       "storage_temp_c_min": 7,
       "storage_temp_c_max": 10,
       "rh_pct_min": 95,
@@ -168,11 +106,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 10,
-      "name_he": "שעועית"
+      "storage_life_days_max": 10
     },
     {
       "scientific_name": "Cucurbita pepo",
+      "name_he": "קישוא",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 12,
       "rh_pct_min": 50,
@@ -180,11 +118,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "קישוא"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Fragaria x ananassa",
+      "name_he": "תות שדה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 90,
@@ -192,11 +130,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "H",
       "storage_life_days_min": 5,
-      "storage_life_days_max": 7,
-      "name_he": "תות שדה"
+      "storage_life_days_max": 7
     },
     {
       "scientific_name": "Solanum melongena",
+      "name_he": "חציל",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 12,
       "rh_pct_min": 90,
@@ -204,11 +142,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "M",
       "storage_life_days_min": 10,
-      "storage_life_days_max": 14,
-      "name_he": "חציל"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Apium graveolens",
+      "name_he": "סלרי",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -216,11 +154,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 56,
-      "name_he": "סלרי"
+      "storage_life_days_max": 56
     },
     {
       "scientific_name": "Beta vulgaris",
+      "name_he": "סלק",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -228,11 +166,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "סלק"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Brassica oleracea var. italica",
+      "name_he": "ברוקולי",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -240,11 +178,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 10,
-      "storage_life_days_max": 14,
-      "name_he": "צנונית"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Raphanus sativus",
+      "name_he": "צנונית",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -252,11 +190,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 14,
-      "name_he": "שום"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Allium sativum",
+      "name_he": "שום",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 65,
@@ -264,11 +202,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 90,
-      "storage_life_days_max": 180,
-      "name_he": "ברוקולי"
+      "storage_life_days_max": 180
     },
     {
       "scientific_name": "Zea mays",
+      "name_he": "תירס",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -276,11 +214,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 4,
-      "storage_life_days_max": 8,
-      "name_he": "קייל"
+      "storage_life_days_max": 8
     },
     {
       "scientific_name": "Solanum tuberosum",
+      "name_he": "תפוח אדמה",
       "storage_temp_c_min": 4,
       "storage_temp_c_max": 10,
       "rh_pct_min": 90,
@@ -288,11 +226,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 90,
-      "storage_life_days_max": 180,
-      "name_he": "כוסברה"
+      "storage_life_days_max": 180
     },
     {
       "scientific_name": "Citrullus lanatus",
+      "name_he": "אבטיח",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 15,
       "rh_pct_min": 85,
@@ -300,11 +238,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "בזיל"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Petroselinum crispum",
+      "name_he": "פטרוזיליה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -312,11 +250,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "שמיר"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Ocimum basilicum",
+      "name_he": "בזיל",
       "storage_temp_c_min": 12,
       "storage_temp_c_max": 15,
       "rh_pct_min": 90,
@@ -324,11 +262,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 5,
-      "storage_life_days_max": 10,
-      "name_he": "ארוגולה"
+      "storage_life_days_max": 10
     },
     {
       "scientific_name": "Brassica oleracea var. acephala",
+      "name_he": "קייל",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -336,11 +274,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 10,
-      "storage_life_days_max": 14,
-      "name_he": "קולורבי"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Coriandrum sativum",
+      "name_he": "כוסברה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -348,11 +286,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 14,
-      "name_he": "לפת"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Anethum graveolens",
+      "name_he": "שמיר",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -360,11 +298,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 14,
-      "name_he": "שומר"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Cynara scolymus",
+      "name_he": "ארטישוק",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -372,11 +310,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 14,
-      "name_he": "כרישה"
+      "storage_life_days_max": 14
     },
     {
       "scientific_name": "Asparagus officinalis",
+      "name_he": "אספרגוס",
       "storage_temp_c_min": 2,
       "storage_temp_c_max": 4,
       "rh_pct_min": 95,
@@ -384,11 +322,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "פטרוזיליה"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Abelmoschus esculentus",
+      "name_he": "במיה",
       "storage_temp_c_min": 10,
       "storage_temp_c_max": 12,
       "rh_pct_min": 90,
@@ -396,11 +334,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 10,
-      "name_he": "נענע"
+      "storage_life_days_max": 10
     },
     {
       "scientific_name": "Brassica rapa",
+      "name_he": "לפת",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -408,11 +346,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 14,
-      "storage_life_days_max": 21,
-      "name_he": "מרווה"
+      "storage_life_days_max": 21
     },
     {
       "scientific_name": "Allium ampeloprasum",
+      "name_he": "כרישה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -420,11 +358,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 21,
-      "storage_life_days_max": 60,
-      "name_he": "טימין"
+      "storage_life_days_max": 60
     },
     {
       "scientific_name": "Ipomoea batatas",
+      "name_he": "בטטה",
       "storage_temp_c_min": 13,
       "storage_temp_c_max": 16,
       "rh_pct_min": 85,
@@ -432,11 +370,11 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 30,
-      "storage_life_days_max": 90,
-      "name_he": "אפונה"
+      "storage_life_days_max": 90
     },
     {
       "scientific_name": "Pisum sativum",
+      "name_he": "אפונה",
       "storage_temp_c_min": 0,
       "storage_temp_c_max": 2,
       "rh_pct_min": 95,
@@ -444,8 +382,7 @@
       "ethylene_production": "L",
       "ethylene_sensitivity": "L",
       "storage_life_days_min": 7,
-      "storage_life_days_max": 10,
-      "name_he": "מנגולד"
+      "storage_life_days_max": 10
     }
   ]
 }

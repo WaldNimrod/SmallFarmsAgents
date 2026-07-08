@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HANDOFF — SFA UI Redesign Step 2 — team_35 → team_100/team_200</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --paper:#f8fbf8;--paper2:#eef4ee;--paper3:#dde8dd;--ink:#1f2a22;--soft:#5d6b5e;--line:#dce6dc;
+  --leaf:#6f8a45;--leafd:#4d6a2c;--leafs:#9bb172;--tomato:#c24f2c;--tomatod:#8e3018;--sun:#d39a32;--sund:#a4711a;--code:#2d8a8c;--coded:#1f5e60;
+  --fhead:"Frank Ruhl Libre",Georgia,serif;--fbody:"Assistant",system-ui,sans-serif;--fmono:"JetBrains Mono",monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--fbody);font-size:17px;line-height:1.62;color:var(--ink);background:var(--paper2);}
+.shell{max-width:1000px;margin:0 auto;padding-inline:clamp(18px,4vw,34px);}
+h1,h2,h3,h4{font-family:var(--fhead);margin:0;line-height:1.18;}
+p{margin:0 0 12px;}
+a{color:var(--coded);}
+code,.mono{font-family:var(--fmono);}
+ltr{unicode-bidi:isolate;direction:ltr;font-family:var(--fmono);}
+
+.mast{background:var(--leafd);color:#eef4e6;padding:38px 0 30px;border-bottom:4px solid var(--sun);}
+.mast .eyebrow{font-family:var(--fmono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--leafs);}
+.mast h1{font-size:clamp(28px,4.5vw,44px);font-weight:900;color:#fff;margin:14px 0 10px;max-width:24ch;}
+.mast p{color:#d8e6cf;font-size:18px;max-width:64ch;margin:0;}
+.mast .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;font-family:var(--fmono);font-size:12px;}
+.mast .meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:4px 12px;color:#e7f1dc;}
+
+main{padding-block:38px 80px;}
+section{margin-bottom:44px;}
+.hr{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--line);padding-bottom:12px;margin-bottom:20px;}
+.hr h2{font-size:26px;font-weight:700;}
+.hr .k{font-family:var(--fmono);font-size:12px;color:var(--soft);margin-inline-start:auto;}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:0 1px 3px rgba(30,50,35,.06);}
+.lead{font-size:18px;}
+.lead b{color:var(--leafd);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:680px){.grid2{grid-template-columns:1fr;}}
+.dsx{background:#eef5f5;border:1px solid var(--code);border-inline-start:4px solid var(--code);border-radius:12px;padding:16px 20px;}
+.dsx h4{font-family:var(--fbody);font-weight:800;font-size:14px;color:var(--coded);margin-bottom:6px;}
+.dsx .tag{display:inline-block;font-family:var(--fmono);font-size:11px;background:var(--code);color:#fff;border-radius:99px;padding:2px 9px;margin-bottom:8px;}
+.dsx p{font-size:14.5px;margin-bottom:0;}
+.dsx code{background:#fff;border:1px solid #cfe3e3;border-radius:5px;padding:1px 5px;font-size:13px;}
+
+.screen{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(30,50,35,.06);}
+.screen__h{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.screen__h .n{font-family:var(--fmono);font-weight:600;font-size:15px;color:#fff;background:var(--leafd);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;}
+.screen__h h3{font-size:21px;}
+.screen__h .file{font-family:var(--fmono);font-size:12px;color:var(--soft);margin-inline-start:auto;}
+.screen ul{margin:0;padding-inline-start:20px;}
+.screen li{margin-bottom:5px;font-size:15.5px;}
+.screen li b{color:var(--leafd);}
+.screen .states{margin-top:12px;font-size:13.5px;color:var(--soft);border-top:1px dotted var(--line);padding-top:10px;}
+.screen .states b{color:var(--ink);font-family:var(--fmono);font-size:12px;}
+
+table{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(30,50,35,.06);font-size:15px;}
+th{text-align:start;font-family:var(--fmono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);background:var(--paper2);padding:11px 16px;border-bottom:1px solid var(--line);}
+td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
+tr:last-child td{border-bottom:0;}
+td .q{font-family:var(--fmono);color:var(--tomato);font-weight:600;}
+td.dec{color:var(--leafd);font-weight:700;}
+
+.files{font-family:var(--fmono);font-size:13.5px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 22px;line-height:1.9;}
+.files .d{color:var(--soft);}
+.files b{color:var(--leafd);}
+.foot{border-top:2px solid var(--line);margin-top:36px;padding-top:22px;color:var(--soft);font-family:var(--fmono);font-size:12px;}
+.pill{display:inline-block;font-family:var(--fmono);font-size:11px;font-weight:600;border-radius:99px;padding:2px 9px;}
+.pill.keep{background:var(--paper3);color:#3a5a30;}
+.pill.new{background:#e7f1d8;color:var(--leafd);}
+</style>
+</head>
+<body>
+
+<div class="mast"><div class="shell">
+  <div class="eyebrow">SFA-S003-P004-WP-CB-UI-REDESIGN · STEP 2 · HANDOFF PACKAGE</div>
+  <h1>הנדאוף עיצוב — refinement של 7 המסכים</h1>
+  <p>מוקאפים hi-fi מתוקנים (standalone HTML על mock.css הנעול), מוכנים למימוש. כל פריט שאושר בדיון ה-REVIEW מומש; הכיוון והשפה העיצובית נשמרו — זה ליטוש, לא שפה חדשה.</p>
+  <div class="meta"><span>team_35 → team_100 / team_200</span><span>2026-06-08</span><span>LOD300 → ready-to-build</span><span>RTL · mobile-first</span><span>tokens נעולים</span></div>
+</div></div>
+
+<main class="shell">
+
+  <!-- OVERVIEW -->
+  <section>
+    <div class="hr"><h2>מה השתנה — בקצרה</h2><span class="k">overview</span></div>
+    <div class="card lead">
+      <p>הדוח אובחן ככיוון נכון שדורש ליטוש. החבילה הזו מטפלת בכל שלוש רמות-התיקון שאושרו: <b>P1 חוסמים</b> (הסרת אימוג׳י מערכתית + רצפת קריאוּת), <b>P2 באגי פריסה</b> (בידוד מספרים RTL, dl שמתמעך, badge חופף במחשבון, header במובייל), ו-<b>P3 ליטוש וקישוריות</b>.</p>
+      <p style="margin-bottom:0">השפה העיצובית, ה-IA (ציר מחזור-החיים), מודל ה-drill-down האוניברסלי ומודל הידע «ידע SFA» — כולם נשמרו והודגשו. <b>mock.css לא נגענו בו</b>; כל התיקונים חיים בשכבת <code>mock-v2.css</code> + סְפְרייט אייקונים, כך שאפשר לאמץ הדרגתית.</p>
+    </div>
+  </section>
+
+  <!-- DS EXTENSIONS -->
+  <section>
+    <div class="hr"><h2>שתי הרחבות מערכת-העיצוב שמומשו</h2><span class="k">DSX-1 · DSX-2</span></div>
+    <div class="grid2">
+      <div class="dsx">
+        <span class="tag">DSX-1 · אייקונים</span>
+        <h4>סט גליפים קוויים (במקום אימוג׳י)</h4>
+        <p>26 אייקונים inline-SVG ב-<code>sfa-icons.js</code> (סְפְרייט שמוזרק פעם אחת ל-<code>&lt;body&gt;</code>). מונוכרום, יורש <code>currentColor</code>, <code>fill/stroke</code> מוטמעים כ-attributes כדי שיתרנדרו נכון בכל מנוע. שימוש: <code>&lt;svg class="gi"&gt;&lt;use href="#i-sprout"&gt;&lt;/use&gt;&lt;/svg&gt;</code>. ה-watercolors נשארים לגידולים ולמודולים.</p>
+      </div>
+      <div class="dsx">
+        <span class="tag">DSX-2 · type scale</span>
+        <h4>רצפת קריאוּת (Q-C)</h4>
+        <p>4 טוקנים: <code>--fs-body</code> 17/18 · <code>--fs-data</code> 18/19 · <code>--fs-secondary</code> 14 · <code>--fs-micro</code> 13 (מובייל/דסקטופ). שום משטח לא יורד מתחת ל-13px. כולל יוטיליטי בידוד-מספרים LTR. מטפל ישירות בתלונה המייסדת («גדלים בלתי-קריאים»).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN NARRATIVE -->
+  <section>
+    <div class="hr"><h2>נרטיב מסך-אחר-מסך</h2><span class="k">7 surfaces</span></div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">01</span><h3>דף הבית</h3><span class="file">home.html</span></div>
+      <ul>
+        <li><b>module watercolors</b> בכרטיסי הכלים; אייקוני קהל קוויים; מניפסט עם גליף sprout בהיר (תוקן ניגודיות על הרקע הירוק).</li>
+        <li>אריחי «בפיתוח» עברו לגליפים קוויים; פסקת המניפסט תחומה ל-~60ch.</li>
+      </ul>
+      <div class="states"><b>STATES</b> · header רספונסיבי (≤680px: חיפוש+חשבון מתקפלים, ניווט לשורה גוללת).</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">02</span><h3>ספר הגידולים</h3><span class="file">book_list.html</span></div>
+      <ul>
+        <li><b>תוקנה חפיפת טווח ה-DTM</b> — הערך (למשל <ltr>65–80</ltr>) מבודד LTR + <code>nowrap</code> + <code>line-height:1.18</code>, כך שלא נשבר על התווית.</li>
+        <li><b>ציפ מחיר ₪</b> נוסף לכל כרטיס (כמות נשארת גיבור, מחיר משני וקטן) — סוגר את לולאת ספר↔מחירון.</li>
+        <li>פילי «עכשיו/בקרוב» עם גליפים קוויים במקום 🌱/⏳.</li>
+      </ul>
+      <div class="states"><b>Q-A</b> · נשמר מודל הניווט (כרטיס = קישור לעמוד הגידול), עם שפה ויזואלית אחידה מול crop/market — לא drill-down בתוך הכרטיס.</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">03</span><h3>כרטיס גידול — המרכזי</h3><span class="file">crop_card.html</span></div>
+      <ul>
+        <li><b>ה-dl בתוך ה-drill-down עבר ל-2 טורים</b> עם ערכים ב-<code>nowrap</code> — הערכים (pH <ltr>6.0–6.8</ltr>, אוכלוסייה <ltr>~400–500</ltr>) כבר לא נשברים. תוקנה תחושת ה«מעיכה».</li>
+        <li><b>כפתור המחשבון הומלך ל-ghost</b> כדי לא להתחרות ב-H1/hero.</li>
+        <li>אייקוני טיפול קוויים (השקיה/דישון/תמיכה/הגנה/חברה); ציר מחזור-החיים וה-stage-nav נשמרו.</li>
+        <li><b>יעד-מגע 44px ל-ⓘ</b>; מודל «ידע SFA» הודגש כעוגן-מותג (Q-D).</li>
+      </ul>
+      <div class="states"><b>STATES</b> · drill-down סגור (נתונים מרכזיים) / פתוח (עומק) · ⓘ L1 ריחוף → L2 מודל · במובייל מגע = L2 ישיר · honest «נתון חסר» CTA תרומה.</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">04</span><h3>מחשבון התכנון</h3><span class="file">calc.html</span></div>
+      <ul>
+        <li><b>badge השלב כבר לא חופף לכותרת</b> — <code>.step__h</code> עבר ל-grid עם טור שמור ל-badge; צ׳יפ הזמינות בגריד עם מרווח עליון.</li>
+        <li>גלריית «מדריך לצוות המנוע» מקופלת ל-<code>&lt;details&gt;</code> (לא מתחרה בבילדר); 15 אייקוני מטרה קוויים.</li>
+        <li>נשמרו: 5 צורות התוצאה, מצב אין-נתונים כנה, סל #13, בורר אזור #11/#15, time-anchor חי, ייצוא PDF/CSV.</li>
+      </ul>
+      <div class="states"><b>STATES</b> · scalar / DATE / DATE-RANGE / DATE-LIST / RANKED-LIST + scalar+₪ + scalar+DATE · honest no-data (בטטה→תאריך) · session נשמר במכשיר.</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">05</span><h3>מחירון השוק</h3><span class="file">market.html</span></div>
+      <ul>
+        <li>אייקוני קישור «בספר/מחשב הכנסה» קוויים; מחירים מבודדי-LTR.</li>
+        <li>מצב «אין מגמה» מילולי במקום «–?» בכרטיסים מתיישנים.</li>
+        <li>נשמר: drill-down (טווח/חציון/מקורות/רעננות/גרף 28-יום) — המשטח המלוטש ביותר.</li>
+      </ul>
+      <div class="states"><b>STATES</b> · טרי / מתעדכן / ישן (מואפר) · drill-down סגור/פתוח · קישורי צולב לספר ולמחשבון.</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">06</span><h3>הנחות היסוד שלי</h3><span class="file">assumptions.html</span></div>
+      <ul>
+        <li>אייקוני קבוצה קוויים; ציפי «used-in» כעת קליקביליים (קישור למחשבון/לגידול הרלוונטי).</li>
+        <li>רצפת קריאוּת הוחלה; מבנה הקבוצות/חיפוש/reset/ברירת-מחדל-קהילתית נשמר.</li>
+      </ul>
+      <div class="states"><b>STATES</b> · קבוצה פתוחה/סגורה · «שונה»/«אפס» לכל שורה · save bar דביק.</div>
+    </div>
+
+    <div class="screen">
+      <div class="screen__h"><span class="n">07</span><h3>הזנת נתוני גידול — פנימי</h3><span class="file">cropdata_entry.html</span></div>
+      <ul>
+        <li>ליטוש קל בלבד (כלי פנימי): header פנימי ללא חפיפת טקסט, רמז מקלדת מוגדל.</li>
+        <li>מבנה 1–5 מונחה-מקלדת + מד התקדמות נשמר.</li>
+      </ul>
+      <div class="states"><b>SCOPE</b> · לא הושקע מעבר לליטוש הקל שהומלץ.</div>
+    </div>
+  </section>
+
+  <!-- DECISIONS LOG -->
+  <section>
+    <div class="hr"><h2>יומן החלטות והנחות</h2><span class="k">decisions log</span></div>
+    <table>
+      <thead><tr><th style="width:90px">סוגיה</th><th>החלטה שננקטה (ברירות-מחדל מומלצות אושרו)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="q">Q-A</span></td><td class="dec">כרטיסי הספר = ניווט לעמוד הגידול + שפה ויזואלית אחידה — ללא drill-down בתוך הכרטיס.</td></tr>
+        <tr><td><span class="q">Q-B</span></td><td class="dec">ציר מחזור-החיים (מתי→איך→טיפול→יבול) נשמר כ-IA הראשי של כרטיס הגידול.</td></tr>
+        <tr><td><span class="q">Q-C</span></td><td class="dec">אומץ סולם הגדלים +1 step (גוף 17/18 · משני 14 · מינימום 13) כטוקנים.</td></tr>
+        <tr><td><span class="q">Q-D</span></td><td class="dec">מודל «ידע SFA» כעוגן-מותג: כל ⓘ נפתח ל-L2 (הגדרה+נוסחה+מקור+תרומה) + מסלול מגע במובייל.</td></tr>
+        <tr><td>אייקונים</td><td class="dec">סט inline-SVG עצמאי (אופליין, ללא CDN) — DSX-1.</td></tr>
+        <tr><td>Tweaks</td><td class="dec">ברירות מחדל: density=comfortable · drill-down=key-only · accent=restrained · illustration=M · type=+1.</td></tr>
+        <tr><td>היקף</td><td class="dec">מלא ל-6 הציבוריים; ליטוש קל ל-cropdata_entry.</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;font-size:14px;color:var(--soft)">הנחות: מחירי ה-₪ בכרטיסים ובמחירון הם דמו (להמחשת הלולאה); תוכן ה«סיפור» והטיפולים מגיע מה-WP תוכן (description_md / care.*_md / fixtures phytoprotection) — ה-UI מוכן עם empty-states כנים עד שהתוכן ינחת.</p>
+  </section>
+
+  <!-- TWEAK INVENTORY -->
+  <section>
+    <div class="hr"><h2>מצאי Tweaks (לבילד)</h2><span class="k">brief §8</span></div>
+    <table>
+      <thead><tr><th>Tweak</th><th>ברירת מחדל</th><th>טוקן / וו-מימוש</th></tr></thead>
+      <tbody>
+        <tr><td>type_baseline</td><td class="dec">+1 step</td><td><code>--fs-*</code> ב-mock-v2.css (3 צעדים)</td></tr>
+        <tr><td>density</td><td class="dec">comfortable</td><td>מרווחי <code>--sp-*</code>; compact/spacious כ-modifier על <code>body</code></td></tr>
+        <tr><td>drilldown_default</td><td class="dec">key-only (סגור)</td><td><code>details[open]</code> ברירת מחדל לפי stage</td></tr>
+        <tr><td>card_columns</td><td class="dec">auto · min 280px</td><td><code>.grid</code> book/market — להעלות min-track</td></tr>
+        <tr><td>illustration_scale</td><td class="dec">M</td><td>גודל <code>.hero__art</code>/<code>.cc__art</code></td></tr>
+        <tr><td>accent_usage</td><td class="dec">restrained</td><td>שימוש ב-<code>--gj-tomato/sun</code> לאיתות now/next + מגמת-מחיר בלבד</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FILE MANIFEST -->
+  <section>
+    <div class="hr"><h2>מבנה החבילה</h2><span class="k">file manifest</span></div>
+    <div class="files">
+      <div><b>00_DESIGN_BOARD.html</b> <span class="d">— נקודת כניסה: 7 מסכים, דסקטופ + מסגרת טלפון</span></div>
+      <div><b>HANDOFF_NARRATIVE.html</b> <span class="d">— המסמך הזה</span></div>
+      <div><b>README.md</b> <span class="d">— הוראות אינטגרציה ל-Claude Code / team_200</span></div>
+      <div style="margin-top:8px">home.html · book_list.html · crop_card.html · calc.html <span class="d">— מסכים</span></div>
+      <div>market.html · assumptions.html · cropdata_entry.html <span class="d">— מסכים</span></div>
+      <div style="margin-top:8px"><b>mock.css</b> <span class="d">— מערכת העיצוב הנעולה <span class="pill keep">LOCKED · unchanged</span></span></div>
+      <div><b>mock-v2.css</b> <span class="d">— שכבת ה-refinement <span class="pill new">NEW</span></span></div>
+      <div><b>sfa-icons.js</b> <span class="d">— סְפְרייט 26 אייקונים <span class="pill new">NEW</span></span></div>
+      <div>wc/ <span class="d">— איורי water-color (גידולים + מודולים)</span></div>
+    </div>
+  </section>
+
+  <div class="foot shell" style="padding-inline:0">
+    HANDOFF_WP-CB-UI-REDESIGN · team_35 → team_100 (spec) + team_200 (build) · 2026-06-08 · על mock.css הנעול · ללא קוד production · backend ממוקא בדפדפן.
+  </div>
+
+</main>
+</body>
+</html>

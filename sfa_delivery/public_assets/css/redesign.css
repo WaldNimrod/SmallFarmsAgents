@@ -11,7 +11,7 @@
    LOADS LAST in the asset chain (after page CSS so it wins on equal
    specificity — team_35 two-file gradual-adoption note). Base DS
    tokens.css stays LOCKED & untouched; this file only ADDS the short
-   --r-*/--sp-*/--sh-* aliases + --fs-* type scale + --shell-* the
+   r/sp/sh aliases + fs type scale + shell-width vars the
    mockups reference. Colour/font tokens already live in tokens.css.
    ============================================================ */
 
@@ -146,6 +146,9 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 /* ── book card: optional ₪ market chip (P3 interlink, book↔market loop) ── */
 .cc__price{ display:inline-flex; align-items:center; gap:5px; align-self:flex-start; font-size:var(--fs-micro); font-weight:600; color:var(--gj-tomato-deep); background:#f7e2da; border-radius:var(--r-pill); padding:3px 10px; }
 .cc__price .num{ font-weight:700; }
+/* WP-CB-UI-TAILS AC-1.2: estimated-range chip — muted + dashed so it reads as an estimate, not a live price. */
+.cc__price--est{ color:var(--gj-ink-soft); background:transparent; border:1px dashed var(--gj-line); }
+.est{ color:var(--gj-ink-soft); } /* table-view estimate number + 'מוערך' marker */
 
 /* ── assumptions: make "used-in" chips real links (P3 interlink) ── */
 .usedin a,.chip-link{ text-decoration:none; }
@@ -250,6 +253,8 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .glance b{ font-family:var(--gj-font-head); font-size:24px; font-weight:700; line-height:1; }
 .glance span{ font-size:13px; color:var(--gj-ink-soft); margin-top:3px; }
 .mktchip{ display:inline-flex; align-items:center; gap:7px; background:#f7e2da; color:var(--gj-tomato-deep); border-radius:var(--r-pill); padding:5px 13px; font-weight:700; font-size:13px; }
+/* WP-CB-MARKET-RANGES: estimated price chip — muted/dashed "estimate" language (matches .cc__price--est). */
+.mktchip--est{ background:transparent; color:var(--gj-ink-soft); border:1px dashed var(--gj-line); }
 
 .stagenav{ position:sticky; top:62px; z-index:20; background:rgba(238,244,238,.94); backdrop-filter:blur(6px); border-block:1px solid var(--gj-line); margin-inline:calc(-1*var(--shell-pad)); padding-inline:var(--shell-pad); }
 .stagenav ul{ display:flex; gap:4px; list-style:none; margin:0; padding:8px 0; overflow-x:auto; }
@@ -382,6 +387,7 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .pc__top{ display:flex; align-items:center; gap:12px; }
 .pc__art{ width:52px; height:52px; border-radius:10px; background:radial-gradient(circle at 50% 40%,#fff,#eef4ee); display:grid; place-items:center; overflow:hidden; flex:0 0 auto; }
 .pc__art .gi{ width:30px; height:30px; color:var(--gj-leaf-soft); }
+.pc__art img{ width:46px; height:46px; object-fit:contain; }
 .pc__name{ font-family:var(--gj-font-head); font-size:19px; font-weight:700; line-height:1.1; }
 .pc__unit{ font-size:12px; color:var(--gj-ink-soft); }
 .pc__chev{ margin-inline-start:auto; color:var(--gj-ink-soft); font-size:13px; transition:transform .15s; }
@@ -400,6 +406,9 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .fresh.f{ background:#e7f1d8; color:var(--gj-leaf-deep); }
 .fresh.a{ background:#fbeedd; color:var(--gj-sun-deep); }
 .fresh.s{ background:#f7e2da; color:var(--gj-tomato-deep); }
+/* classb's .fresh::before status-dot belongs to the market DETAIL pills
+   (.fresh--*); suppress its bleed onto the redesign list pills (.fresh.f/.a/.s). */
+.pc__foot .fresh::before{ content:none; }
 .spark{ display:flex; align-items:flex-end; gap:2px; height:26px; margin-inline-start:auto; }
 .spark i{ width:4px; background:var(--gj-leaf-soft); border-radius:2px; }
 .pc__body{ padding:0 var(--sp-4) var(--sp-4); border-top:1px solid var(--gj-line); margin-top:4px; }
@@ -413,6 +422,74 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
 .pc__links{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
 .pc__links a{ flex:1; justify-content:center; font-size:13px; padding:9px 12px; }
 .pc__links .gi{ width:15px; height:15px; }
+
+/* ============================================================
+   /market/{slug} DETAIL — redesign DS (WP-CB-MARKET-DETAIL).
+   Reuses .pcard / .pc__* / .fresh.f-a-s / .bigspark / .gi; adds the
+   detail-only layout (grid, graph, history table, stats, links).
+   Replaces the retired Class-B v2 .pbig/.pgraph/.pstats/.pdetail.
+   ============================================================ */
+.mdetail .lead{ margin-bottom:var(--sp-5); }
+.mdgrid{ display:grid; grid-template-columns:1fr 320px; gap:var(--sp-4); align-items:start; }
+.mdgrid__main{ display:flex; flex-direction:column; gap:var(--sp-4); min-width:0; }
+.mdgrid__side{ display:flex; flex-direction:column; gap:var(--sp-4); }
+.mdcard{ padding:var(--sp-4); }
+.mdhero .pc__price{ margin-top:14px; }
+.mdhero .pc__price .trend{ margin-inline-start:auto; }
+/* price-index convention (matches .trend.up + the old detail): rising price = red, falling = green */
+.pc__trend--up{ color:var(--gj-tomato-deep); }
+.pc__trend--dn{ color:var(--gj-leaf-deep); }
+.mdmeta{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:12px; font-size:var(--fs-secondary); color:var(--gj-ink-soft); }
+.mdmeta b{ color:var(--gj-ink); font-weight:700; }
+.mdcard__top{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.mdcard__title{ font-family:var(--gj-font-head); font-size:17px; font-weight:700; }
+.mdcard__sub{ font-size:var(--fs-micro); font-weight:700; color:var(--gj-ink-soft); margin-bottom:10px; }
+.mdcard__legend{ margin-top:8px; font-size:var(--fs-micro); color:var(--gj-ink-soft); }
+/* range selector — pill group; 90י/שנה honestly disabled "בקרוב" (AC-5) */
+.rangesel{ display:inline-flex; gap:4px; margin-inline-start:auto; background:var(--gj-paper-2); border:1px solid var(--gj-line); border-radius:var(--r-pill); padding:3px; }
+.rangesel button{ font-family:inherit; font-size:12px; font-weight:700; color:var(--gj-ink-soft); background:transparent; border:0; border-radius:var(--r-pill); padding:5px 11px; cursor:pointer; }
+.rangesel button.is-active{ background:var(--gj-leaf-deep); color:#fff; }
+.rangesel button.is-soon{ color:var(--gj-ink-soft); opacity:.5; cursor:not-allowed; }
+.rangesel button.is-soon::after{ content:" · בקרוב"; font-weight:600; }
+/* 28-day graph */
+.mdgraph{ width:100%; height:120px; display:block; }
+.mdgraph__area{ fill:var(--gj-leaf-soft); opacity:.16; }
+.mdgraph__line{ fill:none; stroke:var(--gj-leaf-deep); stroke-width:2; vector-effect:non-scaling-stroke; }
+.mdgraph__x{ display:flex; justify-content:space-between; font-size:var(--fs-micro); color:var(--gj-ink-soft); margin-top:4px; }
+/* empty state */
+.mdempty{ display:flex; align-items:center; gap:12px; padding:18px; background:var(--gj-paper-2); border:1px dashed var(--gj-line); border-radius:var(--r-m); }
+.mdempty__ic{ flex:0 0 auto; color:var(--gj-ink-soft); }
+.mdempty__ic .gi{ width:26px; height:26px; }
+.mdempty b{ font-family:var(--gj-font-head); font-size:15px; }
+.mdempty p{ margin:2px 0 0; font-size:var(--fs-secondary); color:var(--gj-ink-soft); }
+/* history table */
+.mdtable-wrap{ overflow-x:auto; }
+.mdtable{ width:100%; border-collapse:collapse; font-size:var(--fs-secondary); }
+.mdtable th{ text-align:start; font-size:var(--fs-micro); font-weight:700; color:var(--gj-ink-soft); padding:6px 10px; border-bottom:1px solid var(--gj-line); white-space:nowrap; }
+.mdtable td{ padding:8px 10px; border-bottom:1px solid var(--gj-line); }
+.mdtable tr:last-child td{ border-bottom:0; }
+.delta-up{ color:var(--gj-tomato-deep); font-weight:700; } /* price up = red */
+.delta-dn{ color:var(--gj-leaf-deep); font-weight:700; }  /* price down = green */
+/* stats grid */
+.mdstats{ display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-2); }
+.mdstat{ background:var(--gj-paper-2); border-radius:var(--r-s); padding:10px 12px; }
+.mdstat__k{ font-size:var(--fs-micro); color:var(--gj-ink-soft); }
+.mdstat__v{ font-family:var(--gj-font-head); font-size:20px; font-weight:900; color:var(--gj-ink); margin-top:2px; }
+.mdstat__v small{ font-size:12px; font-weight:600; color:var(--gj-ink-soft); }
+/* sparkline card */
+.mdspark .bigspark{ margin:0; }
+/* cross-link card */
+.mdlink{ display:flex; align-items:center; gap:10px; padding:12px 14px; color:inherit; }
+.mdlink__ic{ flex:0 0 auto; color:var(--gj-leaf-deep); }
+.mdlink__ic .gi{ width:22px; height:22px; }
+.mdlink__b{ display:flex; flex-direction:column; min-width:0; }
+.mdlink__t{ font-family:var(--gj-font-head); font-weight:700; font-size:15px; }
+.mdlink__s{ font-size:var(--fs-micro); color:var(--gj-ink-soft); }
+.mdlink__arrow{ margin-inline-start:auto; color:var(--gj-leaf-deep); font-size:16px; }
+/* source breakdown */
+.mdsrc__row{ display:flex; justify-content:space-between; gap:10px; font-size:var(--fs-secondary); padding:5px 0; border-bottom:1px solid var(--gj-line); }
+.mdsrc__row:last-child{ border-bottom:0; }
+@media(max-width:860px){ .mdgrid{ grid-template-columns:1fr; } }
 
 @media(max-width:680px){ .tb{ position:static; } .market-index .lead h1{ font-size:27px; } }
 
@@ -514,3 +591,10 @@ main{ padding-block:var(--sp-6) var(--sp-7); min-height:60vh; }
    bare .cb-var__star-gi stars. */
 .cb-var__star .gi{ width:1em; height:1em; }
 .cb-var__star-gi{ width:15px; height:15px; color:var(--gj-sun); vertical-align:-0.16em; }
+
+/* ── home hero · watercolor crop collage (WP-CB-UI-MOCKUP-FIDELITY, team_35 Step-2) ── */
+.hub-intro__collage{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; flex:0 0 clamp(220px,32%,320px); }
+.hub-intro__collage span{ aspect-ratio:1; border-radius:var(--r-m); background:radial-gradient(circle at 50% 40%,#fff,#eef4ee); display:grid; place-items:center; overflow:hidden; box-shadow:var(--sh-s); }
+.hub-intro__collage img{ width:78%; height:78%; object-fit:contain; }
+.hub-intro__stats{ margin-top:14px; }
+@media(max-width:680px){ .hub-intro__collage{ flex-basis:100%; } }

@@ -7,6 +7,7 @@ use PDO;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use SFA\Controllers\AssumptionsController;
+use SFA\Lib\CropArt;
 use SFA\Lib\FieldRegistry;
 use SFA\Lib\Template;
 
@@ -146,6 +147,8 @@ final class CropBookViewController
         $nowMonth = (int)date('n');
 
         $crops = [];
+        /** @var array<string,array{price_min:float,price_max:float,unit:string}> */
+        $estimateBySlug = [];
         foreach ($rows as $row) {
             $slug    = (string)($row['slug'] ?? '');
             $payload = json_decode((string)($row['payload_json'] ?? '{}'), true);
@@ -195,10 +198,26 @@ final class CropBookViewController
                 'icon_url'         => (string)($payload['icon_url'] ?? ''),
                 'family_tag_he'    => (string)($payload['family_tag_he'] ?? ''),
                 'category'         => (string)($row['category'] ?? ''),
+                // WP-FINAL-QA: Hebrew category label for the card tag fallback (when
+                // family_tag_he is empty) — never leak the raw English enum (vegetables…).
+                'category_he'      => FieldRegistry::enumLabel('category', (string)($row['category'] ?? '')),
                 'dtm_days'         => $dtm,
                 'in_season'        => $inSeasonAct !== '',
                 'in_season_activity' => $inSeasonAct, // '' | 'seed' | 'transplant'
             ];
+
+            // WP-CB-UI-TAILS AC-1.2: capture an ESTIMATED market range from the crop payload
+            // (crops.payload_json.market_estimate — populated later by WP-CB-MARKET-RANGES / team_80).
+            // Render-side infrastructure only: stays empty until that data lands → the chip simply
+            // does not render (honest). Live product price (below) always wins over this estimate.
+            $me = $payload['market_estimate'] ?? null;
+            if (is_array($me) && (float)($me['price_min'] ?? 0) > 0) {
+                $estimateBySlug[$slug] = [
+                    'price_min' => (float)$me['price_min'],
+                    'price_max' => (float)($me['price_max'] ?? $me['price_min']),
+                    'unit'      => (string)($me['unit'] ?? ''),
+                ];
+            }
         }
 
         // WP-CB-UI-REDESIGN (WI-3): 'now' sort — in-season crops first (stable).
@@ -206,22 +225,40 @@ final class CropBookViewController
             usort($crops, static fn ($a, $b) => ((int)!empty($b['in_season'])) <=> ((int)!empty($a['in_season'])));
         }
 
-        // WP-CB-UI-REDESIGN (WI-3): batched market price per crop slug — the ₪ chip
-        // that closes the book↔market loop. ONE IN(...) query; degrades to empty when
-        // the products table is absent (honest: chip omitted, never fabricated).
+        // WP-CB-BOOK-MARKET-PRICECHIP: batched market price per crop — the ₪ chip that
+        // closes the book↔market loop. A crop links to a product by slug OR by Hebrew name
+        // (crops.hebrew_name = products.hebrew_name) — the same linkage the market detail uses
+        // (MarketViewController::resolveCropSlug). Production product slugs are an OMA namespace
+        // that rarely matches crop slugs, so the old slug-only join rendered ZERO chips; the
+        // Hebrew-name fallback is what actually lights the loop. ONE IN(...) query keyed by slug
+        // and name; result is keyed by CROP slug (what the template reads). Honest: a chip renders
+        // only when a real product price resolves — never fabricated.
         /** @var array<string,array{price:float,unit:string}> */
         $priceBySlug = [];
         $resultSlugs = array_values(array_filter(array_map(static fn ($c) => (string)($c['slug'] ?? ''), $crops)));
-        if (!empty($resultSlugs)) {
+        $resultNames = array_values(array_filter(array_map(static fn ($c) => (string)($c['name_he'] ?? ''), $crops)));
+        if (!empty($resultSlugs) || !empty($resultNames)) {
             try {
-                $ph  = implode(',', array_fill(0, count($resultSlugs), '?'));
-                $pst = $this->pdo->prepare("SELECT slug, last_price, unit FROM products WHERE slug IN ($ph) AND last_price IS NOT NULL");
-                $pst->execute($resultSlugs);
+                $keys = array_values(array_unique(array_merge($resultSlugs, $resultNames)));
+                $ph   = implode(',', array_fill(0, count($keys), '?'));
+                $pst  = $this->pdo->prepare(
+                    "SELECT slug, hebrew_name, last_price, unit FROM products
+                     WHERE last_price IS NOT NULL AND (slug IN ($ph) OR hebrew_name IN ($ph))"
+                );
+                $pst->execute(array_merge($keys, $keys));
+                $bySlug = [];
+                $byName = [];
                 foreach ($pst->fetchAll() as $pr) {
-                    $priceBySlug[(string)$pr['slug']] = [
-                        'price' => (float)$pr['last_price'],
-                        'unit'  => (string)($pr['unit'] ?? ''),
-                    ];
+                    // WP-FINAL-QA: Hebrew unit on the live ₪ chip (kg→ק״ג, bunch→צרור, unit→יחידה).
+                    $entry = ['price' => (float)$pr['last_price'], 'unit' => FieldRegistry::unitLabel((string)($pr['unit'] ?? ''))];
+                    if (($s = (string)($pr['slug'] ?? '')) !== '')        { $bySlug[$s] = $entry; }
+                    if (($n = (string)($pr['hebrew_name'] ?? '')) !== '') { $byName[$n] = $entry; }
+                }
+                foreach ($crops as $c) {
+                    $cslug = (string)($c['slug'] ?? '');
+                    if ($cslug === '') { continue; }
+                    $p = $bySlug[$cslug] ?? ($byName[(string)($c['name_he'] ?? '')] ?? null); // slug wins, else Hebrew name
+                    if ($p !== null) { $priceBySlug[$cslug] = $p; }
                 }
             } catch (\Throwable) {
                 $priceBySlug = [];
@@ -239,6 +276,7 @@ final class CropBookViewController
         return $this->html($response, Template::render('pages/book_entry', [
             'crops'    => $crops,
             'prices'   => $priceBySlug,
+            'estimates'=> $estimateBySlug,
             'view'     => $view,
             'sort'     => $sort,
             'total'    => count($crops),
@@ -350,7 +388,7 @@ final class CropBookViewController
             foreach ($stmt->fetchAll() as $row) {
                 $slug   = (string)($row['slug'] ?? '');
                 // Resolve watercolor art the same way entry() / detail() do (F-REA-002).
-                $wcFile = self::WC_ART[$slug] ?? null;
+                $wcFile = CropArt::file($slug);
                 $iconUrl = $wcFile !== null ? '/public_assets/img/crops/' . $wcFile : '';
                 $items[] = [
                     'slug'          => $slug,
@@ -371,97 +409,6 @@ final class CropBookViewController
             'items'   => $items,  // back-compat alias
         ]));
     }
-    /** WP-CB-1-patch01: watercolor art mapping (crop slug -> wc-*.png). Only slugs with a real served PNG; others fall back to the icon sprite. */
-    private const WC_ART = [
-        // ── original singular keys (14 masters) ──────────────────────────────
-        'basil'      => 'wc-basil.png',
-        'beet'       => 'wc-beet.png',
-        'broccoli'   => 'wc-broccoli.png',
-        'bush-bean'  => 'wc-bush-bean.png',
-        'cabbage'    => 'wc-cabbage.png',
-        'carrot'     => 'wc-carrot.png',
-        'chard'      => 'wc-chard.png',
-        'cucumber'   => 'wc-cucumber.png',
-        'dill'       => 'wc-dill.png',
-        'eggplant'   => 'wc-eggplant.png',
-        'fennel'     => 'wc-fennel.png',
-        'garlic'     => 'wc-garlic.png',
-        'ginger'     => 'wc-ginger.png',
-        'kale'       => 'wc-kale.png',
-        'leek'       => 'wc-leek.png',
-        'lettuce'    => 'wc-lettuce.png',
-        'melon'      => 'wc-melon.png',
-        'onion'      => 'wc-onion.png',
-        'parsley'    => 'wc-parsley.png',
-        'pea'        => 'wc-pea.png',
-        'pepper'     => 'wc-pepper.png',
-        'pole-bean'  => 'wc-pole-bean.png',
-        'radish'     => 'wc-radish.png',
-        'scallion'   => 'wc-scallion.png',
-        'spinach'    => 'wc-spinach.png',
-        'tomato'     => 'wc-tomato.png',
-        'turmeric'   => 'wc-turmeric.png',
-        'zucchini'   => 'wc-zucchini.png',
-        // ── C1: plural DB-slug aliases (patch01 recovery) ────────────────────
-        'carrots'                    => 'wc-carrot.png',
-        'tomatoes'                   => 'wc-tomato.png',
-        'cucumbers'                  => 'wc-cucumber.png',
-        'onions'                     => 'wc-onion.png',
-        'peppers'                    => 'wc-pepper.png',
-        'peas'                       => 'wc-pea.png',
-        'beets'                      => 'wc-beet.png',
-        'radishes'                   => 'wc-radish.png',
-        'melons'                     => 'wc-melon.png',
-        'leeks'                      => 'wc-leek.png',
-        'cherry-tomato'              => 'wc-tomato.png',
-        'summer-squash'              => 'wc-zucchini.png',
-        'onions-scallions'           => 'wc-scallion.png',
-        'beans-default-pole-climbing-' => 'wc-pole-bean.png',
-        // ── C2: 43 new watercolor identity slugs (WP-CB-UI-FIDELITY batch) ──
-        'anise-hyssop'               => 'wc-anise-hyssop.png',
-        'artichokes'                 => 'wc-artichokes.png',
-        'arugula'                    => 'wc-arugula.png',
-        'bay'                        => 'wc-bay.png',
-        'beans-default-pole-climbing' => 'wc-beans-default-pole-climbing.png',
-        'blackberry'                 => 'wc-blackberry.png',
-        'cauliflower'                => 'wc-cauliflower.png',
-        'celery'                     => 'wc-celery.png',
-        'chickpea'                   => 'wc-chickpea.png',
-        'chicory'                    => 'wc-chicory.png',
-        'chinese-lantern'            => 'wc-chinese-lantern.png',
-        'chives'                     => 'wc-chives.png',
-        'cilantro'                   => 'wc-cilantro.png',
-        'cress'                      => 'wc-cress.png',
-        'edamame'                    => 'wc-edamame.png',
-        'fava-bean'                  => 'wc-fava-bean.png',
-        'hibiscus'                   => 'wc-hibiscus.png',
-        'jerusalem-artichokes'       => 'wc-jerusalem-artichokes.png',
-        'jicama'                     => 'wc-jicama.png',
-        'kohlrabi'                   => 'wc-kohlrabi.png',
-        'lemon-balm'                 => 'wc-lemon-balm.png',
-        'lemon-verbena'              => 'wc-lemon-verbena.png',
-        'lettuce-salad-mix'          => 'wc-lettuce-salad-mix.png',
-        'lovage'                     => 'wc-lovage.png',
-        'mint'                       => 'wc-mint.png',
-        'new-zealand-spinach'        => 'wc-new-zealand-spinach.png',
-        'okra'                       => 'wc-okra.png',
-        'oranges'                    => 'wc-oranges.png',
-        'pac-choi-bok-choy'          => 'wc-pac-choi-bok-choy.png',
-        'potato'                     => 'wc-potato.png',
-        'sage'                       => 'wc-sage.png',
-        'sesame'                     => 'wc-sesame.png',
-        'soybean'                    => 'wc-soybean.png',
-        'strawberry'                 => 'wc-strawberry.png',
-        'sunflower'                  => 'wc-sunflower.png',
-        'sweet-corn'                 => 'wc-sweet-corn.png',
-        'sweet-potato'               => 'wc-sweet-potato.png',
-        'tarragon'                   => 'wc-tarragon.png',
-        'thyme'                      => 'wc-thyme.png',
-        'turnips'                    => 'wc-turnips.png',
-        'watermelon'                 => 'wc-watermelon.png',
-        'wheat'                      => 'wc-wheat.png',
-        'winter-squash'              => 'wc-winter-squash.png',
-    ];
 
     public function detail(Request $request, Response $response, array $args): Response
     {
@@ -665,14 +612,25 @@ final class CropBookViewController
             static fn ($n) => is_array($n) && empty($n['is_internal_farm_use_only'])
         ));
 
-        // Best-effort market_link: only attach when a matching product exists.
-        $marketStmt = $this->pdo->prepare('SELECT slug, hebrew_name, last_price FROM products WHERE slug = ? LIMIT 1');
-        $marketStmt->execute([$slug]);
+        // Best-effort market_link: attach when a matching product exists. WP-FINAL-QA
+        // BLOCKER fix: resolve a product by slug OR Hebrew name — the SAME linkage the
+        // index (entry()) and MarketViewController use. Production product slugs are an
+        // OMA namespace that rarely matches crop slugs, so the old slug-only query left
+        // ~26 crops showing "מחיר מוערך" on their page while the index showed a live
+        // "בשוק" price — an inconsistency. Slug match wins, else the Hebrew-name match.
+        $cropHe = (string)($crop['name_he'] ?? ($crop['hebrew_name'] ?? ''));
+        $marketStmt = $this->pdo->prepare(
+            'SELECT slug, hebrew_name, last_price, unit FROM products
+             WHERE last_price IS NOT NULL AND (slug = ? OR hebrew_name = ?)
+             ORDER BY (slug = ?) DESC LIMIT 1'
+        );
+        $marketStmt->execute([$slug, $cropHe, $slug]);
         $marketRow = $marketStmt->fetch();
         if ($marketRow) {
             $crop['market_link'] = [
                 'slug'          => (string)($marketRow['slug'] ?? $slug),
                 'price_current' => (float)($marketRow['last_price'] ?? 0.0),
+                'unit_he'       => FieldRegistry::unitLabel((string)($marketRow['unit'] ?? '')),
                 'source_count'  => 0, // aggregate not joined here; template tolerates 0.
             ];
         }
@@ -792,7 +750,7 @@ final class CropBookViewController
         }
 
         // Watercolor art for this crop
-        $wc_art = self::WC_ART[$slug] ?? null;
+        $wc_art = CropArt::file($slug);
 
         // WP-CB-UI-REDESIGN (WI-4): related crops — same botanical family, for the
         // "גידולים קרובים · אותה משפחה" rail. Degrades to empty (rail omitted).
@@ -827,10 +785,15 @@ final class CropBookViewController
         //     suppresses the range line then). Built from the same $varieties the
         //     vtable already renders — no new query.
         $variety_ranges = self::buildVarietyRanges($varieties);
-        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by
-        //     trust. Derived from the winning_source_class the enrichment/payload
-        //     already exposes via $cb1_fields — never invented. Empty when the
-        //     mirror carries no provenance (template then omits the source row).
+        // (b) which source classes (EX/PR/WR) back the crop's fields, ranked by trust.
+        //     Derived from the winning_source_class $cb1_fields exposes — never invented.
+        //     Enrichment rows carry their real class; a value resolved from the internal
+        //     curated variety payload (F-UI-01 fallback) is classified 'NI' (internal → PR),
+        //     consistent with the crop_attribute path (AC-2.1, WP-CB-UI-TAILS) — so this list
+        //     is accurate rather than spuriously empty. Empty ONLY for genuinely-MISSING fields
+        //     (AC-2.2 honest-omission). NB: source_classes is consumed by the crop_topics macro
+        //     (templates/macros/crop_topics.php), which book_crop.php does not currently include;
+        //     the page's visible field provenance is the pv-* cue (field_state). See build report.
         $source_classes = self::buildSourceClasses($cb1_fields);
 
         return $this->html($response, Template::render('pages/book_crop', [
@@ -988,7 +951,13 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // WP-CB-UI-TAILS AC-2.1: a value resolved from the internal curated variety
+                        // payload IS sourced (our internal dataset) — classify it 'NI' (internal → PR
+                        // class) for source-class ACCURACY, consistent with the crop_attribute path
+                        // below (L982). This corrects the prior '' and feeds buildSourceClasses() →
+                        // source_classes (exposed to the deep template). Honest, not fabricated: only a
+                        // present value is classified; genuinely-MISSING fields keep '' (AC-2.2).
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $canonical,
                     ];
@@ -1021,7 +990,9 @@ final class CropBookViewController
                         'value_best'           => $pv,
                         'unit'                 => '',
                         'field_state'          => $st !== '' ? strtoupper($st) : 'UNKNOWN',
-                        'winning_source_class' => '',
+                        // AC-2.1: internal-curated payload value → 'NI' (internal → PR class), as the
+                        // crop_attribute branch already does. Honest source-class data, not fabricated.
+                        'winning_source_class' => 'NI',
                         'confidence_score'     => null,
                         'field_name'           => $atKey,
                     ];

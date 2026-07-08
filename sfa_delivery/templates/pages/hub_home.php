@@ -78,14 +78,21 @@ ob_start();
     <div class="hub-intro__txt">
       <h1>כלים פתוחים לחקלאות <em>מקומית</em></h1>
       <p>ספר גידולים קהילתי, מחירון שוק בזמן-אמת, ומחשבון שדה — בנויים על ניסיון שדה ומחקר AI.</p>
+      <div class="hub-intro__stats">
+        <?php if ($crop_count > 0): ?>
+          <span class="pill pill--leaf"><?= (int)$crop_count ?> גידולים</span>
+        <?php endif; ?>
+        <?php if ($product_count > 0): ?>
+          <span class="pill pill--tomato"><?= (int)$product_count ?> מוצרים</span>
+        <?php endif; ?>
+      </div>
     </div>
-    <div class="hub-intro__stats">
-      <?php if ($crop_count > 0): ?>
-        <span class="pill pill--leaf"><?= (int)$crop_count ?> גידולים</span>
-      <?php endif; ?>
-      <?php if ($product_count > 0): ?>
-        <span class="pill pill--tomato"><?= (int)$product_count ?> מוצרים</span>
-      <?php endif; ?>
+    <?php /* team_35 Step-2 hero: watercolor crop collage (decorative). */ ?>
+    <div class="hub-intro__collage" aria-hidden="true">
+      <?php foreach (['tomato','lettuce','pepper','carrot','eggplant','cucumber'] as $__wc):
+        $__f = \SFA\Lib\CropArt::file($__wc); if ($__f === null) continue; ?>
+        <span><img src="/public_assets/img/crops/<?= $h($__f) ?>" alt="" loading="lazy" decoding="async"></span>
+      <?php endforeach; ?>
     </div>
   </div>
 

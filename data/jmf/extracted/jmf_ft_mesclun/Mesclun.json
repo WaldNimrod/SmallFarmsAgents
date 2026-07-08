@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "crop_name_he": "עלי בייבי",
+  "crop_jmf_en": "Mesclun",
+  "variety": {
+    "name_he": "חסה בייבי",
+    "name_en": "Baby Lettuce (Salanova one-cut mix)"
+  },
+  "cultivar_recommendation": "Salanova one-cut lettuce: Red Butter, Red Sweet Crisp, Green Sweet Crisp, Green Incised; plus Ezbruke and Brentwood. Avoid Green Oakleaf from the Salanova collection. Cultivars are mixed in the cell flats at seeding.",
+  "species_notes": {
+    "cultivar_recommendation": "זני Salanova ל'חתוך וגדל מחדש' (one-cut): Red Butter, Red Sweet Crisp, Green Sweet Crisp, Green Incised; וכן Ezbruke ו-Brentwood. להימנע מ-Green Oakleaf מסדרת Salanova. הזנים מעורבבים בתאי המשתלה בעת הזריעה.",
+    "growing_tip": "מרווח אינטנסיבי: 4 שורות בערוגה (20 ס\"מ בין שורות), 15 ס\"מ בין הצמחים בשורה. גידול על בד קרקע (landscape fabric) למניעת עשבייה ולשמירת ניקיון העלים בכל מזג אוויר. דישון: ערוגה מועשרת בקומפוסט + תערובת קמח אספסת (2-0-2) וזבל עוף מגורען (5-3-2). תזמון: זריעה בכמות פי 3 מהצורך השבועי כל 3 שבועות, עם מספר קטיפים לכל שתילה. תערובת מומלצת: 75% חסת 'חתוך וגדל מחדש' (Salanova), 15% עלי בייבי (בעיקר מיני-קייל וחרדל אדום), 10% פריזה.",
+    "irrigation": "השקיה יסודית מיד לאחר השתילה; לשמור על הקרקע לחה במהלך השבוע הראשון לאחר השתילה.",
+    "harvest_marker": "קטיף בסכין חדה מאוד — לחדד את הלהב לפני כל קטיף ולהימנע מלהב פחמן/חלוד כדי להפחית חמצון (השחמה) של פני החתך. חיתוך הראש כולו כ-2.5 ס\"מ מעל קודקוד הצמיחה. העלים לא גדולים מכף יד."
+  },
+  "provenance": {
+    "pdf": "L39_mesclun_guide.pdf",
+    "pages": "1-4",
+    "title": "The Market Gardener's Masterclass — Mesclun",
+    "license": "JMF — internal knowledge notes only (never published); variety + cultivar names are factual structure.",
+    "extraction_model": "claude-code-direct",
+    "extracted_at": "2026-06-10T00:00:00+00:00"
+  }
+}

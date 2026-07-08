@@ -49,8 +49,14 @@ $fstate = static fn (string $k) => strtoupper((string)($cb[$k]['field_state'] ??
 // "min–max" across varieties when ≥2 differ, else the single best value.
 $frange = static function (string $k) use ($cb, $ranges, $nf) {
     $r = $ranges[$k] ?? null;
-    if (is_array($r) && (int)($r['count'] ?? 0) >= 2 && (float)$r['min'] !== (float)$r['max']) {
-        return $nf($r['min']) . '–' . $nf($r['max']);
+    $rmin = is_array($r) ? ($r['min'] ?? null) : null;
+    $rmax = is_array($r) ? ($r['max'] ?? null) : null;
+    // Render "min–max" only when BOTH ends are present (else a missing side
+    // produced a stray "–80"); otherwise fall through to the single best value.
+    if (is_array($r) && (int)($r['count'] ?? 0) >= 2
+        && $rmin !== null && $rmin !== '' && $rmax !== null && $rmax !== ''
+        && (float)$rmin !== (float)$rmax) {
+        return $nf($rmin) . '–' . $nf($rmax);
     }
     $v = $cb[$k]['value_best'] ?? null;
     return ($v === null || $v === '') ? null : $nf($v);
@@ -108,6 +114,24 @@ $has_calendar = !empty($sowM) || !empty($transM) || !empty($harvestM);
 
 // market chip
 $mlink = is_array($crop['market_link'] ?? null) ? $crop['market_link'] : null;
+// WP-FINAL-QA: live ₪ chip unit in Hebrew (kg→ק״ג, bunch→צרור, unit→יחידה); fall back to ק״ג.
+$mlUnit = ($mlink && (string)($mlink['unit_he'] ?? '') !== '') ? (string)$mlink['unit_he'] : 'ק״ג';
+
+// WP-CB-MARKET-RANGES: estimated market range (multi-engine research aggregate).
+// The flat price_* fields ARE the PRIMARY basis — organic for most crops (SFA teaches
+// organic growing), conventional for dried-form crops like hibiscus, where $mestNote
+// clarifies the basis. Shown only when no live product price exists — a live price wins.
+$mest        = is_array($crop['market_estimate'] ?? null) ? $crop['market_estimate'] : null;
+$mestHas     = $mest !== null && (float)($mest['price_min'] ?? 0) > 0;
+$mestNote    = $mest ? trim((string)($mest['note'] ?? '')) : '';
+$mestPrimary = $mest ? (string)($mest['primary'] ?? 'organic') : 'organic';
+$mestConv    = ($mest && is_array($mest['conventional'] ?? null)) ? $mest['conventional'] : null;
+// Range formatter: "₪min" or "₪min–max" (trailing-zero-trimmed via $nf).
+$mestRange = static function (array $x) use ($nf): string {
+    $lo = (float)($x['price_min'] ?? 0);
+    $hi = (float)($x['price_max'] ?? $lo);
+    return '₪' . $nf($lo) . ($hi > $lo ? '–' . $nf($hi) : '');
+};
 
 // public notes (rich payload) — body_text list (honest, public-only)
 $pub_notes = array_values(array_filter((array)($crop['notes'] ?? []), static fn ($n) => is_array($n) && !empty($n['body_text']) && empty($n['is_internal_farm_use_only'])));
@@ -202,7 +226,9 @@ ob_start();
           <span class="tag"><svg class="gi" aria-hidden="true"><use href="#i-snow"/></svg> <?= $h($frost_lbl[(string)$frost]) ?></span>
         <?php endif; ?>
         <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
-          <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג ←</a>
+          <a class="mktchip" href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> בשוק היום: <span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/<?= $h($mlUnit) ?> ←</a>
+        <?php elseif ($mestHas): ?>
+          <span class="mktchip mktchip--est"<?= $mestNote !== '' ? ' title="' . $h($mestNote) . '"' : '' ?>><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg> מחיר מוערך: <span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?>/<?= $h($mu) ?><?php endif; ?><?php if ((float)($mest['price_median'] ?? 0) > 0): ?> · חציון <span class="num">₪<?= $h($nf($mest['price_median'])) ?></span><?php endif; ?></span>
         <?php endif; ?>
       </div>
 
@@ -389,15 +415,38 @@ ob_start();
 
     <?php if ($mlink && (float)($mlink['price_current'] ?? 0) > 0): ?>
     <details class="topic">
-      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/ק״ג</b> · ממדד השוק</span><span class="chev">▾</span></summary>
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span>/<?= $h($mlUnit) ?></b> · ממדד השוק</span><span class="chev">▾</span></summary>
       <div class="topic__body">
         <div class="drill">▾ עומק נוסף</div>
         <div class="profit">
-          <div><div class="muted" style="font-size:13px">מחיר נוכחי במדד השוק הקהילתי</div><div class="profit__big"><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span> / ק״ג</div></div>
+          <div><div class="muted" style="font-size:13px">מחיר נוכחי במדד השוק הקהילתי</div><div class="profit__big"><span class="num">₪<?= $h($nf($mlink['price_current'])) ?></span> / <?= $h($mlUnit) ?></div></div>
           <div style="flex:1"></div>
           <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
         </div>
         <div class="srcline">מתוך מדד השוק הקהילתי · <a href="/market/<?= $h((string)($mlink['slug'] ?? $slug)) ?>">למחירון המלא ←</a></div>
+      </div>
+    </details>
+    <?php elseif ($mestHas): ?>
+    <details class="topic">
+      <summary><span class="topic__ic"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg></span><span class="topic__t">הכנסה ושוק</span><span class="topic__key"><b><span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?>/<?= $h($mu) ?><?php endif; ?></b> · מחיר מוערך</span><span class="chev">▾</span></summary>
+      <div class="topic__body">
+        <div class="drill">▾ עומק נוסף</div>
+        <div class="profit">
+          <div>
+            <div class="muted" style="font-size:13px">מחיר מוערך<?= $mestPrimary === 'organic' ? ' · תוצרת אורגנית' : '' ?></div>
+            <div class="profit__big"><span class="num"><?= $h($mestRange($mest)) ?></span><?php if (($mu = (string)($mest['unit'] ?? '')) !== ''): ?> / <?= $h($mu) ?><?php endif; ?></div>
+            <?php if ((float)($mest['price_median'] ?? 0) > 0): ?><div class="muted" style="font-size:13px">חציון <span class="num">₪<?= $h($nf($mest['price_median'])) ?></span></div><?php endif; ?>
+          </div>
+          <div style="flex:1"></div>
+          <a class="btn btn--leaf" href="/calc/?crop=<?= $h(rawurlencode($name_he)) ?>"><svg class="gi" aria-hidden="true"><use href="#i-scale"/></svg> חשב לכמות היעד שלי ←</a>
+        </div>
+        <?php if ($mestPrimary === 'organic' && $mestConv && (float)($mestConv['price_min'] ?? 0) > 0): ?>
+          <div class="srcline">תוצרת רגילה (לא אורגנית): <span class="num"><?= $h($mestRange($mestConv)) ?></span><?php if (($cu = (string)($mestConv['unit'] ?? '')) !== ''): ?>/<?= $h($cu) ?><?php endif; ?></div>
+        <?php endif; ?>
+        <?php if ($mestNote !== ''): ?>
+          <div class="srcline muted"><?= $h($mestNote) ?></div>
+        <?php endif; ?>
+        <div class="srcline">אומדן ממחקר שוק רב-מקורי<?php if (($ao = (string)($mest['as_of'] ?? '')) !== ''): ?> · עדכון <?= $h($ao) ?><?php endif; ?> · אינו מחיר מכירה</div>
       </div>
     </details>
     <?php endif; ?>
@@ -436,7 +485,7 @@ ob_start();
     <div class="relrow">
       <?php foreach ($related as $r): $rslug = (string)($r['slug'] ?? ''); ?>
         <a class="relcard" href="/crop-book/<?= $h($rslug) ?>/">
-          <div class="ph"><span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-leaf"/></svg></span></div>
+          <div class="ph"><?php $rwc = \SFA\Lib\CropArt::file($rslug); if ($rwc !== null): ?><img src="/public_assets/img/crops/<?= $h($rwc) ?>" alt="" loading="lazy" decoding="async"><?php else: ?><span class="cc__icon" aria-hidden="true"><svg class="gi"><use href="#icon-leaf"/></svg></span><?php endif; ?></div>
           <div class="nm"><?= $h((string)($r['name_he'] ?? '')) ?></div>
           <?php if (!empty($r['fam_he'])): ?><span class="tag" style="margin-top:6px"><?= $h((string)$r['fam_he']) ?></span><?php endif; ?>
         </a>

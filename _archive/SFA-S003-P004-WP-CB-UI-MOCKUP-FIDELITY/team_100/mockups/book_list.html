@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · ספר הגידולים · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.lead{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--sp-4);flex-wrap:wrap;margin-bottom:var(--sp-5);}
+.lead h1{font-size:34px;font-weight:900;}
+.lead p{margin:4px 0 0;color:var(--gj-ink-soft);}
+
+/* filter bar — ALWAYS visible, simple */
+.filters{position:sticky;top:62px;z-index:20;background:rgba(238,244,238,.95);backdrop-filter:blur(6px);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-4);margin-bottom:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center;}
+.filters .fsearch{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:9px 16px;}
+.filters .fsearch input{border:0;background:transparent;outline:none;font-family:inherit;font-size:15px;width:100%;}
+.sel{position:relative;}
+.sel select{appearance:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--gj-ink);background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:9px 34px 9px 16px;cursor:pointer;}
+.sel::after{content:"▾";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gj-ink-soft);pointer-events:none;font-size:11px;}
+.fspring{flex:1;}
+.viewtog{display:flex;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);overflow:hidden;}
+.viewtog button{border:0;background:transparent;font-family:inherit;font-weight:600;font-size:14px;padding:9px 16px;cursor:pointer;color:var(--gj-ink-soft);}
+.viewtog button.on{background:var(--gj-leaf-deep);color:#fff;}
+.fcount{font-size:14px;color:var(--gj-ink-soft);margin-bottom:var(--sp-4);}
+.fcount b{color:var(--gj-ink);}
+
+/* crop cards — decision-relevant, not a DB row */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:var(--sp-4);}
+.cc{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);overflow:hidden;box-shadow:var(--sh-s);transition:transform .12s ease,box-shadow .12s ease;display:flex;flex-direction:column;}
+.cc:hover{transform:translateY(-3px);box-shadow:var(--sh-m);}
+.cc__art{height:140px;background:radial-gradient(circle at 50% 38%,#fff,#eef4ee);display:grid;place-items:center;position:relative;overflow:hidden;}
+.cc__art img{max-height:118px;max-width:82%;object-fit:contain;}
+.cc__now{position:absolute;top:10px;inset-inline-end:10px;}
+.cc__b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.cc__name{font-family:var(--gj-font-head);font-size:21px;font-weight:700;line-height:1.1;}
+.cc__latin{font-size:12px;color:var(--gj-ink-soft);font-style:italic;margin-top:-4px;}
+/* the 3 decision stats — inline, readable */
+.cc__stats{display:flex;gap:14px;margin-top:auto;padding-top:10px;border-top:1px solid var(--gj-line);}
+.cc__stats div{display:flex;flex-direction:column;}
+.cc__stats b{font-size:16px;font-weight:700;line-height:1;}
+.cc__stats span{font-size:11px;color:var(--gj-ink-soft);margin-top:3px;}
+.cc__foot{display:flex;justify-content:space-between;align-items:center;}
+
+@media(max-width:680px){ .filters{position:static;} .lead h1{font-size:27px;} }
+</style>
+  <link rel="stylesheet" href="./mock-v2.css">
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP</span> <b>ספר הגידולים</b> · כרטיס = החלטה (אפשר עכשיו? · יבול · ימים להבשלה), לא ציור בלבד. פילטרים ומיון <b>גלויים</b>, לא מאחורי "סינון מתקדם".</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="#"><span class="mk"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a class="is-active" href="#">ספר גידולים</a><a href="#">מחשבון</a><a href="#">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+
+    <div class="lead">
+      <div><h1>ספר הגידולים</h1><p>אינדקס פתוח של גידולי ירקות — מועדי שתילה, ריווח, יבול ומחירים.</p></div>
+      <span class="pill pill--leaf">72 גידולים בספר</span>
+    </div>
+
+    <div class="filters">
+      <div class="fsearch"><span>⌕</span><input placeholder="חפש גידול…"></div>
+      <div class="sel"><select><option>כל המשפחות</option><option>סולניים</option><option>מצליבים</option><option>דלועיים</option><option>סוככיים</option></select></div>
+      <div class="sel"><select><option>כל העונות</option><option>זמין עכשיו (יוני)</option><option>אביב</option><option>קיץ</option><option>סתיו</option><option>חורף</option></select></div>
+      <div class="sel"><select><option>כל השיטות</option><option>זריעה ישירה</option><option>שתילה</option></select></div>
+      <span class="fspring"></span>
+      <div class="sel"><select><option>מיון: שם א׳–ת׳</option><option>מיון: זמין עכשיו</option><option>מיון: ימים להבשלה</option><option>מיון: יבול למ״ר</option></select></div>
+      <div class="viewtog"><button class="on"><svg class="gi" aria-hidden="true"><use href="#i-grid"></use></svg> כרטיסים</button><button>☰ טבלה</button></div>
+    </div>
+
+    <div class="fcount">מציג <b>72</b> גידולים · <b>23</b> זמינים לזריעה החודש</div>
+
+    <div class="grid">
+      <!-- card factory (hand-written sample set) -->
+      <a class="cc" href="crop_card.html">
+        <div class="cc__art"><img src="./wc/wc-tomato.png" alt="עגבנייה"><span class="cc__now pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> עכשיו</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">עגבנייה</div><div class="cc__latin">Solanum lycopersicum</div></div>
+          <span class="tag">סולניים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪9.4</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>65–80</b><span>ימים</span></div><div><b>6–9</b><span>ק״ג/מ״ר</span></div><div><b>בינוני</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-cucumber.png" alt="מלפפון"><span class="cc__now pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> עכשיו</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">מלפפון</div><div class="cc__latin">Cucumis sativus</div></div>
+          <span class="tag">דלועיים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪6.8</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>50–65</b><span>ימים</span></div><div><b>5–8</b><span>ק״ג/מ״ר</span></div><div><b>קל</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-lettuce.png" alt="חסה"><span class="cc__now pill pill--next"><svg class="gi" aria-hidden="true"><use href="#i-calendar"></use></svg> ספטמבר</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">חסה</div><div class="cc__latin">Lactuca sativa</div></div>
+          <span class="tag">מורכבים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪5.0</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>45–60</b><span>ימים</span></div><div><b>3–4</b><span>ק״ג/מ״ר</span></div><div><b>קל</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-pepper.png" alt="פלפל"><span class="cc__now pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> עכשיו</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">פלפל</div><div class="cc__latin">Capsicum annuum</div></div>
+          <span class="tag">סולניים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪12.0</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>70–90</b><span>ימים</span></div><div><b>4–6</b><span>ק״ג/מ״ר</span></div><div><b>בינוני</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-carrot.png" alt="גזר"><span class="cc__now pill pill--next"><svg class="gi" aria-hidden="true"><use href="#i-calendar"></use></svg> אוגוסט</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">גזר</div><div class="cc__latin">Daucus carota</div></div>
+          <span class="tag">סוככיים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪5.2</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>70–100</b><span>ימים</span></div><div><b>4–5</b><span>ק״ג/מ״ר</span></div><div><b>בינוני</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-onion.png" alt="בצל"><span class="cc__now pill pill--next"><svg class="gi" aria-hidden="true"><use href="#i-calendar"></use></svg> אוקטובר</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">בצל</div><div class="cc__latin">Allium cepa</div></div>
+          <span class="tag">שושניים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪4.8</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>110–140</b><span>ימים</span></div><div><b>4–6</b><span>ק״ג/מ״ר</span></div><div><b>קל</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-eggplant.png" alt="חציל"><span class="cc__now pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> עכשיו</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">חציל</div><div class="cc__latin">Solanum melongena</div></div>
+          <span class="tag">סולניים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪7.3</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>75–95</b><span>ימים</span></div><div><b>4–6</b><span>ק״ג/מ״ר</span></div><div><b>בינוני</b><span>קושי</span></div></div>
+        </div>
+      </a>
+      <a class="cc" href="#">
+        <div class="cc__art"><img src="./wc/wc-basil.png" alt="בזיליקום"><span class="cc__now pill pill--now"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg> עכשיו</span></div>
+        <div class="cc__b">
+          <div><div class="cc__name">בזיליקום</div><div class="cc__latin">Ocimum basilicum</div></div>
+          <span class="tag">שפתניים</span>
+          <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"></use></svg>בשוק <span class="num">₪3.5</span>/ק״ג</span>
+          <div class="cc__stats"><div><b>30–45</b><span>ימים</span></div><div><b>2–3</b><span>ק״ג/מ״ר</span></div><div><b>קל</b><span>קושי</span></div></div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+<script src="sfa-icons.js"></script>
+</body>
+</html>

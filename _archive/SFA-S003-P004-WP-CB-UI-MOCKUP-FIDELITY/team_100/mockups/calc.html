@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מוקאפ · מחשבון התכנון (15 מטרות) · SFA</title>
+<link rel="stylesheet" href="./mock.css">
+<style>
+.lead{margin-bottom:var(--sp-5);}
+.lead h1{font-size:34px;font-weight:900;}
+.lead p{margin:4px 0 0;color:var(--gj-ink-soft);max-width:60ch;}
+.qm{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--gj-paper-3);color:var(--gj-ink-soft);font-size:9px;font-weight:700;margin-inline-start:5px;cursor:help;text-decoration:none;vertical-align:1px;}
+
+.calc{display:grid;grid-template-columns:1.35fr 1fr;gap:var(--sp-5);align-items:start;}
+.panel{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-5);box-shadow:var(--sh-s);}
+.step{margin-bottom:var(--sp-5);}
+.step:last-child{margin-bottom:0;}
+.step__h{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.step__n{width:26px;height:26px;border-radius:50%;background:var(--gj-leaf-deep);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;}
+.step__h b{font-size:16px;}
+.step__h .opt{margin-inline-start:auto;font-size:12px;color:var(--gj-ink-soft);}
+
+/* goal grid — all 15, honest availability */
+.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.goal{position:relative;font-family:inherit;text-align:start;font-size:13.5px;font-weight:600;padding:10px 12px;border-radius:var(--r-m);border:1px solid var(--gj-line);background:var(--gj-paper-2);cursor:pointer;color:var(--gj-ink);display:flex;align-items:center;gap:7px;}
+.goal .g{font-size:15px;}
+.goal.on{background:var(--gj-leaf-deep);color:#fff;border-color:var(--gj-leaf-deep);}
+.goal .st{position:absolute;top:-7px;inset-inline-start:8px;font-size:9px;font-weight:700;border-radius:var(--r-pill);padding:1px 6px;}
+.st.live{background:#e7f1d8;color:var(--gj-leaf-deep);}
+.st.soon{background:#fbeedd;color:var(--gj-sun-deep);}
+.st.dev{background:var(--gj-paper-3);color:var(--gj-ink-soft);}
+.goal.on .st{opacity:.92;}
+
+.fld{display:flex;align-items:center;gap:8px;background:var(--gj-paper-2);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:9px 13px;max-width:320px;}
+.fld input,.fld select{border:0;background:transparent;outline:none;font-family:inherit;font-size:15px;font-weight:600;width:100%;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.chip{font-family:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--gj-line);background:var(--gj-paper-2);cursor:pointer;color:var(--gj-ink);}
+.chip.on{background:var(--gj-leaf-deep);color:#fff;border-color:var(--gj-leaf-deep);}
+.extra{display:none;margin-top:10px;padding:12px;background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-m);}
+.extra.show{display:block;}
+.extra h5{margin:0 0 8px;font-size:13px;color:var(--gj-code-deep);}
+/* #13 compare — selected-crop basket */
+.basket{display:none;margin-top:10px;padding:12px;background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-m);}
+.basket.show{display:block;}
+.basket h5{margin:0 0 8px;font-size:13px;color:var(--gj-code-deep);}
+.bchips{display:flex;gap:8px;flex-wrap:wrap;}
+.bchip{display:inline-flex;align-items:center;gap:6px;background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-pill);padding:5px 12px;font-size:13px;font-weight:600;}
+.bchip img{width:20px;height:20px;object-fit:contain;}
+.bchip b{color:var(--gj-tomato-deep);cursor:pointer;}
+.bchip.add{background:var(--gj-leaf-deep);color:#fff;border-color:var(--gj-leaf-deep);cursor:pointer;}
+.extra .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;}
+
+.echo{background:var(--gj-paper-2);border-radius:var(--r-m);padding:13px 16px;font-size:14px;margin:var(--sp-4) 0;}
+.echo b{color:var(--gj-leaf-deep);}
+
+/* RESULT panel — switches shape by goal */
+.result{background:linear-gradient(135deg,#f3f8ec,#eef4ee);border:1px solid var(--gj-leaf-soft);border-radius:var(--r-l);padding:var(--sp-5);min-height:200px;}
+.r-scalar{text-align:center;}
+.r-scalar .big{font-family:var(--gj-font-head);font-size:46px;font-weight:900;color:var(--gj-leaf-deep);line-height:1;}
+.r-scalar .lbl{color:var(--gj-ink-soft);margin-top:6px;}
+.r-scalar .second{margin-top:8px;font-size:14px;color:var(--gj-ink-soft);}
+.r-scalar .second b{color:var(--gj-soil-deep);}
+.breakdown{font-size:12px;color:#33524f;background:#eef5f5;border:1px dashed var(--gj-code);border-radius:var(--r-s);padding:8px 11px;margin-top:12px;text-align:start;}
+.r-title{font-size:12px;font-weight:700;color:var(--gj-leaf-deep);margin-bottom:10px;}
+
+/* DATE shape */
+.r-date{text-align:center;}
+.r-date .d{font-family:var(--gj-font-head);font-size:42px;font-weight:900;color:var(--gj-leaf-deep);}
+.r-date .anchor{font-size:13px;color:var(--gj-ink-soft);margin-top:8px;}
+
+/* DATE RANGE shape */
+.r-range .bar{position:relative;height:42px;background:var(--gj-paper);border-radius:var(--r-pill);margin:18px 0 8px;border:1px solid var(--gj-line);overflow:hidden;}
+.r-range .fill{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,var(--gj-leaf-soft),var(--gj-leaf));}
+.r-range .ends{display:flex;justify-content:space-between;font-weight:700;font-size:15px;}
+.r-range .ends small{display:block;font-weight:500;color:var(--gj-ink-soft);font-size:11px;}
+
+/* DATE LIST shape */
+.r-list .item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--gj-paper);border-radius:var(--r-m);margin-bottom:7px;border:1px solid var(--gj-line);}
+.r-list .n{width:24px;height:24px;border-radius:50%;background:var(--gj-leaf-deep);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;}
+.r-list .dt{font-weight:700;}.r-list .meta{margin-inline-start:auto;font-size:12px;color:var(--gj-ink-soft);}
+
+/* RANKED LIST shape */
+.r-rank table{width:100%;border-collapse:collapse;font-size:14px;}
+.r-rank th{text-align:start;font-size:11px;color:var(--gj-ink-soft);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--gj-line);}
+.r-rank td{padding:9px 8px;border-bottom:1px dotted var(--gj-line);}
+.r-rank tr.top td{background:#e7f1d8;}
+.r-rank .rk{font-weight:900;color:var(--gj-leaf-deep);}
+.r-rank .q{font-weight:800;}
+.r-rank .v{font-size:12px;color:var(--gj-ink-soft);}
+.r-rank .nm{display:flex;align-items:center;gap:8px;font-weight:700;}
+.r-rank .nm img{width:26px;height:26px;object-fit:contain;}
+
+/* no-data honest state */
+.r-nodata{text-align:center;color:var(--gj-ink-soft);}
+.r-nodata .ic{font-size:38px;}
+.r-nodata b{display:block;color:var(--gj-ink);font-size:17px;margin:8px 0 4px;}
+
+.exprow{display:flex;gap:8px;margin-top:14px;}
+.exprow a{flex:1;justify-content:center;font-size:13px;padding:9px;}
+.session{margin-top:var(--sp-4);background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-m);padding:14px;}
+.session h5{margin:0 0 8px;font-size:13px;}
+.srow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px dotted var(--gj-line);}
+.srow:last-child{border:0;}
+.amini{margin-top:14px;font-size:13px;}.amini a{color:var(--gj-code-deep);text-decoration:underline;font-weight:700;}
+
+/* gallery */
+.gallery{margin-top:var(--sp-7);}
+.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-4);}
+.gcard{background:var(--gj-paper);border:1px solid var(--gj-line);border-radius:var(--r-l);padding:var(--sp-5);box-shadow:var(--sh-s);}
+.gcard .gt{font-family:var(--gj-font-head);font-size:17px;font-weight:700;}
+.gcard .gu{font-size:12px;color:var(--gj-ink-soft);margin:2px 0 14px;}
+
+@media(max-width:760px){ .calc{grid-template-columns:1fr;} .goals{grid-template-columns:repeat(2,1fr);} }
+</style>
+  <link rel="stylesheet" href="./mock-v2.css">
+</head>
+<body>
+
+<div class="mockbar"><div class="shell"><span class="x">MOCKUP · team_35→team_100</span> <b>מחשבון התכנון</b> · 15 מטרות (זמינות כנה) · עוגן-זמן חי + region picker · 5 צורות-תוצאה · מצב אין-נתונים. בחרו מטרה למעלה — התוצאה משתנה.</div></div>
+
+<header class="hdr">
+  <div class="shell hdr__in">
+    <a class="brand" href="home.html"><span class="mk"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></span><span>SFA<small>חקלאות מקומית</small></span></a>
+    <nav class="nav"><a href="crop_card.html">ספר גידולים</a><a class="is-active" href="#">מחשבון</a><a href="market.html">מחירון</a></nav>
+    <span class="hdr__sp"></span>
+    <div class="search"><span>⌕</span><input placeholder="חיפוש גידולים ומחירים…"></div>
+    <a class="acct" href="#"><span>◔</span>חשבון</a>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <div class="lead"><h1>מחשבון התכנון</h1><p>בוחרים <b>מה</b> רוצים לדעת, <b>עבור איזה גידול</b> ו<b>לפי מה</b> — ולוחצים «חשב». כלי תכנון: המספר המוביל הוא <b>כמות</b>, ושווי ב-₪ הוא משני ולהמחשה בלבד.</p></div>
+
+    <div class="calc">
+      <!-- LEFT: builder -->
+      <div class="panel">
+        <!-- Step 1 — 15 goals -->
+        <div class="step">
+          <div class="step__h"><span class="step__n">1</span><b>מה תרצו לחשב?</b><span class="opt">15 מטרות</span></div>
+          <div class="goals" id="goals"></div>
+          <p style="font-size:13px;color:var(--gj-ink-soft);margin:10px 0 0"><span class="st live" style="position:static">זמין</span> פעיל · <span class="st soon" style="position:static">בקרוב</span> בפיתוח לפי שלבים · <span class="st dev" style="position:static">—</span> מודל נפרד</p>
+        </div>
+        <!-- Step 2 — crop -->
+        <div class="step">
+          <div class="step__h"><span class="step__n">2</span><b>עבור איזה גידול?</b></div>
+          <div class="fld" id="cropfld"><select><option>עגבנייה</option><option>מלפפון</option><option>חסה</option><option>פלפל</option><option>בטטה (ללא נתוני תאריך)</option></select></div>
+          <div class="basket" id="basket">
+            <h5>בחרו גידולים להשוואה (2–6)</h5>
+            <div class="bchips">
+              <span class="bchip"><img src="./wc/wc-tomato.png">עגבנייה <b>✕</b></span>
+              <span class="bchip"><img src="./wc/wc-cucumber.png">מלפפון <b>✕</b></span>
+              <span class="bchip"><img src="./wc/wc-pepper.png">פלפל <b>✕</b></span>
+              <span class="bchip add">+ הוסף גידול</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 — basis -->
+        <div class="step">
+          <div class="step__h"><span class="step__n">3</span><b>לפי מה?</b></div>
+          <div class="chips"><button class="chip">לפי שטח</button><button class="chip on">מס׳ ערוגות</button><button class="chip">מס׳ שתילים</button></div>
+          <div class="fld"><input value="2"><span class="muted">ערוגות · 10 מ׳ כל אחת</span></div>
+          <div class="extra" id="ex-target"><h5>יעד יבול</h5><div class="row"><div class="fld" style="max-width:160px"><input value="50"><span class="muted">ק״ג</span></div></div></div>
+          <div class="extra" id="ex-seedcost"><h5>מחיר זרעים</h5><div class="row"><div class="fld" style="max-width:150px"><input value="0.15"><span class="muted">₪/גרם</span></div><span class="muted">או</span><div class="fld" style="max-width:180px"><input placeholder="מחיר חבילה"><span class="muted">₪ / גרם בחבילה</span></div></div></div>
+          <div class="extra" id="ex-succession"><h5>פרישת רצף</h5><div class="row"><div class="fld" style="max-width:150px"><input value="5"><span class="muted">מחזורים</span></div><span class="muted">או</span><div class="fld" style="max-width:170px"><input type="text" value="30/09" ><span class="muted">סוף עונה</span></div></div></div>
+        </div>
+        <!-- Step 4 — time anchor (LIVE) + region picker -->
+        <div class="step">
+          <div class="step__h"><span class="step__n">4</span><b>עוגן זמן</b><span class="opt" id="anchorhint">חי — מזין את מחשבוני התאריך</span></div>
+          <div class="chips" id="anchorchips"><button class="chip on">תאריך יעד</button><button class="chip">תאריך זריעה</button><button class="chip">עכשיו</button></div>
+          <div class="fld" id="datefld"><input type="text" value="15/09/2026"><span class="muted">תאריך יעד לקציר</span></div>
+          <div class="extra" id="ex-region"><h5><svg class="gi" aria-hidden="true"><use href="#i-snow"></use></svg> אזור (לחלון הקרה)</h5><div class="row"><div class="fld" style="max-width:250px"><select><option value="coastal" selected>שפלת החוף (ברירת מחדל)</option><option value="judean_hills">הרי ירושלים</option><option value="jordan_valley">עמק הירדן</option><option value="northern_negev">הנגב הצפוני</option><option value="upper_galilee">הגליל העליון</option></select></div></div><p style="font-size:11.5px;color:var(--gj-ink-soft);margin:8px 0 0">תאריכי קרה לפי אזור (<code>frost_regions.json</code>) — ללא הקלדת תאריכים. אזור נטול-קרה → חלון פתוח, ביושר.</p></div>
+        </div>
+
+        <div class="echo" id="echo">השאלה שלך: אחשב <b>כמות שתילים</b> עבור <b>עגבנייה</b>, ל-<b>2 ערוגות</b>.</div>
+        <button class="btn btn--primary" style="font-size:16px">חשב ›</button>
+      </div>
+
+      <!-- RIGHT: result (switches by goal) -->
+      <div>
+        <div class="result" id="result"></div>
+        <div class="exprow"><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-download"></use></svg> PDF</a><a class="btn btn--ghost" href="#"><svg class="gi" aria-hidden="true"><use href="#i-download"></use></svg> CSV</a></div>
+        <div class="session">
+          <h5>הסשן שלי <span class="muted" style="font-weight:400">· נשמר במכשיר</span></h5>
+          <div class="srow"><span>כמות שתילים · עגבנייה</span><b>~97 שתילים</b></div>
+          <div class="srow"><span>תאריך זריעה · עגבנייה</span><b>16/06/2026</b></div>
+          <div class="srow"><span>השוואת גידולים · 8 גידולים</span><b>עגבנייה #1</b></div>
+        </div>
+        <div class="amini"><svg class="gi" aria-hidden="true"><use href="#i-gear"></use></svg> <a href="assumptions.html">נהל את כל הנחות היסוד שלי ←</a></div>
+      </div>
+    </div>
+
+    <!-- GALLERY: 5 result shapes — collapsed reference for the engine team (team_200) -->
+    <details class="gallery">
+      <summary class="ghead" style="cursor:pointer;display:flex;align-items:baseline;gap:12px;justify-content:space-between;margin-bottom:var(--sp-4);list-style:none"><h2 style="font-size:20px;font-weight:700">צורות התוצאה — מדריך לצוות המנוע</h2><span class="eyebrow">5 צורות + מצב אין-נתונים · לחצו להרחבה</span></summary>
+      <div class="gcards">
+        <div class="gcard"><div class="gt">scalar</div><div class="gu">#1 זרעים · #8 יבול · #2 שתילים · #10 צפיפות · #12 דישון · #7 ערוגות</div>
+          <div class="r-scalar"><div class="big">~97</div><div class="lbl">שתילים · ל-2 ערוגות</div></div></div>
+        <div class="gcard"><div class="gt">scalar + שווי משני</div><div class="gu">#9 הכנסה צפויה (כמות מובילה · ₪ משני)</div>
+          <div class="r-scalar"><div class="big">~60</div><div class="lbl">ק״ג · יבול לערוגה</div><div class="second">שווי משוער: <b>₪540–720</b> <span style="font-size:11px">(לפי מדד השוק)</span></div></div></div>
+        <div class="gcard"><div class="gt">DATE</div><div class="gu">#4 תאריך זריעה</div>
+          <div class="r-date"><div class="d">16/06/2026</div><div class="anchor">מחושב מ: תאריך יעד 15/09 − 91 ימים להבשלה</div></div></div>
+        <div class="gcard"><div class="gt">DATE RANGE</div><div class="gu">#5 חלון קטיף · #11 חלון קרה</div>
+          <div class="r-range"><div class="ends"><span>25/03<small>מוקדם בטוח</small></span><span>25/11<small>מאוחר בטוח</small></span></div><div class="bar"><div class="fill" style="inset-inline-start:18%;width:64%"></div></div><div style="text-align:center;font-size:12px;color:var(--gj-ink-soft)">חלון שתילה בטוח · הרי ירושלים</div></div></div>
+        <div class="gcard"><div class="gt">DATE LIST</div><div class="gu">#6 רצף גידולים (לוח זריעות)</div>
+          <div class="r-list"><div class="item"><span class="n">1</span><span class="dt">16/06</span><span class="meta">זריעה ראשונה</span></div><div class="item"><span class="n">2</span><span class="dt">30/06</span><span class="meta">+2 שבועות</span></div><div class="item"><span class="n">3</span><span class="dt">14/07</span><span class="meta">+2 שבועות</span></div></div></div>
+        <div class="gcard"><div class="gt">RANKED LIST</div><div class="gu">#13 השוואת גידולים · סל נבחר (כמות מובילה · ₪/מ׳ משני)</div>
+          <div class="r-rank"><table><thead><tr><th>#</th><th>גידול</th><th>ק״ג/מ׳</th><th>₪/מ׳</th></tr></thead><tbody>
+            <tr class="top"><td class="rk">1</td><td><span class="nm"><img src="./wc/wc-tomato.png">עגבנייה</span></td><td class="q">9.0</td><td class="v">₪76</td></tr>
+            <tr><td class="rk">2</td><td><span class="nm"><img src="./wc/wc-cucumber.png">מלפפון</span></td><td class="q">8.0</td><td class="v">₪54</td></tr>
+            <tr><td class="rk">3</td><td><span class="nm"><img src="./wc/wc-pepper.png">פלפל</span></td><td class="q">6.0</td><td class="v">₪69</td></tr>
+          </tbody></table></div></div>
+        <div class="gcard"><div class="gt">scalar + DATE</div><div class="gu">#3 ימי משתלה (מגשים + תאריך זריעת מגש)</div>
+          <div class="r-scalar"><div class="big">3</div><div class="lbl">מגשי משתלה (128 תאים)</div><div class="second">תאריך זריעת מגש: <b>19/05/2026</b></div></div></div>
+        <div class="gcard" style="border-color:var(--gj-sun)"><div class="gt">מצב אין-נתונים (כנה)</div><div class="gu">לכל מטרה שאין לה נתון לגידול הנבחר</div>
+          <div class="r-nodata"><div class="ic"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></div><b>אין עדיין נתון לגידול הזה</b><div>לבטטה אין נתוני תאריך — לא ממציאים מספר.<br><a href="#" style="color:var(--gj-code-deep);text-decoration:underline;font-weight:700">עזרו להשלים ←</a></div></div></div>
+      </div>
+    </details>
+
+  </div>
+</main>
+
+<footer class="foot"><div class="shell foot__in"><span class="dot"></span><span>SFA · קוד פתוח · קהילתי · <a href="#" style="text-decoration:underline">על הכלים</a> · <a href="#" style="text-decoration:underline">קהילה</a></span></div></footer>
+
+<script>
+/* 15-goal registry — shape, phase, extra inputs, example result */
+var G = [
+  {k:'seed',ic:'<svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg>',l:'זרעים לקנות',ph:'live',shape:'scalar',anchor:0,res:'<div class="r-title">scalar</div><div class="r-scalar"><div class="big">~0.75</div><div class="lbl">גרם · ל-2 ערוגות</div><div class="breakdown">(שטח · צפיפות ÷ אחוז נביטה · מקדם ביטחון)</div></div>'},
+  {k:'transplants',ic:'<svg class="gi" aria-hidden="true"><use href="#i-seedling"></use></svg>',l:'כמות שתילים',ph:'A',shape:'scalar',anchor:0,res:'<div class="r-title">scalar · שלב A</div><div class="r-scalar"><div class="big">~97</div><div class="lbl">שתילים · ל-2 ערוגות</div><div class="breakdown">(100 ÷ מרווח 45) × 2 שורות × 10 מ׳ × 2 ערוגות × 1.1</div></div>'},
+  {k:'yield',ic:'<svg class="gi" aria-hidden="true"><use href="#i-scale"></use></svg>',l:'יבול צפוי',ph:'live',shape:'scalar',anchor:0,res:'<div class="r-title">scalar</div><div class="r-scalar"><div class="big">~120</div><div class="lbl">ק״ג · 2 ערוגות</div></div>'},
+  {k:'revenue',ic:'₪',l:'הכנסה צפויה',ph:'live',shape:'scalar2',anchor:0,res:'<div class="r-title">scalar · כמות מובילה</div><div class="r-scalar"><div class="big">~120</div><div class="lbl">ק״ג · 2 ערוגות</div><div class="second">שווי משוער: <b>₪1,080–1,440</b> <span style="font-size:11px">(מדד השוק · להמחשה)</span></div></div>'},
+  {k:'pop',ic:'<svg class="gi" aria-hidden="true"><use href="#i-grid"></use></svg>',l:'צפיפות שתילה',ph:'live',shape:'scalar',anchor:0,res:'<div class="r-title">scalar + grid</div><div class="r-scalar"><div class="big">2.8</div><div class="lbl">צמ׳ / מ״ר</div><div class="breakdown">ויזואל רשת: ●&nbsp;●&nbsp;●&nbsp;/&nbsp;●&nbsp;●&nbsp;● · מרווח 45×80</div></div>'},
+  {k:'fert',ic:'<svg class="gi" aria-hidden="true"><use href="#i-compost"></use></svg>',l:'כמות דישון',ph:'live',shape:'scalar',anchor:0,res:'<div class="r-title">scalar · אורגני</div><div class="r-scalar"><div class="big">~110</div><div class="lbl">ק״ג קומפוסט · 2 ערוגות</div><div class="second">≈ 5 ק״ג/מ״ר בהכנת הערוגה</div></div>'},
+  {k:'beds',ic:'<svg class="gi" aria-hidden="true"><use href="#i-rows"></use></svg>',l:'ערוגות ליעד',ph:'live',shape:'scalar',anchor:0,extra:'ex-target',res:'<div class="r-title">scalar</div><div class="r-scalar"><div class="big">~6</div><div class="lbl">ערוגות · ליעד 50 ק״ג</div></div>'},
+  {k:'seed_cost',ic:'<svg class="gi" aria-hidden="true"><use href="#i-receipt"></use></svg>',l:'עלות זרעים',ph:'A',shape:'scalar2',anchor:0,extra:'ex-seedcost',res:'<div class="r-title">scalar · שלב A</div><div class="r-scalar"><div class="big">₪0.11</div><div class="lbl">עלות זרעים · 2 ערוגות</div><div class="second">≈ 1 חבילה</div></div>'},
+  {k:'compare',ic:'<svg class="gi" aria-hidden="true"><use href="#i-chart"></use></svg>',l:'השוואת גידולים',ph:'A',shape:'rank',anchor:0,compare:1,res:'<div class="r-title">RANKED LIST · שלב A · סל נבחר · כמות מובילה</div><div class="r-rank"><table><thead><tr><th>#</th><th>גידול</th><th>ק״ג/מ׳</th><th>₪/מ׳</th></tr></thead><tbody><tr class="top"><td class="rk">1</td><td><span class="nm"><img src="./wc/wc-tomato.png">עגבנייה</span></td><td class="q">9.0</td><td class="v">₪76</td></tr><tr><td class="rk">2</td><td><span class="nm"><img src="./wc/wc-cucumber.png">מלפפון</span></td><td class="q">8.0</td><td class="v">₪54</td></tr><tr><td class="rk">3</td><td><span class="nm"><img src="./wc/wc-pepper.png">פלפל</span></td><td class="q">6.0</td><td class="v">₪69</td></tr></tbody></table></div>'},
+  {k:'harvest',ic:'<svg class="gi" aria-hidden="true"><use href="#i-basket"></use></svg>',l:'חלון קטיף',ph:'Bnow',shape:'range',anchor:'sow',res:'<div class="r-title">DATE RANGE · B-now</div><div class="r-range"><div class="ends"><span>14/09<small>תחילת קטיף</small></span><span>26/10<small>סוף קטיף</small></span></div><div class="bar"><div class="fill" style="inset-inline-start:10%;width:55%"></div></div><div style="text-align:center;font-size:12px;color:var(--gj-ink-soft)">מזריעה 16/06 · 91 ימים + חלון 6 שבועות</div></div>'},
+  {k:'succession',ic:'<svg class="gi" aria-hidden="true"><use href="#i-repeat"></use></svg>',l:'רצף גידולים',ph:'Bnow',shape:'list',anchor:'sow',extra:'ex-succession',res:'<div class="r-title">DATE LIST · B-now</div><div class="r-list"><div class="item"><span class="n">1</span><span class="dt">16/06</span><span class="meta">זריעה ראשונה</span></div><div class="item"><span class="n">2</span><span class="dt">30/06</span><span class="meta">+2 שב׳</span></div><div class="item"><span class="n">3</span><span class="dt">14/07</span><span class="meta">+2 שב׳</span></div><div class="item"><span class="n">4</span><span class="dt">28/07</span><span class="meta">+2 שב׳</span></div><div class="item"><span class="n">5</span><span class="dt">11/08</span><span class="meta">אחרונה</span></div></div>'},
+  {k:'sow_date',ic:'<svg class="gi" aria-hidden="true"><use href="#i-calendar"></use></svg>',l:'תאריך זריעה',ph:'Bnow',shape:'date',anchor:'target',res:'<div class="r-title">DATE · B-now</div><div class="r-date"><div class="d">16/06/2026</div><div class="anchor">מחושב מ: תאריך יעד 15/09 − 91 ימים להבשלה (זריעה ישירה)</div></div>'},
+  {k:'nursery',ic:'<svg class="gi" aria-hidden="true"><use href="#i-leaf"></use></svg>',l:'ימי משתלה',ph:'Blater',shape:'scalardate',anchor:'fieldset',res:'<div class="r-title">scalar + DATE · B-later</div><div class="r-scalar"><div class="big">3</div><div class="lbl">מגשי משתלה (128 תאים)</div><div class="second">תאריך זריעת מגש: <b>19/05/2026</b></div></div>'},
+  {k:'frost',ic:'<svg class="gi" aria-hidden="true"><use href="#i-snow"></use></svg>',l:'חלון קרה',ph:'Blater',shape:'range',anchor:'region',extra:'ex-region',res:'<div class="r-title">DATE RANGE · B-later · region picker</div><div class="r-range"><div class="ends"><span>25/03<small>אחרי הקרה האחרונה</small></span><span>25/11<small>לפני הקרה הראשונה</small></span></div><div class="bar"><div class="fill" style="inset-inline-start:18%;width:64%"></div></div><div style="text-align:center;font-size:12px;color:var(--gj-ink-soft)">חלון שתילה בטוח · הרי ירושלים · רגיש לקרה</div></div><div style="margin-top:10px;font-size:12px;color:var(--gj-leaf-deep);background:#eef5ec;border:1px solid var(--gj-leaf-soft);border-radius:8px;padding:8px 10px">בחרתם <b>שפלת החוף</b> (נטול-קרה)? החלון נפתח לכל השנה — ביושר, בלי תאריך מומצא.</div>'},
+  {k:'water',ic:'<svg class="gi" aria-hidden="true"><use href="#i-drop"></use></svg>',l:'צריכת מים',ph:'dev',shape:'nodata',anchor:0,res:'<div class="r-title">מודל נפרד (WP-CB-WATER)</div><div class="r-nodata"><div class="ic"><svg class="gi" aria-hidden="true"><use href="#i-drop"></use></svg></div><b>בפיתוח — מודל מים נפרד</b><div>דורש מודל ET₀×Kc ונתונים ייעודיים. לא ממציאים מספר.</div></div>'}
+];
+var STN={live:'זמין',A:'בקרוב',Bnow:'בקרוב',Blater:'בקרוב',dev:'—'};
+var STC={live:'live',A:'soon',Bnow:'soon',Blater:'soon',dev:'dev'};
+var wrap=document.getElementById('goals');
+G.forEach(function(g,i){
+  var b=document.createElement('button'); b.className='goal'+(i===1?' on':''); b.dataset.k=g.k;
+  b.innerHTML='<span class="st '+STC[g.ph]+'">'+STN[g.ph]+'</span><span class="g">'+g.ic+'</span>'+g.l;
+  b.addEventListener('click',function(){select(g,b);});
+  wrap.appendChild(b);
+});
+function select(g,b){
+  document.querySelectorAll('.goal').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+  // nodata if crop has no date data + a date goal
+  var crop=document.querySelector('#cropfld select').value;
+  var noData = (crop.indexOf('ללא נתוני')>=0 && ['date','range','list','scalardate'].indexOf(g.shape)>=0);
+  document.getElementById('result').innerHTML = noData
+    ? '<div class="r-title">מצב אין-נתונים</div><div class="r-nodata"><div class="ic"><svg class="gi" aria-hidden="true"><use href="#i-sprout"></use></svg></div><b>אין עדיין נתון לגידול הזה</b><div>ל'+crop.split(' ')[0]+' אין נתוני תאריך — לא ממציאים מספר.<br><a href="#" style="color:var(--gj-code-deep);text-decoration:underline;font-weight:700">עזרו להשלים ←</a></div></div>'
+    : g.res;
+  // extra inputs
+  ['ex-target','ex-seedcost','ex-succession','ex-region'].forEach(function(id){document.getElementById(id).classList.remove('show');});
+  if(g.extra) document.getElementById(g.extra).classList.add('show');
+  // #13 compare → selected-crop basket (replaces single crop select)
+  document.getElementById('basket').classList.toggle('show', !!g.compare);
+  document.getElementById('cropfld').style.display = g.compare?'none':'flex';
+  // anchor relevance
+  var dateGoal = g.anchor && g.anchor!==0;
+  document.getElementById('anchorhint').textContent = dateGoal?'חי — מזין מטרה זו':'לא רלוונטי למטרה זו';
+  document.getElementById('datefld').style.opacity = dateGoal?'1':'.45';
+  // echo
+  document.getElementById('echo').innerHTML='השאלה שלך: אחשב <b>'+g.l+'</b> עבור <b>'+(g.compare?'סל של 3 גידולים':crop.split(' ')[0])+'</b>'+(dateGoal?' · עוגן '+(g.anchor==='target'?'תאריך יעד':g.anchor==='region'?'אזור':'תאריך זריעה'):'')+'.';
+}
+document.querySelector('#cropfld select').addEventListener('change',function(){var on=document.querySelector('.goal.on');if(on){var g=G.find(x=>x.k===on.dataset.k);select(g,on);}});
+select(G[1],document.querySelector('.goal.on'));
+</script>
+<script src="sfa-icons.js"></script>
+</body>
+</html>

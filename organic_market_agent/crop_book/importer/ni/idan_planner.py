@@ -36,8 +36,9 @@ Trust tier:   OP (Operator / real farm records)
 Confidence:   0.80
 
 Fields written to crop_variety_source_values:
-  days_to_maturity, in_row_spacing_cm, rows_per_bed, yield_per_m2_kg,
+  days_to_maturity, in_row_spacing_cm, rows_per_bed,
   harvest_window_max_days, planting_method
+  (yield_per_m2_kg removed — forbidden AC-05 derived field; see _NUMERIC_FIELDS)
 """
 from __future__ import annotations
 
@@ -64,7 +65,10 @@ _NUMERIC_FIELDS: list[tuple[str, str, str | None]] = [
     ("days_to_maturity",         "days_to_maturity",        "days"),
     ("in_row_spacing_cm",        "in_row_spacing_cm",       "cm"),
     ("rows_per_bed",             "rows_per_bed",            None),
-    ("avg_yield_per_bed_m",      "yield_per_m2_kg",         "kg/m2"),
+    # WP-CB tails cleanup (AC-05): the `avg_yield_per_bed_m` source was emitted to the
+    # FORBIDDEN derived field `yield_per_m2_kg` (and was unit-mislabeled per-m² vs the
+    # per-bed-meter source). Dropped at source so it no longer relies on the post-seed
+    # strip. To resurface it, map to the legit `yield_per_bed_m` after verifying the unit.
     ("harvest_window_max_days",  "harvest_window_max_days", "days"),
 ]
 

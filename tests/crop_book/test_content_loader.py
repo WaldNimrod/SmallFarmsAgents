@@ -177,8 +177,9 @@ def test_unknown_content_type_skipped(session, tmp_path):
 def test_name_he_override_targets_db_crop(session, tmp_path):
     """A ``_name_he`` override resolves to a DB crop even when JMF_CROP_MAP maps elsewhere.
 
-    Real cases: JMF 'Basil' → 'בזיליקום' but the DB has 'בזיל'; 'Beans (Bush)' → 'שעועית שיחית'
-    but the DB has the generic 'שעועית'. The override lets the authoring file target the right row.
+    Real case: JMF 'Beans (Bush)' → 'שעועית שיחית' but the DB may only have the
+    generic 'שעועית'. The override lets the authoring file target the right row even
+    when JMF_CROP_MAP would resolve elsewhere.
     """
     from organic_market_agent.crop_book.models import Crop, CropFamily
     from organic_market_agent.crop_book.content_models import CropContent

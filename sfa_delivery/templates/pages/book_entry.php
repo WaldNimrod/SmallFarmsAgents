@@ -22,6 +22,7 @@
  *   $families string[]
  *   $filters  array  q,family,season,dtm_max,sow,frost
  */
+use SFA\Lib\CropArt;
 use SFA\Lib\Template;
 
 $h = [Template::class, 'h'];
@@ -30,9 +31,10 @@ $page_title = 'ספר גידולים';
 $page_sub   = 'מאגר ידע פתוח';
 $active     = 'crop-book';
 
-$crops    = is_array($crops    ?? null) ? $crops    : [];
-$prices   = is_array($prices   ?? null) ? $prices   : [];
-$families = is_array($families ?? null) ? $families : [];
+$crops     = is_array($crops     ?? null) ? $crops     : [];
+$prices    = is_array($prices    ?? null) ? $prices    : [];
+$estimates = is_array($estimates ?? null) ? $estimates : [];
+$families  = is_array($families  ?? null) ? $families  : [];
 $view     = (string)($view ?? 'cards');
 $sort     = (string)($sort ?? 'name');
 $total    = (int)($total ?? count($crops));
@@ -59,32 +61,8 @@ foreach ($crops as $c) { if (!empty($c['in_season'])) { $in_season_n++; } }
 $MONTH_HE_FULL = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
 $now_he = $MONTH_HE_FULL[(int)date('n') - 1];
 
-// Watercolor art mapping (singular + plural DB-slug aliases + identity batch).
-$wc_art_map = [
-    'basil'=>'wc-basil.png','beet'=>'wc-beet.png','broccoli'=>'wc-broccoli.png','bush-bean'=>'wc-bush-bean.png',
-    'cabbage'=>'wc-cabbage.png','carrot'=>'wc-carrot.png','chard'=>'wc-chard.png','cucumber'=>'wc-cucumber.png',
-    'dill'=>'wc-dill.png','eggplant'=>'wc-eggplant.png','fennel'=>'wc-fennel.png','garlic'=>'wc-garlic.png',
-    'ginger'=>'wc-ginger.png','kale'=>'wc-kale.png','leek'=>'wc-leek.png','lettuce'=>'wc-lettuce.png',
-    'melon'=>'wc-melon.png','onion'=>'wc-onion.png','parsley'=>'wc-parsley.png','pea'=>'wc-pea.png',
-    'pepper'=>'wc-pepper.png','pole-bean'=>'wc-pole-bean.png','radish'=>'wc-radish.png','scallion'=>'wc-scallion.png',
-    'spinach'=>'wc-spinach.png','tomato'=>'wc-tomato.png','turmeric'=>'wc-turmeric.png','zucchini'=>'wc-zucchini.png',
-    'carrots'=>'wc-carrot.png','tomatoes'=>'wc-tomato.png','cucumbers'=>'wc-cucumber.png','onions'=>'wc-onion.png',
-    'peppers'=>'wc-pepper.png','peas'=>'wc-pea.png','beets'=>'wc-beet.png','radishes'=>'wc-radish.png',
-    'melons'=>'wc-melon.png','leeks'=>'wc-leek.png','cherry-tomato'=>'wc-tomato.png','summer-squash'=>'wc-zucchini.png',
-    'onions-scallions'=>'wc-scallion.png','beans-default-pole-climbing-'=>'wc-pole-bean.png',
-    'anise-hyssop'=>'wc-anise-hyssop.png','artichokes'=>'wc-artichokes.png','arugula'=>'wc-arugula.png','bay'=>'wc-bay.png',
-    'beans-default-pole-climbing'=>'wc-beans-default-pole-climbing.png','blackberry'=>'wc-blackberry.png',
-    'cauliflower'=>'wc-cauliflower.png','celery'=>'wc-celery.png','chickpea'=>'wc-chickpea.png','chicory'=>'wc-chicory.png',
-    'chinese-lantern'=>'wc-chinese-lantern.png','chives'=>'wc-chives.png','cilantro'=>'wc-cilantro.png','cress'=>'wc-cress.png',
-    'edamame'=>'wc-edamame.png','fava-bean'=>'wc-fava-bean.png','hibiscus'=>'wc-hibiscus.png',
-    'jerusalem-artichokes'=>'wc-jerusalem-artichokes.png','jicama'=>'wc-jicama.png','kohlrabi'=>'wc-kohlrabi.png',
-    'lemon-balm'=>'wc-lemon-balm.png','lemon-verbena'=>'wc-lemon-verbena.png','lettuce-salad-mix'=>'wc-lettuce-salad-mix.png',
-    'lovage'=>'wc-lovage.png','mint'=>'wc-mint.png','new-zealand-spinach'=>'wc-new-zealand-spinach.png','okra'=>'wc-okra.png',
-    'oranges'=>'wc-oranges.png','pac-choi-bok-choy'=>'wc-pac-choi-bok-choy.png','potato'=>'wc-potato.png','sage'=>'wc-sage.png',
-    'sesame'=>'wc-sesame.png','soybean'=>'wc-soybean.png','strawberry'=>'wc-strawberry.png','sunflower'=>'wc-sunflower.png',
-    'sweet-corn'=>'wc-sweet-corn.png','sweet-potato'=>'wc-sweet-potato.png','tarragon'=>'wc-tarragon.png','thyme'=>'wc-thyme.png',
-    'turnips'=>'wc-turnips.png','watermelon'=>'wc-watermelon.png','wheat'=>'wc-wheat.png','winter-squash'=>'wc-winter-squash.png',
-];
+// Watercolor art mapping: single source of truth in SFA\Lib\CropArt (shared
+// with the crop page + market grid). Resolved per-card via CropArt::file().
 
 $season_opts = ['' => 'כל העונות', 'summer' => 'קיץ', 'autumn' => 'סתיו', 'winter' => 'חורף', 'spring' => 'אביב'];
 $sort_opts   = ['name' => 'מיון: שם א׳–ת׳', 'now' => 'מיון: זמין עכשיו', 'dtm' => 'מיון: ימים להבשלה'];
@@ -173,14 +151,15 @@ ob_start();
           <?php foreach ($crops as $c):
             $cslug = (string)($c['slug'] ?? '');
             $pr    = $prices[$cslug] ?? null;
+            $est   = $estimates[$cslug] ?? null; // AC-1.2 estimated range (only when no live price)
           ?>
           <tr>
             <td><div class="t-name"><a href="/crop-book/<?= $h($cslug) ?>/"><?= $h((string)($c['name_he'] ?? '')) ?></a>
               <?php if (!empty($c['en_name'])): ?><em dir="ltr"><?= $h((string)$c['en_name']) ?></em><?php endif; ?></div></td>
-            <td class="t-fam"><?= $h((string)($c['family_tag_he'] ?: $c['category'])) ?></td>
+            <td class="t-fam"><?= $h((string)($c['family_tag_he'] ?: ($c['category_he'] ?? $c['category']))) ?></td>
             <td><?= !empty($c['dtm_days']) ? '<span class="num">' . (int)$c['dtm_days'] . '</span>' : '—' ?></td>
             <td><?= !empty($c['in_season']) ? 'כן' : '—' ?></td>
-            <td><?= $pr ? '<span class="num">₪' . $h(number_format($pr['price'], 1)) . '</span>' : '—' ?></td>
+            <td><?php if ($pr): ?><span class="num">₪<?= $h(number_format($pr['price'], 1)) ?></span><?php elseif ($est): ?><span class="num est">₪<?= $h(number_format($est['price_min'], 1)) ?><?= $est['price_max'] > $est['price_min'] ? '–' . $h(number_format($est['price_max'], 1)) : '' ?></span> <small class="est">מוערך</small><?php else: ?>—<?php endif; ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -190,10 +169,11 @@ ob_start();
     <div class="grid">
       <?php foreach ($crops as $c):
         $cslug = (string)($c['slug'] ?? '');
-        $wc    = $wc_art_map[$cslug] ?? null;
+        $wc    = CropArt::file($cslug);
         $act   = (string)($c['in_season_activity'] ?? '');
         $pr    = $prices[$cslug] ?? null;
-        $fam   = (string)($c['family_tag_he'] ?: $c['category']);
+        $est   = $estimates[$cslug] ?? null; // AC-1.2 estimated range (only when no live price)
+        $fam   = (string)($c['family_tag_he'] ?: ($c['category_he'] ?? $c['category']));
       ?>
       <a class="cc" href="/crop-book/<?= $h($cslug) ?>/">
         <div class="cc__art">
@@ -214,6 +194,8 @@ ob_start();
           <?php if ($fam !== ''): ?><span class="tag"><?= $h($fam) ?></span><?php endif; ?>
           <?php if ($pr !== null): ?>
             <span class="cc__price"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg>בשוק <span class="num">₪<?= $h(number_format($pr['price'], 1)) ?></span><?php if ($pr['unit'] !== ''): ?>/<?= $h($pr['unit']) ?><?php endif; ?></span>
+          <?php elseif ($est !== null): ?>
+            <span class="cc__price cc__price--est"><svg class="gi" aria-hidden="true"><use href="#i-shekel"/></svg>מחיר מוערך <span class="num">₪<?= $h(number_format($est['price_min'], 1)) ?><?php if ($est['price_max'] > $est['price_min']): ?>–<?= $h(number_format($est['price_max'], 1)) ?><?php endif; ?></span><?php if ($est['unit'] !== ''): ?>/<?= $h($est['unit']) ?><?php endif; ?></span>
           <?php endif; ?>
           <div class="cc__stats">
             <?php if (!empty($c['dtm_days'])): ?>

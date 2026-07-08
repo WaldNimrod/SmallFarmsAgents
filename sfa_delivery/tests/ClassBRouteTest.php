@@ -80,30 +80,48 @@ final class ClassBRouteTest extends TestCase
         $this->assertStringContainsString('class="setgroup"', $body, 'Account must have .setgroup');
     }
 
-    /** AC-7: market detail renders .pgraph section */
+    /** WP-CB-MARKET-DETAIL AC-1: market detail renders the redesign DS price graph (.mdgraph) */
     public function testMarketDetailRendersGraph(): void
     {
         $req = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('pgraph', $body, 'Market detail must render .pgraph');
+        $this->assertStringContainsString('mdgraph', $body, 'Market detail must render the .mdgraph price graph');
+        $this->assertStringContainsString('28 ימים אחרונים', $body, 'Graph card title (28-day) must render');
     }
 
-    /** AC-7: market detail renders .phist history table */
+    /** WP-CB-MARKET-DETAIL AC-1: market detail renders the redesign DS history table (.mdtable) */
     public function testMarketDetailRendersHistory(): void
     {
         $req = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('phist', $body, 'Market detail must render .phist table');
+        $this->assertStringContainsString('mdtable', $body, 'Market detail must render the .mdtable history table');
+        $this->assertStringContainsString('היסטוריית מחיר', $body, 'History section title must render');
     }
 
-    /** AC-7 + MINOR F-05: market detail has 90/year rangesel buttons marked is-disabled server-side */
+    /** WP-CB-MARKET-DETAIL AC-5: 90י/שנה rangesel buttons are honestly disabled "בקרוב" server-side */
     public function testMarketDetailDisabledRanges(): void
     {
         $req = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
         $body = (string)$this->app->handle($req)->getBody();
-        // Both disabled buttons must be in the template output
-        $this->assertStringContainsString('is-disabled', $body, 'Market detail must have .is-disabled rangesel buttons');
-        $this->assertStringContainsString('90י', $body, 'Market detail must include 90י label (disabled)');
+        $this->assertStringContainsString('is-soon', $body, 'Market detail must mark the 90/year buttons .is-soon (disabled)');
+        $this->assertMatchesRegularExpression('/<button[^>]*\bdisabled\b/', $body, 'The 90/year buttons must be server-side disabled');
+        $this->assertStringContainsString('בקרוב', $body, 'Disabled ranges must be labeled "בקרוב"');
+        $this->assertStringContainsString('90י', $body, 'Market detail must include the 90י label (disabled)');
+    }
+
+    /** WP-CB-MARKET-DETAIL AC-2/AC-3: no raw OS emoji; the hero shows the product watercolor. */
+    public function testMarketDetailNoEmojiAndWatercolorHero(): void
+    {
+        $req = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
+        $body = (string)$this->app->handle($req)->getBody();
+        foreach (['📦', '📭', '📊', '📖', '◐'] as $emoji) {
+            $this->assertStringNotContainsString($emoji, $body, "Market detail must not contain the raw OS emoji {$emoji} (DSX-1 .gi glyphs only)");
+        }
+        $this->assertStringContainsString('pc__art', $body, 'The hero must use the redesign .pc__art (watercolor) block');
+        $this->assertStringContainsString('wc-tomato.png', $body, 'The tomato hero must render its watercolor image');
+        // The retired Class-B v2 blocks must be gone from the primary content.
+        $this->assertStringNotContainsString('class="pbig"', $body, 'Retired .pbig must not remain');
+        $this->assertStringNotContainsString('class="pgraph"', $body, 'Retired .pgraph must not remain');
     }
 
     /** AC-7 + MINOR F-02: rangesel shows 28י not 30 */
@@ -438,19 +456,10 @@ final class ClassBRouteTest extends TestCase
             '/crop-book/ must preserve entry navigation in .book-subnav (questions/family/search)');
     }
 
-    /** A1: crop-book-v1.css .cards-grid uses team_35 restored minmax(168px,1fr) */
-    public function testCropBookCssUsesCompactGrid(): void
-    {
-        $css = file_get_contents(__DIR__ . '/../public_assets/css/crop-book-v1.css');
-        // A1 (patch01 regression restore): team_35 canonical value is minmax(168px,1fr).
-        // The old assertion (≤128px) was enforcing the shrunken patch01 size — updated to
-        // assert the restored team_35 value per WP-CB-UI-FIDELITY fix A1.
-        $this->assertStringContainsString(
-            'minmax(168px, 1fr)',
-            $css,
-            'crop-book-v1.css .cards-grid must use team_35 restored minmax(168px, 1fr) track'
-        );
-    }
+    /* Retired (WP-CB-UI-MOCKUP-FIDELITY): testCropBookCssUsesCompactGrid guarded
+       the old .cards-grid minmax(168px) track. The crop-book list now renders the
+       redesign .cc grid (see testCropBookEntryHasCardsGrid); the dead .ccard /
+       .cards-grid block was removed from crop-book-v1.css. */
 
     // ── WP-CB-UI-patch01 WI-3: hub copy + system-wide terminology ────────────
 
@@ -570,34 +579,34 @@ final class ClassBRouteTest extends TestCase
 
     // ── WP-CB-UI-patch01 WI-7: mobile horizontal overflow fixes ─────────────
 
-    /** WI-7: market detail wraps .phist table in .phist-wrap for overflow-x:auto */
+    /** WI-7 (re-skin): market detail wraps the history table in .mdtable-wrap for overflow-x:auto */
     public function testMarketDetailHistoryHasScrollWrapper(): void
     {
         $req  = (new ServerRequestFactory())->createServerRequest('GET', '/market/tomato');
         $body = (string)$this->app->handle($req)->getBody();
-        $this->assertStringContainsString('phist-wrap', $body,
-            'Market detail must render .phist-wrap scroll container around .phist table (WI-7)');
+        $this->assertStringContainsString('mdtable-wrap', $body,
+            'Market detail must render the .mdtable-wrap scroll container around the history table (WI-7 carried into the re-skin)');
     }
 
-    /** WI-7: classb.css defines .phist-wrap with overflow-x:auto */
-    public function testPhistwrapCssDefinition(): void
+    /** WI-7 (re-skin): redesign.css defines .mdtable-wrap with overflow-x:auto */
+    public function testHistoryWrapCssDefinition(): void
     {
-        $css = file_get_contents(__DIR__ . '/../public_assets/css/classb.css');
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/redesign.css');
         $this->assertMatchesRegularExpression(
-            '#phist-wrap[^}]*overflow-x\s*:\s*auto#s',
+            '#mdtable-wrap[^}]*overflow-x\s*:\s*auto#s',
             $css,
-            'classb.css must define .phist-wrap with overflow-x:auto (WI-7)'
+            'redesign.css must define .mdtable-wrap with overflow-x:auto (WI-7 carried into the re-skin)'
         );
     }
 
-    /** WI-7: classb.css .pgraph__top uses flex-wrap to prevent rangesel overflow */
-    public function testPgraphTopFlexWrap(): void
+    /** WI-7 (re-skin): redesign.css .mdcard__top uses flex-wrap so the rangesel wraps on narrow screens */
+    public function testGraphCardTopFlexWrap(): void
     {
-        $css = file_get_contents(__DIR__ . '/../public_assets/css/classb.css');
+        $css = file_get_contents(__DIR__ . '/../public_assets/css/redesign.css');
         $this->assertMatchesRegularExpression(
-            '#pgraph__top[^}]*flex-wrap\s*:\s*wrap#s',
+            '#mdcard__top[^}]*flex-wrap\s*:\s*wrap#s',
             $css,
-            'classb.css .pgraph__top must use flex-wrap:wrap so rangesel wraps on narrow screens (WI-7)'
+            'redesign.css .mdcard__top must use flex-wrap:wrap so the rangesel wraps on narrow screens (WI-7)'
         );
     }
 
