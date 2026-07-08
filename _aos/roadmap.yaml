@@ -707,7 +707,7 @@ work_packages:
     commit: "7fe7915"
     builder_commits: ["248f85b", "0c4f777", "c1fc66d"]
     branch: "claude/gallant-elbakyan-727a60"
-    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 10/10 ACs. Pre-patch baseline 5 failed/106 passed/2 warnings/4 errors confirmed; post-patch 115 passed/0 warnings/0 errors. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-07 CLEAN (LOD500_LOCKED files untouched). AC-10 skip-class scan CLEAN (grep matches in BUILD_REPORT prose are documentation, not violations). BUILD_REPORT: _COMMUNICATION/TEAM_10/SFA-S003-P001-WP003-patch02/BUILD_REPORT_v1.0.0.md. One scope expansion worth team_190 attention: Cluster B fix touched 4 model files (runs.py + sources.py + users.py + normalizer.py) instead of just runs.py, plus removed PostgreSQL-specific `::jsonb` cast in sources.py — required for AC-01 to PASS due to shared Base.metadata pattern. Pre-existing failure outside crop_book/ (test_t09_runs_trigger_creates_ingestion_run) unchanged from baseline (NOT WP003-patch02-induced)."
+    notes: "sfa_build (team_10, Sonnet) self-attest PASS — 10/10 ACs. Pre-patch baseline 5 failed/106 passed/2 warnings/4 errors confirmed; post-patch 115 passed/0 warnings/0 errors. validate_aos.sh 29 PASS / 17 SKIP / 0 FAIL. Iron Rule #4 CLEAN (no roadmap edits by builder). AC-07 CLEAN (LOD500_LOCKED files untouched). AC-10 skip-class scan CLEAN (grep matches in BUILD_REPORT prose are documentation, not violations). BUILD_REPORT: _archive/SFA-S003-P001/TEAM_10/SFA-S003-P001-WP003-patch02/BUILD_REPORT_v1.0.0.md (archived 2026-07-09, sweep). One scope expansion worth team_190 attention: Cluster B fix touched 4 model files (runs.py + sources.py + users.py + normalizer.py) instead of just runs.py, plus removed PostgreSQL-specific `::jsonb` cast in sources.py — required for AC-01 to PASS due to shared Base.metadata pattern. Pre-existing failure outside crop_book/ (test_t09_runs_trigger_creates_ingestion_run) unchanged from baseline (NOT WP003-patch02-induced)."
     validator: sfa_build
   - gate: L-GATE_V
     result: PASS
@@ -4835,7 +4835,9 @@ work_packages:
       license firewall intact, migration 061 reversible, honest empty-states locked, validate_aos 0 FAIL,
       two-tier write isolation. VC-9 (production smoke) recorded PENDING at verdict time — since SATISFIED by
       the team_100 post-verdict deploy (006 + push + smoke + qa_probe). No BLOCKER/MAJOR/MINOR. Verdict:
-      _COMMUNICATION/TEAM_190/SFA-S003-P004-WP-CB-CONTENT/VERDICT_SFA-S003-P004-WP-CB-CONTENT_L-GATE_VALIDATE_v1.0.0.md
+      _archive/SFA-S003-P004-WP-CB-CONTENT/team_190/VERDICT_SFA-S003-P004-WP-CB-CONTENT_L-GATE_VALIDATE_v1.0.0.md
+      (pre-existing dangling ref repointed by sweep 2026-07-09; a byte-identical duplicate copy also still
+      remains at the old _COMMUNICATION path — left in place, not deleted, per INV-3; flagged in sweep report).
   notes: "LOD500_LOCKED (team_100, 2026-06-09). Live on sfa.nimrod.bio. Cross-engine L-GATE_VALIDATE PASS
     (team_190/Cursor). 25 crops / 77 units / 85 variants, multi-source content+provenance (Normal canonical /
     Deep per-source EX/PR/WR). Archived: _archive/SFA-S003-P004-WP-CB-CONTENT/ARCHIVE_MANIFEST.md. Follow-ups

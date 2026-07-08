@@ -72,3 +72,27 @@ author→adversarial-verify Workflow (50 agents; 25/25 license-verified, 0 flagg
 ## Step 3 (multi-engine propagation)
 
 **Skipped — verified:** no `core/governance/` modified during this WP (`git log 161f698^..HEAD -- _aos/governance/ core/governance/` empty).
+
+## Addendum — 2026-07-09 (Domain Doc & Archival Sweep, DOMAIN_DOC_ARCHIVE_SWEEP_PROCEDURE_v1.0.0)
+
+Despite this manifest recording an archive on 2026-06-09, two artifacts were found still fully live under
+`_COMMUNICATION/` (never actually moved at that time):
+
+| Former path | Archived path |
+|-------------|---------------|
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-CONTENT/COMPLETION_REPORT_2026-06-09_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-CONTENT/team_100/COMPLETION_REPORT_2026-06-09_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_190/SFA-S003-P004-WP-CB-CONTENT/VALIDATION_MANDATE_2026-06-09_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-CONTENT/team_190/VALIDATION_MANDATE_2026-06-09_v1.0.0.md` |
+
+**Not moved (left in place, INV-3 — never delete):** `_COMMUNICATION/TEAM_190/SFA-S003-P004-WP-CB-CONTENT/VERDICT_SFA-S003-P004-WP-CB-CONTENT_L-GATE_VALIDATE_v1.0.0.md`
+is a byte-identical duplicate of the file already archived at `team_190/VERDICT_…_v1.0.0.md` (diff confirmed
+identical). No new content to move; flagged here rather than silently overwritten or deleted. `roadmap.yaml`
+gate_history (L-GATE_VALIDATE) embedded path repointed to the archived copy same session.
+
+**Pre-existing gap (not introduced by this sweep, not fixed — no document content invented):** `spec_ref` in
+`roadmap.yaml` for this WP points to `_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CONTENT/SPEC_2026-06-09_v1.0.0.md`,
+which does not exist anywhere in the tree (not live, not archived) despite this manifest's line 32 citing it as
+an evidence artifact. Flagged as ESCALATE (subtype `MISSING-SPEC-ARTIFACT`) in the sweep report — Phase 1 D-2/D-3
+gap, authoring/locating the correct SPEC file is a judgment task, not weak-engine-mechanical.
+
+Executed by: sweep session — see `_COMMUNICATION/team_120/SWEEP_REPORT_smallfarmsagents_2026-07-09_v1.0.0.md`.
+Not committed (left staged per procedure — team_60 to review/commit).
