@@ -1,0 +1,45 @@
+---
+id: ARCHIVE_MANIFEST_SFA-S003-P004-WP-CB-MIG
+wp: SFA-S003-P004-WP-CB-MIG
+status: CLOSED
+archived_by: team_60
+archive_date: "2026-07-12"
+mandate_ref: "CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md §3 A2-a"
+roadmap_entry: "_aos/roadmap.yaml → id: SFA-S003-P004-WP-CB-MIG"
+archive_root: "_archive/SFA-S003-P004-WP-CB-MIG/"
+---
+
+# Archive Manifest — SFA-S003-P004-WP-CB-MIG
+
+**ספר גידולים: Crop Data Model Migration (execute the LOCKED Canon — 8 phases)**
+
+Roadmap `status: DONE` (malformed-vocabulary class) normalized to `status: CLOSED` and its still-live
+`_COMMUNICATION` artifacts moved to this archive, per the M11 fleet version-hygiene sweep A2-a ruling.
+
+## Files MOVED (git mv — originals removed from `_COMMUNICATION/`)
+
+| From | To |
+|------|----|
+| `_COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/BUILD_REPORT_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_10/SFA-S003-P004-WP-CB-MIG/BUILD_REPORT_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/COVERAGE_SNAPSHOT_CB1_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_10/SFA-S003-P004-WP-CB-MIG/COVERAGE_SNAPSHOT_CB1_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-S-R2-VERDICT-2026-05-31.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-S-R2-VERDICT-2026-05-31.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-S-VERDICT-2026-05-31.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-S-VERDICT-2026-05-31.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-V-VERDICT-2026-05-31.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/MSG-team190-to-team100-SFA-S003-P004-WP-CB-MIG-LGATE-V-VERDICT-2026-05-31.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_2026-05-31_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_2026-05-31_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_R2_2026-05-31_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-S_R2_2026-05-31_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-V_2026-05-31_v1.0.0.md` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/VALIDATION_MANDATE_team190_LGATE-V_2026-05-31_v1.0.0.md` |
+
+## Path redirects
+
+| Old path | New path |
+|----------|----------|
+| `_COMMUNICATION/TEAM_10/SFA-S003-P004-WP-CB-MIG/` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_10/SFA-S003-P004-WP-CB-MIG/` |
+| `_COMMUNICATION/TEAM_100/SFA-S003-P004-WP-CB-MIG/` | `_archive/SFA-S003-P004-WP-CB-MIG/TEAM_100/SFA-S003-P004-WP-CB-MIG/` |
+
+## Left In Place (intentionally not moved)
+
+| Path | Reason |
+|------|--------|
+| `_COMMUNICATION/TEAM_190/SFA-S003-P004/WP-CB-MIG/` (3 files: WP-CB-MIG_LGATE-S_R2_VERDICT_v1.0.0.md, WP-CB-MIG_LGATE-S_VERDICT_v1.0.0.md, WP-CB-MIG_LGATE-V_VERDICT_v1.0.0.md) | team_190 owns validator-dir structure (nested under shared `SFA-S003-P004/` program folder) — established sibling convention (WP-CB-1/WP-CB-DATA manifests) leaves verdict dirs live, not moved |
+
+*Manifest authored by team_60 · 2026-07-12 · M11 fleet version-hygiene sweep, A2-a execution.*

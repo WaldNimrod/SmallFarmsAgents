@@ -206,7 +206,7 @@ work_packages:
 
 - id: SFA-S002-P001-WP003
   label: "Server Scraping Verification (waldhomeserver)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: NORMAL
   current_lean_gate: L-GATE_B
@@ -729,11 +729,12 @@ work_packages:
 
 - id: SFA-S003-P002-WP-A
   label: "ספר גידולים: Data Enrichment — Multi-Source Confidence Layer"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
+  archive_ref: "_archive/SFA-S003-P002-WP-A/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-23"
@@ -822,7 +823,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1
   label: "ספר גידולים: JMF Excel Base Layer — Multi-Source Knowledge Foundation"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
@@ -926,7 +927,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch01
   label: "ספר גידולים: JMF_CROP_MAP alias extension + Rutabaga Hebrew correction"
-  status: DONE
+  status: CLOSED
   track: A
   effort: SMALL
   current_lean_gate: L-GATE_V
@@ -1041,7 +1042,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch02
   label: "ספר גידולים: JMF_CROP_MAP Hebrew terminology corrections (Q4)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: SMALL
   current_lean_gate: L-GATE_V
@@ -1124,7 +1125,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch03
   label: "ספר גידולים: JMF_CROP_MAP taxonomic expansion (11 value changes)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -1233,7 +1234,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04
   label: "ספר גידולים: JMF MasterClass Integration (NotebookLM → DB) + Ginger baseline"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
@@ -1306,7 +1307,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch06
   label: "ספר גידולים: JMF_CROP_MAP cleanup (remove 22 cultivars + 5 typos)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -1410,7 +1411,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04-hotfix01
   label: "ספר גידולים: Postgres int↔bool fix in load_masterclass_sheets.py"
-  status: DONE
+  status: CLOSED
   track: A
   effort: SMALL
   current_lean_gate: L-GATE_V
@@ -1470,7 +1471,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch04-hotfix02
   label: "ספר גידולים: Postgres transaction-poisoning fix in _upsert_variety"
-  status: DONE
+  status: CLOSED
   track: A
   effort: SMALL
   current_lean_gate: L-GATE_V
@@ -1526,7 +1527,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch07
   label: "ספר גידולים: Sheet 056 storage/washing M2M data load + Migration 048"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -1591,7 +1592,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B1-patch08
   label: "ספר גידולים: Variety-parser cleanup (filter noise + DELETE existing)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -1653,7 +1654,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B2
   label: "ספר גידולים: JMF PDF Extraction Layer — AI-assisted NI Source"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
@@ -1758,7 +1759,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-B3
   label: "ספר גידולים: Tend Israel Adaptation Overlay — Local Layer"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -1862,12 +1863,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C1
   label: "ספר גידולים: Wave 1 — Israeli Structured Data + Tend Multi-Year Backfill"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-C1/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
@@ -1948,7 +1950,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C2
   label: "ספר גידולים: Wave 2 — Hebrew Narrative Extraction (NI tier)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
@@ -2024,7 +2026,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C3
   label: "ספר גידולים: Wave 3 — Secondary Sources + OCR + Backlog Sweep"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -2110,12 +2112,13 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C4
   label: "ספר גידולים: Wave 4 — Web Sources (multi-engine team_80 consolidated)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   closed_at: "2026-05-26"
+  archive_ref: "_archive/SFA-S003-P002-WP-C4/ARCHIVE_MANIFEST.md"
   assigned_builder: sfa_build
   assigned_validator: external
   created_at: "2026-05-26"
@@ -2193,7 +2196,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C5
   label: "ספר גידולים: Wave 5 — Cleanup (Phase A builder code+data / Phase B team_00 manual)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -2287,7 +2290,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-C6
   label: "ספר גידולים: Wave 6 — Sparse Crops Expansion (19 sparse crops → ≥6 fields)"
-  status: DONE
+  status: CLOSED
   track: A
   effort: MEDIUM
   current_lean_gate: L-GATE_V
@@ -2383,7 +2386,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI
   label: "UX shell + design adoption (Slim/PHP, uPress) — team_35 LOD300 → live sfa.nimrod.bio"
-  status: DONE
+  status: CLOSED
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
@@ -2516,7 +2519,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch01
   label: "WP-UI follow-up: og-default prompt + community feed hook + deploy script + module hero slot"
-  status: DONE
+  status: CLOSED
   phase: 2_followup
   track: A
   effort: SMALL
@@ -2617,7 +2620,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch02
   label: "Media Integration Completion — brand media deploy + per-crop watercolor icons (70 crops)"
-  status: DONE
+  status: CLOSED
   phase: 2_followup
   track: A
   effort: MEDIUM
@@ -2713,7 +2716,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch03
   label: "Crop-book detail UX + agronomic data surfacing (layout/typography/variety-delta/landing)"
-  status: DONE
+  status: CLOSED
   phase: 2_followup
   track: A
   effort: MEDIUM
@@ -2833,7 +2836,7 @@ work_packages:
 
 - id: SFA-S003-P002-WP-UI-patch04
   label: "Crop-book completeness (all crop data) + global nav + broken-link + layout/ordering"
-  status: DONE
+  status: CLOSED
   phase: 2_followup
   track: A
   effort: LARGE
@@ -2977,13 +2980,14 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-0
   label: "ספר גידולים: Crop Data Model Canon (field taxonomy, attributes layer, units/enums, migration)"
-  status: DONE
+  status: CLOSED
   closed_at: "2026-05-31"
   phase: design
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_S
   lod_status: LOD200_LOCKED
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-0/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-30"
@@ -3095,7 +3099,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MIG
   label: "ספר גידולים: Crop Data Model Migration (execute the LOCKED Canon — 8 phases)"
-  status: DONE
+  status: CLOSED
   phase: build
   track: A
   effort: LARGE
@@ -3103,6 +3107,7 @@ work_packages:
   lod_status: LOD500_LOCKED
   build_commit: "0247a95"
   closed_at: "2026-05-31"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-MIG/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
@@ -3224,7 +3229,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-1
   label: "ספר גידולים v1: Calculator-Driven Planning Tool (14 calculators + AssumptionFields + two-audience UX)"
-  status: DONE
+  status: CLOSED
   phase: spec
   track: A
   effort: LARGE
@@ -3420,14 +3425,14 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-MIG2
   label: "ספר גידולים: Crop Data Model Expansion (13-topic taxonomy + 7 JMF field groups)"
-  status: DONE
+  status: CLOSED
   phase: validation
   track: A
   effort: LARGE
   current_lean_gate: L-GATE_V
   lod_status: LOD500_LOCKED
   closed_at: "2026-06-02"
-  archive_ref: "pending team_191 (ADR042 mandate MANDATE_SFA-S003-P004-WP-CB-MIG2-ARCHIVE)"
+  archive_ref: "_archive/SFA-S003-P004-WP-CB-MIG2/ARCHIVE_MANIFEST.md"
   assigned_builder: team_10
   assigned_validator: team_190
   created_at: "2026-05-31"
@@ -3570,7 +3575,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-1-patch01
   label: "ספר גידולים v1: UI follow-ups (L-GATE_V findings + watercolor art wiring)"
-  status: DONE
+  status: CLOSED
   phase: ui_followup
   track: A
   effort: NORMAL
@@ -3639,7 +3644,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-ALIGN
   label: "ספר גידולים: יישור עיצוב Class A (ספר+מחשבון+app-shell) ל-LOD300 צוות 35 — מימוש מיידי"
-  status: DONE
+  status: CLOSED
   phase: ui_align
   track: A
   effort: LARGE
@@ -3767,7 +3772,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-UI-CLASSB
   label: "ספר גידולים: Class B — עיצוב v2 למשטחי hub/market/search/community/about/account (ממתין לצוות 35)"
-  status: DONE
+  status: CLOSED
   phase: validation
   track: A
   effort: LARGE
@@ -3928,7 +3933,7 @@ work_packages:
 
 - id: SFA-S003-P004-WP-CB-DATA
   label: "ספר גידולים: Enrichment Mirror — populate crop_field_enrichment + crop_attribute on the uPress MySQL delivery tier"
-  status: DONE
+  status: CLOSED
   phase: validation
   track: A
   effort: NORMAL
@@ -5205,7 +5210,10 @@ work_packages:
     (team_190/Cursor). 25 crops / 77 units / 85 variants, multi-source content+provenance (Normal canonical /
     Deep per-source EX/PR/WR). Archived: _archive/SFA-S003-P004-WP-CB-CONTENT/ARCHIVE_MANIFEST.md. Follow-ups
     (NOT blocking): integrate 4 JMF FT fixture guides (phytoprotection/biopesticide/flameweed/nurseryseeding) +
-    Beans (Bush/Pole) key-mapping fix + 3 geresh-mismatch hydro crops."
+    Beans (Bush/Pole) key-mapping fix + 3 geresh-mismatch hydro crops.
+    D2 spec_ref WAIVED per CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md §6 —
+    SPEC_2026-06-09_v1.0.0.md pre-existing gap, never produced, not this sweep's. Per that review's §10 item 3,
+    this waiver requires team_100 sign-off to count toward certified 0-FAIL — pending as of this pass."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DSX1-SWEEP

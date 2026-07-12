@@ -94,5 +94,11 @@ which does not exist anywhere in the tree (not live, not archived) despite this 
 an evidence artifact. Flagged as ESCALATE (subtype `MISSING-SPEC-ARTIFACT`) in the sweep report — Phase 1 D-2/D-3
 gap, authoring/locating the correct SPEC file is a judgment task, not weak-engine-mechanical.
 
+**2026-07-12 disposition (team_60):** WAIVED per `CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md`
+§6 — the file is genuinely gone/never produced (pre-existing historical gap), not repointable to a real artifact.
+A matching `notes:` addendum was added to the `SFA-S003-P004-WP-CB-CONTENT` row in `_aos/roadmap.yaml`. Per that
+review's §10 item 3, this waiver requires **team_100 sign-off** to count toward a certified 0-FAIL — pending as of
+this pass.
+
 Executed by: sweep session — see `_COMMUNICATION/team_120/SWEEP_REPORT_smallfarmsagents_2026-07-09_v1.0.0.md`.
 Not committed (left staged per procedure — team_60 to review/commit).

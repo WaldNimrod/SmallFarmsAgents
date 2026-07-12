@@ -36,21 +36,57 @@
 `spec_ref` for both (`_aos/work_packages/S002/SFA-S002-P001-WP00{1,2}/LOD400_spec.md`) was not moved — per-domain
 convention, `_aos/work_packages/` spec docs remain in place permanently; no dangling reference introduced.
 
-## SFA-S002-P001-WP005 — not archived, ESCALATE
+## SFA-S002-P001-WP005 — program-container archive mandate EXECUTED (2026-07-12)
 
-`roadmap.yaml` records WP005 (`status: COMPLETE`, `lod_status: LOD500_LOCKED`) but **no directory named
-`SFA-S002-P001-WP005` exists anywhere** (live or archived) under any team. Its actual artifacts (per grep)
-live inside the **program-level container** `_COMMUNICATION/TEAM_100/SFA-S002-P001/` and
-`_COMMUNICATION/TEAM_190/SFA-S002-P001/` (e.g. `PROGRAM_PACKAGE_LOD200_v1.0.0.md`, `ARCHIVE_MANDATE_v1.0.0.md`,
-`L_GATE_S_VERDICTS_v1.0.0.md`, `EXTERNAL_VALIDATION_BUNDLE/`, `EXTERNAL_VERDICT_v1.0.0.md`) — both container
-directories are themselves still fully live, un-archived, and contain an explicit `ARCHIVE_MANDATE_v1.0.0.md`
-that was evidently never (or only partially) executed. This is a program-level container, not a single WP-ID
-artifact dir — the mechanical Step-2 scan (`find _COMMUNICATION/team_* -maxdepth 1 -type d -name "<WP-ID>"`)
-returns zero hits for `SFA-S002-P001-WP005` and does not cover container-level dirs. **ESCALATE** (subtype
-`NO-DEDICATED-ARTIFACT-DIR` / `UNEXECUTED-ARCHIVE-MANDATE`) — team_120 to rule on completing the standing
-`ARCHIVE_MANDATE_v1.0.0.md` for the whole `SFA-S002-P001` program container. No file touched.
+`roadmap.yaml` records WP005 (`status: COMPLETE`, `lod_status: LOD500_LOCKED`) but no directory named
+`SFA-S002-P001-WP005` ever existed (live or archived) under any team. Its actual artifacts lived inside the
+**program-level container** `_COMMUNICATION/TEAM_100/SFA-S002-P001/` and `_COMMUNICATION/TEAM_190/SFA-S002-P001/`,
+which held a standing, never-executed `ARCHIVE_MANDATE_v1.0.0.md` (issued 2026-05-07, team_100 → team_191).
+
+**Disposition:** ESCALATE resolved. Per the M11 fleet version-hygiene centralized review (A2-c ruling —
+`CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md` §3 A2-c: *"SFA — SFA-S002-P001-WP005
+UNEXECUTED-ARCHIVE-MANDATE ... execute it (verify-and-move the program container)"*), team_60 executed the
+standing mandate on 2026-07-12. The 5 archivable program-level items were moved **flat** into
+`_archive/SFA-S002-P001/TEAM_100/` and `_archive/SFA-S002-P001/TEAM_190/` (program-level artifacts, not nested
+under a `SFA-S002-P001-WP005/` subfolder — they document the whole program, not just WP005).
+
+### Files MOVED (git mv)
+
+| From | To |
+|------|----|
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/ARCHIVE_MANDATE_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/ARCHIVE_MANDATE_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/` (whole dir: VALIDATE_AOS_OUTPUT.txt, WP007, WP006, RISK_REGISTER.md, ROLLBACK_PLAN.md, PROGRAM_SUMMARY.md, MANIFEST.md, AOS_MAIL_PROMPT.md, WP003, WP004) | `_archive/SFA-S002-P001/TEAM_100/EXTERNAL_VALIDATION_BUNDLE/` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/L_GATE_S_VERDICTS_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/L_GATE_S_VERDICTS_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/PROGRAM_PACKAGE_LOD200_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/PROGRAM_PACKAGE_LOD200_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_190/EXTERNAL_VERDICT_v1.0.0.md` |
+
+### Path redirects
+
+| Old path | New path |
+|----------|----------|
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/ARCHIVE_MANDATE_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/ARCHIVE_MANDATE_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/EXTERNAL_VALIDATION_BUNDLE/` | `_archive/SFA-S002-P001/TEAM_100/EXTERNAL_VALIDATION_BUNDLE/` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/L_GATE_S_VERDICTS_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/L_GATE_S_VERDICTS_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/PROGRAM_PACKAGE_LOD200_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_100/PROGRAM_PACKAGE_LOD200_v1.0.0.md` |
+| `_COMMUNICATION/TEAM_190/SFA-S002-P001/EXTERNAL_VERDICT_v1.0.0.md` | `_archive/SFA-S002-P001/TEAM_190/EXTERNAL_VERDICT_v1.0.0.md` |
+
+### Left In Place (mandate §3 carry-forward carve-out — NOT archived)
+
+| Path | Reason |
+|------|--------|
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/AUDIT_WP001_M10_SPIKE.md` | `ARCHIVE_MANDATE_v1.0.0.md` §3 explicitly carries this forward to Phase 2 (reference for Phase 2 — keep accessible OUT of archive) |
+| `_COMMUNICATION/TEAM_100/SFA-S002-P001/AUDIT_WP002_MYPIPS.md` | Same carve-out, WP002 |
+
+**Note for team_100:** at mandate-issue time (2026-05-07) WP001/WP002 were expected to remain open into "Phase 2."
+As of this pass (2026-07-12), `roadmap.yaml` shows both `SFA-S002-P001-WP001` and `SFA-S002-P001-WP002` at
+`status: COMPLETE` / `lod_status: LOD500_LOCKED` — i.e. Phase 2 for these two has since closed. The mandate's
+carry-forward carve-out was nonetheless honored as written (per the M11 sweep brief's explicit default), so these
+2 audit files were left live rather than archived. team_100 may wish to re-evaluate whether they should now be
+archived given WP001/WP002's closed status — flagged, not actioned.
 
 ---
 *Manifest authored 2026-07-09 by domain-doc-archive-sweep (retroactive, for a program archived earlier by an
 unattributed prior pass) — see `_COMMUNICATION/team_120/SWEEP_REPORT_smallfarmsagents_2026-07-09_v1.0.0.md`.
-Not committed (left staged per procedure — team_60 to review/commit).*
+WP005 disposition completed 2026-07-12 by team_60 per A2-c of
+`CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md`, executing the standing
+`ARCHIVE_MANDATE_v1.0.0.md`.*
