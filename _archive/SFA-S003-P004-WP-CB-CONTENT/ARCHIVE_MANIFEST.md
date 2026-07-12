@@ -96,9 +96,10 @@ gap, authoring/locating the correct SPEC file is a judgment task, not weak-engin
 
 **2026-07-12 disposition (team_60):** WAIVED per `CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md`
 §6 — the file is genuinely gone/never produced (pre-existing historical gap), not repointable to a real artifact.
-A matching `notes:` addendum was added to the `SFA-S003-P004-WP-CB-CONTENT` row in `_aos/roadmap.yaml`. Per that
-review's §10 item 3, this waiver requires **team_100 sign-off** to count toward a certified 0-FAIL — pending as of
-this pass.
+**team_100 sign-off APPROVED 2026-07-12** (review §10-item-3 condition satisfied). In `_aos/roadmap.yaml` the dead
+`spec_ref` path was removed and set to the recognized `"TBD"` waiver placeholder (satisfies validate_aos Check 4
+skip-list + Check 5 required-field), with a `spec_ref_waiver:` field recording the sign-off. Full disposition:
+`_COMMUNICATION/TEAM_60/D2_SPEC_REF_DISPOSITION_smallfarmsagents_2026-07-12_v1.0.0.md`.
 
 Executed by: sweep session — see `_COMMUNICATION/team_120/SWEEP_REPORT_smallfarmsagents_2026-07-09_v1.0.0.md`.
 Not committed (left staged per procedure — team_60 to review/commit).

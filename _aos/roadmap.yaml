@@ -5146,7 +5146,8 @@ work_packages:
   created_at: "2026-06-08"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
-  spec_ref: "_COMMUNICATION/team_100/SFA-S003-P004-WP-CB-CONTENT/SPEC_2026-06-09_v1.0.0.md"
+  spec_ref: "TBD"  # WAIVED — see spec_ref_waiver below (no as-built; original SPEC never produced)
+  spec_ref_waiver: "D2 spec_ref WAIVED — original SPEC_2026-06-09_v1.0.0.md never produced, confirmed gone fleet-wide (no as-built exists). Field set to the recognized 'TBD' waiver placeholder (Check 4 skip-list + review §6 nimrod-bio precedent) so validation stays clean; original dead path removed. team_100 sign-off 2026-07-12 (APPROVED). Ref: _COMMUNICATION/TEAM_60/D2_SPEC_REF_DISPOSITION_smallfarmsagents_2026-07-12_v1.0.0.md + CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md §6/§10-item-3."
   gate_history:
   - gate: L-GATE_E
     result: REGISTER
@@ -5212,8 +5213,8 @@ work_packages:
     (NOT blocking): integrate 4 JMF FT fixture guides (phytoprotection/biopesticide/flameweed/nurseryseeding) +
     Beans (Bush/Pole) key-mapping fix + 3 geresh-mismatch hydro crops.
     D2 spec_ref WAIVED per CENTRALIZED_SWEEP_REVIEW_team_120_M11_FLEET_HYGIENE_2026-07-10_v1.0.0.md §6 —
-    SPEC_2026-06-09_v1.0.0.md pre-existing gap, never produced, not this sweep's. Per that review's §10 item 3,
-    this waiver requires team_100 sign-off to count toward certified 0-FAIL — pending as of this pass."
+    SPEC_2026-06-09_v1.0.0.md pre-existing gap, never produced, not this sweep's. team_100 sign-off APPROVED
+    2026-07-12 (review §10 item 3 satisfied). spec_ref set to TBD waiver placeholder; see spec_ref_waiver field."
   profile: L0
 
 - id: SFA-S003-P004-WP-CB-DSX1-SWEEP
@@ -5230,7 +5231,7 @@ work_packages:
   created_at: "2026-06-08"
   milestone_ref: "S003"
   depends_on: ["SFA-S003-P004-WP-CB-UI-REDESIGN"]
-  spec_ref: "_COMMUNICATION/team_110/SFA-S003-P004-WP-CB-DSX1-SWEEP/HANDOFF_SFA-S003-P004-WP-CB-DSX1-SWEEP_v1.0.0.md"
+  spec_ref: "_archive/SFA-S003-P004-WP-CB-DSX1-SWEEP/team_110/HANDOFF_SFA-S003-P004-WP-CB-DSX1-SWEEP_v1.0.0.md"
   archive_ref: "_archive/SFA-S003-P004-WP-CB-DSX1-SWEEP/ARCHIVE_MANIFEST.md"
   gate_history:
   - gate: L-GATE_E
