@@ -93,8 +93,15 @@ def _db_session():
         load_dotenv()
         if not os.environ.get("DATABASE_URL"):
             return None
+        from sqlalchemy import text as _text
         from organic_market_agent.crop_book import enrichment_models as _em  # noqa: F401
-        from organic_market_agent.db.session import SessionFactory
+        from organic_market_agent.db.session import SessionFactory, engine
+        # SQLAlchemy engines/sessions are lazy — construction alone never raises even when
+        # the DB is unreachable. Probe connectivity explicitly (mirrors conftest.py's
+        # db_session fixture) so a stale/unset DATABASE_URL correctly returns None (skip)
+        # instead of failing hard later inside the test body.
+        with engine.connect() as conn:
+            conn.execute(_text("SELECT 1"))
         return SessionFactory()
     except Exception:
         return None

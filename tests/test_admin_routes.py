@@ -416,7 +416,10 @@ def test_t11_audit_lists_prior_actions(logged_in_client, db_session):
     assert b"create_alias" in r.data or b"disable_alias" in r.data or b"trigger_run" in r.data
 
 
-def test_t14_runs_list_shows_manager_columns(client):
+def test_t14_runs_list_shows_manager_columns(client, db_session):
+    # db_session is required only for its connectivity skip-guard (mirrors t15/logged_in_client):
+    # /runs queries the DB directly, and client alone performs no reachability check, so an
+    # unreachable DB previously surfaced as a raw OperationalError instead of a clean skip.
     r = client.get("/runs")
     assert r.status_code == 200
     assert "מדד / נתונים".encode("utf-8") in r.data

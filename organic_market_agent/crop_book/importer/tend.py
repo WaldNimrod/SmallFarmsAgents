@@ -178,6 +178,10 @@ def discover_tend_years(base_dir: Path) -> list[tuple[str, Path]]:
     """
     results: list[tuple[str, Path]] = []
 
+    if not base_dir.exists():
+        logger.warning("WARN: Tend source_dir not found, skipping: %s", base_dir)
+        return results
+
     flat = base_dir / "CROP_PLAN (from macBook Air - nimrod).CSV"
     if flat.exists():
         results.append(("flat", flat))
