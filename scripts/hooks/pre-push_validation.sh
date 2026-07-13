@@ -8,10 +8,10 @@
 # Prerequisites: bash, git, python3; invoked from within an AOS repo (hub or spoke).
 # Env vars:
 #   AOS_SKIP_TESTS=1         → run validate_aos.sh only; skip the repo test suite.
-#   AOS_PREPUSH_TESTS=strict → repo-test failures BLOCK the push. Default is advisory:
-#                              validate_aos.sh is the HARD gate; repo-test failures only WARN
-#                              (non-blocking) so pre-existing test debt cannot wedge every push
-#                              or break propagation tooling. (Deviation D-S1-002.)
+#   AOS_PREPUSH_TESTS=advisory → repo-test failures only WARN (non-blocking). Default is now
+#                              STRICT: repo-test failures BLOCK the push. Flipped 2026-06-16 once
+#                              the v5 suite reached green + deterministic (471/0); was advisory
+#                              under D-S1-002 only while pre-existing test debt could wedge pushes.
 # Ports: none — this script opens no listeners (CS-5: prerequisites/env/ports stated).
 # Contract: exit 0 = allow push; non-zero = block push.
 # Bypass: `git push --no-verify` skips the hook natively (single disciplined operator).
@@ -51,7 +51,21 @@ if [ -n "$VALIDATE" ]; then
     exit 1
   fi
 else
-  log "validate_aos.sh not found — skipping governance validation (non-AOS repo?)."
+  # DV-4.2 fail-loud (ADR056 / Model-B). An AOS repo (has _aos/) with no resolvable
+  # validate_aos.sh means the Model-B governance cache is not hydrated — typical in a fresh
+  # git worktree, where _aos/lean-kit/ is git-ignored and therefore not checked out. Silently
+  # skipping the governance gate here is a false-green hole: the push lands with NO governance
+  # validation at all (independent of --no-verify). Block loud and point at the fix. A genuine
+  # non-AOS repo (no _aos/ at all) still skips harmlessly.
+  if [ -d "$REPO_ROOT/_aos" ]; then
+    log "validate_aos.sh not found but _aos/ present — Model-B governance cache not hydrated"
+    log "  (fresh worktree?). Governance gate CANNOT run — push BLOCKED (DV-4.2 fail-loud)."
+    log "  Fix: hydrate the cache → bash scripts/aos_governance_bootstrap.sh  (then re-push)."
+    log "  Deliberate bypass (single disciplined operator): git push --no-verify."
+    exit 1
+  else
+    log "validate_aos.sh not found + no _aos/ — genuine non-AOS repo, skipping governance validation."
+  fi
 fi
 
 # ── 2. Repo test entrypoint (graceful — skip when absent) ─────────────────────
@@ -80,7 +94,7 @@ if _run_repo_tests; then
   log "OK — push allowed."
 else
   trc=$?
-  if [ "${AOS_PREPUSH_TESTS:-advisory}" = "strict" ]; then
+  if [ "${AOS_PREPUSH_TESTS:-strict}" = "strict" ]; then
     log "repo tests FAILED (rc=$trc) and AOS_PREPUSH_TESTS=strict — push blocked."
     exit 1
   fi

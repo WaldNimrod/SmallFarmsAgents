@@ -8,7 +8,7 @@ project:
   id: smallfarmsagents
   name: "SmallFarmsAgents — OrganicMarketAgent"
   profile: L0
-  lean_kit_version: "3.1.7+c546ed4"
+  lean_kit_version: "3.4.0+20e2011"
   created: "2026-03-01"
   owner: sfa_sd
   active_milestone: "S003"
