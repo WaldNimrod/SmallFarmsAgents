@@ -77,3 +77,7 @@ output/public/manifest_last_good.json
 output/public/public_report.html
 output/public/public_report.json
 output/public/public_report_body.html
+
+# Runtime app data — scraper raw inputs + freshness-guard status written on the server (never versioned).
+raw_data/
+data/freshness_guard_status.json
