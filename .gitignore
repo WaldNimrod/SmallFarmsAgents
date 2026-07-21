@@ -68,3 +68,12 @@ sfa_delivery/.env.dev
 sfa_delivery/dev_router.php
 sfa_delivery/dev_seed.php
 sfa_delivery/dev_server.sh
+
+# Generated "latest" report rollups — overwritten every publisher run (perpetual dirty).
+# Timestamped public_report-<ts>.* archives stay tracked; only these rolling files are ignored.
+# (M12 hold fleet-hygiene 2026-07-22 — eliminates a recurring server-tree drift source.)
+output/public/manifest.json
+output/public/manifest_last_good.json
+output/public/public_report.html
+output/public/public_report.json
+output/public/public_report_body.html
