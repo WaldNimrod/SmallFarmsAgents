@@ -1,5 +1,6 @@
 ---
 summary: "Guide the creation of a complete new AOS project — never miss a required file again."
+description: "Scaffold and register a brand-new AOS spoke project with all required governance files."
 category: project
 ---
 

@@ -1,5 +1,6 @@
 ---
 summary: "DEPRECATED — use /AOS_gov-sync (unified canonical command since 2026-05-23)."
+description: "Deprecated no-op stub — redirects the caller to use /AOS_gov-sync instead."
 category: governance
 ---
 

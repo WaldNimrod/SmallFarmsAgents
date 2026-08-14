@@ -1,5 +1,6 @@
 ---
 summary: "Dispatch inter-team task: send MSG + autonomous cross-engine exec (default) or v4 paste fallback."
+description: "Send a task to another team and optionally trigger autonomous cross-engine execution."
 category: infrastructure
 ---
 

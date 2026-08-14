@@ -1,5 +1,6 @@
 ---
 summary: "Permanent thin alias → /AOS_mail handoff (W4 consolidation, AOS-V4.5-WP-SESSION-W4-SMART-MAIL)."
+description: "Generate an end-of-session handoff artifact and notify the next owning team's inbox."
 category: session
 ---
 

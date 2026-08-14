@@ -1,5 +1,6 @@
 ---
 summary: "Execute a canonical QA functional acceptance process against a gate mandate."
+description: "Verify delivered work matches a mandate's acceptance criteria; issue a PASS/BLOCK QA verdict."
 category: gate
 ---
 

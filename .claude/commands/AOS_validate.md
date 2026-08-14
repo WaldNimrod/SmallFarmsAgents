@@ -1,5 +1,6 @@
 ---
 summary: "Execute a canonical constitutional or technical validation against a gate mandate."
+description: "Check Iron Rule compliance and process integrity against a mandate; issue a PASS/BLOCK verdict."
 category: gate
 ---
 

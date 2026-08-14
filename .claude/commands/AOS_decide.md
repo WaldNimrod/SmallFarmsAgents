@@ -1,5 +1,6 @@
 ---
 summary: "Generate a structured Decision Brief — canonical multi-option analysis with recommendation, trade-offs."
+description: "Produce a multi-option decision brief with trade-offs for team_00 to rule on."
 category: decision
 ---
 

@@ -1,5 +1,6 @@
 ---
 summary: "Session register + worktree isolation — status, list, worktree, reap (ADR052 W2/W3)."
+description: "Register this session, check concurrency status, create an isolated worktree, or close out."
 category: session
 ---
 

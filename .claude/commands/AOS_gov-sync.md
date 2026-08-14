@@ -1,5 +1,6 @@
 ---
 summary: "Unified AOS environment sync — propagate all hub governance (team contracts + lean-kit + methodology + directives) to all active spokes, both locally and in git."
+description: "team_00/team_100 only — propagate hub governance, lean-kit, and methodology to all spokes."
 category: governance
 ---
 

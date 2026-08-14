@@ -1,5 +1,6 @@
 ---
 summary: "Generate a canonical activation/onboarding prompt for a team to open a new session or topic."
+description: "Generate a copy-paste activation prompt to onboard a fresh session as an AOS team."
 category: session
 ---
 

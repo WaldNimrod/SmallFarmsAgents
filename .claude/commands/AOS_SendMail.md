@@ -1,5 +1,6 @@
 ---
 summary: "ALIAS SHIM → /AOS_mail send (W4 consolidation, AOS-V4.5-WP-SESSION-W4-SMART-MAIL). Removed next minor version."
+description: "Deprecated alias for /AOS_mail send — invoke only when forwarding a legacy send call."
 category: infrastructure
 ---
 

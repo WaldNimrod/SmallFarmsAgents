@@ -1,5 +1,6 @@
 ---
 summary: "Display a concise reference of all AOS slash commands — one line per command (auto-generated from frontmatter)."
+description: "List every available AOS slash command, one line each, grouped by category."
 category: meta
 ---
 

@@ -1,5 +1,6 @@
 ---
 summary: "Archive completed Work Package artifacts — move from _COMMUNICATION/ to _archive/ per Iron Rule #15."
+description: "Move a COMPLETE work package's artifacts from _COMMUNICATION/ into _archive/ after closure."
 category: project
 ---
 

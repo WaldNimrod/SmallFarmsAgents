@@ -1,100 +1,81 @@
 # CLAUDE.md — SmallFarmsAgents
 
-<!-- AOS-CANONICAL-TEMPLATE v1.0.0 — rendered by scripts/aos_sync_all.sh. DO NOT hand-edit content between <!-- aos:canonical:start --> and <!-- aos:canonical:end -->. Project-specific additions go in the "Domain rules" section below. -->
+<!--
+  LEAN ENTRY CONTRACT v1.0.0 — pilot branch `pilot/lean-env` only, never merged to main.
+  disposition: SUPERSEDES this file's AOS-CANONICAL-TEMPLATE v1.0.0 rendering (git log -- CLAUDE.md
+  shows the prior version). Rewritten under the pilot's explicit IR#10/IR#11 exception; the durable
+  form of this change is a hub renderer change, not a spoke hand-edit.
 
-<!-- aos:canonical:start -->
-## ⚠ AOS Spoke Notice (READ FIRST)
+  WHAT INJECTS THIS FILE (resolved includes — the whole list, nothing hidden):
+    1. This file is auto-loaded by the agent harness because it sits at the repo root. Nothing else
+       in this repo is auto-loaded.
+    2. This file mandates reading NO other file. Two commands are mandatory (§2); their output is
+       your context, and both are small and derived.
+    3. AGENTS.md, .cursorrules, _aos/context/*.md and documentation/** exist and are NOT required
+       reading. They are indexed in §6 — open one only when §6 says it answers your question.
+-->
 
-You are working inside an **AOS spoke** — repo `SmallFarmsAgents`, profile `L0`.
+## 1. Where you are
 
-- **AOS = multi-domain, multi-engine infrastructure** for managing agents and projects across the organization. It is NOT a product. It governs how agents collaborate across product repos (spokes).
-- **AOS hub:** `/Users/nimrod/Documents/AOS_V5/agents-os` — SSOT for governance, lean-kit, canon, directives.
-- **`_aos/` in this repo is a READ-ONLY SNAPSHOT** propagated from the hub via `aos_sync_all.sh` / `propagate_governance.sh`.
-- **Do NOT edit** `_aos/governance/`, `_aos/lean-kit/`, `_aos/project_identity.yaml`, or any other AOS-layer file directly.
-- **To request a governance change:** file `GOVERNANCE_CHANGE_REQUEST` artifact in `_COMMUNICATION/team_XX/` → route to `team_100` in the hub. Template: `/Users/nimrod/Documents/AOS_V5/agents-os/lean-kit/modules/project-governance/config_templates/GOVERNANCE_CHANGE_REQUEST.md.template`
-- **Governance procedures are LOCKED to AOS teams** (`team_00`, `team_100`) per Iron Rule #12 / ADR040. Non-AOS teams cannot invoke `/AOS_gov-update` or `/AOS_gov-sync`.
+- **Repo:** `SmallFarmsAgents` · path `/Users/nimrod/Documents/AOS_V5/SmallFarmsAgents` · profile `L0`
+- **Stack:** Python 3.11, Flask, PostgreSQL 15, Docker, SQLAlchemy 2.x + Alembic, httpx. Public delivery tier is Slim 4 / PHP 8 + PDO/MySQL. Playwright for SPA collectors.
+- **`_aos/` is a read-only snapshot** of org-wide governance. Do not edit it. If a rule there blocks you, say so in your delivery report — do not work around it silently.
 
-## Identity
+## 2. Session start — two commands, no reading list
 
-- **Repo:** `SmallFarmsAgents`
-- **Path:** `/Users/nimrod/Documents/AOS_V5/SmallFarmsAgents`
-- **Profile:** `L0`
-- **AOS hub:** `/Users/nimrod/Documents/AOS_V5/agents-os`
-- **Domain:** `smallfarmsagents`
+```bash
+# (a) your work package row — derive it, never read the whole roadmap
+python3 -c "import yaml,sys; wp=sys.argv[1]; d=yaml.safe_load(open('_aos/roadmap.yaml')); r=[w for w in d['work_packages'] if w['id']==wp]; print(yaml.safe_dump(r[0], sort_keys=False, allow_unicode=True) if r else f'NO SUCH WP: {wp}')" <YOUR-WP-ID>
 
-## Mandatory session startup (canonical — uniform across all AOS domains)
+# (b) the test suite, exactly this invocation
+.venv/bin/python3 -m pytest -m "not upress and not integration" -q
+```
 
-0. **[CTX-03] Step 0 — Identity + connectivity (server / agent / non-interactive sessions):** Interactive Mac shells already have `AOS_API_BASE` + `AOS_ACTOR_API_KEY` exported from `~/.aos/actor.env` (auto-sourced by `~/.zshrc`). The v5 server (DB + API) is at the Tailscale-canonical `http://100.125.98.56:8092` (ADR043 §15.4).
-   - **Verify env:** `echo ${AOS_API_BASE:-UNSET}` and `echo ${AOS_ACTOR_API_KEY:+KEY_SET}`. If `UNSET`/empty → `source ~/.aos/actor.env` (interactive), or run `bash /Users/nimrod/Documents/AOS_V5/agents-os/scripts/provision_actor_key.sh <team>` once from a team_00/team_99 issuer session. Never commit the key.
-   - **Identity (so messages/handoffs attribute to THIS domain, not the hub team_100 default — read at send time by the messaging path):** `export AOS_SESSION_TEAM_ID=<this domain's team>` and `export AOS_PROJECT_ID=<this spoke id>`.
-   - **Reachability:** `curl -s -o /dev/null -w '%{http_code}' --max-time 3 ${AOS_API_BASE:-http://100.125.98.56:8092}/api/system/health` → expect **200**.
-   - **Authenticated check:** `curl -s -o /dev/null -w '%{http_code}' --max-time 3 -H "Authorization: Bearer ${AOS_ACTOR_API_KEY}" "${AOS_API_BASE}/api/messaging/v2/inbox?recipient_kind=team&recipient=<your team>"` → expect **200**, not **401**.
-   - Full procedure (key retrieval, auth matrix): hub `governance/directives/ADR043` §15.4 + §16 — do NOT duplicate it here (Iron Rule #11, one-directional flow).
-1. Read `_aos/roadmap.yaml` — current WP and gate position
-2. Read `_aos/context/PROJECT_CONTEXT.md` — project background
-3. Read `_aos/definition.yaml` (L2) or `_aos/context/ACTIVATION_*.md` (L0) — your role
-4. **[CTX-05] DB/API health probe (mandatory — LIVE):** `_api="${AOS_API_BASE:-http://100.125.98.56:8092}"; curl -s --max-time 3 "$_api/api/system/health"` then parse JSON `db.status`:
-   - `online` → API + DB online; all structured mutations go via API (Iron Rule #7 / ADR034).
-   - `offline` **or** HTTP **410** → **STOP**: report to Team 00, wait for Team 00 guidance before proceeding (ADR034 R8 protocol on a named branch — never main).
-   - HTTP **000** → API unreachable (check Tailscale connectivity to the v5 server).
-   - *Degraded fallback only (may be stale):* `cat "/Users/nimrod/Documents/AOS_V5/agents-os/_aos/db_connectivity_status.json"` — hub-written file; use ONLY if the live curl cannot run. The fallback URL is the **:8092** v5 server — never `:8090` (v3/Mac-stub port).
-5. **Validation:** `bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .` — expect **0 FAIL** on this spoke
-6. **AOS identity onboarding (first session only):** read `/Users/nimrod/Documents/AOS_V5/agents-os/methodology/AOS_IDENTITY_ONBOARDING_v1.0.0.md`
+Known pre-existing baseline of (b): `1 failed, 1002 passed, 88 skipped, 25 deselected`. The one failure is `tests/crop_book/test_wp_upload_crop_book.py::test_dispatch_upload_crop_book_profile` and it is not yours. **Green = zero NEW failures.** (`.venv/bin/pytest` directly is broken — dead shebang from a repo move; use the `python3 -m` form above.)
 
-## Iron Rules (uniform across all AOS domains)
+Nothing else is required before you start work.
 
-1. Cross-engine: builder engine ≠ validator engine
-2. Governance snapshots (`_aos/lean-kit/`, `_aos/governance/`, `_aos/methodology/`) are a physical copy or a git-ignored local cache refreshed by sync — never a symlink (Model B / ADR054; version held in tracked `_aos/AOS_GOVERNANCE_VERSION.yaml`)
-3. Repo-internal `spec_ref` paths only
-4. Single logical writer on `roadmap.yaml` (subject to API-only rule when DB online)
-5. Final validation is a DUAL gate: `team_90` owns the GOVERNANCE facet, `team_50` owns the FUNCTIONAL facet — both must PASS (constitutional, cross-engine, immutable)
-6. Inter-team communication via canonical artifact in `_COMMUNICATION/`
-7. **API-only structured mutations when DB online** (ADR034)
-8. **Port canon** — `lean-kit/modules/12-home-server-infrastructure/deployment/port-registry.yaml` is SSOT for all long-running listeners (Team 60)
-9. Universal team numbering
-10. Governance flows source → snapshot only; no reverse (Iron Rule #11)
-11. **Iron Rule #12: `gov-update` + `gov-sync` locked to `team_00` / `team_100` only** (ADR040). Other teams must file canonical GCR.
-12. **Iron Rule #13** (ADR041): every deterministic AOS command is a thin orchestrator (≤150 lines + required `summary:` / `category:` frontmatter) over a hub API endpoint in `core/modules/management/`. SSoT Python modules carry data + logic. Cross-engine (Claude Code / Cursor / Codex / Desktop) call same API. Canon: `/Users/nimrod/Documents/AOS_V5/agents-os/methodology/AOS_COMMAND_ARCHITECTURE_v1.0.0.md`.
+## 3. Rules that bind — each one mechanically checkable
 
-## Directory Authority (uniform)
+| # | Rule | How it is checked |
+|---|---|---|
+| R1 | Every acceptance criterion cites the command that verifies it. A claim with no command is not evidence. | Read the AC: it either contains a runnable command or it fails. |
+| R2 | Never read, print, or log the contents of any `.env*` file, and never put a secret in a command line. | `grep -nE 'cat .*\.env\|source .*\.env' <your diff>` → empty. Existence checks use `test -s`. |
+| R3 | Nothing in a deploy path may destroy the deploy tree: no `git reset --hard`, no `git clean -fdx`, no `rm -rf` of the project dir, no delete-and-reclone. Untracked `.env` and `.venv` live there; destroying them is a known multi-hour outage class. | `grep -nE 'reset --hard\|clean -fdx\|rm -rf\|git clone' <your diff>` → hits must be comments or a disposable temp sandbox only. |
+| R4 | A deploy is green only when the code that is **actually serving** is asserted equal to the code you pushed. A hook exit code, a log line, or a bare HTTP 200 is never sufficient. | The deploy path compares a served build SHA to the pushed SHA and fails loudly, non-zero, on mismatch. |
+| R5 | Before adding a file, search for the one that already exists and edit it. A new file carries a one-line justification naming the search that returned zero. | `git diff --diff-filter=A --name-only <base>..` — every entry justified. |
+| R6 | `spec_ref` values in `_aos/roadmap.yaml` are repo-internal paths that resolve. | `test -f "$(spec_ref)"` |
+| R7 | The decisive validation gate is run by a different vendor's model than the one that built the change. You do not run it; the conductor does. Your job is to make it checkable. | Gate verdict names builder and validator engines explicitly. |
+| R8 | English in all source, docs, and inter-team artifacts. Hebrew only in direct conversation and in product-name seed data. | — |
 
-| Team | May write to |
-|------|-------------|
-| `team_00` (Principal) | Anywhere (final human authority) |
-| `team_100` (Chief Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` (hub only — SSOT edits) |
-| `team_120` (Ambassador) | `_COMMUNICATION/team_120/`, `_aos/` (propagation/bootstrap, under mandate) — inherits prior Git/Files authority (D-191auth; git/file policy → Team 60, archival → API-mediated `archive.py`) |
-| **All other teams** | `_COMMUNICATION/team_[ID]/` + application source ONLY — NEVER `_aos/` |
+## 4. Domain rules — load-bearing, do not re-derive
 
-## Governance File Protection
+- **⚠ Delivery & hosting canon (SSoT: `documentation/02-architecture/sfa-delivery-tier.md`). Three roles, never conflated:**
+  - **Web host = uPress** (shared LAMP, `sfa.nimrod.bio`, Cloudflare edge). The **only** machine that serves end-user HTTP and hosts the live MySQL. The site must live here — never on the home server.
+  - **Backend / pipeline host = waldhomeserver** (canonical Postgres SSoT, scrapers, agents, cron). **Never serves end users** — outbound HTTPS to the delivery tier only.
+  - **Deploy / push origin** = whichever machine's current external IP is allowlisted on uPress. "Deploy host" means the machine you deploy *from*, not the machine that serves. Code → `lftp mirror` to uPress (`UI_DEPLOY_RUNBOOK.md`); data → `POST https://sfa.nimrod.bio/api/v1/ingest` (HMAC).
+  - **⚠ The uPress FTPS allowlist is dynamic, per current external IP.** Port-21 FTPS accepts only allowlisted sources and home/office IPs are not static. To deploy from any machine, ask Nimrod to open that machine's current external IP — it takes seconds. The Mac can deploy directly (`bash scripts/ftp_deploy_sfa_ui.sh`). Symptom of a closed IP: TCP to `ftp.s1240.upress.link:21` **times out** → run `curl https://api.ipify.org` and ask. (HTTPS *data* ingest goes through Cloudflare and needs no allowlist — only FTPS *code* deploy does.)
+- **Local port canon:** Postgres `5433` (`oma-postgres`), Admin `5001`, Viewer `8081`. Never `8080` or `5432` — other projects own those.
+- **Deploy paths (current):** UI code → `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md`. Data → `organic_market_agent/publisher/sfa_ingest_push.py`. **Superseded:** the WP-REST/FTPS/mu-plugin upload to `www.nimrod.bio` — that tier was retired 2026-05-28; do not revive it without a new decision record.
+- **Dev/staging TLS is often invalid by design.** A cert error on a dev/staging URL is expected, not a defect; on production it is a real defect. Bypass flags (`curl -k`, `--ignore-certificate-errors`, `verify=False`) are dev-only.
+- **`curl` alone never validates layout** — it sees HTML, not the rendered box model. Use a real browser probe for any layout/RTL/overflow check.
 
-- `_aos/governance/team_*.md` files in this repo are READ-ONLY snapshots of the hub SSOT at `/Users/nimrod/Documents/AOS_V5/agents-os/core/governance/team_*.md`
-- Any direct edit will be reverted on next `aos_sync_all.sh` run
-- Validated by hub `validate_aos.sh` Checks 27–29
-- Change-request workflow: GCR artifact → team_100 → Team 00 approval → hub edit + sync
+## 5. Where work is recorded
 
-## Dev/Staging TLS & Browser-QA Discipline (uniform)
+- Work packages and gate history: `_aos/roadmap.yaml` (derive your row with §2a; a spoke row is edited directly and committed — that commit is the audit record).
+- Inter-team artifacts: `_COMMUNICATION/team_<id>/`.
+- Ask before assuming: if a rule you need is missing here, that absence is a finding worth reporting, not a gap to fill by guessing.
 
-- **Dev/staging TLS is often invalid BY DESIGN** — many hosts issue a valid certificate only on the primary/production domain. A cert error on a **dev/staging** URL is **expected** and is NOT a defect to fix; a cert error on **production** IS a real defect.
-- **Cert-bypass flags are DEV-ONLY:** `curl -k` · chrome `--ignore-certificate-errors` · `requests verify=False`. Never use them in production QA.
-- **Never use `curl` alone to validate layout** — curl sees only HTML, never the rendered box model, so horizontal-overflow / RTL / responsive bugs pass curl and ship. For any layout/overflow/visual check, run the dependency-free browser-QA runner: `_aos/lean-kit/modules/validation-quality/scripts/qa/qa_probe.mjs` (Node 18+, no pip/npm). Discipline + curl-vs-CDP-vs-Lighthouse guidance: `_aos/lean-kit/modules/validation-quality/docs/BROWSER_QA_HARNESS_CANON_v1.0.0.md`.
-- Dev SEO/Performance scores (noindex edge headers, cache misses) are **artifacts** — re-measure on the production domain.
-<!-- aos:canonical:end -->
+## 6. Index — what exists, and the question it answers
 
-<!-- aos:project-specific:start -->
+| If you need… | Open | Not otherwise required |
+|---|---|---|
+| Product/ops background, parity sign-offs | `_aos/context/PROJECT_CONTEXT.md` | ✔ |
+| Role framing for a builder/validator/architect seat | `_aos/context/ACTIVATION_*.md` | ✔ |
+| The Cursor-engine rule set | `.cursorrules` | ✔ (not loaded by this harness) |
+| A second short repo orientation | `AGENTS.md` | ✔ |
+| Architecture, runbooks, troubleshooting | `documentation/` (start at `documentation/README.md`) | ✔ |
+| Org-wide governance canon, directives, team charters | `_aos/governance/`, `_aos/methodology/` | ✔ |
+| Deploy verification rules in full | `documentation/05-admin-and-operations/` | ✔ |
 
-## Domain rules
-
-- **SFA product + ops context:** `_aos/context/PROJECT_CONTEXT.md` — `validate_aos.sh` result expectations (0 FAIL; PASS/SKIP drift), delivery-tier publish tree and runbook links, 2026-04 production parity sign-offs. Complements `AGENTS.md` and `documentation/README.md`.
-- **Stack:** Python 3.11, Flask, PostgreSQL 15, Docker, SQLAlchemy 2.x + Alembic, httpx (backend/pipeline); **Slim 4 / PHP 8 + PDO/MySQL** for the public delivery tier. Playwright used for M10.4+ mypips SPA collectors (headless Chromium).
-- **⚠ Delivery & hosting canon (anti-drift — SSoT: `documentation/02-architecture/sfa-delivery-tier.md`):** Three distinct roles, never conflate them:
-  - **Web host** = **uPress** (shared LAMP, `sfa.nimrod.bio`, Cloudflare edge). This is the **only** machine that serves end-user HTTP and hosts the live MySQL. The site MUST live here — never on the home server.
-  - **Backend / pipeline host** = **waldhomeserver** (canonical Postgres SSoT, scrapers, agents, cron). **NEVER serves end users** — outbound HTTPS to the delivery tier only.
-  - **Deploy / push origin** = the FTPS upload runs *from* whichever machine's **current external IP is allowlisted on uPress**. "deploy host" / "OPS deploy host" means *the machine you deploy **from***, NOT the machine that serves. Code → `lftp mirror` to uPress (`UI_DEPLOY_RUNBOOK.md`); data → `POST https://sfa.nimrod.bio/api/v1/ingest` (HMAC).
-  - **⚠ uPress FTPS allowlist is DYNAMIC, per current external IP (anti-drift — Nimrod, repeated):** uPress port-21 FTPS accepts only whitelisted source IPs, and home/office IPs are not static. **To deploy from ANY machine (Mac OR waldhomeserver), ask Nimrod to open that machine's current external IP on uPress — it takes seconds.** The Mac CAN deploy directly (`bash scripts/ftp_deploy_sfa_ui.sh` — it has `composer`+`lftp`+`php`+`.env` creds); waldhomeserver is NOT the mandatory relay, it was just the previously-open IP. **Symptom of a closed IP:** TCP to `ftp.s1240.upress.link:21` **times out** → run `curl https://api.ipify.org` and ask Nimrod to open it. (HTTPS *data* ingest goes through Cloudflare and needs no allowlist — only FTPS *code* deploy does.)
-- **Docker port canon:** PG=5433 (`oma-postgres`), Admin=5001, Viewer=8081. Never use 8080 (TikTrack frontend) or 5432 (other projects). See `documentation/08-troubleshooting/DOCKER_SHARED_WORKSTATION.md`.
-- **Deploy paths (current):** UI code → `documentation/05-admin-and-operations/UI_DEPLOY_RUNBOOK.md` (`scripts/ftp_deploy_sfa_ui.sh`, FTPS→uPress). Data → `organic_market_agent/publisher/sfa_ingest_push.py` (HMAC ingest API). **SUPERSEDED:** the WP-REST/FTPS/mu-plugin upload to `www.nimrod.bio` (S002/WP008 era, `publisher/upload_dispatch.py`/`wp_upload.py`) — www tier retired 2026-05-28; do not revive without a new DECISION.
-- **Language policy:** English in all source code, documentation, and inter-team communication. Hebrew only in direct conversation with Nimrod (and in DB seed data for product names).
-
-<!-- Project-specific rules, commands, paths, and conventions go here.
-     This section is PRESERVED across aos_sync_all.sh runs. -->
-<!-- aos:project-specific:end -->
+Everything in this table is optional. If you open one, say so in your delivery report — reading is a cost and we measure it.

@@ -1,5 +1,6 @@
 ---
 summary: "Generate a canonical gate mandate for any team/WP/gate combo (per CANON v1.6.0)."
+description: "Generate and deliver the canonical mandate document assigning a team to a WP gate."
 category: gate
 ---
 

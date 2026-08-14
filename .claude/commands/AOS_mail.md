@@ -1,5 +1,6 @@
 ---
 summary: "Unified mail: check inbox (DB v2 auto-read), send a message, or capture a handoff. Thin over /api/messaging/v2/*."
+description: "Check pending inbox messages, send a new one, or capture a session handoff."
 category: infrastructure
 ---
 

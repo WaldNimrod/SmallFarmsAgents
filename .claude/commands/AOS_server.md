@@ -1,5 +1,6 @@
 ---
 summary: "AOS wrapper for remote server management via waldhomeserver."
+description: "Check status, restart services, fetch logs, or deploy on the remote waldhomeserver."
 category: infrastructure
 ---
 

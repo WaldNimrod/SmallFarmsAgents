@@ -1,5 +1,6 @@
 ---
 summary: "Check the current gate status and communication timeline for a work package."
+description: "Show a work package's gate history, artifact timeline, and recommended next step."
 category: gate
 ---
 

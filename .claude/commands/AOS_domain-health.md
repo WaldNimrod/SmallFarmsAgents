@@ -1,5 +1,6 @@
 ---
 summary: "Run a full cross-domain health audit across all registered AOS domains."
+description: "Audit governance sync, lean-kit version, and validation status across every registered AOS domain."
 category: project
 ---
 
