@@ -5726,3 +5726,17 @@ work_packages:
     capability-not-quantity. STEAL: programmatic-SEO (Hebrew per-region calendars) for free
     brand-front. D4 fully closed; recommend proceed to Phase 0."
   profile: L0
+- id: SFA-S003-P005-WP001
+  label: "Deploy-path DV-1 fix — post-receive hook asserts served build_sha == pushed SHA + minimal health endpoint (AOS stage-B pilot WP)"
+  status: IN_PROGRESS
+  track: STANDARD
+  current_lean_gate: L-GATE_B
+  lod_status: LOD200
+  assigned_builder: sfa_builder_pilot_arms
+  assigned_validator: cross_vendor_tier2
+  created_at: "2026-08-14"
+  milestone_ref: "S003"
+  spec_ref: "hub agents-os: _COMMUNICATION/team_00/RESEARCH_CORPUS_2026-08-12/CANON_REBUILD_STATE.md §B-0 (frozen task statement, K=6 deliverables)"
+  gate_history: []
+  notes: "AOS stage-B pilot WP (DEC-2026-08-13-1 choice; DEC-2026-08-14-1 stage-B cleared). Two fresh-session arms author on branches pilot/arm-a and pilot/lean-env; the hub conductor (sess-60821) installs ONCE to /data/repos/smallfarmsagents.git/hooks/post-receive under DEC-2026-08-13-4 scope with the capra destruction-guard (no reset --hard / clean -fdx / re-clone; pull-in-place preserved). Decisive gate: Tier-2 cross-vendor (builder=claude-code arm, validator=gpt-5.3-codex). AC-B4: DV-1 demonstrated failing on the real deploy path before PASS."
+  profile: L0
