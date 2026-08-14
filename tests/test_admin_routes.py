@@ -464,3 +464,68 @@ def test_t16_runs_export_json_ok_when_logged_in(logged_in_client, db_session):
     assert "source_fetch_runs" in body
     assert "pipeline_alerts" in body
     assert "log_entries" in body
+
+
+# --- DV-1 deploy-verification health surface (SFA-S003-P005-WP001) ---
+
+
+def test_t19_health_is_public_and_reports_status_and_build_sha(client):
+    """The hook curls this unauthenticated; it must never redirect to login."""
+    r = client.get("/api/health", follow_redirects=False)
+    assert r.status_code == 200
+    assert r.content_type.startswith("application/json")
+    body = r.get_json()
+    assert body["status"] == "ok"
+    assert body["build_sha"]
+    assert body["sha_source"] in ("env", "git", "unavailable")
+
+
+def test_t20_health_prefers_env_build_sha(monkeypatch):
+    """AOS_BUILD_SHA wins over the git fallback (deploy path stamps it)."""
+    from organic_market_agent.admin.routes import health as health_mod
+
+    monkeypatch.setenv("AOS_BUILD_SHA", "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef")
+    sha, source = health_mod.resolve_build_sha()
+    assert sha == "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+    assert source == "env"
+
+
+def test_t21_health_falls_back_to_git_head(monkeypatch):
+    """With no env stamp, the SHA comes from `git rev-parse HEAD` in the repo root."""
+    import subprocess
+
+    from organic_market_agent.admin.routes import health as health_mod
+
+    monkeypatch.delenv("AOS_BUILD_SHA", raising=False)
+    sha, source = health_mod.resolve_build_sha()
+    if source == "unavailable":
+        pytest.skip("git not available / not a work tree")
+    expected = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=str(health_mod._REPO_ROOT),
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    assert source == "git"
+    assert sha == expected
+    assert len(sha) == 40
+
+
+def test_t22_health_sha_is_captured_at_process_start_not_per_request(client, monkeypatch):
+    """Load-bearing: a live env change must NOT change the served SHA.
+
+    If it did, a deploy whose `git pull` landed but whose service restart failed
+    would still serve the new SHA and the DV-1 comparison would be a false green.
+    """
+    from organic_market_agent.admin.routes import health as health_mod
+
+    served_before = client.get("/api/health").get_json()["build_sha"]
+    monkeypatch.setenv("AOS_BUILD_SHA", "0000000000000000000000000000000000000000")
+    served_after = client.get("/api/health").get_json()["build_sha"]
+    assert served_after == served_before == health_mod.BUILD_SHA
+
+
+def test_t23_health_never_leaks_more_than_status_and_build_identity(client):
+    body = client.get("/api/health").get_json()
+    assert set(body.keys()) == {"status", "build_sha", "sha_source"}
