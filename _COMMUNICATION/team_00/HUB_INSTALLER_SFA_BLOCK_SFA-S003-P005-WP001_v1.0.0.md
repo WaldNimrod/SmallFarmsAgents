@@ -208,3 +208,31 @@ it — set them in the environment that invokes git for the deploy user (e.g. th
 session environment for `nimrodw`), never by editing the installed hook body itself, which
 would break the byte-identical install guarantee in §1. This section only documents that
 the knobs already exist; this correction round does not change any default.
+
+---
+
+## 8. Live AC-B4 evidence — captured on the real deploy path (2026-08-15)
+
+Recorded by the AOS stage-B conductor. Every line below is verbatim from a real `git push` to
+`nimrodw@100.125.98.56:/data/repos/smallfarmsagents.git`, not a sandbox.
+
+**Red — deployed code lacked the health endpoint:**
+
+    remote: SFA-DEPLOY-STATUS: fail reason=health-unreachable sha=0d8e8cd... served=unknown exit=23
+    remote: ### DEPLOY FAILED — SFA — exit 23
+    PUSH_EXIT=0
+
+The push exit code is 0 while the deploy failed. That is git's documented behaviour and it is the whole
+reason this hook emits a status line: a caller that gates on `git push` alone reads a false green.
+
+**Green — same path, after the fix:**
+
+    remote: DEPLOY VERIFIED: sfa-admin serves build_sha=6947316... == pushed 6947316...
+    remote: SFA-DEPLOY-STATUS: ok sha=6947316... served=6947316... exit=0
+
+Verified independently of the hook, from the server:
+`curl http://127.0.0.1:5001/api/health` → `{"build_sha":"69473162fbda...","sha_source":"git","status":"ok"}`,
+`git -C /data/projects/smallfarmsagents rev-parse HEAD` → the same sha. Served == deployed == pushed.
+
+Untracked `.env` (mode 600) and `.venv` were present with identical modes and sizes before and after both
+pushes, including the failed one. No reset, clean, or re-clone was ever executed.
