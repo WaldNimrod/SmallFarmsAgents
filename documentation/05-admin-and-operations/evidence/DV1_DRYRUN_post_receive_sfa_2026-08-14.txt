@@ -1,0 +1,130 @@
+hook under test : /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/scripts/deploy/post-receive.sfa
+hook sha256     : 5dad59dfcdbd8dc5915ec137cf1a29167c55b1e8ad8b49438231ca67de3e306a
+scratch root    : /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN
+git             : git version 2.52.0
+date (utc)      : 2026-08-14T19:17:35Z
+
+=== SCENARIO 1 — HAPPY PATH (health serves the pushed sha) ===
+pushed sha = 31fe90e524e2a84e1ddc6db422e00ccbb17ecc99 / previous = bb22dc1b13c77c3d2ead2b4ff951a84f302a15dc
+2026-08-14T19:17:35Z post-receive triggered: refs/heads/main -> 31fe90e524e2a84e1ddc6db422e00ccbb17ecc99
+2026-08-14T19:17:35Z deploy tree currently at bb22dc1b13c77c3d2ead2b4ff951a84f302a15dc
+2026-08-14T19:17:35Z pulling origin/main into /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/project
+From /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/bare
+ * branch            main       -> FETCH_HEAD
+   bb22dc1..31fe90e  main       -> origin/main
+Updating bb22dc1..31fe90e
+Fast-forward
+ app.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2026-08-14T19:17:36Z deploy tree now at 31fe90e524e2a84e1ddc6db422e00ccbb17ecc99 (matches pushed sha)
+2026-08-14T19:17:36Z restarting sfa-admin-dryrun
+2026-08-14T19:17:36Z waiting 0s for sfa-admin-dryrun to bind, then probing http://127.0.0.1:5001/api/health (mocked)
+2026-08-14T19:17:36Z DEPLOY VERIFIED: sfa-admin-dryrun is serving build_sha=31fe90e524e2a84e1ddc6db422e00ccbb17ecc99 == pushed 31fe90e524e2a84e1ddc6db422e00ccbb17ecc99
+  [PASS] exit code: 0
+  [PASS] deploy tree advanced to pushed sha: 31fe90e524e2a84e1ddc6db422e00ccbb17ecc99
+  [PASS] untracked .env + .venv survived: yes
+
+=== SCENARIO 2 — STALE PROCESS (restart silently did not take effect) ===
+2026-08-14T19:17:36Z post-receive triggered: refs/heads/main -> 81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a
+2026-08-14T19:17:36Z deploy tree currently at 77b72098549a081503e939b8535b9bb893aa74bc
+2026-08-14T19:17:36Z pulling origin/main into /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/project
+From /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/bare
+ * branch            main       -> FETCH_HEAD
+   77b7209..81cc314  main       -> origin/main
+Updating 77b7209..81cc314
+Fast-forward
+ app.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2026-08-14T19:17:36Z deploy tree now at 81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a (matches pushed sha)
+2026-08-14T19:17:36Z restarting sfa-admin-dryrun
+2026-08-14T19:17:36Z waiting 0s for sfa-admin-dryrun to bind, then probing http://127.0.0.1:5001/api/health (mocked)
+2026-08-14T19:17:36Z attempt 1/2: served build_sha=77b72098549a081503e939b8535b9bb893aa74bc (want 81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a) — retrying
+2026-08-14T19:17:36Z attempt 2/2: served build_sha=77b72098549a081503e939b8535b9bb893aa74bc (want 81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a) — retrying
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! DEPLOY FAILED (exit 23) — SFA IS NOT VERIFIED
+!!! SERVED CODE IS NOT THE PUSHED CODE — served build_sha=77b72098549a081503e939b8535b9bb893aa74bc, pushed=81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a (restart did not take effect)
+!!! pushed sha : 81cc314e5ee7f5455f3af6cb7553c2d19ba2cf1a
+!!! previous   : 77b72098549a081503e939b8535b9bb893aa74bc   <- forward-fix or manual ff to this
+!!! service    : sfa-admin-dryrun
+!!! health url : http://127.0.0.1:5001/api/health (mocked)
+!!! log        : /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/deploy.log
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  [PASS] exit code: 23
+
+=== SCENARIO 3 — HEALTH ENDPOINT DOWN ===
+2026-08-14T19:17:37Z post-receive triggered: refs/heads/main -> e415f026dfeb3e4acf245ac9b09a93b254432548
+2026-08-14T19:17:37Z deploy tree currently at 77b72098549a081503e939b8535b9bb893aa74bc
+2026-08-14T19:17:37Z pulling origin/main into /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/project
+From /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/bare
+ * branch            main       -> FETCH_HEAD
+   77b7209..e415f02  main       -> origin/main
+Updating 77b7209..e415f02
+Fast-forward
+ app.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2026-08-14T19:17:37Z deploy tree now at e415f026dfeb3e4acf245ac9b09a93b254432548 (matches pushed sha)
+2026-08-14T19:17:37Z restarting sfa-admin-dryrun
+2026-08-14T19:17:37Z waiting 0s for sfa-admin-dryrun to bind, then probing http://127.0.0.1:5001/api/health (mocked)
+2026-08-14T19:17:37Z attempt 1/2: health endpoint unreachable (rc=1)
+2026-08-14T19:17:37Z attempt 2/2: health endpoint unreachable (rc=1)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! DEPLOY FAILED (exit 22) — SFA IS NOT VERIFIED
+!!! health endpoint gave no usable build_sha after 2 attempts — sfa-admin-dryrun may be down
+!!! pushed sha : e415f026dfeb3e4acf245ac9b09a93b254432548
+!!! previous   : 77b72098549a081503e939b8535b9bb893aa74bc   <- forward-fix or manual ff to this
+!!! service    : sfa-admin-dryrun
+!!! health url : http://127.0.0.1:5001/api/health (mocked)
+!!! log        : /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/deploy.log
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  [PASS] exit code: 22
+
+=== SCENARIO 4 — RESTART COMMAND FAILS ===
+2026-08-14T19:17:37Z post-receive triggered: refs/heads/main -> 40f288d5dd7ad40919066cae9752603f5822d61d
+2026-08-14T19:17:37Z deploy tree currently at 8105b20cd02869542d5b6b7141e1f961e32965ca
+2026-08-14T19:17:37Z pulling origin/main into /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/project
+From /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/bare
+ * branch            main       -> FETCH_HEAD
+   8105b20..40f288d  main       -> origin/main
+Updating 8105b20..40f288d
+Fast-forward
+ app.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+2026-08-14T19:17:37Z deploy tree now at 40f288d5dd7ad40919066cae9752603f5822d61d (matches pushed sha)
+2026-08-14T19:17:37Z restarting sfa-admin-dryrun
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! DEPLOY FAILED (exit 21) — SFA IS NOT VERIFIED
+!!! restart command failed: false
+!!! pushed sha : 40f288d5dd7ad40919066cae9752603f5822d61d
+!!! previous   : 8105b20cd02869542d5b6b7141e1f961e32965ca   <- forward-fix or manual ff to this
+!!! service    : sfa-admin-dryrun
+!!! health url : http://127.0.0.1:5001/api/health (mocked)
+!!! log        : /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/deploy.log
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  [PASS] exit code: 21
+
+=== SCENARIO 5 — PUSH TO A NON-DEPLOY REF (must be a no-op) ===
+2026-08-14T19:17:37Z post-receive: no refs/heads/main in this push — no deploy
+  [PASS] exit code: 0
+  [PASS] deploy tree NOT moved: 8105b20cd02869542d5b6b7141e1f961e32965ca
+  [PASS] untracked .env + .venv survived: yes
+
+=== SCENARIO 6 — .env MISSING (must refuse before restarting) ===
+2026-08-14T19:17:38Z post-receive triggered: refs/heads/main -> 40f288d5dd7ad40919066cae9752603f5822d61d
+2026-08-14T19:17:38Z deploy tree currently at 8105b20cd02869542d5b6b7141e1f961e32965ca
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! DEPLOY FAILED (exit 10) — SFA IS NOT VERIFIED
+!!! /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/project/.env missing or empty — refusing to restart sfa-admin-dryrun (would crash-loop)
+!!! pushed sha : 40f288d5dd7ad40919066cae9752603f5822d61d
+!!! previous   : 8105b20cd02869542d5b6b7141e1f961e32965ca   <- forward-fix or manual ff to this
+!!! service    : sfa-admin-dryrun
+!!! health url : http://127.0.0.1:5001/api/health (mocked)
+!!! log        : /var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T//sfa-dryrun-bZEZjN/deploy.log
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  [PASS] exit code: 10
+  [PASS] deploy tree NOT moved: 8105b20cd02869542d5b6b7141e1f961e32965ca
+  [PASS] .venv untouched: yes
+
+=== RESULT ===
+checks passed : 12
+checks failed : 0
+DRY RUN: ALL SCENARIOS BEHAVED AS SPECIFIED

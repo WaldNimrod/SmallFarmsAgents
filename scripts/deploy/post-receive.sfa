@@ -1,0 +1,209 @@
+#!/usr/bin/env bash
+# post-receive.sfa — SFA deploy hook with a real DV-1 verification leg.
+#
+# WP: SFA-S003-P005-WP001 (AOS stage-B pilot, arm A).
+# Install target (done by the conductor, NOT by this repo):
+#   /data/repos/smallfarmsagents.git/hooks/post-receive        (mode 0755)
+#
+# WHAT CHANGED vs. the hook currently installed on waldhomeserver
+# ---------------------------------------------------------------
+# The old hook ended with the literal line
+#     echo "DEPLOY OK (no health check for SFA)"
+# which printed unconditionally — after a failed pull, after a failed restart,
+# after anything. It was a success message, not a success *check*.
+#
+# This version keeps the SAME deploy mechanism (pull-in-place into
+# /data/projects/smallfarmsagents + systemctl restart) and adds:
+#   1. ref scoping        — only a push to refs/heads/main deploys (the old hook
+#                           ran `git pull origin main` for a push to ANY ref).
+#   2. pre-flight guards  — project dir is a git worktree; .env exists and is
+#                           non-empty (existence only — the file is NEVER read).
+#   3. pull assertion     — post-pull HEAD must equal the pushed sha.
+#   4. hard restart check — a failed restart is a FAILURE, not a WARN that the
+#                           old hook printed and then walked past.
+#   5. DV-1 verify        — poll the local health endpoint and compare the sha
+#                           the RUNNING PROCESS reports against the pushed sha.
+#                           Mismatch => loud FAIL + non-zero exit.
+#   6. exit codes         — distinct, documented, never a false 0.
+#
+# Why the health comparison actually proves something: /api/health resolves
+# build_sha once, when the Flask app object is constructed. A process that was
+# not restarted keeps reporting the sha it started with, so "pulled but never
+# restarted" shows up as a mismatch instead of passing silently.
+#
+# DESTRUCTION GUARD (capra-mio failure class, DEC-2026-08-13-4)
+# ------------------------------------------------------------
+# /data/projects/smallfarmsagents holds UNTRACKED, UNRECOVERABLE state:
+# `.env` (0600 secrets) and `.venv/` (the interpreter systemd's ExecStart
+# points at). This hook therefore NEVER runs, and must never be edited to run:
+#   git reset --hard | git clean -fdx | rm -rf $PROJECT_DIR | delete-and-reclone
+# Recovery from a bad deploy is a FORWARD fix (push a good commit) or a manual
+# `git -C $PROJECT_DIR merge --ff-only <prev-sha>`-shaped step by a human; the
+# previous sha is printed on every failure path for exactly that reason.
+#
+# Exit codes
+#   0   deploy verified: pushed sha == sha served by the restarted process
+#   10  pre-flight failed  (no worktree / .env missing) — nothing was touched
+#   20  pull failed, or post-pull HEAD != pushed sha    — service NOT restarted
+#   21  service restart failed
+#   22  health endpoint unreachable/unparseable after all retries
+#   23  health reachable but served build_sha != pushed sha  (the DV-1 catch)
+#
+# Overrides exist ONLY so the dry-run harness can exercise THIS file rather
+# than a parallel re-implementation of its logic. Every default is the real
+# production target. See scripts/deploy/dryrun_post_receive_sfa.sh.
+
+set -uo pipefail
+unset GIT_DIR
+unset GIT_WORK_TREE
+
+PROJECT_DIR="${SFA_DEPLOY_PROJECT_DIR:-/data/projects/smallfarmsagents}"
+LOG="${SFA_DEPLOY_LOG:-$PROJECT_DIR/deploy.log}"
+DEPLOY_REF="${SFA_DEPLOY_REF:-refs/heads/main}"
+REMOTE="${SFA_DEPLOY_REMOTE:-origin}"
+BRANCH="${SFA_DEPLOY_BRANCH:-main}"
+SERVICE="${SFA_DEPLOY_SERVICE:-sfa-admin}"
+RESTART_CMD="${SFA_DEPLOY_RESTART_CMD:-sudo systemctl restart $SERVICE}"
+HEALTH_URL="${SFA_DEPLOY_HEALTH_URL:-http://127.0.0.1:5001/api/health}"
+HEALTH_CMD="${SFA_DEPLOY_HEALTH_CMD:-curl -sS -m 5 $HEALTH_URL}"
+ENV_FILE="${SFA_DEPLOY_ENV_FILE:-$PROJECT_DIR/.env}"
+WARMUP_SECONDS="${SFA_DEPLOY_WARMUP:-3}"
+HEALTH_RETRIES="${SFA_DEPLOY_HEALTH_RETRIES:-10}"
+HEALTH_INTERVAL="${SFA_DEPLOY_HEALTH_INTERVAL:-2}"
+
+log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*" | tee -a "$LOG"; }
+
+fail() {
+  # fail <exit-code> <message...>
+  local code="$1"; shift
+  {
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!! DEPLOY FAILED (exit $code) — SFA IS NOT VERIFIED"
+    echo "!!! $*"
+    echo "!!! pushed sha : ${NEW_SHA:-<none>}"
+    echo "!!! previous   : ${PREV_SHA:-<unknown>}   <- forward-fix or manual ff to this"
+    echo "!!! service    : $SERVICE"
+    echo "!!! health url : $HEALTH_URL"
+    echo "!!! log        : $LOG"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  } | tee -a "$LOG"
+  exit "$code"
+}
+
+parse_build_sha() {
+  # stdin: health response body -> stdout: build_sha ("" if absent/unparseable)
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import json,sys
+try:
+    v = json.load(sys.stdin).get("build_sha", "")
+except Exception:
+    v = ""
+print(v if isinstance(v, str) else "")' 2>/dev/null
+  else
+    sed -n 's/.*"build_sha"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1
+  fi
+}
+
+NEW_SHA=""
+PREV_SHA=""
+
+# ---------------------------------------------------------------- ref scoping
+# Read every pushed ref; act only on the deploy branch. A push that carries no
+# such ref (feature branch, tag) is a deliberate no-op, exit 0.
+while read -r _old new ref; do
+  if [ "$ref" = "$DEPLOY_REF" ]; then
+    NEW_SHA="$new"
+  fi
+done
+
+if [ -z "$NEW_SHA" ]; then
+  log "post-receive: no $DEPLOY_REF in this push — no deploy"
+  exit 0
+fi
+
+if [ "$NEW_SHA" = "0000000000000000000000000000000000000000" ]; then
+  log "post-receive: $DEPLOY_REF was DELETED — refusing to deploy"
+  exit 0
+fi
+
+log "post-receive triggered: $DEPLOY_REF -> $NEW_SHA"
+
+# ----------------------------------------------------------------- pre-flight
+if ! git -C "$PROJECT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  fail 10 "$PROJECT_DIR is not a git work tree"
+fi
+
+# Captured before anything moves, so every failure message can name the commit
+# a human would fast-forward back to.
+PREV_SHA="$(git -C "$PROJECT_DIR" rev-parse HEAD 2>/dev/null || echo unknown)"
+log "deploy tree currently at $PREV_SHA"
+
+# Existence + non-emptiness ONLY. The contents of .env are never read, echoed,
+# or logged (R-6 key hygiene). systemd's EnvironmentFile= for sfa-admin has no
+# '-' prefix, so a missing .env makes the restart below a crash loop; catching
+# it here leaves the currently-running healthy process untouched instead.
+if [ "${SFA_DEPLOY_REQUIRE_ENV:-1}" = "1" ] && [ ! -s "$ENV_FILE" ]; then
+  fail 10 "$ENV_FILE missing or empty — refusing to restart $SERVICE (would crash-loop)"
+fi
+
+# ----------------------------------------------------------------------- pull
+# Pull-in-place, unchanged mechanism. --ff-only added: it cannot rewrite or
+# discard anything, and it fails loudly if the deploy tree ever diverges
+# instead of silently authoring a merge commit on the server.
+log "pulling $REMOTE/$BRANCH into $PROJECT_DIR"
+git -C "$PROJECT_DIR" pull --ff-only "$REMOTE" "$BRANCH" 2>&1 | tee -a "$LOG"
+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+  fail 20 "git pull --ff-only $REMOTE $BRANCH failed — service left running old code"
+fi
+
+HEAD_SHA="$(git -C "$PROJECT_DIR" rev-parse HEAD 2>/dev/null || echo unknown)"
+if [ "$HEAD_SHA" != "$NEW_SHA" ]; then
+  fail 20 "post-pull HEAD ($HEAD_SHA) != pushed sha ($NEW_SHA)"
+fi
+log "deploy tree now at $HEAD_SHA (matches pushed sha)"
+
+# -------------------------------------------------------------------- restart
+log "restarting $SERVICE"
+$RESTART_CMD 2>&1 | tee -a "$LOG"
+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+  fail 21 "restart command failed: $RESTART_CMD"
+fi
+
+# ------------------------------------------------------------- DV-1 verify leg
+log "waiting ${WARMUP_SECONDS}s for $SERVICE to bind, then probing $HEALTH_URL"
+sleep "$WARMUP_SECONDS"
+
+served_sha=""
+reachable=0
+attempt=0
+while [ "$attempt" -lt "$HEALTH_RETRIES" ]; do
+  attempt=$((attempt + 1))
+  body="$($HEALTH_CMD 2>/dev/null)"
+  rc=$?
+  if [ "$rc" -eq 0 ] && [ -n "$body" ]; then
+    served_sha="$(printf '%s' "$body" | parse_build_sha)"
+    if [ -n "$served_sha" ]; then
+      reachable=1
+      if [ "$served_sha" = "$NEW_SHA" ]; then
+        break
+      fi
+      log "attempt $attempt/$HEALTH_RETRIES: served build_sha=$served_sha (want $NEW_SHA) — retrying"
+    else
+      log "attempt $attempt/$HEALTH_RETRIES: health response has no build_sha field"
+    fi
+  else
+    log "attempt $attempt/$HEALTH_RETRIES: health endpoint unreachable (rc=$rc)"
+  fi
+  [ "$attempt" -lt "$HEALTH_RETRIES" ] && sleep "$HEALTH_INTERVAL"
+done
+
+if [ "$reachable" -ne 1 ]; then
+  fail 22 "health endpoint gave no usable build_sha after $HEALTH_RETRIES attempts — $SERVICE may be down"
+fi
+
+if [ "$served_sha" != "$NEW_SHA" ]; then
+  fail 23 "SERVED CODE IS NOT THE PUSHED CODE — served build_sha=$served_sha, pushed=$NEW_SHA (restart did not take effect)"
+fi
+
+log "DEPLOY VERIFIED: $SERVICE is serving build_sha=$served_sha == pushed $NEW_SHA"
+exit 0

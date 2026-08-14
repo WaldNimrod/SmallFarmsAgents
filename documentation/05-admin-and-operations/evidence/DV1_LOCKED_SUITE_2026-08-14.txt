@@ -1,0 +1,375 @@
+ssssss.................................................................. [  6%]
+.........................................s.............................. [ 13%]
+........................................................................ [ 19%]
+..........................................ssssssssss.................... [ 26%]
+........................................................................ [ 32%]
+........................................................................ [ 39%]
+........................................................................ [ 45%]
+........................................................................ [ 52%]
+..................ssss.................................................. [ 59%]
+........................................................................ [ 65%]
+.............................................................F.......... [ 72%]
+........................s.s.s..ss.ssssssssssssss.sssssssssssssssssssss.. [ 78%]
+..............s..........ss............................................. [ 85%]
+.............ssssss...........s..........sssssssssss.................... [ 91%]
+..................................ssss..........s....................... [ 98%]
+..................                                                       [100%]
+=================================== FAILURES ===================================
+____________________ test_dispatch_upload_crop_book_profile ____________________
+
+tmp_path = PosixPath('/private/var/folders/by/1t6ry0bj14dfqjz3bk86v_pw0000gn/T/pytest-of-nimrod/pytest-889/test_dispatch_upload_crop_book0')
+
+    def test_dispatch_upload_crop_book_profile(tmp_path):
+        _write_artifacts(tmp_path)
+    
+        counter = {"n": 0}
+        base_url = "https://www.nimrod.bio/wp-content/uploads/2026/05"
+    
+        def _fake_post(url, **kwargs):
+            counter["n"] += 1
+            slug = kwargs.get("headers", {}).get("Content-Disposition", "").split("filename=")[-1].strip('"')
+            return _mock_upload_response(9000 + counter["n"], f"{base_url}/{slug}")
+    
+        def _fake_delete(url, **kwargs):
+            resp = MagicMock()
+            resp.status_code = 200
+            return resp
+    
+>       with patch("organic_market_agent.utils.config.Config.wp_rest_configured", return_value=True):
+
+tests/crop_book/test_wp_upload_crop_book.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1389: in __enter__
+    self.target = self.getter()
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1564: in <lambda>
+    getter = lambda: _importer(target)
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1240: in _importer
+    thing = _dot_lookup(thing, comp, import_path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+thing = <organic_market_agent.utils.config.Config object at 0x103d705e0>
+comp = 'Config', import_path = 'organic_market_agent.utils.config.Config'
+
+    def _dot_lookup(thing, comp, import_path):
+        try:
+            return getattr(thing, comp)
+        except AttributeError:
+>           __import__(import_path)
+E           ModuleNotFoundError: No module named 'organic_market_agent.utils.config.Config'; 'organic_market_agent.utils.config' is not a package
+
+/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/unittest/mock.py:1229: ModuleNotFoundError
+=============================== warnings summary ===============================
+tests/crop_book/test_ac05_derived_fields.py:17
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ac05_derived_fields.py:17: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_bustan_importer.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_bustan_importer.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_aosnot_cache_schema.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_aosnot_cache_schema.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_aosnot_importer.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_aosnot_importer.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_jmf_ft_importers.py:10
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_jmf_ft_importers.py:10: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_migration.py:10
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_migration.py:10: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_sham_hydro_guide.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_sham_hydro_guide.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_sham_variety_trials.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_sham_variety_trials.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c2_zacks_leafy_survey.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c2_zacks_leafy_survey.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_curtis_ocr.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_curtis_ocr.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_curtis_profiles.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_curtis_profiles.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_franchi.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_franchi.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_idan_2018_diff.py:10
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_idan_2018_diff.py:10: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_idan_seedlings.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_idan_seedlings.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_integration.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_integration.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c3_tend_2018.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c3_tend_2018.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_il_moa_calendar.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_il_moa_calendar.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_integration.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_integration.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_migrations.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_migrations.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_ne_veg_guide.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_ne_veg_guide.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_osu_frost_tolerance.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_osu_frost_tolerance.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_seeds_per_gram.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_seeds_per_gram.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_uc_anr_germination.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_uc_anr_germination.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_uc_davis_postharvest.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_uc_davis_postharvest.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_uf_ifas_companion.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_uf_ifas_companion.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_c4_umd_soil_ph.py:4
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_c4_umd_soil_ph.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_content_loader.py:12
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_content_loader.py:12: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_cover_crops.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_cover_crops.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_cover_crops_importer.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_cover_crops_importer.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_crop_harvest_stats_orm.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_crop_harvest_stats_orm.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_crop_knowledge_notes_orm.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_crop_knowledge_notes_orm.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_crop_task_templates_orm.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_crop_task_templates_orm.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_groworganic_importer.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_groworganic_importer.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_icon_url.py:12
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_icon_url.py:12: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_idan_planning_importer.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_idan_planning_importer.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+.venv/lib/python3.9/site-packages/urllib3/__init__.py:35
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+    warnings.warn(
+
+tests/crop_book/test_jmf_crop_map.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_crop_map.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_crop_map_aliases.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_crop_map_aliases.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_ex_override_regression.py:20
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_ex_override_regression.py:20: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_idempotency.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_idempotency.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_masterclass_integration.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_masterclass_integration.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_masterclass_parsers.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_masterclass_parsers.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_seed_dry_run.py:19
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_seed_dry_run.py:19: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_unit_conversions.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_unit_conversions.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_migration_044.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_migration_044.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_migration_045.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_migration_045.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_migration_046.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_migration_046.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_migration_061.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_migration_061.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_cache_schema.py:10
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_cache_schema.py:10: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_dedup_alt_edition.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_dedup_alt_edition.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_idempotency.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_idempotency.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_book.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_book.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_book_alt.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_book_alt.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_ft_biopesticide.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_ft_biopesticide.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_ft_flameweed.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_ft_flameweed.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_ft_nurseryseeding.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_ft_nurseryseeding.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_jmf_ft_phytoprotection.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_jmf_ft_phytoprotection.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_licensing_flag.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_licensing_flag.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_ni_publisher_isolation.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_ni_publisher_isolation.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_planting_calendar.py:5
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_planting_calendar.py:5: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_reconciler_inheritance.py:29
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_reconciler_inheritance.py:29: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_seed_jmf_cli.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_seed_jmf_cli.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_seed_ni_cli.py:9
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_seed_ni_cli.py:9: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_seed_taxonomy_fix.py:26
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_seed_taxonomy_fix.py:26: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_seed_tend_overlay_cli.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_seed_tend_overlay_cli.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_slugify_annotations.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_slugify_annotations.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_source_weights_db.py:21
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_source_weights_db.py:21: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_src_sweep_l45_l39.py:13
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_src_sweep_l45_l39.py:13: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_idempotency.py:8
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_idempotency.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_multi_year.py:6
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_multi_year.py:6: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_overlay_aggregation.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_overlay_aggregation.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_overlay_integration.py:10
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_overlay_integration.py:10: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_overlay_parsers.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_overlay_parsers.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_task_type_mapping.py:11
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_task_type_mapping.py:11: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_tend_task_whitelist.py:7
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_tend_task_whitelist.py:7: PytestUnknownMarkWarning: Unknown pytest.mark.crop_book - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.crop_book
+
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+tests/crop_book/test_jmf_masterclass_integration.py::test_variety_resolution_baseline
+  /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/tests/crop_book/test_jmf_masterclass_integration.py:102: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    variety = session.query(CropVariety).get(vid)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/crop_book/test_wp_upload_crop_book.py::test_dispatch_upload_crop_book_profile
+1 failed, 1010 passed, 88 skipped, 25 deselected, 82 warnings in 12.57s

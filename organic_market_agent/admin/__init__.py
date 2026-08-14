@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from flask import Flask, g
+from flask import Flask, g, request
 
 from organic_market_agent.admin.auth import login_manager
 from organic_market_agent.admin.routes import (
@@ -15,6 +15,7 @@ from organic_market_agent.admin.routes import (
     catalog_inbox,
     dashboard,
     diagnostics,
+    health,
     maintenance,
     products,
     qa_flags,
@@ -44,10 +45,19 @@ def create_app() -> Flask:
     )
     app.secret_key = os.environ.get("ADMIN_SECRET_KEY", "dev-secret-change-me")
 
+    # Build identity of THIS process, snapshotted once at app construction so a
+    # stale (not-restarted) process keeps reporting its own sha. See
+    # organic_market_agent/admin/routes/health.py for why that matters.
+    app.config[health.BUILD_SHA_CONFIG_KEY] = health.resolve_build_sha()
+
     login_manager.init_app(app)
 
     @app.before_request
     def _open_session() -> None:
+        # /api/health must answer while the DB is down — a deploy verifier has
+        # to tell "bad deploy" apart from "database outage".
+        if request.blueprint == health.bp.name:
+            return
         g.db_session = SessionFactory()
         try:
             g.unread_alert_count = int(
@@ -75,6 +85,7 @@ def create_app() -> Flask:
                 sess.rollback()
             sess.close()
 
+    app.register_blueprint(health.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(sources.bp)
