@@ -1,0 +1,196 @@
+==================================================================
+SFA post-receive DV-1 dry run
+hook under test : /Users/nimrod/Documents/AOS_V5/SmallFarmsAgents/scripts/deploy/sfa_post_receive.sh
+sandbox         : /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt
+date_utc        : 2026-08-14T21:13:45Z
+==================================================================
+
+------------------------------------------------------------------
+SCENARIO: served build_sha == pushed SHA   (expect exit 0)
+------------------------------------------------------------------
+2026-08-14T21:13:45Z post-receive: main -> 611d9e2cbfcf211c8b89ae07d0a939889fe8905e (DV-1 verified deploy)
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+   b5d4d25..611d9e2  main       -> origin/main
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+Updating b5d4d25..611d9e2
+Fast-forward
+ app.txt | 1 +
+ 1 file changed, 1 insertion(+)
+2026-08-14T21:13:45Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = 611d9e2cbfcf211c8b89ae07d0a939889fe8905e
+2026-08-14T21:13:45Z restarting sfa-admin-sandbox: echo "[mock] systemctl restart sfa-admin"
+[mock] systemctl restart sfa-admin
+2026-08-14T21:13:45Z health warmup 0s, then probing mock://api/health (up to 2 attempts, 0s apart)
+2026-08-14T21:13:45Z DEPLOY VERIFIED: sfa-admin-sandbox serves build_sha=611d9e2cbfcf211c8b89ae07d0a939889fe8905e == pushed 611d9e2cbfcf211c8b89ae07d0a939889fe8905e (probe: mock://api/health)
+--> exit code: 0 (expected 0)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SCENARIO: stale process — served build_sha is the PREVIOUS SHA (DV-1 mismatch)   (expect exit 24)
+------------------------------------------------------------------
+2026-08-14T21:13:45Z post-receive: main -> a80da2a9ccdf47a48378daca90781c9172e2047c (DV-1 verified deploy)
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+   611d9e2..a80da2a  main       -> origin/main
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+Updating 611d9e2..a80da2a
+Fast-forward
+ app.txt | 1 +
+ 1 file changed, 1 insertion(+)
+2026-08-14T21:13:45Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = a80da2a9ccdf47a48378daca90781c9172e2047c
+2026-08-14T21:13:45Z restarting sfa-admin-sandbox: echo "[mock] systemctl restart sfa-admin"
+[mock] systemctl restart sfa-admin
+2026-08-14T21:13:45Z health warmup 0s, then probing mock://api/health (up to 2 attempts, 0s apart)
+########################################################################
+### DEPLOY FAILED — SFA — exit 24
+### DV-1 MISMATCH: served build_sha=611d9e2cbfcf211c8b89ae07d0a939889fe8905e but pushed SHA=a80da2a9ccdf47a48378daca90781c9172e2047c — sfa-admin-sandbox is serving OTHER code than you pushed (restart did not take effect, or the process is stale)
+### The deploy tree was NOT reset, cleaned or re-cloned; untracked
+### .env / .venv are intact. Recover by hand on the server, then re-push.
+########################################################################
+--> exit code: 24 (expected 24)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SCENARIO: health endpoint returns Flask 404 HTML (pre-D1 server state)   (expect exit 23)
+------------------------------------------------------------------
+2026-08-14T21:13:45Z post-receive: main -> 1e35995b184e978edb76cc5b6a8e7012b30502a4 (DV-1 verified deploy)
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+   a80da2a..1e35995  main       -> origin/main
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+Updating a80da2a..1e35995
+Fast-forward
+ app.txt | 1 +
+ 1 file changed, 1 insertion(+)
+2026-08-14T21:13:46Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = 1e35995b184e978edb76cc5b6a8e7012b30502a4
+2026-08-14T21:13:46Z restarting sfa-admin-sandbox: echo "[mock] systemctl restart sfa-admin"
+[mock] systemctl restart sfa-admin
+2026-08-14T21:13:46Z health warmup 0s, then probing mock://api/health (up to 2 attempts, 0s apart)
+2026-08-14T21:13:46Z health attempt 1/2: no usable build_sha yet
+2026-08-14T21:13:46Z health attempt 2/2: no usable build_sha yet
+########################################################################
+### DEPLOY FAILED — SFA — exit 23
+### health endpoint mock://api/health unreachable or returned no build_sha after 2 attempts — sfa-admin-sandbox is NOT verified up
+### The deploy tree was NOT reset, cleaned or re-cloned; untracked
+### .env / .venv are intact. Recover by hand on the server, then re-push.
+########################################################################
+--> exit code: 23 (expected 23)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SCENARIO: systemctl restart fails   (expect exit 22)
+------------------------------------------------------------------
+2026-08-14T21:13:46Z post-receive: main -> 45b00eb699bce99e7ba9c652984c24af0dce3d54 (DV-1 verified deploy)
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+   1e35995..45b00eb  main       -> origin/main
+From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents
+ * branch            main       -> FETCH_HEAD
+Updating 1e35995..45b00eb
+Fast-forward
+ app.txt | 1 +
+ 1 file changed, 1 insertion(+)
+2026-08-14T21:13:46Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = 45b00eb699bce99e7ba9c652984c24af0dce3d54
+2026-08-14T21:13:46Z restarting sfa-admin-sandbox: echo "[mock] restart refused"; false
+[mock] restart refused
+########################################################################
+### DEPLOY FAILED — SFA — exit 22
+### restart failed (echo "[mock] restart refused"; false) — the previously running process may still be serving OLD code
+### The deploy tree was NOT reset, cleaned or re-cloned; untracked
+### .env / .venv are intact. Recover by hand on the server, then re-push.
+########################################################################
+--> exit code: 22 (expected 22)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SCENARIO: required env file missing — abort before pull/restart   (expect exit 20)
+------------------------------------------------------------------
+2026-08-14T21:13:46Z post-receive: main -> ce4cf4af143f8b8d868864342ebdc299cd9d55f9 (DV-1 verified deploy)
+########################################################################
+### DEPLOY FAILED — SFA — exit 20
+### required env file /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/env.absent is missing or empty — refusing to restart sfa-admin-sandbox into a crash loop
+### The deploy tree was NOT reset, cleaned or re-cloned; untracked
+### .env / .venv are intact. Recover by hand on the server, then re-push.
+########################################################################
+--> exit code: 20 (expected 20)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+PRE-FLIGHT NON-MUTATION CHECK: HEAD before=45b00eb699bce99e7ba9c652984c24af0dce3d54 after=45b00eb699bce99e7ba9c652984c24af0dce3d54
+--> RESULT: PASS (aborted deploy mutated nothing)
+
+------------------------------------------------------------------
+SCENARIO: push to refs/heads/feature-x is ignored   (expect exit 0, no deploy)
+------------------------------------------------------------------
+2026-08-14T21:13:46Z post-receive: ignoring refs/heads/feature-x (only refs/heads/main deploys)
+--> exit code: 0 (expected 0)
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SCENARIO: real 'git push' into the sandbox bare repo, hook installed as hooks/post-receive
+------------------------------------------------------------------
+remote: 2026-08-14T21:13:47Z post-receive: main -> e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6 (DV-1 verified deploy)        
+remote: From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents        
+remote:  * branch            main       -> FETCH_HEAD        
+remote:    ce4cf4a..e46fd4f  main       -> origin/main        
+remote: From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents        
+remote:  * branch            main       -> FETCH_HEAD        
+remote: Updating ce4cf4a..e46fd4f        
+remote: Fast-forward        
+remote:  app.txt | 1 +        
+remote:  1 file changed, 1 insertion(+)        
+remote: 2026-08-14T21:13:47Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6        
+remote: 2026-08-14T21:13:47Z restarting sfa-admin-sandbox: echo "[mock] systemctl restart sfa-admin"        
+remote: [mock] systemctl restart sfa-admin        
+remote: 2026-08-14T21:13:47Z health warmup 0s, then probing mock://api/health (up to 2 attempts, 0s apart)        
+remote: 2026-08-14T21:13:47Z DEPLOY VERIFIED: sfa-admin-sandbox serves build_sha=e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6 == pushed e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6 (probe: mock://api/health)        
+To /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents.git
+   ce4cf4a..e46fd4f  main -> main
+--> git push exit code: 0
+--> deploy tree HEAD after push: e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6 (pushed e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6)
+--> RESULT: PASS (hook fired from a real push and fast-forwarded the deploy tree)
+
+------------------------------------------------------------------
+SCENARIO: real 'git push' with a stale served build_sha (DV-1 mismatch end-to-end)
+------------------------------------------------------------------
+remote: 2026-08-14T21:13:47Z post-receive: main -> 8548d52933c7ff433d544916e41f0418fb7cdf30 (DV-1 verified deploy)        
+remote: From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents        
+remote:  * branch            main       -> FETCH_HEAD        
+remote:    e46fd4f..8548d52  main       -> origin/main        
+remote: From /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents        
+remote:  * branch            main       -> FETCH_HEAD        
+remote: Updating e46fd4f..8548d52        
+remote: Fast-forward        
+remote:  app.txt | 1 +        
+remote:  1 file changed, 1 insertion(+)        
+remote: 2026-08-14T21:13:47Z pull OK: /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/deploy-tree HEAD = 8548d52933c7ff433d544916e41f0418fb7cdf30        
+remote: 2026-08-14T21:13:47Z restarting sfa-admin-sandbox: echo "[mock] systemctl restart sfa-admin"        
+remote: [mock] systemctl restart sfa-admin        
+remote: 2026-08-14T21:13:47Z health warmup 0s, then probing mock://api/health (up to 2 attempts, 0s apart)        
+remote: ########################################################################        
+remote: ### DEPLOY FAILED — SFA — exit 24        
+remote: ### DV-1 MISMATCH: served build_sha=e46fd4f823bbfe4a4bcf2844e012ec5dd9cf4ab6 but pushed SHA=8548d52933c7ff433d544916e41f0418fb7cdf30 — sfa-admin-sandbox is serving OTHER code than you pushed (restart did not take effect, or the process is stale)        
+remote: ### The deploy tree was NOT reset, cleaned or re-cloned; untracked        
+remote: ### .env / .venv are intact. Recover by hand on the server, then re-push.        
+remote: ########################################################################        
+To /private/tmp/claude-501/-Users-nimrod-Documents-SmallFarmsAgents/6980db9d-9004-45b3-9152-cb48a55f25d1/scratchpad/sfa-hook-dryrun.KUrFdt/smallfarmsagents.git
+   e46fd4f..8548d52  main -> main
+--> git push exit code: 0
+--> RESULT: PASS (loud DV-1 FAIL banner reached the pusher and deploy.log)
+
+------------------------------------------------------------------
+DESTRUCTION GUARD (R3 / capra-mio class)
+------------------------------------------------------------------
+env file present after all scenarios       : yes
+untracked .venv-sandbox/ present in tree   : yes
+forbidden ops in the hook (reset --hard / clean -fdx / rm -rf / git clone):
+24:#   No `git reset --hard`, no `git clean -fdx`, no `rm -rf` of the project dir,
+149:    fail 21 "git pull --ff-only $REMOTE $BRANCH failed (divergent tree? resolve by hand — do NOT reset --hard)"
+--> RESULT: PASS
+
+------------------------------------------------------------------
+SUMMARY: 10 passed, 0 failed
+------------------------------------------------------------------

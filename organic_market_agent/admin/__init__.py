@@ -15,6 +15,7 @@ from organic_market_agent.admin.routes import (
     catalog_inbox,
     dashboard,
     diagnostics,
+    health,
     maintenance,
     products,
     qa_flags,
@@ -76,6 +77,7 @@ def create_app() -> Flask:
             sess.close()
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(health.bp)
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(sources.bp)
     app.register_blueprint(products.bp)
