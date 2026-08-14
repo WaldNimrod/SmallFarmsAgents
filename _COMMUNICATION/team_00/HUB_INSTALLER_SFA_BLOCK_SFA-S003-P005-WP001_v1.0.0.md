@@ -102,14 +102,34 @@ sfa_install_post_receive || echo "SFA: block FAILED (see messages above)"
 # ---------------------------------------------------------------------------
 ```
 
-## 3. Bootstrap order (the one ordering trap)
+## 3. Pre-install precheck + bootstrap order (the one ordering trap)
+
+**Run this precheck first, every time — not just on first install.** Installing the new
+hook while the deployed code predates `/api/health` makes the very next push fail on the
+health probe (exit 23), even though nothing about that push was wrong. Copy-paste on the
+deploy host:
+
+```bash
+# SFA pre-install precheck — run BEFORE installing the new hook (§2).
+if curl -fsS --max-time 5 http://127.0.0.1:5001/api/health >/dev/null 2>&1; then
+  echo "PRECHECK OK — /api/health is live. Safe to run the §2 install block now."
+else
+  echo "PRECHECK FAIL — /api/health is not answering yet."
+  echo "Fix:      sudo systemctl restart sfa-admin"
+  echo "Confirm:  curl -fsS http://127.0.0.1:5001/api/health"
+  echo "Re-run this precheck until it prints PRECHECK OK, THEN install."
+fi
+```
+
+Bootstrap order, precheck folded in:
 
 1. Merge this WP to `main` and push to `waldhome`. The **old** hook runs and pulls the
    new files (`scripts/deploy/sfa_post_receive.sh`, the health blueprint) into
    `/data/projects/smallfarmsagents`. It will print `DEPLOY OK (no health check…)` — that
    is expected; nothing is verified yet.
-2. `sudo systemctl restart sfa-admin` once, so the process serves `/api/health`.
-   Confirm: `curl -fsS http://127.0.0.1:5001/api/health` → `{"status":"ok","build_sha":…}`.
+2. Run the precheck above. First install on a tree this old will normally FAIL here — that
+   is the expected footgun, not a bug: `sudo systemctl restart sfa-admin` once, then re-run
+   the precheck until it prints PRECHECK OK.
 3. Run the block in §2. It copies the reviewed hook over the old one (backup kept).
 4. The **next** push is the first DV-1-verified deploy.
 
@@ -132,7 +152,59 @@ sudo systemctl start sfa-admin       # restore, then push again -> DEPLOY VERIFI
 itself still exits **0** when a `post-receive` hook fails — git does not un-update the ref
 for a post-receive failure. The operator's signals are (a) the `remote:` FAIL banner in
 the push output, (b) the same banner in `/data/projects/smallfarmsagents/deploy.log`, and
-(c) the hook's own non-zero exit. If the hub wants a machine-readable green/red at the
-pusher, that needs a follow-up (e.g. the conductor invoking the deploy path via ssh and
-reading its exit code, the way `aos_hub_deploy.sh ff/activate` is invoked in the runbook)
-— out of scope for this WP's K=6.
+(c) the hook's own non-zero exit.
+
+**Update — gate round 2 (C2):** a machine-readable green/red at the pusher is no longer a
+follow-up; the hook now emits a single `SFA-DEPLOY-STATUS` line on every attempt. See §5.
+
+## 5. Reading the deploy status marker (SFA-DEPLOY-STATUS)
+
+The hook emits exactly one greppable line per deploy attempt, to the pusher's `remote:`
+output and to `/data/projects/smallfarmsagents/deploy.log`:
+
+```
+SFA-DEPLOY-STATUS: ok sha=<pushed> served=<served> exit=0
+SFA-DEPLOY-STATUS: fail reason=<token> sha=<pushed> served=<served-or-unknown> exit=<code>
+```
+
+`reason=` tokens (one per failure kind): `deploy-tree-missing`, `env-file-missing`,
+`lock-timeout`, `fetch-failed`, `pull-failed`, `head-mismatch`, `restart-failed`,
+`health-unreachable`, `dv1-mismatch`. (`lock-timeout` means another deploy was still
+holding the pull/restart lock when this push arrived — see the hook header's CONCURRENCY
+section; re-push once the other deploy finishes.)
+
+Read it straight from the push:
+
+```bash
+git push waldhome main 2>&1 | grep 'SFA-DEPLOY-STATUS'
+```
+
+or from the server, after the fact:
+
+```bash
+ssh <deploy-host> "grep SFA-DEPLOY-STATUS /data/projects/smallfarmsagents/deploy.log | tail -1"
+```
+
+No `SFA-DEPLOY-STATUS` line at all means no deploy was attempted for this push — see §6.
+
+## 6. Ref policy
+
+A push to any ref other than `refs/heads/main` (the deploy branch — `SFA_DEPLOY_BRANCH`,
+`main` by default), or a delete of that branch, is an intentional no-op: the hook exits 0
+without attempting a deploy and without an `SFA-DEPLOY-STATUS` line. Treat that bare 0 as
+"nothing happened," never as a deploy confirmation.
+
+## 7. Tuning the readiness window (config change, not code change)
+
+If `sfa-admin` is ever slow to become healthy after a restart, the wait is already
+operator-tunable — no edit to `sfa_post_receive.sh` needed:
+
+- `SFA_DEPLOY_WARMUP` — seconds before the first health probe (default `8`)
+- `SFA_DEPLOY_RETRIES` — probe attempts (default `5`)
+- `SFA_DEPLOY_RETRY_SLEEP` — seconds between probe attempts (default `3`)
+
+These are read from the hook process's own environment at the moment `git push` invokes
+it — set them in the environment that invokes git for the deploy user (e.g. the SSH
+session environment for `nimrodw`), never by editing the installed hook body itself, which
+would break the byte-identical install guarantee in §1. This section only documents that
+the knobs already exist; this correction round does not change any default.
